@@ -88,8 +88,8 @@ mipmapLevels:2
 SERVER_PROPERTIES = """\
 #Minecraft server properties - Freeroam Lite (optimizat pentru host gratuit)
 motd=\\u00A7e\\u00A7lFreeroam Lite \\u00A77- RolePlay pentru toti!
-max-players=20
-view-distance=7
+max-players=15
+view-distance=6
 network-compression-threshold=256
 spawn-protection=0
 allow-flight=true
@@ -132,6 +132,12 @@ world-settings:
     max-entity-collisions: 2
     tick-inactive-villagers: false
     nerf-spawner-mobs: true
+    ticks-per:
+      hopper-transfer: 8
+      hopper-check: 8
+    hopper-amount: 3
+    arrow-despawn-rate: 300
+    trident-despawn-rate: 300
 """
 
 BUKKIT_YML = """\
@@ -156,7 +162,7 @@ ticks-per:
 
 AIKAR_FLAGS = (
     "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 "
-    "-XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch "
+    "-XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC "
     "-XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M "
     "-XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 "
     "-XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 "
@@ -330,9 +336,9 @@ def main():
     with open(os.path.join(sdir, "bukkit.yml"), "w") as f:
         f.write(BUKKIT_YML)
     with open(os.path.join(sdir, "start.sh"), "w") as f:
-        f.write(f"#!/bin/sh\njava -Xms2G -Xmx4G {AIKAR_FLAGS} -jar {server_jar} nogui\n")
+        f.write(f"#!/bin/sh\njava -Xms1G -Xmx4G {AIKAR_FLAGS} -jar {server_jar} nogui\n")
     with open(os.path.join(sdir, "start.bat"), "w") as f:
-        f.write(f"java -Xms2G -Xmx4G {AIKAR_FLAGS} -jar {server_jar} nogui\r\npause\r\n")
+        f.write(f"java -Xms1G -Xmx4G {AIKAR_FLAGS} -jar {server_jar} nogui\r\npause\r\n")
     with open(os.path.join(sdir, "server.properties"), "w") as f:
         f.write(SERVER_PROPERTIES)
     with open(os.path.join(sdir, "eula.txt"), "w") as f:

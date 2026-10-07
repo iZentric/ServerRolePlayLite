@@ -4,6 +4,9 @@ on:
   push:
     branches: [ "arena/a29b4ef4-serverroleplaylite" ]
     paths: [ "deploy/trigger.txt" ]
+concurrency:
+  group: zampto-deploy
+  cancel-in-progress: true
 permissions:
   contents: write
 env:
