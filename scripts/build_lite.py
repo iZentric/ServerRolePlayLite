@@ -10,6 +10,7 @@ Utilizare: python3 scripts/build_lite.py <pack-original.mrpack> <director-output
 """
 import json
 import os
+import re
 import shutil
 import sys
 import urllib.parse
@@ -86,6 +87,32 @@ def resolve_any(slug, mc, loader):
             except Exception as e:  # noqa: BLE001
                 log(f"    ({src}: {alias} -> {e})")
     log(f"  !! '{slug}' sarit (nu exista pt {mc} {loader} nicaieri)")
+    return None
+
+
+def resolve_ftb_maven(artifacts, prefix="1605"):
+    """Maven-ul oficial FTB - sursa sigura pentru buildurile 1.16.5 (1605.x)."""
+    for host in ("https://maven.ftb.dev/releases", "https://maven.saps.dev/releases"):
+        for art in artifacts:
+            try:
+                url = f"{host}/dev/ftb/mods/{art}/maven-metadata.xml"
+                req = urllib.request.Request(url, headers=UA)
+                xml = urllib.request.urlopen(req, timeout=30).read().decode()
+                vers = [v for v in re.findall(r"<version>([^<]+)</version>", xml)
+                        if v.startswith(prefix)]
+                if not vers:
+                    continue
+
+                def key(v):
+                    m = re.search(r"build\.(\d+)", v)
+                    return (v.split("-")[0], int(m.group(1)) if m else 0)
+
+                v = sorted(vers, key=key)[-1]
+                name = f"{art}-{v}.jar"
+                return {"filename": name, "url": f"{host}/dev/ftb/mods/{art}/{v}/{name}",
+                        "hashes": {}, "size": 0, "source": "ftb-maven"}
+            except Exception as e:  # noqa: BLE001
+                log(f"    (ftb-maven {art} @ {host}: {e})")
     return None
 
 
@@ -344,7 +371,11 @@ def main():
     shutil.rmtree(s1, ignore_errors=True)
     shutil.copytree(base, s1)
     for slug in rules.get("maxlite_command_mods", []):
-        info = resolve_any(slug, mc, "forge")
+        if "ftb-library" in slug:
+            info = resolve_ftb_maven(["ftb-library-forge", "ftblibrary", "ftb-library"]) \
+                or resolve_any(slug, mc, "forge")
+        else:
+            info = resolve_any(slug, mc, "forge")
         if info:
             log(f"  + comenzi: {info['filename']} [{info['source']}]")
             download(info["url"], os.path.join(s1, "mods", info["filename"]))
