@@ -23,37 +23,21 @@ jobs:
             echo "" >> $OUT
             echo "**EROARE: secretul ZAMPTO_API_KEY nu este setat in repo!**" >> $OUT
           else
-            SERVER_ID=17192
             for URL in \
-              "https://api.zampto.net/v1/user" \
-              "https://api.zampto.net/v1/me" \
-              "https://api.zampto.net/v1/account" \
-              "https://api.zampto.net/v1/user/servers" \
-              "https://api.zampto.net/v1/hosting/servers" \
-              "https://api.zampto.net/v1/server/$SERVER_ID" \
-              "https://api.zampto.net/user" \
-              "https://api.zampto.net/me" \
               "https://api.zampto.net/servers" \
-              "https://api.zampto.net/server/$SERVER_ID" \
-              "https://api.zampto.net/hosting/servers" \
-              "https://api.zampto.net/account/servers" \
+              "https://api.zampto.net/" \
+              "https://api.zampto.net/endpoints" \
             ; do
-              for STYLE in bearer apikey; do
-                if [ "$STYLE" = "bearer" ]; then
-                  CODE=$(curl -s -o /tmp/body -w '%{http_code}' -m 20 \
-                    -H "Authorization: Bearer $KEY" -H "Accept: application/json" "$URL" || echo "ERR")
-                else
-                  CODE=$(curl -s -o /tmp/body -w '%{http_code}' -m 20 \
-                    -H "x-api-key: $KEY" -H "Accept: application/json" "$URL" || echo "ERR")
-                fi
-                BODY=$(head -c 400 /tmp/body | tr -d '\r' | sed "s/$KEY/***/g")
-                echo "" >> $OUT
-                echo "## [$STYLE] $URL" >> $OUT
-                echo "- status: **$CODE**" >> $OUT
-                echo '```' >> $OUT
-                echo "$BODY" >> $OUT
-                echo '```' >> $OUT
-              done
+              CODE=$(curl -s -o /tmp/body -w '%{http_code}' -m 20 \
+                -H "Authorization: $KEY" -H "Accept: application/json" "$URL" || echo "ERR")
+              BODY=$(head -c 500 /tmp/body | tr -d '\r' | sed "s/$KEY/***/g")
+              echo "" >> $OUT
+              echo "## [raw-auth] $URL" >> $OUT
+              echo "- status: **$CODE**" >> $OUT
+              echo '```' >> $OUT
+              echo "$BODY" >> $OUT
+              echo '```' >> $OUT
+              sleep 5
             done
           fi
           git config user.name "github-actions[bot]"
