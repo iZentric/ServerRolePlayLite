@@ -1,6 +1,6 @@
 {
   "pack_name": "Freeroam Lite",
-  "pack_version": "1.1.0-lite",
+  "pack_version": "1.2.0-lite",
   "minecraft": "1.16.5",
   "forge": "36.2.42",
 
@@ -22,6 +22,12 @@
   "_comentariu_adaugate": "Doar moduri de PERFORMANTA, zero schimbari de gameplay. Daca un slug nu are versiune pt 1.16.5 Forge pe Modrinth, e sarit automat fara sa strice build-ul.",
   "add_client_modrinth": ["entityculling", "fps-reducer", "memoryleakfix", "starlight-forge"],
   "add_server_modrinth": ["clumps", "memoryleakfix", "starlight-forge", "ai-improvements"],
+
+  "_comentariu_perf_extra": "Artileria grea de performanta pt 1.16.5 (RoadRunner=Lithium, Radon=Phosphor etc). Cautate pe Modrinth apoi CurseForge; sarite daca nu exista. Performant si MCMT sunt excluse intentionat (conflicte).",
+  "add_server_extra_perf": ["roadrunner", "radon", "fastfurnace", "fastworkbench", "smooth-boot-reloaded", "saturn"],
+
+  "_comentariu_maxlite": "Moduri server-side care inlocuiesc pluginurile in varianta MaxLite (Forge pur, consum minim).",
+  "maxlite_command_mods": ["ftb-library-forge", "ftb-essentials", "ftb-ranks"],
 
   "_comentariu_pluginuri": "Server hibrid Arclight = moduri Forge + pluginuri Bukkit simultan. Pluginurile de pe GitHub se descarca direct, cele de pe Modrinth se rezolva automat (sarite daca nu exista pt 1.16.5 bukkit).",
   "server_type": "arclight",
