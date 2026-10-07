@@ -77,3 +77,11 @@ Build-ul produce ACUM ambele variante la Releases:
 **Concluzie finală, după GitHub + tot netul:** pentru moduri Forge 1.16.5 NU EXISTĂ nimic
 mai lite decât **Forge pur + stack-ul de moduri de performanță** (varianta MaxLite din
 acest repo). Orice alt „server software" ori e mort, ori adaugă straturi peste Forge.
+
+## E. VERDICTUL FINAL: moduri EXACTE + pluginuri reale, consum minim
+
+| Loc | Variantă (toate la Releases) | Pluginuri reale | Consum | Risc |
+|---|---|---|---|---|
+| 🥇 teoretic | **Mist EXPERIMENTAL** (Mohist+patch-uri Paper, no-tick-view-distance, per-player-mob-spawns) | ✅ | cel mai mic CU pluginuri | ⚠️ proiect abandonat 2021 |
+| 🥈 sigur | **Arclight** ultra-tuned | ✅ | foarte mic | stabil, întreținut |
+| 🏆 absolut | **MaxLite** (Forge pur + FTB comenzi) | ❌ (doar comenzi din moduri) | CEL MAI MIC posibil | zero |
