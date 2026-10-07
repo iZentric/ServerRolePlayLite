@@ -45,6 +45,27 @@ Serverul = **Minecraft 1.16.5 + Forge 36.2.42**, are nevoie de **Java 8 sau 11**
 - Nu e garantat 24/7 — dacă s-a oprit, îl repornești din panou.
 - Fă **backup** la folderul `world/` din când în când (download din Files).
 
+## 🤖 Deploy automat (opțional, fără chei SSH!)
+
+Zampto folosește SFTP cu **user + parolă** (nu chei SSH). Dacă vrei ca fișierele să se
+urce automat pe server la cerere:
+
+1. În panoul Zampto al serverului, găsește datele SFTP (de obicei în tab-ul
+   **Settings** al serverului): adresa (ex. `xxx.zampto.net`), portul (de obicei
+   `2022`) și userul (ex. `evo1.abc123`). Parola o setezi tu la
+   [Settings → SFTP](https://dash.zampto.net/settings/sftp).
+2. În GitHub: repo-ul tău → **Settings → Secrets and variables → Actions →
+   New repository secret** și adaugă pe rând:
+   - `ZAMPTO_SFTP_HOST` = adresa serverului SFTP
+   - `ZAMPTO_SFTP_USER` = userul SFTP
+   - `ZAMPTO_SFTP_PASS` = parola SFTP
+   - `ZAMPTO_SFTP_PORT` = portul (doar dacă NU e 2022)
+3. **Oprește serverul** din panou (să nu scrii fișiere peste el cât rulează).
+4. În GitHub: tab-ul **Actions → Deploy pe Zampto (SFTP) → Run workflow**.
+5. Când termină, pornește serverul din panou.
+
+> Parola rămâne doar în seiful GitHub Secrets — n-o vede nimeni, nici în loguri.
+
 ## 🔐 Securitate
 - Nu da nimănui parola, cheia API sau parola SFTP (nici în chat-uri!).
 - Activează **2FA TOTP** din Settings — durează 2 minute și îți protejează serverul.

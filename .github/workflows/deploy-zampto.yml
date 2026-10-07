@@ -1,0 +1,45 @@
+name: Deploy pe Zampto (SFTP)
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verifica secretele
+        env:
+          H: ${{ secrets.ZAMPTO_SFTP_HOST }}
+          U: ${{ secrets.ZAMPTO_SFTP_USER }}
+          P: ${{ secrets.ZAMPTO_SFTP_PASS }}
+        run: |
+          if [ -z "$H" ] || [ -z "$U" ] || [ -z "$P" ]; then
+            echo "::error::Lipsesc secretele! Adauga in repo: Settings -> Secrets and variables -> Actions -> New repository secret: ZAMPTO_SFTP_HOST, ZAMPTO_SFTP_USER, ZAMPTO_SFTP_PASS (optional ZAMPTO_SFTP_PORT, implicit 2022)."
+            exit 1
+          fi
+          echo "Secrete OK."
+      - name: Descarca pack-ul de server din release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download lite -R ${{ github.repository }} -p '*Server*.zip' -O server.zip
+          mkdir -p srv && cd srv && unzip -q ../server.zip && ls -la
+      - name: Instaleaza lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+      - name: Urca fisierele pe server
+        env:
+          H: ${{ secrets.ZAMPTO_SFTP_HOST }}
+          U: ${{ secrets.ZAMPTO_SFTP_USER }}
+          P: ${{ secrets.ZAMPTO_SFTP_PASS }}
+          PORT: ${{ secrets.ZAMPTO_SFTP_PORT }}
+        run: |
+          PORT="${PORT:-2022}"
+          echo "Upload spre sftp://$H:$PORT ..."
+          lftp -u "$U","$P" "sftp://$H:$PORT" -e "
+            set sftp:auto-confirm yes;
+            set net:max-retries 2;
+            set net:timeout 30;
+            mirror -R --verbose --parallel=4 srv/ /;
+            bye
+          "
+          echo "✅ Deploy terminat! Reporneste serverul din panoul Zampto."
