@@ -41,12 +41,11 @@
     (curseforge: ftb-library-forge -> HTTP Error 404: Not Found)
   !! 'ftb-library-forge' sarit (nu exista pt 1.16.5 forge nicaieri)
     (modrinth: ftb-essentials -> HTTP Error 404: Not Found)
-    (curseforge: ftb-essentials -> niciun fisier compatibil)
-  !! 'ftb-essentials' sarit (nu exista pt 1.16.5 forge nicaieri)
+  + comenzi: ftb-essentials-1605.1.5-build.32.jar [curseforge]
     (modrinth: ftb-ranks -> HTTP Error 404: Not Found)
   + comenzi: ftb-ranks-forge-1605.1.6-build.33.jar [curseforge]
   ↓ Forge installer
-  => out/Freeroam-Lite-Server-MaxLite-1.2.0-lite.zip (164.3 MB)
+  => out/Freeroam-Lite-Server-MaxLite-1.2.0-lite.zip (164.4 MB)
 == SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar
