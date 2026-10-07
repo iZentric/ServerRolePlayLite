@@ -27,7 +27,7 @@
   "add_server_extra_perf": ["roadrunner", "radon", "fastfurnace", "fastworkbench", "smooth-boot-reloaded", "saturn"],
 
   "_comentariu_maxlite": "Moduri server-side care inlocuiesc pluginurile in varianta MaxLite (Forge pur, consum minim).",
-  "maxlite_command_mods": ["ftb-library-forge", "ftb-essentials", "ftb-ranks"],
+  "maxlite_command_mods": ["ftb-library-forge|ftb-library|ftblibrary", "ftb-essentials", "ftb-ranks"],
 
   "_comentariu_pluginuri": "Server hibrid Arclight = moduri Forge + pluginuri Bukkit simultan. Pluginurile de pe GitHub se descarca direct, cele de pe Modrinth se rezolva automat (sarite daca nu exista pt 1.16.5 bukkit).",
   "server_type": "arclight",

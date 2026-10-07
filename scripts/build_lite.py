@@ -76,14 +76,15 @@ def resolve_curseforge(slug, mc, loader):
 
 
 def resolve_any(slug, mc, loader):
-    """Incearca Modrinth, apoi CurseForge. None daca nu exista nicaieri."""
-    for fn, src in ((resolve_modrinth, "modrinth"), (resolve_curseforge, "curseforge")):
-        try:
-            info = fn(slug, mc, loader)
-            info["source"] = src
-            return info
-        except Exception as e:  # noqa: BLE001
-            log(f"    ({src}: {slug} -> {e})")
+    """Incearca Modrinth, apoi CurseForge, pentru fiecare alias (separate cu |)."""
+    for alias in slug.split("|"):
+        for fn, src in ((resolve_modrinth, "modrinth"), (resolve_curseforge, "curseforge")):
+            try:
+                info = fn(alias, mc, loader)
+                info["source"] = src
+                return info
+            except Exception as e:  # noqa: BLE001
+                log(f"    ({src}: {alias} -> {e})")
     log(f"  !! '{slug}' sarit (nu exista pt {mc} {loader} nicaieri)")
     return None
 
