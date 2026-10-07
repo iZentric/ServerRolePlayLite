@@ -282,12 +282,14 @@ def main():
         f.write(f"# Raport build Freeroam Lite ({rules['pack_version']})\n\n")
         f.write(f"Pack original: **{index.get('name')} {index.get('versionId')}** — Minecraft {mc}, Forge {forge}\n\n")
         f.write("## 📱 CLIENT (pentru jucatori — orice PC)\n\n")
-        f.write("### Scos (mai mult FPS, mai putina RAM)\n")
-        for n in sorted(set(report["client_removed"])):
-            f.write(f"- ❌ {n}\n")
-        f.write("\n### Adaugat (optimizare)\n")
+        f.write("**Toate modurile originale sunt pastrate.**\n\n")
+        if report["client_removed"]:
+            f.write("### Scos\n")
+            for n in sorted(set(report["client_removed"])):
+                f.write(f"- ❌ {n}\n")
+        f.write("\n### Adaugat (doar optimizare, zero schimbari de gameplay)\n")
         for n in report["client_added"]:
-            f.write(f"- ✅ {n} (EntityCulling — nu mai randeaza ce nu vezi)\n")
+            f.write(f"- ✅ {n}\n")
         f.write("\n### Pastrat\n")
         for n in report["client_kept_index"] + report["client_kept_override"]:
             f.write(f"- {n}\n")

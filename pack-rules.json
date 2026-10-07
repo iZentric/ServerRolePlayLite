@@ -4,13 +4,10 @@
   "minecraft": "1.16.5",
   "forge": "36.2.42",
 
-  "_comentariu_client": "Scoase de pe CLIENT: Oculus (shadere = cel mai mare consumator de FPS; Rubidium ramane si duce singur greul) si Dynamic Surroundings (15MB de sunete ambientale, consuma CPU/RAM). Restul modurilor de continut TREBUIE sa ramana, altfel clientul nu se poate conecta la server (Forge cere aceleasi moduri cu blocuri pe ambele parti).",
-  "remove_from_client": [
-    "oculus",
-    "DynamicSurroundings"
-  ],
+  "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
+  "remove_from_client": [],
 
-  "_comentariu_server": "Scoase de pe SERVER: toate modurile pur vizuale/client-only. Serverul porneste mai repede si consuma cu ~25-30% mai putina RAM — important pe host gratuit.",
+  "_comentariu_server": "De pe SERVER se scot DOAR modurile client-only (randare/meniuri — pe server nu fac absolut nimic, doar maresc timpul de pornire si RAM-ul). Jucatorii NU sunt afectati: clientul lor le are pe toate.",
   "remove_from_server": [
     "rubidium",
     "oculus",
@@ -22,7 +19,7 @@
     "CTM-MC"
   ],
 
-  "_comentariu_adaugate": "EntityCulling = nu mai randeaza entitatile pe care nu le vezi (+FPS mare in oras plin de masini/NPC). Daca un slug nu exista pe Modrinth pentru 1.16.5 Forge, e sarit automat, fara sa strice build-ul.",
-  "add_client_modrinth": ["entityculling"],
-  "add_server_modrinth": ["clumps"]
+  "_comentariu_adaugate": "Doar moduri de PERFORMANTA, zero schimbari de gameplay. Daca un slug nu are versiune pt 1.16.5 Forge pe Modrinth, e sarit automat fara sa strice build-ul.",
+  "add_client_modrinth": ["entityculling", "fps-reducer", "memoryleakfix", "starlight-forge"],
+  "add_server_modrinth": ["clumps", "memoryleakfix", "starlight-forge", "ai-improvements"]
 }
