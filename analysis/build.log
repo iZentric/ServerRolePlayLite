@@ -4,7 +4,7 @@
   + FpsReducer-forge-1.24-mc1.16.5.jar
   + memoryleakfix-forge-pre1.17-1.1.5.jar
   !! 'starlight-forge' sarit (client): nicio versiune
-  => out/Freeroam-Lite-Client-1.4.0-lite.mrpack (147.8 MB)
+  => out/Freeroam-Lite-Client-1.5.0-ULTRA.mrpack (147.8 MB)
 == Moduri de server (comune) ==
   ↓ mapperbase-1.16.5-2.4.0.0.jar
   ↓ supplementaries-1.16.5-0.18.4b.jar
@@ -25,6 +25,9 @@
     (curseforge: starlight-forge -> HTTP Error 404: Not Found)
   !! 'starlight-forge' sarit (nu exista pt 1.16.5 forge nicaieri)
   + perf: AI-Improvements-1.16.5-0.5.0.jar [modrinth]
+    (modrinth: hibernateforge -> HTTP Error 404: Not Found)
+    (curseforge: hibernateforge -> HTTP Error 404: Not Found)
+  + perf: Multiplayer-Server-Pause-1.16.5-Forge-1.1.0.jar [modrinth]
     (modrinth: roadrunner -> HTTP Error 404: Not Found)
   + perf: RoadRunner-mc1.16.5-1.5.2.jar [curseforge]
   + perf: radon-0.8.0a.jar [modrinth]
@@ -42,6 +45,20 @@
     (curseforge: adaptive-performance-tweaks -> HTTP Error 404: Not Found)
   !! 'adaptive-performance-tweaks' sarit (nu exista pt 1.16.5 forge nicaieri)
   + perf: getittogetherdrops-1.16.5-v1.2.jar [modrinth]
+== ULTRA: dezbrac jar-urile de server de assets client ==
+    ✂ Modernxl 1.16.5.jar: 38.0 -> 6.8 MB
+    ✂ Pizzaland_v68.jar: 84.8 -> 1.7 MB
+    ✂ additional-guns-0.7.1-1.16.5.jar: 0.9 -> 0.1 MB
+    ✂ cfm-7.0.0pre22-1.16.3.jar: 2.0 -> 1.0 MB
+    ✂ cgm-1.2.6-1.16.5.jar: 1.6 -> 0.7 MB
+    ✂ emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar: 0.7 -> 0.3 MB
+    ✂ modernlife-1.16.5-1.15.jar: 3.7 -> 1.0 MB
+    ✂ pamhc2foodcore-1.16.3-1.0.2.jar: 0.3 -> 0.1 MB
+    ✂ roadstuff-1.16.5-4.3.0.jar: 3.9 -> 1.7 MB
+    ✂ selene-1.16.5-1.9.0.jar: 0.2 -> 0.1 MB
+    ✂ supplementaries-1.16.5-0.18.4b.jar: 13.9 -> 2.7 MB
+    ✂ vehicle-mod-0.45.2-1.16.5 (1).jar: 6.7 -> 1.0 MB
+  => total economisit: 139.7 MB
 == SERVER MaxLite (Forge pur - consum minim) ==
   + comenzi: ftb-library-forge-1605.3.5-build.724.jar [ftb-maven]
     (modrinth: ftb-essentials -> HTTP Error 404: Not Found)
@@ -55,7 +72,7 @@
     (modrinth: performant -> nicio versiune)
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
-  => out/Freeroam-Lite-Server-MaxLite-1.4.0-lite.zip (165.3 MB)
+  => out/Freeroam-Lite-Server-MaxLite-1.5.0-ULTRA.zip (32.7 MB)
 == SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar
@@ -77,11 +94,11 @@
     (reincerc 3/3 dupa eroare: HTTP Error 403: Forbidden)
   !! plugin spiget 'PlotSquared-Bukkit-v5.jar' sarit: HTTP Error 403: Forbidden
   ↓ Arclight
-  => out/Freeroam-Lite-Server-Arclight-1.4.0-lite.zip (185.1 MB)
+  => out/Freeroam-Lite-Server-Arclight-1.5.0-ULTRA.zip (52.5 MB)
 == SERVER Mist (hibrid experimental cu patch-uri Paper) ==
   ↓ Mist
-  => out/Freeroam-Lite-Server-Mist-EXPERIMENTAL-1.4.0-lite.zip (184.7 MB)
+  => out/Freeroam-Lite-Server-Mist-EXPERIMENTAL-1.5.0-ULTRA.zip (52.1 MB)
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
-  => out/Freeroam-Lite-Server-CatServer-1.4.0-lite.zip (184.0 MB)
+  => out/Freeroam-Lite-Server-CatServer-1.5.0-ULTRA.zip (51.5 MB)
 GATA.

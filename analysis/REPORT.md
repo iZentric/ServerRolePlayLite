@@ -1,4 +1,4 @@
-# Raport build Freeroam Lite (1.4.0-lite)
+# Raport build Freeroam Lite (1.5.0-ULTRA)
 
 Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
@@ -50,6 +50,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ Clumps-6.0.0.28.jar
 - ✅ memoryleakfix-forge-pre1.17-1.1.5.jar
 - ✅ AI-Improvements-1.16.5-0.5.0.jar
+- ✅ Multiplayer-Server-Pause-1.16.5-Forge-1.1.0.jar
 - ✅ RoadRunner-mc1.16.5-1.5.2.jar
 - ✅ radon-0.8.0a.jar
 - ✅ FastFurnace-1.16.5-4.5.0.jar
@@ -60,5 +61,5 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
 ### Setari consum minim
 - JVM: porneste la 1 GB, creste doar la nevoie (max 4 GB), G1GC Aikar
-- view-distance=6, max-players=15, mobi activati doar langa jucatori
+- view-distance=5 + sync-chunk-writes=false, max-players=15, mobi activati doar langa jucatori
 - Arclight in plus: hoppers rarite, spawn-limits mici, villagers inactivi inghetati
