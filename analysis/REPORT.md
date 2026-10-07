@@ -12,6 +12,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 ## 🖥️ SERVER MaxLite (Forge pur — CONSUM MINIM, recomandat)
 
 ### Comenzi in loc de pluginuri
+- ✅ ftb-library-forge-1605.3.5-build.724.jar
 - ✅ ftb-essentials-1605.1.5-build.32.jar
 - ✅ ftb-ranks-forge-1605.1.6-build.33.jar
 
