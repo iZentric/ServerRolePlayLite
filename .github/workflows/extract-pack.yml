@@ -25,6 +25,7 @@ jobs:
           file pack.mrpack || true
           mkdir -p work
           ( cd work && unzip -q ../pack.mrpack ) || echo "UNZIP_FAILED=$?"
+          chmod -R u+rwX work || true
           echo "--- structura top-level:"
           ls -la work || true
           cp work/modrinth.index.json analysis/ || echo "NO_INDEX"
@@ -38,17 +39,6 @@ jobs:
           if [ -f analysis/overrides-configs.zip ] && [ "$(stat -c%s analysis/overrides-configs.zip)" -gt 95000000 ]; then
             split -b 90m analysis/overrides-configs.zip analysis/overrides-configs.zip.part- && rm analysis/overrides-configs.zip
           fi
-          mkdir -p analysis/override-jars
-          ( cd work && find . -name '*.jar' -type f ) | while read -r j; do
-            sz=$(stat -c%s "work/$j" || echo 0)
-            base=$(basename "$j")
-            if [ "$sz" -le 95000000 ]; then
-              cp "work/$j" "analysis/override-jars/$base" || true
-            else
-              split -b 90m "work/$j" "analysis/override-jars/$base.part-" || true
-            fi
-          done
-          rmdir analysis/override-jars 2>/dev/null || true
           rm -rf work pack.mrpack
           du -sh analysis || true
           ls -la analysis || true
