@@ -428,8 +428,6 @@ def main():
     log("== SERVER Arclight (hibrid cu pluginuri) ==")
     s2 = os.path.join(out_dir, "srv-arclight")
     shutil.rmtree(s2, ignore_errors=True)
-    shutil.rmtree(s3, ignore_errors=True)
-    shutil.rmtree(s4, ignore_errors=True)
     shutil.copytree(base, s2)
     plugdir = os.path.join(s2, "plugins")
     os.makedirs(plugdir, exist_ok=True)
