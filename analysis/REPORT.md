@@ -1,4 +1,4 @@
-# Raport build Freeroam Lite (1.0.0-lite)
+# Raport build Freeroam Lite (1.1.0-lite)
 
 Pack original: **PL2 Gambo 1.0.0** — Minecraft 1.16.5, Forge 36.2.42
 
@@ -58,6 +58,12 @@ Pack original: **PL2 Gambo 1.0.0** — Minecraft 1.16.5, Forge 36.2.42
 - ✅ Clumps-6.0.0.28.jar
 - ✅ memoryleakfix-forge-pre1.17-1.1.5.jar
 - ✅ AI-Improvements-1.16.5-0.5.0.jar
+- ✅ plugin: EssentialsX-2.19.7.jar
+- ✅ plugin: EssentialsXChat-2.19.7.jar
+- ✅ plugin: EssentialsXSpawn-2.19.7.jar
+- ✅ plugin: Vault.jar
+- ✅ plugin: LuckPerms-Bukkit-5.5.71.jar
+- ✅ plugin: Chunky-1.3.38.jar
 
 ### Pastrat
 - mapperbase-1.16.5-2.4.0.0.jar

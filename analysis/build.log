@@ -4,7 +4,7 @@
   + adaug (client): FpsReducer-forge-1.24-mc1.16.5.jar
   + adaug (client): memoryleakfix-forge-pre1.17-1.1.5.jar
   !! 'starlight-forge' sarit (nu e disponibil pt 1.16.5 forge): nicio versiune compatibila
-  => out/Freeroam-Lite-Client-1.0.0-lite.mrpack (147.8 MB)
+  => out/Freeroam-Lite-Client-1.1.0-lite.mrpack (147.8 MB)
 == Construiesc serverul lite (.zip) ==
   ↓ descarc: mapperbase-1.16.5-2.4.0.0.jar
   ↓ descarc: supplementaries-1.16.5-0.18.4b.jar
@@ -27,6 +27,13 @@
   + adaug (server): memoryleakfix-forge-pre1.17-1.1.5.jar
   !! 'starlight-forge' sarit (nu e disponibil pt 1.16.5 forge): nicio versiune compatibila
   + adaug (server): AI-Improvements-1.16.5-0.5.0.jar
-  ↓ descarc installerul Forge
-  => out/Freeroam-Lite-Server-1.0.0-lite.zip (163.8 MB)
+  ↓ plugin: EssentialsX-2.19.7.jar
+  ↓ plugin: EssentialsXChat-2.19.7.jar
+  ↓ plugin: EssentialsXSpawn-2.19.7.jar
+  ↓ plugin: Vault.jar
+  ↓ plugin (modrinth): LuckPerms-Bukkit-5.5.71.jar
+  !! 'spark' sarit (nu e disponibil pt 1.16.5 bukkit): nicio versiune compatibila
+  ↓ plugin (modrinth): Chunky-1.3.38.jar
+  ↓ descarc Arclight (server hibrid Forge+Bukkit)
+  => out/Freeroam-Lite-Server-1.1.0-lite.zip (170.1 MB)
 GATA.
