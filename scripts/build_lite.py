@@ -36,11 +36,20 @@ def http_json(url):
         return json.load(r)
 
 
-def download(url, dest):
+def download(url, dest, tries=4):
     os.makedirs(os.path.dirname(dest), exist_ok=True)
-    req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=600) as r, open(dest, "wb") as f:
-        shutil.copyfileobj(r, f)
+    import time
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers=UA)
+            with urllib.request.urlopen(req, timeout=600) as r, open(dest, "wb") as f:
+                shutil.copyfileobj(r, f)
+            return
+        except Exception as e:  # noqa: BLE001
+            if i == tries - 1:
+                raise
+            log(f"    (reincerc {i+1}/{tries-1} dupa eroare: {e})")
+            time.sleep(5 * (i + 1))
 
 
 def resolve_modrinth(slug, mc, loader):

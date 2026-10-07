@@ -20,6 +20,7 @@ jobs:
         run: gh release download pack-original -p '*.mrpack' -O pack.mrpack
       - name: Build lite packs
         run: |
+          set -o pipefail
           mkdir -p out
           python3 scripts/build_lite.py pack.mrpack out 2>&1 | tee out/build.log
       - name: Commit report
