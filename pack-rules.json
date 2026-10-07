@@ -1,6 +1,6 @@
 {
   "pack_name": "Freeroam Lite",
-  "pack_version": "1.0.0-lite",
+  "pack_version": "1.1.0-lite",
   "minecraft": "1.16.5",
   "forge": "36.2.42",
 
@@ -21,5 +21,17 @@
 
   "_comentariu_adaugate": "Doar moduri de PERFORMANTA, zero schimbari de gameplay. Daca un slug nu are versiune pt 1.16.5 Forge pe Modrinth, e sarit automat fara sa strice build-ul.",
   "add_client_modrinth": ["entityculling", "fps-reducer", "memoryleakfix", "starlight-forge"],
-  "add_server_modrinth": ["clumps", "memoryleakfix", "starlight-forge", "ai-improvements"]
+  "add_server_modrinth": ["clumps", "memoryleakfix", "starlight-forge", "ai-improvements"],
+
+  "_comentariu_pluginuri": "Server hibrid Arclight = moduri Forge + pluginuri Bukkit simultan. Pluginurile de pe GitHub se descarca direct, cele de pe Modrinth se rezolva automat (sarite daca nu exista pt 1.16.5 bukkit).",
+  "server_type": "arclight",
+  "arclight_url": "https://github.com/IzzelAliz/Arclight/releases/download/1.16%2F1.0.25/arclight-forge-1.16.5-1.0.25.jar",
+  "arclight_jar": "arclight-forge-1.16.5-1.0.25.jar",
+  "plugins_github": [
+    "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsX-2.19.7.jar",
+    "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXChat-2.19.7.jar",
+    "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXSpawn-2.19.7.jar",
+    "https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar"
+  ],
+  "plugins_modrinth": ["luckperms", "spark", "chunky"]
 }

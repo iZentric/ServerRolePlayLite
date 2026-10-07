@@ -106,6 +106,54 @@ enable-status=true
 white-list=false
 """
 
+SPIGOT_YML = """\
+# spigot.yml - performanta maxima (Freeroam Lite)
+settings:
+  save-user-cache-on-stop-only: true
+  netty-threads: 2
+world-settings:
+  default:
+    mob-spawn-range: 4
+    entity-activation-range:
+      animals: 16
+      monsters: 20
+      raiders: 24
+      misc: 8
+    entity-tracking-range:
+      players: 48
+      animals: 32
+      monsters: 32
+      misc: 16
+      other: 32
+    merge-radius:
+      item: 3.5
+      exp: 4.0
+    item-despawn-rate: 4800
+    max-entity-collisions: 2
+    tick-inactive-villagers: false
+    nerf-spawner-mobs: true
+"""
+
+BUKKIT_YML = """\
+# bukkit.yml - performanta maxima (Freeroam Lite)
+settings:
+  allow-end: false
+spawn-limits:
+  monsters: 40
+  animals: 8
+  water-animals: 3
+  water-ambient: 5
+  ambient: 5
+chunk-gc:
+  period-in-ticks: 400
+ticks-per:
+  animal-spawns: 400
+  monster-spawns: 4
+  water-spawns: 11
+  ambient-spawns: 11
+  autosave: 6000
+"""
+
 AIKAR_FLAGS = (
     "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 "
     "-XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch "
@@ -117,26 +165,33 @@ AIKAR_FLAGS = (
 )
 
 README_SERVER = """\
-=== FREEROAM LITE - SERVER (Minecraft 1.16.5, Forge 36.2.42) ===
+=== FREEROAM LITE - SERVER HIBRID (Minecraft 1.16.5, Arclight = Forge + Bukkit) ===
 
-CERINTE: Java 8 sau Java 11. RAM recomandat: 4 GB (minim 2 GB).
+MODURI FORGE (mods/) + PLUGINURI BUKKIT (plugins/) IN ACELASI TIMP!
+Pluginuri incluse: EssentialsX (+Chat/Spawn), Vault, LuckPerms, spark, Chunky.
 
---- PE HOST GRATUIT (Eternal Zero / Zampto / FreemcHosting etc.) ---
-1. In panoul hostului alege tipul serverului: Forge 1.16.5 (build 36.2.42).
-2. Urca TOT continutul acestui zip in folderul serverului (prin File Manager sau SFTP).
-3. Daca hostul instaleaza singur Forge, nu mai rula installerul - doar pastreaza
-   folderul mods/ + server.properties + eula.txt.
-4. Porneste serverul din panou. Prima pornire dureaza 2-5 minute.
+CERINTE: Java 8 sau Java 11 (NU 17+). RAM recomandat: 4 GB (minim 2 GB).
+
+--- PE HOST GRATUIT (Zampto etc.) ---
+1. Urca TOT continutul acestui zip in folderul serverului.
+2. In panou, la Startup, seteaza JAR-ul serverului: arclight-forge-1.16.5-1.0.25.jar
+   (daca panoul cere "custom jar", alege asta).
+3. Java version: 11 (sau 8).
+4. Porneste. Prima pornire dureaza 3-6 minute (Arclight isi descarca librariile).
 
 --- PE PC-UL TAU (Windows) ---
 1. Instaleaza Java 8/11 (https://adoptium.net/temurin/releases/?version=11).
-2. Dubluclick pe install-forge.bat (o singura data).
-3. Dubluclick pe start.bat.
-4. Pentru prieteni fara port forwarding: foloseste playit.gg (gratuit).
+2. Dubluclick pe start.bat.
+3. Pentru prieteni fara port forwarding: foloseste playit.gg (gratuit).
 
 --- PE LINUX ---
-1. ./install-forge.sh  (o singura data)
-2. ./start.sh
+./start.sh
+
+--- COMENZI UTILE DUPA PORNIRE ---
+/lp user <nume> permission set * true   -> da-ti toate permisiunile (admin)
+/sethome, /home, /spawn, /tpa <nume>    -> EssentialsX
+/spark tps                               -> vezi performanta serverului
+/chunky radius 1000 + /chunky start      -> pre-genereaza lumea (fara lag la explorare)
 
 NOTA: eula.txt este setat pe true = acceptati automat EULA-ul Minecraft
 (https://aka.ms/MinecraftEULA). Daca nu sunteti de acord, puneti eula=false.
@@ -248,18 +303,32 @@ def main():
             download(info["url"], os.path.join(smods, info["filename"]))
             report["server_added"].append(info["filename"])
 
-    log("  ↓ descarc installerul Forge")
-    forge_installer = f"forge-{mc}-{forge}-installer.jar"
-    download(
-        f"https://maven.minecraftforge.net/net/minecraftforge/forge/{mc}-{forge}/{forge_installer}",
-        os.path.join(sdir, forge_installer),
-    )
+    # Pluginuri Bukkit (ruleaza pe serverul hibrid Arclight)
+    plugdir = os.path.join(sdir, "plugins")
+    os.makedirs(plugdir, exist_ok=True)
+    for url in rules.get("plugins_github", []):
+        name = os.path.basename(urllib.parse.urlparse(url).path)
+        log(f"  ↓ plugin: {name}")
+        try:
+            download(url, os.path.join(plugdir, name))
+            report["server_added"].append(f"plugin: {name}")
+        except Exception as e:  # noqa: BLE001
+            log(f"  !! plugin {name} sarit: {e}")
+    for slug in rules.get("plugins_modrinth", []):
+        info = resolve_modrinth(slug, mc, "bukkit")
+        if info:
+            log(f"  ↓ plugin (modrinth): {info['filename']}")
+            download(info["url"], os.path.join(plugdir, info["filename"]))
+            report["server_added"].append(f"plugin: {info['filename']}")
 
-    server_jar = f"forge-{mc}-{forge}.jar"
-    with open(os.path.join(sdir, "install-forge.sh"), "w") as f:
-        f.write(f"#!/bin/sh\njava -jar {forge_installer} --installServer\n")
-    with open(os.path.join(sdir, "install-forge.bat"), "w") as f:
-        f.write(f"java -jar {forge_installer} --installServer\r\npause\r\n")
+    log("  ↓ descarc Arclight (server hibrid Forge+Bukkit)")
+    server_jar = rules["arclight_jar"]
+    download(rules["arclight_url"], os.path.join(sdir, server_jar))
+
+    with open(os.path.join(sdir, "spigot.yml"), "w") as f:
+        f.write(SPIGOT_YML)
+    with open(os.path.join(sdir, "bukkit.yml"), "w") as f:
+        f.write(BUKKIT_YML)
     with open(os.path.join(sdir, "start.sh"), "w") as f:
         f.write(f"#!/bin/sh\njava -Xms2G -Xmx4G {AIKAR_FLAGS} -jar {server_jar} nogui\n")
     with open(os.path.join(sdir, "start.bat"), "w") as f:
