@@ -1,39 +1,60 @@
 == Dezarhivez pack-ul original ==
-== Construiesc clientul lite (.mrpack) ==
-  + adaug (client): entityculling-forge-mc1.16.5-1.5.2.jar
-  + adaug (client): FpsReducer-forge-1.24-mc1.16.5.jar
-  + adaug (client): memoryleakfix-forge-pre1.17-1.1.5.jar
-  !! 'starlight-forge' sarit (nu e disponibil pt 1.16.5 forge): nicio versiune compatibila
-  => out/Freeroam-Lite-Client-1.1.0-lite.mrpack (147.8 MB)
-== Construiesc serverul lite (.zip) ==
-  ↓ descarc: mapperbase-1.16.5-2.4.0.0.jar
-  ↓ descarc: supplementaries-1.16.5-0.18.4b.jar
-  - scot (server): TextruesRubidiumOptions-1.0.8-mc1.16.5.jar
-  ↓ descarc: modernfix-forge-5.18.0+mc1.16.5.jar
-  ↓ descarc: player-animation-lib-forge-0.4.0+1.16.5.jar
-  ↓ descarc: ferritecore-2.1.1-forge.jar
-  ↓ descarc: emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar
-  - scot (server): InGameAccountSwitcher-Forge-1.16-8.0.1.jar
-  ↓ descarc: roadstuff-1.16.5-4.3.0.jar
-  - scot (server): rubidium-mc1.16.5-0.2.13.jar
-  - scot (server): oculus-mc1.16.5-1.4.7.jar
-  ↓ descarc: selene-1.16.5-1.9.0.jar
-  ↓ descarc: voicechat-forge-1.16.5-2.3.23.jar
-  - scot (server/override): CTM-MC1.16.1-1.1.2.6.jar
-  - scot (server/override): DynamicSurroundings-1.16.5-4.0.5.0.jar
-  - scot (server/override): lightfallclient-1.0.0.jar
-  - scot (server/override): notenoughanimations-1.2.4.jar
-  + adaug (server): Clumps-6.0.0.28.jar
-  + adaug (server): memoryleakfix-forge-pre1.17-1.1.5.jar
-  !! 'starlight-forge' sarit (nu e disponibil pt 1.16.5 forge): nicio versiune compatibila
-  + adaug (server): AI-Improvements-1.16.5-0.5.0.jar
+== CLIENT lite (.mrpack) - toate modurile originale pastrate ==
+  + entityculling-forge-mc1.16.5-1.5.2.jar
+  + FpsReducer-forge-1.24-mc1.16.5.jar
+  + memoryleakfix-forge-pre1.17-1.1.5.jar
+  !! 'starlight-forge' sarit (client): nicio versiune
+  => out/Freeroam-Lite-Client-1.2.0-lite.mrpack (147.8 MB)
+== Moduri de server (comune) ==
+  ↓ mapperbase-1.16.5-2.4.0.0.jar
+  ↓ supplementaries-1.16.5-0.18.4b.jar
+  - scot (client-only): TextruesRubidiumOptions-1.0.8-mc1.16.5.jar
+  ↓ modernfix-forge-5.18.0+mc1.16.5.jar
+  ↓ player-animation-lib-forge-0.4.0+1.16.5.jar
+  ↓ ferritecore-2.1.1-forge.jar
+  ↓ emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar
+  - scot (client-only): InGameAccountSwitcher-Forge-1.16-8.0.1.jar
+  ↓ roadstuff-1.16.5-4.3.0.jar
+  - scot (client-only): rubidium-mc1.16.5-0.2.13.jar
+  - scot (client-only): oculus-mc1.16.5-1.4.7.jar
+  ↓ selene-1.16.5-1.9.0.jar
+  ↓ voicechat-forge-1.16.5-2.3.23.jar
+  + perf: Clumps-6.0.0.28.jar [modrinth]
+  + perf: memoryleakfix-forge-pre1.17-1.1.5.jar [modrinth]
+    (modrinth: starlight-forge -> nicio versiune)
+    (curseforge: starlight-forge -> HTTP Error 404: Not Found)
+  !! 'starlight-forge' sarit (nu exista pt 1.16.5 forge nicaieri)
+  + perf: AI-Improvements-1.16.5-0.5.0.jar [modrinth]
+    (modrinth: roadrunner -> HTTP Error 404: Not Found)
+  + perf: RoadRunner-mc1.16.5-1.5.2.jar [curseforge]
+  + perf: radon-0.8.0a.jar [modrinth]
+    (modrinth: fastfurnace -> nicio versiune)
+  + perf: FastFurnace-1.16.5-4.5.0.jar [curseforge]
+    (modrinth: fastworkbench -> nicio versiune)
+  + perf: FastWorkbench-1.16.5-4.6.2.jar [curseforge]
+    (modrinth: smooth-boot-reloaded -> nicio versiune)
+    (curseforge: smooth-boot-reloaded -> niciun fisier compatibil)
+  !! 'smooth-boot-reloaded' sarit (nu exista pt 1.16.5 forge nicaieri)
+  + perf: saturn-mc1.16.5-0.0.3.jar [modrinth]
+== SERVER MaxLite (Forge pur - consum minim) ==
+    (modrinth: ftb-library-forge -> HTTP Error 404: Not Found)
+    (curseforge: ftb-library-forge -> HTTP Error 404: Not Found)
+  !! 'ftb-library-forge' sarit (nu exista pt 1.16.5 forge nicaieri)
+    (modrinth: ftb-essentials -> HTTP Error 404: Not Found)
+    (curseforge: ftb-essentials -> niciun fisier compatibil)
+  !! 'ftb-essentials' sarit (nu exista pt 1.16.5 forge nicaieri)
+    (modrinth: ftb-ranks -> HTTP Error 404: Not Found)
+  + comenzi: ftb-ranks-forge-1605.1.6-build.33.jar [curseforge]
+  ↓ Forge installer
+  => out/Freeroam-Lite-Server-MaxLite-1.2.0-lite.zip (164.3 MB)
+== SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar
   ↓ plugin: EssentialsXSpawn-2.19.7.jar
   ↓ plugin: Vault.jar
-  ↓ plugin (modrinth): LuckPerms-Bukkit-5.5.71.jar
-  !! 'spark' sarit (nu e disponibil pt 1.16.5 bukkit): nicio versiune compatibila
-  ↓ plugin (modrinth): Chunky-1.3.38.jar
-  ↓ descarc Arclight (server hibrid Forge+Bukkit)
-  => out/Freeroam-Lite-Server-1.1.0-lite.zip (170.1 MB)
+  ↓ plugin: LuckPerms-Bukkit-5.5.71.jar
+  !! plugin 'spark' sarit: nicio versiune
+  ↓ plugin: Chunky-1.3.38.jar
+  ↓ Arclight
+  => out/Freeroam-Lite-Server-Arclight-1.2.0-lite.zip (170.6 MB)
 GATA.
