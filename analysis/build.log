@@ -1,0 +1,28 @@
+== Dezarhivez pack-ul original ==
+== Construiesc clientul lite (.mrpack) ==
+  - scot (client): oculus-mc1.16.5-1.4.7.jar
+  + adaug (client): entityculling-forge-mc1.16.5-1.5.2.jar
+  - scot (client/override): DynamicSurroundings-1.16.5-4.0.5.0.jar
+  => out/Freeroam-Lite-Client-1.0.0-lite.mrpack (133.3 MB)
+== Construiesc serverul lite (.zip) ==
+  ↓ descarc: mapperbase-1.16.5-2.4.0.0.jar
+  ↓ descarc: supplementaries-1.16.5-0.18.4b.jar
+  - scot (server): TextruesRubidiumOptions-1.0.8-mc1.16.5.jar
+  ↓ descarc: modernfix-forge-5.18.0+mc1.16.5.jar
+  ↓ descarc: player-animation-lib-forge-0.4.0+1.16.5.jar
+  ↓ descarc: ferritecore-2.1.1-forge.jar
+  ↓ descarc: emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar
+  - scot (server): InGameAccountSwitcher-Forge-1.16-8.0.1.jar
+  ↓ descarc: roadstuff-1.16.5-4.3.0.jar
+  - scot (server): rubidium-mc1.16.5-0.2.13.jar
+  - scot (server): oculus-mc1.16.5-1.4.7.jar
+  ↓ descarc: selene-1.16.5-1.9.0.jar
+  ↓ descarc: voicechat-forge-1.16.5-2.3.23.jar
+  - scot (server/override): CTM-MC1.16.1-1.1.2.6.jar
+  - scot (server/override): DynamicSurroundings-1.16.5-4.0.5.0.jar
+  - scot (server/override): lightfallclient-1.0.0.jar
+  - scot (server/override): notenoughanimations-1.2.4.jar
+  + adaug (server): Clumps-6.0.0.28.jar
+  ↓ descarc installerul Forge
+  => out/Freeroam-Lite-Server-1.0.0-lite.zip (163.6 MB)
+GATA.
