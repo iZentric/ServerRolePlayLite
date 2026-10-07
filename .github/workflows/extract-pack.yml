@@ -1,0 +1,60 @@
+name: Extract pack analysis
+on:
+  push:
+    branches: [ "arena/a29b4ef4-serverroleplaylite" ]
+    paths: [ ".github/workflows/extract-pack.yml" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download pack from release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download pack-original -p '*.mrpack' -O pack.mrpack
+      - name: Extract analysis files
+        run: |
+          set -e
+          mkdir -p analysis work
+          ( cd work && unzip -q ../pack.mrpack )
+          # 1) index-ul cu lista de moduri
+          cp work/modrinth.index.json analysis/ 2>/dev/null || true
+          # 2) listing complet cu dimensiuni
+          ( cd work && find . -type f -printf '%s\t%p\n' | sort -t$'\t' -k2 ) > analysis/files-listing.tsv
+          # 3) sha1 pentru jar-urile din overrides
+          ( cd work && find . -name '*.jar' -exec sha1sum {} \; ) > analysis/override-jars-sha1.txt || true
+          # 4) configurarile din overrides, fara jar-uri si fara fisiere uriase
+          for d in overrides client-overrides server-overrides; do
+            if [ -d "work/$d" ]; then
+              ( cd work && zip -q -r ../analysis/overrides-configs.zip "$d" -x '*.jar' )
+            fi
+          done
+          # 5) daca zip-ul de configs e prea mare pentru git, il impartim in bucati de 90MB
+          if [ -f analysis/overrides-configs.zip ] && [ "$(stat -c%s analysis/overrides-configs.zip)" -gt 95000000 ]; then
+            split -b 90m analysis/overrides-configs.zip analysis/overrides-configs.zip.part-
+            rm analysis/overrides-configs.zip
+          fi
+          # 6) jar-urile din overrides, impartite in bucati de 90MB daca e nevoie
+          mkdir -p analysis/override-jars
+          ( cd work && find . -name '*.jar' -type f ) | while read -r j; do
+            sz=$(stat -c%s "work/$j")
+            base=$(basename "$j")
+            if [ "$sz" -le 95000000 ]; then
+              cp "work/$j" "analysis/override-jars/$base"
+            else
+              split -b 90m "work/$j" "analysis/override-jars/$base.part-"
+            fi
+          done
+          rmdir analysis/override-jars 2>/dev/null || true
+          rm -rf work pack.mrpack
+          du -sh analysis && ls -la analysis
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f analysis
+          git commit -m "analysis: continut extras din Freeroam 1.0.0 mrpack" || echo "nimic de comis"
+          git push
