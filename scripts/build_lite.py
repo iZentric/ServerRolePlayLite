@@ -448,6 +448,20 @@ def main():
         log(f"  ↓ plugin: {info['filename']}")
         download(info["url"], os.path.join(plugdir, info["filename"]))
         report["arclight_added"].append(f"plugin: {info['filename']}")
+    for sp in rules.get("plugins_spiget", []):
+        try:
+            res = sp["resource"]
+            pat = re.compile(sp["match"])
+            vers = http_json(f"https://api.spiget.org/v2/resources/{res}/versions?size=1000&sort=-releaseDate")
+            v = next((x for x in vers if pat.match(x.get("name", ""))), None)
+            if not v:
+                raise ValueError(f"nicio versiune care sa se potriveasca cu {sp['match']}")
+            log(f"  ↓ plugin: {sp['save_as']} (spiget v{v['name']})")
+            download(f"https://api.spiget.org/v2/resources/{res}/versions/{v['id']}/download",
+                     os.path.join(plugdir, sp["save_as"]))
+            report["arclight_added"].append(f"plugin: {sp['save_as']} ({v['name']})")
+        except Exception as e:  # noqa: BLE001
+            log(f"  !! plugin spiget '{sp.get('save_as')}' sarit: {e}")
     log("  ↓ Arclight")
     download(rules["arclight_url"], os.path.join(s2, rules["arclight_jar"]))
     with open(os.path.join(s2, "spigot.yml"), "w") as f:
