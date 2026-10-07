@@ -1,6 +1,9 @@
 name: Deploy pe Zampto (SFTP)
 on:
   workflow_dispatch: {}
+  push:
+    branches: [ "arena/a29b4ef4-serverroleplaylite" ]
+    paths: [ "deploy/trigger.txt" ]
 permissions:
   contents: read
 jobs:
