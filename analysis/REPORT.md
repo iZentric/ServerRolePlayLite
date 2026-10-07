@@ -1,4 +1,4 @@
-# Raport build Freeroam Lite (1.3.1-lite)
+# Raport build Freeroam Lite (1.4.0-lite)
 
 Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
@@ -15,6 +15,8 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ ftb-library-forge-1605.3.5-build.724.jar
 - ✅ ftb-essentials-1605.1.5-build.32.jar
 - ✅ ftb-ranks-forge-1605.1.6-build.33.jar
+- ✅ EXTREME: jmt_mcmt-1.16.5-0.22.87.jar
+- ✅ EXTREME: performant-1.16.2-5-4.1m.jar
 
 ## 🖥️ SERVER Arclight (hibrid cu pluginuri reale)
 
@@ -53,6 +55,8 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ FastFurnace-1.16.5-4.5.0.jar
 - ✅ FastWorkbench-1.16.5-4.6.2.jar
 - ✅ saturn-mc1.16.5-0.0.3.jar
+- ✅ DataFixerSlayer 1.0-3.jar
+- ✅ getittogetherdrops-1.16.5-v1.2.jar
 
 ### Setari consum minim
 - JVM: porneste la 1 GB, creste doar la nevoie (max 4 GB), G1GC Aikar
