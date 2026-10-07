@@ -1,4 +1,4 @@
-# Raport build Freeroam Lite (1.3.0-lite)
+# Raport build Freeroam Lite (1.3.1-lite)
 
 Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
@@ -28,6 +28,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ plugin: worldguard-bukkit-7.0.5-dist.jar
 - ✅ plugin: ZNPCsPlus-1.0.8.jar
 - ✅ plugin: packetevents-spigot-2.14.0.jar
+- ✅ plugin: GriefPrevention.jar
 - ✅ plugin: LuckPerms-Bukkit-5.5.71.jar
 - ✅ plugin: Chunky-1.3.38.jar
 
