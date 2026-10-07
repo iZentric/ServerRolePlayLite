@@ -2,11 +2,9 @@ name: world-factory
 
 on:
   workflow_dispatch:
-    inputs:
-      radius:
-        description: "Raza pre-generata in blocuri (granita = 2x raza)"
-        default: "1000"
-        required: true
+  push:
+    paths:
+      - "deploy/world-factory-trigger.txt"
 
 concurrency:
   group: world-factory
@@ -49,7 +47,7 @@ jobs:
         run: |
           set -o pipefail
           cd srv
-          R=${{ github.event.inputs.radius }}
+          R=$(tr -dc 0-9 < ../deploy/world-factory-trigger.txt 2>/dev/null | head -c 6); R=${R:-1000}; echo "RAZA=$R"
           mkfifo console.in
           # tinem FIFO deschis ca sa putem scrie comenzi pe rand
           exec 3> console.in
@@ -101,6 +99,6 @@ jobs:
           cd srv && zip -q -r ../world-pregen.zip world || exit 0
           cd .. && gh release delete world --yes || true
           gh release create world world-pregen.zip --title "Lume pre-generata (fabrica)" \
-            --notes "Generata de world-factory, granita $((${{ github.event.inputs.radius }}*2))x$((${{ github.event.inputs.radius }}*2))."
+            --notes "Generata de world-factory, granita stabilita de trigger."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

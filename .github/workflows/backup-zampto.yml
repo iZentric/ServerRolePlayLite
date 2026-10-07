@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 3 * * *"   # in fiecare noapte la 03:00 UTC
   workflow_dispatch:
+  push:
+    paths:
+      - "deploy/backup-trigger.txt"
 
 concurrency:
   group: zampto-backup
