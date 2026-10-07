@@ -85,3 +85,22 @@ acest repo). Orice alt „server software" ori e mort, ori adaugă straturi pest
 | 🥇 teoretic | **Mist EXPERIMENTAL** (Mohist+patch-uri Paper, no-tick-view-distance, per-player-mob-spawns) | ✅ | cel mai mic CU pluginuri | ⚠️ proiect abandonat 2021 |
 | 🥈 sigur | **Arclight** ultra-tuned | ✅ | foarte mic | stabil, întreținut |
 | 🏆 absolut | **MaxLite** (Forge pur + FTB comenzi) | ❌ (doar comenzi din moduri) | CEL MAI MIC posibil | zero |
+
+---
+
+## F. CATALOG COMPLET — TOT ce există pe net pentru moduri Forge 1.16.5 + pluginuri (căutare exhaustivă 2026)
+
+| Soluție | Stare | Descărcabil? | Verdict |
+|---|---|---|---|
+| **Arclight 1.0.25** | ✅ întreținut | ✅ GitHub | în release-ul nostru |
+| **Mist 1.16.5-33** (Mohist+Paper) | ⚠️ abandonat 2021 | ✅ GitHub | în release-ul nostru (EXPERIMENTAL) |
+| **CatServer 1.16.5** (build mai 2023) | ⚠️ 1.16.5 înghețat, dar CEL MAI RECENT hibrid 1.16.5 | ✅ GitHub (23.05.26-1) | **ADĂUGAT — varianta 4** |
+| Mohist 1.16.5 | ✅ există | ✅ mohistmc.com | sărit — cel mai gras, Mist e Mohist+patch-uri Paper |
+| Magma 1.16.5 | ❌ fundația moartă, repo șters | ❌ niciun artefact pe GitHub | imposibil |
+| LoliServer 1.16.5 | ❌ abandonat | ❌ zero release-uri | imposibil |
+| SpongeForge 1.16.5 (API 8) | ⚠️ există RC | doar maven Sponge | NU rulează pluginuri Bukkit (EssentialsX/LuckPerms-Bukkit nu merg) — ecosistem separat |
+| Cardboard / Banner | ✅ | ✅ | DOAR Fabric — pack-ul tău e Forge, inutilizabil |
+| HybridFix | ✅ | ✅ | DOAR 1.12.2 |
+| Conversie mod→plugin sau plugin→mod | — | — | **imposibil tehnic**: API-uri diferite (Forge hooks vs Bukkit API), nimeni n-a reușit vreodată automat |
+
+**Concluzie: există EXACT 4 jar-uri funcționale pe lume pentru 1.16.5 Forge+pluginuri (Arclight, Mist, CatServer, Mohist). Avem 3 din 4 în release (am sărit doar Mohist, cel mai consumator, pentru că Mist = Mohist îmbunătățit).**
