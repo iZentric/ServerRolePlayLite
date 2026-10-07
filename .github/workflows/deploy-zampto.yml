@@ -5,22 +5,25 @@ on:
     branches: [ "arena/a29b4ef4-serverroleplaylite" ]
     paths: [ "deploy/trigger.txt" ]
 permissions:
-  contents: read
+  contents: write
+env:
+  SFTP_HOST: node12.zampto.net
+  SFTP_PORT: "2022"
+  SFTP_USER: 15254.1388b9af
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Verifica secretele
+      - uses: actions/checkout@v4
+      - name: Verifica parola
         env:
-          H: ${{ secrets.ZAMPTO_SFTP_HOST }}
-          U: ${{ secrets.ZAMPTO_SFTP_USER }}
           P: ${{ secrets.ZAMPTO_SFTP_PASS }}
         run: |
-          if [ -z "$H" ] || [ -z "$U" ] || [ -z "$P" ]; then
-            echo "::error::Lipsesc secretele! Adauga in repo: Settings -> Secrets and variables -> Actions -> New repository secret: ZAMPTO_SFTP_HOST, ZAMPTO_SFTP_USER, ZAMPTO_SFTP_PASS (optional ZAMPTO_SFTP_PORT, implicit 2022)."
+          if [ -z "$P" ]; then
+            echo "::error::Lipseste secretul ZAMPTO_SFTP_PASS!"
             exit 1
           fi
-          echo "Secrete OK."
+          echo "Parola e in seif, OK."
       - name: Descarca pack-ul de server din release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -31,18 +34,25 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
       - name: Urca fisierele pe server
         env:
-          H: ${{ secrets.ZAMPTO_SFTP_HOST }}
-          U: ${{ secrets.ZAMPTO_SFTP_USER }}
           P: ${{ secrets.ZAMPTO_SFTP_PASS }}
-          PORT: ${{ secrets.ZAMPTO_SFTP_PORT }}
         run: |
-          PORT="${PORT:-2022}"
-          echo "Upload spre sftp://$H:$PORT ..."
-          lftp -u "$U","$P" "sftp://$H:$PORT" -e "
+          set +e
+          lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "
             set sftp:auto-confirm yes;
             set net:max-retries 2;
-            set net:timeout 30;
-            mirror -R --verbose --parallel=4 srv/ /;
+            set net:timeout 40;
+            mirror -R --verbose --parallel=2 srv/ /;
             bye
-          "
-          echo "✅ Deploy terminat! Reporneste serverul din panoul Zampto."
+          " > deploy-log.txt 2>&1
+          RC=$?
+          echo "exit=$RC" >> deploy-log.txt
+          tail -40 deploy-log.txt
+          mkdir -p analysis
+          { echo "# Deploy Zampto - $(date -u)"; echo; tail -60 deploy-log.txt; } > analysis/deploy-log.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f analysis/deploy-log.txt
+          git commit -m "analysis: log deploy Zampto" || true
+          git pull --rebase origin ${{ github.ref_name }} || true
+          git push || true
+          exit $RC
