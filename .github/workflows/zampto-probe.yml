@@ -23,22 +23,16 @@ jobs:
             echo "" >> $OUT
             echo "**EROARE: secretul ZAMPTO_API_KEY nu este setat in repo!**" >> $OUT
           else
-            for URL in \
-              "https://api.zampto.net/servers" \
-              "https://api.zampto.net/" \
-              "https://api.zampto.net/endpoints" \
-            ; do
-              CODE=$(curl -s -o /tmp/body -w '%{http_code}' -m 20 \
-                -H "Authorization: $KEY" -H "Accept: application/json" "$URL" || echo "ERR")
-              BODY=$(head -c 500 /tmp/body | tr -d '\r' | sed "s/$KEY/***/g")
-              echo "" >> $OUT
-              echo "## [raw-auth] $URL" >> $OUT
-              echo "- status: **$CODE**" >> $OUT
-              echo '```' >> $OUT
-              echo "$BODY" >> $OUT
-              echo '```' >> $OUT
-              sleep 5
-            done
+            CODE=$(curl -s -o /tmp/body -w '%{http_code}' -m 20 \
+              -H "Authorization: Bearer $KEY" -H "Accept: application/json" \
+              -A "Mozilla/5.0 (deploy-bot)" "https://api.zampto.net/servers" || echo "ERR")
+            BODY=$(head -c 800 /tmp/body | tr -d '\r' | sed "s/$KEY/***/g")
+            echo "" >> $OUT
+            echo "## [bearer-final] https://api.zampto.net/servers" >> $OUT
+            echo "- status: **$CODE**" >> $OUT
+            echo '```' >> $OUT
+            echo "$BODY" >> $OUT
+            echo '```' >> $OUT
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
