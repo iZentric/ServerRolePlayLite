@@ -45,7 +45,7 @@ jobs:
             set net:max-retries 3;
             set net:timeout 60;
             rm -f forge-1.16.5-36.2.42-installer.jar install-forge.sh install-forge.bat;
-            mirror -R --verbose --parallel=2 --size-only srv/ /;
+            mirror -R --verbose --parallel=2 --only-newer --ignore-time srv/ /;
             bye
           " > deploy-log.txt 2>&1
           RC=$?
