@@ -24,7 +24,9 @@ jobs:
       - name: Descarca pack-ul si decompileaza Pizzaland
         run: |
           set -eo pipefail
-          mkdir -p work
+          mkdir -p analysis/pizzaland-src work
+          exec > >(tee analysis/pizzaland-src/decompile-log.txt) 2>&1
+          set -x
           curl -L --retry 4 -o work/pack.zip "https://dc-bot.palma-city.de/api/download/freeroam-pack"
           unzip -q -o work/pack.zip -d work/pack
           JAR=$(find work/pack -iname "*izzaland*.jar" | head -1)
@@ -69,6 +71,7 @@ jobs:
           du -h analysis/pizzaland-src/*
 
       - name: Commit rezultatul
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
