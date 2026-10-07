@@ -35,6 +35,8 @@
   "arclight_jar": "arclight-forge-1.16.5-1.0.25.jar",
   "mist_url": "https://github.com/MinecraftMist/Mist/releases/download/1.16.5-33/mist-1.16.5-33-server.jar",
   "mist_jar": "mist-1.16.5-33-server.jar",
+  "catserver_url": "https://github.com/Luohuayu/CatServer/releases/download/23.05.26-1/CatServer-1.16.5-1d8d6313-server.jar",
+  "catserver_jar": "CatServer-1.16.5-1d8d6313-server.jar",
   "plugins_github": [
     "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsX-2.19.7.jar",
     "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXChat-2.19.7.jar",

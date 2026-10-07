@@ -428,6 +428,8 @@ def main():
     log("== SERVER Arclight (hibrid cu pluginuri) ==")
     s2 = os.path.join(out_dir, "srv-arclight")
     shutil.rmtree(s2, ignore_errors=True)
+    shutil.rmtree(s3, ignore_errors=True)
+    shutil.rmtree(s4, ignore_errors=True)
     shutil.copytree(base, s2)
     plugdir = os.path.join(s2, "plugins")
     os.makedirs(plugdir, exist_ok=True)
@@ -485,6 +487,28 @@ def main():
         zip_dir(z, s3)
     log(f"  => {z3} ({os.path.getsize(z3)/1e6:.1f} MB)")
 
+    # ---------------- VARIANTA 4: CATSERVER (hibrid, cel mai STABIL cu moduri+pluginuri) ----------------
+    log("== SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==")
+    s4 = os.path.join(out_dir, "srv-catserver")
+    shutil.rmtree(s4, ignore_errors=True)
+    shutil.copytree(s2, s4)
+    os.remove(os.path.join(s4, rules["arclight_jar"]))
+    log("  ↓ CatServer")
+    download(rules["catserver_url"], os.path.join(s4, rules["catserver_jar"]))
+    write_start_scripts(s4, rules["catserver_jar"])
+    with open(os.path.join(s4, "CITESTE-MA.txt"), "w") as f:
+        f.write(README_ARCLIGHT.replace("Arclight 1.16.5 = Forge + pluginuri Bukkit",
+                                        "CatServer 1.16.5 = Forge + pluginuri Bukkit/Spigot (cel mai STABIL hibrid)")
+                .replace("arclight-forge-1.16.5-1.0.25.jar", rules["catserver_jar"])
+                .replace("(Arclight isi descarca librariile)", "(isi descarca librariile)")
+                + "\nNOTA: CatServer e renumit pentru compatibilitate maxima moduri+pluginuri\n"
+                  "(build mai 2023, cel mai recent hibrid 1.16.5 intretinut). Daca Mist crapa,\n"
+                  "incearca intai varianta asta inainte de Arclight.\n")
+    z4 = os.path.join(out_dir, f"Freeroam-Lite-Server-CatServer-{ver}.zip")
+    with zipfile.ZipFile(z4, "w", zipfile.ZIP_DEFLATED) as z:
+        zip_dir(z, s4)
+    log(f"  => {z4} ({os.path.getsize(z4)/1e6:.1f} MB)")
+
     # ---------------- RAPORT ----------------
     with open(os.path.join(out_dir, "REPORT.md"), "w") as f:
         f.write(f"# Raport build Freeroam Lite ({ver})\n\n")
@@ -513,6 +537,8 @@ def main():
     shutil.rmtree(base, ignore_errors=True)
     shutil.rmtree(s1, ignore_errors=True)
     shutil.rmtree(s2, ignore_errors=True)
+    shutil.rmtree(s3, ignore_errors=True)
+    shutil.rmtree(s4, ignore_errors=True)
     log("GATA.")
 
 
