@@ -25,25 +25,35 @@ jobs:
           else
             SERVER_ID=17192
             for URL in \
-              "https://dash.zampto.net/api/client" \
-              "https://dash.zampto.net/api/client/servers" \
-              "https://dash.zampto.net/api/client/servers/$SERVER_ID" \
-              "https://dash.zampto.net/api/v1/servers" \
-              "https://dash.zampto.net/api/v1/servers/$SERVER_ID" \
-              "https://dash.zampto.net/api/servers/$SERVER_ID" \
-              "https://dash.zampto.net/api/user/servers" \
-              "https://api.zampto.net/v1/servers" \
-              "https://panel.zampto.net/api/client" \
+              "https://api.zampto.net/v1/user" \
+              "https://api.zampto.net/v1/me" \
+              "https://api.zampto.net/v1/account" \
+              "https://api.zampto.net/v1/user/servers" \
+              "https://api.zampto.net/v1/hosting/servers" \
+              "https://api.zampto.net/v1/server/$SERVER_ID" \
+              "https://api.zampto.net/user" \
+              "https://api.zampto.net/me" \
+              "https://api.zampto.net/servers" \
+              "https://api.zampto.net/server/$SERVER_ID" \
+              "https://api.zampto.net/hosting/servers" \
+              "https://api.zampto.net/account/servers" \
             ; do
-              CODE=$(curl -s -o /tmp/body -w '%{http_code}' -m 20 \
-                -H "Authorization: Bearer $KEY" -H "Accept: application/json" "$URL" || echo "ERR")
-              BODY=$(head -c 600 /tmp/body | tr -d '\r' | sed "s/$KEY/***/g")
-              echo "" >> $OUT
-              echo "## $URL" >> $OUT
-              echo "- status: **$CODE**" >> $OUT
-              echo '```' >> $OUT
-              echo "$BODY" >> $OUT
-              echo '```' >> $OUT
+              for STYLE in bearer apikey; do
+                if [ "$STYLE" = "bearer" ]; then
+                  CODE=$(curl -s -o /tmp/body -w '%{http_code}' -m 20 \
+                    -H "Authorization: Bearer $KEY" -H "Accept: application/json" "$URL" || echo "ERR")
+                else
+                  CODE=$(curl -s -o /tmp/body -w '%{http_code}' -m 20 \
+                    -H "x-api-key: $KEY" -H "Accept: application/json" "$URL" || echo "ERR")
+                fi
+                BODY=$(head -c 400 /tmp/body | tr -d '\r' | sed "s/$KEY/***/g")
+                echo "" >> $OUT
+                echo "## [$STYLE] $URL" >> $OUT
+                echo "- status: **$CODE**" >> $OUT
+                echo '```' >> $OUT
+                echo "$BODY" >> $OUT
+                echo '```' >> $OUT
+              done
             done
           fi
           git config user.name "github-actions[bot]"
