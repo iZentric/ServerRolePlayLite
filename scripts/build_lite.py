@@ -408,6 +408,12 @@ def main():
             log(f"  + comenzi: {info['filename']} [{info['source']}]")
             download(info["url"], os.path.join(s1, "mods", info["filename"]))
             report["maxlite_added"].append(info["filename"])
+    for slug in rules.get("maxlite_extreme_mods", []):
+        info = resolve_any(slug, mc, "forge")
+        if info:
+            log(f"  + EXTREME: {info['filename']} [{info['source']}]")
+            download(info["url"], os.path.join(s1, "mods", info["filename"]))
+            report["maxlite_added"].append(f"EXTREME: {info['filename']}")
     forge_installer = f"forge-{mc}-{forge}-installer.jar"
     log("  ↓ Forge installer")
     download(f"https://maven.minecraftforge.net/net/minecraftforge/forge/{mc}-{forge}/{forge_installer}",

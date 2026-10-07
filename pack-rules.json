@@ -1,12 +1,10 @@
 {
   "pack_name": "Freeroam Lite",
-  "pack_version": "1.3.1-lite",
+  "pack_version": "1.4.0-lite",
   "minecraft": "1.16.5",
   "forge": "36.2.42",
-
   "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
   "remove_from_client": [],
-
   "_comentariu_server": "De pe SERVER se scot DOAR modurile client-only (randare/meniuri — pe server nu fac absolut nimic, doar maresc timpul de pornire si RAM-ul). Jucatorii NU sunt afectati: clientul lor le are pe toate.",
   "remove_from_server": [
     "rubidium",
@@ -18,17 +16,37 @@
     "lightfallclient",
     "CTM-MC"
   ],
-
   "_comentariu_adaugate": "Doar moduri de PERFORMANTA, zero schimbari de gameplay. Daca un slug nu are versiune pt 1.16.5 Forge pe Modrinth, e sarit automat fara sa strice build-ul.",
-  "add_client_modrinth": ["entityculling", "fps-reducer", "memoryleakfix", "starlight-forge"],
-  "add_server_modrinth": ["clumps", "memoryleakfix", "starlight-forge", "ai-improvements"],
-
+  "add_client_modrinth": [
+    "entityculling",
+    "fps-reducer",
+    "memoryleakfix",
+    "starlight-forge"
+  ],
+  "add_server_modrinth": [
+    "clumps",
+    "memoryleakfix",
+    "starlight-forge",
+    "ai-improvements"
+  ],
   "_comentariu_perf_extra": "Artileria grea de performanta pt 1.16.5 (RoadRunner=Lithium, Radon=Phosphor etc). Cautate pe Modrinth apoi CurseForge; sarite daca nu exista. Performant si MCMT sunt excluse intentionat (conflicte).",
-  "add_server_extra_perf": ["roadrunner", "radon", "fastfurnace", "fastworkbench", "smooth-boot-reloaded", "saturn"],
-
+  "add_server_extra_perf": [
+    "roadrunner",
+    "radon",
+    "fastfurnace",
+    "fastworkbench",
+    "smooth-boot-reloaded",
+    "saturn",
+    "datafixerslayer|data-fixer-slayer",
+    "adaptive-performance-tweaks",
+    "get-it-together-drops"
+  ],
   "_comentariu_maxlite": "Moduri server-side care inlocuiesc pluginurile in varianta MaxLite (Forge pur, consum minim).",
-  "maxlite_command_mods": ["ftb-library-forge|ftb-library|ftblibrary", "ftb-essentials", "ftb-ranks"],
-
+  "maxlite_command_mods": [
+    "ftb-library-forge|ftb-library|ftblibrary",
+    "ftb-essentials",
+    "ftb-ranks"
+  ],
   "_comentariu_pluginuri": "Server hibrid Arclight = moduri Forge + pluginuri Bukkit simultan. Pluginurile de pe GitHub se descarca direct, cele de pe Modrinth se rezolva automat (sarite daca nu exista pt 1.16.5 bukkit).",
   "server_type": "arclight",
   "arclight_url": "https://github.com/IzzelAliz/Arclight/releases/download/1.16%2F1.0.25/arclight-forge-1.16.5-1.0.25.jar",
@@ -51,7 +69,20 @@
     "https://github.com/GriefPrevention/GriefPrevention/releases/download/16.18/GriefPrevention.jar"
   ],
   "plugins_spiget": [
-    {"resource": 77506, "match": "^5\\.", "save_as": "PlotSquared-Bukkit-v5.jar", "nume": "PlotSquared v5 (ploturi, ultima versiune pt Java 11/1.16.5)"}
+    {
+      "resource": 77506,
+      "match": "^5\\.",
+      "save_as": "PlotSquared-Bukkit-v5.jar",
+      "nume": "PlotSquared v5 (ploturi, ultima versiune pt Java 11/1.16.5)"
+    }
   ],
-  "plugins_modrinth": ["luckperms", "spark", "chunky"]
+  "plugins_modrinth": [
+    "luckperms",
+    "spark",
+    "chunky"
+  ],
+  "maxlite_extreme_mods": [
+    "mcmt|mcmt-multithreading",
+    "performant"
+  ]
 }
