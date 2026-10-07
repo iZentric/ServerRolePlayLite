@@ -1,0 +1,52 @@
+name: backup-zampto
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # in fiecare noapte la 03:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: zampto-backup
+  cancel-in-progress: false
+
+env:
+  SFTP_HOST: node12.zampto.net
+  SFTP_PORT: 2022
+  SFTP_USER: 15254.1388b9af
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instaleaza lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Trage lumea + configurile de pe server
+        run: |
+          set -eo pipefail
+          P='${{ secrets.ZAMPTO_SFTP_PASS }}'
+          mkdir -p backup
+          lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "
+            set sftp:auto-confirm yes;
+            set net:timeout 30; set net:max-retries 2;
+            mirror --verbose --parallel=2 world backup/world;
+            mirror --verbose --parallel=2 plugins backup/plugins --exclude-glob *.jar;
+            get -O backup server.properties || echo nope;
+            bye
+          " || echo "backup partial (unele fisiere pot fi blocate daca serverul ruleaza)"
+          du -sh backup/* || true
+
+      - name: Impacheteaza si publica backup-ul
+        run: |
+          set -eo pipefail
+          STAMP=$(date +%Y-%m-%d)
+          zip -q -r "backup-$STAMP.zip" backup
+          ls -la backup-*.zip
+          gh release delete backup --yes || true
+          gh release create backup "backup-$STAMP.zip" \
+            --title "Backup automat lume (ultimul: $STAMP)" \
+            --notes "Backup nocturn automat al lumii si configurilor de pe Zampto. Pastram mereu ultimul."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

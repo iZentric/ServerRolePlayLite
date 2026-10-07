@@ -146,11 +146,44 @@ biomeBlendRadius:0
 mipmapLevels:2
 """
 
+def strip_client_assets(jar_path):
+    """ULTRA: scoate texturi/modele/sunete/shadere din jar-urile de SERVER.
+    Serverul nu randeaza nimic - pastram lang/, data/, cod, mods.toml.
+    Scoatem si semnaturile (jar modificat = semnatura invalida oricum)."""
+    import tempfile
+    CLIENT_DIRS = ("/textures/", "/models/", "/sounds/", "/shaders/", "/blockstates/", "/font/")
+    try:
+        before = os.path.getsize(jar_path)
+        fd, tmp = tempfile.mkstemp(suffix=".jar", dir=os.path.dirname(jar_path))
+        os.close(fd)
+        with zipfile.ZipFile(jar_path) as zin, \
+             zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as zout:
+            for item in zin.infolist():
+                n = item.filename
+                low = n.lower()
+                if n.startswith("assets/") and "/lang/" not in low and (
+                        any(d in low for d in CLIENT_DIRS)
+                        or low.endswith((".png", ".ogg", ".wav", ".fsh", ".vsh", ".bbmodel"))):
+                    continue
+                if n.startswith("META-INF/") and low.endswith((".sf", ".rsa", ".dsa", ".ec")):
+                    continue
+                zout.writestr(item, zin.read(item))
+        os.replace(tmp, jar_path)
+        after = os.path.getsize(jar_path)
+        if before - after > 1024 * 100:
+            log(f"    ✂ {os.path.basename(jar_path)}: {before/1e6:.1f} -> {after/1e6:.1f} MB")
+        return before - after
+    except Exception as e:  # noqa: BLE001
+        log(f"    !! strip esuat pe {os.path.basename(jar_path)}: {e} (ramane intreg)")
+        return 0
+
+
 SERVER_PROPERTIES = """\
 #Minecraft server properties - Freeroam Lite (consum minim)
 motd=\\u00A7e\\u00A7lFreeroam Lite \\u00A77- RolePlay pentru toti!
 max-players=15
-view-distance=6
+view-distance=5
+sync-chunk-writes=false
 network-compression-threshold=256
 spawn-protection=0
 allow-flight=true
@@ -240,6 +273,37 @@ world-settings:
       enabled: false
 """
 
+SPIGOT_YML = """\
+# Freeroam Lite ULTRA - raze de activare taiate (mobii departe de jucatori dorm)
+settings:
+  save-user-cache-on-stop-only: true
+  netty-threads: 2
+world-settings:
+  default:
+    entity-activation-range:
+      animals: 12
+      monsters: 20
+      raiders: 24
+      misc: 6
+    entity-tracking-range:
+      players: 48
+      animals: 32
+      monsters: 32
+      misc: 16
+      other: 32
+    mob-spawn-range: 3
+    nerf-spawner-mobs: true
+    merge-radius:
+      item: 3.5
+      exp: 4.0
+    ticks-per:
+      hopper-transfer: 8
+      hopper-check: 8
+    max-tick-time:
+      tile: 20
+      entity: 20
+"""
+
 AIKAR_FLAGS = (
     "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 "
     "-XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC "
@@ -247,7 +311,7 @@ AIKAR_FLAGS = (
     "-XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 "
     "-XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 "
     "-XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 "
-    "-XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1"
+    "-XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication"
 )
 
 README_MAXLITE = """\
@@ -393,6 +457,14 @@ def main():
             download(info["url"], os.path.join(bmods, info["filename"]))
             report["server_added"].append(info["filename"])
 
+    if rules.get("ultra_strip_assets"):
+        log("== ULTRA: dezbrac jar-urile de server de assets client ==")
+        saved = 0
+        for j in sorted(os.listdir(bmods)):
+            if j.endswith(".jar"):
+                saved += strip_client_assets(os.path.join(bmods, j))
+        log(f"  => total economisit: {saved/1e6:.1f} MB")
+
     # ---------------- VARIANTA 1: MAX LITE (Forge pur) ----------------
     log("== SERVER MaxLite (Forge pur - consum minim) ==")
     s1 = os.path.join(out_dir, "srv-maxlite")
@@ -474,6 +546,8 @@ def main():
         f.write(SPIGOT_YML)
     with open(os.path.join(s2, "bukkit.yml"), "w") as f:
         f.write(BUKKIT_YML)
+    with open(os.path.join(s2, "spigot.yml"), "w") as f:
+        f.write(SPIGOT_YML)
     write_start_scripts(s2, rules["arclight_jar"])
     with open(os.path.join(s2, "CITESTE-MA.txt"), "w") as f:
         f.write(README_ARCLIGHT)
@@ -548,7 +622,7 @@ def main():
             f.write(f"- ✅ {n}\n")
         f.write("\n### Setari consum minim\n")
         f.write("- JVM: porneste la 1 GB, creste doar la nevoie (max 4 GB), G1GC Aikar\n")
-        f.write("- view-distance=6, max-players=15, mobi activati doar langa jucatori\n")
+        f.write("- view-distance=5 + sync-chunk-writes=false, max-players=15, mobi activati doar langa jucatori\n")
         f.write("- Arclight in plus: hoppers rarite, spawn-limits mici, villagers inactivi inghetati\n")
 
     shutil.rmtree(work, ignore_errors=True)
