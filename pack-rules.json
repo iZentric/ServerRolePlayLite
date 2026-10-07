@@ -1,6 +1,6 @@
 {
   "pack_name": "Freeroam Lite",
-  "pack_version": "1.3.0-lite",
+  "pack_version": "1.3.1-lite",
   "minecraft": "1.16.5",
   "forge": "36.2.42",
 
@@ -47,7 +47,8 @@
     "https://edge.forgecdn.net/files/3283/695/worldedit-bukkit-7.2.5-dist.jar",
     "https://edge.forgecdn.net/files/3342/964/worldguard-bukkit-7.0.5-dist.jar",
     "https://github.com/Pyrbu/ZNPCsPlus/releases/download/1.0.8/ZNPCsPlus-1.0.8.jar",
-    "https://github.com/retrooper/packetevents/releases/download/v2.14.0/packetevents-spigot-2.14.0.jar"
+    "https://github.com/retrooper/packetevents/releases/download/v2.14.0/packetevents-spigot-2.14.0.jar",
+    "https://github.com/GriefPrevention/GriefPrevention/releases/download/16.18/GriefPrevention.jar"
   ],
   "plugins_spiget": [
     {"resource": 77506, "match": "^5\\.", "save_as": "PlotSquared-Bukkit-v5.jar", "nume": "PlotSquared v5 (ploturi, ultima versiune pt Java 11/1.16.5)"}
