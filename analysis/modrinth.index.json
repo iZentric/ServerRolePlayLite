@@ -1,0 +1,208 @@
+{
+  "game": "minecraft",
+  "formatVersion": 1,
+  "versionId": "1.0.0",
+  "name": "PL2 Gambo",
+  "summary": "",
+  "files": [
+    {
+      "path": "mods/mapperbase-1.16.5-2.4.0.0.jar",
+      "hashes": {
+        "sha1": "a4a92e14fc43f9ea1d1b70fa710d2daa0e6185c7",
+        "sha512": "fb89e7150503f1ee20c739b1d9a694ee59f0f5e1a06ad1f732c4c03554f00089d72c467c817e38bd97ca049ce91869345f69a4fb4becab42ec1e7a910434dfbd"
+      },
+      "env": {
+        "client": "required",
+        "server": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/IAUIloQw/versions/XUjcGBam/mapperbase-1.16.5-2.4.0.0.jar"
+      ],
+      "fileSize": 222545
+    },
+    {
+      "path": "mods/supplementaries-1.16.5-0.18.4b.jar",
+      "hashes": {
+        "sha1": "e2260e17634b045dfdb711ffbbeba3254fcb553e",
+        "sha512": "3694189a30e5475df1d046570e9a5be70bf74b34f38459c7bc38f1e27d601d00a46035486588f1e0d4c9de36eba0e7ca53689be88e0ee1535507172d9e039d5b"
+      },
+      "env": {
+        "server": "required",
+        "client": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/fFEIiSDQ/versions/iKyOHYlO/supplementaries-1.16.5-0.18.4b.jar"
+      ],
+      "fileSize": 13904480
+    },
+    {
+      "path": "mods/TextruesRubidiumOptions-1.0.8-mc1.16.5.jar",
+      "hashes": {
+        "sha512": "b0fb2c1293d256888106c03558681286d4c04630b0dece2177f1c203ccb052efb963f79d52792f1df3ca10a0748b4dd193640af391d991898dd22f433f606b06",
+        "sha1": "69abfc3387ca13f82b301122309e0d58ac56147d"
+      },
+      "env": {
+        "server": "required",
+        "client": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/nm57myYP/versions/hsVDO8q9/TextruesRubidiumOptions-1.0.8-mc1.16.5.jar"
+      ],
+      "fileSize": 211610
+    },
+    {
+      "path": "mods/modernfix-forge-5.18.0+mc1.16.5.jar",
+      "hashes": {
+        "sha512": "5db2515339eb1727ec5cb232ca560f0ef689348319a5bb1f2c7e4df1ec4fb2077363c5a00929b98abc2dd4e94c76b4b729b4940602cf9fb778c5e002a9a46ad9",
+        "sha1": "bd020d379e36ed8a2568fa76d998aff265cb57bb"
+      },
+      "env": {
+        "client": "required",
+        "server": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/nmDcB62a/versions/Cc0b1kXl/modernfix-forge-5.18.0%2Bmc1.16.5.jar"
+      ],
+      "fileSize": 867079
+    },
+    {
+      "path": "mods/player-animation-lib-forge-0.4.0+1.16.5.jar",
+      "hashes": {
+        "sha1": "9789f8fee71abb03520c9a38ac6474262feaafbb",
+        "sha512": "7e9d9e3b8368bc7614b6887dc8bfa10671ad4f1a29187d16e181e47f79646edbb0c426fff0a79dccd300c71e804e3d9833a52e9241fa5581fa03e5b2a640aab5"
+      },
+      "env": {
+        "client": "required",
+        "server": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/gedNE4y2/versions/jzuEXFAI/player-animation-lib-forge-0.4.0%2B1.16.5.jar"
+      ],
+      "fileSize": 161419
+    },
+    {
+      "path": "mods/ferritecore-2.1.1-forge.jar",
+      "hashes": {
+        "sha512": "129eaec4743214258ed2f426192eba65f8268697fd37a0fc67f868d22b2eaea4d60d8e29100b034a00347672f830f3c4a4a3a94d2307d02f60c00ff4bd27f6a7",
+        "sha1": "3ae8dbe663156a8dec621d255856356444586905"
+      },
+      "env": {
+        "server": "required",
+        "client": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/uXXizFIs/versions/6gwDuh90/ferritecore-2.1.1-forge.jar"
+      ],
+      "fileSize": 108557
+    },
+    {
+      "path": "mods/emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar",
+      "hashes": {
+        "sha1": "e61ed776531b30ee773e8c402e318218903a6ab7",
+        "sha512": "a5c26a8ad78f52daf49fdeea4e90465c125c54f844d6ec146c10c979039c7005222bcc4af9f4f2f8a4ff7bc5c477fd3b5054b0f5460b9760d2d5b7682e987fd0"
+      },
+      "env": {
+        "server": "required",
+        "client": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/pZ2wrerK/versions/OU1kdZya/emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar"
+      ],
+      "fileSize": 665096
+    },
+    {
+      "path": "mods/InGameAccountSwitcher-Forge-1.16-8.0.1.jar",
+      "hashes": {
+        "sha1": "f0960547e720e700845aece1acb23e1948c68da1",
+        "sha512": "e9f5fbf9aee0ac2ee400cfa556e8b5ac09a4be12c7dcdc7764bd374ab6e946657b19e98cb8fd18713ec870b736844632456b79dc4538f81f15b86291cfb37165"
+      },
+      "env": {
+        "client": "required",
+        "server": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/cudtvDnd/versions/ieat1cvJ/InGameAccountSwitcher-Forge-1.16-8.0.1.jar"
+      ],
+      "fileSize": 183634
+    },
+    {
+      "path": "mods/roadstuff-1.16.5-4.3.0.jar",
+      "hashes": {
+        "sha1": "ad6b4b1d393561bb1563ef3590790765bcba1696",
+        "sha512": "49d0406f84fc6981212fed5bf225e77727d7249b721a55ba578dde6ae4c8013a7a4479e5cb743b3b2dee20c301df03f94b666b4a3c904797f18d93a1e7edb0bc"
+      },
+      "env": {
+        "client": "required",
+        "server": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/wdHMjzyQ/versions/lla8Pn1C/roadstuff-1.16.5-4.3.0.jar"
+      ],
+      "fileSize": 3919117
+    },
+    {
+      "path": "mods/rubidium-mc1.16.5-0.2.13.jar",
+      "hashes": {
+        "sha1": "b3f1d3460e40e7efc60f503a8d4ba4d551451857",
+        "sha512": "7ac6139c2836380ed15fdca4adb4229b47b95653c5f0c8066b5cd204268e6c47d17c82998727246f7e4e06630213b47cdd2093fddac6274e3417ae0b285f93fe"
+      },
+      "env": {
+        "client": "required",
+        "server": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/4ZqxOvjD/versions/YDAuLUY8/rubidium-mc1.16.5-0.2.13.jar"
+      ],
+      "fileSize": 625052
+    },
+    {
+      "path": "mods/oculus-mc1.16.5-1.4.7.jar",
+      "hashes": {
+        "sha1": "b6b44734cb837bd85443b6a7a86ce6193dea3cac",
+        "sha512": "d6de0daed37c6a9545c599ce5d5255c19b4648aceed0875485debd55e8281467c504d2f584dc1bc53b20d30ff4d1b9e50c89fec95b9a738379251bee2d8f5f2c"
+      },
+      "env": {
+        "client": "required",
+        "server": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/GchcoXML/versions/ZFTuwymb/oculus-mc1.16.5-1.4.7.jar"
+      ],
+      "fileSize": 3854643
+    },
+    {
+      "path": "mods/selene-1.16.5-1.9.0.jar",
+      "hashes": {
+        "sha512": "b57fe4e2a6b54787b409afadc5b43b8ba910a5b29b00ade7aea39841356acf64800c5cc92fb842ae7b763c1b2be9b485bfc410ce36ced50d0b9eb1adf8210466",
+        "sha1": "bffec3d3ec6bc76858c1dc5d7624c564a7d437ce"
+      },
+      "env": {
+        "client": "required",
+        "server": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/twkfQtEc/versions/1.9.0/selene-1.16.5-1.9.0.jar"
+      ],
+      "fileSize": 218460
+    },
+    {
+      "path": "mods/voicechat-forge-1.16.5-2.3.23.jar",
+      "hashes": {
+        "sha1": "e4144a85372de3bf698a8c16fbc935a0b2cafbc4",
+        "sha512": "62658c1f728e14f484b852cc350e5abab412446883946b053635413ed2fdc82a2311e72d9f13502be8329d18318193327ad4927a3ee6a5c5a4205430811639f0"
+      },
+      "env": {
+        "server": "required",
+        "client": "required"
+      },
+      "downloads": [
+        "https://cdn.modrinth.com/data/9eGKb6K1/versions/NSBUNV8T/voicechat-forge-1.16.5-2.3.23.jar"
+      ],
+      "fileSize": 7839781
+    }
+  ],
+  "dependencies": {
+    "forge": "36.2.42",
+    "minecraft": "1.16.5"
+  }
+}
