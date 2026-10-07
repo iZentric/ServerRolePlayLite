@@ -9,6 +9,7 @@ on:
   workflow_dispatch: {}
 permissions:
   contents: write
+  actions: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -45,3 +46,9 @@ jobs:
             --target ${{ github.sha }} \
             --title "Freeroam Lite 1.0.0 (client + server)" \
             --notes-file out/REPORT.md
+
+      - name: AUTO-DEPLOY pe Zampto (lant automat)
+        if: success()
+        run: gh workflow run deploy-zampto.yml --ref "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
