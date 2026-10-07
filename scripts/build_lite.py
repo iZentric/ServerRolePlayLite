@@ -58,9 +58,12 @@ def resolve_modrinth(slug, mc, loader):
 def resolve_curseforge(slug, mc, loader):
     """Rezolva prin api.cfwidget.com (fara cheie API) + edge.forgecdn.net."""
     data = http_json(f"https://api.cfwidget.com/minecraft/mc-mods/{slug}")
-    files = [f for f in data.get("files", [])
-             if mc in f.get("versions", [])
-             and (loader.capitalize() in f.get("versions", []) or loader == "any")]
+    all_mc = [f for f in data.get("files", []) if mc in f.get("versions", [])]
+    files = [f for f in all_mc if loader.capitalize() in f.get("versions", [])]
+    if not files:
+        # fallback: doar versiunea de MC; prefera fisierele cu numele loaderului
+        named = [f for f in all_mc if loader.lower() in f.get("name", "").lower()]
+        files = named or all_mc
     if not files:
         raise ValueError("niciun fisier compatibil")
     f = max(files, key=lambda x: x["id"])
