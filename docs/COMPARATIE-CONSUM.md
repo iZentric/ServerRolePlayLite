@@ -63,3 +63,17 @@ Build-ul produce ACUM ambele variante la Releases:
 - FTB Essentials (104M+ descărcări): curseforge.com/minecraft/mc-mods/ftb-essentials
 - Ghid optimizare Forge 1.16.5 (RoadRunner/Radon): gamehostbros.com/guides/games/minecraft/forge-performance-guide
 - Moduri server-side 1.16.5: reddit.com/r/feedthebeast/comments/lztjet
+
+## D. Căutare suplimentară pe GitHub (proiecte „altceva")
+
+| Proiect GitHub | Ce e | Verdict pentru 1.16.5 |
+|---|---|---|
+| Mirai (etil2jz) | fork Forge de performanță | ❌ ARHIVAT (mort) + era doar 1.18.2 |
+| ModcraftForge | fork Forge performanță 1.16.4 | ❌ experiment abandonat, 4 stele |
+| Tenet (ex-Thermos) | hibrid Forge+Bukkit | ❌ pentru versiuni vechi (1.7/1.12) |
+| Kettle / Magma-Forge / Cauldron-Reloaded | hibrizi Forge+Bukkit | ❌ aceeași clasă cu Mohist, nu mai lite |
+| HybridFix | plugin de optimizare PENTRU hibrizi | 🟡 util doar dacă rulezi Arclight |
+
+**Concluzie finală, după GitHub + tot netul:** pentru moduri Forge 1.16.5 NU EXISTĂ nimic
+mai lite decât **Forge pur + stack-ul de moduri de performanță** (varianta MaxLite din
+acest repo). Orice alt „server software" ori e mort, ori adaugă straturi peste Forge.
