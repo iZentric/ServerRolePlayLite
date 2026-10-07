@@ -4,7 +4,7 @@
   + FpsReducer-forge-1.24-mc1.16.5.jar
   + memoryleakfix-forge-pre1.17-1.1.5.jar
   !! 'starlight-forge' sarit (client): nicio versiune
-  => out/Freeroam-Lite-Client-1.2.0-lite.mrpack (147.8 MB)
+  => out/Freeroam-Lite-Client-1.3.0-lite.mrpack (147.8 MB)
 == Moduri de server (comune) ==
   ↓ mapperbase-1.16.5-2.4.0.0.jar
   ↓ supplementaries-1.16.5-0.18.4b.jar
@@ -43,21 +43,32 @@
     (modrinth: ftb-ranks -> HTTP Error 404: Not Found)
   + comenzi: ftb-ranks-forge-1605.1.6-build.33.jar [curseforge]
   ↓ Forge installer
-  => out/Freeroam-Lite-Server-MaxLite-1.2.0-lite.zip (164.9 MB)
+  => out/Freeroam-Lite-Server-MaxLite-1.3.0-lite.zip (164.9 MB)
 == SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar
   ↓ plugin: EssentialsXSpawn-2.19.7.jar
+  ↓ plugin: EssentialsXAntiBuild-2.19.7.jar
+  ↓ plugin: EssentialsXProtect-2.19.7.jar
   ↓ plugin: Vault.jar
+  ↓ plugin: worldedit-bukkit-7.2.5-dist.jar
+  ↓ plugin: worldguard-bukkit-7.0.5-dist.jar
+  ↓ plugin: ZNPCsPlus-1.0.8.jar
+  ↓ plugin: packetevents-spigot-2.14.0.jar
   ↓ plugin: LuckPerms-Bukkit-5.5.71.jar
   !! plugin 'spark' sarit: nicio versiune
   ↓ plugin: Chunky-1.3.38.jar
+  ↓ plugin: PlotSquared-Bukkit-v5.jar (spiget v5.13.12)
+    (reincerc 1/3 dupa eroare: HTTP Error 403: Forbidden)
+    (reincerc 2/3 dupa eroare: HTTP Error 403: Forbidden)
+    (reincerc 3/3 dupa eroare: HTTP Error 403: Forbidden)
+  !! plugin spiget 'PlotSquared-Bukkit-v5.jar' sarit: HTTP Error 403: Forbidden
   ↓ Arclight
-  => out/Freeroam-Lite-Server-Arclight-1.2.0-lite.zip (170.6 MB)
+  => out/Freeroam-Lite-Server-Arclight-1.3.0-lite.zip (184.7 MB)
 == SERVER Mist (hibrid experimental cu patch-uri Paper) ==
   ↓ Mist
-  => out/Freeroam-Lite-Server-Mist-EXPERIMENTAL-1.2.0-lite.zip (170.2 MB)
+  => out/Freeroam-Lite-Server-Mist-EXPERIMENTAL-1.3.0-lite.zip (184.3 MB)
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
-  => out/Freeroam-Lite-Server-CatServer-1.2.0-lite.zip (169.6 MB)
+  => out/Freeroam-Lite-Server-CatServer-1.3.0-lite.zip (183.7 MB)
 GATA.
