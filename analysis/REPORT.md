@@ -4,12 +4,13 @@ Pack original: **PL2 Gambo 1.0.0** — Minecraft 1.16.5, Forge 36.2.42
 
 ## 📱 CLIENT (pentru jucatori — orice PC)
 
-### Scos (mai mult FPS, mai putina RAM)
-- ❌ DynamicSurroundings-1.16.5-4.0.5.0.jar
-- ❌ oculus-mc1.16.5-1.4.7.jar
+**Toate modurile originale sunt pastrate.**
 
-### Adaugat (optimizare)
-- ✅ entityculling-forge-mc1.16.5-1.5.2.jar (EntityCulling — nu mai randeaza ce nu vezi)
+
+### Adaugat (doar optimizare, zero schimbari de gameplay)
+- ✅ entityculling-forge-mc1.16.5-1.5.2.jar
+- ✅ FpsReducer-forge-1.24-mc1.16.5.jar
+- ✅ memoryleakfix-forge-pre1.17-1.1.5.jar
 
 ### Pastrat
 - mapperbase-1.16.5-2.4.0.0.jar
@@ -22,9 +23,11 @@ Pack original: **PL2 Gambo 1.0.0** — Minecraft 1.16.5, Forge 36.2.42
 - InGameAccountSwitcher-Forge-1.16-8.0.1.jar
 - roadstuff-1.16.5-4.3.0.jar
 - rubidium-mc1.16.5-0.2.13.jar
+- oculus-mc1.16.5-1.4.7.jar
 - selene-1.16.5-1.9.0.jar
 - voicechat-forge-1.16.5-2.3.23.jar
 - CTM-MC1.16.1-1.1.2.6.jar
+- DynamicSurroundings-1.16.5-4.0.5.0.jar
 - Modernxl 1.16.5.jar
 - Pizzaland_v68.jar
 - TRansliterationLib-1.0.4.jar
@@ -53,6 +56,8 @@ Pack original: **PL2 Gambo 1.0.0** — Minecraft 1.16.5, Forge 36.2.42
 
 ### Adaugat
 - ✅ Clumps-6.0.0.28.jar
+- ✅ memoryleakfix-forge-pre1.17-1.1.5.jar
+- ✅ AI-Improvements-1.16.5-0.5.0.jar
 
 ### Pastrat
 - mapperbase-1.16.5-2.4.0.0.jar

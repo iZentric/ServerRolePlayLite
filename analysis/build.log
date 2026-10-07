@@ -1,9 +1,10 @@
 == Dezarhivez pack-ul original ==
 == Construiesc clientul lite (.mrpack) ==
-  - scot (client): oculus-mc1.16.5-1.4.7.jar
   + adaug (client): entityculling-forge-mc1.16.5-1.5.2.jar
-  - scot (client/override): DynamicSurroundings-1.16.5-4.0.5.0.jar
-  => out/Freeroam-Lite-Client-1.0.0-lite.mrpack (133.3 MB)
+  + adaug (client): FpsReducer-forge-1.24-mc1.16.5.jar
+  + adaug (client): memoryleakfix-forge-pre1.17-1.1.5.jar
+  !! 'starlight-forge' sarit (nu e disponibil pt 1.16.5 forge): nicio versiune compatibila
+  => out/Freeroam-Lite-Client-1.0.0-lite.mrpack (147.8 MB)
 == Construiesc serverul lite (.zip) ==
   ↓ descarc: mapperbase-1.16.5-2.4.0.0.jar
   ↓ descarc: supplementaries-1.16.5-0.18.4b.jar
@@ -23,6 +24,9 @@
   - scot (server/override): lightfallclient-1.0.0.jar
   - scot (server/override): notenoughanimations-1.2.4.jar
   + adaug (server): Clumps-6.0.0.28.jar
+  + adaug (server): memoryleakfix-forge-pre1.17-1.1.5.jar
+  !! 'starlight-forge' sarit (nu e disponibil pt 1.16.5 forge): nicio versiune compatibila
+  + adaug (server): AI-Improvements-1.16.5-0.5.0.jar
   ↓ descarc installerul Forge
-  => out/Freeroam-Lite-Server-1.0.0-lite.zip (163.6 MB)
+  => out/Freeroam-Lite-Server-1.0.0-lite.zip (163.8 MB)
 GATA.
