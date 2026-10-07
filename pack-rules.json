@@ -33,6 +33,8 @@
   "server_type": "arclight",
   "arclight_url": "https://github.com/IzzelAliz/Arclight/releases/download/1.16%2F1.0.25/arclight-forge-1.16.5-1.0.25.jar",
   "arclight_jar": "arclight-forge-1.16.5-1.0.25.jar",
+  "mist_url": "https://github.com/MinecraftMist/Mist/releases/download/1.16.5-33/mist-1.16.5-33-server.jar",
+  "mist_jar": "mist-1.16.5-33-server.jar",
   "plugins_github": [
     "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsX-2.19.7.jar",
     "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXChat-2.19.7.jar",

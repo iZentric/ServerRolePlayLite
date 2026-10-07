@@ -212,6 +212,25 @@ ticks-per:
   autosave: 6000
 """
 
+PAPER_YML = """\
+# paper.yml - optimizari Paper (doar varianta Mist) - consum minim cu pluginuri
+world-settings:
+  default:
+    no-tick-view-distance: 8
+    per-player-mob-spawns: true
+    optimize-explosions: true
+    disable-chest-cat-detection: true
+    grass-spread-tick-rate: 4
+    max-auto-save-chunks-per-tick: 8
+    despawn-ranges:
+      soft: 28
+      hard: 96
+    hopper:
+      disable-move-event: true
+    anti-xray:
+      enabled: false
+"""
+
 AIKAR_FLAGS = (
     "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 "
     "-XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC "
@@ -433,6 +452,29 @@ def main():
     with zipfile.ZipFile(z2, "w", zipfile.ZIP_DEFLATED) as z:
         zip_dir(z, s2)
     log(f"  => {z2} ({os.path.getsize(z2)/1e6:.1f} MB)")
+
+    # ---------------- VARIANTA 3: MIST (hibrid EXPERIMENTAL, patch-uri Paper) ----------------
+    log("== SERVER Mist (hibrid experimental cu patch-uri Paper) ==")
+    s3 = os.path.join(out_dir, "srv-mist")
+    shutil.rmtree(s3, ignore_errors=True)
+    shutil.copytree(s2, s3)
+    os.remove(os.path.join(s3, rules["arclight_jar"]))
+    log("  ↓ Mist")
+    download(rules["mist_url"], os.path.join(s3, rules["mist_jar"]))
+    with open(os.path.join(s3, "paper.yml"), "w") as f:
+        f.write(PAPER_YML)
+    write_start_scripts(s3, rules["mist_jar"])
+    with open(os.path.join(s3, "CITESTE-MA.txt"), "w") as f:
+        f.write(README_ARCLIGHT.replace("Arclight 1.16.5 = Forge + pluginuri Bukkit",
+                                        "Mist 1.16.5 = Mohist + patch-uri PAPER, EXPERIMENTAL")
+                .replace("arclight-forge-1.16.5-1.0.25.jar", rules["mist_jar"])
+                .replace("(Arclight isi descarca librariile)", "(isi descarca librariile)")
+                + "\nNOTA: Mist e un proiect abandonat din 2021 (experimental!). Daca ceva\n"
+                  "crapa, treci pe varianta Arclight (stabila) sau MaxLite (consum minim).\n")
+    z3 = os.path.join(out_dir, f"Freeroam-Lite-Server-Mist-EXPERIMENTAL-{ver}.zip")
+    with zipfile.ZipFile(z3, "w", zipfile.ZIP_DEFLATED) as z:
+        zip_dir(z, s3)
+    log(f"  => {z3} ({os.path.getsize(z3)/1e6:.1f} MB)")
 
     # ---------------- RAPORT ----------------
     with open(os.path.join(out_dir, "REPORT.md"), "w") as f:
