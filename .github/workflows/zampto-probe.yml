@@ -1,0 +1,54 @@
+name: Zampto API probe
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [ "arena/a29b4ef4-serverroleplaylite" ]
+    paths: [ "deploy/trigger-probe.txt" ]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Interogheaza API-ul Zampto
+        env:
+          KEY: ${{ secrets.ZAMPTO_API_KEY }}
+        shell: bash
+        run: |
+          mkdir -p analysis
+          OUT=analysis/zampto-api-probe.md
+          echo "# Rezultat probe API Zampto ($(date -u))" > $OUT
+          if [ -z "$KEY" ]; then
+            echo "" >> $OUT
+            echo "**EROARE: secretul ZAMPTO_API_KEY nu este setat in repo!**" >> $OUT
+          else
+            SERVER_ID=17192
+            for URL in \
+              "https://dash.zampto.net/api/client" \
+              "https://dash.zampto.net/api/client/servers" \
+              "https://dash.zampto.net/api/client/servers/$SERVER_ID" \
+              "https://dash.zampto.net/api/v1/servers" \
+              "https://dash.zampto.net/api/v1/servers/$SERVER_ID" \
+              "https://dash.zampto.net/api/servers/$SERVER_ID" \
+              "https://dash.zampto.net/api/user/servers" \
+              "https://api.zampto.net/v1/servers" \
+              "https://panel.zampto.net/api/client" \
+            ; do
+              CODE=$(curl -s -o /tmp/body -w '%{http_code}' -m 20 \
+                -H "Authorization: Bearer $KEY" -H "Accept: application/json" "$URL" || echo "ERR")
+              BODY=$(head -c 600 /tmp/body | tr -d '\r' | sed "s/$KEY/***/g")
+              echo "" >> $OUT
+              echo "## $URL" >> $OUT
+              echo "- status: **$CODE**" >> $OUT
+              echo '```' >> $OUT
+              echo "$BODY" >> $OUT
+              echo '```' >> $OUT
+            done
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f analysis/zampto-api-probe.md
+          git commit -m "analysis: rezultat probe API Zampto" || echo "nimic"
+          git pull --rebase origin ${{ github.ref_name }} || true
+          git push || true
