@@ -68,7 +68,7 @@ jobs:
             set sftp:auto-confirm yes;
             set net:max-retries 3;
             set net:timeout 60;
-            rm -f forge-1.16.5-36.2.42-installer.jar install-forge.sh install-forge.bat;
+            rm -f forge-1.16.5-36.2.42-installer.jar install-forge.sh install-forge.bat; rm -f mods/Multiplayer-Server-Pause*.jar;
             mirror -R --verbose --parallel=2 --only-newer --ignore-time srv/ /;
             bye
           " > deploy-log.txt 2>&1

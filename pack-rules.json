@@ -1,6 +1,6 @@
 {
   "pack_name": "Freeroam Lite",
-    "pack_version": "1.5.3",
+  "pack_version": "1.5.4",
   "minecraft": "1.16.5",
   "forge": "36.2.42",
   "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
@@ -23,25 +23,23 @@
     "TRansliterationLib"
   ],
   "_comentariu_adaugate": "Doar moduri de PERFORMANTA, zero schimbari de gameplay. Daca un slug nu are versiune pt 1.16.5 Forge pe Modrinth, e sarit automat fara sa strice build-ul.",
-    "add_client_modrinth": [
-        "radon",
-        "entityculling",
-        "fps-reducer",
-        "saturn",
-        "memoryleakfix",
-        "ksyxis",
-        "connectivity",
-        "multiplayer-server-pause"
-    ],
-    "_comentariu_serverpause": "serverpause = OBLIGATORIU in AMBELE parti (canal serverpause:channel — toti sau nimeni). E in pack si pe server. Clientii cu packul intra fara restart.",
-    "add_server_modrinth": [
-        "clumps",
-        "memoryleakfix",
-        "starlight-forge",
-        "ai-improvements",
-        "cZp2YCuG|multiplayer-server-pause",
-        "in-control"
-    ],
+  "add_client_modrinth": [
+    "radon",
+    "entityculling",
+    "fps-reducer",
+    "saturn",
+    "memoryleakfix",
+    "ksyxis",
+    "connectivity"
+  ],
+  "_comentariu_serverpause": "GUILLOTINA 1.5.4: Prism nu instala modurile din lista externa a mrpack-ului => clientii ramaneau FARA jar => kick pe canal. serverpause scos din AMBELE parti si jarul sters de pe server la deploy.",
+  "add_server_modrinth": [
+    "clumps",
+    "memoryleakfix",
+    "starlight-forge",
+    "ai-improvements",
+    "in-control"
+  ],
   "_comentariu_perf_extra": "Artileria grea de performanta pt 1.16.5 (RoadRunner=Lithium, Radon=Phosphor etc). Cautate pe Modrinth apoi CurseForge; sarite daca nu exista. Performant si MCMT sunt excluse intentionat (conflicte).",
   "add_server_extra_perf": [
     "roadrunner",
@@ -83,8 +81,8 @@
     "https://github.com/AuthMe/AuthMeReloaded/releases/download/5.6.0/AuthMe-5.6.0.jar",
     "https://github.com/SkinsRestorer/SkinsRestorer/releases/download/14.2.12/SkinsRestorer.jar",
     "https://github.com/dmulloy2/ProtocolLib/releases/download/4.8.0/ProtocolLib.jar",
-        "https://github.com/TuxCoding/FastLogin/releases/download/1.11/FastLoginBukkit.jar",
-        "https://github.com/cjburkey01/ClaimChunk/releases/download/0.0.22/claimchunk-0.0.22.jar"
+    "https://github.com/TuxCoding/FastLogin/releases/download/1.11/FastLoginBukkit.jar",
+    "https://github.com/cjburkey01/ClaimChunk/releases/download/0.0.22/claimchunk-0.0.22.jar"
   ],
   "plugins_spiget": [],
   "plugins_modrinth": [
