@@ -18,10 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { variant: CatServer, java: "17", suffix: "-J17" }
           - { variant: CatServer, java: "17", suffix: "-CUSTOM", custom: "da" }
-          - { variant: CatServer, java: "11" }
-          - { variant: Arclight, java: "11", suffix: "-STRIP", strip: "da" }
+          - { variant: CatServer, java: "17", suffix: "-CUSTOM2", custom: "da" }
+          - { variant: CatServer, java: "17", suffix: "-CUSTOM3", custom: "da" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4

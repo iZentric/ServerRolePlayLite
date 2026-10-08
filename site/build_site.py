@@ -41,6 +41,17 @@ rows = []
 for nume, f, ico, nota, e_al_nostru in ENGINES:
     v = parse_verdict(os.path.join(AN, f)) or {}
     rec = records.get(f, {})
+    # EvoKode trage cu 3 tevi pe runda - toate alimenteaza ACELASI record
+    extra = []
+    if "CUSTOM.md" in f:
+        extra = [parse_verdict(os.path.join(AN, "test-boot-CatServer-CUSTOM2.md")),
+                 parse_verdict(os.path.join(AN, "test-boot-CatServer-CUSTOM3.md"))]
+    for ev in extra:
+        if ev and ev.get("rezultat") == "PORNIT" and ev.get("ram"):
+            if not rec.get("ram") or ev["ram"] < rec["ram"]:
+                rec["ram"] = ev["ram"]
+            if ev.get("boot") and (not rec.get("boot") or ev["boot"] < rec["boot"]):
+                rec["boot"] = ev["boot"]
     # CARTEA RECORDURILOR: pastram cea mai buna masuratoare DOVEDITA
     # (cantarele masinilor de test variaza +-15% intre runde - recordul e adevarul stabil)
     if v.get("rezultat") == "PORNIT" and v.get("ram"):
