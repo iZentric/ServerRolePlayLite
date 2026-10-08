@@ -2,6 +2,9 @@ name: loguri-acum
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "deploy/loguri-trigger.txt"
 
 permissions:
   contents: write
