@@ -5,6 +5,8 @@
   + FpsReducer-forge-1.24-mc1.16.5.jar
   + saturn-mc1.16.5-0.0.3.jar
   + memoryleakfix-forge-pre1.17-1.1.5.jar
+  + Ksyxis-1.4.5.jar
+  !! 'connectivity' sarit (client): HTTP Error 404: Not Found
   - taiat din client (stil rust): CTM-MC1.16.1-1.1.2.6.jar
   - taiat din client (stil rust): DynamicSurroundings-1.16.5-4.0.5.0.jar
   - taiat din client (stil rust): lightfallclient-1.0.0.jar
@@ -49,6 +51,10 @@
     (curseforge: adaptive-performance-tweaks -> HTTP Error 404: Not Found)
   !! 'adaptive-performance-tweaks' sarit (nu exista pt 1.16.5 forge nicaieri)
   + perf: getittogetherdrops-1.16.5-v1.2.jar [modrinth]
+  + perf: Ksyxis-1.4.5.jar [modrinth]
+    (modrinth: connectivity -> HTTP Error 404: Not Found)
+    (curseforge: connectivity -> HTTP Error 404: Not Found)
+  !! 'connectivity' sarit (nu exista pt 1.16.5 forge nicaieri)
 == ULTRA: dezbrac jar-urile de server de assets client ==
     ✂ Modernxl 1.16.5.jar: 38.0 -> 6.8 MB
     ✂ Pizzaland_v68.jar: 84.8 -> 1.7 MB
@@ -76,7 +82,7 @@
     (modrinth: performant -> nicio versiune)
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
-  => out/Freeroam-Lite-Server-MaxLite-1.5.0-ULTRA.zip (32.1 MB)
+  => out/Freeroam-Lite-Server-MaxLite-1.5.0-ULTRA.zip (32.2 MB)
 == SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar

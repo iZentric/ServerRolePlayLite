@@ -10,6 +10,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ FpsReducer-forge-1.24-mc1.16.5.jar
 - ✅ saturn-mc1.16.5-0.0.3.jar
 - ✅ memoryleakfix-forge-pre1.17-1.1.5.jar
+- ✅ Ksyxis-1.4.5.jar
 
 ## 🖥️ SERVER MaxLite (Forge pur — CONSUM MINIM, recomandat)
 
@@ -62,6 +63,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ FastWorkbench-1.16.5-4.6.2.jar
 - ✅ saturn-mc1.16.5-0.0.3.jar
 - ✅ getittogetherdrops-1.16.5-v1.2.jar
+- ✅ Ksyxis-1.4.5.jar
 
 ### Setari consum minim
 - JVM: porneste la 1 GB, creste doar la nevoie (max 4 GB), G1GC Aikar
