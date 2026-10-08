@@ -42,7 +42,7 @@ jobs:
               bye"
             echo "RCON ARMAT pe port 28147 — devine viu la urmatorul restart al serverului"
           fi
-          tail -5 work/server.properties > analysis/rcon-stare.txt
+          tail -5 work/server.properties | cut -d= -f1 > analysis/rcon-stare.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f analysis/rcon-stare.txt
