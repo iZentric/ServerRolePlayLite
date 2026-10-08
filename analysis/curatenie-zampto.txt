@@ -37,7 +37,6 @@ server.jar
 nogui
 ls: invalid option -- 'a'
 -rw-r--r--    1 0        0            1000 Oct 8 07:12 CITESTE-MA.txt
--rw-r--r--    1 0        0            2703 Oct 2 05:30 README.txt
 -rw-r--r--    1 0        0             323 Oct 8 00:30 bukkit.yml
 -rw-r--r--    1 0        0             459 Oct 8 08:51 catserver.yml
 drwxr-xr-x    1 0        0            4096 Oct 8 10:22 config
@@ -51,5 +50,4 @@ drwxr-xr-x    1 0        0            4096 Oct 8 11:29 plugins
 -rw-r--r--    1 0        0             622 Oct 8 02:11 spigot.yml
 -rw-r--r--    1 0        0             999 Oct 8 07:12 start.bat
 -rw-r--r--    1 0        0            1001 Oct 8 07:12 start.sh
--rw-r--r--    1 0        0             960 Oct 8 11:36 unix_args.txt
--rw-r--r--    1 0        0             573 Oct 2 05:30 user_jvm_args.txt
+-rw-r--r--    1 0        0             960 Oct 8 11:38 unix_args.txt
