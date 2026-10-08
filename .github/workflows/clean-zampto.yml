@@ -13,6 +13,20 @@ jobs:
       - name: Sterge gunoaiele vechi prin SFTP
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          # FIX: jarul TREBUIE sa se numeasca server.jar (cerinta panoului Zampto)
+          lftp -u "15254.1388b9af","$P" "sftp://node12.zampto.net:2022" -e "
+            set sftp:auto-confirm yes;
+            get unix_args.txt -o /tmp/u.txt;
+            bye" || true
+          JARNAME=$(grep -oE '[A-Za-z0-9._-]+\.jar' /tmp/u.txt | head -1)
+          sed -i "s|$JARNAME|server.jar|" /tmp/u.txt
+          cat /tmp/u.txt
+          lftp -u "15254.1388b9af","$P" "sftp://node12.zampto.net:2022" -e "
+            set sftp:auto-confirm yes;
+            mv 'CatServer-1.16.5-1d8d6313-server.jar' 'server.jar';
+            put /tmp/u.txt -o unix_args.txt;
+            ls *.jar; cat unix_args.txt;
+            bye" || true
           lftp -u "15254.1388b9af","$P" "sftp://node12.zampto.net:2022" -e "
             set sftp:auto-confirm yes;
             rm -f 'mist-1.16.5-33-server.jar';

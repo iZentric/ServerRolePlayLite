@@ -41,6 +41,11 @@ jobs:
           else
             echo "custom indisponibil - ramane oficialul"
           fi
+          # REGULA ZAMPTO: jarul se numeste OBLIGATORIU server.jar
+          CJ=$(ls srv/*.jar | head -1)
+          mv "$CJ" srv/server.jar
+          sed -i -E "s|[A-Za-z0-9._-]+\.jar|server.jar|" srv/unix_args.txt
+          grep jar srv/unix_args.txt
           # LUMEA din fabrica (daca e coapta) merge si ea pe server
           if gh release download world -R ${{ github.repository }} -p 'world-pregen.zip' -O /tmp/world.zip 2>/dev/null; then
             rm -rf srv/world && unzip -q /tmp/world.zip -d srv/ && echo "LUMEA PREGENERATA MONTATA ($(du -sh srv/world | cut -f1))"
