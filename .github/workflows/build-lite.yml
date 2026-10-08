@@ -46,7 +46,7 @@ jobs:
           VERSAJ=$(python3 -c "import json;print(json.load(open('pack-rules.json'))['pack_version'])")
           gh release create lite out/*.mrpack out/*.zip \
             --target ${{ github.sha }} \
-            --title "Freeroam Lite $VERSAJ (client + server)" \
+            --title "⚛️ CUANTIC $VERSAJ (client + server)" \
             --notes-file out/REPORT.md
 
 
