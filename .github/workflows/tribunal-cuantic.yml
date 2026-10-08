@@ -122,6 +122,12 @@ jobs:
             if [ -z "$DONE" ] && grep -q "Done (" boot.log 2>/dev/null; then
               DONE=$(grep -m1 -oE "Done \([0-9.]+s\)" boot.log)
               T1=$(date +%s); DUR=$((T1-START))
+              STABIL=0
+              for q in $(seq 1 18); do
+                sleep 5
+                R=$(ps -o rss= -p $JP 2>/dev/null | awk '{print int($1/1024)}')
+                [ -n "$R" ] && STABIL=$R
+              done
               break
             fi
             sleep 5
@@ -137,7 +143,7 @@ jobs:
             echo "# ${{ matrix.id }}"
             echo "- ARTIFACT: \`$(cat /tmp/md5)\` ($(cat /tmp/size) bytes) — $NumeCandidat"
             echo "- STATUS: **$DONE** in ${DUR:-?}s"
-            echo "- DONE: ${DONE:-NICIODATA} (RAM varf ${MAXRSS}MB, plugini ${PLGI:-0}, jar-mods ${MODURI:-?}, linii ERROR: ${PROCE:-0})"
+            echo "- DONE: ${DONE:-NICIODATA} (RAM varf ${MAXRSS}MB, STABIL@+90s ${STABIL:-n/a}MB, plugini ${PLGI:-0}, linii ERROR: ${PROCE:-0})"
             echo '```'
             grep -m4 -iE "mohist|tenet|arclight|catserver|mist|magma" boot.log | head -4
             echo "--- tail boot.log:"
@@ -171,7 +177,7 @@ jobs:
             echo "# ⚛️ TABLOUL CUANTIC — tribunalul tuturor hibrizilor 1.16.5"
             echo "_Generat: $(date -u '+%F %T UTC') — baza comuna: 32 moduri + 9 pluginuri CUANTIC 1.5.6, Java 17, -Xmx identic, RAM = varf_ "
             echo
-            echo "| Probă | Verdict | Done | RAM vârf | Plugini | Erori |"
+            echo "| Probă | Verdict | Done | RAM vârf + STABIL | Plugini | Erori |"
             echo "|---|---|---|---|---|---|"
             for F in trib/*.md; do
               ID=$(basename "$F" .md)
