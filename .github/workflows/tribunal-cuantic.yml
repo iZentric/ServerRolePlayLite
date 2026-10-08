@@ -80,7 +80,11 @@ jobs:
       - name: Porne-ste si masora (RAM de varf + timp Done + plugini/moduri/erori)
         run: |
           set +e
-          [ "$(cat /tmp/gate)" = "ARTIFACT-OK" ] || { echo "SARI PESTE (fara artefact)"; exit 0; }
+          if [ "$(cat /tmp/gate)" != "ARTIFACT-OK" ]; then
+            mkdir -p ../analysis/tribunal
+            { echo "# ${{ matrix.id }}"; echo "- ARTIFACT: $(cat /tmp/md5)"; echo "- STATUS: ARTIFACT-LIPSA (niciun download valid)"; echo "- DONE: NICIODATA"; } > "../analysis/tribunal/${{ matrix.id }}.md"
+            exit 0
+          fi
           cd srv
           echo "eula=true" > eula.txt
           NumeCandidat=$(cat CANDIDAT.txt 2>/dev/null || echo "?(din url)")
@@ -117,23 +121,14 @@ jobs:
             grep -m4 "ERROR" boot.log | head -4
             echo '```'
           } > "../analysis/tribunal/${{ matrix.id }}.md"
-          cd "$GITHUB_WORKSPACE"
-          for inc in 1 2 3 4 5; do
-            git -c user.name=bot -c user.email=bot@bot add -f analysis/tribunal/ 2>/dev/null
-            git -c user.name=bot -c user.email=bot@bot commit -m "tribunal: ${{ matrix.id }}" 2>/dev/null || break
-            git pull --rebase -q origin "$GITHUB_REF_NAME" && git push -q origin "$GITHUB_REF_NAME" && break
-            sleep $((RANDOM % 8 + 2))
-          done
-      - name: Curata chiflele in caz de esec
-        if: failure()
-        run: |
-          mkdir -p analysis/tribunal
-          echo "# ${{ matrix.id }}" > "analysis/tribunal/${{ matrix.id }}.md"
-          echo "- STATUS: JOB-ESUAT (fara verdict)" >> "analysis/tribunal/${{ matrix.id }}.md"
-          git -c user.name=bot -c user.email=bot@bot add -f analysis/tribunal/
-          git -c user.name=bot -c user.email=bot@bot commit -m "tribunal: ${{ matrix.id }} esuat" || true
-          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
-          git push -q origin "$GITHUB_REF_NAME" || true
+          echo "verdict salvat local"
+      - name: Verdictul calatoreste prin artefact (fara curse)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trib-${{ matrix.id }}
+          path: analysis/tribunal/${{ matrix.id }}.md
+          if-no-files-found: ignore
   tablou:
     needs: probe
     runs-on: ubuntu-latest
@@ -141,6 +136,11 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: trib-*
+          path: trib
+          merge-multiple: true
       - name: Tabloul final CUANTIC
         run: |
           set +e
@@ -150,7 +150,7 @@ jobs:
             echo
             echo "| Probă | Verdict | Done | RAM vârf | Plugini | Erori |"
             echo "|---|---|---|---|---|---|"
-            for F in analysis/tribunal/*.md; do
+            for F in trib/*.md; do
               ID=$(basename "$F" .md)
               ST=$(grep -m1 "STATUS" "$F" | sed 's/.*STATUS: //;s/\*//g')
               DT=$(grep -m1 "DONE" "$F" | sed 's/.*DONE: //;s/ (.*//')
