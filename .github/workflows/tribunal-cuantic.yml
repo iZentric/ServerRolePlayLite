@@ -65,13 +65,13 @@ jobs:
               ;;
           esac
           if head -c2 cand/cand.jar 2>/dev/null | grep -q PK && [ "$(stat -c%s cand/cand.jar)" -gt 500000 ]; then
-            rm -f srv/*.jar
-            cp cand/cand.jar srv/server.jar
+            CJ=$(ls srv/*.jar 2>/dev/null | head -1)
+            [ -n "$CJ" ] || CJ="srv/server.jar"
+            cp cand/cand.jar "$CJ"
             [ -f cand/cand.name ] && cp cand/cand.name srv/CANDIDAT.txt
-            sed -i -E "s|-jar [^ ]+\.jar|-jar server.jar|" srv/unix_args.txt
             echo "ARTIFACT-OK" > /tmp/gate
-            md5sum srv/server.jar | cut -d' ' -f1 > /tmp/md5
-            stat -c%s srv/server.jar > /tmp/size
+            md5sum "$CJ" | cut -d' ' -f1 > /tmp/md5
+            stat -c%s "$CJ" > /tmp/size
           else
             echo "ARTIFACT-LIPSA" > /tmp/gate
             echo "$ART a picat: niciun jar valid descarcabil" > /tmp/md5
