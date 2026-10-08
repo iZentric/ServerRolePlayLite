@@ -84,6 +84,17 @@ jobs:
             grep -iE "Enabling (AuthMe|SkinsRestorer|FastLogin|ProtocolLib|LuckPerms|Essentials|WorldGuard|spark|Chunky|GriefPrevention|ZNPC|Vault|WorldEdit)" boot.log | head -17 | sed 's/^/    /' || true
           } > ../analysis/test-boot-${V}.md
           tail -200 boot.log > ../analysis/test-boot-${V}-tail.log
+          if [ "$V" = "Mist" ]; then
+            MJ=$(ls mist-*.jar | head -1)
+            { echo "===== DOSAR MIST ====="
+              echo "-- MANIFEST:"; unzip -p "$MJ" META-INF/MANIFEST.MF | head -20
+              echo "-- clase modlauncher cusute in jar:"; unzip -l "$MJ" | grep -c "cpw/mods/modlauncher" || true
+              echo "-- clase mohist/mist wrapper:"; unzip -l "$MJ" | grep -iE "mohistmc|ServerMain|Main\.class" | head -10
+              echo "-- jaruri nascute de instalare:"; find libraries -name '*.jar' -path '*forge*' | head -10
+              find libraries -name '*.jar' -path '*minecraft*' | head -10
+              ls -la *.jar 2>/dev/null
+            } >> ../analysis/test-boot-${V}-tail.log 2>&1
+          fi
           # autopsia completa: jurnalele interne ale serverului (eroarea reala ascunsa de wrapper)
           for f in $(find . -name '*.log' -not -name boot.log 2>/dev/null | head -6); do
             echo "===== JURNAL INTERN: $f =====" >> ../analysis/test-boot-${V}-tail.log
