@@ -9,7 +9,6 @@ on:
 concurrency:
   group: world-factory
   cancel-in-progress: true
-  cancel-in-progress: false
 
 env:
   SFTP_HOST: node12.zampto.net
