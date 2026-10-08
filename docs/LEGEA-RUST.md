@@ -26,3 +26,9 @@
 - Post-lansare: spark decide urmatoarea taietura, niciodata moda sau graba.
 
 *Sigilata la cererea patronului: "cel mai mic posibil si modificat sa mearga."*
+
+5. **STANDARDUL CUANTIC** (8 oct, decizia proprietarului) — orice piesa a
+   proiectului poarta numele CUANTIC si trebuie sa fie *din viitor si mai buna
+   ca tot ce exista pe net*. Mai-bun = MASURAT, nu pretins: consum, boot,
+   playeri, automate. Orice componenta care nu bate varianta publica
+   echivalenta cu dovezi pe masa se taie sau se face sa bata.
