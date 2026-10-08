@@ -461,6 +461,10 @@ def write_start_scripts(sdir, server_jar):
         shutil.copy2(icon, os.path.join(sdir, "server-icon.png"))
     cfg = os.path.join(sdir, "config")
     os.makedirs(cfg, exist_ok=True)
+    dc = os.path.join(sdir, "defaultconfigs")
+    os.makedirs(dc, exist_ok=True)
+    with open(os.path.join(dc, "forge-server.toml"), "w") as f:
+        f.write(FORGE_COMMON_TOML)
     with open(os.path.join(cfg, "forge-common.toml"), "w") as f:
         f.write(FORGE_COMMON_TOML)
     inc = os.path.join(cfg, "incontrol")
