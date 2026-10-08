@@ -34,33 +34,27 @@ jobs:
           cd srv
           V="${{ matrix.variant }}"
           if [ "$V" = "Mist" ]; then
-            # LAZARUS 10: rescriem REGISTRUL de amprente din jarul Mist - piesa vindecata devine legala
+            # LAZARUS 10b: rescriem REGISTRUL de amprente (md5) din jarul Mist - doar shell, fara acrobatii
             curl -sL -o /tmp/ml.jar https://maven.minecraftforge.net/cpw/mods/modlauncher/8.1.3/modlauncher-8.1.3.jar
             M5=$(md5sum /tmp/ml.jar | cut -d' ' -f1); SZ=$(stat -c%s /tmp/ml.jar)
             MJ=$(ls mist-*.jar | head -1)
-            echo "== cautam registrul de amprente in $MJ"
-            RES=$(for f in $(unzip -Z1 "$MJ" | grep -viE '\.class$|\.jar$|META-INF/' ); do
-                    unzip -p "$MJ" "$f" 2>/dev/null | grep -lq "modlauncher-8.0.9" /dev/stdin && echo "$f"; done | head -3)
-            echo "== registre gasite: $RES"
-            for r in $RES; do
-              mkdir -p /tmp/fix/$(dirname "$r"); unzip -p "$MJ" "$r" > "/tmp/fix/$r"
-              python3 - "$r" "$M5" "$SZ" << 'PY'
-import sys, re
-p, m5, sz = "/tmp/fix/"+sys.argv[1], sys.argv[2], sys.argv[3]
-out=[]
-for ln in open(p, encoding="utf-8", errors="replace"):
-    if "modlauncher-8.0.9" in ln:
-        print("INAINTE:", ln.strip())
-        ln = re.sub(r"[0-9a-fA-F]{32}", m5, ln)
-        ln = re.sub(r"(?<![\w.])\d{5,9}(?![\w.])", sz, ln)
-        print("DUPA   :", ln.strip())
-    out.append(ln)
-open(p, "w", encoding="utf-8").write("".join(out))
-PY
-              (cd /tmp/fix && zip -q "$OLDPWD/$MJ" "$r")
-            done
+            echo "== LAZARUS: cautam registrul de amprente ==" >> boot.log
+            unzip -Z1 "$MJ" | grep -viE '\.class$|\.jar$|^META-INF/' > /tmp/entries.txt || true
+            : > /tmp/found.txt
+            while read -r f; do
+              if unzip -p "$MJ" "$f" 2>/dev/null | grep -q "modlauncher-8.0.9"; then echo "$f" >> /tmp/found.txt; fi
+            done < /tmp/entries.txt
+            cat /tmp/found.txt >> boot.log
+            while read -r r; do
+              mkdir -p "/tmp/fix/$(dirname "$r")"
+              unzip -p "$MJ" "$r" > "/tmp/fix/$r"
+              grep "modlauncher-8.0.9" "/tmp/fix/$r" | head -2 >> boot.log || true
+              sed -i -E "/modlauncher-8\.0\.9/ s/[0-9a-fA-F]{32}/$M5/g" "/tmp/fix/$r"
+              sed -i -E "/modlauncher-8\.0\.9/ s/\b[0-9]{5,9}\b/$SZ/g" "/tmp/fix/$r"
+              grep "modlauncher-8.0.9" "/tmp/fix/$r" | head -2 >> boot.log || true
+              (cd /tmp/fix && zip -q "$GITHUB_WORKSPACE/srv/$MJ" "$r")
+            done < /tmp/found.txt
             zip -dq "$MJ" 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA' 2>/dev/null || true
-            # piesa vindecata montata sub numele legal
             mkdir -p libraries/cpw/mods/modlauncher/8.0.9
             cp /tmp/ml.jar libraries/cpw/mods/modlauncher/8.0.9/modlauncher-8.0.9.jar
             mkdir -p mohist-config
