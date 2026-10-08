@@ -1,6 +1,6 @@
 name: test-server
 
-# BANCUL DE PROBE v2: porneste serverul Mist EXACT ca pe Zampto si raporteaza LIVE
+# TRIBUNALUL JARURILOR: testeaza TOATE variantele de server pe Java-ul Zampto
 on:
   workflow_dispatch:
   push:
@@ -14,58 +14,59 @@ jobs:
   proba:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [Mist, Arclight, CatServer]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "11" }
-      - name: Descarca serverul Mist din Releases
+      - name: Descarca varianta ${{ matrix.variant }}
         run: |
-          gh release download lite -R ${{ github.repository }} -p '*Server-Mist*.zip' -O srv.zip
+          gh release download lite -R ${{ github.repository }} -p '*Server-${{ matrix.variant }}*.zip' -O srv.zip
           mkdir srv && cd srv && unzip -q ../srv.zip
           echo "eula=true" > eula.txt
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: PORNESTE serverul (identic cu Zampto - unix_args.txt)
+      - name: PORNESTE serverul ${{ matrix.variant }}
         run: |
           cd srv
-          git config --global user.name bot
-          git config --global user.email bot@users.noreply.github.com
+          V="${{ matrix.variant }}"
           START=$(date +%s)
           mkfifo in
-          exec 3<> in          # read-write: nu blocheaza niciodata
+          exec 3<> in
           java -Xms128M -XX:MaxRAMPercentage=90.0 -Dterminal.jline=false @unix_args.txt < in > boot.log 2>&1 &
           JPID=$!
           STATUS=TIMEOUT
-          for i in $(seq 1 90); do
+          for i in $(seq 1 100); do
             if grep -q 'Done (' boot.log 2>/dev/null; then STATUS=PORNIT; break; fi
             if ! kill -0 $JPID 2>/dev/null; then STATUS=CRAPAT; break; fi
             sleep 10
-            # raport LIVE la fiecare 2 minute
-            if [ $((i % 12)) -eq 0 ]; then
-              tail -80 boot.log > ../analysis/test-boot-live.log 2>/dev/null || true
-              (cd .. && git add analysis/test-boot-live.log && git commit -qm "live: proba minutul $((i/6))" && git pull --rebase -q origin ${GITHUB_REF_NAME} && git push -q origin HEAD:${GITHUB_REF_NAME}) || true
-            fi
           done
           T=$(( $(date +%s) - START ))
           RAM="n/a"
           kill -0 $JPID 2>/dev/null && RAM=$(( $(ps -o rss= -p $JPID 2>/dev/null || echo 0) / 1024 ))MB
           echo "stop" >&3; sleep 25; kill -9 $JPID 2>/dev/null || true
           {
-            echo "# RAPORT BANC DE PROBE ($(date -u))"
-            echo "- REZULTAT: **$STATUS** in ${T}s"
-            echo "- RAM dupa pornire: **$RAM**"
-            echo "- Erori importante:"
-            grep -iE "ERROR|FATAL|Exception|Could not|Failed to" boot.log | sort | uniq -c | sort -rn | head -25 | sed 's/^/    /' || true
-            echo "- Pluginuri incarcate:"
-            grep -iE "\[.*(Enabling|Loading)\b" boot.log | grep -iE "AuthMe|Skins|FastLogin|ProtocolLib|LuckPerms|Essentials|WorldGuard|spark|Chunky|GriefPrevention|ZNPC|Vault" | head -20 | sed 's/^/    /' || true
-          } > ../analysis/test-boot-report.md
-          tail -300 boot.log > ../analysis/test-boot-tail.log
-          cat ../analysis/test-boot-report.md
-      - name: Publica raportul final
+            echo "# VERDICT ${V} ($(date -u))"
+            echo "- REZULTAT: **$STATUS** in ${T}s | RAM: **$RAM**"
+            echo "- Done-line:"; grep 'Done (' boot.log | head -2 | sed 's/^/    /' || true
+            echo "- Erori cheie:"
+            grep -iE "ERROR|FATAL|NoSuchMethod|Exception in thread|Could not load" boot.log | sort | uniq -c | sort -rn | head -12 | sed 's/^/    /' || true
+            echo "- Pluginuri pornite:"
+            grep -iE "Enabling (AuthMe|SkinsRestorer|FastLogin|ProtocolLib|LuckPerms|Essentials|WorldGuard|spark|Chunky|GriefPrevention|ZNPC|Vault|WorldEdit)" boot.log | head -17 | sed 's/^/    /' || true
+          } > ../analysis/test-boot-${V}.md
+          tail -200 boot.log > ../analysis/test-boot-${V}-tail.log
+          cat ../analysis/test-boot-${V}.md
+      - name: Publica verdictul
         if: always()
         run: |
           git config user.name bot && git config user.email bot@users.noreply.github.com
-          git add analysis/ || true
-          git commit -m "analysis: raport banc de probe v2" || echo nimic
-          git pull --rebase origin ${GITHUB_REF_NAME} || true
-          git push origin HEAD:${GITHUB_REF_NAME} || true
+          for t in 1 2 3 4 5; do
+            git add analysis/ || true
+            git commit -m "analysis: verdict ${{ matrix.variant }}" || true
+            git pull --rebase origin ${GITHUB_REF_NAME} || true
+            git push origin HEAD:${GITHUB_REF_NAME} && break
+            sleep $((RANDOM % 15 + 3))
+          done
