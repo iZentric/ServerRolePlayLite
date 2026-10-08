@@ -107,6 +107,19 @@ jobs:
           python3 run/rcon.py "$RPASS" > run/rcon.out 2>&1 || true
           sed -E "s|$RPASS|<CHEIE-CENZURATA>|g" run/rcon.out > run/rcon.safe 2>/dev/null || cp run/rcon.out run/rcon.safe
           cat run/rcon.safe
+      - name: Ce zice serverul despre RCON (din log, cenzurat)
+        env:
+          P: ${{ secrets.ZAMPTO_SFTP_PASS }}
+        run: |
+          lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "
+            set sftp:auto-confirm yes;
+            get logs/latest.log -o run/latest.log;
+            bye"
+          { grep -niE "rcon|authenticat" run/latest.log | tail -12; } > run/rconlog.txt
+          grep -c . run/rconlog.txt
+          RLINES=$(grep -ciE "failed auth" run/latest.log)
+          echo "incercari esuate de autentificare RCON in log: $RLINES" >> run/rconlog.txt
+          cat run/rconlog.txt
       - name: Raport in repo (fara cheia nicaieri)
         run: |
           git pull --rebase -q origin "$GITHUB_REF_NAME" || true
@@ -120,6 +133,10 @@ jobs:
             echo "## RCON"
             echo '```'
             cat run/rcon.safe
+            echo '```'
+            echo "## Log server despre RCON (ultimele 12 linii)"
+            echo '```'
+            cat run/rconlog.txt
             echo '```'
           } > analysis/consola.md
           git config user.name "github-actions[bot]"
