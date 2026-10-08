@@ -6,7 +6,8 @@
   "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
   "remove_from_client": [
     "DynamicSurroundings",
-    "CTM-MC"
+    "CTM-MC",
+    "lightfallclient"
   ],
   "_comentariu_server": "De pe SERVER se scot DOAR modurile client-only (randare/meniuri — pe server nu fac absolut nimic, doar maresc timpul de pornire si RAM-ul). Jucatorii NU sunt afectati: clientul lor le are pe toate.",
   "remove_from_server": [
