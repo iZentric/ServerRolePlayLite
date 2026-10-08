@@ -64,7 +64,6 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ FastFurnace-1.16.5-4.5.0.jar
 - ✅ FastWorkbench-1.16.5-4.6.2.jar
 - ✅ saturn-mc1.16.5-0.0.3.jar
-- ✅ DataFixerSlayer 1.0-3.jar
 - ✅ getittogetherdrops-1.16.5-v1.2.jar
 
 ### Setari consum minim
