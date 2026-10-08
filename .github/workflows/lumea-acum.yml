@@ -1,0 +1,84 @@
+name: LUMEA-ACUM
+on:
+  push:
+    paths: ["deploy/lumea-acum.txt"]
+permissions:
+  contents: write
+jobs:
+  lumea:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Descarca EvoKode (serverul nostru forjat)
+        run: |
+          gh release download lite -R ${{ github.repository }} -p '*Server-CatServer*.zip' -O srv.zip
+          mkdir -p srv && cd srv && unzip -q ../srv.zip
+          echo "eula=true" > eula.txt
+          ls -la *.jar
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Genereaza lumea (DEADLOCK-SAFE, forceload vanilla)
+        run: |
+          cd srv
+          mkfifo in
+          exec 3<> in
+          java -Xms2G -Xmx4G -Dterminal.jline=false -jar CatServer-1.16.5-1d8d6313-server.jar nogui < in > gen.log 2>&1 &
+          JPID=$!
+          echo "astept Done (max 12 min)..."
+          for i in $(seq 1 72); do
+            grep -q 'Done (' gen.log && break
+            kill -0 $JPID 2>/dev/null || { echo "MORT LA PORNIRE"; tail -30 gen.log; exit 1; }
+            sleep 10
+          done
+          grep -q 'Done (' gen.log || { echo "TIMEOUT PORNIRE"; tail -30 gen.log; exit 1; }
+          echo ">>> DONE! Pornesc generarea lumea (1200x1200 blocuri)..."
+          echo "worldborder center 0 0" >&3
+          echo "worldborder set 2400" >&3
+          sleep 1
+          echo "forceload add -600 -600 600 600" >&3
+          echo ">>> forceload trimis - generare ~15-20 min..."
+          sleep 1080
+          echo "forceload remove all" >&3
+          sleep 2
+          echo "save-all flush" >&3
+          sleep 20
+          echo "stop" >&3
+          for i in $(seq 1 48); do
+            kill -0 $JPID 2>/dev/null || { echo "server oprit curat"; break; }
+            sleep 5
+          done
+          kill -9 $JPID 2>/dev/null || true
+          exec 3>&-
+          echo "LUMEA:"; du -sh world; ls world
+      - name: Urc-o pe HOST + plasa in Releases
+        if: always()
+        run: |
+          set +e
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          cd srv && zip -q -r ../world-pregen.zip world && cd ..
+          echo "=== PLASA: Releases ==="
+          gh release delete world -y 2>/dev/null
+          gh release create world world-pregen.zip -t "Lume pre-generata (EvoKode)" 2>/dev/null
+          echo "=== HOST: upload direct pe Zampto ==="
+          lftp -u "15254.1388b9af","$P" "sftp://node12.zampto.net:2022" -e "
+            set sftp:auto-confirm yes;
+            set net:timeout 30; set net:max-retries 2;
+            mirror -R --parallel=2 --verbose srv/world world;
+            bye
+          "
+          echo "LUMEA E PE SERVER."
+        env:
+          P: ${{ secrets.ZAMPTO_SFTP_PASS }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Raport
+        if: always()
+        run: |
+          mkdir -p analysis
+          tail -40 srv/gen.log > analysis/lumea-acum.log 2>/dev/null
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add analysis/ && git commit -m "lumea-acum raport" && git pull --rebase -X ours && git push || true
