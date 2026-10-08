@@ -780,3 +780,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# trigger-build: 2026-10-08 (ruleaza intregul lant: 1.5.3 -> release -> deploy)
