@@ -71,6 +71,15 @@ jobs:
             grep -iE "Enabling (AuthMe|SkinsRestorer|FastLogin|ProtocolLib|LuckPerms|Essentials|WorldGuard|spark|Chunky|GriefPrevention|ZNPC|Vault|WorldEdit)" boot.log | head -17 | sed 's/^/    /' || true
           } > ../analysis/test-boot-${V}.md
           tail -200 boot.log > ../analysis/test-boot-${V}-tail.log
+          # autopsia completa: jurnalele interne ale serverului (eroarea reala ascunsa de wrapper)
+          for f in $(find . -name '*.log' -not -name boot.log 2>/dev/null | head -6); do
+            echo "===== JURNAL INTERN: $f =====" >> ../analysis/test-boot-${V}-tail.log
+            tail -60 "$f" >> ../analysis/test-boot-${V}-tail.log
+          done
+          for f in $(find crash-reports -name '*.txt' 2>/dev/null | head -2); do
+            echo "===== CRASH REPORT: $f =====" >> ../analysis/test-boot-${V}-tail.log
+            head -60 "$f" >> ../analysis/test-boot-${V}-tail.log
+          done
           cat ../analysis/test-boot-${V}.md
       - name: Publica verdictul
         if: always()
