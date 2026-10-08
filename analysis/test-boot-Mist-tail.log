@@ -1,3 +1,38 @@
+Downloading file SpecialSource-1.8.5.jar with size 79.27637 KB
+Download finished for SpecialSource-1.8.5.jar !
+Global percentage >70%
+Downloading file gson-2.8.0.jar with size 226.51562 KB
+Download finished for gson-2.8.0.jar !
+Global percentage >70%
+Downloading file guava-20.0.jar with size 2.3294687MB
+Download finished for guava-20.0.jar !
+Global percentage >74%
+Downloading file terminalconsoleappender-1.2.0.jar with size 15.602539 KB
+Download finished for terminalconsoleappender-1.2.0.jar !
+Global percentage >74%
+Downloading file checker-qual-2.0.0.jar with size 335.17773 KB
+Download finished for checker-qual-2.0.0.jar !
+Global percentage >74%
+Downloading file mixin-0.8.2.jar with size 848.1377 KB
+Download finished for mixin-0.8.2.jar !
+Global percentage >76%
+Downloading file maven-artifact-3.6.3.jar with size 56.46875 KB
+Download finished for maven-artifact-3.6.3.jar !
+Global percentage >76%
+Downloading file sqlite-jdbc-3.34.0.jar with size 6.9583216MB
+Download finished for sqlite-jdbc-3.34.0.jar !
+Global percentage >88%
+Downloading file snakeyaml-1.27.jar with size 302.83594 KB
+Download finished for snakeyaml-1.27.jar !
+Global percentage >88%
+Downloading file core-3.6.3.jar with size 194.4248 KB
+Download finished for core-3.6.3.jar !
+Global percentage >88%
+Downloading file asm-tree-6.1.1.jar with size 48.876953 KB
+Download finished for asm-tree-6.1.1.jar !
+Global percentage >88%
+Downloading file toml-3.6.3.jar with size 30.554688 KB
+Download finished for toml-3.6.3.jar !
 Global percentage >89%
 Downloading file fastcsv-1.0.2.jar with size 15.754883 KB
 Download finished for fastcsv-1.0.2.jar !
@@ -141,6 +176,7 @@ Remapping jar... 100%
 Finished the install verification process !
 An error occurs with the server start. You can ask for help to the Mist support on Discord or GitHub.
 == INSTALARE TERMINATA, pornim DIRECT ServerMain (fara paznic) ==
+== piesa vindecata remontata in secunda de dinaintea aprinderii ==
 
 
  __    __   __   ______   ______ 
@@ -155,49 +191,13 @@ Checking libraries, please wait...
 Global percentage >100%
 Downloading file bungeecord-chat-1.16-R0.4.jar with size 145.46973 KB
 Download finished for bungeecord-chat-1.16-R0.4.jar !
+Global percentage >100%
+Downloading file modlauncher-8.0.9.jar with size 123.23828 KB
+Download finished for modlauncher-8.0.9.jar !
 All libraries are nice :) !
 Checking the installation, please wait.
 Finished the install verification process !
-[06:15:31 INFO]: ModLauncher running: args [--gameDir, ., --launchTarget, fmlserver, --fml.forgeVersion, 36.2.4, --fml.mcpVersion, 20210115.111550, --fml.mcVersion, 1.16.5, --fml.forgeGroup, net.minecraftforge, nogui]
-[06:15:31 INFO]: ModLauncher 8.0.9+86+master.3cf110c starting: java version 11.0.32.1 by Eclipse Adoptium
-WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by cpw.mods.modlauncher.SecureJarHandler (file:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/cpw/mods/modlauncher/8.0.9/modlauncher-8.0.9.jar) to field java.util.jar.Manifest.jv
-WARNING: Please consider reporting this to the maintainers of cpw.mods.modlauncher.SecureJarHandler
-WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
-WARNING: All illegal access operations will be denied in a future release
-[06:15:31 INFO]: Added Lets Encrypt root certificates as additional trust
-[06:15:31 INFO]: SpongePowered MIXIN Subsystem Version=0.8.2 Source=file:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar Service=ModLauncher Env=SERVER
-[06:15:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: com.electronwill.nightconfig.core.io.ParsingException: Invalid TOML data: entry "[maxThreads]" defined twice in its table.
-[06:15:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TableParser.checkDuplicateKey(TableParser.java:88)
-[06:15:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TableParser.parseNormal(TableParser.java:59)
-[06:15:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TomlParser.parse(TomlParser.java:44)
-[06:15:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TomlParser.parse(TomlParser.java:37)
-[06:15:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:113)
-[06:15:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:219)
-[06:15:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:202)
-[06:15:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.file.WriteSyncFileConfig.load(WriteSyncFileConfig.java:73)
-[06:15:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread.run(FileWatcher.java:181)
-[06:15:33 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[06:15:33 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[06:15:33 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[06:15:34 INFO]: Launching target 'fmlserver' with arguments [--gameDir, ., nogui]
-Exception in thread "main" [06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: java.lang.NoSuchMethodError: 'void sun.security.util.ManifestEntryVerifier.<init>(java.util.jar.Manifest)'
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.SecureJarHandler.createCodeSource(SecureJarHandler.java:66)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:275)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:527)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.Class.forName0(Native Method)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.Class.forName(Class.java:398)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106)
-[06:15:34 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103)
+An error occurs with the server start. You can ask for help to the Mist support on Discord or GitHub.
 ===== DOSAR MIST =====
 -- MANIFEST:
 Manifest-Version: 1.0
@@ -255,64 +255,3 @@ libraries/net/minecraftforge/installertools/1.1.11/installertools-1.1.11.jar
 libraries/net/minecraftforge/unsafe/0.2.0/unsafe-0.2.0.jar
 libraries/net/minecraftforge/jarsplitter/1.1.2/jarsplitter-1.1.2.jar
 -rw-r--r-- 1 runner runner 8643781 Oct  8 05:23 mist-1.16.5-33-server.jar
-===== JURNAL INTERN: ./logs/latest.log =====
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@51a18b21 to Target : METHOD {Lnet/minecraft/inventory/container/CartographyContainer$3;} {func_75214_a} {(Lnet/minecraft/item/ItemStack;)Z}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@62b790a5 to Target : METHOD {Lnet/minecraft/inventory/container/CartographyContainer;} {func_82846_b} {(Lnet/minecraft/entity/player/PlayerEntity;I)Lnet/minecraft/item/ItemStack;}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@7c52fc81 to Target : METHOD {Lnet/minecraft/item/ItemStack;} {func_82840_a} {(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/client/util/ITooltipFlag;)Ljava/util/List;}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@7523a3dc to Target : METHOD {Lnet/minecraft/client/renderer/entity/FishRenderer;} {func_225623_a_} {(Lnet/minecraft/entity/projectile/FishingBobberEntity;FFLcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;I)V}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@2806d6da to Target : METHOD {Lnet/minecraft/entity/projectile/FishingBobberEntity;} {func_234600_a_} {(Lnet/minecraft/entity/player/PlayerEntity;)Z}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@766a49c7 to Target : METHOD {Lnet/minecraft/block/BeehiveBlock;} {func_225533_a_} {(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/util/math/BlockRayTraceResult;)Lnet/minecraft/util/ActionResultType;}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@1db7157f to Target : METHOD {Lnet/minecraft/block/PumpkinBlock;} {func_225533_a_} {(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/util/math/BlockRayTraceResult;)Lnet/minecraft/util/ActionResultType;}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@75e27856 to Target : METHOD {Lnet/minecraft/block/TripWireBlock;} {func_176208_a} {(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)V}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@6bccd036 to Target : METHOD {Lnet/minecraft/enchantment/EfficiencyEnchantment;} {func_92089_a} {(Lnet/minecraft/item/ItemStack;)Z}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@4f4c88f9 to Target : METHOD {Lnet/minecraft/entity/passive/MooshroomEntity;} {func_230254_b_} {(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResultType;}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@6a756082 to Target : METHOD {Lnet/minecraft/entity/passive/SheepEntity;} {func_230254_b_} {(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResultType;}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModMethodTransformer@cb39552 to Target : METHOD {Lnet/minecraft/entity/passive/SnowGolemEntity;} {func_230254_b_} {(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResultType;}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@2a53f215 to Target : CLASS {Lnet/minecraft/potion/EffectInstance;} {} {V}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@6b63e6ad to Target : CLASS {Lnet/minecraft/block/FlowingFluidBlock;} {} {V}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@7beae796 to Target : CLASS {Lnet/minecraft/item/BucketItem;} {} {V}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@6749fe50 to Target : CLASS {Lnet/minecraft/block/StairsBlock;} {} {V}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@52bf7bf6 to Target : CLASS {Lnet/minecraft/block/FlowerPotBlock;} {} {V}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@261db982 to Target : CLASS {Lnet/minecraft/item/FishBucketItem;} {} {V}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@ae73c80 to Target : CLASS {Lnet/minecraft/item/ItemStack;} {} {V}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@22f4f8f2 to Target : CLASS {Lnet/minecraft/network/play/client/CClientSettingsPacket;} {} {V}
-[06:15:34] [main/DEBUG] [cpw.mods.modlauncher.TransformationServiceDecorator/MODLAUNCHER]: Initialized transformers for transformation service fml
-[06:15:34] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:ModLauncher Root Container(4f56a0a2)]
-[06:15:34] [main/DEBUG] [mixin/]: Processing launch tasks for PlatformAgent[MixinPlatformAgentDefault:ModLauncher Root Container(4f56a0a2)]
-[06:15:34] [main/DEBUG] [mixin/]: Adding mixin platform agents for container ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-server.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-server.jar)
-[06:15:34] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-server.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-server.jar)
-[06:15:34] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-server.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-server.jar)
-[06:15:34] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-server.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-server.jar)
-[06:15:34] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-server.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-server.jar)
-[06:15:34] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-server.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-server.jar)]
-[06:15:34] [main/DEBUG] [mixin/]: Adding mixin platform agents for container ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-universal.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-universal.jar)
-[06:15:34] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-universal.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-universal.jar)
-[06:15:34] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-universal.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-universal.jar)
-[06:15:34] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-universal.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-universal.jar)
-[06:15:34] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-universal.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-universal.jar)
-[06:15:34] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-universal.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-universal.jar)]
-[06:15:34] [main/DEBUG] [mixin/]: inject() running with 3 agents
-[06:15:34] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:ModLauncher Root Container(4f56a0a2)]
-[06:15:34] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-server.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-server.jar)]
-[06:15:34] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:ContainerHandleModLauncher.Resource(forge-1.16.5-36.2.4-universal.jar:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-universal.jar)]
-[06:15:34] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'fmlserver' with arguments [--gameDir, ., nogui]
-[06:15:34] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://minecraft/net/minecraft/server/Main.class got resource net/minecraft/server/Main.class true
-[06:15:34] [main/DEBUG] [mixin/]: Error cleaning class output directory: .mixin.out
-[06:15:34] [main/DEBUG] [mixin/]: Preparing mixins for MixinEnvironment[DEFAULT]
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: java.lang.NoSuchMethodError: 'void sun.security.util.ManifestEntryVerifier.<init>(java.util.jar.Manifest)'
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.SecureJarHandler.createCodeSource(SecureJarHandler.java:66)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:275)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:527)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.Class.forName0(Native Method)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.Class.forName(Class.java:398)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106)
-[06:15:34] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103)
