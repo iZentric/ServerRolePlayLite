@@ -422,6 +422,12 @@ def write_start_scripts(sdir, server_jar):
         f.write(f"java -Xms1G -Xmx4G {AIKAR_FLAGS} -jar {server_jar} nogui\r\npause\r\n")
     with open(os.path.join(sdir, "server.properties"), "w") as f:
         f.write(SERVER_PROPERTIES)
+    # TRUCUL ZAMPTO: unix_args.txt = panoul foloseste flagurile si jar-ul NOSTRU
+    with open(os.path.join(sdir, "unix_args.txt"), "w") as f:
+        f.write("-Xms1G\n-Xmx4G\n")
+        for fl in AIKAR_FLAGS.split():
+            f.write(fl + "\n")
+        f.write(f"-jar\n{server_jar}\nnogui\n")
     with open(os.path.join(sdir, "eula.txt"), "w") as f:
         f.write("# Prin folosirea acestui pachet acceptati https://aka.ms/MinecraftEULA\neula=true\n")
     icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "server-icon.png")
