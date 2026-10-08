@@ -41,6 +41,12 @@ jobs:
           else
             echo "custom indisponibil - ramane oficialul"
           fi
+          # LUMEA din fabrica (daca e coapta) merge si ea pe server
+          if gh release download world -R ${{ github.repository }} -p 'world-pregen.zip' -O /tmp/world.zip 2>/dev/null; then
+            rm -rf srv/world && unzip -q /tmp/world.zip -d srv/ && echo "LUMEA PREGENERATA MONTATA ($(du -sh srv/world | cut -f1))"
+          else
+            echo "lumea inca se coace - serverul si-o genereaza singur la nevoie"
+          fi
       - name: Instaleaza lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
       - name: Urca fisierele pe server

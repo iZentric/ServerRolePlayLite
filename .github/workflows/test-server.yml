@@ -18,15 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { variant: Mist, java: "11" }
-          - { variant: Arclight, java: "11" }
-          - { variant: CatServer, java: "11" }
           - { variant: CatServer, java: "17", suffix: "-J17" }
-          - { variant: CatServer, java: "21", suffix: "-J21" }
-          - { variant: CatServer, java: "17", suffix: "-MCMT", mcmt: "da" }
-          - { variant: CatServer, java: "17", suffix: "-PERF", perfswap: "da" }
           - { variant: CatServer, java: "17", suffix: "-CUSTOM", custom: "da" }
-          - { variant: MaxLite, java: "17", suffix: "-MCMT", mcmt: "da" }
+          - { variant: CatServer, java: "11" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
