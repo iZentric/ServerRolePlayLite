@@ -181,8 +181,8 @@ def strip_client_assets(jar_path):
 SERVER_PROPERTIES = """\
 #Minecraft server properties - Freeroam Lite (consum minim)
 motd=\\u00A7e\\u00A7lFreeroam Lite \\u00A77- RolePlay pentru toti!
-max-players=20
-view-distance=5
+max-players=25
+view-distance=4
 sync-chunk-writes=false
 network-compression-threshold=256
 spawn-protection=128
@@ -190,7 +190,7 @@ allow-flight=true
 enable-command-block=true
 max-tick-time=-1
 sync-chunk-writes=false
-entity-broadcast-range-percentage=75
+entity-broadcast-range-percentage=60
 online-mode=true
 pvp=true
 difficulty=normal
@@ -229,6 +229,7 @@ world-settings:
     ticks-per:
       hopper-transfer: 8
       hopper-check: 8
+      monster-spawns: 2
     hopper-amount: 3
     arrow-despawn-rate: 300
     trident-despawn-rate: 300
@@ -299,6 +300,7 @@ world-settings:
     ticks-per:
       hopper-transfer: 8
       hopper-check: 8
+      monster-spawns: 2
     max-tick-time:
       tile: 20
       entity: 20
@@ -622,7 +624,7 @@ def main():
             f.write(f"- ✅ {n}\n")
         f.write("\n### Setari consum minim\n")
         f.write("- JVM: porneste la 1 GB, creste doar la nevoie (max 4 GB), G1GC Aikar\n")
-        f.write("- view-distance=5 + sync-chunk-writes=false, max-players=15, mobi activati doar langa jucatori\n")
+        f.write("- view-distance=4 + sync-chunk-writes=false, max-players=15, mobi activati doar langa jucatori\n")
         f.write("- Arclight in plus: hoppers rarite, spawn-limits mici, villagers inactivi inghetati\n")
 
     shutil.rmtree(work, ignore_errors=True)
