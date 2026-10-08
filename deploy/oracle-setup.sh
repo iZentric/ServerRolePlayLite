@@ -1,6 +1,6 @@
 #!/bin/bash
 # ===================================================================
-# ORACLE CLOUD (ARM, gratis pe viata) -> serverul nostru, 1 comanda:
+# ORACLE CLOUD (ARM, gratis pe viata, 2 OCPU/12GB din iunie 2026) -> serverul nostru, 1 comanda:
 #   curl -sL https://github.com/iZentric/ServerRolePlayLite/raw/arena/a29b4ef4-serverroleplaylite/deploy/oracle-setup.sh | sudo bash
 # Ubuntu 22.04/24.04 aarch64 (Ampere A1). Face TOT: java, server,
 # firewall, swap, systemd (porneste singur la boot), backup local.
@@ -34,7 +34,7 @@ Description=Server RolePlay Lite
 After=network.target
 [Service]
 WorkingDirectory=/opt/minecraft
-ExecStart=/usr/bin/java -Xms2G -Xmx10G $FLAGS -jar $JAR nogui
+ExecStart=/usr/bin/java -Xms2G -Xmx8G $FLAGS -jar $JAR nogui
 Restart=on-failure
 RestartSec=10
 [Install]
