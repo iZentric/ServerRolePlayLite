@@ -1,5 +1,7 @@
-# Deploy Zampto - Thu Oct  8 07:00:51 UTC 2026
+# Deploy Zampto - Thu Oct  8 07:16:35 UTC 2026
 
-Making directory `defaultconfigs'
+Removing old file `defaultconfigs/forge-server.toml'
 Transferring file `defaultconfigs/forge-server.toml'
+Removing old file `config/forge-common.toml'
+Transferring file `config/forge-common.toml'
 exit=0
