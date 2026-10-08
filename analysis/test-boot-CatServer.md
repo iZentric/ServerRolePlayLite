@@ -1,13 +1,17 @@
-# VERDICT CatServer (Thu Oct  8 03:46:49 UTC 2026)
-- REZULTAT: **CRAPAT** in 70s | RAM: **n/a**
+# VERDICT CatServer (Thu Oct  8 04:06:41 UTC 2026)
+- REZULTAT: **CRAPAT** in 150s | RAM: **n/a**
 - Done-line:
 - Erori cheie:
+          1 §7org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
+          1 org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
           1 net.minecraftforge.fml.LoadingFailedException: Loading errors encountered: [
-          1 [03:46:17] [main/FATAL]: Failed to start the minecraft server
-          1 [03:46:17] [main/FATAL]: Error during pre-loading phase
-          1 [03:46:17] [main/FATAL]: Crash report saved to ./crash-reports/crash-2026-10-08_03.46.17-fml.txt
-          1 The libraries file download completed, if an error occurs only need re-run the server
-          1 Downloading error_prone_annotations-2.1.3.jar Size: 13.3828125 KB
-          1 Description: Mod loading error has occurred
-          1 A detailed walkthrough of the error, its code path and all known details is as follows:
+          1 [04:06:10] [modloading-worker-0/FATAL]: Mixin apply failed lazydfu.mixins.json:SchemasMixin -> net.minecraft.util.datafix.DataFixesManager: org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException @At("NEW") on net/minecraft/util/datafix/DataFixesManager::create$replaceBuilder with priority 1000 cannot inject into net/minecraft/util/datafix/DataFixesManager::func_188279_a()Lcom/mojang/datafixers/DataFixer; merged by vazkii.dfs.mixin.DataFixesManagerMixin with priority 1000 [PREINJECT Applicator Phase -> lazydfu.mixins.json:SchemasMixin -> Prepare Injections ->  -> redirect$zij000$create$replaceBuilder(I)Lcom/mojang/datafixers/DataFixerBuilder; -> Prepare]
+          1 [04:06:10] [modloading-worker-0/ERROR]: Failed to register automatic subscribers. ModID: pizzamod, class cp
+          1 [04:06:10] [main/FATAL]: Preparing crash report with UUID ba34872c-b3a7-4a63-aa3f-406a716263d7
+          1 [04:06:10] [main/FATAL]: Failed to start the minecraft server
+          1 [04:06:10] [main/FATAL]: Failed to complete lifecycle event CONSTRUCT, 2 errors found
+          1 [04:06:10] [main/FATAL]: Crash report saved to ./crash-reports/crash-2026-10-08_04.06.10-fml.txt
+          1 [04:06:09] [modloading-worker-0/FATAL]: Attempted to load class hl for invalid dist DEDICATED_SERVER
+          1 [04:06:09] [modloading-worker-0/FATAL]: Attempted to load class hk for invalid dist DEDICATED_SERVER
+          1 [04:06:09] [modloading-worker-0/FATAL]: Attempted to load class hg for invalid dist DEDICATED_SERVER
 - Pluginuri pornite:
