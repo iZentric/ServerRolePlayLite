@@ -434,10 +434,14 @@ CERINTE: Java 8 sau Java 11 (NU 17+). RAM: porneste de la 1 GB, maxim 4 GB.
 
 
 FORGE_COMMON_TOML = """\
-# Forge insusi - asigurarea serverelor mari: o entitate/mod stricat se STERGE, nu crapa serverul
+# Scutul anti-crash sta in defaultconfigs/forge-server.toml ([server] e config de LUME la Forge 1.16)
 [server]
     removeErroringEntities = true
     removeErroringTileEntities = true
+"""
+
+FORGE_COMMON_CLEAN = """\
+# gol intentionat - cheile [server] NU au voie aici (Forge le reseta cu warning)
 """
 
 
@@ -466,7 +470,7 @@ def write_start_scripts(sdir, server_jar):
     with open(os.path.join(dc, "forge-server.toml"), "w") as f:
         f.write(FORGE_COMMON_TOML)
     with open(os.path.join(cfg, "forge-common.toml"), "w") as f:
-        f.write(FORGE_COMMON_TOML)
+        f.write(FORGE_COMMON_CLEAN)
     inc = os.path.join(cfg, "incontrol")
     os.makedirs(inc, exist_ok=True)
     with open(os.path.join(inc, "spawn.json"), "w") as f:
