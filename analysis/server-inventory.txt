@@ -1,7 +1,5 @@
 ./
 ./CITESTE-MA.txt
-./CatServer-1.16.5-1d8d6313-server.jar
-./README.txt
 ./bukkit.yml
 ./catserver.yml
 ./config/
@@ -62,9 +60,9 @@
 ./plugins/worldedit-bukkit-7.2.5-dist.jar
 ./plugins/worldguard-bukkit-7.0.5-dist.jar
 ./server-icon.png
+./server.jar
 ./server.properties
 ./spigot.yml
 ./start.bat
 ./start.sh
 ./unix_args.txt
-./user_jvm_args.txt
