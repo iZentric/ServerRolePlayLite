@@ -1,5 +1,15 @@
-# Deploy Zampto - Thu Oct  8 22:22:45 UTC 2026
+# Deploy Zampto - Thu Oct  8 22:31:40 UTC 2026
 
+Removing old file `bukkit.yml'
+Transferring file `bukkit.yml'
 Removing old file `server.properties'
 Transferring file `server.properties'
+Removing old file `spigot.yml'
+Transferring file `spigot.yml'
+Removing old file `config/forge-common.toml'
+Transferring file `config/forge-common.toml'
+Removing old file `config/modernlife-common.toml'
+Transferring file `config/modernlife-common.toml'
+Removing old file `plugins/SkinsRestorer.jar'
+Transferring file `plugins/SkinsRestorer.jar'
 exit=0
