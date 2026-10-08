@@ -1,0 +1,22 @@
+name: clean-zampto
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "deploy/clean-trigger.txt"
+jobs:
+  curata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Sterge gunoiul strain (Forge modern instalat de panou)
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          P='${{ secrets.ZAMPTO_SFTP_PASS }}'
+          lftp -u "15254.1388b9af","$P" "sftp://node12.zampto.net:2022" -e "
+            set sftp:auto-confirm yes;
+            rm -f forge-26.3-66.0.9-shim.jar installer.jar.log;
+            rm -rf libraries;
+            bye
+          " || true
+          echo "CURATAT"
