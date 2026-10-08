@@ -102,7 +102,8 @@ except Exception:
             fi
             # LAZARUS 12: nu inlocuim RoadRunner - ii stingem DOAR circuitul care se bate cu Mist
             mkdir -p config
-            for cf in roadrunner.properties lithium.properties; do
+            mkdir -p config/roadrunner
+            for cf in roadrunner.properties lithium.properties roadrunner/rules.properties; do
               printf 'mixin.alloc.chunk_random=false\n' > config/$cf
             done
             # LAZARUS 11: rescriem pasapoartele modurilor - cerinta de Forge relaxata la 36.2.0
