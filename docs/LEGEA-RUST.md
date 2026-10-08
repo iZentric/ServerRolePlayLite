@@ -13,6 +13,12 @@
 3. **DOVADA, NU PAREREA** — nimic nu se declara mai rapid fara bancul de probe
    (test-server.yml) sau spark pe copii reali.
 
+4. **PRAGUL SURVIVAL (intangibil)** — oricat strangem, jocul ramane survival
+   adevarat LANGA jucatori: mobi care apar noaptea linga tine, foame, pericol,
+   farming posibil. Taiem doar ce e DEPARTE de jucatori si ce nu se vede.
+   Daca vreodata o taietura face jocul sa se simta gol => se da inapoi, fara
+   discutie. (Manete de siguranta: plafon 40->55, spawn-range 3->4.)
+
 ## Cum se aplica automat:
 - pack-rules.json = singura sursa de adevar; build-ul face si serverul si
   clientul din ea => regula se aplica AUTOMAT la amandoua.
