@@ -62,7 +62,18 @@ jobs:
           START=$(date +%s)
           mkfifo in
           exec 3<> in
-          java -Xms128M -XX:MaxRAMPercentage=90.0 -Dterminal.jline=false @unix_args.txt < in > boot.log 2>&1 &
+          if [ "$V" = "Mist" ]; then
+            # LAZARUS 6: faza 1 - wrapperul doar INSTALEAZA (moare la start, nu conteaza)
+            timeout 420 java -Dterminal.jline=false -jar "$MJ" nogui >> boot.log 2>&1 || true
+            echo "== INSTALARE TERMINATA, pornim DIRECT ServerMain (fara paznic) ==" >> boot.log
+            # faza 2 - motorul pornit direct, cu comanda smulsa din manifest; erorile curg goale
+            java -Xms128M -XX:MaxRAMPercentage=90.0 -Dterminal.jline=false -cp "$MJ" \
+              net.minecraftforge.server.ServerMain --gameDir . --launchTarget fmlserver \
+              --fml.forgeVersion 36.2.4 --fml.mcpVersion 20210115.111550 \
+              --fml.mcVersion 1.16.5 --fml.forgeGroup net.minecraftforge nogui < in >> boot.log 2>&1 &
+          else
+            java -Xms128M -XX:MaxRAMPercentage=90.0 -Dterminal.jline=false @unix_args.txt < in > boot.log 2>&1 &
+          fi
           JPID=$!
           STATUS=TIMEOUT
           for i in $(seq 1 100); do
