@@ -207,7 +207,7 @@ settings:
   netty-threads: 2
 world-settings:
   default:
-    mob-spawn-range: 4
+    mob-spawn-range: 3
     entity-activation-range:
       animals: 16
       monsters: 20
@@ -267,7 +267,38 @@ world-settings:
     max-auto-save-chunks-per-tick: 8
     despawn-ranges:
       soft: 28
-      hard: 96
+      hard: 72
+    alt-item-despawn-rate:
+      enabled: true
+      items:
+        COBBLESTONE: 300
+        NETHERRACK: 300
+        SAND: 300
+        GRAVEL: 300
+        DIRT: 300
+        GRASS: 300
+        KELP: 300
+        SUGAR_CANE: 300
+        OAK_LEAVES: 300
+        SPRUCE_LEAVES: 300
+        BIRCH_LEAVES: 300
+        JUNGLE_LEAVES: 300
+        ACACIA_LEAVES: 300
+        DARK_OAK_LEAVES: 300
+        CACTUS: 300
+        DIORITE: 300
+        GRANITE: 300
+        ANDESITE: 300
+    entity-per-chunk-save-limit:
+      experience_orb: 16
+      arrow: 16
+      snowball: 8
+      ender_pearl: 8
+      egg: 8
+      fireball: 8
+      firework_rocket: 8
+      potion: 8
+      area_effect_cloud: 8
     hopper:
       disable-move-event: true
     anti-xray:
