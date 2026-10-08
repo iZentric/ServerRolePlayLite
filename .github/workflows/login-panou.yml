@@ -16,51 +16,54 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Logheaza-te in panou si apasa butonul
+      - name: Cod pe email + usi alternative + scanare profunda JS
         env:
           PASS: "REDACTED_PANEL_TOKEN"
         run: |
           set +e
           mkdir -p /tmp/pl analysis
           UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/126 Safari/537.36"
-          DEV="evo-kode-$(date +%s)"
-          try_login () {
-            EMAIL="$1"
-            echo "=== LOGIN $EMAIL ==="
-            curl -s -c /tmp/pl/jar-$2.txt -o /tmp/pl/resp-$2.txt -w "HTTP %{http_code}\n" \
-              -X POST "https://dash.zampto.net/api/auth/login" \
-              -H "Content-Type: application/json" -H "Accept: application/json" \
-              -H "x-device-id: $DEV" -A "$UA" \
-              --max-time 25 \
-              -d "{\"email\":\"$EMAIL\",\"password\":\"$PASS\",\"device_id\":\"$DEV\"}"
-            head -c 400 /tmp/pl/resp-$2.txt; echo
-            echo "--- cookie-uri:"; grep -oE '[[:space:]][^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]*$' /tmp/pl/jar-$2.txt | awk '{print $6}' | sort -u
+          exec > >(tee /tmp/pl/log.txt)
+          hit () {
+            CODE=$(curl -s -o /tmp/pl/r.txt -w "%{http_code}" -X "$1" "$2" \
+              -H "Content-Type: application/json" -H "Accept: application/json" -A "$UA" \
+              -c /tmp/pl/jarx.txt ${3:+-d "$3"} --max-time 20)
+            BODY=$(head -c 250 /tmp/pl/r.txt | tr -d '\n')
+            echo "$CODE $1 $2 -> $BODY"
           }
-          try_login "vasile716yt@gmail.com" "vasile"
+          echo "== 1) CERERE COD PE EMAIL (fara captcha?) =="
+          hit POST "https://dash.zampto.net/api/auth/login/email-code/request" '{"email":"vasile716yt@gmail.com"}'
           sleep 1
-          try_login "radudaniel1307@gmail.com" "radu"
-          echo "=== CARE JAR E LOGAT ==="
-          for J in /tmp/pl/jar-*.txt; do
-            if grep -qiE 'session|token|auth|zamptonet' "$J"; then echo "$J:"; cat "$J"; fi
-          done
-          echo "=== /api/servers cu fiecare jar ==="
-          for J in /tmp/pl/jar-*.txt; do
-            echo "--- $J"
-            curl -s -b "$J" -o /tmp/pl/srv.txt -w "HTTP %{http_code}\n" \
-              -H "Accept: application/json" -A "$UA" "https://dash.zampto.net/api/servers" --max-time 20
-            head -c 700 /tmp/pl/srv.txt; echo
-          done
+          hit POST "https://dash.zampto.net/api/auth/login/email-code/request" '{"email":"radudaniel1307@gmail.com"}'
+          echo "== 2) OAUTH — unde duce GitHub =="
+          curl -s -o /dev/null -w "github oauth redirect: %{redirect_url}\n" "https://dash.zampto.net/api/auth/oauth/github" --max-time 15
+          curl -s -o /dev/null -w "google oauth redirect: %{redirect_url}\n" "https://dash.zampto.net/api/auth/oauth/google" --max-time 15
+          echo "== 3) api.zampto.net login propriu =="
+          hit POST "https://api.zampto.net/auth/login" "{\"email\":\"vasile716yt@gmail.com\",\"password\":\"$PASS\"}"
+          hit POST "https://api.zampto.net/login" "{\"email\":\"vasile716yt@gmail.com\",\"password\":\"$PASS\"}"
+          hit POST "https://api.zampto.net/api/auth/login" "{\"email\":\"vasile716yt@gmail.com\",\"password\":\"$PASS\"}"
+          echo "== 4) SCANARE PROFUNDA: toate chunk-urile JS =="
+          curl -sL -A "$UA" "https://dash.zampto.net/auth/login" -o /tmp/pl/page.html
+          grep -oE '/_next/static/chunks/[a-zA-Z0-9/_.%-]+\.js' /tmp/pl/page.html | sort -u > /tmp/pl/all-chunks.txt
+          wc -l /tmp/pl/all-chunks.txt
+          while read -r C; do
+            curl -sL -A "$UA" "https://dash.zampto.net$C" -o "/tmp/pl/$(echo "$C" | tr '/' '_')" --max-time 20
+            sleep 0.3
+          done < /tmp/pl/all-chunks.txt
           {
-            echo "# LOGIN PANOU ($(date -u))"
+            echo "# LOGIN PANOU 2 ($(date -u))"
             echo
-            echo "## raspunsuri login"
-            for F in /tmp/pl/resp-*.txt; do echo "### $F"; head -c 400 "$F"; echo; done
+            echo "## cerere cod email"
+            grep -c . /tmp/pl/r.txt >/dev/null
             echo
-            echo "## cookie-uri"
-            for F in /tmp/pl/jar-*.txt; do echo "### $F"; cat "$F"; echo; done
+            echo "## strings gasite in JS: power/restart/console/captcha/sitekey"
+            grep -ohE '.{50}(power|restart|turnstile|hcaptcha|sitekey|captcha).{50}' /tmp/pl/_next_static_chunks_*.js 2>/dev/null | head -30
             echo
-            echo "## /api/servers"
-            head -c 1500 /tmp/pl/srv.txt 2>/dev/null
+            echo "## toate caile /api/ din toate chunk-urile"
+            grep -ohE '"/api/[a-zA-Z0-9/_${}.:-]+"' /tmp/pl/_next_static_chunks_*.js /tmp/pl/page.html 2>/dev/null | sort -u | head -60
+            echo
+            echo "## logul complet al usilor"
+            cat /tmp/pl/log.txt 2>/dev/null
           } > analysis/login-panou.md
           exit 0
 
@@ -69,6 +72,6 @@ jobs:
         run: |
           git config user.name bot && git config user.email bot@users.noreply.github.com
           git add analysis/login-panou.md 2>/dev/null || true
-          git commit -m "analysis: login panou Zampto" || echo "nimic"
+          git commit -m "analysis: cod pe email + usi alternative panou" || echo "nimic"
           git pull --rebase -X ours origin ${GITHUB_REF_NAME} || true
           git push origin HEAD:${GITHUB_REF_NAME} || true
