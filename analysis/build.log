@@ -1,9 +1,15 @@
 == Dezarhivez pack-ul original ==
 == CLIENT lite (.mrpack) - toate modurile originale pastrate ==
+  !! 'magnesium|sodium-reforged' sarit (client): HTTP Error 404: Not Found
+  + radon-0.8.0a.jar
   + entityculling-forge-mc1.16.5-1.5.2.jar
   + FpsReducer-forge-1.24-mc1.16.5.jar
+  + ferritecore-2.1.1-forge.jar
+  + saturn-mc1.16.5-0.0.3.jar
+  + modernfix-forge-5.18.0+mc1.16.5.jar
+  !! 'smoothboot-reloaded' sarit (client): HTTP Error 404: Not Found
   + memoryleakfix-forge-pre1.17-1.1.5.jar
-  !! 'starlight-forge' sarit (client): nicio versiune
+  !! 'lazydfu' sarit (client): nicio versiune
   => out/Freeroam-Lite-Client-1.5.0-ULTRA.mrpack (147.8 MB)
 == Moduri de server (comune) ==
   ↓ mapperbase-1.16.5-2.4.0.0.jar
