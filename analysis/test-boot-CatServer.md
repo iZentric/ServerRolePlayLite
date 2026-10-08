@@ -1,21 +1,33 @@
-# VERDICT CatServer (Thu Oct  8 04:48:06 UTC 2026)
-- REZULTAT: **CRAPAT** in 140s | RAM: **n/a**
+# VERDICT CatServer (Thu Oct  8 05:04:50 UTC 2026)
+- REZULTAT: **PORNIT** in 181s | RAM: **4325MB**
 - Done-line:
+    [05:04:16] [Server thread/INFO]: Done (43.873s)! For help, type "help"
 - Erori cheie:
-          2 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinError(MixinProcessor.java:636) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown]
-          2 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinApplyError(MixinProcessor.java:588) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown]
-          1 org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
-          1 org.spongepowered.asm.mixin.throwables.MixinApplyError: Mixin [radon.mixins.json:chunk.MixinChunkNibbleArray] from phase [DEFAULT] in config [radon.mixins.json] FAILED during APPLY
-          1 [04:47:32] [Server thread/ERROR]: Exception stopping the server
-          1 [04:47:31] [Server thread/WARN]: Incorrect key server.removeErroringTileEntities was corrected from null to its default, false. 
-          1 [04:47:31] [Server thread/WARN]: Incorrect key server.removeErroringEntities was corrected from null to its default, false. 
-          1 [04:47:31] [Server thread/FATAL]: Preparing crash report with UUID 2347fb89-1743-4651-ba7a-45046e5eaf4f
-          1 [04:47:31] [Server thread/FATAL]: Mixin apply failed radon.mixins.json:chunk.MixinChunkNibbleArray -> net.minecraft.world.chunk.NibbleArray: org.spongepowered.asm.mixin.transformer.throwables.InvalidMixinException PRIVATE @Overwrite method func_177480_a in radon.mixins.json:chunk.MixinChunkNibbleArray cannot reduce visibiliy of PUBLIC target method
-          1 [04:47:31] [Server thread/ERROR]: \tCause of unexpected exception was
-          1 [04:47:31] [Server thread/ERROR]: This crash report has been saved to: /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/./crash-reports/crash-2026-10-08_04.47.31-server.txt
-          1 [04:47:31] [Server thread/ERROR]: Encountered an unexpected exception
+          1 [05:04:16] [Server thread/WARN]: Could not load any license plate
+          1 [05:03:50] [Server thread/ERROR]: Error occurred while enabling packetevents v2.14.0 (Is it up to date?)
+          1 [05:03:43] [Server thread/ERROR]: You are running a server that does not properly support Bukkit plugins. Bukkit plugins should not be used with Forge/Fabric mods! For Forge: Consider using ForgeEssentials, or SpongeForge + Nucleus.
+          1 [05:03:43] [Server thread/ERROR]: Error occurred while enabling ZNPCsPlus v1.0.8 (Is it up to date?)
+          1 [05:03:33] [Server thread/WARN]: Incorrect key server.removeErroringTileEntities was corrected from null to its default, false. 
+          1 [05:03:33] [Server thread/WARN]: Incorrect key server.removeErroringEntities was corrected from null to its default, false. 
+          1 [05:03:00] [Server thread/ERROR]: Could not load 'plugins/GriefPrevention.jar' in folder 'plugins'
+          1 [05:02:59] [Server thread/ERROR]: Could not load 'plugins/Chunky-1.3.38.jar' in folder 'plugins'
+          1 [05:02:52] [Worker-Main-1/ERROR]: Couldn't load block tag farmersdelight:mushroom_colony_growable_on as it is missing following references: supplementaries:planter_rich (from supplementaries-1.16.5-0.18.4b.jar)
+          1 [05:02:48] [main/WARN]: Incorrect key server was corrected from SimpleCommentedConfig:{removeErroringEntities=true, removeErroringTileEntities=true} to its default, null. 
+          1 [05:02:44] [modloading-worker-1/FATAL]: Attempted to load class hl for invalid dist DEDICATED_SERVER
+          1 [05:02:44] [modloading-worker-1/FATAL]: Attempted to load class hk for invalid dist DEDICATED_SERVER
 - Pluginuri pornite:
-    [04:47:19] [Server thread/INFO]: [LuckPerms] Enabling LuckPerms v5.5.71
-    [04:47:27] [Server thread/INFO]: [Vault] Enabling Vault v1.7.3-b131
-    [04:47:27] [Server thread/INFO]: [ProtocolLib] Enabling ProtocolLib v4.8.0
-    [04:47:27] [Server thread/INFO]: [WorldEdit] Enabling WorldEdit v7.2.5+57d5ac9
+    [05:03:22] [Server thread/INFO]: [LuckPerms] Enabling LuckPerms v5.5.71
+    [05:03:29] [Server thread/INFO]: [Vault] Enabling Vault v1.7.3-b131
+    [05:03:29] [Server thread/INFO]: [ProtocolLib] Enabling ProtocolLib v4.8.0
+    [05:03:29] [Server thread/INFO]: [WorldEdit] Enabling WorldEdit v7.2.5+57d5ac9
+    [05:03:40] [Server thread/INFO]: [SkinsRestorer] Enabling SkinsRestorer v14.2.12
+    [05:03:42] [Server thread/INFO]: [ZNPCsPlus] Enabling ZNPCsPlus v1.0.8
+    [05:03:43] [Server thread/ERROR]: Error occurred while enabling ZNPCsPlus v1.0.8 (Is it up to date?)
+    [05:03:43] [Server thread/INFO]: [Essentials] Enabling Essentials v2.19.7
+    [05:03:49] [Server thread/INFO]: [EssentialsChat] Enabling EssentialsChat v2.19.7
+    [05:03:50] [Server thread/INFO]: [EssentialsAntiBuild] Enabling EssentialsAntiBuild v2.19.7
+    [05:03:50] [Server thread/INFO]: [EssentialsSpawn] Enabling EssentialsSpawn v2.19.7
+    [05:03:50] [Server thread/INFO]: [WorldGuard] Enabling WorldGuard v7.0.5+3827266
+    [05:03:51] [Server thread/INFO]: [EssentialsProtect] Enabling EssentialsProtect v2.19.7
+    [05:03:51] [Server thread/INFO]: [AuthMe] Enabling AuthMe v5.6.0-bCUSTOM
+    [05:03:52] [Server thread/INFO]: [FastLogin] Enabling FastLogin v1.12-SNAPSHOT-65a379c
