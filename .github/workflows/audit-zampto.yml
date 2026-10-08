@@ -23,6 +23,14 @@ jobs:
             set sftp:auto-confirm yes;
             find .;
             bye
+            cat server.properties; echo ---;
+            cat spigot.yml; echo ---;
+            cat bukkit.yml; echo ---;
+            cat catserver.yml; echo ---;
+            cat unix_args.txt; echo ---;
+            cat config/forge-common.toml; echo ---;
+            cat defaultconfigs/forge-server.toml; echo ---;
+            cat config/incontrol/spawn.json; echo ---;
           " > analysis/server-inventory.txt 2>&1 || true
           wc -l analysis/server-inventory.txt
       - name: Publica inventarul
