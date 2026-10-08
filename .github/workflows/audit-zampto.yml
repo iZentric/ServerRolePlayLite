@@ -43,7 +43,7 @@ jobs:
       - name: Publica inventarul
         run: |
           git config user.name bot && git config user.email bot@users.noreply.github.com
-          git add analysis/server-inventory.txt
+          git add analysis/
           git commit -m "analysis: inventarul fisierelor de pe Zampto" || echo "nimic nou"
           git pull --rebase origin ${GITHUB_REF_NAME} || true
           git push origin HEAD:${GITHUB_REF_NAME}
