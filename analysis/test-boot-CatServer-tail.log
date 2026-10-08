@@ -1,200 +1,200 @@
-[05:27:18] [Server thread/WARN]: Incorrect key common.general.validFuels was corrected from null to its default, [vehicle:fuelium, immersiveengineering:biodiesel, immersivepetroleum:diesel]. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.trailer was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.trailer.trailerDetachThreshold was corrected from null to its default, 6.0. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.trailer.trailerSyncCooldown was corrected from null to its default, 100. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.trailer.trailerInventorySyncCooldown was corrected from null to its default, 20. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.gas_pump was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.gas_pump.maxHoseDistance was corrected from null to its default, 10.0. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.gas_pump.gasPumpCapacity was corrected from null to its default, 50000. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fluid_pump was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fluid_pump.pumpTransferAmount was corrected from null to its default, 50. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fluid_pump.pumpCapacity was corrected from null to its default, 500. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fluid_extractor was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fluid_extractor.extractorExtractTime was corrected from null to its default, 600. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fluid_extractor.extractorCapacity was corrected from null to its default, 5000. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fluid_mixer was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fluid_mixer.mixerMixTime was corrected from null to its default, 100. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fluid_mixer.mixerInputCapacity was corrected from null to its default, 5000. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fluid_mixer.mixerOutputCapacity was corrected from null to its default, 10000. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fuel_drum was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fuel_drum.fuelDrumCapacity was corrected from null to its default, 40000. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.blocks.fuel_drum.industrialFuelDrumCapacity was corrected from null to its default, 75000. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.items was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.items.jerry_can was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.items.jerry_can.jerryCanCapacity was corrected from null to its default, 5000. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.items.jerry_can.industrialJerryCanCapacity was corrected from null to its default, 15000. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.items.jerry_can.fillRate was corrected from null to its default, 500. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.items.spray_can was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key common.items.spray_can.sprayCanCapacity was corrected from null to its default, 20. 
-[05:27:18] [Server thread/WARN]: Configuration file ./world/serverconfig/forge-server.toml is not correct. Correcting
-[05:27:18] [Server thread/WARN]: Incorrect key server was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key server.removeErroringEntities was corrected from null to its default, false. 
-[05:27:18] [Server thread/WARN]: Incorrect key server.removeErroringTileEntities was corrected from null to its default, false. 
-[05:27:18] [Server thread/WARN]: Incorrect key server.fullBoundingBoxLadders was corrected from null to its default, false. 
-[05:27:18] [Server thread/WARN]: Incorrect key server.zombieBaseSummonChance was corrected from null to its default, 0.1. 
-[05:27:18] [Server thread/WARN]: Incorrect key server.zombieBabyChance was corrected from null to its default, 0.05. 
-[05:27:18] [Server thread/WARN]: Incorrect key server.logCascadingWorldGeneration was corrected from null to its default, true. 
-[05:27:18] [Server thread/WARN]: Incorrect key server.fixVanillaCascading was corrected from null to its default, false. 
-[05:27:18] [Server thread/WARN]: Incorrect key server.dimensionUnloadQueueDelay was corrected from null to its default, 0. 
-[05:27:18] [Server thread/WARN]: Incorrect key server.treatEmptyTagsAsAir was corrected from null to its default, false. 
-[05:27:18] [Server thread/WARN]: Incorrect key server.fixAdvancementLoading was corrected from null to its default, true. 
-[05:27:18] [Server thread/WARN]: Configuration file ./world/serverconfig/pizzamod-server.toml is not correct. Correcting
-[05:27:18] [Server thread/WARN]: Incorrect key pizzaland was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key pizzaland.troll_protection was corrected from null to its default, SimpleCommentedConfig:{}. 
-[05:27:18] [Server thread/WARN]: Incorrect key pizzaland.troll_protection.enabled was corrected from null to its default, false. 
-[05:27:18] [Server thread/WARN]: Incorrect key pizzaland.troll_protection.duration was corrected from null to its default, 4. 
-[05:27:18] [Server thread/INFO]: Starting locating executor service with thread pool size of 1
-[05:27:18] [Server thread/INFO]: Preparing level "world"
-[05:27:19] [Server thread/WARN]: Method overwrite conflict for removeIf in modernfix-common.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin, previously written by me.jellysquid.mods.lithium.mixin.world.chunk_tickets.SortedArraySetMixin. Skipping method.
-[05:27:20] [Server thread/INFO]: Registering commands with com.sk89q.worldedit.bukkit.BukkitServerInterface
-[05:27:22] [Server thread/INFO]: [Chunky] Enabling Chunky v1.2.217
-[05:27:22] [Server thread/INFO]: [SkinsRestorer] Enabling SkinsRestorer v14.2.12
-[05:27:23] [Server thread/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1mDetected Minecraft [33;1mv1_16_R3[32;1m, using [33;1mSpigotSkinRefresher[32;1m.[0;39m
-[05:27:23] [Server thread/INFO]: [Essentials] Enabling Essentials v2.19.7
-[05:27:23] [Server thread/ERROR]: You are running a server that does not properly support Bukkit plugins. Bukkit plugins should not be used with Forge/Fabric mods! For Forge: Consider using ForgeEssentials, or SpongeForge + Nucleus.
-[05:27:23] [Server thread/INFO]: Status determining class: net.minecraftforge.common.MinecraftForge
-[05:27:24] [Server thread/INFO]: Creating config from template: plugins/Essentials/config.yml
-[05:27:24] [Server thread/INFO]: Creating config from template: plugins/Essentials/kits.yml
-[05:27:24] [Server thread/INFO]: Attempting to convert old kits in config.yml to new kits.yml
-[05:27:24] [Server thread/INFO]: No kits found to migrate.
-[05:27:24] [Server thread/INFO]: Starting Essentials ban format conversion
-[05:27:24] [Server thread/INFO]: Starting usermap repair
-[05:27:24] [Server thread/WARN]: Missing userdata folder, aborting
-[05:27:24] [Server thread/INFO]: Attempting to migrate ignore list to UUIDs
-[05:27:24] [Server thread/INFO]: Attempting to migrate legacy userdata keys to Configurate
-[05:27:24] [Server thread/INFO]: Creating config from template: plugins/Essentials/worth.yml
-[05:27:24] [Server thread/INFO]: Creating config from template: plugins/Essentials/tpr.yml
-[05:27:24] [Server thread/INFO]: Loaded 853 items from items.csv.
-[05:27:24] [Server thread/INFO]: Creating config from template: plugins/Essentials/custom_items.yml
-[05:27:24] [Server thread/WARN]: Initializing Legacy Material Support. Unless you have legacy plugins and/or data this is a bug!
-[05:27:27] [Server thread/INFO]: Using locale en
-[05:27:27] [Server thread/INFO]: ServerListPingEvent: Spigot iterator API
-[05:27:27] [Server thread/INFO]: Starting Metrics. Opt-out using the global bStats config.
-[05:27:27] [Server thread/INFO]: [Vault] [Economy] Essentials Economy hooked.
-[05:27:27] [Server thread/INFO]: Using Vault based permissions (LuckPerms)
-[05:27:27] [Server thread/INFO]: [EssentialsChat] Enabling EssentialsChat v2.19.7
-[05:27:27] [Server thread/INFO]: Starting Metrics. Opt-out using the global bStats config.
-[05:27:27] [Server thread/INFO]: [EssentialsAntiBuild] Enabling EssentialsAntiBuild v2.19.7
-[05:27:27] [Server thread/INFO]: Starting Metrics. Opt-out using the global bStats config.
-[05:27:27] [Server thread/INFO]: [EssentialsSpawn] Enabling EssentialsSpawn v2.19.7
-[05:27:27] [Server thread/INFO]: Starting Metrics. Opt-out using the global bStats config.
-[05:27:27] [Server thread/INFO]: [WorldGuard] Enabling WorldGuard v7.0.5+3827266
-[05:27:27] [Server thread/INFO]: [WorldGuard] Default configuration file written: config.yml
-[05:27:27] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
-[05:27:27] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
-[05:27:28] [Server thread/INFO]: [WorldGuard] (world) TNT ignition is PERMITTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] (world) Lighters are PERMITTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] (world) Lava fire is PERMITTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] (world) Fire spread is UNRESTRICTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'world'
-[05:27:28] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
-[05:27:28] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
-[05:27:28] [Server thread/INFO]: [WorldGuard] (DIM-1) TNT ignition is PERMITTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] (DIM-1) Lighters are PERMITTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] (DIM-1) Lava fire is PERMITTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] (DIM-1) Fire spread is UNRESTRICTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'DIM-1'
-[05:27:28] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
-[05:27:28] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
-[05:27:28] [Server thread/INFO]: [WorldGuard] (DIM1) TNT ignition is PERMITTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] (DIM1) Lighters are PERMITTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] (DIM1) Lava fire is PERMITTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] (DIM1) Fire spread is UNRESTRICTED.
-[05:27:28] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'DIM1'
-[05:27:28] [Server thread/INFO]: [WorldGuard] Loading region data...
-[05:27:28] [Server thread/INFO]: [WorldGuard] Unloading and saving region data that is currently loaded...
-[05:27:28] [Server thread/INFO]: [WorldGuard] Loading region data for loaded worlds...
-[05:27:28] [Server thread/INFO]: [WorldGuard] Loading region data...
-[05:27:28] [Server thread/INFO]: [WorldGuard] Regions saved after UUID migration! This won't happen again unless you change the relevant configuration option in WorldGuard's config.
-[05:27:28] [Server thread/INFO]: [EssentialsProtect] Enabling EssentialsProtect v2.19.7
-[05:27:28] [Server thread/INFO]: Continuing to enable Protect.
-[05:27:28] [Server thread/INFO]: Starting Metrics. Opt-out using the global bStats config.
-[05:27:28] [Server thread/INFO]: [AuthMe] Enabling AuthMe v5.6.0-bCUSTOM
-[05:27:28] [Server thread/INFO]: [AuthMe] Created column 'regdate' and set the current timestamp, 1791437248712, to all 0 rows
-[05:27:28] [Server thread/INFO]: [AuthMe] SQLite Setup finished
-[05:27:28] [Server thread/INFO]: [AuthMe] Hooked into LuckPerms!
-[05:27:29] [Server thread/INFO]: [AuthMe] Hooked successfully into Essentials
-[05:27:29] [Server thread/INFO]: [AuthMe] Essentials spawn file not found: '/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/plugins/Essentials/spawn.yml'
-[05:27:29] [Server thread/INFO]: [AuthMe] AuthMe 5.6.0 build n.CUSTOM successfully enabled!
-[05:27:29] [Server thread/INFO]: [FastLogin] Enabling FastLogin v1.12-SNAPSHOT-65a379c
-[05:27:29] [Server thread/WARN]: [FastLogin] Cannot check for Velocity support in Paper: com.destroystokyo.paper.PaperConfig
-[05:27:29] [Server thread/WARN]: [FastLogin] Disabling Minecraft proxy configuration. Assuming direct connections from now on.
-[05:27:29] [Server thread/INFO]: FastLogin - Starting...
-[05:27:29] [Server thread/INFO]: FastLogin - Start completed.
-[05:27:30] [Server thread/INFO]: Ksyxis: Speeding up the world loading... Delete the mod, if it got stuck after this message. (net.minecraft.server.dedicated.DedicatedServer func_213186_a)
-[05:27:30] [Server thread/INFO]: Preparing start region for dimension minecraft:overworld
-[05:27:30] [Server thread/INFO]: Ksyxis: Enabled compatibility hack with ModernFix. (removeSpawnChunks: false)
-[05:27:30] [Server thread/INFO]: Time elapsed: 10 ms
-[05:27:30] [Server thread/INFO]: Done (11.548s)! For help, type "help"
-[05:27:30] [Server thread/WARN]: Could not load any license plate
-[05:27:30] [Server thread/WARN]: Garagenordner nicht gefunden!
-[05:27:30] [Server thread/WARN]: Running in offline mode - Voice chat encryption is not secure!
-[05:27:30] [Server thread/INFO]: Successfully initialized RadioManager
-[05:27:30] [Server thread/WARN]: Dedicated server took 96.804 seconds to load
-[05:27:30] [VoiceChatServerThread/INFO]: Server started at port 24454
-[05:27:30] [Server thread/INFO]: Essentials found a compatible payment resolution method: Vault Compatibility Layer (v1.7.3-b131)!
-[05:27:30] [Craft Scheduler Thread - 3/INFO]: Fetching version information...
-[05:27:30] [Craft Scheduler Thread - 4/INFO]: [AuthMe] Downloading GEO IP database, because the old database is older than 30 days or doesn't exist
-[05:27:30] [Craft Scheduler Thread - 6/INFO]: [Vault] Checking for Updates ... 
-[05:27:30] [Craft Scheduler Thread - 4/WARN]: [AuthMe] No MaxMind credentials found in the configuration file! GeoIp protections will be disabled.
-[05:27:30] [Craft Scheduler Thread - 4/INFO]: [AuthMe] There is no newer GEO IP database uploaded to MaxMind. Using the old one for now.
-[05:27:30] [Craft Scheduler Thread - 4/WARN]: [AuthMe] Could not download GeoLiteAPI database [FileNotFoundException]: plugins/AuthMe/GeoLite2-Country.mmdb (No such file or directory)
-[05:27:30] [Server thread/INFO]: [FastLogin] Hooking into auth plugin: AuthMeHook
-[05:27:30] [Craft Scheduler Thread - 6/INFO]: [Vault] No new version available
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Downloading update...[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    +==================+[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    |   SkinsRestorer  |[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    |------------------|[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    |  [34;1m[4m[21mStandalone Mode[0;39m[32;1m |[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    +==================+[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    Current version: [31;1m14.2.12[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    New version: [31;1m15.12.6[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    A new version is available! Downloading it now...[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    Update downloaded successfully, it will be applied on the next restart.[0;39m
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
-[05:27:31] [Craft Scheduler Thread - 3/WARN]: There is a new EssentialsX version available for download: 2.22.0.
-[05:27:31] [Craft Scheduler Thread - 3/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
-[05:27:31] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
-[05:27:31] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m
-[05:27:32] [Server thread/INFO]: Stopping the server
-[05:27:32] [Server thread/INFO]: Shutting down locating executor service
-[05:27:32] [Server thread/INFO]: Saved 0 license plates
-[05:27:32] [Server thread/INFO]: CarClear: 0 | true
-[05:27:32] [Server thread/INFO]: Stopping server
-[05:27:32] [Server thread/INFO]: [FastLogin] Disabling FastLogin v1.12-SNAPSHOT-65a379c
-[05:27:32] [Server thread/INFO]: [FastLogin] Safely shutting down scheduler. This could take up to one minute.
-[05:27:32] [Server thread/INFO]: FastLogin - Shutdown initiated...
-[05:27:32] [Server thread/INFO]: FastLogin - Shutdown completed.
-[05:27:32] [Server thread/INFO]: [AuthMe] Disabling AuthMe v5.6.0-bCUSTOM
-[05:27:32] [Server thread/INFO]: [AuthMe] Waiting for 0 tasks to finish
-[05:27:32] [Server thread/INFO]: [AuthMe] AuthMe 5.6.0-bCUSTOM disabled!
-[05:27:32] [Server thread/INFO]: Disabling EssentialsProtect v2.19.7
-[05:27:32] [Server thread/INFO]: [WorldGuard] Disabling WorldGuard v7.0.5+3827266
-[05:27:32] [Server thread/INFO]: [WorldGuard] Shutting down executor and cancelling any pending tasks...
-[05:27:32] [Server thread/INFO]: Disabling EssentialsSpawn v2.19.7
-[05:27:32] [Server thread/INFO]: Disabling EssentialsAntiBuild v2.19.7
-[05:27:32] [Server thread/INFO]: Disabling EssentialsChat v2.19.7
-[05:27:32] [Server thread/INFO]: Disabling Essentials v2.19.7
-[05:27:32] [Server thread/INFO]: [Vault] [Economy] Essentials Economy unhooked.
-[05:27:32] [Server thread/INFO]: [SkinsRestorer] Disabling SkinsRestorer v14.2.12
-[05:27:32] [Server thread/INFO]: [WorldEdit] Disabling WorldEdit v7.2.5+57d5ac9
-[05:27:32] [Server thread/INFO]: Unregistering com.sk89q.worldedit.bukkit.BukkitServerInterface from WorldEdit
-[05:27:32] [Server thread/INFO]: [ProtocolLib] Disabling ProtocolLib v4.8.0
-[05:27:32] [Server thread/INFO]: [Vault] Disabling Vault v1.7.3-b131
-[05:27:32] [Server thread/INFO]: [Chunky] Disabling Chunky v1.2.217
-[05:27:32] [Server thread/INFO]: [LuckPerms] Disabling LuckPerms v5.5.71
-[05:27:32] [Server thread/INFO]: [LuckPerms] Starting shutdown process...
-[05:27:32] [Server thread/INFO]: [LuckPerms] Closing storage...
-[05:27:32] [Server thread/INFO]: [LuckPerms] Goodbye!
-[05:27:32] [Server thread/INFO]: Saving players
-[05:27:32] [Server thread/INFO]: Saving worlds
-[05:27:32] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
-[05:27:32] [Server thread/INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
-[05:27:32] [Server thread/INFO]: Saving chunks for level 'ServerLevel[DIM-1]'/minecraft:the_nether
-[05:27:32] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
-[05:27:32] [Server thread/INFO]: Saving chunks for level 'ServerLevel[DIM1]'/minecraft:the_end
-[05:27:32] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
-[05:27:32] [Server thread/INFO]: Saving usercache.json
+[05:32:03] [Server thread/WARN]: Incorrect key common.general.validFuels was corrected from null to its default, [vehicle:fuelium, immersiveengineering:biodiesel, immersivepetroleum:diesel]. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.trailer was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.trailer.trailerDetachThreshold was corrected from null to its default, 6.0. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.trailer.trailerSyncCooldown was corrected from null to its default, 100. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.trailer.trailerInventorySyncCooldown was corrected from null to its default, 20. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.gas_pump was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.gas_pump.maxHoseDistance was corrected from null to its default, 10.0. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.gas_pump.gasPumpCapacity was corrected from null to its default, 50000. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fluid_pump was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fluid_pump.pumpTransferAmount was corrected from null to its default, 50. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fluid_pump.pumpCapacity was corrected from null to its default, 500. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fluid_extractor was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fluid_extractor.extractorExtractTime was corrected from null to its default, 600. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fluid_extractor.extractorCapacity was corrected from null to its default, 5000. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fluid_mixer was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fluid_mixer.mixerMixTime was corrected from null to its default, 100. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fluid_mixer.mixerInputCapacity was corrected from null to its default, 5000. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fluid_mixer.mixerOutputCapacity was corrected from null to its default, 10000. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fuel_drum was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fuel_drum.fuelDrumCapacity was corrected from null to its default, 40000. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.blocks.fuel_drum.industrialFuelDrumCapacity was corrected from null to its default, 75000. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.items was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.items.jerry_can was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.items.jerry_can.jerryCanCapacity was corrected from null to its default, 5000. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.items.jerry_can.industrialJerryCanCapacity was corrected from null to its default, 15000. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.items.jerry_can.fillRate was corrected from null to its default, 500. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.items.spray_can was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key common.items.spray_can.sprayCanCapacity was corrected from null to its default, 20. 
+[05:32:03] [Server thread/WARN]: Configuration file ./world/serverconfig/forge-server.toml is not correct. Correcting
+[05:32:03] [Server thread/WARN]: Incorrect key server was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key server.removeErroringEntities was corrected from null to its default, false. 
+[05:32:03] [Server thread/WARN]: Incorrect key server.removeErroringTileEntities was corrected from null to its default, false. 
+[05:32:03] [Server thread/WARN]: Incorrect key server.fullBoundingBoxLadders was corrected from null to its default, false. 
+[05:32:03] [Server thread/WARN]: Incorrect key server.zombieBaseSummonChance was corrected from null to its default, 0.1. 
+[05:32:03] [Server thread/WARN]: Incorrect key server.zombieBabyChance was corrected from null to its default, 0.05. 
+[05:32:03] [Server thread/WARN]: Incorrect key server.logCascadingWorldGeneration was corrected from null to its default, true. 
+[05:32:03] [Server thread/WARN]: Incorrect key server.fixVanillaCascading was corrected from null to its default, false. 
+[05:32:03] [Server thread/WARN]: Incorrect key server.dimensionUnloadQueueDelay was corrected from null to its default, 0. 
+[05:32:03] [Server thread/WARN]: Incorrect key server.treatEmptyTagsAsAir was corrected from null to its default, false. 
+[05:32:03] [Server thread/WARN]: Incorrect key server.fixAdvancementLoading was corrected from null to its default, true. 
+[05:32:03] [Server thread/WARN]: Configuration file ./world/serverconfig/pizzamod-server.toml is not correct. Correcting
+[05:32:03] [Server thread/WARN]: Incorrect key pizzaland was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key pizzaland.troll_protection was corrected from null to its default, SimpleCommentedConfig:{}. 
+[05:32:03] [Server thread/WARN]: Incorrect key pizzaland.troll_protection.enabled was corrected from null to its default, false. 
+[05:32:03] [Server thread/WARN]: Incorrect key pizzaland.troll_protection.duration was corrected from null to its default, 4. 
+[05:32:03] [Server thread/INFO]: Starting locating executor service with thread pool size of 1
+[05:32:03] [Server thread/INFO]: Preparing level "world"
+[05:32:03] [Server thread/WARN]: Method overwrite conflict for removeIf in modernfix-common.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin, previously written by me.jellysquid.mods.lithium.mixin.world.chunk_tickets.SortedArraySetMixin. Skipping method.
+[05:32:06] [Server thread/INFO]: Registering commands with com.sk89q.worldedit.bukkit.BukkitServerInterface
+[05:32:09] [Server thread/INFO]: [Chunky] Enabling Chunky v1.2.217
+[05:32:10] [Server thread/INFO]: [SkinsRestorer] Enabling SkinsRestorer v14.2.12
+[05:32:10] [Server thread/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1mDetected Minecraft [33;1mv1_16_R3[32;1m, using [33;1mSpigotSkinRefresher[32;1m.[0;39m
+[05:32:11] [Server thread/INFO]: [Essentials] Enabling Essentials v2.19.7
+[05:32:12] [Server thread/ERROR]: You are running a server that does not properly support Bukkit plugins. Bukkit plugins should not be used with Forge/Fabric mods! For Forge: Consider using ForgeEssentials, or SpongeForge + Nucleus.
+[05:32:12] [Server thread/INFO]: Status determining class: net.minecraftforge.common.MinecraftForge
+[05:32:12] [Server thread/INFO]: Creating config from template: plugins/Essentials/config.yml
+[05:32:13] [Server thread/INFO]: Creating config from template: plugins/Essentials/kits.yml
+[05:32:13] [Server thread/INFO]: Attempting to convert old kits in config.yml to new kits.yml
+[05:32:13] [Server thread/INFO]: No kits found to migrate.
+[05:32:13] [Server thread/INFO]: Starting Essentials ban format conversion
+[05:32:13] [Server thread/INFO]: Starting usermap repair
+[05:32:13] [Server thread/WARN]: Missing userdata folder, aborting
+[05:32:13] [Server thread/INFO]: Attempting to migrate ignore list to UUIDs
+[05:32:13] [Server thread/INFO]: Attempting to migrate legacy userdata keys to Configurate
+[05:32:13] [Server thread/INFO]: Creating config from template: plugins/Essentials/worth.yml
+[05:32:13] [Server thread/INFO]: Creating config from template: plugins/Essentials/tpr.yml
+[05:32:13] [Server thread/INFO]: Loaded 853 items from items.csv.
+[05:32:13] [Server thread/INFO]: Creating config from template: plugins/Essentials/custom_items.yml
+[05:32:13] [Server thread/WARN]: Initializing Legacy Material Support. Unless you have legacy plugins and/or data this is a bug!
+[05:32:18] [Server thread/INFO]: Using locale en
+[05:32:18] [Server thread/INFO]: ServerListPingEvent: Spigot iterator API
+[05:32:18] [Server thread/INFO]: Starting Metrics. Opt-out using the global bStats config.
+[05:32:18] [Server thread/INFO]: [Vault] [Economy] Essentials Economy hooked.
+[05:32:18] [Server thread/INFO]: Using Vault based permissions (LuckPerms)
+[05:32:18] [Server thread/INFO]: [EssentialsChat] Enabling EssentialsChat v2.19.7
+[05:32:18] [Server thread/INFO]: Starting Metrics. Opt-out using the global bStats config.
+[05:32:18] [Server thread/INFO]: [EssentialsAntiBuild] Enabling EssentialsAntiBuild v2.19.7
+[05:32:18] [Server thread/INFO]: Starting Metrics. Opt-out using the global bStats config.
+[05:32:18] [Server thread/INFO]: [EssentialsSpawn] Enabling EssentialsSpawn v2.19.7
+[05:32:18] [Server thread/INFO]: Starting Metrics. Opt-out using the global bStats config.
+[05:32:18] [Server thread/INFO]: [WorldGuard] Enabling WorldGuard v7.0.5+3827266
+[05:32:19] [Server thread/INFO]: [WorldGuard] Default configuration file written: config.yml
+[05:32:19] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
+[05:32:19] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
+[05:32:19] [Server thread/INFO]: [WorldGuard] (world) TNT ignition is PERMITTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] (world) Lighters are PERMITTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] (world) Lava fire is PERMITTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] (world) Fire spread is UNRESTRICTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'world'
+[05:32:19] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
+[05:32:19] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
+[05:32:19] [Server thread/INFO]: [WorldGuard] (DIM-1) TNT ignition is PERMITTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] (DIM-1) Lighters are PERMITTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] (DIM-1) Lava fire is PERMITTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] (DIM-1) Fire spread is UNRESTRICTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'DIM-1'
+[05:32:19] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
+[05:32:19] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
+[05:32:19] [Server thread/INFO]: [WorldGuard] (DIM1) TNT ignition is PERMITTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] (DIM1) Lighters are PERMITTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] (DIM1) Lava fire is PERMITTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] (DIM1) Fire spread is UNRESTRICTED.
+[05:32:19] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'DIM1'
+[05:32:19] [Server thread/INFO]: [WorldGuard] Loading region data...
+[05:32:19] [Server thread/INFO]: [WorldGuard] Unloading and saving region data that is currently loaded...
+[05:32:19] [Server thread/INFO]: [WorldGuard] Loading region data for loaded worlds...
+[05:32:19] [Server thread/INFO]: [WorldGuard] Loading region data...
+[05:32:19] [Server thread/INFO]: [WorldGuard] Regions saved after UUID migration! This won't happen again unless you change the relevant configuration option in WorldGuard's config.
+[05:32:20] [Server thread/INFO]: [EssentialsProtect] Enabling EssentialsProtect v2.19.7
+[05:32:20] [Server thread/INFO]: Continuing to enable Protect.
+[05:32:20] [Server thread/INFO]: Starting Metrics. Opt-out using the global bStats config.
+[05:32:20] [Server thread/INFO]: [AuthMe] Enabling AuthMe v5.6.0-bCUSTOM
+[05:32:20] [Server thread/INFO]: [AuthMe] Created column 'regdate' and set the current timestamp, 1791437540602, to all 0 rows
+[05:32:20] [Server thread/INFO]: [AuthMe] SQLite Setup finished
+[05:32:20] [Server thread/INFO]: [AuthMe] Hooked into LuckPerms!
+[05:32:21] [Server thread/INFO]: [AuthMe] Hooked successfully into Essentials
+[05:32:21] [Server thread/INFO]: [AuthMe] Essentials spawn file not found: '/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/plugins/Essentials/spawn.yml'
+[05:32:21] [Server thread/INFO]: [AuthMe] AuthMe 5.6.0 build n.CUSTOM successfully enabled!
+[05:32:21] [Server thread/INFO]: [FastLogin] Enabling FastLogin v1.12-SNAPSHOT-65a379c
+[05:32:22] [Server thread/WARN]: [FastLogin] Cannot check for Velocity support in Paper: com.destroystokyo.paper.PaperConfig
+[05:32:22] [Server thread/WARN]: [FastLogin] Disabling Minecraft proxy configuration. Assuming direct connections from now on.
+[05:32:22] [Server thread/INFO]: FastLogin - Starting...
+[05:32:22] [Server thread/INFO]: FastLogin - Start completed.
+[05:32:24] [Server thread/INFO]: Ksyxis: Speeding up the world loading... Delete the mod, if it got stuck after this message. (net.minecraft.server.dedicated.DedicatedServer func_213186_a)
+[05:32:24] [Server thread/INFO]: Preparing start region for dimension minecraft:overworld
+[05:32:24] [Server thread/INFO]: Ksyxis: Enabled compatibility hack with ModernFix. (removeSpawnChunks: false)
+[05:32:24] [Server thread/INFO]: Time elapsed: 16 ms
+[05:32:24] [Server thread/INFO]: Done (21.094s)! For help, type "help"
+[05:32:24] [Server thread/WARN]: Could not load any license plate
+[05:32:24] [Server thread/WARN]: Garagenordner nicht gefunden!
+[05:32:24] [Server thread/WARN]: Running in offline mode - Voice chat encryption is not secure!
+[05:32:24] [Server thread/INFO]: Successfully initialized RadioManager
+[05:32:24] [Server thread/WARN]: Dedicated server took 127.954 seconds to load
+[05:32:24] [VoiceChatServerThread/INFO]: Server started at port 24454
+[05:32:24] [Server thread/INFO]: Essentials found a compatible payment resolution method: Vault Compatibility Layer (v1.7.3-b131)!
+[05:32:24] [Craft Scheduler Thread - 3/INFO]: Fetching version information...
+[05:32:24] [Craft Scheduler Thread - 4/INFO]: [AuthMe] Downloading GEO IP database, because the old database is older than 30 days or doesn't exist
+[05:32:24] [Craft Scheduler Thread - 4/WARN]: [AuthMe] No MaxMind credentials found in the configuration file! GeoIp protections will be disabled.
+[05:32:24] [Craft Scheduler Thread - 4/INFO]: [AuthMe] There is no newer GEO IP database uploaded to MaxMind. Using the old one for now.
+[05:32:24] [Craft Scheduler Thread - 6/INFO]: [Vault] Checking for Updates ... 
+[05:32:24] [Craft Scheduler Thread - 4/WARN]: [AuthMe] Could not download GeoLiteAPI database [FileNotFoundException]: plugins/AuthMe/GeoLite2-Country.mmdb (No such file or directory)
+[05:32:24] [Server thread/INFO]: [FastLogin] Hooking into auth plugin: AuthMeHook
+[05:32:24] [Craft Scheduler Thread - 6/INFO]: [Vault] No new version available
+[05:32:25] [Craft Scheduler Thread - 3/WARN]: There is a new EssentialsX version available for download: 2.22.0.
+[05:32:25] [Craft Scheduler Thread - 3/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Downloading update...[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    +==================+[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    |   SkinsRestorer  |[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    |------------------|[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    |  [34;1m[4m[21mStandalone Mode[0;39m[32;1m |[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    +==================+[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    Current version: [31;1m14.2.12[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    New version: [31;1m15.12.6[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    A new version is available! Downloading it now...[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    Update downloaded successfully, it will be applied on the next restart.[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[05:32:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m
+[05:32:25] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
+[05:32:25] [Server thread/INFO]: Stopping the server
+[05:32:25] [Server thread/INFO]: Shutting down locating executor service
+[05:32:25] [Server thread/INFO]: Saved 0 license plates
+[05:32:25] [Server thread/INFO]: CarClear: 0 | true
+[05:32:25] [Server thread/INFO]: Stopping server
+[05:32:25] [Server thread/INFO]: [FastLogin] Disabling FastLogin v1.12-SNAPSHOT-65a379c
+[05:32:25] [Server thread/INFO]: [FastLogin] Safely shutting down scheduler. This could take up to one minute.
+[05:32:25] [Server thread/INFO]: FastLogin - Shutdown initiated...
+[05:32:25] [Server thread/INFO]: FastLogin - Shutdown completed.
+[05:32:25] [Server thread/INFO]: [AuthMe] Disabling AuthMe v5.6.0-bCUSTOM
+[05:32:25] [Server thread/INFO]: [AuthMe] Waiting for 0 tasks to finish
+[05:32:25] [Server thread/INFO]: [AuthMe] AuthMe 5.6.0-bCUSTOM disabled!
+[05:32:25] [Server thread/INFO]: Disabling EssentialsProtect v2.19.7
+[05:32:25] [Server thread/INFO]: [WorldGuard] Disabling WorldGuard v7.0.5+3827266
+[05:32:25] [Server thread/INFO]: [WorldGuard] Shutting down executor and cancelling any pending tasks...
+[05:32:25] [Server thread/INFO]: Disabling EssentialsSpawn v2.19.7
+[05:32:25] [Server thread/INFO]: Disabling EssentialsAntiBuild v2.19.7
+[05:32:25] [Server thread/INFO]: Disabling EssentialsChat v2.19.7
+[05:32:25] [Server thread/INFO]: Disabling Essentials v2.19.7
+[05:32:25] [Server thread/INFO]: [Vault] [Economy] Essentials Economy unhooked.
+[05:32:25] [Server thread/INFO]: [SkinsRestorer] Disabling SkinsRestorer v14.2.12
+[05:32:25] [Server thread/INFO]: [WorldEdit] Disabling WorldEdit v7.2.5+57d5ac9
+[05:32:25] [Server thread/INFO]: Unregistering com.sk89q.worldedit.bukkit.BukkitServerInterface from WorldEdit
+[05:32:26] [Server thread/INFO]: [ProtocolLib] Disabling ProtocolLib v4.8.0
+[05:32:26] [Server thread/INFO]: [Vault] Disabling Vault v1.7.3-b131
+[05:32:26] [Server thread/INFO]: [Chunky] Disabling Chunky v1.2.217
+[05:32:26] [Server thread/INFO]: [LuckPerms] Disabling LuckPerms v5.5.71
+[05:32:26] [Server thread/INFO]: [LuckPerms] Starting shutdown process...
+[05:32:26] [Server thread/INFO]: [LuckPerms] Closing storage...
+[05:32:26] [Server thread/INFO]: [LuckPerms] Goodbye!
+[05:32:26] [Server thread/INFO]: Saving players
+[05:32:26] [Server thread/INFO]: Saving worlds
+[05:32:26] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[05:32:26] [Server thread/INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[05:32:26] [Server thread/INFO]: Saving chunks for level 'ServerLevel[DIM-1]'/minecraft:the_nether
+[05:32:26] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[05:32:26] [Server thread/INFO]: Saving chunks for level 'ServerLevel[DIM1]'/minecraft:the_end
+[05:32:26] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[05:32:26] [Server thread/INFO]: Saving usercache.json
