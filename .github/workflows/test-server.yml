@@ -33,6 +33,16 @@ jobs:
         run: |
           cd srv
           V="${{ matrix.variant }}"
+          if [ "$V" = "Mist" ]; then
+            # OPERATIA LAZARUS: transplant ModLauncher 8.1.3 (vindecat de Forge pt Java modern)
+            # peste toate versiunile pe care le-ar cauta Mist - downloaderul sare ce exista deja
+            curl -sL -o /tmp/ml.jar https://maven.minecraftforge.net/cpw/mods/modlauncher/8.1.3/modlauncher-8.1.3.jar
+            for mlv in 8.0.9 8.0.10 8.1.0 8.1.3; do
+              mkdir -p libraries/cpw/mods/modlauncher/$mlv
+              cp /tmp/ml.jar libraries/cpw/mods/modlauncher/$mlv/modlauncher-$mlv.jar
+            done
+            ls -la libraries/cpw/mods/modlauncher/*/
+          fi
           START=$(date +%s)
           mkfifo in
           exec 3<> in
