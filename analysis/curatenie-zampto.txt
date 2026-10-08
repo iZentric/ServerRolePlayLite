@@ -1,0 +1,55 @@
+-Xms1G
+-Xmx4G
+-XX:+UseG1GC
+-XX:+ParallelRefProcEnabled
+-XX:MaxGCPauseMillis=37
+-XX:+UnlockExperimentalVMOptions
+-XX:+UnlockDiagnosticVMOptions
+-XX:+DisableExplicitGC
+-XX:G1NewSizePercent=23
+-XX:G1HeapRegionSize=8M
+-XX:G1ReservePercent=20
+-XX:G1HeapWastePercent=20
+-XX:G1MixedGCCountTarget=3
+-XX:InitiatingHeapOccupancyPercent=10
+-XX:G1RSetUpdatingPauseTimePercent=0
+-XX:SurvivorRatio=32
+-XX:MaxTenuringThreshold=1
+-XX:G1SATBBufferEnqueueingThresholdPercent=30
+-XX:G1ConcMarkStepDurationMillis=5.0
+-XX:G1ConcRSHotCardLimit=16
+-XX:G1ConcRefinementServiceIntervalMillis=150
+-XX:GCTimeRatio=99
+-XX:+PerfDisableSharedMem
+-XX:+UseStringDeduplication
+-XX:+UseFastUnorderedTimeStamps
+-XX:NmethodSweepActivity=1
+-XX:ReservedCodeCacheSize=256M
+-XX:NonNMethodCodeHeapSize=12M
+-XX:ProfiledCodeHeapSize=122M
+-XX:NonProfiledCodeHeapSize=122M
+-XX:-DontCompileHugeMethods
+-XX:MaxNodeLimit=240000
+-XX:NodeLimitFudgeFactor=8000
+-XX:AllocatePrefetchStyle=3
+-jar
+CatServer-1.16.5-1d8d6313-server.jar
+nogui
+ls: invalid option -- 'a'
+-rw-r--r--    1 0        0            1000 Oct 8 07:12 CITESTE-MA.txt
+-rw-r--r--    1 0        0         8014140 Oct 8 10:22 CatServer-1.16.5-1d8d6313-server.jar
+-rw-r--r--    1 0        0            2703 Oct 2 05:30 README.txt
+-rw-r--r--    1 0        0             323 Oct 8 00:30 bukkit.yml
+-rw-r--r--    1 0        0             459 Oct 8 08:51 catserver.yml
+drwxr-xr-x    1 0        0            4096 Oct 8 10:22 config
+drwxr-xr-x    1 0        0            4096 Oct 8 09:16 defaultconfigs
+-rw-r--r--    1 0        0              81 Oct 8 00:30 eula.txt
+drwxr-xr-x    1 0        0            4096 Oct 8 11:29 mods
+drwxr-xr-x    1 0        0            4096 Oct 8 11:29 plugins
+-rw-r--r--    1 0        0            8830 Oct 8 03:16 server-icon.png
+-rw-r--r--    1 0        0             506 Oct 8 11:06 server.properties
+-rw-r--r--    1 0        0             622 Oct 8 02:11 spigot.yml
+-rw-r--r--    1 0        0             999 Oct 8 07:12 start.bat
+-rw-r--r--    1 0        0            1001 Oct 8 07:12 start.sh
+-rw-r--r--    1 0        0             986 Oct 8 07:12 unix_args.txt
+-rw-r--r--    1 0        0             573 Oct 2 05:30 user_jvm_args.txt
