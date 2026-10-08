@@ -1,6 +1,6 @@
 {
   "pack_name": "Freeroam Lite",
-    "pack_version": "1.5.1",
+    "pack_version": "1.5.2",
   "minecraft": "1.16.5",
   "forge": "36.2.42",
   "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
@@ -30,18 +30,16 @@
         "saturn",
         "memoryleakfix",
         "ksyxis",
-        "connectivity",
-        "multiplayer-server-pause"
+        "connectivity"
     ],
-    "_comentariu_serverpause": "serverpause = mod sincronizat iChun (AMBELE parti): canalul serverpause:channel RUPEA clientii care nu-l aveau ('mismatched mod list'). Obligatoriu in client.",
-  "add_server_modrinth": [
-    "clumps",
-    "memoryleakfix",
-    "starlight-forge",
-    "ai-improvements",
-    "cZp2YCuG|multiplayer-server-pause",
-    "in-control"
-  ],
+    "_comentariu_serverpause": "serverpause EXECUTAT (ghilotina): modul iChun cere TOATA lumea sau PE NIMENI (canal serverpause:channel) — rupea clientii. Consumul gol ramane mic fara el. Revenire doar reconstruit cu acceptMissing (EvoKode).",
+    "add_server_modrinth": [
+        "clumps",
+        "memoryleakfix",
+        "starlight-forge",
+        "ai-improvements",
+        "in-control"
+    ],
   "_comentariu_perf_extra": "Artileria grea de performanta pt 1.16.5 (RoadRunner=Lithium, Radon=Phosphor etc). Cautate pe Modrinth apoi CurseForge; sarite daca nu exista. Performant si MCMT sunt excluse intentionat (conflicte).",
   "add_server_extra_perf": [
     "roadrunner",
