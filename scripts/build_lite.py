@@ -453,7 +453,8 @@ def main():
 
     # ---------------- CLIENT MRPACK ----------------
     log("== CLIENT lite (.mrpack) - toate modurile originale pastrate ==")
-    client_files = list(index["files"])
+    rmc0 = [r.lower() for r in rules.get("remove_from_client", [])]
+    client_files = [f for f in index["files"] if not any(r in f.get("path","").lower() for r in rmc0)]
     for slug in rules["add_client_modrinth"]:
         try:
             info = resolve_modrinth(slug, mc, "forge")
@@ -481,7 +482,11 @@ def main():
     with zipfile.ZipFile(client_mrpack, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("modrinth.index.json", json.dumps(new_index, indent=2))
         z.writestr("overrides/options.txt", OPTIONS_LITE)
+        rmc = [r.lower() for r in rules.get("remove_from_client", [])]
         for jar in override_jars:
+            if any(r in jar.lower() for r in rmc):
+                log(f"  - taiat din client (stil rust): {jar}")
+                continue
             z.write(os.path.join(override_mods_dir, jar), f"overrides/mods/{jar}")
     log(f"  => {client_mrpack} ({os.path.getsize(client_mrpack)/1e6:.1f} MB)")
 
