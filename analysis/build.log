@@ -55,6 +55,11 @@
     (modrinth: connectivity -> HTTP Error 404: Not Found)
     (curseforge: connectivity -> HTTP Error 404: Not Found)
   !! 'connectivity' sarit (nu exista pt 1.16.5 forge nicaieri)
+    (modrinth: fastsuite -> nicio versiune)
+    (curseforge: fastsuite -> HTTP Error 404: Not Found)
+  !! 'fastsuite' sarit (nu exista pt 1.16.5 forge nicaieri)
+    (modrinth: bad-wither-no-cookie-reloaded -> HTTP Error 404: Not Found)
+  + perf: bwncr-1.16.5-3.10.16.jar [curseforge]
 == ULTRA: dezbrac jar-urile de server de assets client ==
     ✂ Modernxl 1.16.5.jar: 38.0 -> 6.8 MB
     ✂ Pizzaland_v68.jar: 84.8 -> 1.7 MB

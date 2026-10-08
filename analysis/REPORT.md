@@ -64,6 +64,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ saturn-mc1.16.5-0.0.3.jar
 - ✅ getittogetherdrops-1.16.5-v1.2.jar
 - ✅ Ksyxis-1.4.5.jar
+- ✅ bwncr-1.16.5-3.10.16.jar
 
 ### Setari consum minim
 - JVM: porneste la 1 GB, creste doar la nevoie (max 4 GB), G1GC Aikar
