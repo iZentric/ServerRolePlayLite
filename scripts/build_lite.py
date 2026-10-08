@@ -160,9 +160,9 @@ OPTIONS_LITE = """\
 renderDistance:4
 graphicsMode:0
 ao:0
-maxFps:60
+maxFps:120
 enableVsync:false
-particles:2
+particles:1
 renderClouds:false
 entityShadows:false
 biomeBlendRadius:0
