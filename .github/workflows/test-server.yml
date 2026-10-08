@@ -1,6 +1,6 @@
 name: test-server
 
-# BANCUL DE PROBE: porneste serverul Mist EXACT ca pe Zampto si raporteaza
+# BANCUL DE PROBE v2: porneste serverul Mist EXACT ca pe Zampto si raporteaza LIVE
 on:
   workflow_dispatch:
   push:
@@ -13,7 +13,7 @@ permissions:
 jobs:
   proba:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -22,42 +22,50 @@ jobs:
         run: |
           gh release download lite -R ${{ github.repository }} -p '*Server-Mist*.zip' -O srv.zip
           mkdir srv && cd srv && unzip -q ../srv.zip
+          echo "eula=true" > eula.txt
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: PORNESTE serverul (identic cu Zampto - unix_args.txt)
         run: |
           cd srv
+          git config --global user.name bot
+          git config --global user.email bot@users.noreply.github.com
           START=$(date +%s)
-          mkfifo in; exec 3> in
-          (java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false @unix_args.txt < in >> boot.log 2>&1; echo EXITED >> boot.log) &
+          mkfifo in
+          exec 3<> in          # read-write: nu blocheaza niciodata
+          java -Xms128M -XX:MaxRAMPercentage=90.0 -Dterminal.jline=false @unix_args.txt < in > boot.log 2>&1 &
           JPID=$!
           STATUS=TIMEOUT
-          for i in $(seq 1 150); do
-            if grep -q 'Done (' boot.log; then STATUS=PORNIT; break; fi
-            if grep -q EXITED boot.log; then STATUS=CRAPAT; break; fi
+          for i in $(seq 1 90); do
+            if grep -q 'Done (' boot.log 2>/dev/null; then STATUS=PORNIT; break; fi
+            if ! kill -0 $JPID 2>/dev/null; then STATUS=CRAPAT; break; fi
             sleep 10
+            # raport LIVE la fiecare 2 minute
+            if [ $((i % 12)) -eq 0 ]; then
+              tail -80 boot.log > ../analysis/test-boot-live.log 2>/dev/null || true
+              (cd .. && git add analysis/test-boot-live.log && git commit -qm "live: proba minutul $((i/6))" && git pull --rebase -q origin ${GITHUB_REF_NAME} && git push -q origin HEAD:${GITHUB_REF_NAME}) || true
+            fi
           done
           T=$(( $(date +%s) - START ))
           RAM="n/a"
-          PID=$(pgrep -f 'unix_args' | head -1 || true)
-          [ -n "$PID" ] && RAM=$(( $(ps -o rss= -p $PID 2>/dev/null || echo 0) / 1024 ))MB
-          echo "stop" >&3; sleep 20; exec 3>&-
+          kill -0 $JPID 2>/dev/null && RAM=$(( $(ps -o rss= -p $JPID 2>/dev/null || echo 0) / 1024 ))MB
+          echo "stop" >&3; sleep 25; kill -9 $JPID 2>/dev/null || true
           {
             echo "# RAPORT BANC DE PROBE ($(date -u))"
             echo "- REZULTAT: **$STATUS** in ${T}s"
             echo "- RAM dupa pornire: **$RAM**"
-            echo "- Erori/avertismente importante:"
-            grep -iE "ERROR|FATAL|Exception|Could not|Failed to" boot.log | grep -viE "DEBUG" | sort | uniq -c | sort -rn | head -25 | sed 's/^/    /'
-            echo '- Pluginurile incarcate:'
-            grep -iE "Enabling|Loading.*plugin" boot.log | head -20 | sed 's/^/    /'
+            echo "- Erori importante:"
+            grep -iE "ERROR|FATAL|Exception|Could not|Failed to" boot.log | sort | uniq -c | sort -rn | head -25 | sed 's/^/    /' || true
+            echo "- Pluginuri incarcate:"
+            grep -iE "\[.*(Enabling|Loading)\b" boot.log | grep -iE "AuthMe|Skins|FastLogin|ProtocolLib|LuckPerms|Essentials|WorldGuard|spark|Chunky|GriefPrevention|ZNPC|Vault" | head -20 | sed 's/^/    /' || true
           } > ../analysis/test-boot-report.md
-          tail -200 boot.log > ../analysis/test-boot-tail.log
+          tail -300 boot.log > ../analysis/test-boot-tail.log
           cat ../analysis/test-boot-report.md
-      - name: Publica raportul
+      - name: Publica raportul final
         if: always()
         run: |
           git config user.name bot && git config user.email bot@users.noreply.github.com
-          git add analysis/test-boot-report.md analysis/test-boot-tail.log || true
-          git commit -m "analysis: raport banc de probe" || echo nimic
+          git add analysis/ || true
+          git commit -m "analysis: raport banc de probe v2" || echo nimic
           git pull --rebase origin ${GITHUB_REF_NAME} || true
           git push origin HEAD:${GITHUB_REF_NAME} || true
