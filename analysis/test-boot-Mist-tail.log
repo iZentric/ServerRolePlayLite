@@ -1,3 +1,6 @@
+Download finished for accesstransformers-3.0.1.jar !
+Global percentage >7%
+Downloading file jline-3.12.1.jar with size 715.74805 KB
 Download finished for jline-3.12.1.jar !
 Global percentage >8%
 Downloading file forgespi-3.2.0.jar with size 19.699219 KB
@@ -194,7 +197,4 @@ Remapping jar... 90%
 Remapping jar... 100%
 [Mist] Creating forge server jar. This can take 1 minute.
 Finished the install verification process !
-Update in check...
-If you don't want to enable update check, set check_update in mohist-config/mohist.yml to false
-The latest Mist version is 1.16.5-0 but you have 1.16.5-33. You should update to fix recent bugs ! (https://github.com/MinecraftMist/Mist/releases)
 An error occurs with the server start. You can ask for help to the Mist support on Discord or GitHub.
