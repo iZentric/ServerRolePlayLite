@@ -70,6 +70,17 @@ jobs:
             cp /tmp/ml.jar libraries/cpw/mods/modlauncher/8.0.9/modlauncher-8.0.9.jar
             mkdir -p mohist-config
             printf 'check_update: false\n' > mohist-config/mohist.yml
+            # LAZARUS 11: rescriem pasapoartele modurilor - cerinta de Forge relaxata la 36.2.0
+            # (Mist are 36.2.4 inghetat; modurile cer 36.2.9-36.2.33 doar din stampila, poate nu din API)
+            for j in mods/*.jar; do
+              if unzip -p "$j" META-INF/mods.toml 2>/dev/null | grep -q 'versionRange="\[36\.2\.[1-9]'; then
+                echo "== pasaport rescris: $j" >> boot.log
+                rm -rf /tmp/mt && mkdir -p /tmp/mt/META-INF
+                unzip -p "$j" META-INF/mods.toml > /tmp/mt/META-INF/mods.toml
+                sed -i -E 's/versionRange="\[36\.2\.[0-9]+/versionRange="[36.2.0/g' /tmp/mt/META-INF/mods.toml
+                (cd /tmp/mt && zip -q "$GITHUB_WORKSPACE/srv/$j" META-INF/mods.toml)
+              fi
+            done
           fi
           START=$(date +%s)
           mkfifo in
