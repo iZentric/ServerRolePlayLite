@@ -77,7 +77,7 @@ jobs:
             echo "$ART a picat: niciun jar valid descarcabil" > /tmp/md5
             echo "0" > /tmp/size
           fi
-      - name: Porne-ste si masora (mecanism identic cu bancul care merge: mkfifo + fd3)
+      - name: Porne-ste si masora (identic cu bancul functional — mkfifo fd3)
         run: |
           set +e
           if [ "$(cat /tmp/gate)" != "ARTIFACT-OK" ]; then
