@@ -68,9 +68,7 @@ jobs:
             echo "== INSTALARE TERMINATA, pornim DIRECT ServerMain (fara paznic) ==" >> boot.log
             # faza 2 - motorul pornit direct, cu comanda smulsa din manifest; erorile curg goale
             java -Xms128M -XX:MaxRAMPercentage=90.0 -Dterminal.jline=false -javaagent:"$MJ" -cp "$MJ" \
-              net.minecraftforge.server.ServerMain --gameDir . --launchTarget fmlserver \
-              --fml.forgeVersion 36.2.4 --fml.mcpVersion 20210115.111550 \
-              --fml.mcVersion 1.16.5 --fml.forgeGroup net.minecraftforge nogui < in >> boot.log 2>&1 &
+              net.minecraftforge.server.ServerMain nogui < in >> boot.log 2>&1 &
           else
             java -Xms128M -XX:MaxRAMPercentage=90.0 -Dterminal.jline=false @unix_args.txt < in > boot.log 2>&1 &
           fi
