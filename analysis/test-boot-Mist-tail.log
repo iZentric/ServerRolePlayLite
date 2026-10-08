@@ -1,13 +1,3 @@
-Downloading file terminalconsoleappender-1.2.0.jar with size 15.602539 KB
-Download finished for terminalconsoleappender-1.2.0.jar !
-Global percentage >74%
-Downloading file checker-qual-2.0.0.jar with size 335.17773 KB
-Download finished for checker-qual-2.0.0.jar !
-Global percentage >74%
-Downloading file mixin-0.8.2.jar with size 848.1377 KB
-Download finished for mixin-0.8.2.jar !
-Global percentage >76%
-Downloading file maven-artifact-3.6.3.jar with size 56.46875 KB
 Download finished for maven-artifact-3.6.3.jar !
 Global percentage >76%
 Downloading file sqlite-jdbc-3.34.0.jar with size 6.9583216MB
@@ -168,33 +158,43 @@ Finished the install verification process !
 Update in check...
 If you don't want to enable update check, set check_update in mohist-config/mohist.yml to false
 The latest Mist version is 1.16.5-0 but you have 1.16.5-33. You should update to fix recent bugs ! (https://github.com/MinecraftMist/Mist/releases)
-[04:04:15 INFO]: ModLauncher running: args [--gameDir, ., --launchTarget, fmlserver, --fml.forgeVersion, 36.2.4, --fml.mcpVersion, 20210115.111550, --fml.mcVersion, 1.16.5, --fml.forgeGroup, net.minecraftforge, nogui]
-[04:04:15 INFO]: ModLauncher 8.0.9+86+master.3cf110c starting: java version 11.0.32.1 by Eclipse Adoptium
+[04:24:58 INFO]: ModLauncher running: args [--gameDir, ., --launchTarget, fmlserver, --fml.forgeVersion, 36.2.4, --fml.mcpVersion, 20210115.111550, --fml.mcVersion, 1.16.5, --fml.forgeGroup, net.minecraftforge, nogui]
+[04:24:58 INFO]: ModLauncher 8.0.9+86+master.3cf110c starting: java version 11.0.32.1 by Eclipse Adoptium
 WARNING: An illegal reflective access operation has occurred
 WARNING: Illegal reflective access by cpw.mods.modlauncher.SecureJarHandler (file:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/cpw/mods/modlauncher/8.0.9/modlauncher-8.0.9.jar) to field java.util.jar.Manifest.jv
 WARNING: Please consider reporting this to the maintainers of cpw.mods.modlauncher.SecureJarHandler
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-[04:04:15 INFO]: Added Lets Encrypt root certificates as additional trust
-[04:04:15 INFO]: SpongePowered MIXIN Subsystem Version=0.8.2 Source=file:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar Service=ModLauncher Env=SERVER
-[04:04:16 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[04:04:16 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[04:04:16 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[04:04:17 INFO]: Launching target 'fmlserver' with arguments [--gameDir, ., nogui]
-Exception in thread "main" [04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: java.lang.NoSuchMethodError: 'void sun.security.util.ManifestEntryVerifier.<init>(java.util.jar.Manifest)'
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.SecureJarHandler.createCodeSource(SecureJarHandler.java:66)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:275)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:527)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.Class.forName0(Native Method)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.Class.forName(Class.java:398)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106)
-[04:04:18 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103)
+[04:24:58 INFO]: Added Lets Encrypt root certificates as additional trust
+[04:24:58 INFO]: SpongePowered MIXIN Subsystem Version=0.8.2 Source=file:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar Service=ModLauncher Env=SERVER
+[04:24:58 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: com.electronwill.nightconfig.core.io.ParsingException: Invalid TOML data: entry "[maxThreads]" defined twice in its table.
+[04:24:58 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TableParser.checkDuplicateKey(TableParser.java:88)
+[04:24:58 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TableParser.parseNormal(TableParser.java:59)
+[04:24:58 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TomlParser.parse(TomlParser.java:44)
+[04:24:58 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TomlParser.parse(TomlParser.java:37)
+[04:24:58 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:113)
+[04:24:58 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:219)
+[04:24:58 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:202)
+[04:24:58 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.file.WriteSyncFileConfig.load(WriteSyncFileConfig.java:73)
+[04:24:58 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread.run(FileWatcher.java:181)
+[04:24:59 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[04:24:59 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[04:24:59 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[04:25:01 INFO]: Launching target 'fmlserver' with arguments [--gameDir, ., nogui]
+Exception in thread "main" [04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: java.lang.NoSuchMethodError: 'void sun.security.util.ManifestEntryVerifier.<init>(java.util.jar.Manifest)'
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.SecureJarHandler.createCodeSource(SecureJarHandler.java:66)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:275)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:527)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.Class.forName0(Native Method)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at java.base/java.lang.Class.forName(Class.java:398)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106)
+[04:25:01 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103)
