@@ -272,6 +272,13 @@ world-settings:
       disable-move-event: true
     anti-xray:
       enabled: false
+    use-faster-eigencraft-redstone: true
+    mob-spawner-tick-rate: 2
+    container-update-tick-rate: 3
+    armor-stands-do-collision-entity-lookups: false
+    prevent-moving-into-unloaded-chunks: true
+    non-player-arrow-despawn-rate: 60
+    creative-arrow-despawn-rate: 60
 """
 
 SPIGOT_YML = """\
