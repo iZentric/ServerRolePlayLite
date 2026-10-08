@@ -1,4 +1,4 @@
-# CONSOLA — 2026-10-08 21:18:53 UTC
+# CONSOLA — 2026-10-08 21:19:17 UTC
 
 ## Ping server (portul de joc)
 ```
@@ -7,6 +7,13 @@ PING OK: {"translate": "disconnect.genericReason", "with": ["Internal Exception:
 ## RCON
 ```
 RCON ESUAT pe toate variantele: #0 len=20: fara raspuns
+```
+## 7) LABORATOR: vanilla local cu acelasi protocol vs host
+```
+CONTROL cheie gresita pe host -> fara raspuns: 
+-rw-r--r-- 1 runner runner 37962360 Oct  8 21:18 lab/v.jar
+[21:19:09] [Server thread/INFO]: Done (27.654s)! For help, type "help"
+LAB gata: 
 ```
 ## Log server despre RCON (ultimele 12 linii)
 ```
