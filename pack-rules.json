@@ -81,28 +81,10 @@
     "https://github.com/AuthMe/AuthMeReloaded/releases/download/5.6.0/AuthMe-5.6.0.jar",
     "https://github.com/SkinsRestorer/SkinsRestorer/releases/download/14.2.12/SkinsRestorer.jar",
     "https://github.com/dmulloy2/ProtocolLib/releases/download/4.8.0/ProtocolLib.jar",
-    "https://github.com/TuxCoding/FastLogin/releases/download/1.12-kick-toggle/FastLoginBukkit.jar"
+    "https://github.com/TuxCoding/FastLogin/releases/download/1.12-kick-toggle/FastLoginBukkit.jar",
+    "https://github.com/cjburkey01/ClaimChunk/releases/download/0.0.23-RC8/claimchunk-0.0.23-RC8-plugin.jar"
   ],
-  "plugins_spiget": [
-    {
-      "resource": 77506,
-      "match": "^5\\.",
-      "save_as": "PlotSquared-Bukkit-v5.jar",
-      "nume": "PlotSquared v5 (ploturi, ultima versiune pt Java 11/1.16.5)"
-    },
-    {
-      "resource": 1884,
-      "match": "^16\\.17",
-      "save_as": "GriefPrevention.jar",
-      "nume": "GriefPrevention 16.17.x (ultima pt Java 11/1.16.5)"
-    },
-    {
-      "resource": 80940,
-      "match": "^(3|4)\\.",
-      "save_as": "ZNPCs.jar",
-      "nume": "ZNPCs clasic (NPC-uri fara packetevents, compatibil ProtocolLib 4)"
-    }
-  ],
+  "plugins_spiget": [],
   "plugins_modrinth": [
     "luckperms",
     "spark",
