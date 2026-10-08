@@ -222,7 +222,7 @@ world-settings:
     merge-radius:
       item: 3.5
       exp: 4.0
-    item-despawn-rate: 3600
+    item-despawn-rate: 2400
     max-entity-collisions: 2
     tick-inactive-villagers: false
     nerf-spawner-mobs: true
