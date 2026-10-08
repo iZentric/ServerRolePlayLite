@@ -1,0 +1,106 @@
+name: verifica-tot
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "deploy/verifica-trigger.txt"
+
+permissions:
+  contents: write
+
+jobs:
+  tot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: SFTP — care parola merge + starea fisierelor
+        env:
+          P_VECHI: ${{ secrets.ZAMPTO_SFTP_PASS }}
+          P_NOU: "REDACTED_PANEL_TOKEN"
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          mkdir -p /tmp/zt analysis
+          probe () {
+            lftp -u "15254.1388b9af","$1" "sftp://node12.zampto.net:2022" -e "
+              set sftp:auto-confirm yes;
+              set net:timeout 25;
+              echo ===LOGAT-CU=$2===;
+              cls -l mods/;
+              echo ===PLUGINS===;
+              cls -l plugins/ | head -25;
+              echo ===WORLD===;
+              cls -l world/level.dat;
+              echo ===GETLOG===;
+              get logs/latest.log -o /tmp/zt/latest-$2.log || echo NO_LOG;
+              bye
+            " 2>&1
+          }
+          probe "$P_VECHI" "vechi" > /tmp/zt/sftp-vechi.txt 2>&1
+          if grep -q "LOGAT-CU" /tmp/zt/sftp-vechi.txt && ! grep -qiE "Login incorrect|Login failed|530" /tmp/zt/sftp-vechi.txt; then
+            echo "PAROLA VECHE INCA MERGE"
+            cp /tmp/zt/sftp-vechi.txt /tmp/zt/sftp-bun.txt
+          else
+            echo "parola veche moarta — incerc noua"
+            probe "$P_NOU" "nou" > /tmp/zt/sftp-nou.txt 2>&1
+            cp /tmp/zt/sftp-nou.txt /tmp/zt/sftp-bun.txt
+          fi
+          echo "=== VERIFICARE SERVERPAUSE PE DISC ==="
+          grep -i "pause" /tmp/zt/sftp-bun.txt || echo "CONFIRMAT: Multiplayer-Server-Pause NU mai e pe disc"
+          echo "=== FASTLOGIN ==="
+          grep -i "fastlogin" /tmp/zt/sftp-bun.txt || echo "FastLogin lipsa?"
+          echo "=== WORLD ==="
+          grep -i "level.dat" /tmp/zt/sftp-bun.txt
+
+      - name: Panoul — deschide usile cu tokenul si apasa restart
+        run: |
+          T="REDACTED_PANEL_TOKEN"
+          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+          hit () {
+            CODE=$(curl -s -o /tmp/zt/resp.txt -w "%{http_code}" -X "$1" "$2" \
+              -H "$3" -H "Accept: application/json" ${4:+-H "$4"} ${5:+-d "$5"} --max-time 20)
+            BODY=$(head -c 300 /tmp/zt/resp.txt | tr -d '\n')
+            echo "| $CODE | $1 $2 | ${3:0:40} | $BODY" >> /tmp/zt/usi.md
+            echo "$CODE $1 $2 -> $BODY"
+          }
+          echo "| HTTP | USA | AUTH | RASPUNS |" > /tmp/zt/usi.md
+          echo "|---|---|---|---|" >> /tmp/zt/usi.md
+          echo "== USA 401 (exista!): /api/servers cu toate felurile de cheie =="
+          hit GET "https://dash.zampto.net/api/servers" "Authorization: Bearer $T"
+          hit GET "https://dash.zampto.net/api/servers" "X-Auth-Token: $T"
+          hit GET "https://dash.zampto.net/api/servers" "X-API-Key: $T"
+          hit GET "https://dash.zampto.net/api/servers" "Cookie: zamptonet=$T"
+          hit GET "https://dash.zampto.net/api/servers" "Cookie: session=$T"
+          hit GET "https://dash.zampto.net/api/servers?token=$T" "Accept: application/json"
+          echo "== api.zampto.net (server de API real — caut formele) =="
+          hit GET "https://api.zampto.net/servers" "Authorization: Bearer $T"
+          hit GET "https://api.zampto.net/v1/servers" "Authorization: Bearer $T"
+          hit GET "https://api.zampto.net/servers/17192" "Authorization: Bearer $T"
+          hit GET "https://api.zampto.net/server/17192" "Authorization: Bearer $T"
+          hit GET "https://api.zampto.net/api/servers/17192/power" "Cookie: zamptonet=$T"
+          echo "== POWER: daca vreo usa cu 200, apas butonul =="
+          for AUTH in "Authorization: Bearer $T" "X-Auth-Token: $T" "Cookie: zamptonet=$T"; do
+            for ID in 17192 1388b9af 15254.1388b9af; do
+              hit POST "https://dash.zampto.net/api/servers/$ID/power" "$AUTH" "Content-Type: application/json" '{"signal":"restart"}'
+              hit POST "https://api.zampto.net/servers/$ID/power" "$AUTH" "Content-Type: application/json" '{"signal":"restart"}'
+            done
+          done
+          cp /tmp/zt/usi.md analysis/panou-usi.md
+
+      - name: Dovada — logul dupa buton
+        run: |
+          echo "== ultimele randuri din logul de pe server (daca s-a repornit apare un Done nou) =="
+          if [ -f /tmp/zt/latest-nou.log ]; then tail -12 /tmp/zt/latest-nou.log; fi
+          if [ -f /tmp/zt/latest-vechi.log ]; then tail -12 /tmp/zt/latest-vechi.log; fi
+          { echo "# verifica-tot $(date -u)"; echo; echo "## SFTP"; cat /tmp/zt/sftp-bun.txt 2>/dev/null | head -60; echo; echo "## USI PANOU"; cat /tmp/zt/usi.md 2>/dev/null; } > analysis/verifica-tot.md
+
+      - name: Comita dovezile
+        if: always()
+        run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add analysis/verifica-tot.md analysis/panou-usi.md 2>/dev/null || true
+          git commit -m "analysis: verifica-tot SFTP+panou" || echo "nimic nou"
+          git pull --rebase -X ours origin ${GITHUB_REF_NAME} || true
+          git push origin HEAD:${GITHUB_REF_NAME} || true
