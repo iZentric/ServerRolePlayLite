@@ -139,16 +139,19 @@ def zip_dir(zf, src_dir, arc_prefix=""):
 
 
 OPTIONS_LITE = """\
-renderDistance:8
+renderDistance:4
 graphicsMode:0
-ao:1
-maxFps:120
+ao:0
+maxFps:60
 enableVsync:false
-particles:1
+particles:2
 renderClouds:false
 entityShadows:false
 biomeBlendRadius:0
-mipmapLevels:2
+mipmapLevels:0
+entityDistanceScaling:0.75
+gamma:1.0
+fullscreen:false
 """
 
 def strip_client_assets(jar_path):
