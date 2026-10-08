@@ -86,27 +86,34 @@
   ↓ plugin: Vault.jar
   ↓ plugin: worldedit-bukkit-7.2.5-dist.jar
   ↓ plugin: worldguard-bukkit-7.0.5-dist.jar
-  ↓ plugin: ZNPCsPlus-1.0.8.jar
-  ↓ plugin: packetevents-spigot-2.14.0.jar
-  ↓ plugin: GriefPrevention.jar
   ↓ plugin: AuthMe-5.6.0.jar
   ↓ plugin: SkinsRestorer.jar
   ↓ plugin: ProtocolLib.jar
   ↓ plugin: FastLoginBukkit.jar
   ↓ plugin: LuckPerms-Bukkit-5.5.71.jar
   !! plugin 'spark' sarit: nicio versiune
-  ↓ plugin: Chunky-1.3.38.jar
+  ↓ plugin: Chunky-1.2.217.jar
   ↓ plugin: PlotSquared-Bukkit-v5.jar (spiget v5.13.12)
     (reincerc 1/3 dupa eroare: HTTP Error 403: Forbidden)
     (reincerc 2/3 dupa eroare: HTTP Error 403: Forbidden)
     (reincerc 3/3 dupa eroare: HTTP Error 403: Forbidden)
   !! plugin spiget 'PlotSquared-Bukkit-v5.jar' sarit: HTTP Error 403: Forbidden
+  ↓ plugin: GriefPrevention.jar (spiget v16.17.1)
+    (reincerc 1/3 dupa eroare: HTTP Error 403: Forbidden)
+    (reincerc 2/3 dupa eroare: HTTP Error 403: Forbidden)
+    (reincerc 3/3 dupa eroare: HTTP Error 403: Forbidden)
+  !! plugin spiget 'GriefPrevention.jar' sarit: HTTP Error 403: Forbidden
+  ↓ plugin: ZNPCs.jar (spiget v4.9)
+    (reincerc 1/3 dupa eroare: HTTP Error 403: Forbidden)
+    (reincerc 2/3 dupa eroare: HTTP Error 403: Forbidden)
+    (reincerc 3/3 dupa eroare: HTTP Error 403: Forbidden)
+  !! plugin spiget 'ZNPCs.jar' sarit: HTTP Error 403: Forbidden
   ↓ Arclight
-  => out/Freeroam-Lite-Server-Arclight-1.5.0-ULTRA.zip (74.7 MB)
+  => out/Freeroam-Lite-Server-Arclight-1.5.0-ULTRA.zip (65.2 MB)
 == SERVER Mist (hibrid experimental cu patch-uri Paper) ==
   ↓ Mist
-  => out/Freeroam-Lite-Server-Mist-EXPERIMENTAL-1.5.0-ULTRA.zip (74.3 MB)
+  => out/Freeroam-Lite-Server-Mist-EXPERIMENTAL-1.5.0-ULTRA.zip (64.8 MB)
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
-  => out/Freeroam-Lite-Server-CatServer-1.5.0-ULTRA.zip (73.7 MB)
+  => out/Freeroam-Lite-Server-CatServer-1.5.0-ULTRA.zip (64.2 MB)
 GATA.
