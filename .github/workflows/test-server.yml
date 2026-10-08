@@ -24,6 +24,8 @@ jobs:
           - { variant: CatServer, java: "17", suffix: "-J17" }
           - { variant: CatServer, java: "21", suffix: "-J21" }
           - { variant: CatServer, java: "17", suffix: "-MCMT", mcmt: "da" }
+          - { variant: CatServer, java: "17", suffix: "-PERF", perfswap: "da" }
+          - { variant: MaxLite, java: "17", suffix: "-MCMT", mcmt: "da" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -39,6 +41,15 @@ jobs:
         run: |
           cd srv
           V="${{ matrix.variant }}${{ matrix.suffix }}"
+          if [ "${{ matrix.perfswap }}" = "da" ]; then
+            rm -f mods/RoadRunner*.jar mods/roadrunner*.jar
+            FID=$(curl -s https://api.cfwidget.com/354143 | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+f=[x for x in d.get('files',[]) if '4.1m' in x.get('name','') and x.get('name','').startswith('performant-1.16')]
+print(f[-1]['id'] if f else '')")
+            [ -n "$FID" ] && curl -sL -o mods/performant-1.16.2-5-4.1m.jar "https://media.forgecdn.net/files/$((FID/1000))/$((FID%1000))/performant-1.16.2-5-4.1m.jar" && echo "== PERFORMANT pe campion ==" >> boot.log
+          fi
           if [ "${{ matrix.mcmt }}" = "da" ]; then
             # EXPERIMENTUL FINAL DE CAPACITATE: serverul pe TOATE nucleele (MCMT)
             curl -sL -o mods/jmt_mcmt-1.16.5-0.22.87.jar https://github.com/jediminer543/JMT-MCMT/releases/download/v0.22.87/jmt_mcmt-1.16.5-0.22.87.jar
