@@ -7,10 +7,11 @@
   + memoryleakfix-forge-pre1.17-1.1.5.jar
   + Ksyxis-1.4.5.jar
   !! 'connectivity' sarit (client): HTTP Error 404: Not Found
+  + Multiplayer-Server-Pause-1.16.5-Forge-1.1.0.jar
   - taiat din client (stil rust): CTM-MC1.16.1-1.1.2.6.jar
   - taiat din client (stil rust): DynamicSurroundings-1.16.5-4.0.5.0.jar
   - taiat din client (stil rust): lightfallclient-1.0.0.jar
-  => out/Freeroam-Lite-Client-1.5.0-ULTRA.mrpack (133.1 MB)
+  => out/Freeroam-Lite-Client-1.5.1.mrpack (133.1 MB)
 == Moduri de server (comune) ==
   ↓ mapperbase-1.16.5-2.4.0.0.jar
   ↓ supplementaries-1.16.5-0.18.4b.jar
@@ -87,13 +88,16 @@
     (modrinth: performant -> nicio versiune)
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
-  => out/Freeroam-Lite-Server-MaxLite-1.5.0-ULTRA.zip (32.2 MB)
+  => out/Freeroam-Lite-Server-MaxLite-1.5.1.zip (32.2 MB)
 == SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar
   ↓ plugin: EssentialsXSpawn-2.19.7.jar
   ↓ plugin: EssentialsXAntiBuild-2.19.7.jar
   ↓ plugin: EssentialsXProtect-2.19.7.jar
+    (reincerc 1/3 dupa eroare: HTTP Error 500: Internal Server Error)
+    (reincerc 2/3 dupa eroare: HTTP Error 500: Internal Server Error)
+    (reincerc 3/3 dupa eroare: HTTP Error 500: Internal Server Error)
   ↓ plugin: Vault.jar
   ↓ plugin: worldedit-bukkit-7.2.5-dist.jar
   ↓ plugin: worldguard-bukkit-7.0.5-dist.jar
@@ -106,11 +110,11 @@
   !! plugin 'spark' sarit: nicio versiune
   ↓ plugin: Chunky-1.2.217.jar
   ↓ Arclight
-  => out/Freeroam-Lite-Server-Arclight-1.5.0-ULTRA.zip (65.4 MB)
+  => out/Freeroam-Lite-Server-Arclight-1.5.1.zip (64.7 MB)
 == SERVER Mist (hibrid experimental cu patch-uri Paper) ==
   ↓ Mist
-  => out/Freeroam-Lite-Server-Mist-EXPERIMENTAL-1.5.0-ULTRA.zip (65.0 MB)
+  => out/Freeroam-Lite-Server-Mist-EXPERIMENTAL-1.5.1.zip (64.3 MB)
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
-  => out/Freeroam-Lite-Server-CatServer-1.5.0-ULTRA.zip (64.4 MB)
+  => out/Freeroam-Lite-Server-CatServer-1.5.1.zip (63.7 MB)
 GATA.

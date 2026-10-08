@@ -1,4 +1,4 @@
-# Raport build Freeroam Lite (1.5.0-ULTRA)
+# Raport build Freeroam Lite (1.5.1)
 
 Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
@@ -11,6 +11,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ saturn-mc1.16.5-0.0.3.jar
 - ✅ memoryleakfix-forge-pre1.17-1.1.5.jar
 - ✅ Ksyxis-1.4.5.jar
+- ✅ Multiplayer-Server-Pause-1.16.5-Forge-1.1.0.jar
 
 ## 🖥️ SERVER MaxLite (Forge pur — CONSUM MINIM, recomandat)
 
