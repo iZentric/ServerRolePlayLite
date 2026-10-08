@@ -61,5 +61,5 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
 ### Setari consum minim
 - JVM: porneste la 1 GB, creste doar la nevoie (max 4 GB), G1GC Aikar
-- view-distance=5 + sync-chunk-writes=false, max-players=15, mobi activati doar langa jucatori
+- view-distance=4 + sync-chunk-writes=false, max-players=15, mobi activati doar langa jucatori
 - Arclight in plus: hoppers rarite, spawn-limits mici, villagers inactivi inghetati
