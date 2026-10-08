@@ -1,0 +1,26 @@
+name: Site EvoKode (auto-update)
+on:
+  push:
+    paths: ["analysis/**", "site/**"]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenereaza site-ul din verdictele reale
+        run: python3 site/build_site.py && mkdir -p _site && cp site/index.html _site/
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: _site }
+      - uses: actions/deploy-pages@v4
+        id: deployment
