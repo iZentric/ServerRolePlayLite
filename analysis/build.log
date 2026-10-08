@@ -32,6 +32,7 @@
     (modrinth: cZp2YCuG -> HTTP Error 404: Not Found)
     (curseforge: cZp2YCuG -> HTTP Error 404: Not Found)
   + perf: Multiplayer-Server-Pause-1.16.5-Forge-1.1.0.jar [modrinth]
+  + perf: incontrol-1.16-5.2.12.jar [modrinth]
     (modrinth: roadrunner -> HTTP Error 404: Not Found)
   + perf: RoadRunner-mc1.16.5-1.5.2.jar [curseforge]
   + perf: radon-0.8.0a.jar [modrinth]
@@ -76,7 +77,7 @@
     (modrinth: performant -> nicio versiune)
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
-  => out/Freeroam-Lite-Server-MaxLite-1.5.0-ULTRA.zip (32.8 MB)
+  => out/Freeroam-Lite-Server-MaxLite-1.5.0-ULTRA.zip (33.0 MB)
 == SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar
@@ -98,11 +99,11 @@
     (reincerc 3/3 dupa eroare: HTTP Error 403: Forbidden)
   !! plugin spiget 'PlotSquared-Bukkit-v5.jar' sarit: HTTP Error 403: Forbidden
   ↓ Arclight
-  => out/Freeroam-Lite-Server-Arclight-1.5.0-ULTRA.zip (52.5 MB)
+  => out/Freeroam-Lite-Server-Arclight-1.5.0-ULTRA.zip (52.7 MB)
 == SERVER Mist (hibrid experimental cu patch-uri Paper) ==
   ↓ Mist
-  => out/Freeroam-Lite-Server-Mist-EXPERIMENTAL-1.5.0-ULTRA.zip (52.1 MB)
+  => out/Freeroam-Lite-Server-Mist-EXPERIMENTAL-1.5.0-ULTRA.zip (52.3 MB)
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
-  => out/Freeroam-Lite-Server-CatServer-1.5.0-ULTRA.zip (51.5 MB)
+  => out/Freeroam-Lite-Server-CatServer-1.5.0-ULTRA.zip (51.7 MB)
 GATA.
