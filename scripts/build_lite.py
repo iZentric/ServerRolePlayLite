@@ -180,7 +180,7 @@ def strip_client_assets(jar_path):
 
 SERVER_PROPERTIES = """\
 #Minecraft server properties - Freeroam Lite (consum minim)
-motd=\\u00A7e\\u00A7lFreeroam Lite \\u00A77- RolePlay pentru toti!
+motd=\u00A76\u00A7lPALMA LITE RP \u00A7f\u25CF \u00A7aOras + Survival \u00A7f\u25CF \u00A7bmerge pe orice PC
 max-players=25
 view-distance=4
 sync-chunk-writes=false
@@ -424,6 +424,9 @@ def write_start_scripts(sdir, server_jar):
         f.write(SERVER_PROPERTIES)
     with open(os.path.join(sdir, "eula.txt"), "w") as f:
         f.write("# Prin folosirea acestui pachet acceptati https://aka.ms/MinecraftEULA\neula=true\n")
+    icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "server-icon.png")
+    if os.path.isfile(icon):
+        shutil.copy2(icon, os.path.join(sdir, "server-icon.png"))
     cfg = os.path.join(sdir, "config")
     os.makedirs(cfg, exist_ok=True)
     with open(os.path.join(cfg, "forge-common.toml"), "w") as f:
