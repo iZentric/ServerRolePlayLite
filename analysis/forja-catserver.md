@@ -1,5 +1,6 @@
-# FORJA CatServer-Custom (Thu Oct  8 07:41:05 UTC 2026)
+# FORJA CatServer-Custom (Thu Oct  8 07:55:19 UTC 2026)
 ```
+> Task :buildSrc:compileTestJava NO-SOURCE
 > Task :buildSrc:compileTestGroovy NO-SOURCE
 > Task :buildSrc:processTestResources NO-SOURCE
 > Task :buildSrc:testClasses UP-TO-DATE
@@ -7,12 +8,14 @@
 > Task :buildSrc:check UP-TO-DATE
 > Task :buildSrc:build UP-TO-DATE
 
+> Configure project :
+Java: 1.8.0_504 JVM: 25.504-b01(Temurin) Arch: amd64 Git-Commit: 1c92118
+
 > Configure project :clean
 WARNING: This project is configured to use the official obfuscation mappings provided by Mojang. These mapping fall under their associated license, you should be fully aware of this license. For the latest license text, refer below, or the reference copy here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md, You can hide this warning by running the `hideOfficialWarningUntilChanged` task
 WARNING: (c) 2020 Microsoft Corporation. These mappings are provided "as-is" and you bear the risk of using them. You may copy and use the mappings for development purposes, but you may not redistribute the mappings complete and unmodified. Microsoft makes no warranties, express or implied, with respect to the mappings provided here.  Use and modification of this document or the source code (in any form) of Minecraft: Java Edition is governed by the Minecraft End User License Agreement available at https://account.mojang.com/documents/minecraft_eula.
 
 > Configure project :
-Java: 1.8.0_504 JVM: 25.504-b01(Temurin) Arch: amd64 Git-Commit: 1c92118
 Forge Version: 1.16.5-36.2.39
 Setting up MCP environment
 Initializing steps
@@ -58,6 +61,7 @@ Note: Recompile with -Xlint:unchecked for details.
 > Task :forge:createFakeSASPatches
 > Task :forge:createMcp2Srg
 > Task :clean:compileJava
+
 > Task :forge:compileJava
 /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/catsrc/src/main/java/catserver/server/remapper/MappingLoader.java:84: warning: sun.misc.Unsafe is internal proprietary API and may be removed in a future release
                 sun.misc.Unsafe unsafe = (sun.misc.Unsafe) unsafeField.get(null);
@@ -81,6 +85,7 @@ Note: Recompile with -Xlint:unchecked for details.
 > Task :clean:processResources NO-SOURCE
 > Task :clean:classes
 > Task :clean:jar
+> Task :clean:reobfJar
 
 > Task :forge:compileJava
 Note: Some input files use or override a deprecated API.
@@ -89,7 +94,6 @@ Note: Some input files use unchecked or unsafe operations.
 Note: Recompile with -Xlint:unchecked for details.
 4 warnings
 
-> Task :clean:reobfJar
 > Task :forge:processResources
 > Task :forge:classes
 > Task :forge:jar
@@ -106,19 +110,15 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 
 See https://docs.gradle.org/7.3.3/userguide/command_line_interface.html#sec:command_line_warnings
 
-BUILD SUCCESSFUL in 3m 9s
+BUILD SUCCESSFUL in 2m 50s
 21 actionable tasks: 18 executed, 3 up-to-date
 BUILDCATSERVER OK
-== jaruri nascute:
-./projects/mcp/build/mcp/merge/output.jar
-./projects/mcp/build/mcp/forgeAccessTransformer/output.jar
-./projects/mcp/build/mcp/mcinject/output.jar
-./projects/mcp/build/mcp/downloadClient/client.jar
-./projects/mcp/build/mcp/forgeSideStripper/output.jar
-./projects/mcp/build/mcp/downloadServer/server.jar
-./projects/mcp/build/mcp/rename/output.jar
-./projects/mcp/build/mcp/stripClient/output.jar
-./projects/mcp/build/mcp/stripServer/output.jar
-./projects/forge/build/reobfJar/output.jar
+== jaruri nascute (toate build/libs + nume CatServer):
+./buildSrc/build/libs/buildSrc.jar
+./projects/forge/build/libs/forge-1.16.5-36.2.39.jar
+./projects/forge/build/libs/CatServer-1.16.5-1c92118-server.jar
+./projects/forge/build/libs/forge-1.16.5-36.2.39-universal.jar
+./projects/clean/build/libs/clean.jar
+./projects/forge/build/libs/CatServer-1.16.5-1c92118-server.jar
 ```
-JAR URCAT: catsrc/projects/mcp/build/mcp/downloadServer/server.jar
+JAR URCAT: catsrc/projects/forge/build/libs/CatServer-1.16.5-1c92118-server.jar
