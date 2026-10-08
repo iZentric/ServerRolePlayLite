@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Construieste Freeroam Lite: client .mrpack + DOUA variante de server:
+"""Construieste CUANTIC: client .mrpack + DOUA variante de server:
   - MaxLite  : Forge pur + moduri-comenzi (FTB Essentials/Ranks) -> consum MINIM
   - Arclight : hibrid Forge+Bukkit cu pluginuri reale (EssentialsX, LuckPerms...)
 
@@ -206,7 +206,7 @@ def strip_client_assets(jar_path):
 
 
 SERVER_PROPERTIES = """\
-#Minecraft server properties - Freeroam Lite (consum minim)
+#Minecraft server properties - CUANTIC (consum minim)
 motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7ov2 \u00A7f| \u00A7aruleaza din viitor: orice PC, zero lag\u00A7f| \u00A7dOras+Survival+Claims
 max-players=25
 view-distance=4
@@ -367,7 +367,7 @@ world-settings:
 """
 
 SPIGOT_YML = """\
-# Freeroam Lite ULTRA - raze de activare taiate (mobii departe de jucatori dorm)
+# CUANTIC ULTRA - raze de activare taiate (mobii departe de jucatori dorm)
 settings:
   save-user-cache-on-stop-only: true
   netty-threads: 2
@@ -551,11 +551,11 @@ def main():
     new_index = {
         "formatVersion": 1, "game": "minecraft", "versionId": ver,
         "name": rules["pack_name"],
-        "summary": "Varianta lite a pack-ului Freeroam (Palma City) - merge pe orice PC.",
+        "summary": "CUANTIC (Palma City RP) - serverul de viitor: merge pe orice PC, ruleaza cu 2.6GB, boot 11s.",
         "dependencies": {"minecraft": mc, "forge": forge},
         "files": client_files,
     }
-    client_mrpack = os.path.join(out_dir, f"Freeroam-Lite-Client-{ver}.mrpack")
+    client_mrpack = os.path.join(out_dir, f"CUANTIC-Client-{ver}.mrpack")
     with zipfile.ZipFile(client_mrpack, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("modrinth.index.json", json.dumps(new_index, indent=2))
         z.writestr("overrides/options.txt", OPTIONS_LITE)
@@ -639,7 +639,7 @@ def main():
     write_start_scripts(s1, f"forge-{mc}-{forge}.jar")
     with open(os.path.join(s1, "CITESTE-MA.txt"), "w") as f:
         f.write(README_MAXLITE)
-    z1 = os.path.join(out_dir, f"Freeroam-Lite-Server-MaxLite-{ver}.zip")
+    z1 = os.path.join(out_dir, f"CUANTIC-Server-MaxLite-{ver}.zip")
     with zipfile.ZipFile(z1, "w", zipfile.ZIP_DEFLATED) as z:
         zip_dir(z, s1)
     log(f"  => {z1} ({os.path.getsize(z1)/1e6:.1f} MB)")
@@ -693,7 +693,7 @@ def main():
     write_start_scripts(s2, rules["arclight_jar"])
     with open(os.path.join(s2, "CITESTE-MA.txt"), "w") as f:
         f.write(README_ARCLIGHT)
-    z2 = os.path.join(out_dir, f"Freeroam-Lite-Server-Arclight-{ver}.zip")
+    z2 = os.path.join(out_dir, f"CUANTIC-Server-Arclight-{ver}.zip")
     with zipfile.ZipFile(z2, "w", zipfile.ZIP_DEFLATED) as z:
         zip_dir(z, s2)
     log(f"  => {z2} ({os.path.getsize(z2)/1e6:.1f} MB)")
@@ -716,7 +716,7 @@ def main():
                 .replace("(Arclight isi descarca librariile)", "(isi descarca librariile)")
                 + "\nNOTA: Mist e un proiect abandonat din 2021 (experimental!). Daca ceva\n"
                   "crapa, treci pe varianta Arclight (stabila) sau MaxLite (consum minim).\n")
-    z3 = os.path.join(out_dir, f"Freeroam-Lite-Server-Mist-EXPERIMENTAL-{ver}.zip")
+    z3 = os.path.join(out_dir, f"CUANTIC-Server-Mist-EXPERIMENTAL-{ver}.zip")
     with zipfile.ZipFile(z3, "w", zipfile.ZIP_DEFLATED) as z:
         zip_dir(z, s3)
     log(f"  => {z3} ({os.path.getsize(z3)/1e6:.1f} MB)")
@@ -740,7 +740,7 @@ def main():
                 + "\nNOTA: CatServer e renumit pentru compatibilitate maxima moduri+pluginuri\n"
                   "(build mai 2023, cel mai recent hibrid 1.16.5 intretinut). Daca Mist crapa,\n"
                   "incearca intai varianta asta inainte de Arclight.\n")
-    z4 = os.path.join(out_dir, f"Freeroam-Lite-Server-CatServer-{ver}.zip")
+    z4 = os.path.join(out_dir, f"CUANTIC-Server-CatServer-{ver}.zip")
     with zipfile.ZipFile(z4, "w", zipfile.ZIP_DEFLATED) as z:
         zip_dir(z, s4)
     log(f"  => {z4} ({os.path.getsize(z4)/1e6:.1f} MB)")
