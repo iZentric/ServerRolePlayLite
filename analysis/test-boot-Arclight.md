@@ -1,4 +1,4 @@
-# VERDICT Arclight (Thu Oct  8 07:26:12 UTC 2026)
+# VERDICT Arclight (Thu Oct  8 07:47:54 UTC 2026)
 - REZULTAT: **CRAPAT** in 50s | RAM: **n/a**
 - Done-line:
 - Erori cheie:
@@ -16,4 +16,5 @@
           1   Extra org/apache/logging/log4j/core/ErrorHandler.class
 - Contextul erorilor invalid-dist (vinovatul cu nume):
 - Contextul erorii File not found (ultimul mister):
+- CANTARUL PE MOD (cei mai scumpi la incarcare, din debug.log):
 - Pluginuri pornite:
