@@ -23,7 +23,28 @@ jobs:
             echo "== cautare directa in snapshoturi:"
             curl -s --max-time 20 "https://web.archive.org/cdx/search/cdx?url=magmafoundation.org*&filter=original:.*jar.*&limit=15&output=text" | head -15 || true
             curl -s --max-time 20 "https://web.archive.org/cdx/search/cdx?url=ci.magmafoundation.org*&limit=10&output=text" | head -10 || true
+            echo "== USILE API (incercare directa de descarcare):"
+            for u in \
+              "https://api.magmafoundation.org/api/v2/1.16.5/latest/download" \
+              "https://magmafoundation.org/api/v2/1.16.5/latest/download" \
+              "https://api.magmafoundation.org/api/v1/1.16.5/latest/download" \
+              "https://magmafoundation.org/api/jar/1.16.5/latest" ; do
+              CODE=$(curl -sL -o /tmp/m.jar -w "%{http_code}" --max-time 25 "$u" || echo ERR)
+              SZ=$(stat -c%s /tmp/m.jar 2>/dev/null || echo 0)
+              TYPE=$(head -c4 /tmp/m.jar 2>/dev/null | od -c | head -1)
+              echo "| $CODE | ${SZ} bytes | $u | $TYPE"
+              if [ "$CODE" = "200" ] && [ "$SZ" -gt 5000000 ]; then
+                echo "JAR GASIT! il urc in release magma"
+                gh release delete magma -y 2>/dev/null || true
+                gh release create magma -t "Magma 1.16.5 (gladiatorul 12)" /tmp/m.jar || true
+                break
+              fi
+            done
+            echo "== ce scrie in docul lor de API (arhivat):"
+            curl -sL --max-time 20 "https://web.archive.org/web/20250617071043/https://magmafoundation.org/api-docs/endpoints/direct-jar-download" | grep -oE "(GET|POST)[^<]{10,120}|/api/[a-zA-Z0-9/{}._-]+" | head -12 || true
           } > analysis/magma-hunt.md 2>&1
           cat analysis/magma-hunt.md
           git config user.name bot && git config user.email bot@users.noreply.github.com
           git add analysis/ && git commit -m "copoiul magma" && git pull --rebase -X ours && git push || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
