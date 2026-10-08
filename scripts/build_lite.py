@@ -474,14 +474,14 @@ FORGE_COMMON_CLEAN = """\
 
 def write_start_scripts(sdir, server_jar):
     with open(os.path.join(sdir, "start.sh"), "w") as f:
-        f.write(f"#!/bin/sh\njava -Xms1G -Xmx4G {AIKAR_FLAGS} -jar {server_jar} nogui\n")
+        f.write(f"#!/bin/sh\njava -Xms2G -Xmx6G {AIKAR_FLAGS} -jar {server_jar} nogui\n")
     with open(os.path.join(sdir, "start.bat"), "w") as f:
-        f.write(f"java -Xms1G -Xmx4G {AIKAR_FLAGS} -jar {server_jar} nogui\r\npause\r\n")
+        f.write(f"java -Xms2G -Xmx6G {AIKAR_FLAGS} -jar {server_jar} nogui\r\npause\r\n")
     with open(os.path.join(sdir, "server.properties"), "w") as f:
         f.write(SERVER_PROPERTIES)
     # TRUCUL ZAMPTO: unix_args.txt = panoul foloseste flagurile si jar-ul NOSTRU
     with open(os.path.join(sdir, "unix_args.txt"), "w") as f:
-        f.write("-Xms1G\n-Xmx4G\n")
+        f.write("-Xms2G\n-Xmx6G\n")
         for fl in AIKAR_FLAGS.split():
             f.write(fl + "\n")
         f.write(f"-jar\n{server_jar}\nnogui\n")

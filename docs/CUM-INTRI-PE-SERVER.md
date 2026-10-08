@@ -13,7 +13,7 @@
 
 ## Pasul 3 — Intră în joc
 1. Apasă **Launch**
-2. Multiplayer → Add Server → pune adresa serverului (o primești de la șef)
+2. Multiplayer → Add Server → pune adresa: **node12.zampto.net:26252**
 3. Joacă! 🏙️ Orașul e în centru (protejat), survival liber în jur.
 
 ---

@@ -152,7 +152,7 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
   <div class="card"><h3>1️⃣ Descarcă pack-ul LITE</h3><p>Cu 72% mai mic decât originalul, cu 7 motoare de FPS — merge pe orice PC, chiar vechi, cu 4GB RAM, fără placă video.</p>
   <p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/Freeroam-Lite-Client-1.5.0-ULTRA.mrpack">⬇️ Descarcă PalmaLiteRP (.mrpack)</a></p></div>
   <div class="card"><h3>2️⃣ Instalează (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege .mrpack → Launch. Pe server intri și cu TLauncher (cont cu parolă).</p></div>
-  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → adresa de la șef → <b>/register parola parola</b> → ești în oraș! 🏙️ PC foarte slab? „Modul Cartof" din ghid.</p></div>
+  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>node12.zampto.net:26252</b> → <b>/register parola parola</b> → ești în oraș! 🏙️ PC foarte slab? „Modul Cartof" din ghid.</p></div>
 </div>
 
 <h2>👑 De ce EvoKode și nu altceva?</h2>
