@@ -1,0 +1,61 @@
+name: buton-restart
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "deploy/restart-trigger.txt"
+
+permissions:
+  contents: write
+
+jobs:
+  buton:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gaseste cheia si apasa restart
+        run: |
+          set +e
+          mkdir -p /tmp/zt analysis
+          T="REDACTED_PANEL_TOKEN"
+          echo "| HTTP | USA | AUTH | RASPUNS |" > /tmp/zt/r.md
+          echo "|---|---|---|---|" >> /tmp/zt/r.md
+          hit () {
+            CODE=$(curl -s -o /tmp/zt/resp.txt -w "%{http_code}" -X "$1" "$2" \
+              -H "$3" -H "Accept: application/json" ${4:+-H "$4"} ${5:+-d "$5"} --max-time 20)
+            BODY=$(head -c 220 /tmp/zt/resp.txt | tr -d '\n')
+            echo "| $CODE | $1 $2 | ${3:0:45} | $BODY" >> /tmp/zt/r.md
+            echo "$CODE $1 $2 [${3:0:30}] -> $BODY"
+          }
+          echo "== DESCOPERIRE RUTE api.zampto.net =="
+          for P in "/" "/openapi.json" "/swagger.json" "/docs" "/api-docs" "/health" "/status" "/v1" "/api"; do
+            hit GET "https://api.zampto.net$P" "X-Client: probe"
+          done
+          echo "== CHEIA RAW (fara Bearer!) pe usa 401 =="
+          hit POST "https://api.zampto.net/servers/17192/power" "Authorization: $T" "Content-Type: application/json" '{"signal":"restart"}'
+          hit POST "https://api.zampto.net/servers/17192/power" "Authorization: Token $T" "Content-Type: application/json" '{"signal":"restart"}'
+          hit POST "https://api.zampto.net/servers/17192/power" "Authorization: zamptonet $T" "Content-Type: application/json" '{"signal":"restart"}'
+          hit GET "https://api.zampto.net/servers/17192" "Authorization: $T"
+          hit GET "https://api.zampto.net/servers/17192/power" "Authorization: $T"
+          hit GET "https://api.zampto.net/servers" "Authorization: $T"
+          echo "== dash.zampto.net/api/servers (usa 401) cu cheia RAW =="
+          hit GET "https://dash.zampto.net/api/servers" "Authorization: $T"
+          hit GET "https://dash.zampto.net/api/servers" "Authorization: Token $T"
+          hit GET "https://dash.zampto.net/api/servers/17192" "Authorization: $T"
+          hit POST "https://dash.zampto.net/api/servers/17192/power" "Authorization: $T" "Content-Type: application/json" '{"signal":"restart"}'
+          echo "== daca raspunsul contine succes/restarting/running, butonul a mers =="
+          grep -iE "succes|restart|running|started|stopped" /tmp/zt/r.md | head -5
+          cp /tmp/zt/r.md analysis/restart-usi.md
+          exit 0
+
+      - name: Comita
+        if: always()
+        run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add analysis/restart-usi.md 2>/dev/null || true
+          git commit -m "analysis: vanatoarea butonului restart" || echo "nimic"
+          git pull --rebase -X ours origin ${GITHUB_REF_NAME} || true
+          git push origin HEAD:${GITHUB_REF_NAME} || true
