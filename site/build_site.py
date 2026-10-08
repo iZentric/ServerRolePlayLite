@@ -44,8 +44,7 @@ for nume, f, ico, nota, e_al_nostru in ENGINES:
     # EvoKode trage cu 3 tevi pe runda - toate alimenteaza ACELASI record
     extra = []
     if "CUSTOM.md" in f:
-        extra = [parse_verdict(os.path.join(AN, "test-boot-CatServer-CUSTOM2.md")),
-                 parse_verdict(os.path.join(AN, "test-boot-CatServer-CUSTOM3.md"))]
+        extra = [parse_verdict(os.path.join(AN, f"test-boot-CatServer-CUSTOM{i}.md")) for i in (2,3,4,5)]
     for ev in extra:
         if ev and ev.get("rezultat") == "PORNIT" and ev.get("ram"):
             if not rec.get("ram") or ev["ram"] < rec["ram"]:

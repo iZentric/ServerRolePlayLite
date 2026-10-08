@@ -23,6 +23,8 @@ jobs:
           - { variant: CatServer, java: "17", suffix: "-CUSTOM", custom: "da" }
           - { variant: CatServer, java: "17", suffix: "-CUSTOM2", custom: "da" }
           - { variant: CatServer, java: "17", suffix: "-CUSTOM3", custom: "da" }
+          - { variant: CatServer, java: "17", suffix: "-CUSTOM4", custom: "da" }
+          - { variant: CatServer, java: "17", suffix: "-CUSTOM5", custom: "da" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
