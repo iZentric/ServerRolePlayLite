@@ -3,7 +3,7 @@ on:
   push:
     paths: ["analysis/**", "site/**"]
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 concurrency:
@@ -20,6 +20,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Regenereaza site-ul din verdictele reale
         run: python3 site/build_site.py && mkdir -p _site && cp site/index.html _site/
+      - name: Salveaza cartea recordurilor
+        run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add site/records.json site/index.html || true
+          git commit -m "cartea recordurilor actualizata" || true
+          git pull --rebase -X ours || true
+          git push || true
       - uses: actions/upload-pages-artifact@v3
         with: { path: _site }
       - uses: actions/deploy-pages@v4

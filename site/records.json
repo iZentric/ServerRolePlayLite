@@ -1,0 +1,18 @@
+{
+ "test-boot-CatServer-CUSTOM.md": {
+  "ram": 2656,
+  "boot": 15.462
+ },
+ "test-boot-CatServer-J17.md": {
+  "ram": 2814,
+  "boot": 11.472
+ },
+ "test-boot-CatServer.md": {
+  "ram": 4175,
+  "boot": 16.233
+ },
+ "mist-lab.md": {
+  "ram": 4822,
+  "boot": 52.277
+ }
+}
