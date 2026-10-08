@@ -218,6 +218,11 @@ world-settings:
       monsters: 20
       raiders: 24
       misc: 8
+      wake-up-inactive:
+        animals-max-per-tick: 2
+        monsters-max-per-tick: 4
+        villagers-max-per-tick: 1
+        flying-monsters-max-per-tick: 2
     entity-tracking-range:
       players: 48
       animals: 32
