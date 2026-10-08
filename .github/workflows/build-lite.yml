@@ -43,9 +43,10 @@ jobs:
         run: |
           gh release delete lite -y --cleanup-tag || true
           sleep 3
+          VERSAJ=$(python3 -c "import json;print(json.load(open('pack-rules.json'))['version'])")
           gh release create lite out/*.mrpack out/*.zip \
             --target ${{ github.sha }} \
-            --title "Freeroam Lite 1.0.0 (client + server)" \
+            --title "Freeroam Lite $VERSAJ (client + server)" \
             --notes-file out/REPORT.md
 
 
