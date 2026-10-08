@@ -1,20 +1,3 @@
-Download finished for accesstransformers-3.0.1.jar !
-Global percentage >7%
-Downloading file jline-3.12.1.jar with size 715.74805 KB
-Download finished for jline-3.12.1.jar !
-Global percentage >8%
-Downloading file forgespi-3.2.0.jar with size 19.699219 KB
-Download finished for forgespi-3.2.0.jar !
-Global percentage >8%
-Downloading file log4j-iostreams-2.11.2.jar with size 46.586914 KB
-Download finished for log4j-iostreams-2.11.2.jar !
-Global percentage >8%
-Downloading file commons-lang-2.6.jar with size 277.5586 KB
-Download finished for commons-lang-2.6.jar !
-Global percentage >9%
-Downloading file error_prone_annotations-2.1.3.jar with size 13.3828125 KB
-Download finished for error_prone_annotations-2.1.3.jar !
-Global percentage >9%
 Downloading file minecraft_server.1.16.5.jar with size 36.203728MB
 Download finished for minecraft_server.1.16.5.jar !
 Global percentage >69%
@@ -198,6 +181,23 @@ Remapping jar... 100%
 [Mist] Creating forge server jar. This can take 1 minute.
 Finished the install verification process !
 An error occurs with the server start. You can ask for help to the Mist support on Discord or GitHub.
+== INSTALARE TERMINATA, pornim DIRECT ServerMain (fara paznic) ==
+
+
+ __    __   __   ______   ______ 
+/\ "-./  \ /\ \ /\  ___\ /\__  _\
+\ \ \-./\ \\ \ \\ \___  \\/_/\ \/
+ \ \_\ \ \_\\ \_\\/\_____\  \ \_\
+  \/_/  \/_/ \/_/ \/_____/   \/_/
+
+
+                                      Welcome to Mist 1.16.5 ! - Mist Developement Group
+Checking libraries, please wait...
+Global percentage >100%
+Downloading file bungeecord-chat-1.16-R0.4.jar with size 145.46973 KB
+Download finished for bungeecord-chat-1.16-R0.4.jar !
+It looks like you're trying to load Mist using -cp rather than -jar.
+If that's the case, you also need to specify -javaagent:<mohist jar> flag.
 ===== DOSAR MIST =====
 -- MANIFEST:
 Manifest-Version: 1.0
