@@ -407,6 +407,14 @@ CERINTE: Java 8 sau Java 11 (NU 17+). RAM: porneste de la 1 GB, maxim 4 GB.
 """
 
 
+FORGE_COMMON_TOML = """\
+# Forge insusi - asigurarea serverelor mari: o entitate/mod stricat se STERGE, nu crapa serverul
+[server]
+    removeErroringEntities = true
+    removeErroringTileEntities = true
+"""
+
+
 def write_start_scripts(sdir, server_jar):
     with open(os.path.join(sdir, "start.sh"), "w") as f:
         f.write(f"#!/bin/sh\njava -Xms1G -Xmx4G {AIKAR_FLAGS} -jar {server_jar} nogui\n")
@@ -416,6 +424,10 @@ def write_start_scripts(sdir, server_jar):
         f.write(SERVER_PROPERTIES)
     with open(os.path.join(sdir, "eula.txt"), "w") as f:
         f.write("# Prin folosirea acestui pachet acceptati https://aka.ms/MinecraftEULA\neula=true\n")
+    cfg = os.path.join(sdir, "config")
+    os.makedirs(cfg, exist_ok=True)
+    with open(os.path.join(cfg, "forge-common.toml"), "w") as f:
+        f.write(FORGE_COMMON_TOML)
 
 
 def main():
