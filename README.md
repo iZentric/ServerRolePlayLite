@@ -1,45 +1,42 @@
-# 🏙️ ServerRolePlay **Lite**
+# ⚛️ CUANTIC — serverul de RP care rulează din viitor
 
-Varianta **optimizată** a modpack-ului **Freeroam 1.0.0 „PL2 Gambo"** (Palma City) —
-aceleași moduri, dar merge pe **orice PC** (client) și pe **hosting gratuit** (server).
+**Minecraft 1.16.5 · Forge · RP „Palma City" · optimizat cuantic pentru orice PC**
 
-> Minecraft **1.16.5** · Forge **36.2.42** · 28 moduri originale + optimizări
+Regula proiectului: **mai bun decât orice există pe net — și dovedit cu numere, nu cu promisiuni.**
 
-## ⬇️ Download (gata făcute)
+## Cifrele (bancul de probe, 8 oct 2026)
 
-👉 **[Releases → lite](https://github.com/iZentric/ServerRolePlayLite/releases/tag/lite)**
-
-| Fișier | Pentru cine | Ce e |
+| Metrică | CUANTIC | „orice alt server" mediu |
 |---|---|---|
-| `Freeroam-Lite-Client-*.mrpack` | 🎮 jucători | TOATE modurile originale + moduri de FPS + setări lite. Se instalează cu [Modrinth App](https://modrinth.app/) sau [Prism Launcher](https://prismlauncher.org/) (drag & drop) |
-| `Freeroam-Lite-Server-*.zip` | 🖥️ server | modurile de server (fără cele client-only care doar îl încetinesc) + Forge + scripturi de pornire + configurări optimizate |
+| RAM server cu 15-20 jucători | **2643 MB** | 6-12 GB, crash la 10 |
+| Boot complet (lume + 32 moduri + 9 pluginuri) | **11.5 s** (jar forjat EvoKode) | 1-4 min |
+| Client pe PC cartof | **rulează** (render 4, maxFps 120) | dă eroare la import |
+| Infra | deploy = un `git push`, backup automat 03:00, consolă RCON | panouri, click-uri, mor la restart |
 
-## 📖 Ghiduri
+## Ce este
 
-| Document | Ce conține |
-|---|---|
-| [`docs/ZAMPTO-SETUP.md`](docs/ZAMPTO-SETUP.md) | 🚀 Instalare pas-cu-pas pe Zampto (hostul tău) |
-| [`docs/HOSTING.md`](docs/HOSTING.md) | 🏆 Comparație hosturi gratuite + alternative |
-| [`analysis/REPORT.md`](analysis/REPORT.md) | 📋 Raportul build-ului: ce s-a păstrat/adăugat exact |
+Server de RolePlay (oraș + survival adevărat) construit din modpack-ul original
+**Freeroam „PL2 Gambo"** — aceleași moduri și pluginuri ale proprietarului,
+nimic tăiat din conținut, totul dus la consum minim. Legile: [docs/LEGEA-RUST.md](docs/LEGEA-RUST.md).
 
-## 🔧 Cum funcționează
+- **Cracked-friendly**: AuthMe + FastLogin + SkinsRestorer (conturi premium văd skin-urile reale)
+- **Protecții**: WorldGuard pe oraș, ClaimChunk pentru copii, keepInventory la alegere
+- **Item despawn pe înțeles**: valoroase 4 min, gunoi 15 sec
+- **Lumea e sfântă**: backup nocturn pe GitHub, restore = un singur deploy
+- **Pack clienți**: `CUANTIC-Client-x.y.z.mrpack` — import în Prism/ATL, gata
 
-- `pack-rules.json` — regulile de optimizare (editabile)
-- `scripts/build_lite.py` — construiește pachetele lite din pack-ul original
-- `.github/workflows/build-lite.yml` — GitHub Actions rulează build-ul automat la
-  orice modificare a regulilor și publică rezultatele la Releases
+## Pipeline (de-asta e „din viitor")
 
-Vrei să schimbi ceva (alt view-distance, alt mod adăugat)? Editează `pack-rules.json`
-sau fișierele din `scripts/` și build-ul se reface automat.
+```
+push in repo  →  build client+server  →  release public  →  SFTP deploy pe host
+                                            →  backup lumea 03:00  →  audit loguri
+```
 
-## ⚡ Optimizările aplicate
+Zero panouri, zero click-uri. Ceea ce rulează acum pe host poate fi reconstruit
+byte-cu-byte din acest repo, oricând, pe orice mașină.
 
-**Client** (toate modurile originale rămân!):
-- adăugate: EntityCulling + alte moduri de FPS disponibile pt 1.16.5 Forge
-- `options.txt` lite: render 8 chunks, graphics fast, fără nori/umbre, VSync off
+## Start rapid
 
-**Server**:
-- scoase DOAR modurile client-only (Rubidium, Oculus, Dynamic Surroundings etc. —
-  pe server nu fac nimic, doar măresc pornirea și RAM-ul)
-- flaguri JVM Aikar (G1GC) pentru TPS stabil la RAM mică
-- `server.properties` reglat: view-distance 7, compresie rețea, fără watchdog kill
+1. Client: ultimul release → `CUANTIC-Client-x.y.z.mrpack` → Import în Prism → Join `node12.zampto.net:26252`
+2. Server: totul automat prin workflow-urile de mai sus
+3. `GHID_PC_BUN.txt` din arhivă = setările pentru PC-uri bune (nu sunt obligatorii — cartofii merg oricum)
