@@ -1,0 +1,74 @@
+name: login-panou
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "deploy/login-trigger.txt"
+
+permissions:
+  contents: write
+
+jobs:
+  login:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Logheaza-te in panou si apasa butonul
+        env:
+          PASS: "REDACTED_PANEL_TOKEN"
+        run: |
+          set +e
+          mkdir -p /tmp/pl analysis
+          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/126 Safari/537.36"
+          DEV="evo-kode-$(date +%s)"
+          try_login () {
+            EMAIL="$1"
+            echo "=== LOGIN $EMAIL ==="
+            curl -s -c /tmp/pl/jar-$2.txt -o /tmp/pl/resp-$2.txt -w "HTTP %{http_code}\n" \
+              -X POST "https://dash.zampto.net/api/auth/login" \
+              -H "Content-Type: application/json" -H "Accept: application/json" \
+              -H "x-device-id: $DEV" -A "$UA" \
+              --max-time 25 \
+              -d "{\"email\":\"$EMAIL\",\"password\":\"$PASS\",\"device_id\":\"$DEV\"}"
+            head -c 400 /tmp/pl/resp-$2.txt; echo
+            echo "--- cookie-uri:"; grep -oE '[[:space:]][^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]*$' /tmp/pl/jar-$2.txt | awk '{print $6}' | sort -u
+          }
+          try_login "vasile716yt@gmail.com" "vasile"
+          sleep 1
+          try_login "radudaniel1307@gmail.com" "radu"
+          echo "=== CARE JAR E LOGAT ==="
+          for J in /tmp/pl/jar-*.txt; do
+            if grep -qiE 'session|token|auth|zamptonet' "$J"; then echo "$J:"; cat "$J"; fi
+          done
+          echo "=== /api/servers cu fiecare jar ==="
+          for J in /tmp/pl/jar-*.txt; do
+            echo "--- $J"
+            curl -s -b "$J" -o /tmp/pl/srv.txt -w "HTTP %{http_code}\n" \
+              -H "Accept: application/json" -A "$UA" "https://dash.zampto.net/api/servers" --max-time 20
+            head -c 700 /tmp/pl/srv.txt; echo
+          done
+          {
+            echo "# LOGIN PANOU ($(date -u))"
+            echo
+            echo "## raspunsuri login"
+            for F in /tmp/pl/resp-*.txt; do echo "### $F"; head -c 400 "$F"; echo; done
+            echo
+            echo "## cookie-uri"
+            for F in /tmp/pl/jar-*.txt; do echo "### $F"; cat "$F"; echo; done
+            echo
+            echo "## /api/servers"
+            head -c 1500 /tmp/pl/srv.txt 2>/dev/null
+          } > analysis/login-panou.md
+          exit 0
+
+      - name: Comita
+        if: always()
+        run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add analysis/login-panou.md 2>/dev/null || true
+          git commit -m "analysis: login panou Zampto" || echo "nimic"
+          git pull --rebase -X ours origin ${GITHUB_REF_NAME} || true
+          git push origin HEAD:${GITHUB_REF_NAME} || true
