@@ -35,6 +35,8 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ plugin: GriefPrevention.jar
 - ✅ plugin: AuthMe-5.6.0.jar
 - ✅ plugin: SkinsRestorer.jar
+- ✅ plugin: ProtocolLib.jar
+- ✅ plugin: FastLoginBukkit.jar
 - ✅ plugin: LuckPerms-Bukkit-5.5.71.jar
 - ✅ plugin: Chunky-1.3.38.jar
 
