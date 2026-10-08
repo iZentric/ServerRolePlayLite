@@ -1,0 +1,80 @@
+name: harta-pagini
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "deploy/harta-trigger.txt"
+
+permissions:
+  contents: write
+
+jobs:
+  harta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extrage API-ul din paginile reale ale panoului
+        run: |
+          set +e
+          mkdir -p /tmp/pg analysis
+          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/126 Safari/537.36"
+          for P in "/server-console?id=17192" "/server-files?id=17192" "/server-startup?id=17192" "/server-schedules?id=17192" "/server?id=17192" "/server-settings?id=17192"; do
+            N=$(echo "$P" | tr '/?=&' '____')
+            curl -sL -A "$UA" "https://dash.zampto.net$P" -o "/tmp/pg/page$N.html" --max-time 25
+            echo "page $N: $(wc -c < /tmp/pg/page$N.html) bytes"
+            sleep 0.4
+          done
+          cat /tmp/pg/page*.html | grep -oE '/_next/static/chunks/[a-zA-Z0-9/_.%-]+\.js' | sort -u > /tmp/pg/chunks.txt
+          echo "chunks unice: $(wc -l < /tmp/pg/chunks.txt)"
+          while read -r C; do
+            curl -sL -A "$UA" "https://dash.zampto.net$C" -o "/tmp/pg/c_$(basename "$C")" --max-time 20
+            sleep 0.25
+          done < /tmp/pg/chunks.txt
+          {
+            echo "# HARTA PAGINI ($(date -u))"
+            echo
+            echo "## ws/wss/socket"
+            cat /tmp/pg/page*.html /tmp/pg/c_*.js 2>/dev/null | grep -ohE 'wss?://[a-zA-Z0-9._${}/?=-]+' | sort -u | head -20
+            echo
+            echo "## /api/ paths (toate)"
+            cat /tmp/pg/page*.html /tmp/pg/c_*.js 2>/dev/null | grep -ohE '"/api/[a-zA-Z0-9/_${}.:?=&-]+"' | sort -u | head -80
+            echo
+            echo "## power/stop/restart context"
+            cat /tmp/pg/c_*.js 2>/dev/null | grep -ohE '.{70}(power|signal|restart|/stop|kill).{70}' | head -30
+            echo
+            echo "## header/auth in fetch"
+            cat /tmp/pg/c_*.js 2>/dev/null | grep -ohE '.{40}(Authorization|x-device|csrf|credentials).{40}' | head -20
+          } > analysis/harta-pagini.md
+          cat analysis/harta-pagini.md
+          exit 0
+
+      - name: O bataie SFTP — confirmarea starii
+        run: |
+          set +e
+          sudo apt-get install -y -qq lftp 2>/dev/null
+          lftp -u "15254.1388b9af","REDACTED_SFTP_PASS" "sftp://node12.zampto.net:2022" -e "
+            set sftp:auto-confirm yes; set net:timeout 25;
+            echo ===LOGAT===;
+            cls -l mods/ | grep -i pause && echo PAUZA-INCA-PE-DISC || echo PAUZA-STERSA;
+            cls -l world/level.dat;
+            get logs/latest.log -o /tmp/pg/live.log || echo NOLOG;
+            bye
+          " 2>&1 | tail -8
+          if [ -f /tmp/pg/live.log ]; then
+            echo "=== LOG LIVE (ultimele 6) ==="
+            tail -6 /tmp/pg/live.log
+            grep -c "Done (" /tmp/pg/live.log | sed 's/^/booturi in log: /'
+          fi
+          exit 0
+
+      - name: Comita
+        if: always()
+        run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add analysis/harta-pagini.md 2>/dev/null || true
+          git commit -m "analysis: harta paginilor panoului (console/files/schedules)" || echo "nimic"
+          git pull --rebase -X ours origin ${GITHUB_REF_NAME} || true
+          git push origin HEAD:${GITHUB_REF_NAME} || true
