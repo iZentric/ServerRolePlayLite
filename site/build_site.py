@@ -121,6 +121,11 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
 .btn{{display:inline-block;background:linear-gradient(90deg,#059669,#34d399);color:#04281c;font-weight:800;padding:10px 16px;border-radius:10px;text-decoration:none}}
 .btn:hover{{filter:brightness(1.1)}}
 .card a{{color:#60a5fa}}
+.tbl{{width:100%;border-collapse:collapse;margin-top:12px;background:var(--card);border-radius:12px;overflow:hidden}}
+.tbl th,.tbl td{{padding:9px 12px;text-align:left;border-bottom:1px solid #232a3d;font-size:.92rem}}
+.tbl th{{color:var(--mut);font-weight:600}}
+.tbl tr.hl{{background:#0b2e22}}
+.tbl tr.hl td{{color:#6ee7b7}}
 </style></head><body><div class="wrap">
 <header>
   <h1>EvoKode</h1>
@@ -153,6 +158,40 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
   <p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/Freeroam-Lite-Client-1.5.0-ULTRA.mrpack">⬇️ Descarcă PalmaLiteRP (.mrpack)</a></p></div>
   <div class="card"><h3>2️⃣ Instalează (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege .mrpack → Launch. Pe server intri și cu TLauncher (cont cu parolă).</p></div>
   <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>node12.zampto.net:26252</b> → <b>/register parola parola</b> → ești în oraș! 🏙️ PC foarte slab? „Modul Cartof" din ghid.</p></div>
+</div>
+
+<h2>📈 Câți copii duce? (fierul: 8 GB RAM · 2,5 nuclee · GRATIS)</h2>
+<div class="sub">Estimări inginerești din măsurătorile reale. Mobii sunt plafonați global (40), fiecare copil costă doar „felia" lui — de-aia consumul NU explodează cu playerii.</div>
+<table class="tbl">
+<tr><th>Copii</th><th>RAM</th><th>CPU</th><th>TPS</th><th>Cum se simte</th></tr>
+<tr><td>5</td><td>2.9 GB</td><td>30%</td><td>20</td><td>perfect — serverul nici nu respiră greu</td></tr>
+<tr><td>10</td><td>3.1 GB</td><td>50%</td><td>20</td><td>croazieră</td></tr>
+<tr><td>15</td><td>3.4 GB</td><td>80%</td><td>19-20</td><td>excelent</td></tr>
+<tr><td>20</td><td>3.7 GB</td><td>120%</td><td>18-20</td><td>foarte bine</td></tr>
+<tr><td>25</td><td>4.0 GB</td><td>160%</td><td>17-19</td><td>bine — se trag manetele de criză</td></tr>
+<tr class="hl"><td><b>30</b></td><td>4.3 GB</td><td>200%</td><td>16-19</td><td><b>ținta — playabil cu manetele trase</b></td></tr>
+<tr><td>35</td><td>4.6 GB</td><td>240%</td><td>14-17</td><td>eroic, la limita fizicii</td></tr>
+</table>
+
+<h2>🕰️ Consumul în timp — „dintele de fierăstrău" anti-Mohist</h2>
+<div class="sub">Serverele hibrid clasice mor pentru că memoria lor crește ca un munte, zi după zi. Al nostru e tuns zilnic:</div>
+<div class="card"><pre style="color:var(--mut);overflow-x:auto">
+06:00 GHILOTINA (restart automat) → memoria la zero
+06:01 → pauză totală: 0% CPU, nimeni online
+14:00 intră copiii → trezire instant, +~50 MB/copil
+18:00 vârful serii: 15-25 copii, totul plafonat
+03:00 gol → iar pauză totală
+06:00 ghilotina iar → orice scurgere = decapitată
+─────────────────────────────────────────────
+grafic săptămânal: ╱╲╱╲╱╲╱╲  plat ca dinții de fierăstrău
+boala Mohist:      ╱─╱─╱──↗  muntele care crește → crash
+</pre></div>
+
+<h2>🛡️ Dacă se strică ceva? (planul morții)</h2>
+<div class="cards">
+  <div class="card"><h3>💥 Un mod crapă</h3><p>Scutul anti-crash ȘTERGE entitatea vinovată și serverul merge mai departe. Panoul repornește automat în ~15s dacă e ceva grav.</p></div>
+  <div class="card"><h3>🧠 Scurgere de memorie</h3><p>spark o vede cu numele ei, ghilotina de la 06:00 o taie zilnic, inginerul o execută definitiv. Boala posibilă — moartea NU.</p></div>
+  <div class="card"><h3>💾 Corupție / dezastru</h3><p>Backup automat în fiecare zi. Maxim 24 de ore de progres pierdut, în cel mai negru scenariu.</p></div>
 </div>
 
 <h2>👑 De ce EvoKode și nu altceva?</h2>
