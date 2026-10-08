@@ -1,7 +1,5 @@
-# Deploy Zampto - Thu Oct  8 01:50:52 UTC 2026
+# Deploy Zampto - Thu Oct  8 01:53:40 UTC 2026
 
-Removing old file `server.properties'
-Transferring file `server.properties'
-Transferring file `plugins/AuthMe-5.6.0.jar'
-Transferring file `plugins/SkinsRestorer.jar'
+Transferring file `plugins/FastLoginBukkit.jar'
+Transferring file `plugins/ProtocolLib.jar'
 exit=0
