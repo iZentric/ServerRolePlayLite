@@ -46,9 +46,14 @@ jobs:
           s=socket.create_connection(("node12.zampto.net",port),15)
           body=vi(-1)+vi(len(host))+host+struct.pack(">H",port)+vi(1)
           s.sendall(vi(len(body))+body)
-          l1=read_varint(s);pid=read_varint(s);l2=read_varint(s)
-          j=json.loads(recv_exact(s,l2))
-          print("MCSTATUS="+json.dumps({"live":True,"versiune":j["version"]["name"],"online":j["players"]["online"],"max":j["players"]["max"],"motd":str(j.get("description"))[:80]}))
+          l1=read_varint(s)
+          raw=recv_exact(s,l1)
+          try:
+              read_varint(s)  # packet id, unde exista
+          except Exception:
+              pass
+          j=json.loads(raw)
+          print("MCSTATUS="+json.dumps(j)[:400])
           PYEOF
           python3 /tmp/mcping.py > /tmp/ping.txt 2>&1 || true
           cat /tmp/ping.txt
@@ -76,20 +81,23 @@ jobs:
               i,t=struct.unpack(">ii",b[:8])
               return i,t,b[8:-2].decode("utf8","replace")
           s=socket.create_connection(("node12.zampto.net",28147),15)
-          s.settimeout(12)
+          s.settimeout(15)
           send(s,1,3,sys.argv[1].encode())
-          try:
-              i,t,d=recv(s)
-              if i==1: print("RCON-AUTENTIFICAT")
-              else: print("RCON-CHEIE-GRESITE id="+str(i)+" "+repr(d[:40]))
-          except Exception as e:
-              print("RCON FARA RASPUNS LA LOGIN:",e)
-          try:
-              send(s,2,2,b"list")
-              i,t,d=recv(s)
-              print("RCON COMANDA list ->",d[:150].replace("\n"," "))
-          except Exception as e:
-              print("RCON COMANDA ESUATA:",e)
+          # MC-12864: vanilla NU raspunde la login — trimit comanda direct si vad ce vine
+          send(s,2,2,b"list")
+          raspuns=""
+          for incercare in range(3):
+              try:
+                  i,t,d=recv(s)
+              except Exception as e:
+                  break
+              if i==2 and d.strip():
+                  raspuns=d
+                  break
+          if raspuns:
+              print("RCON-PLIN: cheie OK, consola responsiva ->",raspuns[:150].replace("\n"," "))
+          else:
+              print("RCON: conectat dar fara raspuns util (probabil chei gresite — MC inchide dupes esec)")
           PYEOF
           python3 /tmp/rcon.py "$P" > /tmp/rcon.txt 2>&1 || true
           cat /tmp/rcon.txt
