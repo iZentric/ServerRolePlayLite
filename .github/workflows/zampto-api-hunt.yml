@@ -1,0 +1,32 @@
+name: Vanatoarea API-ului Zampto
+on:
+  push:
+    paths: ["deploy/api-hunt-trigger.txt"]
+permissions:
+  contents: write
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Incearca toate usile posibile
+        run: |
+          mkdir -p analysis
+          { echo "# VANATOAREA API ZAMPTO ($(date -u))"
+          for base in "https://dash.zampto.net" "https://api.zampto.net" "https://zampto.net"; do
+            for path in "/api/client" "/api/client/servers" "/api/application/servers" "/api/servers" "/api/v1/servers" "/api/user/servers" "/api/servers/17192" "/api/servers/17192/power"; do
+              CODE=$(curl -s -o /tmp/r.txt -w "%{http_code}" --max-time 10 "$base$path" \
+                -H "Authorization: Bearer $KEY" -H "Accept: application/json" 2>/dev/null || echo ERR)
+              BODY=$(head -c 120 /tmp/r.txt | tr -d '\n' | grep -v DOCTYPE || true)
+              echo "| $CODE | $base$path | $BODY"
+            done
+          done } > analysis/zampto-api-hunt.md
+          cat analysis/zampto-api-hunt.md
+        env:
+          KEY: ${{ secrets.ZAMPTO_API_KEY }}
+      - name: Raport
+        if: always()
+        run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add analysis/ && git commit -m "vanatoare api" && git pull --rebase -X ours && git push || true
