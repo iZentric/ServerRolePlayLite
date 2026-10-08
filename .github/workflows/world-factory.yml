@@ -8,6 +8,7 @@ on:
 
 concurrency:
   group: world-factory
+  cancel-in-progress: true
   cancel-in-progress: false
 
 env:
@@ -47,7 +48,7 @@ jobs:
         run: |
           set -o pipefail
           cd srv
-          R=$(tr -dc 0-9 < ../deploy/world-factory-trigger.txt 2>/dev/null | head -c 6); R=${R:-1000}; echo "RAZA=$R"
+          R=$(grep -oE '[0-9]+' ../deploy/world-factory-trigger.txt 2>/dev/null | head -1); R=${R:-1000}; echo "RAZA=$R"
           mkfifo console.in
           # tinem FIFO deschis ca sa putem scrie comenzi pe rand
           exec 3> console.in
