@@ -57,10 +57,12 @@ jobs:
           PYEOF
           python3 run/ping.py > run/ping.out 2>&1 || true
           cat run/ping.out
-      - name: RCON — rulez comanda din deploy/consola-trigger.txt
+      - name: RCON — rulez comanda (cu variante de parsare a cheii)
+        env:
+          SECRETA_P: ${{ secrets.ZAMPTO_SFTP_PASS }}
         run: |
           cat > run/rcon.py <<'PYEOF'
-          import socket,struct,sys
+          import socket,struct,sys,re
           def send(s,i,t,p=b""):
               d=struct.pack(">ii",i,t)+p+b"\x00\x00"
               s.sendall(struct.pack(">i",len(d))+d)
@@ -78,34 +80,44 @@ jobs:
                   b+=c
               i,t=struct.unpack(">ii",b[:8])
               return i,t,b[8:-2].decode("utf8","replace")
-          pw=sys.argv[1].encode()
-          import re
+          raw=open("run/sp.txt","rb").read()
+          m=re.search(rb"rcon\.password=([^\r\n]*)",raw)
+          cand=set()
+          if m:
+              v=m.group(1)
+              cand.add(v); cand.add(v.rstrip()); cand.add(v.rstrip(b"\r "))
+          if len(sys.argv)>1 and sys.argv[1]:
+              cand.add(sys.argv[1].encode().rstrip())
           cmd="list"
           for l in open("deploy/consola-trigger.txt"):
               l=l.strip()
-              if l and not re.match(r"^\d{4}-", l): cmd=l
-          s=socket.create_connection(("node12.zampto.net",28147),15)
-          s.settimeout(15)
-          send(s,1,3,pw)
-          send(s,2,2,cmd.encode())
-          out=""
-          for _ in range(4):
+              if l and not re.match(r"^\d{4}-",l): cmd=l
+          ok=False; detalii=[]
+          for n,c in enumerate(sorted(cand,key=len,reverse=True)):
               try:
-                  i,t,d=recv(s)
-              except Exception:
-                  break
-              if i==2 and d.strip():
-                  out=d
-                  break
-          if out:
-              print("RCON OK -> comanda: "+cmd)
-              print(out[:800])
-          else:
-              print("RCON FARA RASPUNS la: "+cmd)
+                  s=socket.create_connection(("node12.zampto.net",28147),10); s.settimeout(12)
+                  send(s,1,3,c); send(s,2,2,cmd.encode())
+                  out=""
+                  for _ in range(4):
+                      try: i,t,d=recv(s)
+                      except Exception: break
+                      if i==2 and d.strip(): out=d; break
+                  s.close()
+                  if out:
+                      print("RCON-PLIN cu varianta#%d (len=%d)"%(n,len(c)))
+                      print(out[:800].replace("\n"," ")); ok=True; break
+                  else:
+                      detalii.append("#%d len=%d: fara raspuns"%(n,len(c)))
+              except Exception as e:
+                  detalii.append("#%d len=%d: %s"%(n,len(c),e))
+          if not ok:
+              print("RCON ESUAT pe toate variantele:", " | ".join(detalii[:5]))
           PYEOF
-          RPASS=$(cat run/rpass)
-          python3 run/rcon.py "$RPASS" > run/rcon.out 2>&1 || true
-          sed -E "s|$RPASS|<CHEIE-CENZURATA>|g" run/rcon.out > run/rcon.safe 2>/dev/null || cp run/rcon.out run/rcon.safe
+          python3 run/rcon.py "$SECRETA_P" > run/rcon.out 2>&1 || true
+          if [ -s run/sp.txt ]; then
+            K=$(grep '^rcon.password=' run/sp.txt | cut -d= -f2- | tr -d '\r')
+            sed -E "s|${K}|<CHEIE>|g" run/rcon.out > run/rcon.safe 2>/dev/null || cp run/rcon.out run/rcon.safe
+          else cp run/rcon.out run/rcon.safe; fi
           cat run/rcon.safe
       - name: Ce zice serverul despre RCON (din log, cenzurat)
         env:
