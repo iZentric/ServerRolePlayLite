@@ -19,3 +19,11 @@
 ---
 ### ⚙️ PC foarte slab? Setările sunt DEJA puse pe minim în pack. Nu schimba nimic.
 ### ❓ Nu merge ceva? Scrie-i șefului serverului.
+
+---
+## 🥔 MOD CARTOF (pentru cele mai slabe PC-uri dintre toate):
+Daca si cu pack-ul nostru merge greu, in joc: Options → Video Settings:
+- Render Distance: 4 (serverul oricum trimite doar 4!)
+- Graphics: Fast │ Smooth Lighting: OFF │ Particles: Minimal
+- Clouds: OFF │ Entity Shadows: OFF │ Mipmap: 0
+Cu astea, pana si un PC de bibliotecă din 2010 duce jocul.

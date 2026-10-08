@@ -71,3 +71,11 @@ Motiv (masurat, nu parere): boot 11.7s vs 21.6s pe Java 11 (-46%), RAM -22%.
 ## 00. JARUL SERVERULUI (8 oct, dupa-amiaza):
 Serverul ruleaza jarul FORJAT DE NOI din sursa CatServer la zi (commit 1c92118)
 - mai nou decat binarul oficial (mai 2023) si MAI MIC la tribunal: 2656MB vs 2999MB.
+
+## MANETELE DE CRIZA (cand serverul e PLIN - 20-25+ copii):
+Trase pe rand, in ordinea asta, DOAR daca spark arata TPS sub 18:
+1. spigot.yml: view-distance 4 -> 3 (restart) = -40% chunks/copil, copiii abia observa
+2. bukkit.yml: monsters 40 -> 30 = noaptea tot vie, serverul respira
+3. InControl: plafon 50 -> 35
+4. Startup: Xmx4G -> Xmx3G daca panoul arata OOM-kill (RAM, nu CPU)
+Fiecare maneta = reversibila. NU trage niciuna preventiv - doar pe date.
