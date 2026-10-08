@@ -28,7 +28,9 @@
     "entityculling",
     "fps-reducer",
     "saturn",
-    "memoryleakfix"
+    "memoryleakfix",
+    "ksyxis",
+    "connectivity"
   ],
   "add_server_modrinth": [
     "clumps",
@@ -47,7 +49,9 @@
     "smooth-boot-reloaded",
     "saturn",
     "adaptive-performance-tweaks",
-    "get-it-together-drops"
+    "get-it-together-drops",
+    "ksyxis",
+    "connectivity"
   ],
   "_comentariu_maxlite": "Moduri server-side care inlocuiesc pluginurile in varianta MaxLite (Forge pur, consum minim).",
   "maxlite_command_mods": [
