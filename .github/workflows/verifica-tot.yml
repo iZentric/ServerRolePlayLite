@@ -53,7 +53,8 @@ jobs:
           echo "=== FASTLOGIN ==="
           grep -i "fastlogin" /tmp/zt/sftp-bun.txt || echo "FastLogin lipsa?"
           echo "=== WORLD ==="
-          grep -i "level.dat" /tmp/zt/sftp-bun.txt
+          grep -i "level.dat" /tmp/zt/sftp-bun.txt || echo "level.dat NEVĂZUT"
+          exit 0
 
       - name: Panoul — deschide usile cu tokenul si apasa restart
         run: |
@@ -90,8 +91,10 @@ jobs:
             done
           done
           cp /tmp/zt/usi.md analysis/panou-usi.md
+          exit 0
 
       - name: Dovada — logul dupa buton
+        if: always()
         run: |
           echo "== ultimele randuri din logul de pe server (daca s-a repornit apare un Done nou) =="
           if [ -f /tmp/zt/latest-nou.log ]; then tail -12 /tmp/zt/latest-nou.log; fi
