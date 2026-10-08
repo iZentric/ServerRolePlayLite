@@ -26,7 +26,8 @@ ENGINES = [
     ("CatServer oficial + Java 11",    "test-boot-CatServer.md",        "🥉", "Cum il ruleaza restul lumii", False),
     ("Mist (inviat de noi)",           "mist-lab.md",                   "🧟", "14 operatii; traieste doar dezbracat; LuckPerms mort", False),
     ("CatServer + Java 21",            "test-boot-CatServer-J21.md",    "⚰️", "Fizic imposibil (ASM nu citeste J21)", False),
-    ("Arclight",                       "test-boot-Arclight.md",         "⚰️", "Razboi de mixin cu motoarele de performanta", False),
+    ("Arclight (dezbracat de motoare)", "test-boot-Arclight-STRIP.md",  "🩻", "Cat AR FI daca ar trai - fara cele 13 motoare mixin", False),
+    ("Arclight (intreg)",              "test-boot-Arclight.md",         "⚰️", "Razboi de mixin cu motoarele de performanta", False),
 ]
 
 import json
@@ -123,7 +124,7 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
 </header>
 
 <h2>⚔️ Duelul motoarelor — cine consumă cel mai puțin?</h2>
-<div class="sub">Toate testate pe mașini identice, cu ACELEAȘI moduri și pluginuri. Bara mai scurtă = mai bun. Afișăm RECORDUL dovedit al fiecărui motor (cea mai bună măsurătoare din toate rundele de teste).</div>
+<div class="sub">Toate testate pe mașini identice, cu ACELEAȘI moduri și pluginuri. Bara mai scurtă = mai bun. Afișăm RECORDUL dovedit al fiecărui motor. Criteriul coroanei = <b>RAM-ul</b> (boot-ul variază ±20% între mașinile de test — e doar orientativ). Morții sunt testați și DEZBRĂCAȚI de modurile care îi ucid, ca să vezi cât AR FI — și tot pierd.</div>
 {tabel}
 
 <h2>📉 Cum a slăbit EvoKode într-o singură zi</h2>
