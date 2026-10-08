@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "8" }
       - name: Clonam sursa CatServer (1.16.5)
-        run: git clone --depth 25 -b universal https://github.com/Luohuayu/CatServer catsrc || git clone --depth 25 https://github.com/Luohuayu/CatServer catsrc
+        run: git clone --depth 25 -b 1.16.5 https://github.com/Luohuayu/CatServer catsrc
       - name: FAZA 1 - construim jarul NOSTRU din sursa
         run: |
           cd catsrc
@@ -22,8 +22,7 @@ jobs:
           chmod +x gradlew || true
           (./gradlew tasks --all --no-daemon -q 2>&1 | grep -iE "setup|build|jar|launcher" | head -20) >> ../forja.log 2>&1 || true
           (timeout 90m ./gradlew setup --no-daemon >> ../forja.log 2>&1 && echo "SETUP OK" >> ../forja.log) || echo "setup esuat/inexistent" >> ../forja.log
-          (timeout 20m ./gradlew buildLauncher --no-daemon >> ../forja.log 2>&1 && echo "BUILDLAUNCHER OK" >> ../forja.log) || \
-          (timeout 20m ./gradlew build -x test --no-daemon >> ../forja.log 2>&1 && echo "BUILD OK" >> ../forja.log) || echo "build esuat" >> ../forja.log
+          (timeout 25m ./gradlew buildCatServer --no-daemon >> ../forja.log 2>&1 && echo "BUILDCATSERVER OK" >> ../forja.log) || echo "build esuat" >> ../forja.log
           echo "== jaruri nascute:" >> ../forja.log
           find . -name "*.jar" -newer gradlew -size +5M | head -10 >> ../forja.log || true
       - name: Raport in analysis/
