@@ -23,6 +23,7 @@ jobs:
           - { variant: CatServer, java: "11" }
           - { variant: CatServer, java: "17", suffix: "-J17" }
           - { variant: CatServer, java: "21", suffix: "-J21" }
+          - { variant: CatServer, java: "17", suffix: "-MCMT", mcmt: "da" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -38,6 +39,11 @@ jobs:
         run: |
           cd srv
           V="${{ matrix.variant }}${{ matrix.suffix }}"
+          if [ "${{ matrix.mcmt }}" = "da" ]; then
+            # EXPERIMENTUL FINAL DE CAPACITATE: serverul pe TOATE nucleele (MCMT)
+            curl -sL -o mods/jmt_mcmt-1.16.5-0.22.87.jar https://github.com/jediminer543/JMT-MCMT/releases/download/v0.22.87/jmt_mcmt-1.16.5-0.22.87.jar
+            echo "== MCMT montat ==" >> boot.log
+          fi
           if [ "$V" = "Mist" ]; then
             # LAZARUS 10b: rescriem REGISTRUL de amprente (md5) din jarul Mist - doar shell, fara acrobatii
             curl -sL -o /tmp/ml.jar https://maven.minecraftforge.net/cpw/mods/modlauncher/8.1.3/modlauncher-8.1.3.jar
