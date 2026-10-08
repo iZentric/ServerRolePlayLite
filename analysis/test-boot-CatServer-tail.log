@@ -1,93 +1,96 @@
-		at net.minecraft.util.Util.func_240976_a_(Util.java:197) ~[?:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:modernfix-common.mixins.json:perf.boost_worker_count.UtilMixin,pl:mixin:APP:modernfix-common.mixins.json:perf.thread_priorities.UtilMixin,pl:mixin:A,pl:runtimedistcleaner:A}
-		at gb.a(PizzaTileEntities.java:55) ~[pizzamod:1.13] {re:classloading,pl:runtimedistcleaner:A}
-		at gb.<clinit>(PizzaTileEntities.java:31) ~[pizzamod:1.13] {re:classloading,pl:runtimedistcleaner:A}
-		at java.lang.Class.forName0(Native Method) ~[?:?] {}
-		at java.lang.Class.forName(Class.java:398) ~[?:?] {}
-		at net.minecraftforge.fml.AutomaticEventSubscriber.lambda$inject$6(AutomaticEventSubscriber.java:75) ~[forge:?] {re:classloading}
-		at java.util.ArrayList.forEach(ArrayList.java:1541) ~[?:?] {}
-		at net.minecraftforge.fml.AutomaticEventSubscriber.inject(AutomaticEventSubscriber.java:62) ~[forge:?] {re:classloading}
-		at net.minecraftforge.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:91) ~[forge:36.2] {re:classloading}
-		at net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$4(ModContainer.java:120) ~[forge:?] {re:classloading}
-		at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1736) ~[?:?] {}
-		at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1728) ~[?:?] {}
-		at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290) ~[?:?] {}
-		at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020) ~[?:?] {}
-		at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656) ~[?:?] {re:computing_frames}
-		at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594) ~[?:?] {re:computing_frames}
-		at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:183) ~[?:?] {}
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:497)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at net.minecraftforge.eventbus.EventBus.registerObject(EventBus.java:94)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at net.minecraftforge.eventbus.EventBus.register(EventBus.java:120)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at dC.<init>(GlucksradEntity.java:37)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at cq.<init>(PizzamodModElements.java:49)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at cp.<init>(PizzamodMod.java:44)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.lang.Class.newInstance(Class.java:584)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at net.minecraftforge.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:81)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$4(ModContainer.java:120)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1736)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1728)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594)
+[04:24:58] [modloading-worker-1/INFO]: [net.minecraftforge.fml.loading.RuntimeDistCleaner:processClassWithFlags:75]: 	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:183)
+[04:24:58] [modloading-worker-1/INFO]: Bypassed Mojang DFU
+[04:24:58] [modloading-worker-1/INFO]: Instantiating Mojang DFU
+[04:24:59] [main/FATAL]: Failed to complete lifecycle event CONSTRUCT, 1 errors found
+[04:24:59] [main/FATAL]: Preparing crash report with UUID 577377ed-8a41-43bd-a24d-0df7fbd8d77f
+[04:24:59] [main/INFO]: [net.minecraft.crash.CrashReport:func_85057_a:197]: Negative index in crash report handler (22/24)
+[04:24:59] [main/FATAL]: Crash report saved to ./crash-reports/crash-2026-10-08_04.24.59-fml.txt
+---- Minecraft Crash Report ----
+// Everything's going to plan. No, really, that was supposed to happen.
 
-	Caused by 1: org.spongepowered.asm.mixin.throwables.MixinApplyError: Mixin [lazydfu.mixins.json:SchemasMixin] from phase [DEFAULT] in config [lazydfu.mixins.json] FAILED during APPLY
-		at org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinError(MixinProcessor.java:636) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-		at org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinApplyError(MixinProcessor.java:588) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-		at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:379) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-		at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:250) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-		at org.spongepowered.asm.service.modlauncher.MixinTransformationHandler.processClass(MixinTransformationHandler.java:131) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-		at org.spongepowered.asm.launch.MixinLaunchPluginLegacy.processClass(MixinLaunchPluginLegacy.java:131) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-		at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:154) ~[modlauncher-8.1.3.jar:8.1.3+8.1.3+main-8.1.x.c94d18ec] {}
-		at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:85) ~[modlauncher-8.1.3.jar:?] {}
-		at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-8.1.3.jar:?] {}
-		at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:265) ~[modlauncher-8.1.3.jar:?] {}
-		at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136) ~[modlauncher-8.1.3.jar:?] {re:classloading}
-		at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98) ~[modlauncher-8.1.3.jar:?] {re:classloading}
-		at java.lang.ClassLoader.loadClass(ClassLoader.java:527) ~[?:?] {}
-		at net.minecraft.util.Util.func_240990_b_(Util.java:205) ~[?:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:modernfix-common.mixins.json:perf.boost_worker_count.UtilMixin,pl:mixin:APP:modernfix-common.mixins.json:perf.thread_priorities.UtilMixin,pl:mixin:A,pl:runtimedistcleaner:A}
-		at net.minecraft.util.Util.func_240976_a_(Util.java:197) ~[?:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:modernfix-common.mixins.json:perf.boost_worker_count.UtilMixin,pl:mixin:APP:modernfix-common.mixins.json:perf.thread_priorities.UtilMixin,pl:mixin:A,pl:runtimedistcleaner:A}
-		at gb.a(PizzaTileEntities.java:55) ~[pizzamod:1.13] {re:classloading,pl:runtimedistcleaner:A}
-		at gb.<clinit>(PizzaTileEntities.java:31) ~[pizzamod:1.13] {re:classloading,pl:runtimedistcleaner:A}
-		at java.lang.Class.forName0(Native Method) ~[?:?] {}
-		at java.lang.Class.forName(Class.java:398) ~[?:?] {}
-		at net.minecraftforge.fml.AutomaticEventSubscriber.lambda$inject$6(AutomaticEventSubscriber.java:75) ~[forge:?] {re:classloading}
-		at java.util.ArrayList.forEach(ArrayList.java:1541) ~[?:?] {}
-		at net.minecraftforge.fml.AutomaticEventSubscriber.inject(AutomaticEventSubscriber.java:62) ~[forge:?] {re:classloading}
-		at net.minecraftforge.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:91) ~[forge:36.2] {re:classloading}
-		at net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$4(ModContainer.java:120) ~[forge:?] {re:classloading}
-		at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1736) ~[?:?] {}
-		at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1728) ~[?:?] {}
-		at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290) ~[?:?] {}
-		at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020) ~[?:?] {}
-		at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656) ~[?:?] {re:computing_frames}
-		at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594) ~[?:?] {re:computing_frames}
-		at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:183) ~[?:?] {}
+Time: 10/8/26, 4:24 AM
+Description: Mod loading error has occurred
 
-	Mod File: Pizzaland_v68.jar
-	Failure message: Pizzaland Roleplay (pizzamod) has failed to load correctly
-		org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
-	Mod Version: 68
-	Mod Issue URL: NOT PROVIDED
-	Exception message: org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException: @At("NEW") on net/minecraft/util/datafix/DataFixesManager::create$replaceBuilder with priority 1000 cannot inject into net/minecraft/util/datafix/DataFixesManager::func_188279_a()Lcom/mojang/datafixers/DataFixer; merged by vazkii.dfs.mixin.DataFixesManagerMixin with priority 1000 [PREINJECT Applicator Phase -> lazydfu.mixins.json:SchemasMixin -> Prepare Injections ->  -> redirect$zij000$create$replaceBuilder(I)Lcom/mojang/datafixers/DataFixerBuilder; -> Prepare]
+java.lang.Exception: Mod Loading has failed
+	at net.minecraftforge.fml.CrashReportExtender.dumpModLoadingCrashReport(CrashReportExtender.java:85) ~[forge:?] {re:classloading}
+	at net.minecraftforge.fml.server.ServerModLoader.load(ServerModLoader.java:51) ~[forge:?] {re:classloading}
+	at net.minecraft.server.Main.main(Main.java:120) ~[?:?] {re:classloading}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?] {}
+	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51) ~[CatServer-1.16.5-1d8d6313-server.jar:36.2] {}
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) [modlauncher-8.1.3.jar:?] {re:classloading}
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.1.3.jar:?] {re:classloading}
+	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:63) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:60) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at net.minecraftforge.server.ServerMain.main(ServerMain.java:57) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?] {}
+	at foxlaunch.FoxServerLauncher.main(FoxServerLauncher.java:33) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at catserver.server.CatServerLaunch.main(CatServerLaunch.java:8) [CatServer-1.16.5-1d8d6313-server.jar:1.16.5-1d8d6313] {}
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: main
 Stacktrace:
-	at org.spongepowered.asm.mixin.injection.code.Injector.findTargetNodes(Injector.java:305) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {re:classloading}
-	at org.spongepowered.asm.mixin.injection.code.Injector.find(Injector.java:240) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {re:classloading}
-	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.prepare(InjectionInfo.java:421) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {re:classloading,re:classloading}
-	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.prepare(InjectorWrapperImpl.java:51) ~[modernfix:5.18.0+mc1.16.5] {re:classloading}
-	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.WrapperInjectionInfo.prepare(WrapperInjectionInfo.java:57) ~[modernfix:5.18.0+mc1.16.5] {re:classloading}
-	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.prepareInjections(MixinTargetContext.java:1319) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {re:classloading}
-	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.prepareInjections(MixinApplicatorStandard.java:1042) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:393) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:325) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-	at org.spongepowered.asm.mixin.transformer.TargetClassContext.apply(TargetClassContext.java:383) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {re:classloading}
-	at org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:365) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {re:classloading}
-	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-	at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:250) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-	at org.spongepowered.asm.service.modlauncher.MixinTransformationHandler.processClass(MixinTransformationHandler.java:131) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-	at org.spongepowered.asm.launch.MixinLaunchPluginLegacy.processClass(MixinLaunchPluginLegacy.java:131) ~[mixin-0.8.4.jar:0.8.4+unknown-b0.git-unknown] {}
-	at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:154) ~[modlauncher-8.1.3.jar:8.1.3+8.1.3+main-8.1.x.c94d18ec] {}
+	at net.minecraftforge.fml.loading.RuntimeDistCleaner.processClassWithFlags(RuntimeDistCleaner.java:73) ~[CatServer-1.16.5-1d8d6313-server.jar:36.2] {}
+-- MOD transliterationlib --
+Details:
+	Mod File: TRansliterationLib-1.0.4.jar
+	Failure message: TRansliterationLib Mod (transliterationlib) has failed to load correctly
+		java.lang.RuntimeException: Attempted to load class net/minecraft/client/renderer/RenderType for invalid dist DEDICATED_SERVER
+	Mod Version: 1.0.4
+	Mod Issue URL: https://github.com/tr7zw/TRansliterationLib/issues
+	Exception message: java.lang.RuntimeException: Attempted to load class net/minecraft/client/renderer/RenderType for invalid dist DEDICATED_SERVER
+Stacktrace:
+	at net.minecraftforge.fml.loading.RuntimeDistCleaner.processClassWithFlags(RuntimeDistCleaner.java:73) ~[CatServer-1.16.5-1d8d6313-server.jar:36.2] {}
 	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:85) ~[modlauncher-8.1.3.jar:?] {}
 	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-8.1.3.jar:?] {}
 	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:265) ~[modlauncher-8.1.3.jar:?] {}
 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136) ~[modlauncher-8.1.3.jar:?] {re:classloading}
 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98) ~[modlauncher-8.1.3.jar:?] {re:classloading}
 	at java.lang.ClassLoader.loadClass(ClassLoader.java:527) ~[?:?] {}
-	at net.minecraft.util.Util.func_240990_b_(Util.java:205) ~[?:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:modernfix-common.mixins.json:perf.boost_worker_count.UtilMixin,pl:mixin:APP:modernfix-common.mixins.json:perf.thread_priorities.UtilMixin,pl:mixin:A,pl:runtimedistcleaner:A}
-	at net.minecraft.util.Util.func_240976_a_(Util.java:197) ~[?:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:modernfix-common.mixins.json:perf.boost_worker_count.UtilMixin,pl:mixin:APP:modernfix-common.mixins.json:perf.thread_priorities.UtilMixin,pl:mixin:A,pl:runtimedistcleaner:A}
-	at gb.a(PizzaTileEntities.java:55) ~[pizzamod:1.13] {re:classloading,pl:runtimedistcleaner:A}
-	at gb.<clinit>(PizzaTileEntities.java:31) ~[pizzamod:1.13] {re:classloading,pl:runtimedistcleaner:A}
-	at java.lang.Class.forName0(Native Method) ~[?:?] {}
-	at java.lang.Class.forName(Class.java:398) ~[?:?] {}
-	at net.minecraftforge.fml.AutomaticEventSubscriber.lambda$inject$6(AutomaticEventSubscriber.java:75) ~[forge:?] {re:classloading}
-	at java.util.ArrayList.forEach(ArrayList.java:1541) ~[?:?] {}
-	at net.minecraftforge.fml.AutomaticEventSubscriber.inject(AutomaticEventSubscriber.java:62) ~[forge:?] {re:classloading}
-	at net.minecraftforge.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:91) ~[forge:36.2] {re:classloading}
+	at dev.tr7zw.transliterationlib.forge.TRansliterationLibAPIImpl.<init>(TRansliterationLibAPIImpl.java:23) ~[transliterationlib:1.0.4] {re:classloading}
+	at dev.tr7zw.transliterationlib.forge.TRansliterationLibMod.<init>(TRansliterationLibMod.java:18) ~[transliterationlib:1.0.4] {re:classloading}
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?] {re:classloading,re:classloading,re:classloading,re:classloading}
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[?:?] {re:classloading,re:classloading,re:classloading,re:classloading}
+	at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?] {re:classloading,re:classloading,re:classloading,re:classloading}
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:490) ~[?:?] {}
+	at java.lang.Class.newInstance(Class.java:584) ~[?:?] {}
+	at net.minecraftforge.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:81) ~[forge:36.2] {re:classloading}
 	at net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$4(ModContainer.java:120) ~[forge:?] {re:classloading}
 	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1736) ~[?:?] {}
 	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1728) ~[?:?] {}
@@ -105,7 +108,7 @@ Details:
 	Operating System: Linux (amd64) version 6.17.0-1022-azure
 	Java Version: 11.0.32.1, Eclipse Adoptium
 	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode), Eclipse Adoptium
-	Memory: 1720134144 bytes (1640 MB) / 1988100096 bytes (1896 MB) up to 4294967296 bytes (4096 MB)
+	Memory: 1206679088 bytes (1150 MB) / 1535115264 bytes (1464 MB) up to 4294967296 bytes (4096 MB)
 	CPUs: 2
 	JVM Flags: 36 total; -Xms128M -XX:MaxRAMPercentage=90.0 -Xms1G -Xmx4G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=37 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=23 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99 -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=256M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=122M -XX:NonProfiledCodeHeapSize=122M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:AllocatePrefetchStyle=3
 	ModLauncher: 8.1.3+8.1.3+main-8.1.x.c94d18ec
@@ -154,25 +157,22 @@ Details:
 		mapperbase-1.16.5-2.4.0.0.jar                     |Mapper Base                   |mapperbase                    |1.16.5-2.4.0.0      |CREATE_REG|Manifest: NOSIGNATURE
 		roadstuff-1.16.5-4.3.0.jar                        |Road Stuff                    |roadstuff                     |1.16.5-4.3.0        |CREATE_REG|Manifest: NOSIGNATURE
 		ferritecore-2.1.1-forge.jar                       |Ferrite Core                  |ferritecore                   |2.1.1               |CREATE_REG|Manifest: NOSIGNATURE
-		DataFixerSlayer 1.0-3.jar                         |DataFixerSlayer               |datafixerslayer               |1.0-3               |CREATE_REG|Manifest: NOSIGNATURE
 		AI-Improvements-1.16.5-0.5.0.jar                  |AI-Improvements               |aiimprovements                |0.4.0               |CREATE_REG|Manifest: NOSIGNATURE
 		memoryleakfix-forge-pre1.17-1.1.5.jar             |Memory Leak Fix               |memoryleakfix                 |1.1.5               |CREATE_REG|Manifest: NOSIGNATURE
 		forge-1.16.5-36.2.39-universal.jar                |Forge                         |forge                         |36.2.39             |CREATE_REG|Manifest: NOSIGNATURE
 		supplementaries-1.16.5-0.18.4b.jar                |Supplementaries               |supplementaries               |0.18.2              |CREATE_REG|Manifest: NOSIGNATURE
-		Pizzaland_v68.jar                                 |Pizzaland Roleplay            |pizzamod                      |68                  |ERROR     |Manifest: NOSIGNATURE
+		Pizzaland_v68.jar                                 |Pizzaland Roleplay            |pizzamod                      |68                  |CREATE_REG|Manifest: NOSIGNATURE
 		emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar|Emotecraft                    |emotecraft                    |2.2.7-b.build.47    |CREATE_REG|Manifest: NOSIGNATURE
 		selene-1.16.5-1.9.0.jar                           |Selene                        |selene                        |1.16.5-1.0          |CREATE_REG|Manifest: NOSIGNATURE
 	RoadRunner != Lithium: This instance was launched using RoadRunner, which is an *unofficial* Lithium fork! Please **do not** report bugs to them!
-	Crash Report UUID: ba34872c-b3a7-4a63-aa3f-406a716263d7
+	Crash Report UUID: 577377ed-8a41-43bd-a24d-0df7fbd8d77f
 	CraftBukkit Information: 
    Running: 
    Failed to handle CraftCrashReport: craftbukkit not runs
-[04:06:10] [main/FATAL]: Failed to start the minecraft server
+[04:24:59] [main/FATAL]: Failed to start the minecraft server
 net.minecraftforge.fml.LoadingFailedException: Loading errors encountered: [
 	TRansliterationLib Mod (transliterationlib) has failed to load correctly
-§7java.lang.RuntimeException: Attempted to load class net/minecraft/client/renderer/RenderType for invalid dist DEDICATED_SERVER,
-	Pizzaland Roleplay (pizzamod) has failed to load correctly
-§7org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
+§7java.lang.RuntimeException: Attempted to load class net/minecraft/client/renderer/RenderType for invalid dist DEDICATED_SERVER
 ]
 	at net.minecraftforge.fml.ModLoader.waitForTransition(ModLoader.java:269) ~[forge:?]
 	at net.minecraftforge.fml.ModLoader.dispatchAndHandleError(ModLoader.java:236) ~[forge:?]
