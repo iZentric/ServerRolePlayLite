@@ -33,6 +33,14 @@ jobs:
         run: |
           gh release download lite -R ${{ github.repository }} -p '*Server-CatServer*.zip' -O server.zip
           mkdir -p srv && cd srv && unzip -q ../server.zip && ls -la
+          # INCORONAREA FORJEI: jarul compilat de NOI peste cel oficial (2656MB vs 2999MB la tribunal)
+          cd "$GITHUB_WORKSPACE"
+          if gh release download custom -R ${{ github.repository }} -p '*.jar' -O /tmp/custom.jar; then
+            CJ=$(ls srv/*.jar | grep -iE "catserver" | head -1)
+            cp /tmp/custom.jar "$CJ" && echo "JAR FORJAT MONTAT: $CJ"
+          else
+            echo "custom indisponibil - ramane oficialul"
+          fi
       - name: Instaleaza lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
       - name: Urca fisierele pe server

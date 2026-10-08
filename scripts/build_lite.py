@@ -476,6 +476,8 @@ def write_start_scripts(sdir, server_jar):
         f.write(FORGE_COMMON_TOML)
     with open(os.path.join(cfg, "forge-common.toml"), "w") as f:
         f.write(FORGE_COMMON_CLEAN)
+    with open(os.path.join(cfg, "modernlife-common.toml"), "w") as f:
+        f.write("# generat gol intentionat - ModernLife il umple la primul boot (ucide eroarea File not found)\n")
     inc = os.path.join(cfg, "incontrol")
     os.makedirs(inc, exist_ok=True)
     with open(os.path.join(inc, "spawn.json"), "w") as f:
