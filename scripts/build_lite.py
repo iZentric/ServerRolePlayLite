@@ -170,7 +170,51 @@ mipmapLevels:0
 entityDistanceScaling:0.75
 gamma:1.0
 fullscreen:false
+autoJump:false
 """
+
+def build_potato_textures(mods_dir, jars):
+    """ARMA PC-urilor SLABE: resourcepack cu TOATE texturile modurilor
+    injumatatite (16x->8x etc). Placile integrate (HD2000) rasufla usurate.
+    Optional - copilul il activeaza din Resource Packs cand vrea."""
+    try:
+        from PIL import Image
+    except ImportError:
+        log("  !! Pillow lipsa - sar texturile-cartof")
+        return None
+    import io
+    buf = io.BytesIO()
+    n_done = 0
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zp:
+        zp.writestr("pack.mcmeta", json.dumps({"pack": {
+            "pack_format": 6,
+            "description": "EvoKode MOD CARTOF - texturi injumatatite pt PC-uri slabe"}}))
+        for jar in jars:
+            p = os.path.join(mods_dir, jar)
+            try:
+                with zipfile.ZipFile(p) as zj:
+                    for e in zj.namelist():
+                        if "/textures/" in e and e.endswith(".png"):
+                            try:
+                                data = zj.read(e)
+                                img = Image.open(io.BytesIO(data))
+                                w, h = img.size
+                                if w < 16 or h < 16 or w > 2048:
+                                    continue
+                                img = img.resize((max(8, w // 2), max(8, h // 2)), Image.NEAREST)
+                                ob = io.BytesIO()
+                                img.save(ob, format="PNG", optimize=True)
+                                if ob.tell() < len(data):
+                                    zp.writestr(e, ob.getvalue())
+                                    n_done += 1
+                            except Exception:
+                                continue
+            except Exception:
+                continue
+    log(f"  🥔 texturi-cartof: {n_done} texturi injumatatite")
+    return buf.getvalue() if n_done else None
+
+
 
 def strip_client_assets(jar_path):
     """ULTRA: scoate texturi/modele/sunete/shadere din jar-urile de SERVER.
@@ -559,6 +603,16 @@ def main():
         z.writestr("modrinth.index.json", json.dumps(new_index, indent=2))
         z.writestr("overrides/options.txt", OPTIONS_LITE)
         z.writestr("overrides/SETARI-PC-BUN.txt", GHID_PC_BUN)
+        potato = build_potato_textures(override_mods_dir, override_jars)
+        if potato:
+            z.writestr("overrides/resourcepacks/EvoKode-MOD-CARTOF.zip", potato)
+            z.writestr("overrides/MOD-CARTOF-EXTREM.txt",
+                "PC FOARTE SLAB? ARMA FINALA (optionala):\n"
+                "In joc: Options -> Resource Packs -> activeaza EvoKode-MOD-CARTOF\n"
+                "= toate texturile modurilor injumatatite -> placa video respira.\n"
+                "Arata putin mai pixelat - dar merge si pe calculatorul bunicii.\n\n"
+                "BONUS RAM: in Prism Launcher -> Edit Instance -> Settings -> Memory:\n"
+                "pune Minimum 1024 MiB, Maximum 2048-2560 MiB (pt PC cu 4GB RAM).\n")
         rmc = [r.lower() for r in rules.get("remove_from_client", [])]
         for jar in override_jars:
             if any(r in jar.lower() for r in rmc):
