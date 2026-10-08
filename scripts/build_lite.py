@@ -431,6 +431,10 @@ def write_start_scripts(sdir, server_jar):
     os.makedirs(cfg, exist_ok=True)
     with open(os.path.join(cfg, "forge-common.toml"), "w") as f:
         f.write(FORGE_COMMON_TOML)
+    inc = os.path.join(cfg, "incontrol")
+    os.makedirs(inc, exist_ok=True)
+    with open(os.path.join(inc, "spawn.json"), "w") as f:
+        f.write('[\n  {"hostile": true, "maxcount": 50, "result": "deny"}\n]\n')
 
 
 def main():
