@@ -111,16 +111,18 @@ jobs:
         env:
           P: ${{ secrets.ZAMPTO_SFTP_PASS }}
         run: |
+          set +e
           lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "
             set sftp:auto-confirm yes;
             get logs/latest.log -o run/latest.log;
             bye"
-          { grep -niE "rcon|authenticat" run/latest.log | tail -12; } > run/rconlog.txt
+          grep -niE "rcon|authenticat" run/latest.log | tail -12 > run/rconlog.txt
           grep -c . run/rconlog.txt
           RLINES=$(grep -ciE "failed auth" run/latest.log)
           echo "incercari esuate de autentificare RCON in log: $RLINES" >> run/rconlog.txt
           cat run/rconlog.txt
       - name: Raport in repo (fara cheia nicaieri)
+        if: always()
         run: |
           git pull --rebase -q origin "$GITHUB_REF_NAME" || true
           {
