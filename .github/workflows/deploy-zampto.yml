@@ -46,8 +46,17 @@ jobs:
           mv "$CJ" srv/server.jar
           sed -i -E "s|[A-Za-z0-9._-]+\.jar|server.jar|" srv/unix_args.txt
           grep jar srv/unix_args.txt
-          # DECIZIA FINALA: lumea se naste PE HOST la primul START (chunky o coace in fundal).
-          # NICIODATA nu suprascriem lumea vie a copiilor cu vreo lume din fabrica!
+          # LUMEA din fabrica: montata DOAR daca hostul NU are deja o lume vie (lumea copiilor = SFANTA)
+          if gh release download world -R ${{ github.repository }} -p 'world-pregen.zip' -O /tmp/world.zip 2>/dev/null; then
+            HASW=$(lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "cls world/level.dat; bye" 2>/dev/null | grep -c level.dat || true)
+            if [ "$HASW" = "0" ]; then
+              rm -rf srv/world && unzip -q /tmp/world.zip -d srv/ && echo "LUMEA DIN FABRICA MONTATA ($(du -sh srv/world | cut -f1))"
+            else
+              echo "hostul ARE deja lume vie - n-o ating (sfanta)"
+            fi
+          else
+            echo "fabrica inca n-a livrat - lumea se naste la START"
+          fi
       - name: Instaleaza lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
       - name: Urca fisierele pe server
