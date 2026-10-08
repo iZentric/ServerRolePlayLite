@@ -44,3 +44,10 @@ Skin pe cont nepremium: `/skin set NumeJucatorPremium`
 Panou → Network: daca poti adauga o alocare UDP (24454), pune-o si scrie portul in
 `config/voicechat/voicechat-server.properties` (port=24454). Daca nu se poate, jocul
 merge perfect si fara voce.
+
+## 6. Logare automata premium (FastLogin):
+- Copil cu cont PREMIUM: intra AUTOMAT, fara parola (FastLogin il verifica la Mojang)
+- Comanda `/premium` - un jucator isi marcheaza singur contul ca premium
+- Nepremium (TLauncher): raman pe /register + /login (AuthMe)
+- Daca serverul nu porneste din cauza ProtocolLib (hibridele-s sensibile): sterge
+  plugins/ProtocolLib.jar si plugins/FastLoginBukkit.jar - totul revine la AuthMe simplu.

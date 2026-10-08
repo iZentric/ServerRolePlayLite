@@ -76,7 +76,9 @@
     "https://github.com/retrooper/packetevents/releases/download/v2.14.0/packetevents-spigot-2.14.0.jar",
     "https://github.com/GriefPrevention/GriefPrevention/releases/download/16.18/GriefPrevention.jar",
     "https://github.com/AuthMe/AuthMeReloaded/releases/download/5.6.0/AuthMe-5.6.0.jar",
-    "https://github.com/SkinsRestorer/SkinsRestorer/releases/download/14.2.12/SkinsRestorer.jar"
+    "https://github.com/SkinsRestorer/SkinsRestorer/releases/download/14.2.12/SkinsRestorer.jar",
+    "https://github.com/dmulloy2/ProtocolLib/releases/download/4.8.0/ProtocolLib.jar",
+    "https://github.com/TuxCoding/FastLogin/releases/download/1.12-kick-toggle/FastLoginBukkit.jar"
   ],
   "plugins_spiget": [
     {
