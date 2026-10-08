@@ -51,3 +51,15 @@ merge perfect si fara voce.
 - Nepremium (TLauncher): raman pe /register + /login (AuthMe)
 - Daca serverul nu porneste din cauza ProtocolLib (hibridele-s sensibile): sterge
   plugins/ProtocolLib.jar si plugins/FastLoginBukkit.jar - totul revine la AuthMe simplu.
+
+## 7. GRANITA LUMII (lipeste si astea la prima pornire):
+```
+worldborder center 0 0
+worldborder set 2000
+```
+## 8. Pre-generarea DIN MERS (optional, dupa ce intri):
+```
+chunky radius 800
+chunky start
+```
+(genereaza harta incet in fundal; opresti oricand cu `chunky pause`)
