@@ -43,14 +43,7 @@ jobs:
           V="${{ matrix.variant }}${{ matrix.suffix }}"
           if [ "${{ matrix.perfswap }}" = "da" ]; then
             rm -f mods/RoadRunner*.jar mods/roadrunner*.jar
-            FID=$(curl -s https://api.cfwidget.com/354143 | python3 -c "
-import json,sys
-try:
-    d=json.load(sys.stdin)
-    f=[x for x in d.get('files',[]) if '4.1m' in x.get('name','') and x.get('name','').startswith('performant-1.16')]
-    print(f[-1]['id'] if f else '')
-except Exception:
-    print('')" 2>/dev/null) || FID=""
+            FID=$(curl -s https://api.cfwidget.com/354143 | python3 -c "import json,sys; d=json.load(sys.stdin); f=[x for x in d.get('files',[]) if '4.1m' in x.get('name','') and x.get('name','').startswith('performant-1.16')]; print(f[-1]['id'] if f else '')" 2>/dev/null) || FID=""
             [ -n "$FID" ] && curl -sL -o mods/performant-1.16.2-5-4.1m.jar "https://media.forgecdn.net/files/$((FID/1000))/$((FID%1000))/performant-1.16.2-5-4.1m.jar" && echo "== PERFORMANT pe campion ==" >> boot.log || true
           fi
           if [ "${{ matrix.mcmt }}" = "da" ]; then
@@ -86,14 +79,7 @@ except Exception:
             printf 'check_update: false\n' > mohist-config/mohist.yml
             # LAZARUS 13 (ordinul Overlordului): RoadRunner JOS de pe Mist, PERFORMANT sus
             rm -f mods/RoadRunner*.jar mods/roadrunner*.jar
-            FID=$(curl -s https://api.cfwidget.com/354143 | python3 -c "
-import json,sys
-try:
-    d=json.load(sys.stdin)
-    f=[x for x in d.get('files',[]) if '4.1m' in x.get('name','') and x.get('name','').startswith('performant-1.16')]
-    print(f[-1]['id'] if f else '')
-except Exception:
-    print('')" 2>/dev/null) || FID=""
+            FID=$(curl -s https://api.cfwidget.com/354143 | python3 -c "import json,sys; d=json.load(sys.stdin); f=[x for x in d.get('files',[]) if '4.1m' in x.get('name','') and x.get('name','').startswith('performant-1.16')]; print(f[-1]['id'] if f else '')" 2>/dev/null) || FID=""
             if [ -n "$FID" ]; then
               URL="https://media.forgecdn.net/files/$((FID/1000))/$((FID%1000))/performant-1.16.2-5-4.1m.jar"
               curl -sL -o mods/performant-1.16.2-5-4.1m.jar "$URL" && echo "== PERFORMANT montat ($URL)" >> boot.log || true
