@@ -25,6 +25,7 @@ jobs:
           - { variant: CatServer, java: "21", suffix: "-J21" }
           - { variant: CatServer, java: "17", suffix: "-MCMT", mcmt: "da" }
           - { variant: CatServer, java: "17", suffix: "-PERF", perfswap: "da" }
+          - { variant: CatServer, java: "17", suffix: "-CUSTOM", custom: "da" }
           - { variant: MaxLite, java: "17", suffix: "-MCMT", mcmt: "da" }
     steps:
       - uses: actions/checkout@v4
@@ -35,6 +36,13 @@ jobs:
           gh release download lite -R ${{ github.repository }} -p '*Server-${{ matrix.variant }}*.zip' -O srv.zip
           mkdir srv && cd srv && unzip -q ../srv.zip
           echo "eula=true" > eula.txt
+          if [ "${{ matrix.custom }}" = "da" ]; then
+            # JARUL FORJAT DE NOI intra in arena in locul celui oficial
+            gh release download custom -R ${{ github.repository }} -p '*.jar' -O /tmp/custom.jar
+            CJ=$(ls *.jar | grep -iE "catserver" | head -1)
+            cp /tmp/custom.jar "$CJ"
+            echo "JARUL NOSTRU montat peste: $CJ"
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: PORNESTE serverul ${{ matrix.variant }}
