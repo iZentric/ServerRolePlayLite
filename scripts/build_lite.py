@@ -138,6 +138,24 @@ def zip_dir(zf, src_dir, arc_prefix=""):
             zf.write(full, arc)
 
 
+GHID_PC_BUN = '''\
+=== AI PC BUN? RIDICA-TI SETARILE IN 30 SECUNDE ===
+Pack-ul vine setat pentru PC-uri SLABE (asa merge la toata lumea).
+Daca PC-ul tau duce (8GB+ RAM, placa video dedicata), in joc:
+Options -> Video Settings:
+  - Render Distance: 8-12        (serverul trimite 4, dar orizontul e mai lin)
+  - Smooth Lighting: ON          (umbre frumoase)
+  - Graphics: Fancy
+  - Mipmap Levels: 4             (texturi fine in departare)
+  - Max Framerate: 120 / Unlimited
+  - Particles: All
+  - Entity Distance: 100-125%
+BONUS placa buna: pune un shader! Pack-ul are deja Oculus:
+  descarca "Complementary Reimagined" (versiunea 1.16.5) ->
+  pune-l in folderul shaderpacks -> Options -> Video -> Shader Packs.
+Serverul NU simte nimic din astea - sunt doar pe ecranul TAU.
+'''
+
 OPTIONS_LITE = """\
 renderDistance:4
 graphicsMode:0
@@ -539,6 +557,7 @@ def main():
     with zipfile.ZipFile(client_mrpack, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("modrinth.index.json", json.dumps(new_index, indent=2))
         z.writestr("overrides/options.txt", OPTIONS_LITE)
+        z.writestr("overrides/SETARI-PC-BUN.txt", GHID_PC_BUN)
         rmc = [r.lower() for r in rules.get("remove_from_client", [])]
         for jar in override_jars:
             if any(r in jar.lower() for r in rmc):
