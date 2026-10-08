@@ -1,0 +1,200 @@
+[03:46:06] [Thread-1/INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:202)
+[03:46:06] [Thread-1/INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.file.WriteSyncFileConfig.load(WriteSyncFileConfig.java:73)
+[03:46:06] [Thread-1/INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread.run(FileWatcher.java:181)
+[03:46:06] [main/WARN]: Incorrect key [maxThreads] was corrected from null to -1
+[03:46:07] [main/INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[03:46:07] [main/INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[03:46:07] [main/INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[03:46:09] [main/INFO]: Launching target 'fmlserver' with arguments [--gameDir, ., nogui]
+[03:46:09] [main/INFO]: [org.slf4j.helpers.Util:report:128]: SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+[03:46:09] [main/INFO]: [org.slf4j.helpers.Util:report:128]: SLF4J: Defaulting to no-operation (NOP) logger implementation
+[03:46:09] [main/INFO]: [org.slf4j.helpers.Util:report:128]: SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+[03:46:17] [main/FATAL]: Error during pre-loading phase
+net.minecraftforge.fml.ModLoadingException: Mod §efastfurnace§r requires §6placebo§r §o4.6.0 or above§r
+§7Currently, §6placebo§r§7 is §o§nnot installed
+	at net.minecraftforge.fml.ModLoadingException.lambda$fromEarlyException$0(ModLoadingException.java:64) ~[forge:?]
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195) ~[?:?]
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1655) ~[?:?]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484) ~[?:?]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474) ~[?:?]
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150) ~[?:?]
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173) ~[?:?]
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:497) ~[?:?]
+	at java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:274) ~[?:?]
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1655) ~[?:?]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484) ~[?:?]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474) ~[?:?]
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:913) ~[?:?]
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:578) ~[?:?]
+	at net.minecraftforge.fml.ModLoader.<init>(ModLoader.java:120) ~[forge:?]
+	at net.minecraftforge.fml.ModLoader.get(ModLoader.java:154) ~[forge:?]
+	at net.minecraftforge.fml.server.ServerModLoader.load(ServerModLoader.java:44) ~[forge:?]
+	at net.minecraft.server.Main.main(Main.java:120) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?]
+	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51) ~[CatServer-1.16.5-1d8d6313-server.jar:36.2]
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-8.1.3.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) [modlauncher-8.1.3.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) [modlauncher-8.1.3.jar:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) [modlauncher-8.1.3.jar:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.1.3.jar:?]
+	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:63) [CatServer-1.16.5-1d8d6313-server.jar:?]
+	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:60) [CatServer-1.16.5-1d8d6313-server.jar:?]
+	at net.minecraftforge.server.ServerMain.main(ServerMain.java:57) [CatServer-1.16.5-1d8d6313-server.jar:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?]
+	at foxlaunch.FoxServerLauncher.main(FoxServerLauncher.java:33) [CatServer-1.16.5-1d8d6313-server.jar:?]
+	at catserver.server.CatServerLaunch.main(CatServerLaunch.java:8) [CatServer-1.16.5-1d8d6313-server.jar:1.16.5-1d8d6313]
+[03:46:17] [main/INFO]: [net.minecraft.crash.CrashReport:func_85057_a:197]: Negative index in crash report handler (22/24)
+[03:46:17] [main/FATAL]: Crash report saved to ./crash-reports/crash-2026-10-08_03.46.17-fml.txt
+---- Minecraft Crash Report ----
+// Oops.
+
+Time: 10/8/26, 3:46 AM
+Description: Mod loading error has occurred
+
+java.lang.Exception: Mod Loading has failed
+	at net.minecraftforge.fml.CrashReportExtender.dumpModLoadingCrashReport(CrashReportExtender.java:85) ~[forge:?] {re:classloading}
+	at net.minecraftforge.fml.server.ServerModLoader.load(ServerModLoader.java:51) ~[forge:?] {re:classloading}
+	at net.minecraft.server.Main.main(Main.java:120) ~[?:?] {re:classloading}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?] {}
+	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51) ~[CatServer-1.16.5-1d8d6313-server.jar:36.2] {}
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.1.3.jar:?] {}
+	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:63) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:60) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at net.minecraftforge.server.ServerMain.main(ServerMain.java:57) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?] {}
+	at foxlaunch.FoxServerLauncher.main(FoxServerLauncher.java:33) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at catserver.server.CatServerLaunch.main(CatServerLaunch.java:8) [CatServer-1.16.5-1d8d6313-server.jar:1.16.5-1d8d6313] {}
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: main
+Stacktrace:
+	at net.minecraftforge.fml.CrashReportExtender.lambda$dumpModLoadingCrashReport$7(CrashReportExtender.java:88) ~[forge:?] {re:classloading}
+-- MOD fastfurnace --
+Details:
+	Mod File: FastFurnace-1.16.5-4.5.0.jar
+	Failure message: Mod fastfurnace requires placebo 4.6.0 or above
+		Currently, placebo is not installed
+	Mod Version: 4.5.0
+	Mod Issue URL: NOT PROVIDED
+	Exception message: MISSING EXCEPTION MESSAGE
+Stacktrace:
+	at net.minecraftforge.fml.CrashReportExtender.lambda$dumpModLoadingCrashReport$7(CrashReportExtender.java:88) ~[forge:?] {re:classloading}
+	at java.util.ArrayList.forEach(ArrayList.java:1541) ~[?:?] {}
+	at net.minecraftforge.fml.CrashReportExtender.dumpModLoadingCrashReport(CrashReportExtender.java:86) ~[forge:?] {re:classloading}
+	at net.minecraftforge.fml.server.ServerModLoader.load(ServerModLoader.java:51) ~[forge:?] {re:classloading}
+	at net.minecraft.server.Main.main(Main.java:120) ~[?:?] {re:classloading}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?] {}
+	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51) ~[CatServer-1.16.5-1d8d6313-server.jar:36.2] {}
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.1.3.jar:?] {}
+	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:63) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:60) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at net.minecraftforge.server.ServerMain.main(ServerMain.java:57) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?] {}
+	at foxlaunch.FoxServerLauncher.main(FoxServerLauncher.java:33) [CatServer-1.16.5-1d8d6313-server.jar:?] {}
+	at catserver.server.CatServerLaunch.main(CatServerLaunch.java:8) [CatServer-1.16.5-1d8d6313-server.jar:1.16.5-1d8d6313] {}
+
+
+-- MOD fastbench --
+Details:
+	Mod File: FastWorkbench-1.16.5-4.6.2.jar
+	Failure message: Mod fastbench requires placebo 4.6.0 or above
+		Currently, placebo is not installed
+	Mod Version: 4.6.2
+	Mod Issue URL: NOT PROVIDED
+	Exception message: MISSING EXCEPTION MESSAGE
+
+-- System Details --
+Details:
+	Minecraft Version: 1.16.5
+	Minecraft Version ID: 1.16.5
+	Operating System: Linux (amd64) version 6.17.0-1022-azure
+	Java Version: 11.0.32.1, Eclipse Adoptium
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode), Eclipse Adoptium
+	Memory: 614194496 bytes (585 MB) / 1073741824 bytes (1024 MB) up to 4294967296 bytes (4096 MB)
+	CPUs: 2
+	JVM Flags: 36 total; -Xms128M -XX:MaxRAMPercentage=90.0 -Xms1G -Xmx4G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=37 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=23 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99 -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=256M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=122M -XX:NonProfiledCodeHeapSize=122M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:AllocatePrefetchStyle=3
+	ModLauncher: 8.1.3+8.1.3+main-8.1.x.c94d18ec
+	ModLauncher launch target: fmlserver
+	ModLauncher naming: srg
+	ModLauncher services: 
+		/mixin-0.8.4.jar mixin PLUGINSERVICE 
+		/eventbus-4.0.0.jar eventbus PLUGINSERVICE 
+		/CatServer-1.16.5-1d8d6313-server.jar object_holder_definalize PLUGINSERVICE 
+		/CatServer-1.16.5-1d8d6313-server.jar runtime_enum_extender PLUGINSERVICE 
+		/CatServer-1.16.5-1d8d6313-server.jar capability_inject_definalize PLUGINSERVICE 
+		/accesstransformers-3.0.1.jar accesstransformer PLUGINSERVICE 
+		/CatServer-1.16.5-1d8d6313-server.jar runtimedistcleaner PLUGINSERVICE 
+		/mixin-0.8.4.jar mixin TRANSFORMATIONSERVICE 
+		/CatServer-1.16.5-1d8d6313-server.jar fml TRANSFORMATIONSERVICE 
+	FML: 36.2
+	Forge: net.minecraftforge:36.2.39
+	FML Language Providers: 
+		javafml@36.2
+		minecraft@1
+	Mod List: 
+		forge-1.16.5-36.2.39-server.jar                   |Minecraft                     |minecraft                     |1.16.5              |NONE      |Manifest: NOSIGNATURE
+		forge-1.16.5-36.2.39-universal.jar                |Forge                         |forge                         |36.2.39             |NONE      |Manifest: NOSIGNATURE
+	CraftBukkit Information: 
+   Running: 
+   Failed to handle CraftCrashReport: craftbukkit not runs
+[03:46:17] [main/FATAL]: Failed to start the minecraft server
+net.minecraftforge.fml.LoadingFailedException: Loading errors encountered: [
+	Mod §efastfurnace§r requires §6placebo§r §o4.6.0 or above§r
+§7Currently, §6placebo§r§7 is §o§nnot installed,
+	Mod §efastbench§r requires §6placebo§r §o4.6.0 or above§r
+§7Currently, §6placebo§r§7 is §o§nnot installed
+]
+	at net.minecraftforge.fml.ModLoader.gatherAndInitializeMods(ModLoader.java:178) ~[forge:?]
+	at net.minecraftforge.fml.server.ServerModLoader.load(ServerModLoader.java:44) ~[forge:?]
+	at net.minecraft.server.Main.main(Main.java:120) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?]
+	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51) ~[CatServer-1.16.5-1d8d6313-server.jar:36.2]
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-8.1.3.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) [modlauncher-8.1.3.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) [modlauncher-8.1.3.jar:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) [modlauncher-8.1.3.jar:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.1.3.jar:?]
+	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:63) [CatServer-1.16.5-1d8d6313-server.jar:?]
+	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:60) [CatServer-1.16.5-1d8d6313-server.jar:?]
+	at net.minecraftforge.server.ServerMain.main(ServerMain.java:57) [CatServer-1.16.5-1d8d6313-server.jar:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?]
+	at foxlaunch.FoxServerLauncher.main(FoxServerLauncher.java:33) [CatServer-1.16.5-1d8d6313-server.jar:?]
+	at catserver.server.CatServerLaunch.main(CatServerLaunch.java:8) [CatServer-1.16.5-1d8d6313-server.jar:1.16.5-1d8d6313]
