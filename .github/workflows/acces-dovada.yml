@@ -1,0 +1,106 @@
+name: Acces dovada (audit live pe server)
+on:
+  push:
+    paths: [ "deploy/dovada-trigger.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+env:
+  SFTP_HOST: node12.zampto.net
+  SFTP_PORT: "2022"
+  SFTP_USER: 15254.1388b9af
+jobs:
+  dovada:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instaleaza lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+      - name: Nivelul 1 - MC ping pe portul serverului (serverul e VIU?)
+        run: |
+          cat > /tmp/mcping.py <<'PYEOF'
+          import socket,struct,json
+          def recv_exact(s,n):
+              b=b""
+              while len(b)<n:
+                  c=s.recv(n-len(b))
+                  if not c: raise EOFError
+                  b+=c
+              return b
+          def read_varint(s):
+              n=0;sh=0
+              while True:
+                  c=s.recv(1)
+                  if not c: raise EOFError
+                  b=c[0];n|=(b&0x7f)<<sh
+                  if not (b&0x80): return n
+                  sh+=7
+          def vi(x):
+              out=b"";x&=0xffffffff
+              while True:
+                  b=x&0x7f;x>>=7
+                  out+=bytes([b|(0x80 if x else 0)])
+                  if not x: return out
+          host=b"node12.zampto.net";port=26252
+          s=socket.create_connection(("node12.zampto.net",port),15)
+          body=vi(-1)+vi(len(host))+host+struct.pack(">H",port)+vi(1)
+          s.sendall(vi(len(body))+body)
+          l1=read_varint(s);pid=read_varint(s);l2=read_varint(s)
+          j=json.loads(recv_exact(s,l2))
+          print("MCSTATUS="+json.dumps({"live":True,"versiune":j["version"]["name"],"online":j["players"]["online"],"max":j["players"]["max"],"motd":str(j.get("description"))[:80]}))
+          PYEOF
+          python3 /tmp/mcping.py > /tmp/ping.txt 2>&1 || true
+          cat /tmp/ping.txt
+      - name: Nivelul 2 - citire fisiere (SFTP) + Nivelul 3 - jarul e BYTE-IDENTIC cu forja noastra
+        env:
+          P: ${{ secrets.ZAMPTO_SFTP_PASS }}
+        run: |
+          set +e
+          mkdir -p dl
+          lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "
+            set sftp:auto-confirm yes;
+            cls -la / > dl/root-listing.txt;
+            cls -la /mods > dl/mods-listing.txt;
+            get server.jar -o dl/server.jar;
+            get server.properties -o dl/server.properties;
+            get logs/latest.log -o dl/latest.log;
+            bye"
+          gh release download custom -R "$GITHUB_REPOSITORY" -p '*.jar' -O dl/custom.jar 2>/dev/null
+          M1=$(md5sum dl/server.jar 2>/dev/null | cut -d' ' -f1)
+          M2=$(md5sum dl/custom.jar 2>/dev/null | cut -d' ' -f1)
+          IDENTIC="NU"; [ -n "$M1" ] && [ "$M1" = "$M2" ] && IDENTIC="DA"
+          MODURI=$(grep -c '\.jar' dl/mods-listing.txt 2>/dev/null)
+          {
+            echo "# DOVADA ACCES — server Evor — $(date -u '+%F %T UTC')"
+            echo
+            echo "## 1) Serverul e VIU (ping MC pe 26252, de la distanta)"
+            grep -q '"live": true' /tmp/ping.txt && tail -1 /tmp/ping.txt || echo "PING ESUAT: $(cat /tmp/ping.txt)"
+            echo
+            echo "## 2) Am citit filesystemul prin SFTP"
+            echo "- fisiere in root: $(wc -l < dl/root-listing.txt) intrari"
+            echo "- moduri pe server: $MODURI .jar"
+            echo "- marime server.jar pe disc: $(stat -c%s dl/server.jar 2>/dev/null) bytes"
+            echo "- marime latest.log: $(stat -c%s dl/latest.log 2>/dev/null) bytes"
+            echo
+            echo "## 3) Jarul de pe server = FORJA noastra (EvoKode custom, byte-cu-byte)"
+            echo "- md5 server.jar (pe host): \`$M1\`"
+            echo "- md5 jar din release custom: \`$M2\`"
+            echo "- IDENTIC: **$IDENTIC**"
+            echo
+            echo "## 4) RCON inarmat (chei din server.properties, valorile sunt cenzurate)"
+            grep -E '^(enable-rcon|rcon\.port|rcon\.password)' dl/server.properties 2>/dev/null | cut -d= -f1 | sed 's/^/- /'
+            echo
+            echo "## 5) Ultimele 8 linii din logul SERVERULUI (bataia lui de inima)"
+            echo '```'
+            tail -8 dl/latest.log 2>/dev/null
+            echo '```'
+          } > analysis/acces-dovada.md
+          cat analysis/acces-dovada.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f analysis/acces-dovada.md
+          git commit -m "analysis: dovada acces live pe server" || true
+          git pull --rebase origin "$GITHUB_REF_NAME" || true
+          git push || true
+          exit 0
