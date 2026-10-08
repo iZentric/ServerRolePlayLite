@@ -136,6 +136,10 @@ print(f[-1]['id'] if f else '')")
             grep -B6 "invalid dist" boot.log | grep -iE "mod |\.jar|modid|scan|candidate" | head -8 | sed 's/^/    /' || true
             echo "- Contextul erorii File not found (ultimul mister):"
             grep -B8 -A2 "File not found" boot.log | head -14 | sed 's/^/    /' || true
+            echo "- CANTARUL PE MOD (cei mai scumpi la incarcare, din debug.log):"
+            if [ -f logs/debug.log ]; then
+              grep -ioE "[a-z0-9_ .-]+ took [0-9.]+ ?s" logs/debug.log | sort -t'k' -k2 -rn | head -15 | sed 's/^/    /' || true
+            fi
             echo "- Pluginuri pornite:"
             grep -iE "Enabling (AuthMe|SkinsRestorer|FastLogin|ProtocolLib|LuckPerms|Essentials|WorldGuard|spark|Chunky|GriefPrevention|ZNPC|Vault|WorldEdit)" boot.log | head -17 | sed 's/^/    /' || true
           } > ../analysis/test-boot-${V}.md
