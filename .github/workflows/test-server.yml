@@ -3,8 +3,7 @@ name: test-server
 # TRIBUNALUL JARURILOR: testeaza TOATE variantele de server pe Java-ul Zampto
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "17 */3 * * *"   # vanatoarea autonoma de recorduri, din 3 in 3 ore
+  # schedule: PAUZAT — mananca minute GitHub (repornirea = muta inapoi linia cron)
   push:
     paths:
       - "deploy/test-trigger.txt"
