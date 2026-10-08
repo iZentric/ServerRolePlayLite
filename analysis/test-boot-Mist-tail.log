@@ -1,203 +1,203 @@
-Download finished for bungeecord-chat-1.16-R0.4.jar !
-Global percentage >91%
-Downloading file javaxdelta-2.0.1.jar with size 38.081055 KB
-Download finished for javaxdelta-2.0.1.jar !
-Global percentage >91%
-Downloading file jarsplitter-1.1.2.jar with size 7.7939453 KB
-Download finished for jarsplitter-1.1.2.jar !
-Global percentage >91%
-Downloading file asm-analysis-6.1.1.jar with size 31.229492 KB
-Download finished for asm-analysis-6.1.1.jar !
-Global percentage >91%
-Downloading file binarypatcher-1.0.12.jar with size 16.104492 KB
-Download finished for binarypatcher-1.0.12.jar !
-Global percentage >91%
-Downloading file commons-io-2.4.jar with size 180.80078 KB
-Download finished for commons-io-2.4.jar !
-Global percentage >91%
-Downloading file coremods-4.0.6.jar with size 24.856445 KB
-Download finished for coremods-4.0.6.jar !
-Global percentage >92%
-Downloading file jopt-simple-5.0.4.jar with size 76.31445 KB
-Download finished for jopt-simple-5.0.4.jar !
-Global percentage >92%
-Downloading file asm-9.1.jar with size 118.93555 KB
-Download finished for asm-9.1.jar !
-Global percentage >92%
-Downloading file asm-analysis-9.1.jar with size 33.4541 KB
-Download finished for asm-analysis-9.1.jar !
-Global percentage >92%
-Downloading file asm-commons-9.1.jar with size 70.93848 KB
-Download finished for asm-commons-9.1.jar !
-Global percentage >92%
-Downloading file asm-tree-9.1.jar with size 51.427734 KB
-Download finished for asm-tree-9.1.jar !
-Global percentage >92%
-Downloading file asm-util-9.1.jar with size 82.694336 KB
-Download finished for asm-util-9.1.jar !
-Global percentage >92%
-Downloading file log4j-core-2.11.2.jar with size 1.5540934MB
-Download finished for log4j-core-2.11.2.jar !
-Global percentage >95%
-Downloading file opencsv-2.3.jar with size 19.362305 KB
-Download finished for opencsv-2.3.jar !
-Global percentage >95%
-Downloading file jsr305-3.0.2.jar with size 19.46875 KB
-Download finished for jsr305-3.0.2.jar !
-Global percentage >95%
-Downloading file jline-2.14.6.jar with size 262.48047 KB
-Download finished for jline-2.14.6.jar !
-Global percentage >95%
-Downloading file installertools-1.1.11.jar with size 53.030273 KB
-Download finished for installertools-1.1.11.jar !
-Global percentage >95%
-Downloading file lzma-java-1.3.jar with size 49.844727 KB
-Download finished for lzma-java-1.3.jar !
-Global percentage >96%
-Downloading file typetools-0.8.3.jar with size 15.063477 KB
-Download finished for typetools-0.8.3.jar !
-Global percentage >96%
-Downloading file asm-6.1.1.jar with size 105.71484 KB
-Download finished for asm-6.1.1.jar !
-Global percentage >96%
-Downloading file nashorn-core-compat-15.1.1.1.jar with size 2.0924158MB
-Download finished for nashorn-core-compat-15.1.1.1.jar !
-Global percentage >99%
-Downloading file antlr4-runtime-4.9.1.jar with size 329.94922 KB
-Download finished for antlr4-runtime-4.9.1.jar !
-Global percentage >100%
-Downloading file maven-resolver-provider-3.8.1.jar with size 64.68262 KB
-Download finished for maven-resolver-provider-3.8.1.jar !
-Global percentage >100%
-Downloading file maven-resolver-connector-basic-1.6.2.jar with size 44.652344 KB
-Download finished for maven-resolver-connector-basic-1.6.2.jar !
-Global percentage >100%
-Downloading file maven-resolver-transport-http-1.6.2.jar with size 42.594727 KB
-Download finished for maven-resolver-transport-http-1.6.2.jar !
-Global percentage >100%
-Downloading file cleaner-1.0-SNAPSHOT.jar with size 1.8701172 KB
-Download finished for cleaner-1.0-SNAPSHOT.jar !
-Global percentage >100%
-Downloading file adventure-api-4.7.0.jar with size 229.36035 KB
-Download finished for adventure-api-4.7.0.jar !
-Global percentage >100%
-Downloading file adventure-key-4.7.0.jar with size 8.011719 KB
-Download finished for adventure-key-4.7.0.jar !
-Global percentage >100%
-Downloading file adventure-text-serializer-gson-4.7.0.jar with size 29.592773 KB
-Download finished for adventure-text-serializer-gson-4.7.0.jar !
-Global percentage >100%
-Downloading file adventure-text-serializer-legacy-4.7.0.jar with size 20.700195 KB
-Download finished for adventure-text-serializer-legacy-4.7.0.jar !
-Global percentage >100%
-Downloading file adventure-text-serializer-plain-4.7.0.jar with size 5.8125 KB
-Download finished for adventure-text-serializer-plain-4.7.0.jar !
-Global percentage >100%
-Downloading file examination-api-1.1.0.jar with size 21.414062 KB
-Download finished for examination-api-1.1.0.jar !
-Global percentage >101%
-Downloading file examination-string-1.1.0.jar with size 5.760742 KB
-Download finished for examination-string-1.1.0.jar !
-All libraries are nice :) !
-Checking the installation, please wait.
-[Mist] Creating mappings txt file
-[Mist] Creating extra and slim jar files. This can take 1 minute.
-[Mist] Creating srg jar file. This can take 1 minute.
-Loading mappings
-Loading mappings...  0%
-Loading mappings... 10%
-Loading mappings... 20%
-Loading mappings... 30%
-Loading mappings... 40%
-Loading mappings... 50%
-0 packages, 5447 classes, 21481 fields, 38359 methods
-Remapping final jar
-Remapping jar...  0%
-Remapping jar... 10%
-Remapping jar... 20%
-Remapping jar... 30%
-Remapping jar... 40%
-Remapping jar... 50%
-Remapping jar... 60%
-Remapping jar... 70%
-Remapping jar... 80%
-Remapping jar... 90%
-Remapping jar... 100%
 [Mist] Creating forge server jar. This can take 1 minute.
 Finished the install verification process !
-[07:25:34 INFO]: ModLauncher running: args [--gameDir, ., --launchTarget, fmlserver, --fml.forgeVersion, 36.2.4, --fml.mcpVersion, 20210115.111550, --fml.mcVersion, 1.16.5, --fml.forgeGroup, net.minecraftforge, nogui]
-[07:25:34 INFO]: ModLauncher 8.1.3+8.1.3+main-8.1.x.c94d18ec starting: java version 11.0.32.1 by Eclipse Adoptium
+[07:47:11 INFO]: ModLauncher running: args [--gameDir, ., --launchTarget, fmlserver, --fml.forgeVersion, 36.2.4, --fml.mcpVersion, 20210115.111550, --fml.mcVersion, 1.16.5, --fml.forgeGroup, net.minecraftforge, nogui]
+[07:47:11 INFO]: ModLauncher 8.1.3+8.1.3+main-8.1.x.c94d18ec starting: java version 11.0.32.1 by Eclipse Adoptium
 WARNING: An illegal reflective access operation has occurred
 WARNING: Illegal reflective access by cpw.mods.modlauncher.SecureJarHandler (file:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/cpw/mods/modlauncher/8.0.9/modlauncher-8.0.9.jar) to field java.util.jar.Manifest.jv
 WARNING: Please consider reporting this to the maintainers of cpw.mods.modlauncher.SecureJarHandler
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-[07:25:34 INFO]: Added Lets Encrypt root certificates as additional trust
-[07:25:34 INFO]: SpongePowered MIXIN Subsystem Version=0.8.2 Source=file:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar Service=ModLauncher Env=SERVER
-[07:25:35 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[07:25:35 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[07:25:35 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[07:25:35 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[07:25:35 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[07:25:35 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[07:25:35 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[07:25:35 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[07:25:35 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[07:25:37 ERROR]: Mixin config pizzamod.mixin.json does not specify "minVersion" property
-[07:25:37 INFO]: Launching target 'fmlserver' with arguments [--gameDir, ., nogui]
-[07:25:37 INFO]: Loaded rule configuration file for RoadRunner: 81 options available, 0 override(s) found
-[07:25:37 INFO]: Loaded configuration file for ModernFix 5.18.0+mc1.16.5: 89 options available, 0 override(s) found
-[07:25:37 INFO]: Applied Forge config corruption patch
-[07:25:38 INFO]: Patching LivingEntity#attackEntityFrom
-[07:25:39 WARN]: @Mixin target net/minecraft/block/AbstractBlock$AbstractBlockState$Cache is public in roadrunner.mixins.json:shapes.side_shape_cache.BlockCacheMixin and should be specified in value
-[07:25:39 INFO]: Patching ItemStack#onItemUse
-[07:25:39 INFO]: Patching LootTableManager#apply
-[07:25:39 WARN]: @Mixin target net/minecraft/block/AbstractBlock$AbstractBlockState$Cache is public in ferritecore.blockstatecache.mixin.json:BlockStateCacheMixin and should be specified in value
-[07:25:39 WARN]: @Mixin target net/minecraft/world/server/ChunkManager$EntityTracker is public in emotecraft.mixins.json:TrackedEntityAccessor and should be specified in value
-[07:25:39 INFO]: [MemoryLeakFix] Will be applying 3 memory leak fixes!
-[07:25:39 INFO]: [MemoryLeakFix] Currently enabled memory leak fixes: [entityMemoriesLeak, biomeTemperatureLeak, drownedNavigationLeak]
-[07:25:39 INFO]: Initializing MixinExtras via org.embeddedt.modernfix.forge.shadow.mixinextras.service.MixinExtrasServiceImpl(version=0.3.2).
-Exception in thread "main" [07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:39)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: Caused by: java.lang.reflect.InvocationTargetException
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
-[07:25:39 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	... 7 more
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: Caused by: org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:223)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformationHandler.processClass(MixinTransformationHandler.java:121)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.launch.MixinLaunchPlugin.processClass(MixinLaunchPlugin.java:131)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:154)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:85)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:265)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:527)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.Main.main(Main.java:121)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:648]: 	... 13 more
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:671]: Caused by: org.spongepowered.asm.mixin.injection.throwables.InjectionError: Critical injection failure: Argument modifier method makeImmutableForFluid(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/math/BlockPos; in roadrunner.mixins.json:alloc.chunk_random.ServerWorldMixin failed injection check, (0/1) succeeded. Scanned 1 target(s). Using refmap RoadRunner-mc1.16.5-refmap.json
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.postInject(InjectionInfo.java:408)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.applyInjections(MixinTargetContext.java:1291)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyInjections(MixinApplicatorStandard.java:1042)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:395)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:320)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:345)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:569)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:351)
-[07:25:39 INFO]: [java.lang.Throwable:printStackTrace:671]: 	... 24 more
+[07:47:11 ERROR]: Zip Error when loading jar file /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/mods/performant-1.16.2-5-4.1m.jar
+java.util.zip.ZipException: zip END header not found
+	at java.util.zip.ZipFile$Source.zerror(ZipFile.java:1776) ~[?:?]
+	at java.util.zip.ZipFile$Source.findEND(ZipFile.java:1659) ~[?:?]
+	at java.util.zip.ZipFile$Source.initCEN(ZipFile.java:1666) ~[?:?]
+	at java.util.zip.ZipFile$Source.<init>(ZipFile.java:1470) ~[?:?]
+	at java.util.zip.ZipFile$Source.get(ZipFile.java:1433) ~[?:?]
+	at java.util.zip.ZipFile$CleanableResource.<init>(ZipFile.java:743) ~[?:?]
+	at java.util.zip.ZipFile$CleanableResource.get(ZipFile.java:860) ~[?:?]
+	at java.util.zip.ZipFile.<init>(ZipFile.java:258) ~[?:?]
+	at java.util.zip.ZipFile.<init>(ZipFile.java:187) ~[?:?]
+	at java.util.zip.ZipFile.<init>(ZipFile.java:201) ~[?:?]
+	at net.minecraftforge.fml.loading.ModDirTransformerDiscoverer.visitFile(ModDirTransformerDiscoverer.java:75) ~[mist-1.16.5-33-server.jar:36.1]
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183) ~[?:?]
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195) ~[?:?]
+	at java.util.Iterator.forEachRemaining(Iterator.java:133) ~[?:?]
+	at java.util.Spliterators$IteratorSpliterator.forEachRemaining(Spliterators.java:1801) ~[?:?]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484) ~[?:?]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474) ~[?:?]
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150) ~[?:?]
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173) ~[?:?]
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:497) ~[?:?]
+	at net.minecraftforge.fml.loading.ModDirTransformerDiscoverer.scan(ModDirTransformerDiscoverer.java:65) ~[mist-1.16.5-33-server.jar:36.1]
+	at net.minecraftforge.fml.loading.ModDirTransformerDiscoverer.candidates(ModDirTransformerDiscoverer.java:37) ~[mist-1.16.5-33-server.jar:36.1]
+	at cpw.mods.modlauncher.TransformationServicesHandler.lambda$discoverServices$13(TransformationServicesHandler.java:137) ~[modlauncher-8.0.9.jar:?]
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195) [?:?]
+	at java.util.Iterator.forEachRemaining(Iterator.java:133) [?:?]
+	at java.util.Spliterators$IteratorSpliterator.forEachRemaining(Spliterators.java:1801) [?:?]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484) [?:?]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474) [?:?]
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:913) [?:?]
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) [?:?]
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:578) [?:?]
+	at cpw.mods.modlauncher.TransformationServicesHandler.discoverServices(TransformationServicesHandler.java:137) [modlauncher-8.0.9.jar:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:75) [modlauncher-8.0.9.jar:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.0.9.jar:?]
+	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109) [mist-1.16.5-33-server.jar:?]
+	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106) [mist-1.16.5-33-server.jar:?]
+	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103) [mist-1.16.5-33-server.jar:?]
+[07:47:11 INFO]: Added Lets Encrypt root certificates as additional trust
+[07:47:12 INFO]: SpongePowered MIXIN Subsystem Version=0.8.2 Source=file:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar Service=ModLauncher Env=SERVER
+[07:47:12 WARN]: File /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/mods/performant-1.16.2-5-4.1m.jar has been ignored - it is invalid
+[07:47:12 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:47:13 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:47:13 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:47:13 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:47:13 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:47:13 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:47:13 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:47:13 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:47:13 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:47:15 ERROR]: Mixin config pizzamod.mixin.json does not specify "minVersion" property
+[07:47:15 INFO]: Launching target 'fmlserver' with arguments [--gameDir, ., nogui]
+[07:47:15 INFO]: Loaded configuration file for ModernFix 5.18.0+mc1.16.5: 89 options available, 0 override(s) found
+[07:47:16 INFO]: Applied Forge config corruption patch
+[07:47:16 INFO]: Patching LivingEntity#attackEntityFrom
+[07:47:17 INFO]: Patching ItemStack#onItemUse
+[07:47:18 INFO]: Patching LootTableManager#apply
+[07:47:18 WARN]: @Mixin target net/minecraft/block/AbstractBlock$AbstractBlockState$Cache is public in ferritecore.blockstatecache.mixin.json:BlockStateCacheMixin and should be specified in value
+[07:47:18 WARN]: @Mixin target net/minecraft/world/server/ChunkManager$EntityTracker is public in emotecraft.mixins.json:TrackedEntityAccessor and should be specified in value
+[07:47:18 INFO]: [MemoryLeakFix] Will be applying 3 memory leak fixes!
+[07:47:18 INFO]: [MemoryLeakFix] Currently enabled memory leak fixes: [entityMemoriesLeak, biomeTemperatureLeak, drownedNavigationLeak]
+[07:47:18 INFO]: Initializing MixinExtras via org.embeddedt.modernfix.forge.shadow.mixinextras.service.MixinExtrasServiceImpl(version=0.3.2).
+[07:47:18 INFO]: Patching LivingEntity#attackEntityFrom
+[07:47:19 INFO]: ModernFix reached bootstrap stage (40.89 s after launch)
+[07:47:20 INFO]: Using Java 9+ class definer
+[07:47:20 FATAL]: Mixin apply failed fastbench.mixins.json:MixinWorkbenchContainer -> net.minecraft.inventory.container.WorkbenchContainer: org.spongepowered.asm.mixin.transformer.throwables.InvalidMixinException Unexpecteded ArrayIndexOutOfBoundsException whilst transforming the mixin class: [INJECT Applicator Phase -> fastbench.mixins.json:MixinWorkbenchContainer -> Apply Injections -> Inject -> fastbench.mixins.json:MixinWorkbenchContainer->@FactoryRedirectWrapper::makeExtInv(Lnet/minecraft/inventory/container/Container;II)Lnet/minecraft/inventory/CraftingInventory;]
+org.spongepowered.asm.mixin.transformer.throwables.InvalidMixinException: Unexpecteded ArrayIndexOutOfBoundsException whilst transforming the mixin class: [INJECT Applicator Phase -> fastbench.mixins.json:MixinWorkbenchContainer -> Apply Injections -> Inject -> fastbench.mixins.json:MixinWorkbenchContainer->@FactoryRedirectWrapper::makeExtInv(Lnet/minecraft/inventory/container/Container;II)Lnet/minecraft/inventory/CraftingInventory;]
+	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.applyInjections(MixinTargetContext.java:1300) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyInjections(MixinApplicatorStandard.java:1042) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:395) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:320) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:345) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:569) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:351) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:223) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.transformer.MixinTransformationHandler.processClass(MixinTransformationHandler.java:121) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.launch.MixinLaunchPlugin.processClass(MixinLaunchPlugin.java:131) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:154) ~[modlauncher-8.0.9.jar:8.1.3+8.1.3+main-8.1.x.c94d18ec]
+	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:85) ~[modlauncher-8.0.9.jar:?]
+	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-8.0.9.jar:?]
+	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:265) ~[modlauncher-8.0.9.jar:?]
+	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136) ~[modlauncher-8.0.9.jar:?]
+	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98) ~[modlauncher-8.0.9.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:527) ~[?:?]
+	at net.minecraft.block.Blocks.<clinit>(Blocks.java:195) ~[?:?]
+	at net.minecraft.world.gen.surfacebuilders.SurfaceBuilder.<clinit>(SurfaceBuilder.java:12) ~[?:?]
+	at net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilders.<clinit>(SourceFile:11) ~[?:?]
+	at net.minecraft.util.registry.WorldGenRegistries.func_243674_g(WorldGenRegistries.java:33) ~[?:?]
+	at net.minecraft.util.registry.WorldGenRegistries.lambda$static$8(WorldGenRegistries.java:89) ~[?:?]
+	at java.util.LinkedHashMap.forEach(LinkedHashMap.java:684) ~[?:?]
+	at net.minecraft.util.registry.WorldGenRegistries.<clinit>(WorldGenRegistries.java:88) ~[?:?]
+	at net.minecraft.util.registry.Registry.<clinit>(Registry.java:464) ~[?:?]
+	at net.minecraft.util.registry.Bootstrap.func_151354_b(Bootstrap.java:41) ~[?:?]
+	at net.minecraft.server.Main.main(Main.java:144) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?]
+	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51) ~[mist-1.16.5-33-server.jar:36.1]
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-8.0.9.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) [modlauncher-8.0.9.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) [modlauncher-8.0.9.jar:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) [modlauncher-8.0.9.jar:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.0.9.jar:?]
+	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109) [mist-1.16.5-33-server.jar:?]
+	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106) [mist-1.16.5-33-server.jar:?]
+	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103) [mist-1.16.5-33-server.jar:?]
+Caused by: java.lang.ArrayIndexOutOfBoundsException: Index 3 out of bounds for length 3
+	at org.spongepowered.asm.mixin.injection.code.Injector.checkCoerce(Injector.java:576) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.injection.code.Injector.validateParams(Injector.java:531) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.injection.invoke.RedirectInjector.injectAtConstructor(RedirectInjector.java:626) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.injection.invoke.RedirectInjector.inject(RedirectInjector.java:339) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.spongepowered.asm.mixin.injection.code.Injector.inject(Injector.java:264) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.inject(InjectorWrapperImpl.java:127) ~[modernfix:5.18.0+mc1.16.5]
+	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.doGranularInject(InjectorWrapperImpl.java:100) ~[modernfix:5.18.0+mc1.16.5]
+	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.granularInject(InjectorWrapperImpl.java:75) ~[modernfix:5.18.0+mc1.16.5]
+	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.factory.FactoryRedirectWrapperImpl.granularInject(FactoryRedirectWrapperImpl.java:51) ~[modernfix:5.18.0+mc1.16.5]
+	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.inject(InjectorWrapperImpl.java:62) ~[modernfix:5.18.0+mc1.16.5]
+	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.WrapperInjectionInfo.inject(WrapperInjectionInfo.java:71) ~[modernfix:5.18.0+mc1.16.5]
+	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.applyInjections(MixinTargetContext.java:1284) ~[mixin-0.8.2.jar:0.8.2+unknown-b0.git-unknown]
+	... 39 more
+Exception in thread "main" [07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:39)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: Caused by: java.lang.reflect.InvocationTargetException
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
+[07:47:20 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	... 7 more
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: Caused by: org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:223)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformationHandler.processClass(MixinTransformationHandler.java:121)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.launch.MixinLaunchPlugin.processClass(MixinLaunchPlugin.java:131)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:154)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:85)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:265)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:527)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.block.Blocks.<clinit>(Blocks.java:195)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.world.gen.surfacebuilders.SurfaceBuilder.<clinit>(SurfaceBuilder.java:12)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilders.<clinit>(SourceFile:11)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.util.registry.WorldGenRegistries.func_243674_g(WorldGenRegistries.java:33)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.util.registry.WorldGenRegistries.lambda$static$8(WorldGenRegistries.java:89)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at java.base/java.util.LinkedHashMap.forEach(LinkedHashMap.java:684)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.util.registry.WorldGenRegistries.<clinit>(WorldGenRegistries.java:88)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.util.registry.Registry.<clinit>(Registry.java:464)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.util.registry.Bootstrap.func_151354_b(Bootstrap.java:41)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.Main.main(Main.java:144)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:648]: 	... 13 more
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:671]: Caused by: org.spongepowered.asm.mixin.throwables.MixinApplyError: Mixin [fastbench.mixins.json:MixinWorkbenchContainer] from phase [DEFAULT] in config [fastbench.mixins.json] FAILED during APPLY
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinError(MixinProcessor.java:642)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinApplyError(MixinProcessor.java:594)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:356)
+[07:47:20 INFO]: [java.lang.Throwable:printStackTrace:671]: 	... 33 more
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: Caused by: org.spongepowered.asm.mixin.transformer.throwables.InvalidMixinException: Unexpecteded ArrayIndexOutOfBoundsException whilst transforming the mixin class: [INJECT Applicator Phase -> fastbench.mixins.json:MixinWorkbenchContainer -> Apply Injections -> Inject -> fastbench.mixins.json:MixinWorkbenchContainer->@FactoryRedirectWrapper::makeExtInv(Lnet/minecraft/inventory/container/Container;II)Lnet/minecraft/inventory/CraftingInventory;]
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.applyInjections(MixinTargetContext.java:1300)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyInjections(MixinApplicatorStandard.java:1042)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:395)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:320)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:345)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:569)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:351)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	... 33 more
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: Caused by: java.lang.ArrayIndexOutOfBoundsException: Index 3 out of bounds for length 3
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.injection.code.Injector.checkCoerce(Injector.java:576)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.injection.code.Injector.validateParams(Injector.java:531)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.injection.invoke.RedirectInjector.injectAtConstructor(RedirectInjector.java:626)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.injection.invoke.RedirectInjector.inject(RedirectInjector.java:339)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.injection.code.Injector.inject(Injector.java:264)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.inject(InjectorWrapperImpl.java:127)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.doGranularInject(InjectorWrapperImpl.java:100)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.granularInject(InjectorWrapperImpl.java:75)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.factory.FactoryRedirectWrapperImpl.granularInject(FactoryRedirectWrapperImpl.java:51)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.inject(InjectorWrapperImpl.java:62)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.WrapperInjectionInfo.inject(WrapperInjectionInfo.java:71)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.applyInjections(MixinTargetContext.java:1284)
+[07:47:20 INFO]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	... 39 more
 ===== CONFIG NATIV: mohist-config/mohist.yml =====
 check_update: false
 ===== CONFIG NATIV: bukkit.yml =====
@@ -304,65 +304,65 @@ libraries/net/minecraftforge/eventbus/4.0.0/eventbus-4.0.0.jar
 libraries/net/minecraftforge/installertools/1.1.11/installertools-1.1.11.jar
 libraries/net/minecraftforge/unsafe/0.2.0/unsafe-0.2.0.jar
 libraries/net/minecraftforge/jarsplitter/1.1.2/jarsplitter-1.1.2.jar
--rw-r--r-- 1 runner runner 8643834 Oct  8 07:25 mist-1.16.5-33-server.jar
+-rw-r--r-- 1 runner runner 8643834 Oct  8 07:46 mist-1.16.5-33-server.jar
 ===== JURNAL INTERN: ./logs/latest.log =====
-[07:25:39] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://memoryleakfix/ca/fxco/memoryleakfix/extensions/ExtendDrowned.class got resource ca/fxco/memoryleakfix/extensions/ExtendDrowned.class true
-[07:25:39] [main/TRACE] [mixin/]: Added class metadata for ca/fxco/memoryleakfix/extensions/ExtendDrowned to metadata cache
-[07:25:39] [main/TRACE] [mixin/]: Added class metadata for net/minecraft/world/ISeedReader to metadata cache
-[07:25:39] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://minecraft/net/minecraft/world/IServerWorld.class got resource net/minecraft/world/IServerWorld.class true
-[07:25:39] [main/TRACE] [mixin/]: Added class metadata for net/minecraft/world/IServerWorld to metadata cache
-[07:25:39] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/common/extensions/IForgeWorldServer.class got resource net/minecraftforge/common/extensions/IForgeWorldServer.class true
-[07:25:39] [main/TRACE] [mixin/]: Added class metadata for net/minecraftforge/common/extensions/IForgeWorldServer to metadata cache
-[07:25:39] [main/TRACE] [mixin/]: Added class metadata for it/unimi/dsi/fastutil/objects/ObjectSet to metadata cache
-[07:25:39] [main/TRACE] [mixin/]: Added class metadata for it/unimi/dsi/fastutil/objects/ObjectIterator to metadata cache
-[07:25:39] [main/TRACE] [mixin/]: Added class metadata for net/minecraft/world/storage/IServerWorldInfo to metadata cache
-[07:25:39] [main/TRACE] [mixin/]: Added class metadata for net/minecraft/pathfinding/Path to metadata cache
-[07:25:39] [main/TRACE] [mixin/]: Added class metadata for java/util/function/Function to metadata cache
-[07:25:39] [main/TRACE] [mixin/]: Added class metadata for java/util/function/Consumer to metadata cache
-[07:25:39] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/InjectorWrapperImpl.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/InjectorWrapperImpl.class true
-[07:25:39] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/factory/FactoryRedirectWrapperImpl.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/factory/FactoryRedirectWrapperImpl.class true
-[07:25:39] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/InjectorWrapperImpl$Factory.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/InjectorWrapperImpl$Factory.class true
-[07:25:39] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/utils/CompatibilityHelper.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/utils/CompatibilityHelper.class true
-[07:25:39] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/versions/MixinVersion.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/versions/MixinVersion.class true
-[07:25:39] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/versions/MixinVersionImpl_v0_8.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/versions/MixinVersionImpl_v0_8.class true
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:39)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: Caused by: java.lang.reflect.InvocationTargetException
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	... 7 more
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: Caused by: org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:223)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformationHandler.processClass(MixinTransformationHandler.java:121)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.launch.MixinLaunchPlugin.processClass(MixinLaunchPlugin.java:131)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:154)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:85)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:265)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:527)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.Main.main(Main.java:121)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	... 13 more
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: Caused by: org.spongepowered.asm.mixin.injection.throwables.InjectionError: Critical injection failure: Argument modifier method makeImmutableForFluid(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/math/BlockPos; in roadrunner.mixins.json:alloc.chunk_random.ServerWorldMixin failed injection check, (0/1) succeeded. Scanned 1 target(s). Using refmap RoadRunner-mc1.16.5-refmap.json
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.postInject(InjectionInfo.java:408)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.applyInjections(MixinTargetContext.java:1291)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyInjections(MixinApplicatorStandard.java:1042)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:395)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:320)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:345)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:569)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:351)
-[07:25:39] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	... 24 more
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: Caused by: java.lang.reflect.InvocationTargetException
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	... 7 more
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: Caused by: org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:223)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformationHandler.processClass(MixinTransformationHandler.java:121)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.launch.MixinLaunchPlugin.processClass(MixinLaunchPlugin.java:131)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:154)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:85)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:265)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:527)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.block.Blocks.<clinit>(Blocks.java:195)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.world.gen.surfacebuilders.SurfaceBuilder.<clinit>(SurfaceBuilder.java:12)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilders.<clinit>(SourceFile:11)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.util.registry.WorldGenRegistries.func_243674_g(WorldGenRegistries.java:33)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.util.registry.WorldGenRegistries.lambda$static$8(WorldGenRegistries.java:89)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at java.base/java.util.LinkedHashMap.forEach(LinkedHashMap.java:684)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.util.registry.WorldGenRegistries.<clinit>(WorldGenRegistries.java:88)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.util.registry.Registry.<clinit>(Registry.java:464)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.util.registry.Bootstrap.func_151354_b(Bootstrap.java:41)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.Main.main(Main.java:144)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	... 13 more
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: Caused by: org.spongepowered.asm.mixin.throwables.MixinApplyError: Mixin [fastbench.mixins.json:MixinWorkbenchContainer] from phase [DEFAULT] in config [fastbench.mixins.json] FAILED during APPLY
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinError(MixinProcessor.java:642)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinApplyError(MixinProcessor.java:594)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:356)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	... 33 more
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: Caused by: org.spongepowered.asm.mixin.transformer.throwables.InvalidMixinException: Unexpecteded ArrayIndexOutOfBoundsException whilst transforming the mixin class: [INJECT Applicator Phase -> fastbench.mixins.json:MixinWorkbenchContainer -> Apply Injections -> Inject -> fastbench.mixins.json:MixinWorkbenchContainer->@FactoryRedirectWrapper::makeExtInv(Lnet/minecraft/inventory/container/Container;II)Lnet/minecraft/inventory/CraftingInventory;]
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.applyInjections(MixinTargetContext.java:1300)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyInjections(MixinApplicatorStandard.java:1042)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:395)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:320)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:345)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:569)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:351)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	... 33 more
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: Caused by: java.lang.ArrayIndexOutOfBoundsException: Index 3 out of bounds for length 3
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.injection.code.Injector.checkCoerce(Injector.java:576)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.injection.code.Injector.validateParams(Injector.java:531)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.injection.invoke.RedirectInjector.injectAtConstructor(RedirectInjector.java:626)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.injection.invoke.RedirectInjector.inject(RedirectInjector.java:339)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.injection.code.Injector.inject(Injector.java:264)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.inject(InjectorWrapperImpl.java:127)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.doGranularInject(InjectorWrapperImpl.java:100)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.granularInject(InjectorWrapperImpl.java:75)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.factory.FactoryRedirectWrapperImpl.granularInject(FactoryRedirectWrapperImpl.java:51)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.InjectorWrapperImpl.inject(InjectorWrapperImpl.java:62)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.embeddedt.modernfix.forge.shadow.mixinextras.wrapper.WrapperInjectionInfo.inject(WrapperInjectionInfo.java:71)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.applyInjections(MixinTargetContext.java:1284)
+[07:47:20] [main/INFO] [STDERR/]: [java.lang.Throwable:printEnclosedStackTrace:713]: 	... 39 more
