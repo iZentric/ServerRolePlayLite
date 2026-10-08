@@ -124,7 +124,8 @@ jobs:
           SECRETA_P: ${{ secrets.ZAMPTO_SFTP_PASS }}
         run: |
           set +e
-          mkdir -p lab
+          mkdir -p lab run
+          exec > >(tee run/lab.out) 2>&1
           # control pe host: cheie evidenta gresita — trebuie "Wrong password" in raspuns
           CTRL=$(python3 - <<PYEOF
           import socket,struct
@@ -227,6 +228,10 @@ jobs:
             echo "## RCON"
             echo '```'
             cat run/rcon.safe
+            echo '```'
+            echo "## 7) LABORATOR: vanilla local cu acelasi protocol vs host"
+            echo '```'
+            cat run/lab.out 2>/dev/null
             echo '```'
             echo "## Log server despre RCON (ultimele 12 linii)"
             echo '```'
