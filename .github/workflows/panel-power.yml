@@ -1,0 +1,37 @@
+name: Buton START (panou Zampto)
+on:
+  push:
+    paths: ["deploy/power-trigger.txt"]
+permissions:
+  contents: write
+jobs:
+  power:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apasa butonul prin API
+        run: |
+          SIGNAL=$(grep -oE "start|stop|restart|kill" deploy/power-trigger.txt | head -1)
+          SIGNAL=${SIGNAL:-start}
+          SID="1388b9af"
+          echo "== trimit semnal: $SIGNAL catre serverul $SID"
+          HTTP=$(curl -s -o /tmp/resp.txt -w "%{http_code}" -X POST \
+            "https://dash.zampto.net/api/client/servers/$SID/power" \
+            -H "Authorization: Bearer $PANEL_KEY" \
+            -H "Content-Type: application/json" -H "Accept: application/json" \
+            -d "{\"signal\":\"$SIGNAL\"}")
+          echo "HTTP: $HTTP"; cat /tmp/resp.txt || true
+          sleep 20
+          echo "== starea serverului dupa semnal:"
+          curl -s "https://dash.zampto.net/api/client/servers/$SID/resources" \
+            -H "Authorization: Bearer $PANEL_KEY" -H "Accept: application/json" | head -c 600 || true
+          mkdir -p analysis
+          { echo "# BUTON $SIGNAL ($(date -u))"; echo "HTTP: $HTTP"; cat /tmp/resp.txt 2>/dev/null; } > analysis/panel-power.md
+        env:
+          PANEL_KEY: ${{ secrets.ZAMPTO_PANEL_KEY }}
+      - name: Raport
+        if: always()
+        run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add analysis/ && git commit -m "raport buton" && git pull --rebase -X ours && git push || true
