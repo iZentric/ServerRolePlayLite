@@ -185,7 +185,7 @@ def strip_client_assets(jar_path):
 
 SERVER_PROPERTIES = """\
 #Minecraft server properties - Freeroam Lite (consum minim)
-motd=\u00A76\u00A7lPALMA LITE RP \u00A7f\u25CF \u00A7aOras + Survival \u00A7f\u25CF \u00A7bmerge pe orice PC
+motd=\u00A7d\u00A7lEvoKode \u00A7f\u25CF \u00A76\u00A7lPALMA LITE RP \u00A7f\u25CF \u00A7aOras + Survival \u00A7f\u25CF \u00A7bmerge pe orice PC
 max-players=25
 view-distance=4
 sync-chunk-writes=false

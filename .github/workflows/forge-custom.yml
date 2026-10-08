@@ -17,6 +17,11 @@ jobs:
       - name: FAZA 1 - construim jarul NOSTRU din sursa
         run: |
           cd catsrc
+          # BRANDUL EvoKode cusut in sursa: numele raportat de server -> EvoKode
+          for f in $(grep -rln 'getServerModName' src patches 2>/dev/null | head -5); do
+            sed -i 's/return "CatServer"/return "EvoKode"/g' "$f"
+            echo "brand EvoKode cusut in: $f"
+          done
           git log -1 --format="sursa: %h %s (%ci)" | tee ../forja.log
           ls | tee -a ../forja.log
           chmod +x gradlew || true
