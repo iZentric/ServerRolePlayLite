@@ -21,8 +21,8 @@ jobs:
           # VERIFICARE PANICA: modurile-s INTREGI? (panoul arata doar 68MB disk)
           lftp -u "15254.1388b9af","$P" "sftp://node12.zampto.net:2022" -e "
             set sftp:auto-confirm yes;
-            ls -la mods/ | head -40;
-            du -s mods 2>/dev/null || true;
+            cls -l mods/;
+            du -sb mods;
             bye" > analysis/mods-sizes.txt 2>&1 || true
           tail -40 analysis/mods-sizes.txt
           P='${{ secrets.ZAMPTO_SFTP_PASS }}'
