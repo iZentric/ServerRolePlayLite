@@ -34,3 +34,13 @@ spark tps
 spark healthreport
 ```
 TPS 20 = perfect. Sub 17 = îmi zici și operez.
+
+## 4. Sistemul de conturi (serverul primeste si TLauncher si premium):
+Copiii la prima intrare: `/register parola parola` — apoi mereu: `/login parola`
+Skin pe cont nepremium: `/skin set NumeJucatorPremium`
+⚠️ Fiind server deschis (offline-mode), NU da niciodata OP fara ca AuthMe sa fie activ!
+
+## 5. Voice chat-ul (modul are nevoie de un port UDP):
+Panou → Network: daca poti adauga o alocare UDP (24454), pune-o si scrie portul in
+`config/voicechat/voicechat-server.properties` (port=24454). Daca nu se poate, jocul
+merge perfect si fara voce.
