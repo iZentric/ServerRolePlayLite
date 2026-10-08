@@ -105,6 +105,8 @@ jobs:
             grep -iE "ERROR|FATAL|NoSuchMethod|Exception in thread|Could not load" boot.log | sort | uniq -c | sort -rn | head -12 | sed 's/^/    /' || true
             echo "- Contextul erorilor invalid-dist (vinovatul cu nume):"
             grep -B6 "invalid dist" boot.log | grep -iE "mod |\.jar|modid|scan|candidate" | head -8 | sed 's/^/    /' || true
+            echo "- Contextul erorii File not found (ultimul mister):"
+            grep -B8 -A2 "File not found" boot.log | head -14 | sed 's/^/    /' || true
             echo "- Pluginuri pornite:"
             grep -iE "Enabling (AuthMe|SkinsRestorer|FastLogin|ProtocolLib|LuckPerms|Essentials|WorldGuard|spark|Chunky|GriefPrevention|ZNPC|Vault|WorldEdit)" boot.log | head -17 | sed 's/^/    /' || true
           } > ../analysis/test-boot-${V}.md
