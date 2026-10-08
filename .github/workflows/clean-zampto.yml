@@ -1,22 +1,40 @@
-name: clean-zampto
+name: MATURATORUL (curata gunoaiele de pe Zampto)
 on:
-  workflow_dispatch:
   push:
-    paths:
-      - "deploy/clean-trigger.txt"
+    paths: ["deploy/clean-trigger.txt"]
 jobs:
-  curata:
+  clean:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
+    permissions:
+      contents: write
     steps:
-      - name: Sterge gunoiul strain (Forge modern instalat de panou)
+      - uses: actions/checkout@v4
+      - name: Sterge gunoaiele vechi prin SFTP
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
-          P='${{ secrets.ZAMPTO_SFTP_PASS }}'
           lftp -u "15254.1388b9af","$P" "sftp://node12.zampto.net:2022" -e "
             set sftp:auto-confirm yes;
-            rm -f forge-26.3-66.0.9-shim.jar installer.jar.log;
-            rm -rf libraries;
+            rm -f 'mist-1.16.5-33-server.jar';
+            rm -f 'paper.yml';
+            rm -f 'run.bat'; rm -f 'run.sh';
+            rm -f 'mods/DataFixerSlayer 1.0-3.jar';
+            rm -f 'mods/TRansliterationLib-1.0.4.jar';
+            rm -f 'mods/radon-0.8.0a.jar';
+            rm -f 'plugins/Chunky-1.3.38.jar';
+            rm -f 'plugins/claimchunk-0.0.23-RC8-plugin.jar';
+            rm -f 'plugins/ZNPCsPlus-1.0.8.jar';
+            rm -f 'plugins/packetevents-spigot-2.14.0.jar';
+            rm -f 'plugins/GriefPrevention.jar';
+            cat unix_args.txt;
+            ls -la;
             bye
-          " || true
-          echo "CURATAT"
+          " > analysis/curatenie-zampto.txt 2>&1 || true
+          tail -30 analysis/curatenie-zampto.txt
+        env:
+          P: ${{ secrets.ZAMPTO_SFTP_PASS }}
+      - name: Raport
+        if: always()
+        run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add analysis/ && git commit -m "raport maturator" && git pull --rebase -X ours && git push || true
