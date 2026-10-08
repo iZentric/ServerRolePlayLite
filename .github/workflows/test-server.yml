@@ -70,6 +70,11 @@ jobs:
             cp /tmp/ml.jar libraries/cpw/mods/modlauncher/8.0.9/modlauncher-8.0.9.jar
             mkdir -p mohist-config
             printf 'check_update: false\n' > mohist-config/mohist.yml
+            # LAZARUS 12: nu inlocuim RoadRunner - ii stingem DOAR circuitul care se bate cu Mist
+            mkdir -p config
+            for cf in roadrunner.properties lithium.properties; do
+              printf 'mixin.alloc.chunk_random=false\n' > config/$cf
+            done
             # LAZARUS 11: rescriem pasapoartele modurilor - cerinta de Forge relaxata la 36.2.0
             # (Mist are 36.2.4 inghetat; modurile cer 36.2.9-36.2.33 doar din stampila, poate nu din API)
             for j in mods/*.jar; do
