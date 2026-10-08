@@ -41,6 +41,9 @@ jobs:
               mkdir -p libraries/cpw/mods/modlauncher/$mlv
               cp /tmp/ml.jar libraries/cpw/mods/modlauncher/$mlv/modlauncher-$mlv.jar
             done
+            # LAZARUS 2: taiem telefonul spre casa (update-checker mort din 2021)
+            mkdir -p mohist-config
+            printf 'check_update: false\n' > mohist-config/mohist.yml
             ls -la libraries/cpw/mods/modlauncher/*/
           fi
           START=$(date +%s)
