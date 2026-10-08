@@ -21,6 +21,7 @@ jobs:
           P_VECHI: ${{ secrets.ZAMPTO_SFTP_PASS }}
           P_NOU: "REDACTED_PANEL_TOKEN"
         run: |
+          set +e
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
           mkdir -p /tmp/zt analysis
           probe () {
@@ -38,13 +39,13 @@ jobs:
               bye
             " 2>&1
           }
-          probe "$P_VECHI" "vechi" > /tmp/zt/sftp-vechi.txt 2>&1
+          probe "$P_VECHI" "vechi" > /tmp/zt/sftp-vechi.txt 2>&1 || true
           if grep -q "LOGAT-CU" /tmp/zt/sftp-vechi.txt && ! grep -qiE "Login incorrect|Login failed|530" /tmp/zt/sftp-vechi.txt; then
             echo "PAROLA VECHE INCA MERGE"
             cp /tmp/zt/sftp-vechi.txt /tmp/zt/sftp-bun.txt
           else
             echo "parola veche moarta — incerc noua"
-            probe "$P_NOU" "nou" > /tmp/zt/sftp-nou.txt 2>&1
+            probe "$P_NOU" "nou" > /tmp/zt/sftp-nou.txt 2>&1 || true
             cp /tmp/zt/sftp-nou.txt /tmp/zt/sftp-bun.txt
           fi
           echo "=== VERIFICARE SERVERPAUSE PE DISC ==="
@@ -56,6 +57,7 @@ jobs:
 
       - name: Panoul — deschide usile cu tokenul si apasa restart
         run: |
+          set +e
           T="REDACTED_PANEL_TOKEN"
           UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
           hit () {
