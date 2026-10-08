@@ -18,10 +18,16 @@
   ],
   "_comentariu_adaugate": "Doar moduri de PERFORMANTA, zero schimbari de gameplay. Daca un slug nu are versiune pt 1.16.5 Forge pe Modrinth, e sarit automat fara sa strice build-ul.",
   "add_client_modrinth": [
+    "magnesium|sodium-reforged",
+    "radon",
     "entityculling",
     "fps-reducer",
+    "ferrite-core",
+    "saturn",
+    "modernfix",
+    "smoothboot-reloaded",
     "memoryleakfix",
-    "starlight-forge"
+    "lazydfu"
   ],
   "add_server_modrinth": [
     "clumps",
