@@ -21,8 +21,8 @@ jobs:
           - { id: "ARCLIGHT-OFICIAL", art: "ghurl", url: "https://github.com/IzzelAliz/Arclight/releases/download/1.16%2F1.0.25/arclight-forge-1.16.5-1.0.25.jar" }
           - { id: "ARCLIGHT-CHATNAUT", art: "ghrel", repo: "Chatnaut/Arclight", ref: "latest" }
           - { id: "MIST-33",        art: "ghurl", url: "https://github.com/MinecraftMist/Mist/releases/download/1.16.5-33/mist-1.16.5-33-server.jar" }
-          - { id: "MAGMA-FORGE",    art: "magma" }
-          - { id: "ARCLIGHT-CITY",  art: "ghrel", repo: "DexterHuang/Arclight-City", ref: "latest" }
+          - { id: "MAGMA-1.16.5",   art: "magma" }
+          - { id: "ARCLIGHT-CITY",  art: "exclus" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -51,17 +51,37 @@ jobs:
                 || gh release download -R "$REPO" -p '*.jar' -O cand/cand.jar 2>/dev/null
               ;;
             maven)
-              for A in Tenet-1.16.5 Mohist-1.16.5; do
-                MJ=$(curl -s --max-time 30 "https://maven.mohistmc.com/com/mohistmc/$A/maven-metadata.xml" | grep -oE '<latest>[^<]+' | cut -d'>' -f2)
-                [ -n "$MJ" ] || continue
-                curl -sL --max-time 240 -o cand/cand.jar "https://maven.mohistmc.com/com/mohistmc/$A/$MJ/$A-$MJ.jar" && \
-                  head -c2 cand/cand.jar | grep -q PK && { echo "$A $MJ" > cand/cand.name; break; }
+              for A in Mohist-1.16.5 Tenet-1.16.5; do
+                for BASE in https://maven.mohistmc.com/com/mohistmc https://repo.mohistmc.com/releases/com/mohistmc; do
+                  MJ=$(curl -sL --max-time 30 "$BASE/$A/maven-metadata.xml" | grep -oE '<latest>[^<]+|<version>[^<]+' | tail -1 | sed -E "s/.*>//")
+                  [ -n "$MJ" ] || continue
+                  for SUFF in "-server" ""; do
+                    curl -sL --max-time 240 -o cand/cand.jar "$BASE/$A/$MJ/$A$SUFF-$MJ.jar" 2>/dev/null
+                    head -c2 cand/cand.jar 2>/dev/null | grep -q PK && { echo "$A $MJ (via $BASE)" > cand/cand.name; break 3; }
+                  done
+                done
               done
+              # fallback: API-ul vechi al site-ului
+              curl -sL --max-time 60 "https://mohistmc.com/api/1.16.5/mohist/latest" -o /tmp/mapi.json 2>/dev/null
+              JU=$(python3 -c "import json;d=json.load(open('/tmp/mapi.json'));print(d.get('url') or (d.get('data') or {}).get('url',''))" 2>/dev/null)
+              if [ -n "$JU" ]; then
+                curl -sL --max-time 240 -o cand/cand.jar "$JU" && head -c2 cand/cand.jar | grep -q PK && echo "mohist API $JU" > cand/cand.name
+              fi
               ;;
             magma)
-              for U in "https://magmafork.com/api/download/latest/1.16.5" "https://www.magmafork.com/api/download/latest/1.16.5" "https://magmafork.com/download/1.16.5"; do
-                curl -sL --max-time 120 -o cand/cand.jar "$U" && head -c2 cand/cand.jar | grep -q PK && { echo "magma $U" > cand/cand.name; break; }
+              for G in magma magmaforge magma-forge; do
+                for BASE in https://repo.magmafoundation.org/releases/org/magmafoundation https://maven.magmafoundation.org/releases/org/magmafoundation; do
+                  MV=$(curl -sL --max-time 30 "$BASE/$G/maven-metadata.xml" | grep -oE "<version>[^<]*1\.16\.5[^<]*" | tail -1 | sed "s/<version>//")
+                  [ -n "$MV" ] || continue
+                  curl -sL --max-time 240 -o cand/cand.jar "$BASE/$G/$MV/$G-$MV.jar"
+                  head -c2 cand/cand.jar 2>/dev/null | grep -q PK && { echo "magma $G $MV" > cand/cand.name; break 3; }
+                done
               done
+              ;;
+            exclus)
+              mkdir -p "$GITHUB_WORKSPACE/analysis/tribunal"
+              { echo "# ${{ matrix.id }}"; echo "- ARTIFACT: n/a"; echo "- STATUS: **EXCLUS-DIN-OFICIU** (repo-ul e un MOD de oras pentru Arclight, nu un server hibrid — cercetat pe GitHub azi)"; echo "- DONE: NICIODATA"; } > "$GITHUB_WORKSPACE/analysis/tribunal/${{ matrix.id }}.md"
+              exit 0
               ;;
           esac
           if head -c2 cand/cand.jar 2>/dev/null | grep -q PK && [ "$(stat -c%s cand/cand.jar)" -gt 500000 ]; then
@@ -81,8 +101,8 @@ jobs:
         run: |
           set +e
           if [ "$(cat /tmp/gate)" != "ARTIFACT-OK" ]; then
-            mkdir -p ../analysis/tribunal
-            { echo "# ${{ matrix.id }}"; echo "- ARTIFACT: $(cat /tmp/md5)"; echo "- STATUS: ARTIFACT-LIPSA (niciun download valid)"; echo "- DONE: NICIODATA"; } > "../analysis/tribunal/${{ matrix.id }}.md"
+            mkdir -p "$GITHUB_WORKSPACE/analysis/tribunal"
+            { echo "# ${{ matrix.id }}"; echo "- ARTIFACT: $(cat /tmp/md5)"; echo "- STATUS: ARTIFACT-LIPSA (niciun download valid din sursele oficiale)"; echo "- DONE: NICIODATA"; } > "$GITHUB_WORKSPACE/analysis/tribunal/${{ matrix.id }}.md"
             exit 0
           fi
           cd srv
