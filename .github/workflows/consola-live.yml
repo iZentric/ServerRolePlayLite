@@ -119,6 +119,86 @@ jobs:
             sed -E "s|${K}|<CHEIE>|g" run/rcon.out > run/rcon.safe 2>/dev/null || cp run/rcon.out run/rcon.safe
           else cp run/rcon.out run/rcon.safe; fi
           cat run/rcon.safe
+      - name: LABORATOR — acelasi probe pe vanilla local + control cheie gresite pe host
+        env:
+          SECRETA_P: ${{ secrets.ZAMPTO_SFTP_PASS }}
+        run: |
+          set +e
+          mkdir -p lab
+          # control pe host: cheie evidenta gresita — trebuie "Wrong password" in raspuns
+          CTRL=$(python3 - <<PYEOF
+          import socket,struct
+          def send(s,i,t,p=b""):
+              d=struct.pack(">ii",i,t)+p+b"\x00\x00"
+              s.sendall(struct.pack(">i",len(d))+d)
+          def recv(s):
+              h=b""
+              while len(h)<4:
+                  c=s.recv(4-len(h))
+                  if not c: raise EOFError
+                  h+=c
+              n=struct.unpack(">i",h)[0]
+              b=b""
+              while len(b)<n:
+                  c=s.recv(n-len(b))
+                  if not c: break
+                  b+=c
+              i,t=struct.unpack(">ii",b[:8])
+              return i,t,b[8:-2].decode("utf8","replace")
+          s=socket.create_connection(("node12.zampto.net",28147),10); s.settimeout(10)
+          send(s,1,3,b"CHEIE-EVIDENT-GRESITA-xyz")
+          send(s,2,2,b"list")
+          try:
+              print(recv(s))
+          except Exception as e:
+              print("fara raspuns:",e)
+          PYEOF
+          )
+          echo "CONTROL cheie gresita pe host -> $CTRL"
+          # laborator local: vanilla 1.16.5 + rcon pe localhost:25575
+          V=$(curl -s https://launchermeta.mojang.com/mc/game/version_manifest_v2.json | python3 -c "import json,sys;d=json.load(sys.stdin);print(next(v['url'] for v in d['versions'] if v['id']=='1.16.5'))")
+          curl -sL -o lab/v.jar "$(curl -s $V | python3 -c "import json,sys;print(json.load(sys.stdin)['downloads']['server']['url'])")"
+          ls -la lab/v.jar
+          cd lab
+          echo "eula=true" > eula.txt
+          printf 'enable-rcon=true\nrcon.port=25575\nrcon.password=LABCHEIE123\nonline-mode=false\nsync-chunk-writes=false\n' > server.properties
+          java -Xmx1024M -Xms512M -jar v.jar --nogui > lab.log 2>&1 &
+          JPID=$!
+          for k in $(seq 1 40); do grep -q "Done (" lab.log && break; sleep 3; done
+          grep -m1 "Done (" lab.log || echo "LABORATORUL N-A PORNIC"
+          python3 - <<PYEOF
+          import socket,struct,time
+          def send(s,i,t,p=b""):
+              d=struct.pack(">ii",i,t)+p+b"\x00\x00"
+              s.sendall(struct.pack(">i",len(d))+d)
+          def recv(s):
+              h=b""
+              while len(h)<4:
+                  c=s.recv(4-len(h))
+                  if not c: raise EOFError
+                  h+=c
+              n=struct.unpack(">i",h)[0]
+              b=b""
+              while len(b)<n:
+                  c=s.recv(n-len(b))
+                  if not c: break
+                  b+=c
+              i,t=struct.unpack(">ii",b[:8])
+              return i,t,b[8:-2].decode("utf8","replace")
+          time.sleep(2)
+          s=socket.create_connection(("127.0.0.1",25575),10); s.settimeout(12)
+          send(s,1,3,b"LABCHEIE123")
+          send(s,2,2,b"list")
+          for _ in range(4):
+              try:
+                  i,t,d=recv(s)
+                  print("LAB raspuns id="+str(i)+" type="+str(t)+" body="+repr(d[:120]))
+              except Exception as e:
+                  print("LAB gata:",e); break
+          PYEOF
+          kill $JPID 2>/dev/null; sleep 1; kill -9 $JPID 2>/dev/null
+          cd "$GITHUB_WORKSPACE"
+
       - name: Ce zice serverul despre RCON (din log, cenzurat)
         env:
           P: ${{ secrets.ZAMPTO_SFTP_PASS }}
