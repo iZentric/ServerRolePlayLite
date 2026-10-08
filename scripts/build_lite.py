@@ -181,7 +181,7 @@ def strip_client_assets(jar_path):
 SERVER_PROPERTIES = """\
 #Minecraft server properties - Freeroam Lite (consum minim)
 motd=\\u00A7e\\u00A7lFreeroam Lite \\u00A77- RolePlay pentru toti!
-max-players=15
+max-players=20
 view-distance=5
 sync-chunk-writes=false
 network-compression-threshold=256
