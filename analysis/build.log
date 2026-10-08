@@ -10,7 +10,7 @@
   - taiat din client (stil rust): CTM-MC1.16.1-1.1.2.6.jar
   - taiat din client (stil rust): DynamicSurroundings-1.16.5-4.0.5.0.jar
   - taiat din client (stil rust): lightfallclient-1.0.0.jar
-  => out/Freeroam-Lite-Client-1.5.5.mrpack (133.1 MB)
+  => out/CUANTIC-Client-1.5.6.mrpack (133.1 MB)
 == Moduri de server (comune) ==
   ↓ mapperbase-1.16.5-2.4.0.0.jar
   ↓ supplementaries-1.16.5-0.18.4b.jar
@@ -84,7 +84,7 @@
     (modrinth: performant -> nicio versiune)
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
-  => out/Freeroam-Lite-Server-MaxLite-1.5.5.zip (32.1 MB)
+  => out/CUANTIC-Server-MaxLite-1.5.6.zip (32.1 MB)
 == SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar
@@ -103,11 +103,11 @@
   !! plugin 'spark' sarit: nicio versiune
   ↓ plugin: Chunky-1.2.217.jar
   ↓ Arclight
-  => out/Freeroam-Lite-Server-Arclight-1.5.5.zip (64.7 MB)
+  => out/CUANTIC-Server-Arclight-1.5.6.zip (64.7 MB)
 == SERVER Mist (hibrid experimental cu patch-uri Paper) ==
   ↓ Mist
-  => out/Freeroam-Lite-Server-Mist-EXPERIMENTAL-1.5.5.zip (64.3 MB)
+  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.5.6.zip (64.3 MB)
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
-  => out/Freeroam-Lite-Server-CatServer-1.5.5.zip (63.6 MB)
+  => out/CUANTIC-Server-CatServer-1.5.6.zip (63.6 MB)
 GATA.
