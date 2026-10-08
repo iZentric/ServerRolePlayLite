@@ -8,9 +8,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ radon-0.8.0a.jar
 - ✅ entityculling-forge-mc1.16.5-1.5.2.jar
 - ✅ FpsReducer-forge-1.24-mc1.16.5.jar
-- ✅ ferritecore-2.1.1-forge.jar
 - ✅ saturn-mc1.16.5-0.0.3.jar
-- ✅ modernfix-forge-5.18.0+mc1.16.5.jar
 - ✅ memoryleakfix-forge-pre1.17-1.1.5.jar
 
 ## 🖥️ SERVER MaxLite (Forge pur — CONSUM MINIM, recomandat)
