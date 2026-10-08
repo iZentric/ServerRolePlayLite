@@ -60,7 +60,6 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ Multiplayer-Server-Pause-1.16.5-Forge-1.1.0.jar
 - ✅ incontrol-1.16-5.2.12.jar
 - ✅ RoadRunner-mc1.16.5-1.5.2.jar
-- ✅ radon-0.8.0a.jar
 - ✅ Placebo-1.16.5-4.7.1.jar
 - ✅ FastFurnace-1.16.5-4.5.0.jar
 - ✅ FastWorkbench-1.16.5-4.6.2.jar
