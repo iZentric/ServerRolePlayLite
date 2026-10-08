@@ -53,10 +53,15 @@ def download(url, dest, tries=4):
 
 
 def resolve_modrinth(slug, mc, loader):
+    ver_pat = None
+    if "@" in slug:
+        slug, _, ver_pat = slug.partition("@")
     gv = urllib.parse.quote(json.dumps([mc]))
     ld = urllib.parse.quote(json.dumps([loader]))
     url = f"https://api.modrinth.com/v2/project/{slug}/version?game_versions={gv}&loaders={ld}"
     versions = http_json(url)
+    if ver_pat:
+        versions = [x for x in versions if re.search(ver_pat, x.get("version_number", ""))]
     if not versions:
         raise ValueError("nicio versiune")
     v = versions[0]

@@ -31,7 +31,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download lite -R ${{ github.repository }} -p '*Server-Mist-EXPERIMENTAL*.zip' -O server.zip
+          gh release download lite -R ${{ github.repository }} -p '*Server-CatServer*.zip' -O server.zip
           mkdir -p srv && cd srv && unzip -q ../server.zip && ls -la
       - name: Instaleaza lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
