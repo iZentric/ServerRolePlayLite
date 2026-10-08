@@ -45,6 +45,19 @@ jobs:
             mkdir -p mohist-config
             printf 'check_update: false\n' > mohist-config/mohist.yml
             ls -la libraries/cpw/mods/modlauncher/*/
+            # LAZARUS 4: CHIRURGIE PE JAR - daca modlauncher e cusut IN jarul Mist,
+            # scoatem clasele bolnave si coasem inauntru pe cele vindecate din 8.1.3
+            MJ=$(ls mist-*.jar | head -1)
+            echo "== continut modlauncher in $MJ:"
+            unzip -l "$MJ" | grep -cE "cpw/mods/modlauncher" || true
+            if unzip -l "$MJ" | grep -qE "cpw/mods/modlauncher/SecureJarHandler"; then
+              echo "== SHADED GASIT - operam pe jar"
+              mkdir -p /tmp/mlfix && (cd /tmp/mlfix && unzip -oq /tmp/ml.jar 'cpw/*')
+              zip -dq "$MJ" 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA' 2>/dev/null || true
+              zip -dq "$MJ" 'cpw/mods/modlauncher/*' 2>/dev/null || true
+              (cd /tmp/mlfix && zip -rq "$OLDPWD/$MJ" cpw)
+              echo "== transplant intern terminat"
+            fi
           fi
           START=$(date +%s)
           mkfifo in
