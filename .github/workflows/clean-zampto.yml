@@ -23,7 +23,7 @@ jobs:
           cat /tmp/u.txt
           lftp -u "15254.1388b9af","$P" "sftp://node12.zampto.net:2022" -e "
             set sftp:auto-confirm yes;
-            mv 'CatServer-1.16.5-1d8d6313-server.jar' 'server.jar';
+            rm -f 'README.txt'; rm -f 'user_jvm_args.txt';
             put /tmp/u.txt -o unix_args.txt;
             ls *.jar; cat unix_args.txt;
             bye" || true
