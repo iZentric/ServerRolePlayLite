@@ -65,7 +65,7 @@ jobs:
           import socket,struct,sys,re
           def send(s,i,t,p=b""):
               d=struct.pack(">ii",i,t)+p+b"\x00\x00"
-              s.sendall(struct.pack(">i",len(d)+4)+d)
+              s.sendall(struct.pack(">i",len(d))+d)
           def recv(s):
               h=b""
               while len(h)<4:
