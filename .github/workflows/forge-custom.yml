@@ -23,14 +23,16 @@ jobs:
           (./gradlew tasks --all --no-daemon -q 2>&1 | grep -iE "setup|build|jar|launcher" | head -20) >> ../forja.log 2>&1 || true
           (timeout 90m ./gradlew setup --no-daemon >> ../forja.log 2>&1 && echo "SETUP OK" >> ../forja.log) || echo "setup esuat/inexistent" >> ../forja.log
           (timeout 25m ./gradlew buildCatServer --no-daemon >> ../forja.log 2>&1 && echo "BUILDCATSERVER OK" >> ../forja.log) || echo "build esuat" >> ../forja.log
-          echo "== jaruri nascute:" >> ../forja.log
-          find . -name "*.jar" -newer gradlew -size +5M | head -10 >> ../forja.log || true
+          echo "== jaruri nascute (toate build/libs + nume CatServer):" >> ../forja.log
+          find . -path "*build/libs/*.jar" >> ../forja.log 2>/dev/null || true
+          find . -iname "*catserver*.jar" -not -path "*/caches/*" >> ../forja.log 2>/dev/null || true
       - name: Raport in analysis/
         if: always()
         run: |
           mkdir -p analysis
           { echo "# FORJA CatServer-Custom ($(date -u))"; echo '```'; tail -120 forja.log; echo '```'; } > analysis/forja-catserver.md
-          J=$(find catsrc -name "*.jar" -size +30M | head -1)
+          J=$(find catsrc -iname "*catserver*.jar" -path "*libs*" | head -1)
+          [ -z "$J" ] && J=$(find catsrc -path "*build/libs/*.jar" -size +10M | head -1)
           if [ -n "$J" ]; then
             gh release delete custom -y 2>/dev/null || true
             gh release create custom -t "CatServer-Custom (forja noastra)" -n "jar construit de noi din sursa" "$J" || true
