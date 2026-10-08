@@ -260,6 +260,27 @@ ticks-per:
   autosave: 6000
 """
 
+
+CATSERVER_YML = """\
+# catserver.yml - tunat pe cheile reale (autopsia tribunalului, 8 oct)
+world:
+  keepSpawnInMemory: false
+  forceSaveOnWatchdog: true
+fakePlayer:
+  permissions:
+  - essentials.build
+  eventPass: false
+plugin:
+  patcher:
+    enableDynmapCompatible: false
+    enableEssentialsNewVersionCompatible: true
+    enableMythicMobsPatcherCompatible: false
+    enableWorldEditCompatible: true
+disableFMLStatusModInfo: true
+disableAsyncCatchWarn: true
+versionCheck: false
+"""
+
 PAPER_YML = """\
 # paper.yml - optimizari Paper (doar varianta Mist) - consum minim cu pluginuri
 world-settings:
@@ -668,6 +689,8 @@ def main():
     os.remove(os.path.join(s4, rules["arclight_jar"]))
     log("  ↓ CatServer")
     download(rules["catserver_url"], os.path.join(s4, rules["catserver_jar"]))
+    with open(os.path.join(s4, "catserver.yml"), "w") as f:
+        f.write(CATSERVER_YML)
     write_start_scripts(s4, rules["catserver_jar"])
     with open(os.path.join(s4, "CITESTE-MA.txt"), "w") as f:
         f.write(README_ARCLIGHT.replace("Arclight 1.16.5 = Forge + pluginuri Bukkit",
