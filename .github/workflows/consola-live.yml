@@ -1,0 +1,130 @@
+name: Consola (RCON de la distanta — cheia o citesc de pe server)
+# Comanda de trimis = in fisierul deploy/consola-trigger.txt (orice, o linie).
+# Flux: SFTP ia server.properties -> extrag rcon.password -> test ping MC + RCON list
+# -> raportul (analysis/consola.md) afiseaza DOAR rezultatul, niciodata cheia.
+on:
+  push:
+    paths: [ "deploy/consola-trigger.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+env:
+  SFTP_HOST: node12.zampto.net
+  SFTP_PORT: "2022"
+  SFTP_USER: 15254.1388b9af
+jobs:
+  consola:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instaleaza lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+      - name: Extrag cheia RCON de pe server (nu se logui niciodata)
+        env:
+          P: ${{ secrets.ZAMPTO_SFTP_PASS }}
+        run: |
+          mkdir -p run
+          lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "
+            set sftp:auto-confirm yes;
+            get server.properties -o run/sp.txt;
+            bye"
+          grep '^rcon.password=' run/sp.txt | cut -d= -f2- > run/rpass
+          echo "cheie extrasa: lungime $(wc -c < run/rpass | awk '{print $1-1}')"
+      - name: Ping MC intreg (citire pana la EOF, taio de la '{')
+        run: |
+          cat > run/ping.py <<'PYEOF'
+          import socket,json
+          s=socket.create_connection(("node12.zampto.net",26252),15)
+          s.settimeout(15)
+          def vi(x):
+              out=b"";x&=0xffffffff
+              while True:
+                  b=x&0x7f;x>>=7
+                  out+=bytes([b|(0x80 if x else 0)])
+                  if not x: return out
+          host=b"node12.zampto.net"
+          body=vi(-1)+vi(len(host))+host+__import__("struct").pack(">H",26252)+vi(1)
+          s.sendall(vi(len(body))+body)
+          data=b""
+          while True:
+              c=s.recv(65536)
+              if not c: break
+              data+=c
+          i=data.find(b"{")
+          j=json.loads(data[i:].split(b"\x00")[0])
+          print("PING OK:", json.dumps(j)[:350])
+          PYEOF
+          python3 run/ping.py > run/ping.out 2>&1 || true
+          cat run/ping.out
+      - name: RCON — rulez comanda din deploy/consola-trigger.txt
+        run: |
+          cat > run/rcon.py <<'PYEOF'
+          import socket,struct,sys
+          def send(s,i,t,p=b""):
+              d=struct.pack(">ii",i,t)+p+b"\x00\x00"
+              s.sendall(struct.pack(">i",len(d))+d)
+          def recv(s):
+              h=b""
+              while len(h)<4:
+                  c=s.recv(4-len(h))
+                  if not c: raise EOFError
+                  h+=c
+              n=struct.unpack(">i",h)[0]
+              b=b""
+              while len(b)<n:
+                  c=s.recv(n-len(b))
+                  if not c: break
+                  b+=c
+              i,t=struct.unpack(">ii",b[:8])
+              return i,t,b[8:-2].decode("utf8","replace")
+          pw=sys.argv[1].encode()
+          import re
+          cmd="list"
+          for l in open("deploy/consola-trigger.txt"):
+              l=l.strip()
+              if l and not re.match(r"^\d{4}-", l): cmd=l
+          s=socket.create_connection(("node12.zampto.net",28147),15)
+          s.settimeout(15)
+          send(s,1,3,pw)
+          send(s,2,2,cmd.encode())
+          out=""
+          for _ in range(4):
+              try:
+                  i,t,d=recv(s)
+              except Exception:
+                  break
+              if i==2 and d.strip():
+                  out=d
+                  break
+          if out:
+              print("RCON OK -> comanda: "+cmd)
+              print(out[:800])
+          else:
+              print("RCON FARA RASPUNS la: "+cmd)
+          PYEOF
+          RPASS=$(cat run/rpass)
+          python3 run/rcon.py "$RPASS" > run/rcon.out 2>&1 || true
+          sed -E "s|$RPASS|<CHEIE-CENZURATA>|g" run/rcon.out > run/rcon.safe 2>/dev/null || cp run/rcon.out run/rcon.safe
+          cat run/rcon.safe
+      - name: Raport in repo (fara cheia nicaieri)
+        run: |
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          {
+            echo "# CONSOLA — $(date -u '+%F %T UTC')"
+            echo
+            echo "## Ping server (portul de joc)"
+            echo '```'
+            cat run/ping.out
+            echo '```'
+            echo "## RCON"
+            echo '```'
+            cat run/rcon.safe
+            echo '```'
+          } > analysis/consola.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f analysis/consola.md
+          git commit -m "analysis: raport consola" || true
+          git push || true
+          exit 0
