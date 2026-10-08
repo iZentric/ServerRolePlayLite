@@ -1,4 +1,4 @@
-# CONSOLA — 2026-10-08 21:10:38 UTC
+# CONSOLA — 2026-10-08 21:12:59 UTC
 
 ## Ping server (portul de joc)
 ```
@@ -6,12 +6,10 @@ PING OK: {"translate": "disconnect.genericReason", "with": ["Internal Exception:
 ```
 ## RCON
 ```
-RCON FARA RASPUNS la: list
+RCON ESUAT pe toate variantele: #0 len=20: fara raspuns
 ```
 ## Log server despre RCON (ultimele 12 linii)
 ```
-431:[20:40:38] [Server thread/INFO] [net.minecraft.network.rcon.RConThread]: Thread RCON Listener started
-432:[20:40:38] [Server thread/INFO] [net.minecraft.network.rcon.MainThread]: RCON running on 0.0.0.0:28147
 470:[21:02:08] [RCON Listener #1/INFO] [net.minecraft.network.rcon.RConThread]: Thread RCON Client /20.125.176.176 started
 471:[21:02:08] [RCON Client /20.125.176.176 #2/INFO] [net.minecraft.network.rcon.ClientThread]: Thread RCON Client /20.125.176.176 shutting down
 472:[21:04:38] [RCON Listener #1/INFO] [net.minecraft.network.rcon.RConThread]: Thread RCON Client /4.151.214.97 started
@@ -22,5 +20,7 @@ RCON FARA RASPUNS la: list
 477:[21:08:37] [RCON Client /20.169.61.196 #5/INFO] [net.minecraft.network.rcon.ClientThread]: Thread RCON Client /20.169.61.196 shutting down
 478:[21:10:34] [RCON Client /52.159.229.67 #6/INFO] [net.minecraft.network.rcon.ClientThread]: Thread RCON Client /52.159.229.67 shutting down
 479:[21:10:34] [RCON Listener #1/INFO] [net.minecraft.network.rcon.RConThread]: Thread RCON Client /52.159.229.67 started
+480:[21:12:55] [RCON Listener #1/INFO] [net.minecraft.network.rcon.RConThread]: Thread RCON Client /134.33.77.240 started
+481:[21:12:55] [RCON Client /134.33.77.240 #7/INFO] [net.minecraft.network.rcon.ClientThread]: Thread RCON Client /134.33.77.240 shutting down
 incercari esuate de autentificare RCON in log: 0
 ```
