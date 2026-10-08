@@ -12,11 +12,9 @@
 ./defaultconfigs/
 ./defaultconfigs/forge-server.toml
 ./eula.txt
-./mist-1.16.5-33-server.jar
 ./mods/
 ./mods/AI-Improvements-1.16.5-0.5.0.jar
 ./mods/Clumps-6.0.0.28.jar
-./mods/DataFixerSlayer 1.0-3.jar
 ./mods/FastFurnace-1.16.5-4.5.0.jar
 ./mods/FastWorkbench-1.16.5-4.6.2.jar
 ./mods/Ksyxis-1.4.5.jar
@@ -25,7 +23,6 @@
 ./mods/Pizzaland_v68.jar
 ./mods/Placebo-1.16.5-4.7.1.jar
 ./mods/RoadRunner-mc1.16.5-1.5.2.jar
-./mods/TRansliterationLib-1.0.4.jar
 ./mods/additional-guns-0.7.1-1.16.5.jar
 ./mods/bwncr-1.16.5-3.10.16.jar
 ./mods/cfm-7.0.0pre22-1.16.3.jar
@@ -42,37 +39,28 @@
 ./mods/obfuscate-0.6.3-1.16.5.jar
 ./mods/pamhc2foodcore-1.16.3-1.0.2.jar
 ./mods/player-animation-lib-forge-0.4.0+1.16.5.jar
-./mods/radon-0.8.0a.jar
 ./mods/roadstuff-1.16.5-4.3.0.jar
 ./mods/saturn-mc1.16.5-0.0.3.jar
 ./mods/selene-1.16.5-1.9.0.jar
 ./mods/supplementaries-1.16.5-0.18.4b.jar
 ./mods/vehicle-mod-0.45.2-1.16.5 (1).jar
 ./mods/voicechat-forge-1.16.5-2.3.23.jar
-./paper.yml
 ./plugins/
 ./plugins/AuthMe-5.6.0.jar
 ./plugins/Chunky-1.2.217.jar
-./plugins/Chunky-1.3.38.jar
 ./plugins/EssentialsX-2.19.7.jar
 ./plugins/EssentialsXAntiBuild-2.19.7.jar
 ./plugins/EssentialsXChat-2.19.7.jar
 ./plugins/EssentialsXProtect-2.19.7.jar
 ./plugins/EssentialsXSpawn-2.19.7.jar
 ./plugins/FastLoginBukkit.jar
-./plugins/GriefPrevention.jar
 ./plugins/LuckPerms-Bukkit-5.5.71.jar
 ./plugins/ProtocolLib.jar
 ./plugins/SkinsRestorer.jar
 ./plugins/Vault.jar
-./plugins/ZNPCsPlus-1.0.8.jar
 ./plugins/claimchunk-0.0.22.jar
-./plugins/claimchunk-0.0.23-RC8-plugin.jar
-./plugins/packetevents-spigot-2.14.0.jar
 ./plugins/worldedit-bukkit-7.2.5-dist.jar
 ./plugins/worldguard-bukkit-7.0.5-dist.jar
-./run.bat
-./run.sh
 ./server-icon.png
 ./server.properties
 ./spigot.yml
