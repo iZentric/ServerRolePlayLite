@@ -1,3 +1,69 @@
+Global percentage >91%
+Downloading file binarypatcher-1.0.12.jar with size 16.104492 KB
+Download finished for binarypatcher-1.0.12.jar !
+Global percentage >91%
+Downloading file commons-io-2.4.jar with size 180.80078 KB
+Download finished for commons-io-2.4.jar !
+Global percentage >91%
+Downloading file coremods-4.0.6.jar with size 24.856445 KB
+Download finished for coremods-4.0.6.jar !
+Global percentage >92%
+Downloading file jopt-simple-5.0.4.jar with size 76.31445 KB
+Download finished for jopt-simple-5.0.4.jar !
+Global percentage >92%
+Downloading file asm-9.1.jar with size 118.93555 KB
+Download finished for asm-9.1.jar !
+Global percentage >92%
+Downloading file asm-analysis-9.1.jar with size 33.4541 KB
+Download finished for asm-analysis-9.1.jar !
+Global percentage >92%
+Downloading file asm-commons-9.1.jar with size 70.93848 KB
+Download finished for asm-commons-9.1.jar !
+Global percentage >92%
+Downloading file asm-tree-9.1.jar with size 51.427734 KB
+Download finished for asm-tree-9.1.jar !
+Global percentage >92%
+Downloading file asm-util-9.1.jar with size 82.694336 KB
+Download finished for asm-util-9.1.jar !
+Global percentage >92%
+Downloading file log4j-core-2.11.2.jar with size 1.5540934MB
+Download finished for log4j-core-2.11.2.jar !
+Global percentage >95%
+Downloading file opencsv-2.3.jar with size 19.362305 KB
+Download finished for opencsv-2.3.jar !
+Global percentage >95%
+Downloading file jsr305-3.0.2.jar with size 19.46875 KB
+Download finished for jsr305-3.0.2.jar !
+Global percentage >95%
+Downloading file jline-2.14.6.jar with size 262.48047 KB
+Download finished for jline-2.14.6.jar !
+Global percentage >95%
+Downloading file installertools-1.1.11.jar with size 53.030273 KB
+Download finished for installertools-1.1.11.jar !
+Global percentage >95%
+Downloading file lzma-java-1.3.jar with size 49.844727 KB
+Download finished for lzma-java-1.3.jar !
+Global percentage >96%
+Downloading file typetools-0.8.3.jar with size 15.063477 KB
+Download finished for typetools-0.8.3.jar !
+Global percentage >96%
+Downloading file asm-6.1.1.jar with size 105.71484 KB
+Download finished for asm-6.1.1.jar !
+Global percentage >96%
+Downloading file nashorn-core-compat-15.1.1.1.jar with size 2.0924158MB
+Download finished for nashorn-core-compat-15.1.1.1.jar !
+Global percentage >99%
+Downloading file antlr4-runtime-4.9.1.jar with size 329.94922 KB
+Download finished for antlr4-runtime-4.9.1.jar !
+Global percentage >100%
+Downloading file maven-resolver-provider-3.8.1.jar with size 64.68262 KB
+Download finished for maven-resolver-provider-3.8.1.jar !
+Global percentage >100%
+Downloading file maven-resolver-connector-basic-1.6.2.jar with size 44.652344 KB
+Download finished for maven-resolver-connector-basic-1.6.2.jar !
+Global percentage >100%
+Downloading file maven-resolver-transport-http-1.6.2.jar with size 42.594727 KB
+Download finished for maven-resolver-transport-http-1.6.2.jar !
 Global percentage >100%
 Downloading file cleaner-1.0-SNAPSHOT.jar with size 1.8701172 KB
 Download finished for cleaner-1.0-SNAPSHOT.jar !
@@ -49,155 +115,139 @@ Remapping jar... 90%
 Remapping jar... 100%
 [Mist] Creating forge server jar. This can take 1 minute.
 Finished the install verification process !
-[06:32:43 INFO]: ModLauncher running: args [--gameDir, ., --launchTarget, fmlserver, --fml.forgeVersion, 36.2.4, --fml.mcpVersion, 20210115.111550, --fml.mcVersion, 1.16.5, --fml.forgeGroup, net.minecraftforge, nogui]
-[06:32:43 INFO]: ModLauncher 8.1.3+8.1.3+main-8.1.x.c94d18ec starting: java version 11.0.32.1 by Eclipse Adoptium
+[07:06:31 INFO]: ModLauncher running: args [--gameDir, ., --launchTarget, fmlserver, --fml.forgeVersion, 36.2.4, --fml.mcpVersion, 20210115.111550, --fml.mcVersion, 1.16.5, --fml.forgeGroup, net.minecraftforge, nogui]
+[07:06:31 INFO]: ModLauncher 8.1.3+8.1.3+main-8.1.x.c94d18ec starting: java version 11.0.32.1 by Eclipse Adoptium
 WARNING: An illegal reflective access operation has occurred
 WARNING: Illegal reflective access by cpw.mods.modlauncher.SecureJarHandler (file:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/cpw/mods/modlauncher/8.0.9/modlauncher-8.0.9.jar) to field java.util.jar.Manifest.jv
 WARNING: Please consider reporting this to the maintainers of cpw.mods.modlauncher.SecureJarHandler
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-[06:32:43 INFO]: Added Lets Encrypt root certificates as additional trust
-[06:32:43 INFO]: SpongePowered MIXIN Subsystem Version=0.8.2 Source=file:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar Service=ModLauncher Env=SERVER
-[06:32:44 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[06:32:44 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[06:32:44 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
-[06:32:46 INFO]: Launching target 'fmlserver' with arguments [--gameDir, ., nogui]
-[06:32:53 FATAL]: Error during pre-loading phase
-[06:32:53 INFO]: [net.minecraft.crash.CrashReport:func_85057_a:201]: Negative index in crash report handler (16/18)
-[06:32:53 FATAL]: Crash report saved to ./crash-reports/crash-2026-10-08_06.32.53-fml.txt
----- Minecraft Crash Report ----
-// Everything's going to plan. No, really, that was supposed to happen.
-
-Time: 10/8/26, 6:32 AM
-Description: Mod loading error has occurred
-
-java.lang.Exception: Mod Loading has failed
-	at net.minecraftforge.fml.CrashReportExtender.dumpModLoadingCrashReport(CrashReportExtender.java:86) ~[forge:?] {re:classloading}
-	at net.minecraftforge.fml.server.ServerModLoader.load(ServerModLoader.java:51) ~[forge:?] {re:classloading}
-	at net.minecraft.server.Main.main(Main.java:148) ~[?:?] {re:classloading}
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?] {}
-	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
-	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?] {}
-	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51) ~[mist-1.16.5-33-server.jar:36.1] {}
-	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.0.9.jar:?] {}
-	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109) [mist-1.16.5-33-server.jar:?] {}
-	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106) [mist-1.16.5-33-server.jar:?] {}
-	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103) [mist-1.16.5-33-server.jar:?] {}
-
-
-A detailed walkthrough of the error, its code path and all known details is as follows:
----------------------------------------------------------------------------------------
-
--- Head --
-Thread: main
-Stacktrace:
-	at net.minecraftforge.fml.CrashReportExtender.lambda$dumpModLoadingCrashReport$7(CrashReportExtender.java:89) ~[forge:?] {re:classloading}
--- MOD fastbench --
-Details:
-	Mod File: FastWorkbench-1.16.5-4.6.2.jar
-	Failure message: Mod fastbench requires forge 36.2.9 or above
-		Currently, forge is 36.2.4
-	Mod Version: 4.6.2
-	Mod Issue URL: NOT PROVIDED
-	Exception message: MISSING EXCEPTION MESSAGE
-Stacktrace:
-	at net.minecraftforge.fml.CrashReportExtender.lambda$dumpModLoadingCrashReport$7(CrashReportExtender.java:89) ~[forge:?] {re:classloading}
-	at java.util.ArrayList.forEach(ArrayList.java:1541) ~[?:?] {}
-	at net.minecraftforge.fml.CrashReportExtender.dumpModLoadingCrashReport(CrashReportExtender.java:87) ~[forge:?] {re:classloading}
-	at net.minecraftforge.fml.server.ServerModLoader.load(ServerModLoader.java:51) ~[forge:?] {re:classloading}
-	at net.minecraft.server.Main.main(Main.java:148) ~[?:?] {re:classloading}
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?] {}
-	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
-	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?] {}
-	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51) ~[mist-1.16.5-33-server.jar:36.1] {}
-	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.0.9.jar:?] {}
-	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109) [mist-1.16.5-33-server.jar:?] {}
-	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106) [mist-1.16.5-33-server.jar:?] {}
-	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103) [mist-1.16.5-33-server.jar:?] {}
-
-
--- MOD fastfurnace --
-Details:
-	Mod File: FastFurnace-1.16.5-4.5.0.jar
-	Failure message: Mod fastfurnace requires forge 36.2.9 or above
-		Currently, forge is 36.2.4
-	Mod Version: 4.5.0
-	Mod Issue URL: NOT PROVIDED
-	Exception message: MISSING EXCEPTION MESSAGE
-
--- MOD placebo --
-Details:
-	Mod File: Placebo-1.16.5-4.7.1.jar
-	Failure message: Mod placebo requires forge 36.2.33 or above
-		Currently, forge is 36.2.4
-	Mod Version: 4.7.1
-	Mod Issue URL: NOT PROVIDED
-	Exception message: MISSING EXCEPTION MESSAGE
-
--- MOD voicechat --
-Details:
-	Mod File: voicechat-forge-1.16.5-2.3.23.jar
-	Failure message: Mod voicechat requires forge 36.2.20 or above
-		Currently, forge is 36.2.4
-	Mod Version: 1.16.5-2.3.23
-	Mod Issue URL: https://github.com/henkelmax/simple-voice-chat/issues
-	Exception message: MISSING EXCEPTION MESSAGE
-
--- MOD obfuscate --
-Details:
-	Mod File: obfuscate-0.6.3-1.16.5.jar
-	Failure message: Mod obfuscate requires forge 36.2.20 or above
-		Currently, forge is 36.2.4
-	Mod Version: 0.6.3
-	Mod Issue URL: https://github.com/MrCrayfish/Obfuscate/issues
-	Exception message: MISSING EXCEPTION MESSAGE
-
--- System Details --
-Details:
-	Minecraft Version: 1.16.5
-	Minecraft Version ID: 1.16.5
-	Mohist Version: 1.16.5-33
-	Operating System: Linux (amd64) version 6.17.0-1022-azure
-	Java Version: 11.0.32.1, Eclipse Adoptium
-	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode), Eclipse Adoptium
-	Memory: 730173240 bytes (696 MB) / 1073741824 bytes (1024 MB) up to 4294967296 bytes (4096 MB)
-	CPUs: 2
-	JVM Flags: 36 total; -Xms128M -XX:MaxRAMPercentage=90.0 -Xms1G -Xmx4G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=37 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=23 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99 -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=256M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=122M -XX:NonProfiledCodeHeapSize=122M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:AllocatePrefetchStyle=3
-	ModLauncher: 8.1.3+8.1.3+main-8.1.x.c94d18ec
-	ModLauncher launch target: fmlserver
-	ModLauncher naming: srg
-	ModLauncher services: 
-		/mixin-0.8.2.jar mixin PLUGINSERVICE 
-		/eventbus-4.0.0.jar eventbus PLUGINSERVICE 
-		/mist-1.16.5-33-server.jar object_holder_definalize PLUGINSERVICE 
-		/mist-1.16.5-33-server.jar runtime_enum_extender PLUGINSERVICE 
-		/mist-1.16.5-33-server.jar capability_inject_definalize PLUGINSERVICE 
-		/accesstransformers-3.0.1.jar accesstransformer PLUGINSERVICE 
-		/mist-1.16.5-33-server.jar runtimedistcleaner PLUGINSERVICE 
-		/mixin-0.8.2.jar mixin TRANSFORMATIONSERVICE 
-		/mist-1.16.5-33-server.jar fml TRANSFORMATIONSERVICE 
-	FML: 36.1
-	Forge: net.minecraftforge:36.2.4
-	FML Language Providers: 
-		javafml@36.1
-		minecraft@1
-	Mod List: 
-		forge-1.16.5-36.2.4-server.jar                    |Minecraft                     |minecraft                     |1.16.5              |NONE      |Manifest: NOSIGNATURE
-		forge-1.16.5-36.2.4-universal.jar                 |Forge                         |forge                         |36.2.4              |NONE      |Manifest: NOSIGNATURE
-	CraftBukkit Information: 
-   Running: 
-   Failed to handle CraftCrashReport: craftbukkit not runs
-[06:32:53 FATAL]: Failed to start the minecraft server
+[07:06:31 INFO]: Added Lets Encrypt root certificates as additional trust
+[07:06:31 INFO]: SpongePowered MIXIN Subsystem Version=0.8.2 Source=file:/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/srv/libraries/org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar Service=ModLauncher Env=SERVER
+[07:06:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: com.electronwill.nightconfig.core.io.ParsingException: Invalid TOML data: entry "[maxThreads]" defined twice in its table.
+[07:06:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TableParser.checkDuplicateKey(TableParser.java:88)
+[07:06:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TableParser.parseNormal(TableParser.java:59)
+[07:06:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TomlParser.parse(TomlParser.java:44)
+[07:06:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.toml.TomlParser.parse(TomlParser.java:37)
+[07:06:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:113)
+[07:06:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:219)
+[07:06:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:202)
+[07:06:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.file.WriteSyncFileConfig.load(WriteSyncFileConfig.java:73)
+[07:06:31 INFO]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: 	at com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread.run(FileWatcher.java:181)
+[07:06:32 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:06:32 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:06:32 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:06:32 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:06:32 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:06:32 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:06:32 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:06:32 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:06:32 INFO]: [jdk.nashorn.api.scripting.NashornScriptEngine:<init>:143]: Warning: Nashorn engine is planned to be removed from a future JDK release
+[07:06:33 ERROR]: Mixin config pizzamod.mixin.json does not specify "minVersion" property
+[07:06:33 INFO]: Launching target 'fmlserver' with arguments [--gameDir, ., nogui]
+[07:06:34 INFO]: Loaded rule configuration file for RoadRunner: 81 options available, 0 override(s) found
+[07:06:34 INFO]: Loaded configuration file for ModernFix 5.18.0+mc1.16.5: 89 options available, 0 override(s) found
+[07:06:34 INFO]: Applied Forge config corruption patch
+[07:06:35 INFO]: Patching LivingEntity#attackEntityFrom
+[07:06:35 WARN]: @Mixin target net/minecraft/block/AbstractBlock$AbstractBlockState$Cache is public in roadrunner.mixins.json:shapes.side_shape_cache.BlockCacheMixin and should be specified in value
+[07:06:35 INFO]: Patching ItemStack#onItemUse
+[07:06:35 INFO]: Patching LootTableManager#apply
+[07:06:35 WARN]: @Mixin target net/minecraft/block/AbstractBlock$AbstractBlockState$Cache is public in ferritecore.blockstatecache.mixin.json:BlockStateCacheMixin and should be specified in value
+[07:06:35 WARN]: @Mixin target net/minecraft/world/server/ChunkManager$EntityTracker is public in emotecraft.mixins.json:TrackedEntityAccessor and should be specified in value
+[07:06:35 INFO]: [MemoryLeakFix] Will be applying 3 memory leak fixes!
+[07:06:35 INFO]: [MemoryLeakFix] Currently enabled memory leak fixes: [entityMemoriesLeak, biomeTemperatureLeak, drownedNavigationLeak]
+[07:06:35 INFO]: Initializing MixinExtras via org.embeddedt.modernfix.forge.shadow.mixinextras.service.MixinExtrasServiceImpl(version=0.3.2).
+Exception in thread "main" [07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:39)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: Caused by: java.lang.reflect.InvocationTargetException
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
+[07:06:36 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	... 7 more
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: Caused by: org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:223)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformationHandler.processClass(MixinTransformationHandler.java:121)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.launch.MixinLaunchPlugin.processClass(MixinLaunchPlugin.java:131)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:154)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:85)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:265)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:527)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.Main.main(Main.java:121)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:648]: 	... 13 more
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:671]: Caused by: org.spongepowered.asm.mixin.injection.throwables.InjectionError: Critical injection failure: Argument modifier method makeImmutableForFluid(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/math/BlockPos; in roadrunner.mixins.json:alloc.chunk_random.ServerWorldMixin failed injection check, (0/1) succeeded. Scanned 1 target(s). Using refmap RoadRunner-mc1.16.5-refmap.json
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.postInject(InjectionInfo.java:408)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.applyInjections(MixinTargetContext.java:1291)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyInjections(MixinApplicatorStandard.java:1042)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:395)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:320)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:345)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:569)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:351)
+[07:06:36 INFO]: [java.lang.Throwable:printStackTrace:671]: 	... 24 more
+===== CONFIG NATIV: mohist-config/mohist.yml =====
+check_update: false
+===== CONFIG NATIV: bukkit.yml =====
+# bukkit.yml - performanta maxima (doar varianta Arclight)
+settings:
+  allow-end: false
+spawn-limits:
+  monsters: 40
+  animals: 8
+  water-animals: 3
+  water-ambient: 5
+  ambient: 5
+chunk-gc:
+  period-in-ticks: 400
+ticks-per:
+  animal-spawns: 400
+  monster-spawns: 4
+  water-spawns: 11
+  ambient-spawns: 11
+  autosave: 6000
+===== CONFIG NATIV: spigot.yml =====
+# Freeroam Lite ULTRA - raze de activare taiate (mobii departe de jucatori dorm)
+settings:
+  save-user-cache-on-stop-only: true
+  netty-threads: 2
+world-settings:
+  default:
+    entity-activation-range:
+      animals: 12
+      monsters: 20
+      raiders: 24
+      misc: 6
+    entity-tracking-range:
+      players: 48
+      animals: 32
+      monsters: 32
+      misc: 16
+      other: 32
+    mob-spawn-range: 3
+    nerf-spawner-mobs: true
+    merge-radius:
+      item: 3.5
+      exp: 4.0
+    ticks-per:
+      hopper-transfer: 8
+      hopper-check: 8
+      monster-spawns: 2
+    max-tick-time:
+      tile: 20
+      entity: 20
 ===== DOSAR MIST =====
 -- MANIFEST:
 Manifest-Version: 1.0
@@ -233,7 +283,6 @@ Class-Path: libraries/org/ow2/asm/asm/9.1/asm-9.1.jar libraries/org/ow
         0  2021-09-04 13:46   com/mohistmc/network/download/
      1666  2021-09-04 13:46   com/mohistmc/network/download/UpdateUtils$1.class
      1234  2021-09-04 13:46   com/mohistmc/network/download/NetworkUtil.class
-/home/runner/work/_temp/8deab5a0-63c6-485c-8fba-f23913005c14.sh: line 65:  2188 Killed                  java -Xms128M -XX:MaxRAMPercentage=90.0 -Dterminal.jline=false @unix_args.txt < in > boot.log 2>&1
 -- jaruri nascute de instalare:
 libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-universal.jar
 libraries/net/minecraftforge/forge/1.16.5-36.2.4/forge-1.16.5-36.2.4-server.jar
@@ -255,126 +304,65 @@ libraries/net/minecraftforge/eventbus/4.0.0/eventbus-4.0.0.jar
 libraries/net/minecraftforge/installertools/1.1.11/installertools-1.1.11.jar
 libraries/net/minecraftforge/unsafe/0.2.0/unsafe-0.2.0.jar
 libraries/net/minecraftforge/jarsplitter/1.1.2/jarsplitter-1.1.2.jar
--rw-r--r-- 1 runner runner 8643834 Oct  8 06:32 mist-1.16.5-33-server.jar
+-rw-r--r-- 1 runner runner 8643834 Oct  8 07:06 mist-1.16.5-33-server.jar
 ===== JURNAL INTERN: ./logs/latest.log =====
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/NetworkRegistry.class got resource net/minecraftforge/fml/network/NetworkRegistry.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/NetworkInstance.class got resource net/minecraftforge/fml/network/NetworkInstance.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/NetworkEvent.class got resource net/minecraftforge/fml/network/NetworkEvent.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/NetworkEvent$LoginPayloadEvent.class got resource net/minecraftforge/fml/network/NetworkEvent$LoginPayloadEvent.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/NetworkEvent$GatherLoginPayloadsEvent.class got resource net/minecraftforge/fml/network/NetworkEvent$GatherLoginPayloadsEvent.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/simple/IndexedMessageCodec.class got resource net/minecraftforge/fml/network/simple/IndexedMessageCodec.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLHandshakeMessages$C2SAcknowledge.class got resource net/minecraftforge/fml/network/FMLHandshakeMessages$C2SAcknowledge.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLHandshakeMessages$LoginIndexedMessage.class got resource net/minecraftforge/fml/network/FMLHandshakeMessages$LoginIndexedMessage.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/NetworkDirection.class got resource net/minecraftforge/fml/network/NetworkDirection.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/NetworkEvent$ClientCustomPayloadEvent.class got resource net/minecraftforge/fml/network/NetworkEvent$ClientCustomPayloadEvent.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/ICustomPacket.class got resource net/minecraftforge/fml/network/ICustomPacket.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/LogicalSide.class got resource net/minecraftforge/fml/LogicalSide.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://minecraft/net/minecraft/network/play/client/CCustomPayloadPacket.class got resource net/minecraft/network/play/client/CCustomPayloadPacket.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/NetworkEvent$ServerCustomPayloadEvent.class got resource net/minecraftforge/fml/network/NetworkEvent$ServerCustomPayloadEvent.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://minecraft/net/minecraft/network/play/server/SCustomPayloadPlayPacket.class got resource net/minecraft/network/play/server/SCustomPayloadPlayPacket.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/NetworkEvent$ClientCustomPayloadLoginEvent.class got resource net/minecraftforge/fml/network/NetworkEvent$ClientCustomPayloadLoginEvent.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://minecraft/net/minecraft/network/login/client/CCustomPayloadLoginPacket.class got resource net/minecraft/network/login/client/CCustomPayloadLoginPacket.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/NetworkEvent$ServerCustomPayloadLoginEvent.class got resource net/minecraftforge/fml/network/NetworkEvent$ServerCustomPayloadLoginEvent.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://minecraft/net/minecraft/network/login/server/SCustomPayloadLoginPacket.class got resource net/minecraft/network/login/server/SCustomPayloadLoginPacket.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/simple/SimpleChannel$MessageBuilder.class got resource net/minecraftforge/fml/network/simple/SimpleChannel$MessageBuilder.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://minecraft/net/minecraft/network/PacketBuffer.class got resource net/minecraft/network/PacketBuffer.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/common/extensions/IForgePacketBuffer.class got resource net/minecraftforge/common/extensions/IForgePacketBuffer.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLHandshakeHandler.class got resource net/minecraftforge/fml/network/FMLHandshakeHandler.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/util/ThreeConsumer.class got resource net/minecraftforge/fml/util/ThreeConsumer.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLLoginWrapper.class got resource net/minecraftforge/fml/network/FMLLoginWrapper.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/event/EventNetworkChannel.class got resource net/minecraftforge/fml/network/event/EventNetworkChannel.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/simple/IndexedMessageCodec$MessageHandler.class got resource net/minecraftforge/fml/network/simple/IndexedMessageCodec$MessageHandler.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLHandshakeMessages$S2CModList.class got resource net/minecraftforge/fml/network/FMLHandshakeMessages$S2CModList.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLHandshakeMessages$C2SModListReply.class got resource net/minecraftforge/fml/network/FMLHandshakeMessages$C2SModListReply.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLHandshakeMessages$S2CRegistry.class got resource net/minecraftforge/fml/network/FMLHandshakeMessages$S2CRegistry.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLHandshakeMessages$S2CConfigData.class got resource net/minecraftforge/fml/network/FMLHandshakeMessages$S2CConfigData.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/config/ConfigTracker.class got resource net/minecraftforge/fml/config/ConfigTracker.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/config/ModConfig$ModConfigEvent.class got resource net/minecraftforge/fml/config/ModConfig$ModConfigEvent.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/config/ModConfig$Loading.class got resource net/minecraftforge/fml/config/ModConfig$Loading.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/config/ModConfig$Reloading.class got resource net/minecraftforge/fml/config/ModConfig$Reloading.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/config/ModConfig$Type.class got resource net/minecraftforge/fml/config/ModConfig$Type.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLPlayMessages$SpawnEntity.class got resource net/minecraftforge/fml/network/FMLPlayMessages$SpawnEntity.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLPlayMessages$OpenContainer.class got resource net/minecraftforge/fml/network/FMLPlayMessages$OpenContainer.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLPlayMessages$SyncCustomTagTypes.class got resource net/minecraftforge/fml/network/FMLPlayMessages$SyncCustomTagTypes.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/event/TagsUpdatedEvent$CustomTagTypes.class got resource net/minecraftforge/event/TagsUpdatedEvent$CustomTagTypes.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/network/FMLMCRegisterPacketHandler.class got resource net/minecraftforge/fml/network/FMLMCRegisterPacketHandler.class true
-[06:32:53] [main/DEBUG] [net.minecraftforge.fml.ModLoader/CORE]: Loading Network data for FML net version: FML2
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/CrashReportExtender$1.class got resource net/minecraftforge/fml/CrashReportExtender$1.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/versions/forge/ForgeVersion.class got resource net/minecraftforge/versions/forge/ForgeVersion.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/ModWorkManager.class got resource net/minecraftforge/fml/ModWorkManager.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/ModWorkManager$DrivenExecutor.class got resource net/minecraftforge/fml/ModWorkManager$DrivenExecutor.class true
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/ModWorkManager$SyncExecutor.class got resource net/minecraftforge/fml/ModWorkManager$SyncExecutor.class true
-[06:32:53] [main/DEBUG] [net.minecraftforge.fml.ModWorkManager/LOADING]: Using 2 threads for parallel mod-loading
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/ModList.class got resource net/minecraftforge/fml/ModList.class true
-[06:32:53] [main/FATAL] [net.minecraftforge.fml.ModLoader/CORE]: Error during pre-loading phase
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/assets/forge/lang/en_us.json got resource assets/forge/lang/en_us.json true
-[06:32:53] [main/DEBUG] [net.minecraftforge.fml.ForgeI18n/CORE]: Loading I18N data entries: 4980
-[06:32:53] [main/DEBUG] [net.minecraftforge.versions.forge.ForgeVersion/CORE]: Forge Version package package net.minecraftforge.versions.forge, Forge, version 36.1 from cpw.mods.modlauncher.TransformingClassLoader@7a7698f4
-[06:32:53] [main/DEBUG] [net.minecraftforge.versions.forge.ForgeVersion/CORE]: Found Forge version 36.2.4
-[06:32:53] [main/DEBUG] [net.minecraftforge.versions.forge.ForgeVersion/CORE]: Found Forge spec 36.1
-[06:32:53] [main/DEBUG] [net.minecraftforge.versions.forge.ForgeVersion/CORE]: Found Forge group net.minecraftforge
-[06:32:53] [main/INFO] [STDOUT/]: [net.minecraft.crash.CrashReport:func_85057_a:201]: Negative index in crash report handler (16/18)
-[06:32:53] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/fml/MavenVersionStringHelper.class got resource net/minecraftforge/fml/MavenVersionStringHelper.class true
-[06:32:53] [main/FATAL] [net.minecraftforge.fml.server.ServerModLoader/]: Crash report saved to ./crash-reports/crash-2026-10-08_06.32.53-fml.txt
-[06:32:53] [main/FATAL] [net.minecraft.server.Main/]: Failed to start the minecraft server
-===== CRASH REPORT: crash-reports/crash-2026-10-08_06.32.53-fml.txt =====
----- Minecraft Crash Report ----
-// Uh... Did I do that?
-
-Time: 10/8/26, 6:32 AM
-Description: Mod loading error has occurred
-
-java.lang.Exception: Mod Loading has failed
-	at net.minecraftforge.fml.CrashReportExtender.dumpModLoadingCrashReport(CrashReportExtender.java:86) ~[forge:?] {re:classloading}
-	at net.minecraftforge.fml.server.ServerModLoader.load(ServerModLoader.java:51) ~[forge:?] {re:classloading}
-	at net.minecraft.server.Main.main(Main.java:148) ~[?:?] {re:classloading}
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?] {}
-	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
-	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?] {}
-	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51) ~[mist-1.16.5-33-server.jar:36.1] {}
-	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.0.9.jar:?] {}
-	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109) [mist-1.16.5-33-server.jar:?] {}
-	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106) [mist-1.16.5-33-server.jar:?] {}
-	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103) [mist-1.16.5-33-server.jar:?] {}
-
-
-A detailed walkthrough of the error, its code path and all known details is as follows:
----------------------------------------------------------------------------------------
-
--- Head --
-Thread: main
-Stacktrace:
-	at net.minecraftforge.fml.CrashReportExtender.lambda$dumpModLoadingCrashReport$7(CrashReportExtender.java:89) ~[forge:?] {re:classloading}
--- MOD fastbench --
-Details:
-	Mod File: FastWorkbench-1.16.5-4.6.2.jar
-	Failure message: Mod fastbench requires forge 36.2.9 or above
-		Currently, forge is 36.2.4
-	Mod Version: 4.6.2
-	Mod Issue URL: NOT PROVIDED
-	Exception message: MISSING EXCEPTION MESSAGE
-Stacktrace:
-	at net.minecraftforge.fml.CrashReportExtender.lambda$dumpModLoadingCrashReport$7(CrashReportExtender.java:89) ~[forge:?] {re:classloading}
-	at java.util.ArrayList.forEach(ArrayList.java:1541) ~[?:?] {}
-	at net.minecraftforge.fml.CrashReportExtender.dumpModLoadingCrashReport(CrashReportExtender.java:87) ~[forge:?] {re:classloading}
-	at net.minecraftforge.fml.server.ServerModLoader.load(ServerModLoader.java:51) ~[forge:?] {re:classloading}
-	at net.minecraft.server.Main.main(Main.java:148) ~[?:?] {re:classloading}
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:?] {}
-	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
-	at java.lang.reflect.Method.invoke(Method.java:566) ~[?:?] {}
-	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51) ~[mist-1.16.5-33-server.jar:36.1] {}
-	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) [modlauncher-8.0.9.jar:?] {}
-	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.0.9.jar:?] {}
-	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109) [mist-1.16.5-33-server.jar:?] {}
-	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106) [mist-1.16.5-33-server.jar:?] {}
-	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103) [mist-1.16.5-33-server.jar:?] {}
-
+[07:06:36] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://memoryleakfix/ca/fxco/memoryleakfix/extensions/ExtendDrowned.class got resource ca/fxco/memoryleakfix/extensions/ExtendDrowned.class true
+[07:06:36] [main/TRACE] [mixin/]: Added class metadata for ca/fxco/memoryleakfix/extensions/ExtendDrowned to metadata cache
+[07:06:36] [main/TRACE] [mixin/]: Added class metadata for net/minecraft/world/ISeedReader to metadata cache
+[07:06:36] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://minecraft/net/minecraft/world/IServerWorld.class got resource net/minecraft/world/IServerWorld.class true
+[07:06:36] [main/TRACE] [mixin/]: Added class metadata for net/minecraft/world/IServerWorld to metadata cache
+[07:06:36] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://forge/net/minecraftforge/common/extensions/IForgeWorldServer.class got resource net/minecraftforge/common/extensions/IForgeWorldServer.class true
+[07:06:36] [main/TRACE] [mixin/]: Added class metadata for net/minecraftforge/common/extensions/IForgeWorldServer to metadata cache
+[07:06:36] [main/TRACE] [mixin/]: Added class metadata for it/unimi/dsi/fastutil/objects/ObjectSet to metadata cache
+[07:06:36] [main/TRACE] [mixin/]: Added class metadata for it/unimi/dsi/fastutil/objects/ObjectIterator to metadata cache
+[07:06:36] [main/TRACE] [mixin/]: Added class metadata for net/minecraft/world/storage/IServerWorldInfo to metadata cache
+[07:06:36] [main/TRACE] [mixin/]: Added class metadata for net/minecraft/pathfinding/Path to metadata cache
+[07:06:36] [main/TRACE] [mixin/]: Added class metadata for java/util/function/Function to metadata cache
+[07:06:36] [main/TRACE] [mixin/]: Added class metadata for java/util/function/Consumer to metadata cache
+[07:06:36] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/InjectorWrapperImpl.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/InjectorWrapperImpl.class true
+[07:06:36] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/factory/FactoryRedirectWrapperImpl.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/factory/FactoryRedirectWrapperImpl.class true
+[07:06:36] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/InjectorWrapperImpl$Factory.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/wrapper/InjectorWrapperImpl$Factory.class true
+[07:06:36] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/utils/CompatibilityHelper.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/utils/CompatibilityHelper.class true
+[07:06:36] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/versions/MixinVersion.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/versions/MixinVersion.class true
+[07:06:36] [main/TRACE] [net.minecraftforge.fml.loading.ModJarURLHandler/CORE]: Loading modjar URL modjar://modernfix/org/embeddedt/modernfix/forge/shadow/mixinextras/versions/MixinVersionImpl_v0_8.class got resource org/embeddedt/modernfix/forge/shadow/mixinextras/versions/MixinVersionImpl_v0_8.class true
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:39)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:109)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain$Runner.access$100(ServerMain.java:106)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1050]: 	at net.minecraftforge.server.ServerMain.main(ServerMain.java:103)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: Caused by: java.lang.reflect.InvocationTargetException
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:51)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	... 7 more
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: Caused by: org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:223)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.mixin.transformer.MixinTransformationHandler.processClass(MixinTransformationHandler.java:121)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at org.spongepowered.asm.launch.MixinLaunchPlugin.processClass(MixinLaunchPlugin.java:131)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:154)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:85)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader$DelegatedClassLoader.findClass(TransformingClassLoader.java:265)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:136)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at cpw.mods.modlauncher.TransformingClassLoader.loadClass(TransformingClassLoader.java:98)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:527)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.Main.main(Main.java:121)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	... 13 more
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: Caused by: org.spongepowered.asm.mixin.injection.throwables.InjectionError: Critical injection failure: Argument modifier method makeImmutableForFluid(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/math/BlockPos; in roadrunner.mixins.json:alloc.chunk_random.ServerWorldMixin failed injection check, (0/1) succeeded. Scanned 1 target(s). Using refmap RoadRunner-mc1.16.5-refmap.json
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.postInject(InjectionInfo.java:408)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.applyInjections(MixinTargetContext.java:1291)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyInjections(MixinApplicatorStandard.java:1042)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:395)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:320)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:345)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:569)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:351)
+[07:06:36] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:671]: 	... 24 more
