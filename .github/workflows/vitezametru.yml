@@ -53,6 +53,49 @@ jobs:
               echo "_Nicun /spark healthreport rulat pe host inca — cand intra lumea, da comanda si raportul apare aici automat la urmatorul tur de cron_"
             fi
           } > analysis/viteza-live.md
+          echo "== audit disc =="
+          URL=$(curl -fsS https://api.github.com/repos/"$GITHUB_REPOSITORY"/releases/tags/lite 2>/dev/null | jq -r '.assets[].browser_download_url' | grep -m1 Server-CatServer)
+          EXPMD=NU; HOSTMD=NU
+          if [ -n "$URL" ]; then
+            curl -fsSL -m 120 "$URL" -o /tmp/exp.zip 2>/dev/null
+            lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "set sftp:auto-confirm yes; cat unix_args.txt; bye" > run/ua-remote.txt 2>/dev/null
+            lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "set sftp:auto-confirm yes; cls -1 mods; bye" > run/mods-remote.txt 2>/dev/null
+            lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "set sftp:auto-confirm yes; cat server.properties; bye" > run/sp-remote.txt 2>/dev/null
+            if [ -f /tmp/exp.zip ]; then
+              unzip -p /tmp/exp.zip unix_args.txt 2>/dev/null | md5sum | cut -c1-8 > /tmp/exp-md
+              md5sum run/ua-remote.txt 2>/dev/null | cut -c1-8 > /tmp/host-md
+              unzip -l /tmp/exp.zip 2>/dev/null | awk '{print $4}' | grep -E '^mods/[^/]+.jar$' | sed 's|mods/||' | sort -u > /tmp/exp-mods
+              sort -u run/mods-remote.txt 2>/dev/null | grep -E '.jar$' > /tmp/host-mods || true
+              grep -E "^player-idle-timeout" run/sp-remote.txt 2>/dev/null | head -1 > /tmp/host-idle
+              EXPMD=$(cat /tmp/exp-md); HOSTMD=$(cat /tmp/host-md)
+            fi
+          fi
+          DIFFMODS=$(diff /tmp/exp-mods /tmp/host-mods 2>/dev/null | grep -cE '^[<>]' || echo 0)
+          {
+            echo ""
+            echo "## AUDIT DISC (host vs release \`lite\`)"
+            echo "- moduri: host $(wc -l < /tmp/host-mods 2>/dev/null || echo ?) vs release $(wc -l < /tmp/exp-mods 2>/dev/null || echo ?) — fisiere care difera: **$DIFFMODS**"
+            if [ "$EXPMD" != "NU" ]; then
+              if [ "$EXPMD" = "$HOSTMD" ]; then echo "- unix_args.txt: **LA ZI** ($HOSTMD)"; else echo "- unix_args.txt: **VECHI** (host $HOSTMD vs release $EXPMD)"; fi
+            fi
+            echo "- $(cat /tmp/host-idle 2>/dev/null | sed 's/^/player-idle remota: /' || echo 'idle: necunoscut')"
+          } >> analysis/viteza-live.md
+          STALE=NU
+          if [ -n "$URL" ]; then
+            if [ "$DIFFMODS" -gt 0 ] 2>/dev/null || [ "$EXPMD" != "$HOSTMD" ]; then STALE=DA; fi
+          fi
+          if [ "$STALE" = "DA" ]; then
+            KEY=$( (echo "$DIFFMODS"; md5sum run/ua-remote.txt 2>/dev/null; sort /tmp/host-mods 2>/dev/null) | md5sum | cut -c1-12 )
+            OLDKEY=$(cat analysis/audit-key.txt 2>/dev/null || echo vechi)
+            echo "stale=$STALE key=$KEY old=$OLDKEY"
+            if [ "$KEY" != "$OLDKEY" ]; then
+              mkdir -p analysis deploy
+              echo "$KEY" > analysis/audit-key.txt
+              date -u +%FT%TZ > deploy/trigger.txt
+              git add -f analysis/audit-key.txt deploy/trigger.txt
+              git commit -q -m "auto-deploy: host vechitate $KEY" || true
+            fi
+          fi
           cat analysis/viteza-live.md
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
