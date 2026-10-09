@@ -1,23 +1,20 @@
-# A1-QUOTA diagnostic - 2026-10-09 16:11:52 UTC
-## A) resource-availability (API vechi de limite):
+# A1-QUOTA V2 (QMS) - 2026-10-09 16:13:08 UTC
+## A) exista serviciul quotas in CLI?
 ```
--- standard-a1-core-count
--- standard-a1-memory-count
--- standard-a1-instance-count
-```
-## B) help quota-change-request create (cine approve, ce campuri):
-```
-Usage: oci limits [OPTIONS] COMMAND [ARGS]...
+Usage: oci [OPTIONS] COMMAND [ARGS]...
 
-Error: No such command 'quota-change-request'.
-
-For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+Error: No such command 'quotas'.
 ```
-## C) quota-metric list brut (poate alt nume de optiune):
+## B) listez quotas compute si caut a1 (brut):
 ```
-Usage: oci limits [OPTIONS] COMMAND [ARGS]...
+Usage: oci [OPTIONS] COMMAND [ARGS]...
 
-Error: No such command 'quota-metric'.
+Error: No such command 'quotas'.
 
-For OCI CLI commands and parameters suggestion, auto completion and other useful features, try the Interactive mode by typing `oci -i`.
+```
+## C) help change (cum se cere cresterea):
+```
+Usage: oci [OPTIONS] COMMAND [ARGS]...
+
+Error: No such command 'quotas'.
 ```
