@@ -1,6 +1,6 @@
 {
   "pack_name": "CUANTIC",
-  "pack_version": "1.5.7",
+  "pack_version": "1.5.8",
   "minecraft": "1.16.5",
   "forge": "36.2.42",
   "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
@@ -39,7 +39,8 @@
     "starlight-forge",
     "ai-improvements",
     "in-control",
-    "ferritecore"
+    "ferritecore",
+    "spark"
   ],
   "_comentariu_perf_extra": "Artileria grea de performanta pt 1.16.5 (RoadRunner=Lithium, Radon=Phosphor etc). Cautate pe Modrinth apoi CurseForge; sarite daca nu exista. Performant si MCMT sunt excluse intentionat (conflicte).",
   "add_server_extra_perf": [
@@ -88,7 +89,6 @@
   "plugins_spiget": [],
   "plugins_modrinth": [
     "luckperms",
-    "spark",
     "chunky@^1\\.2\\."
   ],
   "maxlite_extreme_mods": [
