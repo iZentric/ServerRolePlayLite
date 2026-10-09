@@ -109,8 +109,8 @@ probe() {
   echo "  B) -Xmx8G, 3 flaguri (toata RAM-ul): MSPT 1.2/1.6/9.1/29.5 · GC 111.38 ms mediu/8 · Old 0 · heap 1.2G/8G · RSS 3366MB · keep-up 0"
 } > /tmp/tuneout.txt 2>&1
 RSS=$(grep -o 'VmHWM:\s*[0-9]*' /tmp/tuneout.txt | grep -o '[0-9]*' | head -1)
-V="JVMTUNE ok: $(printf '%s\n' $FLAGI | wc -l) flaguri
-V="$V keepup=$(grep -o 'total=[0-9]*' /tmp/tuneout.txt | tail -1 | cut -d= -f2) hwm=${RSS}KB"
+NF=$(printf "%s\n" $FLAGI | grep -c . )
+V="$V flaguri=$NF keepup=$(grep -o 'total=[0-9]*' /tmp/tuneout.txt | tail -1 | cut -d= -f2) hwm=${RSS}KB"
 echo "$V" > /tmp/tuneverdict
 
 mkdir -p "$GITHUB_WORKSPACE/analysis" 2>/dev/null && cd "$GITHUB_WORKSPACE"
