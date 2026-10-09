@@ -1,4 +1,4 @@
-# Vitezametru CUANTIC — ultima citire 2026-10-09 13:13:37 UTC
+# Vitezametru CUANTIC — ultima citire 2026-10-09 13:15:50 UTC
 
 _Linii TPS in fisier: NU EXISTA (CatServer tipareste TPS doar in consola panoului — valoarea reala de citit acolo cand intra jucatorii)_
 
@@ -8,8 +8,17 @@ _Linii TPS in fisier: NU EXISTA (CatServer tipareste TPS doar in consola panoulu
 
 _Nicun /spark healthreport rulat pe host inca — cand intra lumea, da comanda si raportul apare aici automat la urmatorul tur de cron_
 
-## AUDIT DISC (host vs release `lite`)
-- moduri: host 34 vs release 30 — fisiere care difera: **64**
-- unix_args.txt: **VECHI** (host e87e00c8 vs release 9ca0deea)
-- player-idle remota: player-idle-timeout=0
-- debug: URL=https://github.com/iZentric/ServerRolePlayLite/relea | STALE-v1=DA
+## AUDIT DISC (release vs host — numarul 34 vs 30 = mostenire permisa, deploy nu sterge)
+- jar-uri CARE LIPSC de pe host: **30**
+    - AI-Improvements-1.16.5-0.5.0.jar
+    - Clumps-6.0.0.28.jar
+    - FastFurnace-1.16.5-4.5.0.jar
+    - FastWorkbench-1.16.5-4.6.2.jar
+    - Ksyxis-1.4.6.jar
+    - Pizzaland_v68.jar
+    - Placebo-1.16.5-4.7.1.jar
+    - RoadRunner-mc1.16.5-1.5.2.jar
+- extra pe host (straini, nu declanseaza nimic): 34 — mods/AI-Improvements-1.16.5-0.5.0.jar mods/Clumps-6.0.0.28.jar 
+- unix_args flaguri: **DIFERA** (host 019710e2 vs release 74ada85d)
+- player-idle-timeout=0 pe host
+auto-deploy armat: ec2be0adbc80
