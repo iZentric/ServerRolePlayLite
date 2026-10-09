@@ -37,8 +37,8 @@ start/stop/restart) cu pași de salvare și rollback · limitări, regresiuni, t
 | compatibilități confirmate | 32 moduri + 15 plugini, audit `missing 0` | `analysis/viteza/`, `docs/ANATOMIA-SERVERULUI.md` |
 | config optimizat + schimbări | livrat | `docs/VITEZA-CUANTIC.md`, `docs/CONSUM-DETALIAT.md` |
 | baseline vs candidat | parțial: idle + load sintetic, `Done 14-83s`, vârf RAM 4185 MB | `analysis/viteza*` |
-| benchmark **cu jucători reali** | **NELIVRAT** — necesita clienți reali, mineflayer nu trece de handshake-ul FML | — |
-| punte live (chat/loguri + start/stop/restart) | **NOU**: `~/cuantic-live/cmd.in` → consola serverului, loguri citite din home; RCON ramâne inutilizabil pe 1.16.5 (MC-12864) | `scripts/cuantic-live.sh` |
+| benchmark **cu jucători reali** | **PARȚIAL LIVRAT**: 1 jucător real, MSPT mediu **2.4 ms**, p95 7.8 ms, 0 `Can't keep up`, G1 Old 0 GC, heap 743 MB/2 GB, 13% CPU pe 2 vCPU, 4 ms latență prin tunel. Lipsesc 3-10 jucători și baseline-ul original | [docs/BENCH-CUANTIC.md](BENCH-CUANTIC.md), `analysis/BENCH-LIVE.md` |
+| punte live (chat/loguri + start/stop/restart) | **LIVRAT și probat**: `list` → `There are 1 out of maximum 25 players online: iZentric`, `say` → mesaj în chat; `spark health/gc` rulează din consola; RCON rămâne inutilizabil pe 1.16.5 (MC-12864) | `scripts/cuantic-live.sh`, `analysis/BENCH-LIVE.md` |
 | 24/7 pe Cloud Shell | **IMPOSIBIL fizic**: containerul unui job moare la final; persistă numai home-ul | `analysis/up.md`, `analysis/chk.md` |
 | expunere publică | frps pe VPS-ul proprietarului + frpc în Cloud Shell, adresă fixă `92.5.171.150:25565` | `scripts/frps-install.sh`, `scripts/cuantic-live.sh` |
 | cost | 0 lei (free tier OCI/Evovv, GitHub Actions, binare open-source) | — |
