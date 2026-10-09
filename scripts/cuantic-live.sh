@@ -3,10 +3,38 @@
 # In aceeasi masina cu serverul: java isi tine stdin deschis printr-un fifo (fara EOF = fara "Stopping server" fantoma)
 # si citeste comenzi de consola din ~/cuantic-live/cmd.in (scrise din orice container, inclusiv de agent).
 D=$HOME/cuantic-live
+REPO=iZentric/ServerRolePlayLite
 J=$HOME/.local/jdk17/bin/java
 [ -x "$J" ] || J=$(ls /usr/lib/jvm/java-17*/bin/java 2>/dev/null | head -1)
+mkdir -p "$D"
+# ===== 1.5.9: packul se singureaza de unul singur =====
+# Clientul si serverul trebuie sa vina din ACELASI build: altfel id-urile de registru
+# difera si FML refuza login-ul ("Missing registry data"). Daca pe release e o versiune
+# noua, o punem pe server fara sa stricam world-ul.
+NEW=$(gh release view lite --repo "$REPO" --json assets --jq '[.assets[].name|select(test("Server-CatServer"))][0]' 2>/dev/null)
+CUR=$(cat "$D/.pack" 2>/dev/null)
+if [ -n "$NEW" ] && [ "$NEW" != "$CUR" ]; then
+  echo "PACK: ${CUR:-niciunul} -> $NEW (world-ul ramane)"
+  Z="/tmp/$NEW"; rm -rf /tmp/pk "$Z"; mkdir -p /tmp/pk
+  if gh release download lite --repo "$REPO" -p "$NEW" -D /tmp --clobber >/dev/null 2>&1; then
+    unzip -oq "$Z" -d /tmp/pk
+    ( cd "$D" && rm -rf mods plugins && mkdir -p mods plugins
+      for f in /tmp/pk/*; do b=$(basename "$f"); case "$b" in
+        mods|plugins) cp -r "$f" ./ ;;
+        *.jar|*.txt|*.json) cp "$f" ./ ;;
+      esac; done )
+    echo "$NEW" > "$D/.pack"
+    echo "PACK: actualizat -> $(ls "$D"/*.jar 2>/dev/null | xargs -n1 basename 2>/dev/null | tr '\n' ' ')"
+    echo "unix_args md5: $(md5sum "$D/unix_args.txt" 2>/dev/null | cut -c1-8)"
+  else
+    echo "PACK: descarcarea a esuat - ramble varianta veche ($CUR)"
+  fi
+  rm -rf /tmp/pk "$Z"
+fi
 cd "$D" || { echo "nu exista $D"; exit 1; }
 echo eula=true > eula.txt
+sed -i "s/^online-mode=.*/online-mode=false/" server.properties 2>/dev/null
+echo "RULEAZA: pack $(cat "$D/.pack" 2>/dev/null || echo vechi), java $($J -version 2>&1 | head -1)"
 : > cmd.in
 mkfifo -m 600 in.fifo 2>/dev/null
 exec 3<>in.fifo

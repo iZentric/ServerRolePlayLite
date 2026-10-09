@@ -15,7 +15,7 @@ on:
 
 jobs:
   vm:
-    runs-on: [self-hosted, cuantic]
+    runs-on: [self-hosted]
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
