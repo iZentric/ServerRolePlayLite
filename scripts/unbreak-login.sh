@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# UNBREAK-LOGIN — jucatorul si-a dat /premium (FastLogin) si nu mai poate intra:
+# UNBREAK-LOGIN — mod normal: scoage flag-ul /premium. Cu FLAG=DA in mediul jobului, face inversul
+# (il pune premium = zero parola, skin real) pentru un cont platit chiar in launcher.
+# Mod normal: jucatorul si-a dat /premium (FastLogin) si nu mai poate intra:
 # serverul cere sesiune valida de la Mojang unui cont cracked => "Invalid session" / "Failed to verify username".
 # Remediu: scoate flag-ul premium din bazele SQLite ale pluginurilor, dezactivea comanda /premium
 # pentru ca sa nu se mai intample, apoi reporneste serverul ca sa citeasca noile valori.
@@ -36,7 +38,8 @@ for db in dbs:
             continue
         try:
             before = cur.execute("select %s,%s from %s where lower(%s)=?" % (nc[0], pc[0], t, nc[0]), (name.lower(),)).fetchall()
-            n = cur.execute("update %s set %s=0 where lower(%s)=?" % (t, pc[0], nc[0]), (name.lower(),)).rowcount
+            val = 1 if os.environ.get("FLAG") == "DA" else 0
+            n = cur.execute("update %s set %s=? where lower(%s)=?" % (t, pc[0], nc[0]), (val, name.lower())).rowcount
             con.commit()
             after = cur.execute("select %s,%s from %s where lower(%s)=?" % (nc[0], pc[0], t, nc[0]), (name.lower(),)).fetchall()
             print("  %s:%s.%s inainte=%s dupa=%s randuri_update=%s" % (os.path.basename(db), t, pc[0], before, after, n))
@@ -52,6 +55,7 @@ grep -q "TOTAL randuri desmarcate: 0" /tmp/fixdb.txt && V="$V db=0-randuri" || V
 CFG="$D/plugins/FastLogin/config.yml"
 if [ -f "$CFG" ]; then
   cp "$CFG" "$CFG.bak.$(date +%s)"
+  if [ "${FLAG:-NU}" = DA ]; then V="$V (mod:FLAG=DA)"; fi
   python3 - "$CFG" <<'PY'
 import re, sys
 p = sys.argv[1]; s = open(p).read()
