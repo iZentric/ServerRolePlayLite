@@ -1,0 +1,30 @@
+name: CUANTIC LIVE PE ORACLE (runner gazda) — jar + port + adresa
+on:
+  push:
+    paths: [ "deploy/live.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  live:
+    runs-on: [self-hosted]
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ruleaza scriptul live
+        run: |
+          set +e
+          bash scripts/live.sh
+          mkdir -p analysis
+          { echo "# CUANTIC LIVE — $(date -u '+%F %T UTC')"; echo '```'; cat /tmp/live.txt; echo '```'; } > analysis/live.md
+          echo "----- live.log (tail) -----" >> analysis/live.md
+          echo '```' >> analysis/live.md
+          tail -25 $HOME/cuantic-live/live.log >> analysis/live.md 2>/dev/null
+          echo '```' >> analysis/live.md
+          cat analysis/live.md | head -60
+          git config user.name "live-bot"
+          git config user.email "bot@arena.local"
+          git add -f analysis/live.md
+          git commit -m "live: server pe gazda Oracle" || true
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          git push -q origin "$GITHUB_REF_NAME" || true
