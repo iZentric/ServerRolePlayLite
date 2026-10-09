@@ -1,0 +1,24 @@
+name: VMNEW — Ampere gratuit cu serverul CUANTIC, montat de agent
+on:
+  push:
+    paths: [ "deploy/vmnew.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  v:
+    runs-on: [self-hosted]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          set +e
+          PYPY=$(head -1 "$(which oci)" 2>/dev/null | sed 's/^#!//' | tr -d '\r')
+          "$PYPY" scripts/vmnew.py > /tmp/vm-run.txt 2>&1; echo "rc=$?" >> /tmp/vm-run.txt
+          tail -25 /tmp/vm-run.txt
+          git config user.name vmnew-bot
+          git config user.email bot@arena.local
+          git add -A 2>/dev/null
+          git commit -q --allow-empty -m "$(cat /tmp/vmverdict 2>/dev/null || echo 'VM: fara verdict') | $(cat /tmp/vm.txt 2>/dev/null | tail -c 380 | tr '\n' ' ')"
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          git push -q origin "$GITHUB_REF_NAME" || true
