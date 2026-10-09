@@ -1,0 +1,43 @@
+name: A1-QUOTA — cer singuri cresterea de limita ARM prin API
+on:
+  push:
+    paths: [ "deploy/quota.txt" ]
+permissions:
+  contents: write
+jobs:
+  cere:
+    runs-on: [self-hosted]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Descopera metrica si deschide cererea
+        run: |
+          set +e
+          TEN=ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa
+          mkdir -p analysis
+          R=analysis/a1-quota.md
+          {
+            echo "# A1-QUOTA — $(date -u '+%F %T UTC')"
+            echo "## cereri existente:"
+            oci limits quota-change-request list --compartment-id $TEN --output json 2>&1 | jq -r '.data[]? | .["quota-metric-name"] + " | " + .["lifecycle-state"] + " | tinich " + (.["desired-quota-value"]|tostring)' | head -10
+            echo "## metrice compute cu a1 in nume:"
+            oci limits quota-metric list --compartment-id $TEN --resource-service-name compute --output json 2>&1 | jq -r '.data[]? | .["quota-metric-name"] + " | current=" + (.["value"]|tostring) + " | service:" + (.["resource-service-name"] // "?")' > /tmp/metrics.txt
+            grep -iE "a1" /tmp/metrics.txt | head -12
+            echo "(total metrice: $(wc -l < /tmp/metrics.txt))"
+            echo "## INCERCARE CERERI DESCHISE pentru a1:"
+            for M in $(grep -iE "a1.*(ocpu|core|memory|instance|count)" /tmp/metrics.txt | grep -oE "compute\.[a-z0-9.]*a1[a-z0-9.-]*" | sort -u); do
+              echo "-- cerere pentru $M"
+              oci limits quota-change-request create --compartment-id $TEN \
+                --quota-metric-name "$M" \
+                --desired-quota-value 24 \
+                --justification "Always Free Ampere A1 for self-hosted Minecraft server (20 players, family/RP community, non-commercial)" 2>&1 | tail -6
+            done
+          } > $R
+          cat $R
+          git config user.name "quota-bot"
+          git config user.email "bot@arena.local"
+          git add -f analysis/a1-quota.md
+          git commit -m "a1-quota: cerere deschisa" || true
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          git push -q origin "$GITHUB_REF_NAME" || true
+          exit 0
