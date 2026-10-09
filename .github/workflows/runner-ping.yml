@@ -1,0 +1,16 @@
+name: RUNNER-PING
+on:
+  push:
+    paths: [ "deploy/runner-ping.txt" ]
+jobs:
+  ping:
+    runs-on: [self-hosted]
+    timeout-minutes: 4
+    steps:
+      - name: Cine e acolo
+        run: |
+          echo "RUNNER-VIU"
+          hostname 2>/dev/null || computername
+          uname -m 2>/dev/null || echo "arch-nu"
+          head -2 /etc/os-release 2>/dev/null || ver
+          ip -4 route get 1.1.1.1 2>/dev/null | head -1 || echo "rutare-nu"
