@@ -1,4 +1,4 @@
-# Vitezametru CUANTIC — ultima citire 2026-10-09 13:04:02 UTC
+# Vitezametru CUANTIC — ultima citire 2026-10-09 13:09:42 UTC
 
 _Linii TPS in fisier: NU EXISTA (CatServer tipareste TPS doar in consola panoului — valoarea reala de citit acolo cand intra jucatorii)_
 
@@ -12,3 +12,4 @@ _Nicun /spark healthreport rulat pe host inca — cand intra lumea, da comanda s
 - moduri: host 34 vs release 30 — fisiere care difera: **64**
 - unix_args.txt: **VECHI** (host e87e00c8 vs release 9ca0deea)
 - player-idle remota: player-idle-timeout=0
+- debug: URL=https://github.com/iZentric/ServerRolePlayLite/relea | STALE-v1=DA
