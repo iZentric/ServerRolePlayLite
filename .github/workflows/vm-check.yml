@@ -1,4 +1,4 @@
-name: VM-CHECK (ce exista in Oracle + acces prin cheia din Cloud Shell)
+name: VM-CHECK (inventar Oracle + incercare acces)
 on:
   push:
     paths: [ "deploy/vm-check.txt" ]
@@ -29,13 +29,21 @@ jobs:
             echo '```'
             echo "## chei SSH prezente:"
             ls -la ~/.ssh/ 2>/dev/null
-            echo "## test conectare la VM (daca exista IP in state):"
-            IP=$(grep -m1 '^IP=' ~/cuantic-vm.state 2>/dev/null | cut -d= -f2)
-            if [ -n "$IP" ] && [ -f ~/.ssh/cuantic_oci ]; then
-              ssh -i ~/.ssh/cuantic_oci -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 "ubuntu@$IP" 'echo VIU-PE-VM; hostname; nproc; free -g | awk "/Mem:/{print \$2\" GB\"}"; sudo -n true && echo SUDO-DA || echo SUDO-NU' 2>&1 | head -8
-            else
-              echo "ori fara IP in state, ori fara cheie — niciun test"
-            fi
+            echo "## detalii instante:"
+            for IID in $(oci compute instance list --compartment-id "$TEN" --lifecycle-state RUNNING --output json 2>/dev/null | jq -r '.data[].id'); do
+              oci compute instance get --instance-id "$IID" --output json 2>/dev/null | jq -r '.data | "shape: " + .["shape"] + " | agent: " + (.["agent-config"."are-all-plugins-disabled"|tostring) + " | ad: " + .["availability-domain"]'
+              ADOM=$(oci compute instance get --instance-id "$IID" --output json 2>/dev/null | jq -r '.data.id')
+              VN=$(oci compute vnic-attachment list --compartment-id "$TEN" --instance-id "$ADOM" --output json 2>/dev/null | jq -r '.data[0].vnic_id')
+              oci network vnic get --vnic-id "$VN" --output json 2>/dev/null | jq -r '"vnic: " + .data.id + " publicIp: " + (.data.publicIp // "NICIUNUL") + " privateIp: " + (.data["private-ip"])'
+              echo "-----"
+            done
+            echo "## incercari SSH cu cheia noastra (posibil sa mearga doar pe cele create cu ea, dar incercam tot):"
+            for IPT in $(for IID in $(oci compute instance list --compartment-id "$TEN" --lifecycle-state RUNNING --output json 2>/dev/null | jq -r '.data[].id'); do VN=$(oci compute vnic-attachment list --compartment-id "$TEN" --instance-id "$IID" --output json 2>/dev/null | jq -r '.data[0].vnic_id'); oci network vnic get --vnic-id "$VN" --output json 2>/dev/null | jq -r '.data.publicIp // empty'; done | sort -u); do
+              for U in ubuntu opc ubuntu cloud-init; do
+                R=$(ssh -i ~/.ssh/cuantic_oci -o StrictHostKeyChecking=accept-new -o ConnectTimeout=8 -o BatchMode=yes "$U@$IPT" 'echo VIU; hostname; nproc; free -g | awk "/Mem:/{print \$2\"GB\"}"; df -h / | awk "NR==2{print \$4}"' 2>/dev/null)
+                if [ -n "$R" ]; then echo "ACCES DA pe $U@$IPT:"; echo "$R"; break; else echo "acces NU pe $U@$IPT"; fi
+              done
+            done
           } > analysis/vm-check.md
           cat analysis/vm-check.md | head -40
           git config user.name "vmcheck-bot"
