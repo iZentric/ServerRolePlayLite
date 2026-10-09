@@ -1,29 +1,15 @@
-# CUANTIC LIVE — 2026-10-09 17:15:40 UTC
+# CUANTIC LIVE — 2026-10-09 17:21:57 UTC (jobul tine serverul ~2h)
+
+- **ADRESA DE JOC: `NU`** — Java 1.16.5, cracked, CUANTIC 1.5.8
+
+- boot: Done (17.800s) | MC ping din exterior: n/a
+
 ```
-== LIVE6 — 2026-10-09 17:15:37 UTC ==
-uptime: 17:15:37 up  7:50,  0 users,  load average: 0.08, 0.67, 0.90
-heartbeat v1 (daca e viu, detasamentul functioneaza): 2026-10-09T16:46:17Z | acum: 2026-10-09T17:15:37Z
-procese: java=0
-0 supervisor=0
-0 bore=0
-0 watchdog=0
-0
-port 25565:
-    NIMIC ASCULTAT
-log live: 0 bind-uri | ultimul rand: [17:12:00] [modloading-worker-0/INFO]: Instantiating Mojang DFU
-jurnal eschere (de ce pica): 
-  127.0.0.1:25565 = REFUZAT
-bore: bore.pub:15540
-probe publica: "online":false
-==> Cloud Shell nu poate fi server de jocuri (fara intrare). Opresc si sterg tot ce am incercat aici.
-  what ramane: 291M	/home/mndvasi9/cuantic-live
-  curat: /home/mndvasi9/7zE06283EBA /home/mndvasi9/cuantic-vm.state /home/mndvasi9/minecraft /home/mndvasi9/OpenJDK21U-jre_aarch64_linux_hotspot_21.0.6_7.tar.gz 
-  libere: overlay          70G   35G   32G  53% /
-GATA
-```
------ live.log (ultimele 12) -----
-```
-```
------ bore.log -----
-```
+== LIVE7 — 2026-10-09 17:18:33 UTC ==
+iaduc pack: https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Server-CatServer-1.5.8.zip
+jar: CatServer-1.16.5-1d8d6313-server.jar | heap: -Xms2G -Xmx6G  | mods: 32 | plugini: 15
+java: 1 proces | mem: Mem:          11884        2315        5757          78        3811        7743
+boot: Done (17.800s) | ERROR: 3
+  port local 25565: REFUZAT [Errno 111] Connection refused
+relay: NU
 ```
