@@ -15,4 +15,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Server + relay
-        run: bash scripts/fin.sh || true
+        run: bash scripts/fin2.sh || true
