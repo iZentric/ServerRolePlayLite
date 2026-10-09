@@ -1,19 +1,7 @@
-# SERVER SUS — 2026-10-09 19:12:38 UTC
-
-- **adresa: `bore.pub:18122`**
-- boot: NU | socket: DA | dinafara: "online":false
-- procesele sunt in tmux (`tmux ls`), deci traieshte dupa job cat tine sesiunea Cloud Shell
+# UP — 2026-10-09 21:10:21 UTC
 
 ```
-== UP — 2026-10-09 19:11:31 UTC ==
-jar: /home/mndvasi9/cuantic-live/CatServer-1.16.5-1d8d6313-server.jar | java17: /usr/lib/jvm/java-17/bin/java
-mod: tmux
-socket aparut la it 9
-boot: NU | socket 25565: DA
-  handshake local: OK
-adresa: bore.pub:18122
-  proba 1: "online":false 
-  proba 2: "online":false 
-  proba 3: "online":false 
-==> bore.pub:18122 | socket DA | "online":false
-```
+adresa: 92.5.171.150:25565
+[0m[1;31m2026-10-09 20:41:15.063 [E] [proxy/proxy.go:237] [2565a3d716494b61] [mc] connect to local service [127.0.0.1:25565] error: dial tcp 127.0.0.1:25565: connect: connection refused
+[0m[1;31m2026-10-09 20:41:16.152 [E] [proxy/proxy.go:237] [2565a3d716494b61] [mc] connect to local service [127.0.0.1:25565] error: dial tcp 127.0.0.1:25565: connect: connection refused
+[0m```
