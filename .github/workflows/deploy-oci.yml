@@ -1,0 +1,42 @@
+name: DEPLOY CUANTIC pe OCI (ARM Always Free)
+on:
+  push:
+    paths: [ "deploy/oci-trigger.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  instaleaza:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pregateste cheia si gazda din secrets
+        env:
+          K: ${{ secrets.OCI_SSH_KEY }}
+          H: ${{ secrets.OCI_HOST }}
+          U: ${{ secrets.OCI_USER }}
+        run: |
+          if [ -z "$H" ] || [ -z "$K" ]; then
+            echo "::error::Lipsesc secrets-urile OCI_HOST / OCI_SSH_KEY (Settings-Actions-Secrets). Fara ele nu am pe unde intra."
+            exit 1
+          fi
+          printf '%s\n' "$K" > /tmp/key
+          chmod 600 /tmp/key
+          echo "$H" > /tmp/host
+          echo "SSHUSER=${U:-opc}" >> "$GITHUB_ENV"
+      - name: Trimite scriptul si ruleaza instalarea
+        run: |
+          set -e
+          H=$(cat /tmp/host)
+          ssh-keyscan -H "$H" >> ~/.ssh/known_hosts 2>/dev/null || true
+          A="ssh -i /tmp/key -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 $SSHUSER@$H"
+          scp -i /tmp/key -o StrictHostKeyChecking=accept-new scripts/oci-setup.sh "$SSHUSER@$H:/tmp/oci-setup.sh"
+          $A "chmod +x /tmp/oci-setup.sh && bash /tmp/oci-setup.sh" 2>&1 | tail -40
+      - name: Verifica live (port deschis + ping server)
+        run: |
+          set +e
+          H=$(cat /tmp/host)
+          timeout 12 bash -c "echo > /dev/tcp/$H/25565" 2>/dev/null && echo "PORT 25565: DESCHIS" || echo "PORT 25565: INCHIS (asteapta 60s si reincearca — lumea se incarca)"
+          pip install -q mcstatus 2>/dev/null
+          python3 -c "from mcstatus import JavaServer; s=JavaServer('$H:25565').status(); print('MOTD:', str(s.description)[:120]); print('JUCATORI:', s.players.online, '/', s.players.max); print('PING-SERVER-VIU')" 2>&1 | tail -4
