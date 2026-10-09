@@ -1,3 +1,4 @@
-op sh -- 2026-10-09 22:39:50 UTC
-OP: inca nu stiu nume=NICIUNUL-in-log java=SUS port=ASCULTA consola=NU
-live.log final: [m> [K[33;1m[22:37:58] [Server thread/WARN]: Mismatch in destroy block pos: BlockPos{x=0, y=0, z=0} BlockPos{x=136, y=69, z=-236} [m> [K[33;1m[22:37:59] [Server thread/WARN]: Mismatch in destroy block pos: BlockPos{x=0, y=0, z=0} BlockPos{x=137, y=69, z=-237} [m> [K[33;1m[22:37:59] [Serv
+op sh -- 2026-10-09 22:42:41 UTC
+OP: nume=iZentric java=SUS port=ASCULTA consola=NU ops.json=SCRIS
+DOVEZI: [22:42:10] [Server thread/INFO]: /127.0.0.1:34386 lost connection: Disconnected|[22:42:13] [Server thread/INFO]: /127.0.0.1:34400 lost connection: Disconnected|[22:42:16] [Server thread/INFO]: /127.0.0.1:34420 lost connection: Disconnected|
+live.log final: > [K[22:42:16] [Craft Scheduler Thread - 29/INFO]: [FastLogin] Enabling onlinemode encryption for UNKNOWN[/127.0.0.1:34420] > [K[31;1m[22:42:16] [Craft Scheduler Thread - 29/ERROR]: [FastLogin] GameProfile iZentric (/127.0.0.1:34420) tried to log in with 
