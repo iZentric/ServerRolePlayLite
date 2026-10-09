@@ -210,9 +210,9 @@ SERVER_PROPERTIES = """\
 motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7ov2 \u00A7f| \u00A7aruleaza din viitor: orice PC, zero lag\u00A7f| \u00A7dOras+Survival+Claims
 max-players=25
 view-distance=4
-player-idle-timeout=10
+player-idle-timeout=0
 sync-chunk-writes=false
-network-compression-threshold=256
+network-compression-threshold=512
 spawn-protection=0
 allow-flight=true
 enable-command-block=true
@@ -258,7 +258,7 @@ world-settings:
     item-despawn-rate: 2400
     max-entity-collisions: 2
     tick-inactive-villagers: false
-    nerf-spawner-mobs: true
+    nerf-spawner-mobs: false
     ticks-per:
       hopper-transfer: 8
       hopper-check: 8
@@ -385,7 +385,7 @@ world-settings:
       misc: 16
       other: 32
     mob-spawn-range: 3
-    nerf-spawner-mobs: true
+    nerf-spawner-mobs: false
     merge-radius:
       item: 3.5
       exp: 4.0
