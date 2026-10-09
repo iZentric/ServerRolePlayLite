@@ -528,47 +528,6 @@ def main():
     report = {"client_added": [], "server_removed": [], "server_kept": [],
               "server_added": [], "maxlite_added": [], "arclight_added": []}
 
-    # ---------------- CLIENT MRPACK ----------------
-    log("== CLIENT lite (.mrpack) - toate modurile originale pastrate ==")
-    rmc0 = [r.lower() for r in rules.get("remove_from_client", [])]
-    client_files = [f for f in index["files"] if not any(r in f.get("path","").lower() for r in rmc0)]
-    for slug in rules["add_client_modrinth"]:
-        try:
-            info = resolve_modrinth(slug, mc, "forge")
-        except Exception as e:  # noqa: BLE001
-            log(f"  !! '{slug}' sarit (client): {e}")
-            continue
-        client_files.append({
-            "path": f"mods/{info['filename']}",
-            "hashes": info["hashes"],
-            "env": {"client": "required", "server": "unsupported"},
-            "downloads": [info["url"]],
-            "fileSize": info["size"],
-        })
-        report["client_added"].append(info["filename"])
-        log(f"  + {info['filename']}")
-
-    new_index = {
-        "formatVersion": 1, "game": "minecraft", "versionId": ver,
-        "name": rules["pack_name"],
-        "summary": "CUANTIC (Palma City RP) - serverul de viitor: merge pe orice PC, ruleaza cu 2.6GB, boot 11s.",
-        "dependencies": {"minecraft": mc, "forge": forge},
-        "files": client_files,
-    }
-    client_mrpack = os.path.join(out_dir, f"CUANTIC-Client-{ver}.mrpack")
-    with zipfile.ZipFile(client_mrpack, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("modrinth.index.json", json.dumps(new_index, indent=2))
-        z.writestr("overrides/options.txt", OPTIONS_LITE)
-        z.writestr("overrides/SETARI-PC-BUN.txt", GHID_PC_BUN)
-
-        rmc = [r.lower() for r in rules.get("remove_from_client", [])]
-        for jar in override_jars:
-            if any(r in jar.lower() for r in rmc):
-                log(f"  - taiat din client (stil rust): {jar}")
-                continue
-            z.write(os.path.join(override_mods_dir, jar), f"overrides/mods/{jar}")
-    log(f"  => {client_mrpack} ({os.path.getsize(client_mrpack)/1e6:.1f} MB)")
-
     # ---------------- MODURI DE SERVER (comune ambelor variante) ----------------
     log("== Moduri de server (comune) ==")
     base = os.path.join(out_dir, "server-base")
@@ -598,6 +557,77 @@ def main():
             log(f"  + perf: {info['filename']} [{info['source']}]")
             download(info["url"], os.path.join(bmods, info["filename"]))
             report["server_added"].append(info["filename"])
+
+    # ---------------- CLIENT MRPACK ----------------
+    log("== CLIENT lite (.mrpack) - toate modurile originale pastrate ==")
+    rmc0 = [r.lower() for r in rules.get("remove_from_client", [])]
+    client_files = [f for f in index["files"] if not any(r in f.get("path","").lower() for r in rmc0)]
+    for slug in rules["add_client_modrinth"]:
+        try:
+            info = resolve_modrinth(slug, mc, "forge")
+        except Exception as e:  # noqa: BLE001
+            log(f"  !! '{slug}' sarit (client): {e}")
+            continue
+        client_files.append({
+            "path": f"mods/{info['filename']}",
+            "hashes": info["hashes"],
+            "env": {"client": "required", "server": "unsupported"},
+            "downloads": [info["url"]],
+            "fileSize": info["size"],
+        })
+        report["client_added"].append(info["filename"])
+        log(f"  + {info['filename']}")
+
+    # 1.5.9 FIX (cauza reala a "Failed to synchronize registry data"): orice mod de pe
+    # server care INREGISTREAZA lucruri (Clumps = entity_type `clumps:xp_orb_big`) trebuie
+    # sa existe SI pe client, altfel FML opreste conexiunea inainte de login:
+    #   "Missing registry data for network connection" -> "Failed to load registry".
+    # NU le punem in lista externa a mrpack-ului (GUILLOTINA 1.5.4: Prism ignora lista
+    # externa) - jar-ul intra FISIC in overrides/mods, acelasi fisier byte-cu-byte de pe server.
+    mirror = [m.lower() for m in rules.get("mirror_on_client", [])]
+    report["client_mirrored"], report["mirror_missing"], mirror_jars = [], [], []
+    have = {os.path.basename(f["path"]).lower() for f in client_files}
+    have |= {j.lower() for j in override_jars}
+    for m in mirror:
+        al = [a for a in m.split("|") if a]
+        hit = [j for j in sorted(os.listdir(bmods))
+               if j.endswith(".jar") and any(a in j.lower() for a in al)]
+        if not hit:
+            report["mirror_missing"].append(m)
+            log(f"  !! mirror '{m}': jar LipsA pe server - clientul va da handshake eronat")
+            continue
+        for j in hit:
+            if j.lower() in have:
+                log(f"  = mirror '{m}' era deja in client: {j}")
+                continue
+            have.add(j.lower())
+            mirror_jars.append(j)
+            report["client_mirrored"].append(j)
+            log(f"  + mirror in client: {j}")
+
+    new_index = {
+        "formatVersion": 1, "game": "minecraft", "versionId": ver,
+        "name": rules["pack_name"],
+        "summary": "CUANTIC (Palma City RP) - serverul de viitor: merge pe orice PC, ruleaza cu 2.6GB, boot 11s.",
+        "dependencies": {"minecraft": mc, "forge": forge},
+        "files": client_files,
+    }
+    client_mrpack = os.path.join(out_dir, f"CUANTIC-Client-{ver}.mrpack")
+    with zipfile.ZipFile(client_mrpack, "w", zipfile.ZIP_DEFLATED) as z:
+        z.writestr("modrinth.index.json", json.dumps(new_index, indent=2))
+        z.writestr("overrides/options.txt", OPTIONS_LITE)
+        z.writestr("overrides/SETARI-PC-BUN.txt", GHID_PC_BUN)
+
+        rmc = [r.lower() for r in rules.get("remove_from_client", [])]
+        for jar in override_jars:
+            if any(r in jar.lower() for r in rmc):
+                log(f"  - taiat din client (stil rust): {jar}")
+                continue
+            z.write(os.path.join(override_mods_dir, jar), f"overrides/mods/{jar}")
+        for jar in mirror_jars:
+            z.write(os.path.join(bmods, jar), f"overrides/mods/{jar}")
+    log(f"  => {client_mrpack} ({os.path.getsize(client_mrpack)/1e6:.1f} MB)")
+
 
     if rules.get("ultra_strip_assets"):
         log("== ULTRA: dezbrac jar-urile de server de assets client ==")

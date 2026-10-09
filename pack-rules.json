@@ -1,6 +1,6 @@
 {
   "pack_name": "CUANTIC",
-  "pack_version": "1.5.8",
+  "pack_version": "1.5.9",
   "minecraft": "1.16.5",
   "forge": "36.2.42",
   "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
@@ -95,5 +95,15 @@
     "mcmt|mcmt-multithreading",
     "performant"
   ],
-  "ultra_strip_assets": true
+  "ultra_strip_assets": true,
+  "mirror_on_client": [
+    "clumps",
+    "placebo",
+    "fastfurnace",
+    "fastbench|fastworkbench",
+    "aiimprovements|ai-improvements",
+    "incontrol|in-control",
+    "bwncr|bad-wither"
+  ],
+  "_comentariu_mirror": "Moduri de pe server care AU intrari in registru (Clumps = entity_type). Daca lipsesc de pe client, FML zice 'Missing registry data for network connection' si playerii nu mai intra. Build-ul le copiaz byte-cu-byte din mods/ de pe server in overrides/mods al mrpack-ului - aceeasi versiune, mereu. Adauga aici ORICE mod nou care inregistreaza blocuri/itemuri/entitati."
 }
