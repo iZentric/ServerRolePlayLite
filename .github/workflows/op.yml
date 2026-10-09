@@ -15,5 +15,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: acorda OP
         env:
-          NUME_TAU: ${{ github.event.inputs.nume }}
+          NUME_TAU: ${{ github.event.inputs.nume || 'iZentric' }}
         run: bash scripts/op.sh

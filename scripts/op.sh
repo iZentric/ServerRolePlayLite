@@ -50,28 +50,23 @@ if [ -n "$N" ] && [ -w "$D/cmd.in" ]; then
 fi
 V="$V consola=$CONS"
 
-# ---- 4. ops.json (UUID offline = algoritmul Java nameUUIDFromBytes) ----
-if [ -n "$N" ]; then
-  P="$N" D="$D" python3 - <<'PY'
-import hashlib, json, os, uuid
-name, d = os.environ["P"], os.environ["D"]
-b = bytearray(hashlib.md5(("OfflinePlayer:" + name).encode("utf-8")).digest())
-b[6] = (b[6] & 0x0F) | 0x30          # versiune 3
-b[8] = (b[8] & 0x3F) | 0x80          # variant IETF
-u = str(uuid.UUID(bytes=bytes(b)))
-p = os.path.join(d, "ops.json")
-try:
-    cur = json.load(open(p))
-    if not isinstance(cur, list):
-        cur = []
-except Exception:
-    cur = []
-cur = [x for x in cur if (x.get("name") or "").lower() != name.lower()]
-cur.append({"uuid": u, "name": name, "level": 4, "bypassesPlayerLimit": False})
-json.dump(cur, open(p, "w"), indent=2)
-print("ops.json:", name, u)
-PY
-  V="$V ops.json=SCRIS"
+# ---- 3.5 consola moarta? atunci restart controlat: SIGTERM = oprire gracioasa (salveaza lumea),
+#      serverul citeste ops.json la pornire => OP-ul devine live.
+if [ "$CONS" != DA ] && [ -n "$N" ]; then
+  RAMAS=$(cat "$D/cmd.in" 2>/dev/null | tr '\n' ' ' | cut -c1-60)
+  V="$V cmd.in_neconsumat=[${RAMAS:-gol}]"
+  echo "> op $N" >> "$D/op-live.sql" 2>/dev/null
+  pkill -TERM -f 'java @unix_args' 2>/dev/null; sleep 22
+  pgrep -f 'java @unix_args' >/dev/null 2>&1 && { pkill -KILL -f 'java @unix_args'; sleep 8; }
+  cd "$D" || true
+  [ -p in.fifo ] || mkfifo -m 600 in.fifo
+  setsid tail -f /dev/null > "$D/in.fifo" &
+  setsid "$J" @unix_args.txt < "$D/in.fifo" > "$D/live.log" 2>&1 &
+  for i in $(seq 1 40); do
+    sleep 5
+    sed -e 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$D/live.log" 2>/dev/null | grep -qaE 'Done \([0-9.]+s\)|For voicechat binding' && break
+  done
+  V="$V restart=PORNIT"
 fi
 
 # ---- 5. verdict in commit ----
