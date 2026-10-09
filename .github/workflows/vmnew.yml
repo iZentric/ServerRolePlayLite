@@ -1,8 +1,9 @@
 name: VMNEW — VM Ampere gratuit (cont propriu, 0 lei)
 
-# Trigger: impinge un commit care atinge deploy/vmnew.txt SAU mesajul contine 'vmnew'.
-# Ruleaza DOAR pe runner-ul self-hosted din Cloud Shell, care are deja venv-ul cu SDK-ul OCI
-# si ~/.oci/config. Pe runner-ul GitHub n-avem cheie, deci dăm fail cu mesaj limpede.
+# Ruleaza DOAR pe runner-ul self-hosted din Cloud Shell: acolo exista config-ul OCI (~/.oci/config
+# sau ~/remote/.oci/config) si un python care are deja SDK-ul.
+# Logs-urile runner-ului self-hosted NU se vad prin API, deci tot ce conteaza se scrie in
+# analysis/vm-setup.txt + analysis/vm-status.txt si se impinge in commit (ales cu git log).
 
 on:
   push:
@@ -20,62 +21,54 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Pregateste venv-ul cu SDK OCI
+      - name: gaseste un python cu SDK OCI (si isi face singur diagnosticul)
         run: |
-          set -e
-          rm -f /tmp/ocibin
-          # ATENTIE la set -e: un `[ test ] && cmd` care pica opreste pasul cu "Exit code 1" fals.
-          for c in "$HOME/oci-venv/bin/oci" "$HOME/.venv/bin/oci" "$(command -v oci || true)"; do
-            if [ -x "$c" ]; then echo "$c" > /tmp/ocibin; break; fi
-          done
-          if [ ! -s /tmp/ocibin ]; then
-            python3 -m venv "$HOME/oci-venv"
-            "$HOME/oci-venv/bin/pip" install -q --disable-pip-version-check oci
-            echo "$HOME/oci-venv/bin/oci" > /tmp/ocibin
-          fi
-          OCIBIN=$(cat /tmp/ocibin)
-          echo "OCIBIN=$OCIBIN" >> "$GITHUB_ENV"
-          echo "VENV=$(dirname "$(dirname "$OCIBIN")")" >> "$GITHUB_ENV"
-          # config-ul e in ~/remote/.oci/config (copia in ~ daca lipseste)
-          if [ ! -f "$HOME/.oci/config" ] && [ -d "$HOME/remote/.oci" ]; then cp -r "$HOME/remote/.oci" "$HOME/.oci"; fi
-          if [ ! -f "$HOME/.oci/config" ]; then echo "LIPSA config OCI (nici in ~/remote/.oci)"; exit 1; fi
-          echo "config OCI: OK   cli: $($OCIBIN --version 2>&1 | head -1)"
+          mkdir -p analysis
+          {
+            echo "HOME=$HOME  user=$(id -un)"
+            command -v oci || echo "oci pe PATH: NU"
+            ls -d "$HOME"/*venv* 2>/dev/null || echo "niciun *venv* in \$HOME"
+            PY=""
+            OCLI=$(command -v oci 2>/dev/null || true)
+            if [ -n "$OCLI" ]; then
+              CAND=$(head -1 "$OCLI" | sed 's/^#!//')
+              if [ -x "$CAND" ] && "$CAND" -c "import oci" 2>/dev/null; then PY="$CAND"; echo "python din shebang-ul lui oci: $PY"; fi
+            fi
+            for c in "$HOME/oci-venv/bin/python" "$HOME/.venv/bin/python" "$(command -v python3 || true)"; do
+              if [ -n "$c" ] && [ -x "$c" ] && [ -z "$PY" ]; then
+                if "$c" -c "import oci" 2>/dev/null; then PY="$c"; echo "python existent cu oci: $PY"; fi
+              fi
+            done
+            if [ -z "$PY" ]; then
+              P3=$(command -v python3)
+              echo "niciun python cu 'import oci' -> incerc: $P3 -m pip install --user oci"
+              "$P3" -m pip install --quiet --disable-pip-version-check --user oci 2>&1 | tail -3
+              if "$P3" -c "import oci" 2>/dev/null; then PY="$P3"; else
+                echo "reincerc cu --break-system-packages (PEP 668)"
+                "$P3" -m pip install --quiet --disable-pip-version-check --user --break-system-packages oci 2>&1 | tail -3
+                if "$P3" -c "import oci" 2>/dev/null; then PY="$P3"; fi
+              fi
+            fi
+            if [ -z "$PY" ]; then echo "PYTHON OCI: NICIUNUL - opresc aici"; exit 3; fi
+            "$PY" -c "import oci; print('oci SDK', oci.__version__)"
+            echo "PY=$PY" >> "$GITHUB_ENV"
+            if [ ! -f "$HOME/.oci/config" ] && [ -d "$HOME/remote/.oci" ]; then cp -r "$HOME/remote/.oci" "$HOME/.oci"; echo "config copiat din ~/remote/.oci"; fi
+              grep -E "^[A-Za-z]" "$HOME/.oci/config" | cut -c1-42 | head -6
+            test -f "$HOME/.oci/config" || exit 4
+          } 2>&1 | tee analysis/vm-setup.txt
 
-      - name: Ruleaza scripts/vmnew.py (SDK OCI)
+      - name: ruleaza scripts/vmnew.py
         run: |
-          set -e
-          . "$VENV/bin/activate"
-          python3 -c "import oci; print('oci', oci.__version__)"
-          python3 scripts/vmnew.py
+          mkdir -p analysis
+          "$PY" scripts/vmnew.py 2>&1 | tail -40 | tee analysis/vm-run.txt
 
-      - name: Publica IP + parola in commit (doar la creare)
+      - name: impinge verdictul (IP + parola intra in repo = alegi tu ce faci cu ele)
         if: always()
         run: |
           git config user.name "cuantic-bot"
           git config user.email "bot@cuantic.local"
-          git add -f analysis/vm-instance.json analysis/vm-status.txt 2>/dev/null || true
-          git diff --cached --quiet || git commit -m "vmnew: $(head -c 200 analysis/vm-status.txt 2>/dev/null || echo 'fara verdict')" || true
+          git add -f analysis/vm-instance.json analysis/vm-status.txt analysis/vm-run.txt analysis/vm-setup.txt 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "vmnew: $(tr -d '\n' < analysis/vm-status.txt 2>/dev/null | head -c 180)" || true
           git pull --rebase origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || true
           git push -q origin "HEAD:$GITHUB_REF_NAME" >/dev/null 2>&1 || echo "nimic de impins"
-          sed 's/^/  /' analysis/vm-status.txt 2>/dev/null || true
-
-      - name: Cate IP-ul public si deschide portul
-        if: always()
-        run: |
-          if [ ! -s analysis/vm-instance.json ]; then echo "fara VM in acest ruleaza"; exit 0; fi
-          IP=$(grep -o '"public_ip": *"[^"]*"' analysis/vm-instance.json | sed 's/.*"\([0-9.]*\)"$/\1/')
-          echo "IP_VM=$IP" >> "$GITHUB_ENV"
-          echo "IP gasit: ${IP:-NIMENI}"
-          if [ -z "$IP" ]; then exit 0; fi
-          for i in $(seq 1 40); do
-            if timeout 4 bash -c "exec 3<>/dev/tcp/$IP/22" 2>/dev/null; then echo "SSH: PORNIT"; break; fi
-            sleep 15
-          done
-          "$OCIBIN" instance-agent-runner action invoke \
-            --instance-id "$(grep -o '"id": *"ocid1[^"]*"' analysis/vm-instance.json | sed 's/.*\(ocid1[^"]*\).*/\1/')" \
-            --action-type RUN_SHELL \
-            --instance-name "$IP" --time-to-duration PT2M \
-            --action-content "{\"timeout\":\"PT2M\",\"workingDirectory\":\"/tmp\",\"command\":\"ufw allow from 92.5.171.150 to any port 25565 proto tcp || true\"}" >/dev/null 2>&1 || true
-          sleep 60
-          echo "=== verdict MC ==="
-          curl -fsS --max-time 10 "https://api.mcsrvstat.us/3/$IP:25565" 2>/dev/null | head -c 400 || echo "incă jos (se poate monta prin Run Command)"
+          echo "===== verdict ====="; cat analysis/vm-status.txt 2>/dev/null || cat analysis/vm-setup.txt

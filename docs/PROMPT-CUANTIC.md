@@ -30,7 +30,9 @@ start/stop/restart) cu pași de salvare și rollback · limitări, regresiuni, t
 ## stare_project_vs_profil (2026-10-09)
 | Cerință | Stare | Unde |
 |---|---|---|
-| jar Cuantic (CatServer + Arclight 1.5.8) | livrat, build reproducible | `scripts/build_lite.py`, release `lite` |
+| jar Cuantic (CatServer + Arclight) | livrat, build reproducible, **1.5.9** | `scripts/build_lite.py`, release `lite` |
+| client `.mrpack` (ca să poată intra cineva) | **1.5.9**: 24 moduri originale + 7 de FPS + cele **7 moduri de registru** luate byte-cu-byte de pe server (`Clumps`, `Placebo`, `FastFurnace`, `FastWorkbench`, `AI-Improvements`, `InControl`, `bwncr`) | `analysis/build.log` (`+ mirror in client` ×7, zero `!!`) |
+| login de client real | handshake **dovedit** din logurile tale: `Connecting to 92.5.171.150, 25565` + `Successfully synchronized gun properties from server`; blocada era registru (rândul de mai sus) | `latest.log` client 22:51 |
 | pași build/instalare | livrat | `docs/PRIMA-PORNIRE.md`, `deploy/INSTALEAZA-PACK.bat` |
 | compatibilități confirmate | 32 moduri + 15 plugini, audit `missing 0` | `analysis/viteza/`, `docs/ANATOMIA-SERVERULUI.md` |
 | config optimizat + schimbări | livrat | `docs/VITEZA-CUANTIC.md`, `docs/CONSUM-DETALIAT.md` |
@@ -42,6 +44,14 @@ start/stop/restart) cu pași de salvare și rollback · limitări, regresiuni, t
 | cost | 0 lei (free tier OCI/Evovv, GitHub Actions, binare open-source) | — |
 
 ## Următorul experiment cu cel mai mare potențial
-Trei clienți reali cu `CUANTIC-Client-1.5.8.mrpack` intrați deodată, măsurați 10 min: MSPT p50/p95/p99, TPS,
+Trei clienți reali cu `CUANTIC-Client-1.5.9.mrpack` intrați deodată, măsurați 10 min: MSPT p50/p95/p99, TPS,
 RAM steady vs peak, pauze GC — pe CatServer vs Arclight, aceeasi lume/seed. Baseline-ul e packul nemodificat
 din release-ul `lite`.
+
+## Lecția registrelor (obligatorie la orice modificare de moduri)
+`Failed to synchronize registry data` **nu** e „rețeaua lentă", nu e lag, nu se repară cu RAM.
+E tabelul de id-uri de registre (blocks / items / `minecraft:entity_type`) diferit între client și server.
+Regula de build: **dublăm în client orice mod de pe server care înregistrează ceva**
+(`pack-rules.json → mirror_on_client`, jarul copiat byte-cu-byte din `mods/` de pe server), iar clientul și
+serverul se iau mereu din **același tag de release** (`lite`). Verificare: în `latest.log` al clientului nu
+trebuie să apară linia `Server has additional mods that may be needed on the client:`.
