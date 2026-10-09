@@ -1,0 +1,95 @@
+name: VITEZA — 1.5.7 vs aceeasi-1.5.6 (A/B cuantificat)
+on:
+  push:
+    paths: [ "deploy/viteza-trigger.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  masoare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { id: "CUANTIC-1.5.7", refpack: "nu" }
+          - { id: "REF-fara-noveluri", refpack: "da" }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17" }
+      - name: Baza + jar campion (+ eventualile noutati)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          gh release download lite -R "$GITHUB_REPOSITORY" -p '*Server-CatServer*.zip' -O srv.zip
+          mkdir srv && cd srv && unzip -q ../srv.zip
+          gh release download custom -R "$GITHUB_REPOSITORY" -p '*.jar' -O /tmp/custom.jar
+          CJ=$(ls *.jar | head -1); cp /tmp/custom.jar "$CJ"
+          if [ "${{ matrix.refpack }}" = "da" ]; then
+            rm -f mods/ferritecore*.jar mods/FerriteCore*.jar
+            rm -f spigot.yml
+            echo "REF: fara ferritecore, spigot implicit" > REFNOTE.txt
+          fi
+          ls mods | wc -l > /tmp/modcount
+      - name: Pornire masurata (aceeasi procedura ca la tribunal)
+        run: |
+          set +e
+          cd srv
+          echo "eula=true" > eula.txt
+          START=$(date +%s)
+          mkfifo in
+          exec 3<> in
+          java -Xms128M -XX:MaxRAMPercentage=90.0 -Dterminal.jline=false @unix_args.txt < in > boot.log 2>&1 &
+          JP=$!
+          MAXRSS=0; DONE=""; STABIL=0
+          for k in $(seq 1 100); do
+            kill -0 $JP 2>/dev/null || break
+            RSS=$(ps -o rss= -p $JP 2>/dev/null | awk '{print int($1/1024)}')
+            [ -n "$RSS" ] && [ "$RSS" -gt "$MAXRSS" ] && MAXRSS=$RSS
+            if [ -z "$DONE" ] && grep -q "Done (" boot.log; then
+              DONE=$(grep -m1 -oE "Done \([0-9.]+s\)" boot.log)
+              T1=$(date +%s); DUR=$((T1-START))
+              for q in $(seq 1 18); do
+                sleep 5
+                R=$(ps -o rss= -p $JP 2>/dev/null | awk '{print int($1/1024)}')
+                [ -n "$R" ] && STABIL=$R
+              done
+              break
+            fi
+            sleep 5
+          done
+          [ -z "$DONE" ] && DONE="NICIODATA"
+          echo "stop" >&3 2>/dev/null; sleep 6; kill -9 $JP 2>/dev/null
+          PLGI=$(grep -cE "\]: \[[A-Za-z]+\] Enabling" boot.log)
+          MODN=$(cat /tmp/modcount)
+          mkdir -p ../analysis
+          { echo "# ${{ matrix.id }}"; echo "- DONE: $DONE (total ${DUR:-?}s)"; echo "- RAM varf ${MAXRSS}MB, STABIL@+90s ${STABIL}MB"; echo "- plugini ${PLGI:-0}, fisiere mods ${MODN:-?}"; } > "../analysis/viteza-${{ matrix.id }}.md"
+          cd "$GITHUB_WORKSPACE"
+          git -c user.name=bot -c user.email=bot@bot add -f "analysis/viteza-${{ matrix.id }}.md"
+          git -c user.name=bot -c user.email=bot@bot commit -q -m "viteza: ${{ matrix.id }}" || true
+          for t in 1 2 3 4; do git pull --rebase -q origin "$GITHUB_REF_NAME" && git push -q origin "$GITHUB_REF_NAME" && break; sleep $((RANDOM%6+3)); done
+          exit 0
+  tablou:
+    needs: masoare
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tabloul de viteza
+        run: |
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          {
+            echo "# ⚛️ TABLOUL DE VITEZĂ — 1.5.7 vs 1.5.6-fără-noutăți"
+            echo "_$(date -u '+%F %T UTC') — acelasi hardware, acelasi jar campion, diferenta = DOAR ferritecore + spigot.yml CUANTIC_"; echo
+            for F in analysis/viteza-*.md; do sed -n '2,4p' "$F" | tr '\n' ' '; echo "| $F"; done | sed 's/^/- /'
+            echo
+            echo "Criteriile coroanei: boot (Done), RAM stabil, zero erori noi."
+          } > docs/VITEZA-CUANTIC.md
+          cat docs/VITEZA-CUANTIC.md
+          git -c user.name=bot -c user.email=bot@bot add -f docs/VITEZA-CUANTIC.md
+          git -c user.name=bot -c user.email=bot@bot commit -m "viteza: tablou A/B 1.5.7" || true
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          git push -q origin "$GITHUB_REF_NAME" || true

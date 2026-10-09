@@ -1,0 +1,60 @@
+name: VITEZAMETRUL (TPS+RAM live de pe host, din log)
+on:
+  schedule:
+    - cron: "17 */2 * * *"
+  push:
+    paths: [ "deploy/vitezametru-trigger.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+env:
+  SFTP_HOST: node12.zampto.net
+  SFTP_PORT: "2022"
+  SFTP_USER: 15254.1388b9af
+jobs:
+  citește:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+      - name: Extrage bataile TPS-ului din latest.log
+        env:
+          P: ${{ secrets.ZAMPTO_SFTP_PASS }}
+        run: |
+          set +e
+          mkdir -p run analysis
+          lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "
+            set sftp:auto-confirm yes;
+            get logs/latest.log -o run/latest.log;
+            bye"
+          {
+            echo "# Vitezametru CUANTIC — ultima citire $(date -u '+%F %T UTC')"
+            echo
+            echo "| linume | TPS (1m/5m/15m) | RAM |"
+            echo "|---|---|---|"
+            paste -d" " <(grep -E "TPS from last" run/latest.log | tail -8 | grep -oE "^[0-9:]+") \
+                     <(grep -E "TPS from last" run/latest.log | tail -8 | grep -oE "[0-9]+\.[0-9], \*?[0-9]+\.[0-9], \*?[0-9]+\.[0-9]") > /tmp/tps.txt
+            grep -E "Current Memory Usage" run/latest.log | tail -8 | grep -oE "[0-9]+/[0-9]+ mb" > /tmp/mem.txt
+            for i in $(seq 1 8); do
+              L=$(sed -n "${i}p" /tmp/tps.txt); M=$(sed -n "${i}p" /tmp/mem.txt)
+              [ -n "$L" ] && echo "| $L | $(sed -n "${i}p" /tmp/mem.txt) |"
+            done
+            echo
+            echo "- Evenimente connect/*disconnect in log: $(grep -cE "entered the game|lost connection" run/latest.log 2>/dev/null) evenimente in log"
+            echo "- ERORI recente (post-boot): $(grep -cE "\[ERROR\]" run/latest.log) total, $(grep -E "\[ERROR\]" run/latest.log | tail -3 | tr '\n' ';' | cut -c1-300)"
+            # ALERTEX if sub 18
+            WORST=$(grep -E "TPS from last" run/latest.log | tail -4 | grep -oE "[0-9]+\.[0-9]," | head -1 | tr -d ,)
+            if [ -n "$WORST" ]; then
+              LOW=$(python3 -c "print('DA' if $WORST < 18 else 'NU')")
+              echo "- ALERTA sub-18-TPS la ultima fereastra: **$LOW** (cea mai recenta 1m: $WORST)"
+            fi
+          } > analysis/viteza-live.md
+          cat analysis/viteza-live.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f analysis/viteza-live.md
+          git commit -m "vitezametru: citire $WORST" || true
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          git push -q origin "$GITHUB_REF_NAME" || true
+          exit 0
