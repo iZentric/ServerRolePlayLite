@@ -139,23 +139,17 @@ try:
     flds = vars(TP())
     log("VARS top (campuri reale):", list(flds))
     listfield = next((k for k, v in flds.items() if v is None and ("item" in k or "limit" in k) and k not in ("justification",)), None)
-    # alege campul de tip lista: cel care primeste o lista fara TypeError
-    gotit = None
-    for k in flds:
-        if k in ("justification", "compartment_id"): continue
-        try:
-            TP(**{k: items}); gotit = k; break
-        except Exception: pass
-    log("camp lista retinut:", gotit)
-    tk = {"compartment_id": ten, "justification": "Server Minecraft pentru 20 copii (Always Free A1)"}
-    if gotit: tk[gotit] = items
-    top = TP(**tk)
-    log("top gata cu:", list(tk))
+    items = []
+    for ln, wv in (("standard-a1-core-count",4),("standard-a1-memory-count",24),("standard-a1-instance-count",4)):
+        items.append(IP(service_name="compute", limit_name=ln, value=wv))
+    top = TP(display_name="cuantic-a1-quota", compartment_id=ten,
+             justification="Always Free Ampere A1 for a self-hosted Minecraft server for 20 kids (non-commercial)",
+             limits_increase_item_requests=items)
+    log("top construit:", list(vars(top)))
     sent = None
     for label, fn in (
         ("doar-details", lambda: li.create_limits_increase_request(top)),
         ("kw-details", lambda: li.create_limits_increase_request(create_limits_increase_request_details=top)),
-        ("dict", lambda: li.create_limits_increase_request({k: (v if k != gotit else [vars(i) for i in items]) for k, v in tk.items()})),
     ):
         try:
             sent = fn(); log("TRIMISA prin", label); break
@@ -164,8 +158,8 @@ try:
     if sent:
         d = sent.data
         log("RESPONSA id:", str(getattr(d,"id","?"))[:44], "| state:", getattr(d,"lifecycle_state", getattr(d,"status","?")),
-            "| approval:", getattr(d,"approver_type", "?"), "| msg:", str(getattr(d,"status_message", getattr(d,"message","-")))[:120])
-    log("items construite:", len(items))
+            "| msg:", str(getattr(d,"status_message","-"))[:120])
+
 except Exception as e:
     log("LI FAIL:", str(e)[:280])
 
