@@ -1,9 +1,8 @@
 name: VMNEW — VM Ampere gratuit (cont propriu, 0 lei)
 
-# Ruleaza DOAR pe runner-ul self-hosted din Cloud Shell: acolo exista config-ul OCI (~/.oci/config
-# sau ~/remote/.oci/config) si un python care are deja SDK-ul.
-# Logs-urile runner-ului self-hosted NU se vad prin API, deci tot ce conteaza se scrie in
-# analysis/vm-setup.txt + analysis/vm-status.txt si se impinge in commit (ales cu git log).
+# Ruleaza pe runner-ul self-hosted din Cloud Shell (acolo e config-ul OCI).
+# AVEM BANUIELI ca pasii unui job pe acest runner NU impart aceleasi fisiere, deci TOTUL e intr-un
+# singur pas, iar verdictul e scris in MESAJUL commitului (se citeste cu `git log --oneline -1`).
 
 on:
   push:
@@ -21,54 +20,48 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: gaseste un python cu SDK OCI (si isi face singur diagnosticul)
+      - name: tot intr-un singur pas (python -> vmnew.py -> verdict in commit)
+        shell: bash
         run: |
-          mkdir -p analysis
+          set +e
+          OUT=/tmp/vmnew.out
           {
-            echo "HOME=$HOME  user=$(id -un)"
+            echo "## pasul a inceput in $(date -Is), HOME=$HOME, pwd=$(pwd)"
             command -v oci || echo "oci pe PATH: NU"
-            ls -d "$HOME"/*venv* 2>/dev/null || echo "niciun *venv* in \$HOME"
             PY=""
-            OCLI=$(command -v oci 2>/dev/null || true)
+            OCLI=$(command -v oci 2>/dev/null)
             if [ -n "$OCLI" ]; then
-              CAND=$(head -1 "$OCLI" | sed 's/^#!//')
-              if [ -x "$CAND" ] && "$CAND" -c "import oci" 2>/dev/null; then PY="$CAND"; echo "python din shebang-ul lui oci: $PY"; fi
+              C=$(head -1 "$OCLI" | sed 's/^#!//')
+              if [ -x "$C" ] && "$C" -c "import oci" 2>/dev/null; then PY="$C"; echo "PY: $PY (din shebangul lui oci)"; fi
             fi
-            for c in "$HOME/oci-venv/bin/python" "$HOME/.venv/bin/python" "$(command -v python3 || true)"; do
-              if [ -n "$c" ] && [ -x "$c" ] && [ -z "$PY" ]; then
-                if "$c" -c "import oci" 2>/dev/null; then PY="$c"; echo "python existent cu oci: $PY"; fi
-              fi
+            for c in "$HOME/oci-venv/bin/python" "$HOME/.venv/bin/python" "$(command -v python3)"; do
+              if [ -z "$PY" ] && [ -x "$c" ] && "$c" -c "import oci" 2>/dev/null; then PY="$c"; echo "PY: $PY (import oci OK)"; fi
             done
             if [ -z "$PY" ]; then
               P3=$(command -v python3)
-              echo "niciun python cu 'import oci' -> incerc: $P3 -m pip install --user oci"
-              "$P3" -m pip install --quiet --disable-pip-version-check --user oci 2>&1 | tail -3
-              if "$P3" -c "import oci" 2>/dev/null; then PY="$P3"; else
-                echo "reincerc cu --break-system-packages (PEP 668)"
-                "$P3" -m pip install --quiet --disable-pip-version-check --user --break-system-packages oci 2>&1 | tail -3
-                if "$P3" -c "import oci" 2>/dev/null; then PY="$P3"; fi
+              "$P3" -m pip install --quiet --disable-pip-version-check --user oci >/dev/null 2>&1
+              if "$P3" -c "import oci" 2>/dev/null; then PY="$P3"; echo "PY: $P3 (dupa pip --user)"; else
+                "$P3" -m pip install --quiet --disable-pip-version-check --user --break-system-packages oci >/dev/null 2>&1
+                if "$P3" -c "import oci" 2>/dev/null; then PY="$P3"; echo "PY: $P3 (dupa --break-system-packages)"; fi
               fi
             fi
-            if [ -z "$PY" ]; then echo "PYTHON OCI: NICIUNUL - opresc aici"; exit 3; fi
-            "$PY" -c "import oci; print('oci SDK', oci.__version__)"
-            echo "PY=$PY" >> "$GITHUB_ENV"
-            if [ ! -f "$HOME/.oci/config" ] && [ -d "$HOME/remote/.oci" ]; then cp -r "$HOME/remote/.oci" "$HOME/.oci"; echo "config copiat din ~/remote/.oci"; fi
-              grep -E "^[A-Za-z]" "$HOME/.oci/config" | cut -c1-42 | head -6
-            test -f "$HOME/.oci/config" || exit 4
-          } 2>&1 | tee analysis/vm-setup.txt
-
-      - name: ruleaza scripts/vmnew.py
-        run: |
-          mkdir -p analysis
-          "$PY" scripts/vmnew.py 2>&1 | tail -40 | tee analysis/vm-run.txt
-
-      - name: impinge verdictul (IP + parola intra in repo = alegi tu ce faci cu ele)
-        if: always()
-        run: |
-          git config user.name "cuantic-bot"
-          git config user.email "bot@cuantic.local"
-          git add -f analysis/vm-instance.json analysis/vm-status.txt analysis/vm-run.txt analysis/vm-setup.txt 2>/dev/null || true
-          git diff --cached --quiet || git commit -m "vmnew: $(tr -d '\n' < analysis/vm-status.txt 2>/dev/null | head -c 180)" || true
-          git pull --rebase origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || true
-          git push -q origin "HEAD:$GITHUB_REF_NAME" >/dev/null 2>&1 || echo "nimic de impins"
-          echo "===== verdict ====="; cat analysis/vm-status.txt 2>/dev/null || cat analysis/vm-setup.txt
+            if [ -z "$PY" ]; then echo "VERDICT: fara python cu SDK OCI (pip a esuat?)"; exit 0; fi
+            if [ ! -f "$HOME/.oci/config" ] && [ -d "$HOME/remote/.oci" ]; then cp -r "$HOME/remote/.oci" "$HOME/.oci"; fi
+            if [ ! -f "$HOME/.oci/config" ]; then echo "VERDICT: fara ~/.oci/config pe acest runner"; exit 0; fi
+            echo "## rulez scripts/vmnew.py"
+            "$PY" scripts/vmnew.py 2>&1
+            echo "## cod iesire $?"
+          } > $OUT 2>&1
+          # verdictul: intai cel anuntat de script (/tmp/vmverdict), altfel ultimele linii
+          VER=$(cat /tmp/vmverdict 2>/dev/null | head -1)
+          [ -n "$VER" ] || VER=$(grep -a -E "VM:|verdict|profil|Traceback|Error" $OUT | tail -3 | tr '\n' ' ' | tr -d '"')
+          [ -n "$VER" ] || VER=$(tail -2 $OUT | tr '\n' ' ')
+          VER=$(echo "$VER" | tr -d '"' | head -c 190)
+          mkdir -p analysis && cp $OUT analysis/vm-run.txt && cat /tmp/vm.txt > analysis/vm-status.txt 2>/dev/null
+          git config user.name "cuantic-bot"; git config user.email "bot@cuantic.local"
+          git add -f analysis/vm-run.txt analysis/vm-status.txt >/dev/null 2>&1
+          git commit -q -m "vmnew: ${VER:-nimic in output}" >/dev/null 2>&1 || echo "commit: nimic nou"
+          git pull --rebase -q origin "$GITHUB_REF_NAME" >/dev/null 2>&1
+          git push -q origin "HEAD:$GITHUB_REF_NAME" >/dev/null 2>&1 || echo "push: esuat"
+          echo "===== VERDICT (si in commit) ====="
+          sed 's/^/  /' $OUT | tail -30

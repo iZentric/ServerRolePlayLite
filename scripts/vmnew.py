@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # VMNEW — creeaza VM.Standard.A1.Flex (4 ocpu / 24 GB, Always Free) cu serverul CUANTIC prin cloud-init.
-import oci, oci.core, base64
+import oci, oci.core, base64, os, re
 L = []
 def say(*a):
     s = " ".join(str(x) for x in a); print(s, flush=True); L.append(s)
@@ -8,7 +8,32 @@ def fin(verdict):
     open("/tmp/vm.txt", "w").write("\n".join(L) + "\n")
     open("/tmp/vmverdict", "w").write(verdict + "\n")
 
-cfg = oci.config.from_file(); region = cfg.get("region", "eu-frankfurt-1"); ten = cfg["tenancy"]
+def load_cfg():
+    """Profilul nu e mereu DEFAULT: cautam orice profil functionala (DEFAULT, CUANTIC, altii)."""
+    path = os.path.expanduser(os.environ.get("OCI_CONFIG_FILE", "~/.oci/config"))
+    try:
+        profs = re.findall(r"^\[([^\]]+)\]", open(path).read(), re.M)
+    except Exception as e:
+        say("verdict: citire config esuata:", str(e)[:120]); raise SystemExit(0)
+    for pr in [os.environ.get("OCI_PROFILE"), "DEFAULT", "CUANTIC"] + profs:
+        if not pr:
+            continue
+        try:
+            c = oci.config.from_file(path, pr)
+            kf = os.path.expanduser(c.get("key_file", ""))
+            if not os.path.isfile(kf):
+                base = os.path.basename(kf)
+                for cand in ("~/.oci/" + base, "~/remote/.oci/" + base):
+                    if os.path.isfile(os.path.expanduser(cand)):
+                        c["key_file"] = os.path.expanduser(cand); break
+            oci.config.validate_config(c)
+            say("profil OCI:", pr, "| cheie:", os.path.basename(c.get("key_file", "?")))
+            return c
+        except Exception as e:
+            say("  profil", pr, "->", str(e)[:90])
+    say("verdict: NICIUN profil OCI valid in", path); raise SystemExit(0)
+
+cfg = load_cfg(); region = cfg.get("region", "eu-frankfurt-1"); ten = cfg["tenancy"]
 core = oci.core.ComputeClient(config=cfg, region=region, verify=False)
 net = oci.core.VirtualNetworkClient(config=cfg, region=region, verify=False)
 M = oci.core.models
