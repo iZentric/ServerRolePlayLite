@@ -1,4 +1,4 @@
-# Vitezametru CUANTIC — ultima citire 2026-10-09 13:17:55 UTC
+# Vitezametru CUANTIC — ultima citire 2026-10-09 13:19:45 UTC
 
 _Linii TPS in fisier: NU EXISTA (CatServer tipareste TPS doar in consola panoului — valoarea reala de citit acolo cand intra jucatorii)_
 
@@ -13,4 +13,3 @@ _Nicun /spark healthreport rulat pe host inca — cand intra lumea, da comanda s
 - extra pe host (straini, nu declanseaza nimic): 4 — Ksyxis-1.4.5.jar Modernxl 1.16.5.jar 
 - unix_args flaguri: **DIFERA** (host 0de7fecb vs release ae2bde3f)
 - player-idle-timeout=0 pe host
-auto-deploy armat: 3732c98b5e4d
