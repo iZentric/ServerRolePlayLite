@@ -141,7 +141,7 @@ try:
     listfield = next((k for k, v in flds.items() if v is None and ("item" in k or "limit" in k) and k not in ("justification",)), None)
     items = []
     for ln, wv in (("standard-a1-core-count",4),("standard-a1-memory-count",24),("standard-a1-instance-count",4)):
-        items.append(IP(service_name="compute", limit_name=ln, value=wv))
+        items.append(IP(service_name="compute", limit_name=ln, value=wv, region="eu-frankfurt-1"))
     top = TP(display_name="cuantic-a1-quota", compartment_id=ten,
              justification="Always Free Ampere A1 for a self-hosted Minecraft server for 20 kids (non-commercial)",
              limits_increase_item_requests=items)
