@@ -23,8 +23,10 @@ jobs:
       - name: Pregateste venv-ul cu SDK OCI
         run: |
           set -e
+          rm -f /tmp/ocibin
+          # ATENTIE la set -e: un `[ test ] && cmd` care pica opreste pasul cu "Exit code 1" fals.
           for c in "$HOME/oci-venv/bin/oci" "$HOME/.venv/bin/oci" "$(command -v oci || true)"; do
-            [ -x "$c" ] && echo "$c" > /tmp/ocibin && break
+            if [ -x "$c" ]; then echo "$c" > /tmp/ocibin; break; fi
           done
           if [ ! -s /tmp/ocibin ]; then
             python3 -m venv "$HOME/oci-venv"
@@ -35,8 +37,8 @@ jobs:
           echo "OCIBIN=$OCIBIN" >> "$GITHUB_ENV"
           echo "VENV=$(dirname "$(dirname "$OCIBIN")")" >> "$GITHUB_ENV"
           # config-ul e in ~/remote/.oci/config (copia in ~ daca lipseste)
-          [ -f "$HOME/.oci/config" ] || { [ -d "$HOME/remote/.oci" ] && cp -r "$HOME/remote/.oci" "$HOME/.oci"; }
-          test -f "$HOME/.oci/config" || { echo "LIPSA config OCI (nici in ~/remote/.oci)"; exit 1; }
+          if [ ! -f "$HOME/.oci/config" ] && [ -d "$HOME/remote/.oci" ]; then cp -r "$HOME/remote/.oci" "$HOME/.oci"; fi
+          if [ ! -f "$HOME/.oci/config" ]; then echo "LIPSA config OCI (nici in ~/remote/.oci)"; exit 1; fi
           echo "config OCI: OK   cli: $($OCIBIN --version 2>&1 | head -1)"
 
       - name: Ruleaza scripts/vmnew.py (SDK OCI)
@@ -60,11 +62,11 @@ jobs:
       - name: Cate IP-ul public si deschide portul
         if: always()
         run: |
-          [ -s analysis/vm-instance.json ] || exit 0
+          if [ ! -s analysis/vm-instance.json ]; then echo "fara VM in acest ruleaza"; exit 0; fi
           IP=$(grep -o '"public_ip": *"[^"]*"' analysis/vm-instance.json | sed 's/.*"\([0-9.]*\)"$/\1/')
           echo "IP_VM=$IP" >> "$GITHUB_ENV"
           echo "IP gasit: ${IP:-NIMENI}"
-          [ -z "$IP" ] && exit 0
+          if [ -z "$IP" ]; then exit 0; fi
           for i in $(seq 1 40); do
             if timeout 4 bash -c "exec 3<>/dev/tcp/$IP/22" 2>/dev/null; then echo "SSH: PORNIT"; break; fi
             sleep 15
