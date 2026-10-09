@@ -10,34 +10,21 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
-      - name: Descopera metrica si deschide cererea
+      - name: Ruleaza QMS cu python-ul CLI-ului
         run: |
           set +e
-          TEN=ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa
+          PYPY=$(head -1 "$(which oci)" 2>/dev/null | sed 's/^#!//' | tr -d '\r')
+          echo "pymodal din shebang: $PYPY"
+          "$PYPY" -c "import oci" 2>/dev/null || PYPY=$(for c in ~/.local/lib/oracle-cli/bin/python3 /usr/lib/oracle/oci-cli*/bin/python3 /opt/oci-cli/bin/python3; do [ -x "$c" ] && "$c" -c "import oci" 2>/dev/null && echo "$c" && break; done)
+          echo "python folosit: $PYPY"
+          "$PYPY" scripts/qms.py 2>&1 | tail -40
           mkdir -p analysis
-          R=analysis/a1-quota.md
-          {
-            echo "# A1-QUOTA V2 (QMS) - $(date -u '+%F %T UTC')"
-            echo "## A) exista serviciul quotas in CLI?"
-            echo '```'
-            oci quotas --help 2>&1 | head -14
-            echo '```'
-            echo "## B) listez quotas compute si caut a1 (brut):"
-            echo '```'
-            oci quotas quota list --scope-id $TEN --service-name compute --max-results 1000 2>&1 > /tmp/q.json
-            head -c 300 /tmp/q.json; echo
-            jq -r '.data[]? | select(.name|test("a1";"i")) | .name + " | " + (.limitValue|tostring) + " | " + (.adjustable // "?") + " | used:" + (.usedValue|tostring)' /tmp/q.json 2>/dev/null | head -10
-            echo '```'
-            echo "## C) help change (cum se cere cresterea):"
-            echo '```'
-            oci quotas quota change --help 2>&1 | sed -n '1,26p'
-            echo '```'
-          } > $R
-          cat $R
+          { echo "# A1-QUOTA (QMS prin SDK) — $(date -u '+%F %T UTC')"; echo; cat /tmp/qms.txt 2>/dev/null; } > analysis/a1-quota.md
+          cat analysis/a1-quota.md
           git config user.name "quota-bot"
           git config user.email "bot@arena.local"
           git add -f analysis/a1-quota.md
-          git commit -m "a1-quota: cerere deschisa" || true
+          git commit -m "a1-quota: rulare QMS" || true
           git pull --rebase -q origin "$GITHUB_REF_NAME" || true
           git push -q origin "$GITHUB_REF_NAME" || true
-          exit 0
+
