@@ -54,21 +54,23 @@ jobs:
             if [ -n "$H" ]; then
               echo
               echo "## RAPORT SPARK (profilare sub sarcina reala)"
-              python3 - "$H" <<'PYP'
-import json,sys
-d=json.load(open(sys.argv[1]))
-g=d.get("gc",{}) or {}
-m=d.get("memory",{}) or {}
-print(f"- TPS mediu **{d.get('average_tps','?')}** | mediana {d.get('median_tps','?')} | minim {d.get('min_tps','?')} / 20")
-print(f"- Uptime {int(d.get('uptime_ms',0)/1000)}s | jucatori max: {d.get('players','?')}")
-print(f"- GC: {g.get('collections','?')} colectii, pauza totala {g.get('total_pause_time','?')}ms")
-pt=m.get("pools",{}).get("heap",{})
-print(f"- Heap: {int(pt.get('used',0)/1e6)}MB/{int(pt.get('max',0)/1e6)}MB")
-tl=d.get("tick_list",[])
-if tl:
-    s=sorted(tl); n=len(s)
-    print(f"- Tick (MSPT): mediana {s[n//2]:.1f}ms | p95 {s[int(n*0.95)]:.1f}ms | varf {s[-1]:.1f}ms (limita 50)")
-PYP
+              python3 -c '
+              import json,sys
+              d=json.load(open(sys.argv[1]))
+              g=d.get("gc",{}) or {}
+              m=d.get("memory",{}) or {}
+              print("- TPS mediu **"+str(d.get("average_tps","?"))+"** | mediana "+str(d.get("median_tps","?"))+" | minim "+str(d.get("min_tps","?"))+" / 20")
+              pl=d.get("players","?")
+              if isinstance(pl,dict): pl=pl.get("max","?")
+              print("- Uptime "+str(int(d.get("uptime_ms",0)/1000))+"s | jucatori max: "+str(pl))
+              print("- GC: "+str(g.get("collections","?"))+" colectii, pauza "+str(g.get("total_pause_time","?"))+"ms")
+              pt=(m.get("pools",{}) or {}).get("heap",{}) or {}
+              if pt: print("- Heap: "+str(int(pt.get("used",0)/1e6))+"MB/"+str(int(pt.get("max",0)/1e6))+"MB")
+              tl=d.get("tick_list",[])
+              if tl:
+                  s2=sorted(tl); n=len(s2)
+                  print("- Tick (MSPT): mediana %.1fms | p95 %.1fms | varf %.1fms (limita 50)"%(s2[n//2],s2[int(n*0.95)],s2[-1]))
+' "$H"
             fi
             echo
             echo '<details><summary>ultimele 6 linii log (debug format)</summary>'
