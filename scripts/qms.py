@@ -102,43 +102,68 @@ if a1 and chname:
         if not done:
             log("QMS nu a mers pt", name, "— trec la LI")
 
-# ---------- LI: explorare vars() + trimitere ----------
+# ---------- LI v7: probe camp cu camp + trimitere ----------
 try:
     from oci.limits_increase.limits_increase_client import LimitsIncreaseClient
     import oci.limits_increase.models as lim
     li = LimitsIncreaseClient(config=config)
     TP = lim.CreateLimitsIncreaseRequestDetails
     IP = lim.CreateLimitsIncreaseItemRequestDetails
-    probe = IP(service_name="compute", limit_name="standard-a1-core-count", value=4, desired_value=4, availability_domain="x")
-    log("VARS item:", vars(probe))
-    probe2 = TP(limits_details=[probe], limits=[probe], justification="test")
-    log("VARS top:", vars(probe2))
+    def probe(cls, cands):
+        ok = []
+        for f, v in cands:
+            try:
+                cls(**{f: v}); ok.append(f)
+            except TypeError:
+                pass
+            except Exception:
+                ok.append(f)
+        log(cls.__name__, "accepta:", ok)
+        return ok
+    iok = probe(IP, [("service_name","compute"),("limit_name","x"),("value",1),("desired_value",1),
+                     ("justification","j"),("description","d"),("availability_domain","a"),("region_name","r")])
+    tok = probe(TP, [("limits_details",[]),("limits",[]),("items",[]),("requests",[]),
+                     ("justification","j"),("description","d"),("notes","n"),("compartment_id",ten)])
     items = []
     for ln, wv in (("standard-a1-core-count",4),("standard-a1-memory-count",24),("standard-a1-instance-count",4)):
-        items.append(IP(service_name="compute", limit_name=ln, value=wv))
-    top = None
-    for kw in ({"limits_details": items}, {"limits": items}, {"items": items}):
+        ik = {}
+        if "service_name" in iok: ik["service_name"] = "compute"
+        if "limit_name" in iok: ik["limit_name"] = ln
+        if "value" in iok: ik["value"] = wv
+        elif "desired_value" in iok: ik["desired_value"] = wv
+        if "justification" in iok: ik["justification"] = "Server Minecraft 20 copii (Always Free A1)"
         try:
-            top = TP(**kw); log("top cu", list(kw)); break
+            items.append(IP(**ik))
         except Exception as e:
-            log("  refuz", list(kw), str(e)[:60])
-    # incearca toate combinatiile de chei posibile
+            log("item build fail:", str(e)[:150])
+    log("items construite:", len(items))
+    tk = {}
+    listfield = next((f for f in ("limits_details","limits","items","requests") if f in tok), None)
+    if listfield is None and items:
+        # nimic de listat recunoscut — bagam in toate si lasam exceptia sa vorbeasca
+        for f in ("limits_details","limits","items","requests"):
+            try:
+                TP(**{f: items}); listfield = f; break
+            except TypeError: pass
+    if listfield: tk[listfield] = items
+    if "justification" in tok: tk["justification"] = "Server Minecraft 20 copii (Always Free A1)"
+    top = TP(**tk)
+    log("top kw folositi:", list(tk))
     sent = None
-    for attempt in range(4):
+    for label, fn in (
+        ("kw", lambda: li.create_limits_increase_request(compartment_id=ten, create_limits_increase_request_details=top)),
+        ("pos", lambda: li.create_limits_increase_request(ten, top)),
+    ):
         try:
-            if attempt == 0: r = li.create_limits_increase_request(compartment_id=ten, create_limits_increase_request_details=top)
-            elif attempt == 1: r = li.create_limits_increase_request(ten, top)
-            elif attempt == 2: r = li.create_limits_increase_request(compartment_id=ten, body=top)
-            else: r = li.create_limits_increase_request(ten, {"limits_details": [vars(i) for i in items]})
-            sent = r; break
-        except TypeError as e:
-            log("attempt", attempt, "TypeError:", str(e)[:120])
+            sent = fn(); log("TRIMISA prin", label); break
         except Exception as e:
-            log("attempt", attempt, ":", str(e)[:240])
+            log(label, "->", str(e)[:260])
     if sent:
-        log("CERERE TRIMISA! data:", str(sent.data)[:300])
+        d = sent.data
+        log("RESPONSA: id:", str(getattr(d,"id","?"))[:44], "| state:", getattr(d,"lifecycle_state", getattr(d,"status","?")),
+            "| aprobat de:", getattr(d,"approver_type", getattr(d,"approved_by","?")))
 except Exception as e:
-    log("LI FAIL:", str(e)[:300])
+    log("LI FAIL:", str(e)[:280])
 
 open("/tmp/qms.txt", "w").write("\n".join(out))
 print("GATA")
