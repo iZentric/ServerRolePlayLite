@@ -1,0 +1,14 @@
+name: BENCH — masuratori reale pe serverul live (jucator in lume)
+on:
+  push:
+    paths: [ "scripts/bench-live.sh", "deploy/bench.txt", ".github/workflows/bench.yml" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  b:
+    runs-on: [self-hosted]
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/bench-live.sh

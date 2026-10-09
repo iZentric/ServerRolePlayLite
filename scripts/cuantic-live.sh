@@ -42,7 +42,13 @@ echo "JAVA: $J -> $("$J" -version 2>&1 | head -1)"
 [ -s "$(ls CatServer-*.jar 2>/dev/null | head -1)" ] || echo "!! jar absent - ruleaza jobul JAVA inainte"
 tmux kill-session -t frpc 2>/dev/null
 tmux new -s frpc -d "exec $HOME/frpc -c $HOME/frpc.toml > $HOME/frpc.log 2>&1"
-setsid "$J" @unix_args.txt < in.fifo > live.log 2>&1 &
+# pază de dublu-pornit: daca java e deja SUS (pornit de ex. de un job de diagnostic), il supervisez
+# si il folosesc, dar NU mai pornesc al doilea server pe aceeasi lume (ar bloca region lock-ul).
+if pgrep -f 'java @unix_args' >/dev/null 2>&1; then
+  echo "java e deja SUS -> il supervisez, nu-il repornesc (puntea cmd.in functioneaza pe procesul existent)"
+else
+  setsid "$J" @unix_args.txt < in.fifo > live.log 2>&1 &
+fi
 echo "MC pornit. Adresa: 92.5.171.150:25565. Ctrl+C = opresti DOAR supervisorul (serverul ramane sus)."
 LAST=-1
 while :; do
@@ -64,7 +70,7 @@ while :; do
   if ss -lnt | grep -q ':25565'; then S="SUS"; else S="nu asculta"; fi
   echo " $(date +%T) mc=$ALIVE port=$S log=$NOW"
   if [ "$ALIVE" = NU ]; then
-    echo " mc mort -> repornesc"; setsid "$J" @unix_args.txt < in.fifo > live.log 2>&1 & LAST=0
+    echo " mc mort -> repornesc"; [ -f unix_args.txt ] && { setsid "$J" @unix_args.txt < in.fifo > live.log 2>&1 & }; LAST=0
   elif [ "$NOW" = "$LAST" ]; then
     echo " log blocat:"; tail -2 live.log; tail -1 "$HOME/frpc.log" 2>/dev/null
   fi
