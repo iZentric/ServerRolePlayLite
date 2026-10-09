@@ -1,0 +1,47 @@
+name: VM-CHECK (ce exista in Oracle + acces prin cheia din Cloud Shell)
+on:
+  push:
+    paths: [ "deploy/vm-check.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  cauta:
+    runs-on: [self-hosted]
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Statul VM-ului si cheile
+        run: |
+          set +e
+          mkdir -p analysis
+          TEN=ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa
+          {
+            echo "# VM-CHECK"
+            echo "## fisier de stare al scriptului (~/cuantic-vm.state):"
+            echo '```'
+            cat ~/cuantic-vm.state 2>/dev/null || echo "(nu exista — scriptul n-a apucat sa salveze)"
+            echo '```'
+            echo "## instante compute in tenancy:"
+            echo '```'
+            oci compute instance list --compartment-id "$TEN" --lifecycle-state RUNNING --output json 2>/dev/null | jq -r '.data[]? | .["display-name"] + " | " + .id + " | " + .["time-created"]'
+            oci compute instance list --compartment-id "$TEN" --output json 2>/dev/null | jq -r '.data[]? | .["display-name"] + " | " + .["lifecycle-state"]' | sort -u
+            echo '```'
+            echo "## chei SSH prezente:"
+            ls -la ~/.ssh/ 2>/dev/null
+            echo "## test conectare la VM (daca exista IP in state):"
+            IP=$(grep -m1 '^IP=' ~/cuantic-vm.state 2>/dev/null | cut -d= -f2)
+            if [ -n "$IP" ] && [ -f ~/.ssh/cuantic_oci ]; then
+              ssh -i ~/.ssh/cuantic_oci -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 "ubuntu@$IP" 'echo VIU-PE-VM; hostname; nproc; free -g | awk "/Mem:/{print \$2\" GB\"}"; sudo -n true && echo SUDO-DA || echo SUDO-NU' 2>&1 | head -8
+            else
+              echo "ori fara IP in state, ori fara cheie — niciun test"
+            fi
+          } > analysis/vm-check.md
+          cat analysis/vm-check.md | head -40
+          git config user.name "vmcheck-bot"
+          git config user.email "bot@arena.local"
+          git add -f analysis/vm-check.md
+          git commit -m "vm-check" || true
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          git push -q origin "$GITHUB_REF_NAME" || true
+          exit 0
