@@ -1,0 +1,75 @@
+name: A1-LAUNCH — VM 4/24 ARM, ridicat de runner direct in Oracle
+on:
+  push:
+    paths: [ "deploy/a1.txt" ]
+permissions:
+  contents: write
+jobs:
+  porneste:
+    runs-on: [self-hosted]
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lanceaza (sau reutilizeaza) A1 + asteapta IP + pregateste OS
+        run: |
+          set +e
+          TEN=ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa
+          echo "== retea existenta =="
+          VCN=$(oci network vcn list --compartment-id "$TEN" --output json 2>/dev/null | jq -r '.data[0].id // empty')
+          SUB=$(oci network subnet list --compartment-id "$TEN" --vcn-id "$VCN" --output json 2>/dev/null | jq -r '.data[0].id // empty')
+          echo "vcn=$VCN subnet=$SUB"
+          IMG=$(oci compute image list --compartment-id "$TEN" --operating-system "Canonical Ubuntu" --operating-system-version "24.04" --shape "VM.Standard.A1.Flex" --sort-by TIMECREATED --sort-order DESC --output json 2>/dev/null | jq -r '.data[0].id // empty')
+          [ -n "$IMG" ] || IMG=$(oci compute image list --compartment-id "$TEN" --operating-system "Canonical Ubuntu" --operating-system-version "22.04" --shape "VM.Standard.A1.Flex" --sort-by TIMECREATED --sort-order DESC --output json 2>/dev/null | jq -r '.data[0].id // empty')
+          AD=$(oci iam availability-domain list --compartment-id "$TEN" --output json 2>/dev/null | jq -r '.data[0].name')
+          PUB=$(cat ~/.ssh/cuantic_oci.pub)
+          echo "== exista deja un A1 cu numele cuantic? =="
+          IID=$(oci compute instance list --compartment-id "$TEN" --lifecycle-state RUNNING --output json 2>/dev/null | jq -r '.data[] | select(.["display-name"]=="cuantic") | .id' | head -1)
+          if [ -z "$IID" ]; then
+            echo "LANSARE NOUA..."
+            OUT=$(oci compute instance launch --compartment-id "$TEN" --display-name cuantic \
+              --availability-domain "$AD" --shape "VM.Standard.A1.Flex" \
+              --shape-config '{"ocpus": 4, "memoryInGBs": 24}' \
+              --image-id "$IMG" --subnet-id "$SUB" --assign-public-ip true \
+              --boot-volume-size-in-gbs 200 \
+              --metadata "{\"ssh_authorized_keys\":\"$PUB\"}" --output json 2>&1)
+            IID=$(echo "$OUT" | jq -r '.data.id // empty' 2>/dev/null)
+            echo "$OUT" > /tmp/a1-launch.log
+            [ -n "$IID" ] && echo "IID=$IID" >> ~/cuantic-vm.state || echo "LANSEAZA-NU" >> /tmp/a1-launch.log
+          fi
+          echo "== astept IP (max 8 min) =="
+          IP=""
+          for t in $(seq 1 32); do
+            [ -z "$IID" ] && break
+            VN=$(oci compute vnic-attachment list --compartment-id "$TEN" --instance-id "$IID" --output json 2>/dev/null | jq -r '.data[0].vnicId // empty')
+            [ -n "$VN" ] && IP=$(oci network vnic get --vnic-id "$VN" --output json 2>/dev/null | jq -r '.data.publicIp // empty')
+            [ -n "$IP" ] && break
+            sleep 15
+          done
+          [ -n "$IP" ] && echo "IP=$IP" >> ~/cuantic-vm.state
+          echo "== pregatire OS prin SSH (java 17  unelte) =="
+          OS="NU"
+          if [ -n "$IP" ]; then
+            for r in 1 2 3 4 5 6; do
+              R=$(ssh -i ~/.ssh/cuantic_oci -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 -o BatchMode=yes "ubuntu@$IP" 'sudo -n apt-get update -qq && sudo -n DEBIAN_FRONTEND=noninteractive apt-get install -y -qq openjdk-17-jre-headless >/dev/null && java -version 2>&1 | head -1 && echo OS-PREGATIT' 2>&1)
+              if echo "$R" | grep -q OS-PREGATIT; then OS="DA: $R"; break; fi
+              sleep 20
+            done
+          fi
+          mkdir -p analysis
+          {
+            echo "# A1-LAUNCH — resultat"
+            echo "- citire: $(date -u '+%F %T UTC')"
+            echo "- instanta: ${IID:-NICIOCNIDINLOG}"
+            echo "- IP public: ${IP:-NIMIC}"
+            echo "- OS pregatit (java 17): $OS"
+            if [ -z "$IID" ]; then echo "- eroare launch (tail):"; echo '```'; tail -8 /tmp/a1-launch.log 2>/dev/null; echo '```'; fi
+            if [ -n "$IP" ]; then echo "- conectare copii: adresa **$IP** port 25565 (cracké)"; fi
+          } > analysis/a1-live.md
+          cat analysis/a1-live.md
+          git config user.name "a1-bot"
+          git config user.email "bot@arena.local"
+          git add -f analysis/a1-live.md
+          git commit -m "a1-live: $IP" || true
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          git push -q origin "$GITHUB_REF_NAME" || true
+          exit 0
