@@ -102,45 +102,43 @@ if a1 and chname:
         if not done:
             log("QMS nu a mers pt", name, "— trec la LI")
 
-# ---------- Limits Increase cu format REAL din openapi_types ----------
+# ---------- LI: explorare vars() + trimitere ----------
 try:
     from oci.limits_increase.limits_increase_client import LimitsIncreaseClient
     import oci.limits_increase.models as lim
     li = LimitsIncreaseClient(config=config)
     TP = lim.CreateLimitsIncreaseRequestDetails
     IP = lim.CreateLimitsIncreaseItemRequestDetails
-    log("TOP openapi:", getattr(TP, "openapi_types", {}))
-    log("ITEM openapi:", getattr(IP, "openapi_types", {}))
-    log("TOP attrmap:", getattr(TP, "attribute_map", {}))
-    log("ITEM attrmap:", getattr(IP, "attribute_map", {}))
-    want = [("standard-a1-core-count", 4), ("standard-a1-memory-count", 24), ("standard-a1-instance-count", 4)]
-    # ghicim cheia listei din modelul parinte: primul parametru de tip list
-    tlist = {k: v for k, v in getattr(TP, "openapi_types", {}).items() if v == "list"}
-    ilist = getattr(IP, "openapi_types", {})
-    log("camp list parinte:", tlist, "| item campuri:", ilist)
+    probe = IP(service_name="compute", limit_name="standard-a1-core-count", value=4, desired_value=4, availability_domain="x")
+    log("VARS item:", vars(probe))
+    probe2 = TP(limits_details=[probe], limits=[probe], justification="test")
+    log("VARS top:", vars(probe2))
     items = []
-    for ln, wv in want:
-        ik = {}
-        if "service_name" in ilist: ik["service_name"] = "compute"
-        for cand in ("limit_name", "name", "resource_name"):
-            if cand in ilist: ik[cand] = ln; break
-        for cand in ("value", "desired_value", "requested_value"):
-            if cand in ilist: ik[cand] = wv; break
-        if "availability_domain" in ilist: pass
-        items.append(IP(**ik))
-        log("item ok:", ik)
-    pk = {}
-    for k in tlist:
-        pk[k] = items
-    for cand in ("justification", "description", "user_notes"):
-        if cand in getattr(TP, "openapi_types", {}): pk[cand] = "Server Minecraft pentru 20 copii (Always Free A1)"
-    det = TP(**pk)
-    log("body gata:", str(det.to_dict())[:400])
-    res = li.create_limits_increase_request(compartment_id=ten, create_limits_increase_request_details=det)
-    log("CERERE LIMITE TRIMISA! state:", getattr(res.data, "lifecycle_state", "?"), "| id:", str(getattr(res.data, "id", "?"))[:40], "| approval:", getattr(res.data, "approver_type", getattr(res.data, "approver", "?")))
+    for ln, wv in (("standard-a1-core-count",4),("standard-a1-memory-count",24),("standard-a1-instance-count",4)):
+        items.append(IP(service_name="compute", limit_name=ln, value=wv))
+    top = None
+    for kw in ({"limits_details": items}, {"limits": items}, {"items": items}):
+        try:
+            top = TP(**kw); log("top cu", list(kw)); break
+        except Exception as e:
+            log("  refuz", list(kw), str(e)[:60])
+    # incearca toate combinatiile de chei posibile
+    sent = None
+    for attempt in range(4):
+        try:
+            if attempt == 0: r = li.create_limits_increase_request(compartment_id=ten, create_limits_increase_request_details=top)
+            elif attempt == 1: r = li.create_limits_increase_request(ten, top)
+            elif attempt == 2: r = li.create_limits_increase_request(compartment_id=ten, body=top)
+            else: r = li.create_limits_increase_request(ten, {"limits_details": [vars(i) for i in items]})
+            sent = r; break
+        except TypeError as e:
+            log("attempt", attempt, "TypeError:", str(e)[:120])
+        except Exception as e:
+            log("attempt", attempt, ":", str(e)[:240])
+    if sent:
+        log("CERERE TRIMISA! data:", str(sent.data)[:300])
 except Exception as e:
-    log("LI ERR:", str(e)[:400])
-    log(traceback.format_exc()[-500:])
+    log("LI FAIL:", str(e)[:300])
 
 open("/tmp/qms.txt", "w").write("\n".join(out))
 print("GATA")
