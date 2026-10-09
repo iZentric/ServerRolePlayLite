@@ -15,8 +15,12 @@ ociq(){ local jq="$1"; shift; oci "$@" --output json 2>/dev/null | jq -r "$jq" 2
 
 say "0. verificari"
 command -v oci >/dev/null || fail "Prea frumos — abandoneaza Cloud Shell-ul din dreapta sus si redeschide-l"
-TEN=$(oci os ns get --query 'data.id' --raw-output 2>/dev/null) || fail "oci n-authentificat in Cloud Shell (incheie sesiunea si redeschide)"
-[ -n "$TEN" ] || fail "nu-mi pot lua tenancy OCID"
+# pe tenancy nou `os ns get` inca nu are namespace -> incercam 3 surse
+TEN="${TEN:-}"
+if [ -z "$TEN" ]; then TEN=$(oci os ns get --query 'data.id' --raw-output 2>/dev/null | grep -m1 -E '^oc' || true); fi
+if [ -z "$TEN" ]; then TEN=$(oci iam region subscription list --output json 2>/dev/null | jq -r '.data[0].tenancyId' 2>/dev/null | grep -m1 -E '^oc' || true); fi
+if [ -z "$TEN" ]; then TEN=$(oci iam region-subscription list --output json 2>/dev/null | jq -r '.data[0].tenancy-id' 2>/dev/null | grep -m1 -E '^oc' || true); fi
+[ -n "$TEN" ] || fail "oci n-autentificat in Cloud Shell — inchide si redeschide Cloud Shell, apoi ruleaza din nou"
 echo "tenancy: $TEN"
 
 say "1. retea (VCN + gateway + subnet + porturi 22/25565) — se face o singura data"
