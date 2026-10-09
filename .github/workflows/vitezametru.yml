@@ -83,6 +83,9 @@ jobs:
                 echo "- $(grep -E '^player-idle-timeout' run/sp-remote.txt 2>/dev/null | head -1 || echo 'idle: ?') pe host"
               } >> analysis/viteza-live.md
               if [ "$MISSN" != "0" ] || [ "$EF" != "$HF" ]; then STALE=DA; fi
+              echo '```' >> analysis/viteza-live.md
+              diff <(unzip -p /tmp/exp.zip unix_args.txt 2>/dev/null | tr -d '\r' | grep -vE 'jar|nogui' | sort -u) <(tr -d '\r' < run/ua-remote.txt 2>/dev/null | grep -vE 'jar|nogui' | sort -u) | head -12 >> analysis/viteza-live.md
+              echo '```' >> analysis/viteza-live.md
               if [ "$STALE" = "DA" ]; then
                 KEY=$( (cat /tmp/missing /tmp/extra /tmp/h-flags 2>/dev/null) | md5sum | cut -c1-12 )
                 OLDKEY=$(cat analysis/audit-key.txt 2>/dev/null || echo vechi)
