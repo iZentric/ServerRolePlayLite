@@ -17,23 +17,20 @@ jobs:
           mkdir -p analysis
           R=analysis/a1-quota.md
           {
-            echo "# A1-QUOTA diagnostic - $(date -u '+%F %T UTC')"
-            AD=$(oci iam availability-domain list --compartment-id $TEN --query 'data[0].name' --raw-output 2>/dev/null)
-            echo "## A) resource-availability (API vechi de limite):"
+            echo "# A1-QUOTA V2 (QMS) - $(date -u '+%F %T UTC')"
+            echo "## A) exista serviciul quotas in CLI?"
             echo '```'
-            for L in standard-a1-core-count standard-a1-memory-count standard-a1-instance-count; do
-              echo "-- $L"
-              oci limits resource-availability get --service-name compute --limit-name $L --compartment-id $TEN --availability-domain "$AD" 2>&1 | grep -E '"(name|value|availableValue|adjustable)"' | head -4
-            done
+            oci quotas --help 2>&1 | head -14
             echo '```'
-            echo "## B) help quota-change-request create (cine approve, ce campuri):"
+            echo "## B) listez quotas compute si caut a1 (brut):"
             echo '```'
-            oci limits quota-change-request create --help 2>&1 | sed -n '1,30p'
+            oci quotas quota list --scope-id $TEN --service-name compute --max-results 1000 2>&1 > /tmp/q.json
+            head -c 300 /tmp/q.json; echo
+            jq -r '.data[]? | select(.name|test("a1";"i")) | .name + " | " + (.limitValue|tostring) + " | " + (.adjustable // "?") + " | used:" + (.usedValue|tostring)' /tmp/q.json 2>/dev/null | head -10
             echo '```'
-            echo "## C) quota-metric list brut (poate alt nume de optiune):"
+            echo "## C) help change (cum se cere cresterea):"
             echo '```'
-            oci limits quota-metric list --help 2>&1 | head -12
-            oci limits quota-metric list --compartment-id $TEN --service-name compute 2>&1 | grep -iE "a1" | head -10
+            oci quotas quota change --help 2>&1 | sed -n '1,26p'
             echo '```'
           } > $R
           cat $R
