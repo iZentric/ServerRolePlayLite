@@ -57,46 +57,44 @@ jobs:
           } > analysis/viteza-live.md
           echo "== audit disc =="
           URL=$(curl -fsS https://api.github.com/repos/"$GITHUB_REPOSITORY"/releases/tags/lite 2>/dev/null | jq -r '.assets[].browser_download_url' | grep -m1 Server-CatServer)
-          EXPMD=NU; HOSTMD=NU
+          STALE=NU
           if [ -n "$URL" ]; then
             curl -fsSL -m 120 "$URL" -o /tmp/exp.zip 2>/dev/null
             lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "set sftp:auto-confirm yes; cat unix_args.txt; bye" > run/ua-remote.txt 2>/dev/null
             lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "set sftp:auto-confirm yes; cls -1 mods; bye" > run/mods-remote.txt 2>/dev/null
             lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "set sftp:auto-confirm yes; cat server.properties; bye" > run/sp-remote.txt 2>/dev/null
             if [ -f /tmp/exp.zip ]; then
-              unzip -p /tmp/exp.zip unix_args.txt 2>/dev/null | md5sum | cut -c1-8 > /tmp/exp-md
-              md5sum run/ua-remote.txt 2>/dev/null | cut -c1-8 > /tmp/host-md
-              unzip -l /tmp/exp.zip 2>/dev/null | awk '{print $4}' | grep -E '^mods/[^/]+.jar$' | sed 's|mods/||' | sort -u > /tmp/exp-mods
-              sort -u run/mods-remote.txt 2>/dev/null | grep -E '.jar$' > /tmp/host-mods || true
-              grep -E "^player-idle-timeout" run/sp-remote.txt 2>/dev/null | head -1 > /tmp/host-idle
-              EXPMD=$(cat /tmp/exp-md); HOSTMD=$(cat /tmp/host-md)
-            fi
-          fi
-          DIFFMODS=$(diff /tmp/exp-mods /tmp/host-mods 2>/dev/null | grep -cE '^[<>]' || echo 0)
-          {
-            echo ""
-            echo "## AUDIT DISC (host vs release \`lite\`)"
-            echo "- moduri: host $(wc -l < /tmp/host-mods 2>/dev/null || echo ?) vs release $(wc -l < /tmp/exp-mods 2>/dev/null || echo ?) — fisiere care difera: **$DIFFMODS**"
-            if [ "$EXPMD" != "NU" ]; then
-              if [ "$EXPMD" = "$HOSTMD" ]; then echo "- unix_args.txt: **LA ZI** ($HOSTMD)"; else echo "- unix_args.txt: **VECHI** (host $HOSTMD vs release $EXPMD)"; fi
-            fi
-            echo "- $(cat /tmp/host-idle 2>/dev/null | sed 's/^/player-idle remota: /' || echo 'idle: necunoscut')"
-            echo "- debug: URL=${URL:0:52} | STALE-v1=$( [ -n "$URL" ] && ( [ "$DIFFMODS" -gt 0 ] 2>/dev/null || [ "$EXPMD" != "$HOSTMD" ] ) && echo DA || echo NU )"
-          } >> analysis/viteza-live.md
-          STALE=NU
-          if [ -n "$URL" ]; then
-            if [ "$DIFFMODS" -gt 0 ] 2>/dev/null || [ "$EXPMD" != "$HOSTMD" ]; then STALE=DA; fi
-          fi
-          if [ "$STALE" = "DA" ]; then
-            KEY=$( (echo "$DIFFMODS"; md5sum run/ua-remote.txt 2>/dev/null; sort /tmp/host-mods 2>/dev/null) | md5sum | cut -c1-12 )
-            OLDKEY=$(cat analysis/audit-key.txt 2>/dev/null || echo vechi)
-            echo "stale=$STALE key=$KEY old=$OLDKEY"
-            if [ "$KEY" != "$OLDKEY" ]; then
-              mkdir -p analysis deploy
-              echo "$KEY" > analysis/audit-key.txt
-              date -u +%FT%TZ > deploy/trigger.txt
-              git add -f analysis/audit-key.txt deploy/trigger.txt
-              git commit -q -m "auto-deploy: host vechitate $KEY" || echo "auto-deploy commit ESUAT" >> analysis/viteza-live.md
+              unzip -l /tmp/exp.zip 2>/dev/null | awk '{print $4}' | grep -E '^mods/[^/]+\.jar$' | sed 's|mods/||' | sort -u > /tmp/exp-mods
+              sort -u run/mods-remote.txt 2>/dev/null | grep -E '.jar$' | sort -u > /tmp/host-mods
+              comm -23 /tmp/exp-mods /tmp/host-mods > /tmp/missing 2>/dev/null || true
+              comm -13 /tmp/exp-mods /tmp/host-mods > /tmp/extra 2>/dev/null || true
+              unzip -p /tmp/exp.zip unix_args.txt 2>/dev/null | grep -vE 'jar|nogui' | md5sum | cut -c1-8 > /tmp/e-flags
+              grep -vE 'jar|nogui' run/ua-remote.txt 2>/dev/null | md5sum | cut -c1-8 > /tmp/h-flags
+              MISSN=$(wc -l < /tmp/missing | tr -d ' ')
+              EXTRAN=$(wc -l < /tmp/extra | tr -d ' ')
+              EF=$(cat /tmp/e-flags); HF=$(cat /tmp/h-flags)
+              {
+                echo ""
+                echo "## AUDIT DISC (release vs host — numarul 34 vs 30 = mostenire permisa, deploy nu sterge)"
+                echo "- jar-uri CARE LIPSC de pe host: **$MISSN**"
+                if [ "$MISSN" != "0" ]; then sed 's/^/    - /' /tmp/missing | head -8; fi
+                echo "- extra pe host (straini, nu declanseaza nimic): $EXTRAN — $(head -2 /tmp/extra | tr '\n' ' ')"
+                if [ "$EF" = "$HF" ]; then echo "- unix_args (flaguri, cu iertare de nume jar): **LA ZI** ($HF)"; else echo "- unix_args flaguri: **DIFERA** (host $HF vs release $EF)"; fi
+                echo "- $(grep -E '^player-idle-timeout' run/sp-remote.txt 2>/dev/null | head -1 || echo 'idle: ?') pe host"
+              } >> analysis/viteza-live.md
+              if [ "$MISSN" != "0" ] || [ "$EF" != "$HF" ]; then STALE=DA; fi
+              if [ "$STALE" = "DA" ]; then
+                KEY=$( (cat /tmp/missing /tmp/extra /tmp/h-flags 2>/dev/null) | md5sum | cut -c1-12 )
+                OLDKEY=$(cat analysis/audit-key.txt 2>/dev/null || echo vechi)
+                if [ "$KEY" != "$OLDKEY" ]; then
+                  echo "auto-deploy armat: $KEY" >> analysis/viteza-live.md
+                  mkdir -p analysis deploy
+                  echo "$KEY" > analysis/audit-key.txt
+                  date -u +%FT%TZ > deploy/trigger.txt
+                  git add -f analysis/audit-key.txt deploy/trigger.txt
+                  git commit -q -m "auto-deploy: lipsa $MISSN + flags $HF ($KEY)" || true
+                fi
+              fi
             fi
           fi
           cat analysis/viteza-live.md
