@@ -1,4 +1,4 @@
-# Raport build Freeroam Lite (1.5.9)
+# Raport build Freeroam Lite (1.6.0)
 
 Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
@@ -62,9 +62,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ Placebo-1.16.5-4.7.1.jar
 - ✅ FastFurnace-1.16.5-4.5.0.jar
 - ✅ FastWorkbench-1.16.5-4.6.2.jar
-- ✅ saturn-mc1.16.5-0.0.3.jar
 - ✅ getittogetherdrops-1.16.5-v1.2.jar
-- ✅ Ksyxis-1.4.6.jar
 - ✅ bwncr-1.16.5-3.10.16.jar
 
 ### Setari consum minim

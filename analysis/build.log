@@ -78,12 +78,29 @@
     (modrinth: performant -> nicio versiune)
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
-Traceback (most recent call last):
-  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/build_lite.py", line 823, in <module>
-    main()
-  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/build_lite.py", line 680, in main
-    write_start_scripts(s1, f"forge-{mc}-{forge}.jar")
-  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/build_lite.py", line 478, in write_start_scripts
-    f.write(f"#!/bin/sh\njava -Xms1G -Xmx2G {FLAGS_17} -jar {server_jar} nogui\n")
-                                             ^^^^^^^^
-UnboundLocalError: cannot access local variable 'FLAGS_17' where it is not associated with a value
+  => out/CUANTIC-Server-MaxLite-1.6.0.zip (35.0 MB)
+== SERVER Arclight (hibrid cu pluginuri) ==
+  ↓ plugin: EssentialsX-2.19.7.jar
+  ↓ plugin: EssentialsXChat-2.19.7.jar
+  ↓ plugin: EssentialsXSpawn-2.19.7.jar
+  ↓ plugin: EssentialsXAntiBuild-2.19.7.jar
+  ↓ plugin: EssentialsXProtect-2.19.7.jar
+  ↓ plugin: Vault.jar
+  ↓ plugin: worldedit-bukkit-7.2.5-dist.jar
+  ↓ plugin: worldguard-bukkit-7.0.5-dist.jar
+  ↓ plugin: AuthMe-5.6.0.jar
+  ↓ plugin: SkinsRestorer.jar
+  ↓ plugin: ProtocolLib.jar
+  ↓ plugin: FastLoginBukkit.jar
+  ↓ plugin: claimchunk-0.0.22.jar
+  ↓ plugin: LuckPerms-Bukkit-5.5.71.jar
+  ↓ plugin: Chunky-1.2.217.jar
+  ↓ Arclight
+  => out/CUANTIC-Server-Arclight-1.6.0.zip (67.5 MB)
+== SERVER Mist (hibrid experimental cu patch-uri Paper) ==
+  ↓ Mist
+  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.6.0.zip (67.2 MB)
+== SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
+  ↓ CatServer
+  => out/CUANTIC-Server-CatServer-1.6.0.zip (66.5 MB)
+GATA.
