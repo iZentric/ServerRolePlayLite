@@ -1,91 +1,65 @@
-#!/usr/bin/env bash
-# UP — serverul CUANTIC pe Cloud Shell, lasat in tmux (supravietuieste jobului),
-# + relay bore, + proba dinafara. Raportul (adresa) e impins in git in ~3 min.
-LOG=/tmp/up.txt; : > $LOG
-say(){ echo "$*" | tee -a $LOG; }
-DIR=$HOME/cuantic-live
-J17=$(ls /usr/lib/jvm/java-17*/bin/java 2>/dev/null | head -1)
-say "== UP — $(date -u '+%F %T UTC') =="
-mkdir -p $DIR
+#!/bin/bash
+# CUANTIC — pornire completa pe Cloud Shell, facuta de robot, si TINE serverul cat traieste jobul (~27 min).
+D=$HOME/cuantic-live
+S=92.5.171.150
+T=pateu-de-codru-7
+mkdir -p "$D"; cd "$D" || exit 1
 
-# pack (daca lipseste)
-JAR=$(ls $DIR/CatServer-*.jar 2>/dev/null | head -1)
-if [ -z "$JAR" ]; then
-  URL=$(curl -fsS --max-time 30 https://api.github.com/repos/iZentric/ServerRolePlayLite/releases/tags/lite | grep -o '"browser_download_url": *"[^"]*Server-CatServer[^"]*"' | head -1 | sed 's/.*"\(http[^"]*\)".*/\1/')
-  curl -fsSL --retry 2 -o $DIR/p.zip "$URL" && (cd $DIR && unzip -qo p.zip && rm -f p.zip)
-  JAR=$(ls $DIR/CatServer-*.jar 2>/dev/null | head -1)
+if [ ! -f unix_args.txt ]; then
+  URL=$(curl -fsS https://api.github.com/repos/iZentric/ServerRolePlayLite/releases/tags/lite | grep -o '"browser_download_url": *"[^"]*Server-CatServer[^"]*"' | head -1 | sed 's/.*"\(http[^"]*\)".*/\1/')
+  curl -fsSLo p.zip "$URL"; unzip -qo p.zip; rm -f p.zip
 fi
-say "jar: ${JAR:-LIPSESTE} | java17: ${J17:-LIPSESTE}"
-cd $DIR
-echo 'eula=true' > eula.txt
-grep -q '^server-ip=' server.properties || echo 'server-ip=' >> server.properties
-sed -i 's/^server-ip=.*/server-ip=/; s/^server-port=.*/server-port=25565/; s/^online-mode=.*/online-mode=false/; s/^player-idle-timeout=.*/player-idle-timeout=0/' server.properties
+echo "pack: $([ -f unix_args.txt ] && echo DA || echo NU) | marime: $(du -sh "$D" | cut -f1)"
+echo eula=true > eula.txt
+sed -i 's/^online-mode=.*/online-mode=false/; s/^server-ip=.*/server-ip=/' server.properties
+J=$(ls /usr/lib/jvm/java-17*/bin/java 2>/dev/null | head -1)
+echo "java: $J"
 
-# curat ce a mai ramas din incercarile precedente
+printf 'serverAddr = "%s"\nserverPort = 443\nauth.method = "token"\nauth.token = "%s"\n\n[[proxies]]\nname = "mc"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 25565\nremotePort = 25565\n' "$S" "$T" > "$HOME/frpc.toml"
+if [ ! -x "$HOME/frpc" ]; then
+  VER=$(curl -fsS https://api.github.com/repos/fatedier/frp/releases/latest | grep -oE '"tag_name": *"v[0-9.]+"' | head -1 | grep -oE '[0-9.]+')
+  ARCH=$(uname -m); case $ARCH in aarch64) A=arm64;; *) A=amd64;; esac
+  cd "$HOME" && curl -fsSLo frp.tgz "https://github.com/fatedier/frp/releases/download/v${VER}/frp_${VER}_linux_${A}.tar.gz" && tar xzf frp.tgz && mv -f frp_${VER}_linux_${A}/frpc "$HOME/frpc"
+  cd "$D" || exit 1
+fi
+echo "frpc: $("$HOME/frpc" --version 2>&1 | head -1)"
+
 tmux kill-server 2>/dev/null
-pkill -f 'unix_args.txt' 2>/dev/null; pkill -f 'bore local' 2>/dev/null; sleep 3
-
-# serverul intr-un tmux detachat (stdin = pty, deci fara EOF = fara "Stopping server")
-if command -v tmux >/dev/null; then
-  tmux new-session -d -s mc "cd $DIR && $J17 @unix_args.txt > live.log 2>&1"
-  say "mod: tmux"
-else
-  setsid script -qfc "cd $DIR && $J17 @unix_args.txt" /dev/null > $DIR/live.log 2>&1 &
-  say "mod: script(1) (fara tmux)"
-fi
-
-SOCKET=NU
-for i in $(seq 1 90); do
-  sleep 3
-  ss -lnt 2>/dev/null | grep -q ':25565' && { SOCKET=DA; say "socket aparut la it $i"; break; }
+pkill -f unix_args.txt 2>/dev/null
+pkill -f 'frpc -c' 2>/dev/null
+sleep 3
+tmux new -s mc -d "cd $D && $J @unix_args.txt > live.log 2>&1"
+i=0
+while [ $i -lt 60 ]; do
+  sleep 5; i=$((i+1))
+  ss -lnt | grep -q ':25565' && break
 done
-DONE=$(grep -m1 -oE 'Done \([0-9.]+s\)' $DIR/live.log 2>/dev/null)
-say "boot: ${DONE:-NU} | socket 25565: $SOCKET"
-if [ "$SOCKET" != "DA" ]; then
-  say "--- de ce nu leaga:"
-  grep -nE 'Failed to bind|Stopping server|Address already|ERROR' $DIR/live.log | tail -6 | sed 's/^/  /' >> $LOG
-  say "--- ultimele 8 linii:"; tail -8 $DIR/live.log | cut -c1-150 | sed 's/^/  /' >> $LOG
-fi
-python3 - <<'PY' >> $LOG 2>&1
-import socket
-for h in ("127.0.0.1",):
-    try:
-        s = socket.create_connection((h, 25565), timeout=6); print("  handshake local: OK"); s.close()
-    except Exception as e:
-        print("  handshake local:", e)
-PY
+echo "socket 25565 dupa $((i*5))s: $(ss -lnt | grep -q ':25565' && echo DA || echo NU)"
+grep -a -m1 'Done (' "$D/live.log"
 
-# ---------- relay ----------
-[ -x $HOME/bore ] || { curl -fsSL --retry 2 -o $HOME/b.tgz https://github.com/ekzhang/bore/releases/download/v0.6.0/bore-v0.6.0-aarch64-unknown-linux-musl.tar.gz && tar xzf $HOME/b.tgz -C $HOME && mv -f $HOME/bore-v0.6.0-aarch64-unknown-linux-musl/bore $HOME/bore && chmod +x $HOME/bore && rm -rf $HOME/b.tgz $HOME/bore-v0.6.0-*; }
-: > $DIR/bore.log
-if command -v tmux >/dev/null; then
-  tmux new-session -d -s bore "$HOME/bore local 25565 --to bore.pub --port 25565 2>&1 | tee -a $DIR/bore.log; $HOME/bore local 25565 --to bore.pub 2>&1 | tee -a $DIR/bore.log"
-else
-  setsid bash -c "$HOME/bore local 25565 --to bore.pub --port 25565 >> $DIR/bore.log 2>&1 || $HOME/bore local 25565 --to bore.pub >> $DIR/bore.log 2>&1" &
-fi
-ADDR=""
-for i in $(seq 1 12); do
-  sleep 4
-  ADDR=$(grep -oE 'listening at bore\.pub:[0-9]+' $DIR/bore.log 2>/dev/null | tail -1 | sed 's/listening at //')
-  [ -n "$ADDR" ] && break
+tmux new -s frpc -d "exec $HOME/frpc -c $HOME/frpc.toml > $HOME/frpc.log 2>&1"
+sleep 10
+tail -2 "$HOME/frpc.log"
+for k in 1 2 3; do
+  sleep 6
+  echo "testextern $k: $(curl -fsS --max-time 12 https://api.mcsrvstat.us/3/$S:25565 | tr -d '\n' | head -c 200)"
 done
-say "adresa: ${ADDR:-NU}"
 
-# ---------- proba dinafara ----------
-RES="n/a"
-for i in 1 2 3; do
-  sleep 10
-  R=$(curl -fsS --max-time 25 "https://api.mcsrvstat.us/3/${ADDR:-bore.pub:1}" 2>/dev/null)
-  RES=$(echo "$R" | grep -oE '"online":(true|false)')
-  say "  proba $i: $RES $(echo "$R" | grep -oE '\"motd\":.{0,60}')"
-  case "$R" in *'"online":true'*) break;; esac
+mkdir -p "$GITHUB_WORKSPACE/analysis"
+{ printf '# UP — %s\n\n' "$(date -u '+%F %T UTC')"; echo '```'; echo "adresa: $S:25565"; ss -lnt | grep 25565; tail -3 "$HOME/frpc.log"; echo '```'; } > "$GITHUB_WORKSPACE/analysis/up.md"
+cd "$GITHUB_WORKSPACE" || exit 0
+git config user.name cuantic-bot
+git config user.email bot@arena.local
+git add -f analysis/up.md
+git commit -q -m "up: $S:25565" || true
+git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+git push -q origin "$GITHUB_REF_NAME" || true
+echo "ADRESA=$S:25565"
+
+END=$(( $(date +%s) + 1500 ))
+while [ "$(date +%s)" -lt "$END" ]; do
+  pgrep -f unix_args.txt > /dev/null || { tmux kill-session -t mc 2>/dev/null; tmux new -s mc -d "cd $D && $J @unix_args.txt > live.log 2>&1"; echo "$(date +%T) MC repornit"; }
+  pgrep -f 'frpc -c' > /dev/null || { tmux kill-session -t frpc 2>/dev/null; tmux new -s frpc -d "exec $HOME/frpc -c $HOME/frpc.toml > $HOME/frpc.log 2>&1"; echo "$(date +%T) frpc repornit"; }
+  sleep 20
 done
-say "==> ${ADDR:-NU} | socket $SOCKET | $RES"
-echo "${ADDR:-NU}" > $DIR/ADRESA
-
-mkdir -p "$GITHUB_WORKSPACE/analysis"; cd "$GITHUB_WORKSPACE"
-{ printf '# SERVER SUS — %s\n\n- **adresa: `%s`**\n- boot: %s | socket: %s | dinafara: %s\n- procesele sunt in tmux (`tmux ls`), deci traieshte dupa job cat tine sesiunea Cloud Shell\n\n' "$(date -u '+%F %T UTC')" "${ADDR:-NU}" "${DONE:-NU}" "$SOCKET" "$RES"
-  echo '```'; cat $LOG; echo '```'; } > analysis/up.md
-git add -f analysis/up.md; git commit -q -m "up: ${ADDR:-nu}" || true
-git pull --rebase -q origin "$GITHUB_REF_NAME" || true; git push -q origin "$GITHUB_REF_NAME" || true
-say "GATA"; exit 0
+echo "job gata — serverul se opreste odata cu el"
