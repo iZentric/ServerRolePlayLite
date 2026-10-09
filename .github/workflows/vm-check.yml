@@ -29,21 +29,28 @@ jobs:
             echo '```'
             echo "## chei SSH prezente:"
             ls -la ~/.ssh/ 2>/dev/null
-            echo "## detalii instante:"
-            for IID in $(oci compute instance list --compartment-id "$TEN" --lifecycle-state RUNNING --output json 2>/dev/null | jq -r '.data[].id'); do
-              oci compute instance get --instance-id "$IID" --output json 2>/dev/null | jq -r '.data | "shape: " + .["shape"] + " | agent: " + (.["agent-config"."are-all-plugins-disabled"|tostring) + " | ad: " + .["availability-domain"]'
-              ADOM=$(oci compute instance get --instance-id "$IID" --output json 2>/dev/null | jq -r '.data.id')
-              VN=$(oci compute vnic-attachment list --compartment-id "$TEN" --instance-id "$ADOM" --output json 2>/dev/null | jq -r '.data[0].vnic_id')
-              oci network vnic get --vnic-id "$VN" --output json 2>/dev/null | jq -r '"vnic: " + .data.id + " publicIp: " + (.data.publicIp // "NICIUNUL") + " privateIp: " + (.data["private-ip"])'
-              echo "-----"
+            echo "## detalii instante RUNNING:"
+            IDS=$(oci compute instance list --compartment-id "$TEN" --lifecycle-state RUNNING --output json 2>/dev/null | jq -r '.data[].id')
+            : > /tmp/ips.txt
+            for IID in $IDS; do
+              oci compute instance get --instance-id "$IID" --output json 2>/dev/null | jq -r '"\(.data["display-name"]) | shape: \(.data["shape"]) | ad: \(.data["availability-domain"])"'
+              VN=$(oci compute vnic-attachment list --compartment-id "$TEN" --instance-id "$IID" --output json 2>/dev/null | jq -r '.data[0].vnicId // empty')
+              if [ -n "$VN" ]; then
+                oci network vnic get --vnic-id "$VN" --output json 2>/dev/null | jq -r '"   ip public: \(.data.publicIp // "NICIUNUL") | privat: \(.data.privateIp)"'
+                P=$(oci network vnic get --vnic-id "$VN" --output json 2>/dev/null | jq -r '.data.publicIp // empty')
+                [ -n "$P" ] && echo "$P" >> /tmp/ips.txt
+              fi
             done
-            echo "## incercari SSH cu cheia noastra (posibil sa mearga doar pe cele create cu ea, dar incercam tot):"
-            for IPT in $(for IID in $(oci compute instance list --compartment-id "$TEN" --lifecycle-state RUNNING --output json 2>/dev/null | jq -r '.data[].id'); do VN=$(oci compute vnic-attachment list --compartment-id "$TEN" --instance-id "$IID" --output json 2>/dev/null | jq -r '.data[0].vnic_id'); oci network vnic get --vnic-id "$VN" --output json 2>/dev/null | jq -r '.data.publicIp // empty'; done | sort -u); do
-              for U in ubuntu opc ubuntu cloud-init; do
-                R=$(ssh -i ~/.ssh/cuantic_oci -o StrictHostKeyChecking=accept-new -o ConnectTimeout=8 -o BatchMode=yes "$U@$IPT" 'echo VIU; hostname; nproc; free -g | awk "/Mem:/{print \$2\"GB\"}"; df -h / | awk "NR==2{print \$4}"' 2>/dev/null)
-                if [ -n "$R" ]; then echo "ACCES DA pe $U@$IPT:"; echo "$R"; break; else echo "acces NU pe $U@$IPT"; fi
+            echo "## teste SSH cu cheia noastra pe fiecare ip public:"
+            while read -r IPT; do
+              [ -z "$IPT" ] && continue
+              OK=NU
+              for U in ubuntu opc; do
+                R=$(ssh -i ~/.ssh/cuantic_oci -o StrictHostKeyChecking=accept-new -o ConnectTimeout=8 -o BatchMode=yes "$U@$IPT" 'echo VIU; hostname; nproc; free -g | awk "/Mem:/{print \$2\"GB RAM\"}"; df -h / | awk "NR==2{print \$4\" liberi\"}"; sudo -n true 2>/dev/null && echo SUDO-DA || echo SUDO-NU' 2>/dev/null)
+                if [ -n "$R" ]; then OK=DA; echo "=== ACCES DA prin $U@$IPT:"; echo "$R" | sed 's/^/    /'; fi
               done
-            done
+              [ "$OK" = "NU" ] && echo "=== $IPT: cheile noastre nu intra (instanta a fost creata cu alta cheie)"
+            done < /tmp/ips.txt
           } > analysis/vm-check.md
           cat analysis/vm-check.md | head -40
           git config user.name "vmcheck-bot"
