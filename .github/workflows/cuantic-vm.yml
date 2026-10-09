@@ -1,0 +1,98 @@
+name: CUANTIC PE VM (ruleaza local, pe runnerul din Oracle)
+on:
+  push:
+    paths: [ "deploy/vm-deploy.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  instaleaza-si-masoara:
+    runs-on: [self-hosted]
+    timeout-minutes: 25
+    steps:
+      - name: Pregatire sistem (java 17 + unelte)
+        run: |
+          set +e
+          command -v java >/dev/null || sudo dnf -y install -q java-17-openjdk-headless
+          command -v unzip >/dev/null || sudo dnf -y install -q unzip
+          command -v jq  >/dev/null || sudo dnf -y install -q jq
+          java -version 2>&1 | head -1
+      - name: Aducel pachetul CUANTIC (release lite, server CatServer)
+        run: |
+          set -e
+          mkdir -p ~/cuantic
+          cd ~/cuantic
+          URL=$(curl -fsS https://api.github.com/repos/iZentric/ServerRolePlayLite/releases/tags/lite | jq -r '.assets[].browser_download_url' | grep -m1 Server-CatServer)
+          echo "URL=$URL"
+          if [ ! -f .last-url ] || [ "$(cat .last-url)" != "$URL" ]; then
+            curl -fsSL -o pack.zip "$URL"
+            unzip -qo pack.zip
+            echo "$URL" > .last-url
+          else
+            echo "deja la zi"
+          fi
+          MEM=$(awk '/MemTotal/{print int($2/1048576)}' /proc/meminfo)
+          HEAP=6G; [ "${MEM:-0}" -ge 14 ] && HEAP=10G
+          sed -i "1s/.*/-Xms${HEAP}/;2s/.*/-Xmx${HEAP}/" unix_args.txt
+          head -2 unix_args.txt
+      - name: Port 25565 + systemd + pornire
+        run: |
+          set -e
+          cd ~/cuantic
+          if ! sudo iptables -L INPUT -n 2>/dev/null | grep -q 25565; then
+            sudo iptables -I INPUT -p tcp --dport 25565 -j ACCEPT 2>/dev/null || true
+            sudo sh -c "iptables-save > /etc/sysconfig/iptables" 2>/dev/null || true
+          fi
+          U=$(whoami); H=$HOME
+          sudo tee /etc/systemd/system/cuantic.service >/dev/null <<EOF
+          [Unit]
+          Description=CUANTIC 1.16.5 CatServer EvoKode pe ARM
+          After=network-online.target
+          [Service]
+          User=$U
+          WorkingDirectory=$H/cuantic
+          ExecStart=/usr/bin/java @$H/cuantic/unix_args.txt
+          Restart=always
+          RestartSec=15
+          LimitNOFILE=65536
+          [Install]
+          WantedBy=multi-user.target
+          EOF
+          sudo systemctl daemon-reload
+          sudo systemctl enable --now cuantic
+          for i in $(seq 1 120); do
+            sudo journalctl -u cuantic --no-pager 2>/dev/null | grep -q "Done (" && break
+            sleep 5
+          done
+          sudo journalctl -u cuantic --no-pager | tail -3
+      - name: Masurare si raport in git
+        run: |
+          set +e
+          cd "$GITHUB_WORKSPACE"
+          sudo rm -rf analysis; mkdir -p analysis
+          DONE=$(sudo journalctl -u cuantic --no-pager | grep -m1 -oE "Done \([0-9.]+s\)")
+          RSS=$(pgrep -f unix_args | head -1 | xargs -r -I{} ps -o rss= -p {} | awk '{print int($1/1024)}')
+          ERRN=$(sudo journalctl -u cuantic --no-pager | grep -c ERROR)
+          PLG=$(sudo journalctl -u cuantic --no-pager | grep -cE "]: (Enabling|Loading)")
+          SPARK=$(ls ~/cuantic/mods 2>/dev/null | grep -c spark)
+          sleep 30
+          RSS2=$(pgrep -f unix_args | head -1 | xargs -r -I{} ps -o rss= -p {} | awk '{print int($1/1024)}')
+          TOP=$(nproc)
+          FREE=$(free -g | awk '/Mem:/{print $4}')
+          {
+            echo "# CUANTIC pe VM ARM — raport live"
+            echo "_citire: $(date -u '+%F %T UTC') — ruleaza pe runnerul VOSTRU, 132.145.236.16:25565_"
+            echo "- boot: **${DONE:-NICIODATA}**"
+            echo "- RAM server la +30s dupa Done: ${RSS2:-?} MB (varf in timpul bootului: ${RSS:-?} MB)"
+            echo "- plugini incercati: $PLG | linii ERROR: $ERRN | spark mod: $SPARK"
+            echo "- gazda: $TOP cores ARM, liber acum: $FREE GB din 24"
+            echo "- adresa de jucats: **132.145.236.16** (port 25565, default)"
+          } > analysis/vm-live.md
+            cat analysis/vm-live.md
+          git config user.name "vm-report-bot"
+          git config user.email "bot@arena.local"
+          git add -f analysis/vm-live.md
+            git commit -m "vm-live: $DONE" || true
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          git push -q origin "$GITHUB_REF_NAME" || true
+          exit 0
