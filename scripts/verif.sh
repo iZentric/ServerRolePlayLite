@@ -19,18 +19,21 @@ sed -i 's/^server-ip=.*/server-ip=/; s/^server-port=.*/server-port=25565/; s/^on
 echo 'eula=true' > eula.txt
 
 pkill -f 'java @unix_args' 2>/dev/null; pkill -f 'bore local' 2>/dev/null; sleep 2
-setsid bash -c "cd $DIR && exec tail -f /dev/null | ${J17:-java} @unix_args.txt > live.log 2>&1" &
+setsid bash -c "cd $DIR && exec tail -f /dev/null | ${J17:-java} -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv6Addresses=false @unix_args.txt > live.log 2>&1" &
 DONE=""
 for i in $(seq 1 80); do DONE=$(grep -m1 -oE 'Done \([0-9.]+s\)' $DIR/live.log 2>/dev/null); [ -n "$DONE" ] && break; sleep 3; done
 say "boot: ${DONE:-NU in 240s}"
 python3 - <<'PY' >> $LOG 2>&1
 import socket
-try:
-    s = socket.create_connection(("127.0.0.1", 25565), timeout=6)
-    print("  port local 25565: DESCHIS"); s.close()
-except Exception as e:
-    print("  port local 25565: REFUZAT", e)
+for host in ("127.0.0.1", "::1", "0.0.0.0"):
+    try:
+        fam = socket.AF_INET6 if host == "::1" else socket.AF_INET
+        s = socket.socket(fam, socket.SOCK_STREAM); s.settimeout(5)
+        s.connect((host, 25565)); print("  ", host, "25565: DESCHIS"); s.close()
+    except Exception as e:
+        print("  ", host, "25565: REFUZAT", e)
 PY
+ss -lnt 2>/dev/null | grep -E '25565|State' | sed 's/^/  ss: /' >> $LOG
 
 [ -x $HOME/bore ] || { curl -fsSL --retry 2 -o $HOME/b.tgz https://github.com/ekzhang/bore/releases/download/v0.6.0/bore-v0.6.0-aarch64-unknown-linux-musl.tar.gz && tar xzf $HOME/b.tgz -C $HOME && mv -f $HOME/bore-v0.6.0-aarch64-unknown-linux-musl/bore $HOME/bore && chmod +x $HOME/bore && rm -rf $HOME/b.tgz $HOME/bore-v0.6.0-*; }
 : > $DIR/bore.log
