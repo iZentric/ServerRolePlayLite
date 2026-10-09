@@ -3,11 +3,19 @@
 import inspect, traceback
 
 out = []
+def _safe_attr(o, *names, dflt="?"):
+    for n in names:
+        v = getattr(o, n, None)
+        if v is not None: return v
+    return dflt
 def log(*a):
     s = " ".join(str(x) for x in a); print(s); out.append(s)
 
 import oci
-config = oci.config.from_file()
+try:
+    config = oci.config.from_file()
+except Exception:
+    open("/tmp/qms.txt","w").write("CONFIG FAIL:\n"+traceback.format_exc()); raise SystemExit(0)
 config["region"] = "eu-frankfurt-1"
 ten = config.get("tenancy")
 log("sdk", oci.__version__, "ten", ten[:28] + "...")
@@ -39,17 +47,20 @@ def call(fn, extra_vals=None, positional=()):
         return None, f"ERR: {str(e)[:200]}"
 
 # ---------- QMS ----------
-from oci.limits.quotas_client import QuotasClient
+try:
+    from oci.limits.quotas_client import QuotasClient
+except Exception:
+    from oci.limits import QuotasClient
 import oci.limits.models as lm
 qc = QuotasClient(config=config)
 r, err = call(qc.list_quotas)
 items = []
-if r: items = r.data.items or []
+if r: items = getattr(getattr(r,"data",None),"items",None) or []
 else: log("list_quotas esuat:", err)
-a1 = [q for q in items if "a1" in (q.name or "").lower()]
+a1 = [q for q in items if "a1" in (_safe_attr(q,"name","quota_name","") or "").lower()]
 log("a1 gasite:", len(a1))
 for q in a1[:8]:
-    log("-", q.name, "| lim:", q.limit_value, "| uzat:", q.used_value, "| ajust:", q.is_adjustable)
+    log("-", _safe_attr(q,"name"), "| lim:", _safe_attr(q,"limit_value","limitValue"), "| uzat:", _safe_attr(q,"used_value","usedValue"), "| ajust:", _safe_attr(q,"is_adjustable","isAdjustable"))
 
 chname = [x for x in dir(lm) if "changequota" in x.lower() and not x.startswith("_")]
 log("modele change:", chname[:4])
@@ -60,9 +71,9 @@ if a1 and chname:
     targets = {}
     for q in a1:
         n = q.name.lower()
-        if "core" in n or "ocpu" in n: targets[q.name] = 4
-        elif "mem" in n: targets[q.name] = 24
-        elif "count" in n or "instance" in n: targets[q.name] = 4
+        if "core" in n or "ocpu" in n: targets[_safe_attr(q,"name","quota_name")] = 4
+        elif "mem" in n: targets[_safe_attr(q,"name","quota_name")] = 24
+        elif "count" in n or "instance" in n: targets[_safe_attr(q,"name","quota_name")] = 4
     for name, want in targets.items():
         kw = {}
         for cand in ("desired_value", "desired_limit", "new_value", "value", "limit_value"):

@@ -17,9 +17,9 @@ jobs:
           echo "pymodal din shebang: $PYPY"
           "$PYPY" -c "import oci" 2>/dev/null || PYPY=$(for c in ~/.local/lib/oracle-cli/bin/python3 /usr/lib/oracle/oci-cli*/bin/python3 /opt/oci-cli/bin/python3; do [ -x "$c" ] && "$c" -c "import oci" 2>/dev/null && echo "$c" && break; done)
           echo "python folosit: $PYPY"
-          "$PYPY" scripts/qms.py 2>&1 | tail -40
+          "$PYPY" scripts/qms.py > /tmp/qms-run.txt 2>&1; echo "rc=$?" >> /tmp/qms-run.txt; tail -60 /tmp/qms-run.txt
           mkdir -p analysis
-          { echo "# A1-QUOTA (QMS prin SDK) — $(date -u '+%F %T UTC')"; echo; cat /tmp/qms.txt 2>/dev/null; } > analysis/a1-quota.md
+          { echo "# A1-QUOTA (QMS prin SDK) — $(date -u '+%F %T UTC')"; echo; echo '```'; { cat /tmp/qms.txt 2>/dev/null; echo; echo "---- iesire bruta:"; cat /tmp/qms-run.txt 2>/dev/null; } | head -70; echo '``'; echo '``'; } > analysis/a1-quota.md
           cat analysis/a1-quota.md
           git config user.name "quota-bot"
           git config user.email "bot@arena.local"
