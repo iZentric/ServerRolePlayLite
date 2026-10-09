@@ -65,11 +65,11 @@ jobs:
             lftp -u "$SFTP_USER","$P" "sftp://$SFTP_HOST:$SFTP_PORT" -e "set sftp:auto-confirm yes; cat server.properties; bye" > run/sp-remote.txt 2>/dev/null
             if [ -f /tmp/exp.zip ]; then
               unzip -l /tmp/exp.zip 2>/dev/null | awk '{print $4}' | grep -E '^mods/[^/]+\.jar$' | sed 's|mods/||' | sort -u > /tmp/exp-mods
-              sort -u run/mods-remote.txt 2>/dev/null | grep -E '.jar$' | sort -u > /tmp/host-mods
+              sed 's|.*/||' run/mods-remote.txt 2>/dev/null | grep -E '.jar$' | sort -u > /tmp/host-mods
               comm -23 /tmp/exp-mods /tmp/host-mods > /tmp/missing 2>/dev/null || true
               comm -13 /tmp/exp-mods /tmp/host-mods > /tmp/extra 2>/dev/null || true
-              unzip -p /tmp/exp.zip unix_args.txt 2>/dev/null | grep -vE 'jar|nogui' | md5sum | cut -c1-8 > /tmp/e-flags
-              grep -vE 'jar|nogui' run/ua-remote.txt 2>/dev/null | md5sum | cut -c1-8 > /tmp/h-flags
+              unzip -p /tmp/exp.zip unix_args.txt 2>/dev/null | tr -d '\r' | grep -vE 'jar|nogui' | sort -u | md5sum | cut -c1-8 > /tmp/e-flags
+              tr -d '\r' < run/ua-remote.txt 2>/dev/null | grep -vE 'jar|nogui' | sort -u | md5sum | cut -c1-8 > /tmp/h-flags
               MISSN=$(wc -l < /tmp/missing | tr -d ' ')
               EXTRAN=$(wc -l < /tmp/extra | tr -d ' ')
               EF=$(cat /tmp/e-flags); HF=$(cat /tmp/h-flags)
