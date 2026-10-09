@@ -113,7 +113,8 @@ jobs:
             for F in vb/*.md; do
               [ -f "$F" ] || continue
               echo "## $(basename "$F" .md)"
-              sed -n '2,3p' "$F"
+              sed -n '2p' "$F"
+              grep -m1 '^- STATUS' "$F" || echo "- STATUS: (lipseste)"
               echo
             done
             echo "Criterii: boot (Done), RAM stabil@+90s, zero erori noi."
