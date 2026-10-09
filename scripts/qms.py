@@ -102,61 +102,45 @@ if a1 and chname:
         if not done:
             log("QMS nu a mers pt", name, "— trec la LI")
 
-# ---------- Limits Increase (cererea clasica din Console) ----------
+# ---------- Limits Increase cu format REAL din openapi_types ----------
 try:
     from oci.limits_increase.limits_increase_client import LimitsIncreaseClient
     import oci.limits_increase.models as lim
     li = LimitsIncreaseClient(config=config)
-    top = [x for x in dir(lim) if x == "CreateLimitsIncreaseRequestDetails"][0]
-    it  = [x for x in dir(lim) if x == "CreateLimitsIncreaseItemRequestDetails"][0]
-    TP, IP = getattr(lim, top), getattr(lim, it)
-    tp = dict(getattr(TP, "attribute_map", {})); ip = dict(getattr(IP, "attribute_map", {}))
-    log("TOP atribute:", tp); log("ITEM atribute:", ip)
-    invT = {v: k for k, v in tp.items()}; invI = {v: k for k, v in ip.items()}
-    reqs = []
-    for lname, want in (("standard-a1-core-count", 4), ("standard-a1-memory-count", 24), ("standard-a1-instance-count", 4)):
+    TP = lim.CreateLimitsIncreaseRequestDetails
+    IP = lim.CreateLimitsIncreaseItemRequestDetails
+    log("TOP openapi:", getattr(TP, "openapi_types", {}))
+    log("ITEM openapi:", getattr(IP, "openapi_types", {}))
+    log("TOP attrmap:", getattr(TP, "attribute_map", {}))
+    log("ITEM attrmap:", getattr(IP, "attribute_map", {}))
+    want = [("standard-a1-core-count", 4), ("standard-a1-memory-count", 24), ("standard-a1-instance-count", 4)]
+    # ghicim cheia listei din modelul parinte: primul parametru de tip list
+    tlist = {k: v for k, v in getattr(TP, "openapi_types", {}).items() if v == "list"}
+    ilist = getattr(IP, "openapi_types", {})
+    log("camp list parinte:", tlist, "| item campuri:", ilist)
+    items = []
+    for ln, wv in want:
         ik = {}
-        def put(cands, val):
-            for c in cands:
-                if c in tp or c in ip: pass
-                if c in (ip.keys() if False else ip): ik[c] = val; return True
-                if c in invI: ik[invI[c]] = val; return True
-            return False
-        put(("service_name",), "compute")
-        put(("limit_name", "name", "limit"), lname)
-        put(("desired_value", "new_value", "value", "requested_value"), want)
-        put(("justification", "description", "notes", "user_reason"), "server Minecraft copii, Always Free")
-        ik = {k: v for k, v in ik.items() if v is not None}
-        try: reqs.append(IP(**ik))
-        except Exception as e: log("item build", lname, ":", str(e)[:120])
-    tk = {}
-    for cand in ("limits_details", "limits", "items", "requests"):
-        if cand in tp or cand in invT: tk[cand if cand in tp else invT[cand]] = reqs; break
-    det2 = TP(**tk)
-    # plan B: dict pur cu nume camelCase, ca la REST
-    rawdet = {"limits": [{"serviceName":"compute","limitName":ln,"desiredValue":w,"justification":"Server Minecraft pentru 20 copii (Always Free A1)"} for ln,w in (("standard-a1-core-count",4),("standard-a1-memory-count",24),("standard-a1-instance-count",4))]}
-    mm2 = [m for m in dir(li) if "create" in m and not m.startswith("_")]
-    log("LI metode:", mm2)
-    for m in mm2:
-        fn = getattr(li, m)
-        tried = [
-            {"compartment_id": ten, "create_limits_increase_request_details": det2},
-            {"compartment_id": ten, "create_limits_increase_request_details": rawdet},
-            {"compartment_id": ten, "create_limits_details": rawdet},
-        ]
-        ok = False
-        for kw in tried:
-            sigp = {p for p in inspect.signature(fn).parameters if p != "self"}
-            kw = {k: v for k, v in kw.items() if k in sigp} or kw
-            try:
-                res = fn(**kw)
-                log("LIMITE CERERE TRIMISA prin", m, "| state:", getattr(res.data, "lifecycle_state", "?"), "| id:", str(getattr(res.data, "id", "?"))[:44])
-                ok = True; break
-            except Exception as e:
-                log("  ", m, list(kw.keys()), "->", str(e)[:200])
-        if ok: break
-except Exception:
-    log("LI FAIL:\n" + traceback.format_exc()[-700:])
+        if "service_name" in ilist: ik["service_name"] = "compute"
+        for cand in ("limit_name", "name", "resource_name"):
+            if cand in ilist: ik[cand] = ln; break
+        for cand in ("value", "desired_value", "requested_value"):
+            if cand in ilist: ik[cand] = wv; break
+        if "availability_domain" in ilist: pass
+        items.append(IP(**ik))
+        log("item ok:", ik)
+    pk = {}
+    for k in tlist:
+        pk[k] = items
+    for cand in ("justification", "description", "user_notes"):
+        if cand in getattr(TP, "openapi_types", {}): pk[cand] = "Server Minecraft pentru 20 copii (Always Free A1)"
+    det = TP(**pk)
+    log("body gata:", str(det.to_dict())[:400])
+    res = li.create_limits_increase_request(compartment_id=ten, create_limits_increase_request_details=det)
+    log("CERERE LIMITE TRIMISA! state:", getattr(res.data, "lifecycle_state", "?"), "| id:", str(getattr(res.data, "id", "?"))[:40], "| approval:", getattr(res.data, "approver_type", getattr(res.data, "approver", "?")))
+except Exception as e:
+    log("LI ERR:", str(e)[:400])
+    log(traceback.format_exc()[-500:])
 
 open("/tmp/qms.txt", "w").write("\n".join(out))
 print("GATA")
