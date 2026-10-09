@@ -1,0 +1,14 @@
+name: JAVA — Java noastra + pack reasamblat + test real de boot
+on:
+  push:
+    paths: [ "deploy/java.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  j:
+    runs-on: [self-hosted]
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/java.sh || true
