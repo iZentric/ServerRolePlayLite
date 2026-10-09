@@ -10,7 +10,7 @@
   - taiat din client (stil rust): CTM-MC1.16.1-1.1.2.6.jar
   - taiat din client (stil rust): DynamicSurroundings-1.16.5-4.0.5.0.jar
   - taiat din client (stil rust): lightfallclient-1.0.0.jar
-  => out/CUANTIC-Client-1.5.7.mrpack (133.1 MB)
+  => out/CUANTIC-Client-1.5.8.mrpack (133.1 MB)
 == Moduri de server (comune) ==
   ↓ mapperbase-1.16.5-2.4.0.0.jar
   ↓ supplementaries-1.16.5-0.18.4b.jar
@@ -35,6 +35,7 @@
     (modrinth: ferritecore -> HTTP Error 404: Not Found)
     (curseforge: ferritecore -> HTTP Error 404: Not Found)
   !! 'ferritecore' sarit (nu exista pt 1.16.5 forge nicaieri)
+  + perf: spark-1.9.1-forge.jar [modrinth]
     (modrinth: roadrunner -> HTTP Error 404: Not Found)
   + perf: RoadRunner-mc1.16.5-1.5.2.jar [curseforge]
     (modrinth: placebo -> nicio versiune)
@@ -87,7 +88,7 @@
     (modrinth: performant -> nicio versiune)
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
-  => out/CUANTIC-Server-MaxLite-1.5.7.zip (32.1 MB)
+  => out/CUANTIC-Server-MaxLite-1.5.8.zip (35.1 MB)
 == SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar
@@ -103,14 +104,13 @@
   ↓ plugin: FastLoginBukkit.jar
   ↓ plugin: claimchunk-0.0.22.jar
   ↓ plugin: LuckPerms-Bukkit-5.5.71.jar
-  !! plugin 'spark' sarit: nicio versiune
   ↓ plugin: Chunky-1.2.217.jar
   ↓ Arclight
-  => out/CUANTIC-Server-Arclight-1.5.7.zip (64.7 MB)
+  => out/CUANTIC-Server-Arclight-1.5.8.zip (67.6 MB)
 == SERVER Mist (hibrid experimental cu patch-uri Paper) ==
   ↓ Mist
-  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.5.7.zip (64.3 MB)
+  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.5.8.zip (67.2 MB)
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
-  => out/CUANTIC-Server-CatServer-1.5.7.zip (63.6 MB)
+  => out/CUANTIC-Server-CatServer-1.5.8.zip (66.6 MB)
 GATA.
