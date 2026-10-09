@@ -1,0 +1,19 @@
+name: OP — proprietarul devine operator, fara paste
+on:
+  push:
+    paths: [ "scripts/op.sh", "deploy/op.txt", ".github/workflows/op.yml" ]
+  workflow_dispatch:
+    inputs:
+      nume: { description: "numele de jucator (gol = il ghicesc din live.log)", required: false, default: "" }
+permissions:
+  contents: write
+jobs:
+  op:
+    runs-on: [self-hosted]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: acorda OP
+        env:
+          NUME_TAU: ${{ github.event.inputs.nume }}
+        run: bash scripts/op.sh

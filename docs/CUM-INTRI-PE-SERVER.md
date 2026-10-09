@@ -67,3 +67,5 @@ se instalează mereu din **același release** — altfel riști exact eroarea de
 ## Ai alt launcher?
 ATG / MultiMC la fel (Import .mrpack). **CurseForge/Prism-only nu merge**: nu importă `.mrpack`.
 NV Launcher: **Import .zip**, **NU** „Import Modrinth modpack". **Vanilla**: nu merge deloc — serverul cere Forge + moduri.
+
+# 1.5.9: OP acordat de agent din interior (scripts/op.sh prin jobul OP), nu de user in consola.
