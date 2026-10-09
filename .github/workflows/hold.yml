@@ -8,7 +8,7 @@ permissions:
   actions: write
 concurrency:
   group: hold-cuantic
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   hold:
     runs-on: [self-hosted]
