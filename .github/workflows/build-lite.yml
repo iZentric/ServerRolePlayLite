@@ -52,7 +52,7 @@ jobs:
 
       - name: VALIDARE FLAGURI JVM pe Java 11 real
         uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: "11" }
+        with: { distribution: temurin, java-version: "17" }   # 1.6.0: ACEEASI Java pe care ruleaza serverul (11 -> 17)
       - name: Testeaza flagurile (daca unul nu exista, build-ul pica aici, nu serverul)
         run: |
           FLAGS=$(python3 -c "import re;s=open('scripts/build_lite.py').read();m=re.search(r'AIKAR_FLAGS = \((.*?)\n\)',s,re.S);print(eval('('+m.group(1)+')'))")

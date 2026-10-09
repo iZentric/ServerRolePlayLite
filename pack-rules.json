@@ -1,6 +1,6 @@
 {
   "pack_name": "CUANTIC",
-  "pack_version": "1.5.9",
+  "pack_version": "1.6.0",
   "minecraft": "1.16.5",
   "forge": "36.2.42",
   "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
@@ -48,13 +48,8 @@
     "placebo",
     "fastfurnace",
     "fastworkbench",
-    "smooth-boot-reloaded",
-    "saturn",
-    "adaptive-performance-tweaks",
     "get-it-together-drops",
-    "ksyxis",
     "connectivity",
-    "fastsuite",
     "bad-wither-no-cookie-reloaded"
   ],
   "_comentariu_maxlite": "Moduri server-side care inlocuiesc pluginurile in varianta MaxLite (Forge pur, consum minim).",
@@ -97,13 +92,8 @@
   ],
   "ultra_strip_assets": true,
   "mirror_on_client": [
-    "clumps",
-    "placebo",
-    "fastfurnace",
-    "fastbench|fastworkbench",
-    "aiimprovements|ai-improvements",
-    "incontrol|in-control",
-    "bwncr|bad-wither"
+    "clumps"
   ],
-  "_comentariu_mirror": "Moduri de pe server care AU intrari in registru (Clumps = entity_type). Daca lipsesc de pe client, FML zice 'Missing registry data for network connection' si playerii nu mai intra. Build-ul le copiaz byte-cu-byte din mods/ de pe server in overrides/mods al mrpack-ului - aceeasi versiune, mereu. Adauga aici ORICE mod nou care inregistreaza blocuri/itemuri/entitati."
+  "_comentariu_mirror": "Doar clumps: e SINGURUL mod de pe server cu intrari in registru (entity_type clumps:xp_orb_big). Celelalte 6 (placebo, fastfurnace, fastbench, aiimprovements, incontrol, bwncr) NU inregistreaza nimic si au stat degeaba pe client (-6 moduri, -1.2MB). Dovada: logul client 1.5.8 arata eroarea fatala doar la minecraft:entity_type. Daca apare din nou 'Missing registry data' pentru alta insta, se adauga slug-ul aici.",
+  "_comentariu_taieri_160": "1.6.0 FASTSLEP: fastsuite = accelerador de JUnit (nu exista teste in productii), smooth-boot = ordinea de pornire a CLIENTULUI, ksyxis/saturn = optimizari de client (memorie/assete), adaptive-performance-tweaks = scade view-distance dinamic = se bate cu configul nostru si cu survivalul. Zero din ele nu aduceau FPS/RAM pe server."
 }

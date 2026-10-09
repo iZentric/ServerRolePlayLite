@@ -475,14 +475,25 @@ FORGE_COMMON_CLEAN = """\
 
 def write_start_scripts(sdir, server_jar):
     with open(os.path.join(sdir, "start.sh"), "w") as f:
-        f.write(f"#!/bin/sh\njava -Xms2G -Xmx6G {AIKAR_FLAGS} -jar {server_jar} nogui\n")
+        f.write(f"#!/bin/sh\njava -Xms1G -Xmx2G {FLAGS_17} -jar {server_jar} nogui\n")
     with open(os.path.join(sdir, "start.bat"), "w") as f:
-        f.write(f"java -Xms2G -Xmx6G {AIKAR_FLAGS} -jar {server_jar} nogui\r\npause\r\n")
+        f.write(f"java -Xms1G -Xmx2G {FLAGS_17} -jar {server_jar} nogui\r\npause\r\n")
     with open(os.path.join(sdir, "server.properties"), "w") as f:
         f.write(SERVER_PROPERTIES)
     # TRUCUL ZAMPTO: unix_args.txt = panoul foloseste flagurile si jar-ul NOSTRU
+    # 1.6.0: flagurile se iau din lista VALIDATA PE JAVA 17 (deploy/jvm-flags-17.txt, scrisa de
+    # scripts/jvm-tune.sh). Motive dovedite: (a) cateva flaguri Aikar pt Java 11 NU mai exista in 17
+    # si JVM-ul refuza sa porneasca; (b) -Xmx6G/8G a iesit MAI PROST masurat: pauza GC medie
+    # 111.38 ms la 8G vs 47.2 ms la 2G, cu +0.75GB RSS pierduti. Heap-ul de lucru e ~1.2GB.
+    FLAGS_17 = AIKAR_FLAGS
+    vfile = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "deploy", "jvm-flags-17.txt")
+    if os.path.isfile(vfile):
+        cand = " ".join(x for x in open(vfile, encoding="utf-8").read().split("\n") if x.strip() and not x.startswith("#"))
+        if "-XX:+UseG1GC" in cand:
+            FLAGS_17 = cand
+            log(f"  flaguri luate din {os.path.relpath(vfile, os.getcwd())} (validate pe Java 17)")
     with open(os.path.join(sdir, "unix_args.txt"), "w") as f:
-        f.write("-Xms2G\n-Xmx6G\n")
+        f.write("-Xms1G\n-Xmx2G\n")
         for fl in AIKAR_FLAGS.split():
             f.write(fl + "\n")
         f.write(f"-jar\n{server_jar}\nnogui\n")

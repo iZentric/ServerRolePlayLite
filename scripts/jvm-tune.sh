@@ -42,8 +42,16 @@ V="$V aruncat=$(echo $ARUNCAT | wc -w)"
 
 if [ -z "$FLAGI" ]; then
   echo "JVMTUNE: candidat respins de Java 17, ramane ce a fost" > /tmp/tuneverdict
-  cp /tmp/tuneverdict /tmp/tuneout.txt; exit 0
+  cp /tmp/tuneverdict /tmp/tuneout.txt
+  cd "$GITHUB_WORKSPACE" 2>/dev/null || true
+  { echo "# esec candidat — $(date -u '+%F %T UTC')"; cat /tmp/jvm.err 2>/dev/null; } > analysis/JVM-TUNE.md
+  git config user.name "cuantic-bot"; git commit -q -am "jvm-tune: candidat respins" 2>/dev/null || true
+  git pull --rebase -q origin "${GITHUB_REF_NAME:-arena/a29b4ef4-serverroleplaylite}" 2>/dev/null || true
+  git push -q origin "HEAD:${GITHUB_REF_NAME:-arena/a29b4ef4-serverroleplaylite}" 2>/dev/null || true
+  exit 0
 fi
+mkdir -p "$GITHUB_WORKSPACE/deploy" 2>/dev/null
+printf '%s\n' $FLAGI > "$GITHUB_WORKSPACE/deploy/jvm-flags-17.txt" 2>/dev/null || true
 { echo "## flaguri acceptate de Java 17 ($(printf '%s\n' $FLAGI | wc -l))"; printf '%s\n' $FLAGI | sed 's/^/  /'
   echo "## aruncate (nu mai exista in 17):$ARUNCAT"; } > /tmp/flagreport.txt
 
@@ -101,13 +109,14 @@ probe() {
   echo "  B) -Xmx8G, 3 flaguri (toata RAM-ul): MSPT 1.2/1.6/9.1/29.5 · GC 111.38 ms mediu/8 · Old 0 · heap 1.2G/8G · RSS 3366MB · keep-up 0"
 } > /tmp/tuneout.txt 2>&1
 RSS=$(grep -o 'VmHWM:\s*[0-9]*' /tmp/tuneout.txt | grep -o '[0-9]*' | head -1)
+V="JVMTUNE ok: $(printf '%s\n' $FLAGI | wc -l) flaguri
 V="$V keepup=$(grep -o 'total=[0-9]*' /tmp/tuneout.txt | tail -1 | cut -d= -f2) hwm=${RSS}KB"
 echo "$V" > /tmp/tuneverdict
 
 mkdir -p "$GITHUB_WORKSPACE/analysis" 2>/dev/null && cd "$GITHUB_WORKSPACE"
 { echo "# JVM-TUNE CUANTIC — $(date -u '+%F %T UTC')"; echo; echo '```'; cat /tmp/tuneout.txt; echo '```'; } > analysis/JVM-TUNE.md
 git config user.name "cuantic-bot"; git config user.email "bot@cuantic.local"
-git add -f analysis/JVM-TUNE.md >/dev/null 2>&1
+git add -f analysis/JVM-TUNE.md deploy/jvm-flags-17.txt >/dev/null 2>&1
 git commit -q -m "$(echo "$V" | tr -d '"' | head -c 180)" || true
 git pull --rebase -q origin "${GITHUB_REF_NAME:-arena/a29b4ef4-serverroleplaylite}" || true
 git push -q origin "HEAD:${GITHUB_REF_NAME:-arena/a29b4ef4-serverroleplaylite}" || echo "push: nimic"
