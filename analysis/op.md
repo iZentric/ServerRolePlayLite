@@ -1,4 +1,4 @@
-op sh -- 2026-10-09 22:42:41 UTC
-OP: nume=iZentric java=SUS port=ASCULTA consola=NU ops.json=SCRIS
+op sh -- 2026-10-09 22:46:24 UTC
+OP: nume=iZentric java=SUS port=ASCULTA consola=NU cmd.in_neconsumat=[gol] restart=PORNIT
 DOVEZI: [22:42:10] [Server thread/INFO]: /127.0.0.1:34386 lost connection: Disconnected|[22:42:13] [Server thread/INFO]: /127.0.0.1:34400 lost connection: Disconnected|[22:42:16] [Server thread/INFO]: /127.0.0.1:34420 lost connection: Disconnected|
-live.log final: > [K[22:42:16] [Craft Scheduler Thread - 29/INFO]: [FastLogin] Enabling onlinemode encryption for UNKNOWN[/127.0.0.1:34420] > [K[31;1m[22:42:16] [Craft Scheduler Thread - 29/ERROR]: [FastLogin] GameProfile iZentric (/127.0.0.1:34420) tried to log in with 
+live.log final: [22:46:22] [Craft Scheduler Thread - 1/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[34;1mWant to support SkinsRestorer or receive priority support? Become a supporter: [33;1mhttps://skinsrestorer.net/pricing[0;39m [22:46:22] [Craft Scheduler Thread 
