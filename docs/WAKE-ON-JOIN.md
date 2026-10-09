@@ -33,8 +33,8 @@ crează A1.Flex 4 vCPU / 24 GB cu cloud-install-ul de mai sus și lasă verdictu
 ## Ce se schimbă la jucători când mutăm pe VM cu wake
 - `server-port` intern devine **25566**, tu dai Join pe **25565** la fel (nu se schimbă nimic la client);
 - primul join al zilei stă ~15-20 s (încălzire), al doilea e instant;
-- lista de servere răspunde mereu (proxy-ul răspunde la ping cu „offline"? **nu**: ping-ul e trimis și el mai departe,
-  deci în lista de servere apare „offline" cât timp JVM-ul doarme — singurul semn vizibil că doarme).
+- lista de servere: proxy-ul trimite mai departe TOATE conexiunile, deci si simpla deschidere a listei
+  trezeste serverul => in lista trece de la «offline» la «online» in ~15 s. Asta e singurma urma vizibila ca a dormit.
 
 ## Ce NU e testat încă
 Proxiesul rulează deocamdată **numai pe hârtie** — n-a apucat să fie instalat pe nicio mașină, pentru că
