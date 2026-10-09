@@ -1,65 +1,79 @@
-# CUANTIC LIVE — 2026-10-09 16:54:02 UTC
+# CUANTIC LIVE — 2026-10-09 17:00:33 UTC
 ```
-== CUANTIC LIVE v2 — 2026-10-09 16:52:38 UTC ==
-disc: overlay          70G   35G   32G  53% / | mem: Mem:          11884        2226        2466          76        7191        7825
-java17: openjdk version "17.0.20.1" 2026-08-18 LTS  [/usr/lib/jvm/java-17-openjdk-17.0.20.1.1-1.1.0.1.el8.aarch64/bin/java]
-args: -Xms1G -Xmx4G 
-procese java: 1
-boot: Done (20.904s)
-ERROR in log: 0
-primele 12 linii:
-  Loading libraries, please wait...
-  Current Java version (17.0.20.1) is not supported, please replace to Java8-16
-  2026-10-09 16:52:42,089 main WARN Advanced terminal features are not available in this environment
-  [16:52:42] [main/INFO]: ModLauncher running: args [--gameDir, ., --launchTarget, fmlserver, --fml.forgeVersion, 36.2.39, --fml.mcpVersion, 20210115.111550, --fml.mcVersion, 1.16.5, --fml.forgeGroup, net.minecraftforge, nogui]
-  [16:52:42] [main/INFO]: ModLauncher 8.1.3+8.1.3+main-8.1.x.c94d18ec starting: java version 17.0.20.1 by Red Hat, Inc.
-  [16:52:42] [main/INFO]: Added Lets Encrypt root certificates as additional trust
-  [16:52:42] [main/INFO]: SpongePowered MIXIN Subsystem Version=0.8.4 Source=file:/home/mndvasi9/cuantic-live/libraries/org/spongepowered/mixin/0.8.4/mixin-0.8.4.jar Service=ModLauncher Env=SERVER
-  [16:52:45] [main/ERROR]: Mixin config pizzamod.mixin.json does not specify "minVersion" property
-  [16:52:45] [main/INFO]: Launching target 'fmlserver' with arguments [--gameDir, ., nogui]
-  [16:52:45] [main/INFO]: Loaded rule configuration file for RoadRunner: 81 options available, 0 override(s) found
-  [16:52:45] [main/INFO]: Loaded configuration file for ModernFix 5.18.0+mc1.16.5: 89 options available, 0 override(s) found
-  [16:52:45] [main/INFO]: Applying Nashorn fix
-  ! [16:53:30] [Server thread/WARN]: java.security.NoSuchAlgorithmException: SHA1PRNG SecureRandom not available
-  ! [16:53:30] [Server thread/WARN]: 	at java.base/sun.security.jca.GetInstance.getInstance(GetInstance.java:159)
-  ! [16:53:30] [Server thread/WARN]: 	at java.base/java.security.SecureRandom.getInstance(SecureRandom.java:387)
-  ! [16:53:30] [Server thread/WARN]: 	at org.h2.util.MathUtils.getSecureRandom(MathUtils.java:73)
-  ! [16:53:30] [Server thread/WARN]: 	at org.h2.util.MathUtils.secureRandomLong(MathUtils.java:271)
-  ! [16:53:30] [Server thread/WARN]: 	at org.h2.value.ValueUuid.getNewRandom(ValueUuid.java:51)
-  ! [16:53:30] [Server thread/WARN]: 	at org.h2.table.Column.initializeSequence(Column.java:456)
-asculta pe 127.0.0.1:25565: NU
-ram: Mem:          11884        2231        5415          78        4237        7830
-probe direct IP: "online":false
-iau playit (relay gratuit pentru MC Java)...
-asset: NICIUNUL
-playit indisponibil
-==> SERVER PORNIT (Done (20.904s))
-==> ADRESA DE JOC: NU AM REUSAT (serverul merge local, fara intrare publica)
+== CUANTIC LIVE v3 — 2026-10-09 16:58:04 UTC ==
+java17: /usr/lib/jvm/java-17-openjdk-17.0.20.1.1-1.1.0.1.el8.aarch64/bin/java
+--- interfete:
+  1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+  2: eth0    inet 10.89.0.2/24 brd 10.89.0.255 scope global eth0\       valid_lft forever preferred_lft forever
+  7: enp1s0    inet 10.215.108.231/17 brd 10.215.127.255 scope global enp1s0\       valid_lft forever preferred_lft forever
+egress (asa ne vad internetul): 132.145.236.16 | IP public pe NIC: NICIUNUL (deci NAT/cloud-shell)
+mod retea estimat: PUBLIC-POSIBILE
+java pornit, procese: 1
+boot: Done (13.592s) | ERROR: 0
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+ConnectionRefusedError: [Errno 111] Connection refused
+asculta local 25565: NU
+bind:
+tin serverul 45s la dispozitia probei...
+  incercare 1: mcsrvstat="online":false mcstatus="online":false
+  incercare 2: mcsrvstat="online":false mcstatus="online":false
+  incercare 3: mcsrvstat="online":false mcstatus="online":false
+  incercare 4: mcsrvstat="online":false mcstatus="online":false
+  incercare 5: mcsrvstat="online":false mcstatus="online":false
+  incercare 6: mcsrvstat="online":false mcstatus="online":false
+  incercare 7: mcsrvstat="online":false mcstatus="online":false
+  incercare 8: mcsrvstat="online":false mcstatus="online":false
+  incercare 9: mcsrvstat="online":false mcstatus="online":false
+  incercare 10: mcsrvstat="online":false mcstatus="online":false
+  incercare 11: mcsrvstat="online":false mcstatus="online":false
+  incercare 12: mcsrvstat="online":false mcstatus="online":false
+  incercare 13: mcsrvstat="online":false mcstatus="online":false
+  incercare 14: mcsrvstat="online":false mcstatus="online":false
+  incercare 15: mcsrvstat="online":false mcstatus="online":false
+==> REZULTAT: portul NU e deschis din exterior (gazda = Cloud Shell/VM cu retea doar de iesire sau securitate nepermisiva).
+playit (iesire bruta):
+  Could not connect to the playit service. playit also tried to start it first, but startup failed: The playit daemon is not reachable at /run/playit/playitd.sock.
+  playitd must be running in the background before playit can connect to it.
+  
+  Run with --systemd or --openrc to let playit start the installed service, or start playitd manually and connect with --socket-path:
+    playitd --socket-path=./playit.sock --secret-path=./playit.toml
+    playit --socket-path=./playit.sock
+server in viata acum: NU
+==> ADRESA: NU
 GATA
 ```
 ----- live.log (tail) -----
 ```
-[16:53:56] [Server thread/INFO]: [Vault] [Economy] Essentials Economy unhooked.
-[16:53:56] [Server thread/INFO]: [WorldEdit] Disabling WorldEdit v7.2.5+57d5ac9
-[16:53:56] [Server thread/INFO]: Unregistering com.sk89q.worldedit.bukkit.BukkitServerInterface from WorldEdit
-[16:53:56] [Server thread/INFO]: [SkinsRestorer] Disabling SkinsRestorer v14.2.12
-[16:53:56] [Server thread/INFO]: [ProtocolLib] Disabling ProtocolLib v4.8.0
-[16:53:56] [Server thread/INFO]: [Vault] Disabling Vault v1.7.3-b131
-[16:53:56] [Server thread/INFO]: [Chunky] Disabling Chunky v1.2.217
-[16:53:56] [Server thread/INFO]: [LuckPerms] Disabling LuckPerms v5.5.71
-[16:53:56] [Server thread/INFO]: [LuckPerms] Starting shutdown process...
-[16:53:56] [Server thread/INFO]: [LuckPerms] Closing storage...
-[16:53:56] [Server thread/INFO]: [LuckPerms] Goodbye!
-[16:53:56] [Server thread/INFO]: Saving players
-[16:53:57] [Server thread/INFO]: Saving worlds
-[16:53:57] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
-[16:53:57] [Server thread/INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
-[16:53:57] [Server thread/INFO]: Saving chunks for level 'ServerLevel[DIM-1]'/minecraft:the_nether
-[16:53:57] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
-[16:53:57] [Server thread/INFO]: Saving chunks for level 'ServerLevel[DIM1]'/minecraft:the_end
-[16:53:57] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
-[16:53:57] [Server thread/INFO]: Saving usercache.json
+[16:59:10] [Server thread/INFO]: [Vault] [Economy] Essentials Economy unhooked.
+[16:59:10] [Server thread/INFO]: [WorldEdit] Disabling WorldEdit v7.2.5+57d5ac9
+[16:59:10] [Server thread/INFO]: Unregistering com.sk89q.worldedit.bukkit.BukkitServerInterface from WorldEdit
+[16:59:10] [Server thread/INFO]: [SkinsRestorer] Disabling SkinsRestorer v14.2.12
+[16:59:10] [Server thread/INFO]: [ProtocolLib] Disabling ProtocolLib v4.8.0
+[16:59:10] [Server thread/INFO]: [Vault] Disabling Vault v1.7.3-b131
+[16:59:10] [Server thread/INFO]: [Chunky] Disabling Chunky v1.2.217
+[16:59:10] [Server thread/INFO]: [LuckPerms] Disabling LuckPerms v5.5.71
+[16:59:10] [Server thread/INFO]: [LuckPerms] Starting shutdown process...
+[16:59:10] [Server thread/INFO]: [LuckPerms] Closing storage...
+[16:59:10] [Server thread/INFO]: [LuckPerms] Goodbye!
+[16:59:10] [Server thread/INFO]: Saving players
+[16:59:10] [Server thread/INFO]: Saving worlds
+[16:59:10] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[16:59:12] [Server thread/INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[16:59:12] [Server thread/INFO]: Saving chunks for level 'ServerLevel[DIM-1]'/minecraft:the_nether
+[16:59:12] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[16:59:12] [Server thread/INFO]: Saving chunks for level 'ServerLevel[DIM1]'/minecraft:the_end
+[16:59:12] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[16:59:12] [Server thread/INFO]: Saving usercache.json
 ```
 ----- playit.log (tail) -----
 ```
+Could not connect to the playit service. playit also tried to start it first, but startup failed: The playit daemon is not reachable at /run/playit/playitd.sock.
+playitd must be running in the background before playit can connect to it.
+
+Run with --systemd or --openrc to let playit start the installed service, or start playitd manually and connect with --socket-path:
+  playitd --socket-path=./playit.sock --secret-path=./playit.toml
+  playit --socket-path=./playit.sock
+----- ADRESA -----
+Adresa de joc: NU
 ```
