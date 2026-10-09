@@ -17,21 +17,24 @@ jobs:
           mkdir -p analysis
           R=analysis/a1-quota.md
           {
-            echo "# A1-QUOTA — $(date -u '+%F %T UTC')"
-            echo "## cereri existente:"
-            oci limits quota-change-request list --compartment-id $TEN --output json 2>&1 | jq -r '.data[]? | .["quota-metric-name"] + " | " + .["lifecycle-state"] + " | tinich " + (.["desired-quota-value"]|tostring)' | head -10
-            echo "## metrice compute cu a1 in nume:"
-            oci limits quota-metric list --compartment-id $TEN --resource-service-name compute --output json 2>&1 | jq -r '.data[]? | .["quota-metric-name"] + " | current=" + (.["value"]|tostring) + " | service:" + (.["resource-service-name"] // "?")' > /tmp/metrics.txt
-            grep -iE "a1" /tmp/metrics.txt | head -12
-            echo "(total metrice: $(wc -l < /tmp/metrics.txt))"
-            echo "## INCERCARE CERERI DESCHISE pentru a1:"
-            for M in $(grep -iE "a1.*(ocpu|core|memory|instance|count)" /tmp/metrics.txt | grep -oE "compute\.[a-z0-9.]*a1[a-z0-9.-]*" | sort -u); do
-              echo "-- cerere pentru $M"
-              oci limits quota-change-request create --compartment-id $TEN \
-                --quota-metric-name "$M" \
-                --desired-quota-value 24 \
-                --justification "Always Free Ampere A1 for self-hosted Minecraft server (20 players, family/RP community, non-commercial)" 2>&1 | tail -6
+            echo "# A1-QUOTA diagnostic - $(date -u '+%F %T UTC')"
+            AD=$(oci iam availability-domain list --compartment-id $TEN --query 'data[0].name' --raw-output 2>/dev/null)
+            echo "## A) resource-availability (API vechi de limite):"
+            echo '```'
+            for L in standard-a1-core-count standard-a1-memory-count standard-a1-instance-count; do
+              echo "-- $L"
+              oci limits resource-availability get --service-name compute --limit-name $L --compartment-id $TEN --availability-domain "$AD" 2>&1 | grep -E '"(name|value|availableValue|adjustable)"' | head -4
             done
+            echo '```'
+            echo "## B) help quota-change-request create (cine approve, ce campuri):"
+            echo '```'
+            oci limits quota-change-request create --help 2>&1 | sed -n '1,30p'
+            echo '```'
+            echo "## C) quota-metric list brut (poate alt nume de optiune):"
+            echo '```'
+            oci limits quota-metric list --help 2>&1 | head -12
+            oci limits quota-metric list --compartment-id $TEN --service-name compute 2>&1 | grep -iE "a1" | head -10
+            echo '```'
           } > $R
           cat $R
           git config user.name "quota-bot"
