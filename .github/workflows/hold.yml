@@ -1,0 +1,21 @@
+name: CUANTIC PE CLOUD SHELL (server tinut sus + relay)
+on:
+  push:
+    paths: [ "deploy/hold.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: hold-cuantic
+  cancel-in-progress: false
+jobs:
+  hold:
+    runs-on: [self-hosted]
+    timeout-minutes: 350
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tine serverul sus
+        run: bash scripts/hold.sh || true
