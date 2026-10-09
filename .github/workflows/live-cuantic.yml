@@ -14,7 +14,7 @@ jobs:
       - name: Ruleaza scriptul live
         run: |
           set +e
-          bash scripts/live5.sh
+          bash scripts/live6.sh
           mkdir -p analysis
           { echo "# CUANTIC LIVE — $(date -u '+%F %T UTC')"; echo '```'; cat /tmp/live.txt; echo '```';
             echo "----- live.log (ultimele 12) -----"; echo '```'; tail -12 $HOME/cuantic-live/live.log; echo '```';
