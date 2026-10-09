@@ -65,8 +65,12 @@ for SLID in $SLIDS; do
 done
 
 say "3. cheia noastra de acces (ramane aici, in Cloud Shell)"
-[ -f ~/.ssh/cuantic_oci ] || ssh-keygen -t ed25519 -f ~/.ssh/cuantic_oci -N "" -q -C "cuantic-deploy"
-PUB=$(cat ~/.ssh/cuantic_oci.pub)
+if [ ! -f ~/.ssh/cuantic_oci ]; then
+  ssh-keygen -t ed25519 -f ~/.ssh/cuantic_oci -N "" -q -C "cuantic-deploy" 2>/dev/null || \
+  ssh-keygen -t rsa -b 3072 -f ~/.ssh/cuantic_oci -N "" -q -C "cuantic-deploy"   # FIPS nu lasa ed25519 -> RSA
+fi
+PUB=$(cat ~/.ssh/cuantic_oci.pub 2>/dev/null) || true
+[ -n "$PUB" ] || fail "cheia n-a putut fi generata — ruleaza din nou"
 
 say "4. imagine Ubuntu ARM"
 IMG=$(ociq '.data[0].id // empty' compute image list --compartment-id "$TEN" --operating-system "Canonical Ubuntu" --operating-system-version "24.04" --shape "VM.Standard.A1.Flex" --sort-by TIMECREATED --sort-order DESC)
@@ -82,7 +86,7 @@ else
   OUT=$(oci compute instance launch --compartment-id "$TEN" --display-name cuantic \
     --availability-domain "$AD" --shape "VM.Standard.A1.Flex" \
     --shape-config '{"ocpus": 4, "memoryInGBs": 24}' \
-    --image "$IMG" --subnet-id "$SUB" --assign-public-ip true \
+    --image-id "$IMG" --subnet-id "$SUB" --assign-public-ip true \
     --boot-volume-size-in-gbs 200 \
     --metadata "{\"ssh_authorized_keys\":\"$PUB\"}" --output json 2>&1)
   IID=$(echo "$OUT" | jq -r '.data.id // empty' 2>/dev/null || true)
