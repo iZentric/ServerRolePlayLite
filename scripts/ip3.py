@@ -8,15 +8,21 @@ def say(*a):
 
 cfg = oci.config.from_file(); cfg.setdefault("region", "eu-frankfurt-1")
 ten = cfg["tenancy"]; REG = "eu-frankfurt-1"
-sign = oci.signer.Signer(ten, cfg)
-core = oci.core.ComputeClient(config=cfg, signer=sign, region=REG, verify=False)
+sign = None
+try:
+    sign = oci.signer.Signer(ten, cfg["user"], cfg["fingerprint"], cfg["key_file"], cfg.get("pass_phrase"))
+except Exception as e:
+    say("signer manual esuat: %s -> folosesc doar config" % str(e)[:80])
+kw = dict(config=cfg, region=REG, verify=False)
+if sign is not None: kw["signer"] = sign
+core = oci.core.ComputeClient(**kw)
 net = None
 for cls_path in ("oci.core.VirtualNetworkClient", "oci.network.VirtualNetworkClient"):
     try:
         mod, cl = cls_path.rsplit(".", 1)
         if mod == "oci.network":
             import oci.network
-        net = getattr(__import__(mod, fromlist=[cl]), cl)(config=cfg, signer=sign, region=REG, verify=False)
+        net = getattr(__import__(mod, fromlist=[cl]), cl)(**kw)
         say("client retea:", cls_path); break
     except Exception as e:
         say("  %s -> %s" % (cls_path, str(e)[:150]))
