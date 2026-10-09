@@ -9,15 +9,19 @@ J=$HOME/.local/jdk17/bin/java
 [ -x "$J" ] || J=$(ls /usr/lib/jvm/java-17*/bin/java 2>/dev/null | head -1)
 V="OP: inca nu stiu"
 
-# ---- 1. numele lui, extras din log (cel mai frecvent jucator care a incercat) ----
+# ---- 1. numele lui, extras din log (ANSI curatat; mai intai UUID-ul vanilie, apoi join/lost) ----
+CLEAN=$(sed -e 's/\x1b\[[0-9;]*[a-zA-Z]//g' -e 's/\r/\n/g' "$L" 2>/dev/null)
 N=${NUME_TAU:-}
 if [ -z "$N" ]; then
-  N=$(grep -haoE '\]: [A-Za-z0-9_]{3,16} (joined the game|lost connection|logged in|logged in with)|Disconnecting [A-Za-z0-9_]{3,16}' "$L" 2>/dev/null \
-      | sed -E 's/.*\]: ([A-Za-z0-9_]{3,16}).*/\1/; s/Disconnecting //' \
-      | sort | uniq -c | sort -rn | head -1 | awk '{print $2}')
+  N=$(printf '%s\n' "$CLEAN" | grep -aoE 'UUID of player [A-Za-z0-9_]{3,16}' | tail -1 | awk '{print $4}')
 fi
-case "$N" in Server|minecraft|FML|thread|INFO|WARN|Done|Stopping|Unknown) N="" ;; esac
-V="$V nume=${N:-NICIUNUL-in-log}"
+if [ -z "$N" ]; then
+  N=$(printf '%s\n' "$CLEAN" | grep -aoE '[A-Za-z0-9_]{3,16} (joined the game|lost connection)' \
+     | awk '{print $1}' | sort | uniq -c | sort -rn | head -1 | awk '{print $2}')
+fi
+case "$N" in Server|minecraft|FML|thread|INFO|WARN|Done|Stopping|Unknown|Disconnecting) N="" ;; esac
+DOVEZI=$(printf '%s\n' "$CLEAN" | grep -aE 'joined the game|lost connection|UUID of player|is now a server operator|players online' | tail -3 | cut -c1-110 | tr '\n' '|')
+V="OP: nume=${N:-NICIUNUL-in-log}"
 
 # ---- 2. serverul in picioare? (il pornim DOAR dac nobody altcineva il supravegheaza) ----
 if ! pgrep -f 'java @unix_args' >/dev/null 2>&1; then
@@ -73,7 +77,7 @@ fi
 # ---- 5. verdict in commit ----
 cd "$GITHUB_WORKSPACE" 2>/dev/null || cd "$D"
 mkdir -p analysis
-{ echo "op sh -- $(date -u '+%F %T UTC')"; echo "$V"; echo "live.log final: $(tail -4 "$L" 2>/dev/null | tr '\n' ' ' | cut -c1-300)"; } > analysis/op.md
+{ echo "op sh -- $(date -u '+%F %T UTC')"; echo "$V"; echo "DOVEZI: $DOVEZI"; echo "live.log final: $(tail -4 "$L" 2>/dev/null | tr '\n' ' ' | cut -c1-260)"; } > analysis/op.md
 git config user.name "cuantic-bot"; git config user.email "bot@cuantic.local"
 git add -f analysis/op.md >/dev/null 2>&1
 git commit -q -m "$(echo "$V" | tr -d '"' | head -c 180)" || true
