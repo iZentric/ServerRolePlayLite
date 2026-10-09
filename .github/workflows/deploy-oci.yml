@@ -24,7 +24,7 @@ jobs:
           printf '%s\n' "$K" > /tmp/key
           chmod 600 /tmp/key
           echo "$H" > /tmp/host
-          echo "SSHUSER=${U:-opc}" >> "$GITHUB_ENV"
+          echo "SSHUSER=${U:-ubuntu}" >> "$GITHUB_ENV"
       - name: Trimite scriptul si ruleaza instalarea
         run: |
           set -e
