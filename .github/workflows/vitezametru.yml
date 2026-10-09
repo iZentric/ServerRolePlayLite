@@ -7,10 +7,6 @@ on:
   workflow_dispatch: {}
 permissions:
   contents: write
-env:
-  SFTP_HOST: node12.zampto.net
-  SFTP_PORT: "2022"
-  SFTP_USER: 15254.1388b9af
 jobs:
   citeste:
     runs-on: ubuntu-latest
@@ -20,6 +16,9 @@ jobs:
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
       - name: Extrage bataile TPS-ului din latest.log
         env:
+          SFTP_HOST: node12.zampto.net
+          SFTP_PORT: "2022"
+          SFTP_USER: 15254.1388b9af
           P: ${{ secrets.ZAMPTO_SFTP_PASS }}
         run: |
           set +e
@@ -31,30 +30,28 @@ jobs:
           {
             echo "# Vitezametru CUANTIC — ultima citire $(date -u '+%F %T UTC')"
             echo
-            echo "| linume | TPS (1m/5m/15m) | RAM |"
+            echo "| timp | TPS 1m/5m/15m | RAM |"
             echo "|---|---|---|"
-            paste -d" " <(grep -E "TPS from last" run/latest.log | tail -8 | grep -oE "^[0-9:]+") \
-                     <(grep -E "TPS from last" run/latest.log | tail -8 | grep -oE "[0-9]+\.[0-9], \*?[0-9]+\.[0-9], \*?[0-9]+\.[0-9]") > /tmp/tps.txt
-            grep -E "Current Memory Usage" run/latest.log | tail -8 | grep -oE "[0-9]+/[0-9]+ mb" > /tmp/mem.txt
-            for i in $(seq 1 8); do
-              L=$(sed -n "${i}p" /tmp/tps.txt); M=$(sed -n "${i}p" /tmp/mem.txt)
-              [ -n "$L" ] && echo "| $L | $(sed -n "${i}p" /tmp/mem.txt) |"
+            grep -E "TPS from last" run/latest.log | tail -8 | sed -E 's/^\[([0-9:]+)\].*last 1m\/5m\/15m: ([0-9.,* ]+) .*/|\1 |\2 |/' > /tmp/a.txt
+            grep -E "Current Memory Usage" run/latest.log | tail -8 | grep -oE "[0-9]+\/[0-9]+ mb" > /tmp/b.txt
+            for i in 1 2 3 4 5 6 7 8; do
+              A=$(sed -n "${i}p" /tmp/a.txt); B=$(sed -n "${i}p" /tmp/b.txt)
+              [ -n "$A" ] && echo "$A $B |" | sed 's/ | \([0-9/]* mb\) |/ | \1 |/'
             done
             echo
-            echo "- Evenimente connect/*disconnect in log: $(grep -cE "entered the game|lost connection" run/latest.log 2>/dev/null) evenimente in log"
-            echo "- ERORI recente (post-boot): $(grep -cE "\[ERROR\]" run/latest.log) total, $(grep -E "\[ERROR\]" run/latest.log | tail -3 | tr '\n' ';' | cut -c1-300)"
-            # ALERTEX if sub 18
-            WORST=$(grep -E "TPS from last" run/latest.log | tail -4 | grep -oE "[0-9]+\.[0-9]," | head -1 | tr -d ,)
-            if [ -n "$WORST" ]; then
-              LOW=$(python3 -c "print('DA' if $WORST < 18 else 'NU')")
-              echo "- ALERTA sub-18-TPS la ultima fereastra: **$LOW** (cea mai recenta 1m: $WORST)"
+            N=$(grep -E "TPS from last" run/latest.log | tail -1 | grep -oE "[0-9]+\.[0-9]," | head -1 | tr -d ,)
+            echo "- Ultima fereastra 1m: $N / 20"
+            if [ -n "$N" ]; then
+              python3 -c "import sys; print('- ALERTA sub 18 TPS: **' + ('DA' if $N < 18 else 'NU') + '**')"
             fi
+            echo "- Evenimente join/leave in log: $(grep -cE 'entered the game|lost connection' run/latest.log)"
+            echo "- Linii [ERROR] in log: $(grep -cE '[[]ERROR[]]' run/latest.log)"
           } > analysis/viteza-live.md
           cat analysis/viteza-live.md
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f analysis/viteza-live.md
-          git commit -m "vitezametru: citire $WORST" || true
+          git commit -m "vitezametru: citire" || true
           git pull --rebase -q origin "$GITHUB_REF_NAME" || true
           git push -q origin "$GITHUB_REF_NAME" || true
           exit 0
