@@ -2,15 +2,36 @@ name: RUNNER-PING
 on:
   push:
     paths: [ "deploy/runner-ping.txt" ]
+permissions:
+  contents: write
 jobs:
   ping:
     runs-on: [self-hosted]
     timeout-minutes: 4
     steps:
-      - name: Cine e acolo
+      - uses: actions/checkout@v4
+      - name: Cine e acolo v2
         run: |
-          echo "RUNNER-VIU"
-          hostname 2>/dev/null || computername
-          uname -m 2>/dev/null || echo "arch-nu"
-          head -2 /etc/os-release 2>/dev/null || ver
-          ip -4 route get 1.1.1.1 2>/dev/null | head -1 || echo "rutare-nu"
+          set +e
+          mkdir -p analysis
+          HN=$(hostname 2>/dev/null || echo ?)
+          AR=$(uname -m 2>/dev/null || echo ?)
+          OS=$(grep PRETTY_NAME /etc/os-release 2>/dev/null | cut -d'"' -f2); [ -z "$OS" ] && OS="Windows($(uname -s 2>/dev/null))"
+          IP=$(ip -4 route get 8.8.8.8 2>/dev/null | grep -oE 'src [0-9.]+' | awk '{print $2}')
+          PIP=$(curl -fsS -m 8 https://api.ipify.org 2>/dev/null)
+          {
+            echo "# Identitatea runner-ului CUANTIC"
+            echo "- hostname: \`$HN\`"
+            echo "- arhitectura: $AR"
+            echo "- sistem: $OS"
+            echo "- ip local: ${IP:-n/a}"
+            echo "- ip public: ${PIP:-n/a}"
+            echo "- citire: $(date -u '+%F %T UTC')"
+          } > analysis/runner-id.md
+          git config user.name "runner-id-bot"
+          git config user.email "bot@arena.local"
+          git add -f analysis/runner-id.md
+          git commit -m "runner-id: $HN $AR" || true
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          git push -q origin "$GITHUB_REF_NAME" || true
+          exit 0
