@@ -90,8 +90,10 @@ EOF
 cd "$GITHUB_WORKSPACE" || exit 0
 git config user.name java-bot
 git config user.email bot@arena.local
-git add -A
-git commit -q -m "java/pack OK: $V" || true
+git add -A 2>/dev/null
+git commit -q --allow-empty -m "VERDICT: $V"
+git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+git push -q origin "$GITHUB_REF_NAME" || true
 echo "tail boot.log:"; cat /tmp/boot-tail.txt
 echo "VERDICT: $V"
 echo "c.sh: scris la $HOME/c.sh"
