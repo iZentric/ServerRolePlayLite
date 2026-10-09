@@ -1,0 +1,14 @@
+name: BRAND — numele CUANTIC in lista de servere
+on:
+  push:
+    paths: [ "scripts/brand.sh", "deploy/brand.txt", ".github/workflows/brand.yml" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  b:
+    runs-on: [self-hosted]
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/brand.sh

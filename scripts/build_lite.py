@@ -205,7 +205,7 @@ def strip_client_assets(jar_path):
         return 0
 
 
-SERVER_PROPERTIES = """\
+SERVER_PROPERTIES = r"""\
 #Minecraft server properties - CUANTIC (consum minim)
 motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7ov2 \u00A7f| \u00A7aruleaza din viitor: orice PC, zero lag\u00A7f| \u00A7dOras+Survival+Claims
 max-players=25
