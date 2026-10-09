@@ -68,8 +68,8 @@ jobs:
               sed 's|.*/||' run/mods-remote.txt 2>/dev/null | grep -E '.jar$' | sort -u > /tmp/host-mods
               comm -23 /tmp/exp-mods /tmp/host-mods > /tmp/missing 2>/dev/null || true
               comm -13 /tmp/exp-mods /tmp/host-mods > /tmp/extra 2>/dev/null || true
-              unzip -p /tmp/exp.zip unix_args.txt 2>/dev/null | tr -d '\r' | grep -vE 'jar|nogui' | sort -u | md5sum | cut -c1-8 > /tmp/e-flags
-              tr -d '\r' < run/ua-remote.txt 2>/dev/null | grep -vE 'jar|nogui' | sort -u | md5sum | cut -c1-8 > /tmp/h-flags
+              unzip -p /tmp/exp.zip unix_args.txt 2>/dev/null | tr -d '\r' | grep -vE 'jar|nogui|Xms|Xmx' | sort -u | md5sum | cut -c1-8 > /tmp/e-flags
+              tr -d '\r' < run/ua-remote.txt 2>/dev/null | grep -vE 'jar|nogui|Xms|Xmx' | sort -u | md5sum | cut -c1-8 > /tmp/h-flags
               MISSN=$(wc -l < /tmp/missing | tr -d ' ')
               EXTRAN=$(wc -l < /tmp/extra | tr -d ' ')
               EF=$(cat /tmp/e-flags); HF=$(cat /tmp/h-flags)
