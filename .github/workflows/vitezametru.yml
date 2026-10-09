@@ -81,6 +81,7 @@ jobs:
               if [ "$EXPMD" = "$HOSTMD" ]; then echo "- unix_args.txt: **LA ZI** ($HOSTMD)"; else echo "- unix_args.txt: **VECHI** (host $HOSTMD vs release $EXPMD)"; fi
             fi
             echo "- $(cat /tmp/host-idle 2>/dev/null | sed 's/^/player-idle remota: /' || echo 'idle: necunoscut')"
+            echo "- debug: URL=${URL:0:52} | STALE-v1=$( [ -n "$URL" ] && ( [ "$DIFFMODS" -gt 0 ] 2>/dev/null || [ "$EXPMD" != "$HOSTMD" ] ) && echo DA || echo NU )"
           } >> analysis/viteza-live.md
           STALE=NU
           if [ -n "$URL" ]; then
@@ -95,7 +96,7 @@ jobs:
               echo "$KEY" > analysis/audit-key.txt
               date -u +%FT%TZ > deploy/trigger.txt
               git add -f analysis/audit-key.txt deploy/trigger.txt
-              git commit -q -m "auto-deploy: host vechitate $KEY" || true
+              git commit -q -m "auto-deploy: host vechitate $KEY" || echo "auto-deploy commit ESUAT" >> analysis/viteza-live.md
             fi
           fi
           cat analysis/viteza-live.md
