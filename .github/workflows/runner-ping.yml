@@ -10,28 +10,26 @@ jobs:
     timeout-minutes: 4
     steps:
       - uses: actions/checkout@v4
-      - name: Cine e acolo v2
+      - name: Diagnostic complet
         run: |
           set +e
           mkdir -p analysis
-          HN=$(hostname 2>/dev/null || echo ?)
-          AR=$(uname -m 2>/dev/null || echo ?)
-          OS=$(grep PRETTY_NAME /etc/os-release 2>/dev/null | cut -d'"' -f2); [ -z "$OS" ] && OS="Windows($(uname -s 2>/dev/null))"
-          IP=$(ip -4 route get 8.8.8.8 2>/dev/null | grep -oE 'src [0-9.]+' | awk '{print $2}')
-          PIP=$(curl -fsS -m 8 https://api.ipify.org 2>/dev/null)
           {
-            echo "# Identitatea runner-ului CUANTIC"
-            echo "- hostname: \`$HN\`"
-            echo "- arhitectura: $AR"
-            echo "- sistem: $OS"
-            echo "- ip local: ${IP:-n/a}"
-            echo "- ip public: ${PIP:-n/a}"
-            echo "- citire: $(date -u '+%F %T UTC')"
-          } > analysis/runner-id.md
-          git config user.name "runner-id-bot"
+            echo "# Diagnostic runner VM"
+            echo "- user: $(whoami)  home: $HOME"
+            echo "- sudo fara parola: $(sudo -n true 2>&1 && echo DA || echo NU)"
+            for c in java dnf yum curl unzip jq git python3 iptables systemctl; do
+              echo "- $c: $(command -v $c || echo LIPSA)"
+            done
+            echo "- java version: $(java -version 2>&1 | head -1)"
+            echo "- github api reachable: $(curl -fsS -o /dev/null -w '%{http_code}' -m 8 https://api.github.com 2>/dev/null)"
+            echo "- memorie: $(free -g | awk '/Mem:/{print $2" GB total, "$7" disponibila"}')"
+            echo "- disc: $(df -h $HOME | awk 'NR==2{print $4" liberi din "$2}')"
+          } > analysis/runner-diag.md
+          git config user.name "diag-bot"
           git config user.email "bot@arena.local"
-          git add -f analysis/runner-id.md
-          git commit -m "runner-id: $HN $AR" || true
+          git add -f analysis/runner-diag.md
+          git commit -m "diag runner" || true
           git pull --rebase -q origin "$GITHUB_REF_NAME" || true
           git push -q origin "$GITHUB_REF_NAME" || true
           exit 0
