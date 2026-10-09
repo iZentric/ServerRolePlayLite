@@ -28,7 +28,7 @@ jobs:
           mkdir -p "$GITHUB_WORKSPACE/srv" && cd "$GITHUB_WORKSPACE/srv" && unzip -qo ../srv.zip
           ls *.jar | head -1 > /tmp/cjar
           echo "MODURI=$(ls mods 2>/dev/null | wc -l)" >> "$GITHUB_ENV"
-      - name: Ajustare REF (scoate exact noutatile 1.5.7: ferritecore + spigot CUANTIC)
+      - name: Ajustare REF (scoate noutatile 1.5.7 — ferritecore + spigot CUANTIC)
         run: |
           set +e
           if [ "${{ matrix.refpack }}" = "da" ]; then
