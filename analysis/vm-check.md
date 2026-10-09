@@ -15,5 +15,7 @@ drwx------.  2 mndvasi9 oci   48 Oct  9 12:27 .
 drwxr-xr-x. 13 mndvasi9 oci 4096 Oct  9 12:41 ..
 -rw-------.  1 mndvasi9 oci 2602 Oct  9 12:27 cuantic_oci
 -rw-r--r--.  1 mndvasi9 oci  568 Oct  9 12:27 cuantic_oci.pub
-## test conectare la VM (daca exista IP in state):
-ori fara IP in state, ori fara cheie — niciun test
+## detalii instante:
+-----
+-----
+## incercari SSH cu cheia noastra (posibil sa mearga doar pe cele create cu ea, dar incercam tot):
