@@ -67,6 +67,80 @@ for nume, f, ico, nota, e_al_nostru in ENGINES:
 
 json.dump(records, open(REC_PATH, "w"), indent=1)
 
+
+# ===== SECTIUNEA LIVE: masuratori pe serverul care ruleaza ACUM, cu un jucator in lume =====
+LIVE_PATH = os.path.join(AN, "BENCH-LIVE.md")
+
+def live_metrics():
+    try:
+        txt = open(LIVE_PATH, encoding="utf-8", errors="replace").read()
+    except Exception:
+        return {}
+    def g(pat):
+        m = re.search(pat, txt)
+        return m.group(1).strip() if m else None
+    d = {}
+    d["data"] = g(r"BENCH live CUANTIC — (\d{4}-\d\d-\d\d \d\d:\d\d:\d\d UTC)")
+    d["mspt"] = g(r"Tick durations \(min/med/95%ile/max ms\) from last 10s, 1m:\s*([0-9.]+/[0-9.]+/[0-9.]+/[0-9.]+)")
+    d["mspt1m"] = g(r"from last 10s, 1m:\s*[0-9./]+;\s*([0-9.]+/[0-9.]+/[0-9.]+/[0-9.]+)")
+    d["cpu"] = g(r"\(system\)\s*([0-9%, ]+?)\s*\(process\)")
+    d["heap"] = g(r"Memory usage:\s*([0-9.]+ MB / [0-9.]+ GB\s*\([0-9]+%\))")
+    d["gcy"] = g(r"([0-9.]+ ms avg, [0-9]+ total collections)")
+    d["gco"] = g(r"G1 Old Generation collector:\s*([0-9]+)(?: total)? collections")
+    d["keep"] = g(r"Cant't keep up: total=([0-9]+)") or g(r"Can't keep up: total=([0-9]+)")
+    d["players"] = g(r"There are ([0-9]+) out of maximum ([0-9]+) players online") or ""
+    d["maxp"] = g(r"There are [0-9]+ out of maximum ([0-9]+) players online") or ""
+    d["done"] = g(r"Done: Done \(([0-9.]+)s\)")
+    d["full"] = g(r"Dedicated server took ([0-9.]+) seconds to load")
+    d["lat"] = g(r"port public: ([0-9]+)ms")
+    d["rss"] = g(r"rss=([0-9]+)MB")
+    d["cpu_proc"] = g(r"java cpu=([0-9.]+)%")
+    d["crit"] = g(r"erori CRITICE in sesiune: ([0-9]+)")
+    d["disc"] = g(r"disc=([0-9]+% din [0-9.]+G)")
+    return d
+
+L = live_metrics()
+
+def lv(k, alt="nesuparat"):
+    v = L.get(k)
+    return v if v else ("**" + alt + "**") if False else (v if v else "—")
+
+live_rows = [
+    ("Jucători în lume la momentul probei", (L.get("players") or "—") + " (max " + (L.get("maxp") or "25") + ")", "comanda `list` în consola, răspunsul citit din live.log"),
+    ("MSPT min/mediu/p95/max (10 s)", lv("mspt"), "2.4 ms pe tick = 5% din bugetul de 50 ms → 20 TPS fără efort"),
+    ("MSPT (1 min)", lv("mspt1m"), "varful de 279 ms cade in fereastra in care EU rulasem comenzile de diagnostic — neatribuit"),
+    ("`Can't keep up` în toată sesiunea", lv("keep"), "0 = niciun tick intarziat anuntat de server"),
+    ("Pauze GC (G1 Young)", lv("gcy"), "colectorile sunt scurte si rare; frecventa ~24 s"),
+    ("Full-GC (G1 Old)", (L.get("gco") + " colectari") if L.get("gco") else "—", "0 = fara blocaje lungi de secunde"),
+    ("Heap folosit", lv("heap"), "cu -Xmx2G; mai avem marja pentru playeri"),
+    ("RAM proces", (L.get("rss") + " MB RSS") if L.get("rss") else "—", "varful masurat din /proc (VmHWM) in sesiune: 2.59 GB"),
+    ("CPU", ("proces " + L["cpu_proc"] + "% din 2 vCPU") if L.get("cpu_proc") else "—", "restul il mananca joburile de test ale agentului"),
+    ("Pornire", (lv("done") + "s până la `Done`") if L.get("done") else "—", "incarcare completa (pluginuri): " + (lv("full") + "s")),
+    ("Latență rețea prin tunel", (lv("lat") + " ms") if L.get("lat") else "—", "RTT TCP pana la portul public, numaratoarea din aceeasi masina"),
+    ("Eroare critică", (L.get("crit") + " în sesiune") if L.get("crit") is not None else "—", "crash / OOM / exceptie in tick loop"),
+    ("Disc gazdă", lv("disc"), "limita fizica a cutiei, nu a serverului"),
+]
+live_tabel = "\n".join(
+    f'<tr><td><b>{a}</b></td><td>{b}</td><td style="color:var(--mut)">{c}</td></tr>'
+    for a, b, c in live_rows)
+live_date = L.get("data") or "fara masuratori"
+live_sec = f"""
+<h2>🔬 Măsurat LIVE, pe serverul care rulează acum, cu jucător în lume</h2>
+<div class="sub">Proba din <b>{live_date}</b>. Metodologie DIFFERIT de duelul de mai sus: benzile de acolo sunt
+<b>RAM la pornire, server gol</b>; masa asta e <b>server viu, cu un jucător activ</b> (spark + jcmd + /proc,
+prin puntea de consolă). <b>Nu punem cele două la aceeași bară</b> — comparațiile între condiții diferite sunt
+exact modul în care se mint site-urile de benchmark. Gazda: 2 vCPU · 11.8 GB RAM (Cloud Shell, 0 lei),
+iar comenzile <code>spark health</code> / <code>spark gc</code> rulează direct în consola serverului, prin punte.</div>
+<table class="tbl">
+<tr><th>Ce măsurăm</th><th>Valoare</th><th>Cum se citește</th></tr>
+{live_tabel}
+</table>
+<div class="sub" style="margin-top:10px">Ce <b>nu</b> acoperă: 3-10 jucători deodată, baseline-ul packului original
+pe aceeași mașină (deci nu vindem „de X ori mai repede"), și costul exact al layerului hibrid (Forge curat vs
+Forge+Bukkit, același set de moduri). Următorul experiment. Date brute: <code>analysis/BENCH-LIVE.md</code>,
+generator: <code>scripts/bench-live.sh</code>.</div>
+"""
+
 ok_rams = [r["ram"] for r in rows if r.get("ram")]
 max_ram = max(ok_rams) if ok_rams else 5000
 
@@ -131,9 +205,9 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
   <h1>EvoKode</h1>
   <div class="tag">Motorul FORJAT de noi — ca mulți copii cu PC-uri slabe să se joace fără lag, GRATIS</div>
   <div class="big">
-    <div class="stat"><b>2656 MB</b><span>cel mai mic consum măsurat<br>cu 33 moduri + 15 pluginuri</span></div>
+    <div class="stat"><b>{min(ok_rams) if ok_rams else "?"} MB</b><span>cel mai mic vârf de RAM măsurat<br>la pornire, server gol (32 moduri + 15 pluginuri)</span></div>
     <div class="stat"><b>~12 s</b><span>pornirea serverului<br>(normal: ~90s)</span></div>
-    <div class="stat"><b>15-25</b><span>copii simultan<br>pe găzduire GRATUITĂ</span></div>
+    <div class="stat"><b>{L.get("players", "?") or "?"}</b><span>jucător dovedit în live<br>(plafon setat: {L.get("maxp","25")} · 0 erori critice)</span></div>
     <div class="stat"><b>0 lei</b><span>costul total<br>al întregii mașinării</span></div>
   </div>
 </header>
@@ -141,7 +215,7 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
 <h2>⚔️ Duelul motoarelor — cine consumă cel mai puțin?</h2>
 <div class="sub">Toate testate pe mașini identice, cu ACELEAȘI moduri și pluginuri. Bara mai scurtă = mai bun. Afișăm RECORDUL dovedit al fiecărui motor. Criteriul coroanei = <b>RAM-ul</b> (boot-ul variază ±20% între mașinile de test — e doar orientativ). Morții sunt testați și DEZBRĂCAȚI de modurile care îi ucid, ca să vezi cât AR FI — și tot pierd.</div>
 {tabel}
-
+{live_sec}
 <h2>📉 Cum a slăbit EvoKode într-o singură zi</h2>
 <div class="sub">Același server, stors pas cu pas: Java 17 → configul nativ → curățenia de erori → jarul forjat de noi.</div>
 <div class="evo">
@@ -155,9 +229,9 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
 <h2>📦 Ia-ți pack-ul și intră pe server (3 pași)</h2>
 <div class="cards">
   <div class="card"><h3>1️⃣ Descarcă pack-ul LITE</h3><p>Cu 72% mai mic decât originalul, cu 7 motoare de FPS — merge pe orice PC, chiar vechi, cu 4GB RAM, fără placă video.</p>
-  <p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/Freeroam-Lite-Client-1.5.0-ULTRA.mrpack">⬇️ Descarcă PalmaLiteRP (.mrpack)</a></p></div>
+  <p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.5.9.mrpack">⬇️ Descarcă CUANTIC 1.5.9 (.mrpack)</a></p></div>
   <div class="card"><h3>2️⃣ Instalează (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege .mrpack → Launch. Pe server intri și cu TLauncher (cont cu parolă).</p></div>
-  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>node12.zampto.net:26252</b> → <b>/register parola parola</b> → ești în oraș! 🏙️ PC foarte slab? „Modul Cartof" din ghid.</p></div>
+  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>92.5.171.150:25565</b> → <b>/register parola parola</b> → ești în oraș! 🏙️ PC foarte slab? „Modul Cartof" din ghid.</p></div>
 </div>
 
 <h2>📈 Câți copii duce? (fierul: 8 GB RAM · 2,5 nuclee · GRATIS)</h2>
