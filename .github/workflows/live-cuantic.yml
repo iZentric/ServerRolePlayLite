@@ -7,7 +7,7 @@ permissions:
   contents: write
 concurrency:
   group: live-cuantic
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   live:
     runs-on: [self-hosted]
