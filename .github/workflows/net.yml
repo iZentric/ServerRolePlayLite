@@ -1,0 +1,27 @@
+name: NET — IP public + porturi pe VM-ul din cont
+on:
+  push:
+    paths: [ "deploy/net.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  n:
+    runs-on: [self-hosted]
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ruleaza net.py cu python-ul CLI-ului
+        run: |
+          set +e
+          PYPY=$(head -1 "$(which oci)" 2>/dev/null | sed 's/^#!//' | tr -d '\r')
+          "$PYPY" scripts/net.py > /tmp/net-run.txt 2>&1; echo "rc=$?" >> /tmp/net-run.txt
+          tail -30 /tmp/net-run.txt
+          mkdir -p analysis
+          { printf '# NET — %s\n' "$(date -u '+%F %T UTC')"; echo '```'; { cat /tmp/net.txt 2>/dev/null; echo "---- brute ----"; tail -40 /tmp/net-run.txt; }; echo '```'; } > analysis/net.md
+          git config user.name "net-bot"
+          git config user.email "bot@arena.local"
+          git add -f analysis/net.md
+          git commit -q -m "net: IP+porturi" || true
+          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
+          git push -q origin "$GITHUB_REF_NAME" || true
