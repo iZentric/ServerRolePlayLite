@@ -1,29 +1,18 @@
-name: CUANTIC LIVE PE ORACLE (runner gazda) — jar + port + adresa
+name: CUANTIC LIVE — server + adresa (tine ~2h)
 on:
   push:
     paths: [ "deploy/live.txt" ]
   workflow_dispatch: {}
 permissions:
   contents: write
+concurrency:
+  group: live-cuantic
+  cancel-in-progress: false
 jobs:
   live:
     runs-on: [self-hosted]
-    timeout-minutes: 14
+    timeout-minutes: 125
     steps:
       - uses: actions/checkout@v4
-      - name: Ruleaza scriptul live
-        run: |
-          set +e
-          bash scripts/live6.sh
-          mkdir -p analysis
-          { echo "# CUANTIC LIVE — $(date -u '+%F %T UTC')"; echo '```'; cat /tmp/live.txt; echo '```';
-            echo "----- live.log (ultimele 12) -----"; echo '```'; tail -12 $HOME/cuantic-live/live.log; echo '```';
-            echo "----- bore.log -----"; echo '```'; tail -10 $HOME/cuantic-live/bore.log; echo '```';
-          } > analysis/live.md
-          cat analysis/live.md | head -70
-          git config user.name "live-bot"
-          git config user.email "bot@arena.local"
-          git add -f analysis/live.md
-          git commit -m "live: supervisor + bore relay" || true
-          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
-          git push -q origin "$GITHUB_REF_NAME" || true
+      - name: Server + relay
+        run: bash scripts/live7.sh || true
