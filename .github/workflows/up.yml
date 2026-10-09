@@ -1,7 +1,7 @@
-name: TEST BIND pe Cloud Shell (MC leaga portul?)
+name: UP — server CUANTIC pe Cloud Shell (tmux) + adresa
 on:
   push:
-    paths: [ "deploy/bind.txt" ]
+    paths: [ "deploy/up.txt" ]
   workflow_dispatch: {}
 permissions:
   contents: write
@@ -9,9 +9,9 @@ concurrency:
   group: play-cuantic
   cancel-in-progress: true
 jobs:
-  b:
+  up:
     runs-on: [self-hosted]
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - run: bash scripts/bind.sh || true
+      - run: bash scripts/up.sh || true
