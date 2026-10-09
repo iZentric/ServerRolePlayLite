@@ -1,0 +1,19 @@
+name: FIXLOGIN — scoage flag-ul /premium care blocheau login-ul
+on:
+  push:
+    paths: [ "scripts/unbreak-login.sh", "deploy/fix.txt", ".github/workflows/fixlogin.yml" ]
+  workflow_dispatch:
+    inputs:
+      nume: { description: "numele blocat", required: false, default: "iZentric" }
+permissions:
+  contents: write
+jobs:
+  f:
+    runs-on: [self-hosted]
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: repara login-ul
+        env:
+          NUME_TAU: ${{ github.event.inputs.nume || 'iZentric' }}
+        run: bash scripts/unbreak-login.sh
