@@ -32,21 +32,10 @@
   + perf: FastFurnace-1.16.5-4.5.0.jar [curseforge]
     (modrinth: fastworkbench -> nicio versiune)
   + perf: FastWorkbench-1.16.5-4.6.2.jar [curseforge]
-    (modrinth: smooth-boot-reloaded -> nicio versiune)
-    (curseforge: smooth-boot-reloaded -> niciun fisier compatibil)
-  !! 'smooth-boot-reloaded' sarit (nu exista pt 1.16.5 forge nicaieri)
-  + perf: saturn-mc1.16.5-0.0.3.jar [modrinth]
-    (modrinth: adaptive-performance-tweaks -> nicio versiune)
-    (curseforge: adaptive-performance-tweaks -> HTTP Error 404: Not Found)
-  !! 'adaptive-performance-tweaks' sarit (nu exista pt 1.16.5 forge nicaieri)
   + perf: getittogetherdrops-1.16.5-v1.2.jar [modrinth]
-  + perf: Ksyxis-1.4.6.jar [modrinth]
     (modrinth: connectivity -> HTTP Error 404: Not Found)
     (curseforge: connectivity -> HTTP Error 404: Not Found)
   !! 'connectivity' sarit (nu exista pt 1.16.5 forge nicaieri)
-    (modrinth: fastsuite -> nicio versiune)
-    (curseforge: fastsuite -> HTTP Error 404: Not Found)
-  !! 'fastsuite' sarit (nu exista pt 1.16.5 forge nicaieri)
     (modrinth: bad-wither-no-cookie-reloaded -> HTTP Error 404: Not Found)
   + perf: bwncr-1.16.5-3.10.16.jar [curseforge]
 == CLIENT lite (.mrpack) - toate modurile originale pastrate ==
@@ -58,16 +47,10 @@
   + Ksyxis-1.4.6.jar
   !! 'connectivity' sarit (client): HTTP Error 404: Not Found
   + mirror in client: Clumps-6.0.0.28.jar
-  + mirror in client: Placebo-1.16.5-4.7.1.jar
-  + mirror in client: FastFurnace-1.16.5-4.5.0.jar
-  + mirror in client: FastWorkbench-1.16.5-4.6.2.jar
-  + mirror in client: AI-Improvements-1.16.5-0.5.0.jar
-  + mirror in client: incontrol-1.16-5.2.12.jar
-  + mirror in client: bwncr-1.16.5-3.10.16.jar
   - taiat din client (stil rust): CTM-MC1.16.1-1.1.2.6.jar
   - taiat din client (stil rust): DynamicSurroundings-1.16.5-4.0.5.0.jar
   - taiat din client (stil rust): lightfallclient-1.0.0.jar
-  => out/CUANTIC-Client-1.5.9.mrpack (133.5 MB)
+  => out/CUANTIC-Client-1.6.0.mrpack (133.1 MB)
 == ULTRA: dezbrac jar-urile de server de assets client ==
     ✂ Modernxl 1.16.5.jar: 38.0 -> 6.8 MB
     ✂ Pizzaland_v68.jar: 84.8 -> 1.7 MB
@@ -95,29 +78,12 @@
     (modrinth: performant -> nicio versiune)
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
-  => out/CUANTIC-Server-MaxLite-1.5.9.zip (35.1 MB)
-== SERVER Arclight (hibrid cu pluginuri) ==
-  ↓ plugin: EssentialsX-2.19.7.jar
-  ↓ plugin: EssentialsXChat-2.19.7.jar
-  ↓ plugin: EssentialsXSpawn-2.19.7.jar
-  ↓ plugin: EssentialsXAntiBuild-2.19.7.jar
-  ↓ plugin: EssentialsXProtect-2.19.7.jar
-  ↓ plugin: Vault.jar
-  ↓ plugin: worldedit-bukkit-7.2.5-dist.jar
-  ↓ plugin: worldguard-bukkit-7.0.5-dist.jar
-  ↓ plugin: AuthMe-5.6.0.jar
-  ↓ plugin: SkinsRestorer.jar
-  ↓ plugin: ProtocolLib.jar
-  ↓ plugin: FastLoginBukkit.jar
-  ↓ plugin: claimchunk-0.0.22.jar
-  ↓ plugin: LuckPerms-Bukkit-5.5.71.jar
-  ↓ plugin: Chunky-1.2.217.jar
-  ↓ Arclight
-  => out/CUANTIC-Server-Arclight-1.5.9.zip (67.6 MB)
-== SERVER Mist (hibrid experimental cu patch-uri Paper) ==
-  ↓ Mist
-  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.5.9.zip (67.2 MB)
-== SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
-  ↓ CatServer
-  => out/CUANTIC-Server-CatServer-1.5.9.zip (66.6 MB)
-GATA.
+Traceback (most recent call last):
+  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/build_lite.py", line 823, in <module>
+    main()
+  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/build_lite.py", line 680, in main
+    write_start_scripts(s1, f"forge-{mc}-{forge}.jar")
+  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/build_lite.py", line 478, in write_start_scripts
+    f.write(f"#!/bin/sh\njava -Xms1G -Xmx2G {FLAGS_17} -jar {server_jar} nogui\n")
+                                             ^^^^^^^^
+UnboundLocalError: cannot access local variable 'FLAGS_17' where it is not associated with a value
