@@ -10,6 +10,13 @@ say "uptime: $(uptime | sed 's/^ *//')"
 say "ss 25565:"; ss -lnt 2>/dev/null | grep -E '25565|24454' | sed 's/^/  /' >> $LOG
 say "live.log: $(wc -l < $DIR/live.log 2>/dev/null) linii | $(grep -m1 -oE 'Done \([0-9.]+s\)' $DIR/live.log 2>/dev/null)"
 say "log final: $(tail -3 $DIR/live.log 2>/dev/null | tr '\n' ' ' | cut -c1-260)"
+say "disc: $(df -h "$HOME" 2>/dev/null | tail -1)"
+say "fisiere: $(ls "$DIR" 2>/dev/null | tr '\n' ' ' | cut -c1-200)"
+say "pack marcat: $(cat "$DIR/.pack" 2>/dev/null || echo FARA-MARCARE)"
+say "unix_args: $(head -4 "$DIR/unix_args.txt" 2>/dev/null | tr '\n' ' ')"
+say "erori-cheie: $(grep -aiE 'error|exception|Unrecognized|Address already|Done \(' "$DIR/live.log" 2>/dev/null | tail -5 | cut -c1-140 | tr '\n' '|')"
+say "sup.log: $(tail -5 "$DIR/sup.log" 2>/dev/null | tr '\n' '|' | cut -c1-260)"
+say "frpc.toml: $(grep -c . "$HOME/frpc.toml" 2>/dev/null || echo NICIFISIER)"
 A=$(cat $DIR/ADRESA 2>/dev/null)
 say "adresa din fisier: ${A:-NU}"
 for i in 1 2 3; do
