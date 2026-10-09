@@ -1,0 +1,17 @@
+name: TEST BIND pe Cloud Shell (MC leaga portul?)
+on:
+  push:
+    paths: [ "deploy/bind.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: play-cuantic
+  cancel-in-progress: true
+jobs:
+  b:
+    runs-on: [self-hosted]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/bind.sh || true
