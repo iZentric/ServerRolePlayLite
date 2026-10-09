@@ -16,7 +16,7 @@ if [ -z "$N" ]; then
       | sed -E 's/.*\]: ([A-Za-z0-9_]{3,16}).*/\1/; s/Disconnecting //' \
       | sort | uniq -c | sort -rn | head -1 | awk '{print $2}')
 fi
-case "$N" in Server|minecraft|FML|thread|INFO|WARN|Done|Stopping|Can't|Unknown) N="" ;; esac
+case "$N" in Server|minecraft|FML|thread|INFO|WARN|Done|Stopping|Unknown) N="" ;; esac
 V="$V nume=${N:-NICIUNUL-in-log}"
 
 # ---- 2. serverul in picioare? (il pornim DOAR dac nobody altcineva il supravegheaza) ----
