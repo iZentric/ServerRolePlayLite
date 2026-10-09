@@ -136,32 +136,36 @@ try:
             items.append(IP(**ik))
         except Exception as e:
             log("item build fail:", str(e)[:150])
-    log("items construite:", len(items))
-    tk = {}
-    listfield = next((f for f in ("limits_details","limits","items","requests") if f in tok), None)
-    if listfield is None and items:
-        # nimic de listat recunoscut — bagam in toate si lasam exceptia sa vorbeasca
-        for f in ("limits_details","limits","items","requests"):
-            try:
-                TP(**{f: items}); listfield = f; break
-            except TypeError: pass
-    if listfield: tk[listfield] = items
-    if "justification" in tok: tk["justification"] = "Server Minecraft 20 copii (Always Free A1)"
+    flds = vars(TP())
+    log("VARS top (campuri reale):", list(flds))
+    listfield = next((k for k, v in flds.items() if v is None and ("item" in k or "limit" in k) and k not in ("justification",)), None)
+    # alege campul de tip lista: cel care primeste o lista fara TypeError
+    gotit = None
+    for k in flds:
+        if k in ("justification", "compartment_id"): continue
+        try:
+            TP(**{k: items}); gotit = k; break
+        except Exception: pass
+    log("camp lista retinut:", gotit)
+    tk = {"compartment_id": ten, "justification": "Server Minecraft pentru 20 copii (Always Free A1)"}
+    if gotit: tk[gotit] = items
     top = TP(**tk)
-    log("top kw folositi:", list(tk))
+    log("top gata cu:", list(tk))
     sent = None
     for label, fn in (
-        ("kw", lambda: li.create_limits_increase_request(compartment_id=ten, create_limits_increase_request_details=top)),
-        ("pos", lambda: li.create_limits_increase_request(ten, top)),
+        ("doar-details", lambda: li.create_limits_increase_request(top)),
+        ("kw-details", lambda: li.create_limits_increase_request(create_limits_increase_request_details=top)),
+        ("dict", lambda: li.create_limits_increase_request({k: (v if k != gotit else [vars(i) for i in items]) for k, v in tk.items()})),
     ):
         try:
             sent = fn(); log("TRIMISA prin", label); break
         except Exception as e:
-            log(label, "->", str(e)[:260])
+            log(label, "->", str(e)[:300])
     if sent:
         d = sent.data
-        log("RESPONSA: id:", str(getattr(d,"id","?"))[:44], "| state:", getattr(d,"lifecycle_state", getattr(d,"status","?")),
-            "| aprobat de:", getattr(d,"approver_type", getattr(d,"approved_by","?")))
+        log("RESPONSA id:", str(getattr(d,"id","?"))[:44], "| state:", getattr(d,"lifecycle_state", getattr(d,"status","?")),
+            "| approval:", getattr(d,"approver_type", "?"), "| msg:", str(getattr(d,"status_message", getattr(d,"message","-")))[:120])
+    log("items construite:", len(items))
 except Exception as e:
     log("LI FAIL:", str(e)[:280])
 
