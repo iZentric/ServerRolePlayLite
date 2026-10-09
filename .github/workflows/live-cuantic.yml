@@ -14,11 +14,11 @@ jobs:
       - name: Ruleaza scriptul live
         run: |
           set +e
-          bash scripts/live3.sh
+          bash scripts/live4.sh
           mkdir -p analysis
           { echo "# CUANTIC LIVE — $(date -u '+%F %T UTC')"; echo '```'; cat /tmp/live.txt; echo '```';
             echo "----- live.log (tail) -----"; echo '```'; tail -20 $HOME/cuantic-live/live.log; echo '```';
-            echo "----- playit.log (tail) -----"; echo '```'; tail -12 $HOME/cuantic-live/playit.log; echo "----- ADRESA -----"; cat $HOME/cuantic-live/ADRESA 2>/dev/null; echo '```';
+            echo "----- playit.log (tail) -----"; echo '```'; tail -12 $HOME/cuantic-live/bore.log 2>/dev/null; echo "----- last live.log -----"; tail -6 $HOME/cuantic-live/live.log; echo "----- ADRESA -----"; cat $HOME/cuantic-live/ADRESA 2>/dev/null; echo '```';
           } > analysis/live.md
           cat analysis/live.md | head -70
           git config user.name "live-bot"
