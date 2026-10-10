@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generatorul site-ului EvoKode - citeste verdictele reale din analysis/ si naste index.html"""
+"""Generatorul site-ului CUANTIC - citeste verdictele reale din analysis/ si naste index.html"""
 import os, re, glob, datetime
 
 AN = os.path.join(os.path.dirname(__file__), "..", "analysis")
@@ -21,7 +21,7 @@ def parse_verdict(path):
     }
 
 ENGINES = [
-    ("EvoKode (jarul NOSTRU, forjat)", "test-boot-CatServer-CUSTOM.md", "👑", "Compilat de noi din sursa la zi + Java 17", True),
+    ("CUANTIC (jarul NOSTRU, forjat)", "test-boot-CatServer-CUSTOM.md", "👑", "Compilat de noi din sursa la zi + Java 17", True),
     ("CatServer oficial + Java 17",    "test-boot-CatServer-J17.md",    "🥈", "Binarul oficial (mai 2023)", False),
     ("CatServer oficial + Java 11",    "test-boot-CatServer.md",        "🥉", "Cum il ruleaza restul lumii", False),
     ("Mist (inviat de noi)",           "mist-lab.md",                   "🧟", "14 operatii; traieste doar dezbracat; LuckPerms mort", False),
@@ -41,7 +41,7 @@ rows = []
 for nume, f, ico, nota, e_al_nostru in ENGINES:
     v = parse_verdict(os.path.join(AN, f)) or {}
     rec = records.get(f, {})
-    # EvoKode trage cu 3 tevi pe runda - toate alimenteaza ACELASI record
+    # CUANTIC trage cu 3 tevi pe runda - toate alimenteaza ACELASI record
     extra = []
     if "CUSTOM.md" in f:
         extra = [parse_verdict(os.path.join(AN, f"test-boot-CatServer-CUSTOM{i}.md")) for i in (2,3,4,5)]
@@ -161,7 +161,7 @@ now = datetime.datetime.utcnow().strftime("%d %b %Y, %H:%M UTC")
 html = f"""<!DOCTYPE html>
 <html lang="ro"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>EvoKode — motorul forjat pentru copii cu PC-uri slabe</title>
+<title>CUANTIC — motorul forjat pentru copii cu PC-uri slabe</title>
 <style>
 :root{{--bg:#0b0d12;--card:#141824;--acc:#e879f9;--ok:#34d399;--txt:#e5e7eb;--mut:#9ca3af}}
 *{{box-sizing:border-box;margin:0;padding:0}}
@@ -202,7 +202,7 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
 .tbl tr.hl td{{color:#6ee7b7}}
 </style></head><body><div class="wrap">
 <header>
-  <h1>EvoKode</h1>
+  <h1>CUANTIC</h1>
   <div class="tag">Motorul FORJAT de noi — ca mulți copii cu PC-uri slabe să se joace fără lag, GRATIS</div>
   <div class="big">
     <div class="stat"><b>{min(ok_rams) if ok_rams else "?"} MB</b><span>cel mai mic vârf de RAM măsurat<br>la pornire, server gol (32 moduri + 15 pluginuri)</span></div>
@@ -216,7 +216,7 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
 <div class="sub">Toate testate pe mașini identice, cu ACELEAȘI moduri și pluginuri. Bara mai scurtă = mai bun. Afișăm RECORDUL dovedit al fiecărui motor. Criteriul coroanei = <b>RAM-ul</b> (boot-ul variază ±20% între mașinile de test — e doar orientativ). Morții sunt testați și DEZBRĂCAȚI de modurile care îi ucid, ca să vezi cât AR FI — și tot pierd.</div>
 {tabel}
 {live_sec}
-<h2>📉 Cum a slăbit EvoKode într-o singură zi</h2>
+<h2>📉 Cum a slăbit CUANTIC într-o singură zi</h2>
 <div class="sub">Același server, stors pas cu pas: Java 17 → configul nativ → curățenia de erori → jarul forjat de noi.</div>
 <div class="evo">
   <div style="height:100%">4256 MB<br>dimineața</div>
@@ -268,7 +268,7 @@ boala Mohist:      ╱─╱─╱──↗  muntele care crește → crash
   <div class="card"><h3>💾 Corupție / dezastru</h3><p>Backup automat în fiecare zi. Maxim 24 de ore de progres pierdut, în cel mai negru scenariu.</p></div>
 </div>
 
-<h2>👑 De ce EvoKode și nu altceva?</h2>
+<h2>👑 De ce CUANTIC și nu altceva?</h2>
 <div class="cards">
   <div class="card"><h3>⚒️ Forjat, nu descărcat</h3><p>Nu rulăm un jar de pe net — l-am COMPILAT noi din sursa la zi. E mai nou și mai mic decât binarul oficial pe care-l folosește toată lumea.</p></div>
   <div class="card"><h3>⚖️ Totul dovedit la tribunal</h3><p>11 motoare, 3 versiuni de Java, 2 motoare de tick — toate judecate pe mașini reale. Nimic ales „din auzite". Cifrele de pe pagina asta sunt măsurători, nu reclame.</p></div>
@@ -280,7 +280,7 @@ boala Mohist:      ╱─╱─╱──↗  muntele care crește → crash
 
 <footer>
   <span class="live">●</span> Pagina se regenerează automat din rezultatele testelor · ultima actualizare: {now}<br>
-  EvoKode · Palma Lite RP · 1.16.5 Forge+Bukkit · construit cu LEGEA RUST
+  CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit · set de flaguri validat pe Java 17 in CI
 </footer>
 </div></body></html>"""
 
