@@ -30,3 +30,15 @@ mkdir -p "$GITHUB_WORKSPACE/analysis"; cd "$GITHUB_WORKSPACE"
 git add -f analysis/chk.md; git commit -q -m "chk" || true
 git pull --rebase -q origin "$GITHUB_REF_NAME" || true; git push -q origin "$GITHUB_REF_NAME" || true
 say "GATA"; exit 0
+
+# PROBĂ PLUGINS/BRAND (cerută de verdictul T5=0 linii de incarcare si T10CADE): catologul zice
+# altfel decat numaratoarea noastra - masuram direct in live.log.
+L="$D/live.log"; [ -f "$L" ] || L=$(ls -t "$D"/*.log 2>/dev/null | head -1)
+{ echo "--- plugins/brand in log:";
+  echo "fisiere in plugins: $(ls "$D"/plugins/*.jar 2>/dev/null | wc -l) (Cuantic-Brand: $(ls "$D"/plugins/ 2>/dev/null | grep -ci cuantic))"
+  echo "linii Enabling: $(tail -4000 "$L" 2>/dev/null | grep -aci 'Enabling') | 'Server booting'|'Done': $(tail -4000 "$L" 2>/dev/null | grep -aci 'Done (')"
+  echo "Cuantic in log (ultimele 4000 linii): $(tail -4000 "$L" 2>/dev/null | grep -aci cuantic)"
+  tail -4000 "$L" 2>/dev/null | grep -ai "Cuantic/version" | tail -2
+  echo "esecuri plugin: $(tail -4000 "$L" 2>/dev/null | grep -aiE 'Could not (load|enable)|error occurred while enabling' | wc -l)"
+  tail -4000 "$L" 2>/dev/null | grep -aiE 'Could not (load|enable)|error occurred while enabling' | tail -3 | cut -c1-160
+} >> "$ANALYSIS/chk.md" 2>/dev/null || true
