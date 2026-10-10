@@ -11,12 +11,25 @@ mkdir -p "$D"
 # Clientul si serverul trebuie sa vina din ACELASI build: altfel id-urile de registru
 # difera si FML refuza login-ul ("Missing registry data"). Daca pe release e o versiune
 # noua, o punem pe server fara sa stricam world-ul.
-NEW=$(gh release view lite --repo "$REPO" --json assets --jq '[.assets[].name|select(test("Server-CatServer"))][0]' 2>/dev/null)
+RELJSON=$(curl -fsSLo - --max-time 25 "https://api.github.com/repos/$REPO/releases/tags/lite" 2>/dev/null)
+printf '%s' "$RELJSON" | python3 -c "
+import sys, json
+try:
+    a = json.load(sys.stdin).get('assets', [])
+except Exception:
+    a = []
+for x in a:
+    if 'Server-CatServer' in x.get('name',''):
+        print(x['name']); print(x['browser_download_url']); break
+" > /tmp/rel.info 2>/dev/null
+RNAME=$(sed -n 1p /tmp/rel.info 2>/dev/null)
+RURL=$(sed -n 2p /tmp/rel.info 2>/dev/null)
+NEW="$RNAME"
 CUR=$(cat "$D/.pack" 2>/dev/null)
 if [ -n "$NEW" ] && [ "$NEW" != "$CUR" ]; then
   echo "PACK: ${CUR:-niciunul} -> $NEW (world-ul ramane)"
   Z="/tmp/$NEW"; rm -rf /tmp/pk "$Z"; mkdir -p /tmp/pk
-  if gh release download lite --repo "$REPO" -p "$NEW" -D /tmp --clobber >/dev/null 2>&1; then
+  if [ -n "$RURL" ] && curl -fL --max-time 400 -o "$Z" "$RURL" >/dev/null 2>&1 && [ -s "$Z" ]; then
     unzip -oq "$Z" -d /tmp/pk
     ( cd "$D" && rm -rf mods plugins && mkdir -p mods plugins
       for f in /tmp/pk/*; do b=$(basename "$f"); case "$b" in

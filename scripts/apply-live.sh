@@ -6,12 +6,13 @@
 D=$HOME/cuantic-live
 REPO=iZentric/ServerRolePlayLite
 AS=${VETA_ASTEPTAT:-}
+[ -n "$AS" ] || AS=$(python3 -c "import json;print(json.load(open('$GITHUB_WORKSPACE/pack-rules.json'))['pack_version'])" 2>/dev/null)
 V="APPLY: incepe"
 
 # ---- 1. aşteaptă release-ul aşteptat (build-ul trebuie sa termine inainte) ----
 if [ -n "$AS" ]; then
   for i in $(seq 1 40); do
-    CUR=$(gh release view lite --repo "$REPO" --json assets --jq '[.assets[].name|select(test("Server-CatServer"))][0]' 2>/dev/null)
+    CUR=$(curl -fsSLo - --max-time 20 "https://api.github.com/repos/$REPO/releases/tags/lite" 2>/dev/null | python3 -c "import sys,json;print(next((a['name'] for a in json.load(sys.stdin).get('assets',[]) if 'Server-CatServer' in a['name']),''))" 2>/dev/null)
     case "$CUR" in *"$AS"*) V="$V release=$CUR"; break ;; esac
     sleep 15
     [ $i -eq 40 ] && V="$V release=asteptam-$AS-am-gasit-$CUR"
@@ -33,6 +34,22 @@ pgrep -f 'java @unix_args' >/dev/null 2>&1 && { pkill -KILL -f 'java @unix_args'
 # ---- 3. scriptul de run la zi + packul cel nou ----
 curl -fsSLo "$HOME/c.sh" "https://raw.githubusercontent.com/$REPO/arena/a29b4ef4-serverroleplaylite/scripts/cuantic-live.sh" || V="$V c.sh=ESUAT"
 ( cd "$D" 2>/dev/null && rm -f .pack ) 2>/dev/null
+ZP="/tmp/apply-pack.zip"
+RURL=$(curl -fsSLo - --max-time 25 "https://api.github.com/repos/$REPO/releases/tags/lite" 2>/dev/null | python3 -c "import sys,json;print(next((a['browser_download_url'] for a in json.load(sys.stdin).get('assets',[]) if 'Server-CatServer' in a['name']),''))" 2>/dev/null)
+if [ -n "$RURL" ] && curl -fL --max-time 400 -o "$ZP" "$RURL" >/dev/null 2>&1 && [ -s "$ZP" ]; then
+  rm -rf /tmp/pk; mkdir -p /tmp/pk; unzip -oq "$ZP" -d /tmp/pk
+  ( cd "$D" && rm -rf mods plugins && mkdir -p mods plugins
+    for f in /tmp/pk/*; do b=$(basename "$f"); case "$b" in
+      mods|plugins) cp -r "$f" ./ ;;
+      *.jar|*.txt|*.json) cp "$f" ./ ;;
+    esac; done )
+  echo "CUANTIC" > /dev/null
+  echo "$AS" > "$D/.pack.new"
+  V="$V moduri=$(ls "$D"/mods/*.jar 2>/dev/null | wc -l) plugini=$(ls "$D"/plugins/*.jar 2>/dev/null | wc -l)"
+  echo "$V" > /tmp/apply-v.txt
+else
+  V="$V descarcare-esuata"
+fi
 ( setsid bash "$HOME/c.sh" >> "$D/sup.log" 2>&1 < /dev/null & )
 V="$V sup=pornit"
 
