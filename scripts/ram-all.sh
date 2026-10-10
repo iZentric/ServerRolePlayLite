@@ -5,6 +5,10 @@
 # reporneste java si o lasa sa se dovedeasca. Daca OOM-killerul o omora inainte de "Done ("
 # coboram plafonul cu 18% si incercam din nou - asa afla masina singura cat poate duce, fara
 # sa ramana in bucla de morti. Fiecare incercare e inregistrata in verdict, cu cifre.
+# PAUZAT: jobul asta opreste supervisorul si probeaza flota de heap una cate una, ceea ce lasa
+# serverul JOS cateva minute (si a dat si un verdict fals cand fifo-ul era deschis gresit).
+# CUANTIC_FORTEAZA=1 il reapune.
+case "${CUANTIC_FORTEAZA:-}" in ""|0) echo "PAUZAT: nu dau jos serverul pentru o cautare de plafon (plafonul corect e acum in scripts/cuantic-args.sh: MemTotal-2G, max 8G)." >&2; exit 0;; esac
 D=$HOME/cuantic-live
 BR=arena/a29b4ef4-serverroleplaylite
 RAW=https://raw.githubusercontent.com/iZentric/ServerRolePlayLite/$BR/scripts

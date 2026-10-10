@@ -90,7 +90,26 @@ out "      jucatori multi. Acestea se raporteaza de la client, nu de aici - nu l
 
 TREC=$(grep -c '^\[TRECE\]' /tmp/acc.txt); CADE=$(grep -c '^\[CAD' /tmp/acc.txt); VER=$(grep -c '^\[VERIFICA\]' /tmp/acc.txt)
 out ""
-out "SCOR: TRECE=$TREC VERIFICA=$VER CADE=$CADE din 9 teste"
+out "
+# ---- T10: brand Cuantic in /version (cerut: dovada pe build-ul real) ----
+if [ -p "$D/in.fifo" ] || [ -p "$D/cmd.in" ]; then
+  F="$D/cmd.in"; [ -p "$F" ] || F="$D/in.fifo"
+  L0=$(wc -l < "$D/live.log" 2>/dev/null || echo 0)
+  echo "version" > "$F" 2>/dev/null; sleep 6; echo "cuantic" > "$F" 2>/dev/null; sleep 6
+  NEW=$(tail -n +$((L0+1)) "$D/live.log" 2>/dev/null | sed -e "s/\x1b\[[0-9;]*[a-zA-Z]//g")
+  if printf '%s' "$NEW" | grep -qai "Cuantic" && printf '%s' "$NEW" | grep -qaiE "based on|adapted from|CraftBukkit|CatServer"; then
+    T="TRECE"; R10="brand + provenienta upstream in iesire"
+  elif printf '%s' "$NEW" | grep -qai "Cuantic"; then
+    T="VERIFICA"; R10="brand apare, dar linia de provenienta lipseste"
+  else
+    T="CADE"; R10="niciun raspuns cu Cuantic (Cuantic-Brand plugin neluat sau punta moarta)"
+  fi
+  say "[$T] T10 /version: $R10"
+else
+  say "[N-A] T10 /version: niciun fisier de comanda pe $D"
+fi
+
+SCOR: TRECE=$TREC VERIFICA=$VER CADE=$CADE din 9 teste"
 
 mkdir -p "$GITHUB_WORKSPACE/analysis" 2>/dev/null && cd "$GITHUB_WORKSPACE"
 cp /tmp/acc.txt analysis/ACCEPTANCE.md

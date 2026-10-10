@@ -26,7 +26,6 @@ def packv():
   # slug-uri care nu au rezolvat pe catalog -> devin vizibile, nu se mai pierd in liniste
 import urllib.request
 import zipfile
-import subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UA = {"User-Agent": "iZentric/ServerRolePlayLite build_lite (github)"}
