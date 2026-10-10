@@ -1,6 +1,6 @@
-# CHAT CUANTIC — 2026-10-10 15:40:58 UTC
+# CHAT CUANTIC — 2026-10-10 14:43:23 UTC
 
-CHAT: mesaj-vechi-ignorat linii-nou=0 poz=460 supervisor=NU
+CHAT: mesaj-vechi-ignorat linii-nou=0 poz=349 supervisor=DA
 
 ### noile linii din acest tur:
 ```
@@ -19,5 +19,5 @@ CHAT: mesaj-vechi-ignorat linii-nou=0 poz=460 supervisor=NU
 CUANTIC agent: sunt puntea de chat: scrie ceva in joc, eu il citesc la fiecare runda si iti raspund tot in joc. Login cu parola: scos. Cuantic 1.6.1 pe release, serverul ruleaza.
 ```
 
-pozitie in live.log: 460 | cmd.in marime: 0 bytes | java: JOS
+pozitie in live.log: 349 | cmd.in marime: 0 bytes | java: JOS
 port: 0 | login-pluginuri in .fara-login: 0

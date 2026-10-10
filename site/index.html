@@ -113,7 +113,7 @@ footer code{color:#9fb0c9}
   <h1>Serverul care <span>nu te face să aștepți</span> și nu-ți cere bani.</h1>
   <p class="lede">Am luat un server cu <b>32 de moduri și 15 pluginuri</b> — genul care de obicei zboară pe 8-16 GB RAM — și l-am adus să meargă pe o mașină cât un telefon mai vechi. Fiecare cifră de pe pagina asta e măsurată de roboții noștri pe mașina reală, cu un jucător în lume, și are sursa ei.</p>
   <div class="cta">
-    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.6.mrpack">⬇️ Ia pack-ul de client (1.6.6)</a>
+    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.6.mrpack">⬇️ Ia pack-ul de client (1.6.7)</a>
     <a class="btn ghost" href="#cifre">📊 Vezi cifrele și de unde vin</a>
     <a class="btn ghost" href="https://github.com/iZentric/ServerRolePlayLite">⭐ Codul, pe GitHub</a>
   </div>
@@ -121,7 +121,7 @@ footer code{color:#9fb0c9}
     <div class="stat"><b>2.0 ms</b><span>întârzierea pe care o simți (95 din 100 de cadre) — limita la care începe lag-ul e 50 ms</span></div>
     <div class="stat"><b class="b2">13.7 s</b><span>până serverul e viu, cu 47 de componente încărcate (47 = 32 moduri + 15 pluginuri)</span></div>
     <div class="stat"><b class="b3">0</b><span>mesaje de tip „serverul nu ține pasul" în toate probele</span></div>
-    <div class="stat"><b class="b3" style="font-size:20px">1.6.6</b><span> ultimul pack: CUANTIC-Client-1.6.6.mrpack + CUANTIC-Server-CatServer-1.6.6.zip</span></div>
+    <div class="stat"><b class="b3" style="font-size:20px">1.6.7</b><span> ultimul pack: CUANTIC-Client-1.6.6.mrpack + CUANTIC-Server-CatServer-1.6.6.zip</span></div>
     <div class="stat"><b class="b4">0 lei</b><span>total: mașina e cont gratuit, codul e al nostru, uneltele open-source</span></div>
   </div>
 </header>
@@ -159,7 +159,12 @@ Ce putem demonstra e exact ce e scris mai sus.</div>
 
 
 
-<h2>🆕 Ce s-a schimbat în 1.6.6 (și de ce contează pentru tine)</h2>
+<h2>🆕 Ce s-a schimbat în 1.6.7 (și de ce contează pentru tine)</h2>
+<div class="grid">
+  <div class="card"><h3>Proveniența din `/version` devine dovadă în log</h3><p>Testul T10 de pe cutie a zis <code>\1</code> — pentru că pluginul trimitea cele 3 linii doar jucătorului, iar live.log prindea doar consemnarea. Acum aceleași 3 linii (fără coduri de culoare) se scriu și în log: <code>\1</code> poate verifica șirul „based on / adapted from”, nu doar cuvântul Cuantic.</p></div>
+</div>
+<details><summary><b>Istoric: ce am reparat pe rând</b> (3 versiuni)</summary>
+<h3 style="margin:14px 0 6px">1.6.6</h3>
 <div class="grid">
   <div class="card"><h3>Regulă nouă: serverul rămâne pornit după orice comandă</h3><p>Toate cele 18 workflow-uri de pe cutie se termină acum cu un pas <code>\1</code> care aleargă <code>\1</code> ⇒ un job care crapă, e anulat sau terminat cu java oprită o repornește. Singura metodă să-l lași jos e un fișier scris de tine: <code>\1</code> (acum <code>\1</code> ți se supune și raportează de ce nu pornește).</p></div>
   <div class="card"><h3>Poarta de login a ieșit din pack, nu doar de pe server</h3><p><code>\1</code> + <code>\1</code> erau încă descărcate de <code>\1</code> în toate cele 4 arhive ⇒ orice replay al build-ului le aducea înapoi și îți cerea parolă. Acum nu mai sunt în listă: intri pe <code>\1</code> fără cont. <code>\1</code> + <code>\1</code> au rămas (skins), <code>\1</code> a rămas (grade).</p></div>
@@ -167,7 +172,6 @@ Ce putem demonstra e exact ce e scris mai sus.</div>
   <div class="card"><h3>Brand Cuantic în `/version`, legat de build</h3><p><code>\1</code> (același cod, urcă odată cu pack-ul) se compilează în CI pe niște antete locale și se montează în <code>\1</code> la CatServer, Arclight și Mist. A treia linie rămâne textul upstream: „based on / adapted from”.</p></div>
   <div class="card"><h3>Site-ul nu mai poate minți nici măcar 4 minute</h3><p>Dacă <code>\1</code> avansează înaintea publicării arhivei, pagina rămâne legată de ultimul asset care chiar există (fără link 404 și fără „None MB”); altfel linkurile, greutățile și titlul secțiunii se recitesc din release + <code>\1</code>, la fiecare release, push pe analiză/site și în fiecare oră.</p></div>
 </div>
-<details><summary><b>Istoric: ce am reparat pe rând</b> (2 versiuni)</summary>
 <h3 style="margin:14px 0 6px">1.6.5</h3>
 <div class="grid">
   <div class="card"><h3>Heap-ul nu mai doboară cutia</h3><p><code>\1</code> = RAM total − 2 GB (min 1 GB, max 8 GB) în loc de tot RAM-ul. <code>\1</code> pe o cutie de 11.8 GB a chemat OOM-killerul, care omora și java și runnerul ⇒ server jos. <code>\1</code> revine la tot RAM-ul, <code>\1</code> (scris de guardianul de OOM) îl acoperă.</p></div>
@@ -310,7 +314,7 @@ boala hibridelor:   ╱─╱─╱──↗    (muntele care crește → crash)
 </pre></div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 14:42 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 16:06 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>analysis/BENCH-LIVE.md</code> · <code>analysis/RAM-ALL.md</code> · <code>analysis/ACCEPTANCE.md</code> · <code>site/records.json</code>
 </footer>

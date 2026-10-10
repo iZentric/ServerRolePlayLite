@@ -23,6 +23,10 @@ public class CuanticBrandPlugin extends JavaPlugin implements Listener {
             + ", API " + Bukkit.getBukkitVersion() + ") \u00A7a— hibrid invizibil, cost 0");
     }
 
+    private static String curata(String t) {
+        return t.replaceAll("\u00A7.", "");
+    }
+
     private String cuantic() {
         String v = getDescription().getVersion();
         return (v == null || v.isEmpty()) ? "?" : v;
@@ -36,11 +40,17 @@ public class CuanticBrandPlugin extends JavaPlugin implements Listener {
         if (!e.getPlayer().hasPermission("bukkit.command.version") && !m.startsWith("/cuantic")) return;
         e.setCancelled(true);
         String sender = e.getPlayer().getName();
-        e.getPlayer().sendMessage("\u00A76\u00A7l\u00BB \u00A7b\u00A7lCuantic \u00A7f" + cuantic()
-            + " \u00A77(build propriu, Java " + System.getProperty("java.version") + ")");
-        e.getPlayer().sendMessage("\u00A77Minecraft \u00A7f" + Bukkit.getMinecraftVersion()
-            + " \u00A77· API \u00A7f" + Bukkit.getBukkitVersion() + " \u00A77· motor \u00A7f" + Bukkit.getName());
-        e.getPlayer().sendMessage("\u00A77Cuantic based on / adapted from: \u00A7f" + Bukkit.getVersion());
-        getServer().getConsoleSender().sendMessage(sender + " a dat /version → brand Cuantic " + cuantic());
+        String l1 = "\u00A76\u00A7l\u00BB \u00A7b\u00A7lCuantic \u00A7f" + cuantic()
+            + " \u00A77(build propriu, Java " + System.getProperty("java.version") + ")";
+        String l2 = "\u00A77Minecraft \u00A7f" + Bukkit.getMinecraftVersion()
+            + " \u00A77· API \u00A7f" + Bukkit.getBukkitVersion() + " \u00A77· motor \u00A7f" + Bukkit.getName();
+        String l3 = "\u00A77Cuantic based on / adapted from: \u00A7f" + Bukkit.getVersion();
+        e.getPlayer().sendMessage(l1);
+        e.getPlayer().sendMessage(l2);
+        e.getPlayer().sendMessage(l3);
+        // Aceleasi 3 linii in log (fara coduri de culoare), ca testul T10 sa aiba dovada
+        // in live.log ca provineenta a fost afisata, nu doar ca brandul a aparut.
+        getServer().getConsoleSender().sendMessage("[Cuantic/version] " + sender + ": "
+            + curata(l1) + " | " + curata(l2) + " | " + curata(l3));
     }
 }

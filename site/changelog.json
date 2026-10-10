@@ -72,5 +72,11 @@
    "t": "Site-ul nu mai poate minți nici măcar 4 minute",
    "p": "Dacă `pack_version` avansează înaintea publicării arhivei, pagina rămâne legată de ultimul asset care chiar există (fără link 404 și fără „None MB”); altfel linkurile, greutățile și titlul secțiunii se recitesc din release + `pack-rules.json`, la fiecare release, push pe analiză/site și în fiecare oră."
   }
+ ],
+ "1.6.7": [
+  {
+   "t": "Proveniența din `/version` devine dovadă în log",
+   "p": "Testul T10 de pe cutie a zis `brand apare, dar linia de proveniență lipsește` — pentru că pluginul trimitea cele 3 linii doar jucătorului, iar live.log prindea doar consemnarea. Acum aceleași 3 linii (fără coduri de culoare) se scriu și în log: `analysis/ACCEPTANCE.md` poate verifica șirul „based on / adapted from”, nu doar cuvântul Cuantic."
+  }
  ]
 }
