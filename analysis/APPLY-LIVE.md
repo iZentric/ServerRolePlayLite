@@ -1,21 +1,21 @@
-# APPLY-LIVE — 2026-10-10 12:25:09 UTC
+# APPLY-LIVE — 2026-10-10 13:05:42 UTC
 
-APPLY: incepe release=asteptam-1.6.0-am-gasit- sup=nimic descarcare-esuata sup=pornit boot=DA online=DA jar=CatServer-1.16.5-1d8d6313-server.jar  pack=-
+APPLY: incepe release=asteptam-1.6.0-am-gasit-CUANTIC-Server-CatServer-1.6.4.zip sup=nimic moduri=30 plugini=15 straturi-tuning=4/4 sup=pornit boot=DA online=NU jar=CatServer-1.16.5-1d8d6313-server.jar  pack=CUANTIC-Server-CatServer-1.6.4.zip
 
 flaguri active: `-Xms1485M -Xmx11884M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=37 -XX:`
 
 ```
-[12:24:57] [Craft Scheduler Thread - 2/WARN]: 	at com.cjburkey.claimchunk.ClaimChunk.doUpdateCheck(ClaimChunk.java:201)
-[12:24:57] [Craft Scheduler Thread - 2/WARN]: 	at org.bukkit.craftbukkit.v1_16_R3.scheduler.CraftTask.run(CraftTask.java:81)
-[12:24:57] [Craft Scheduler Thread - 2/WARN]: 	at org.bukkit.craftbukkit.v1_16_R3.scheduler.CraftAsyncTask.run(CraftAsyncTask.java:54)
-[12:24:57] [Craft Scheduler Thread - 2/WARN]: 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-[12:24:57] [Craft Scheduler Thread - 2/WARN]: 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-[12:24:57] [Craft Scheduler Thread - 2/WARN]: 	at java.base/java.lang.Thread.run(Thread.java:840)
+[13:05:34] [main/INFO]: Patching ItemStack#onItemUse
+[13:05:38] [main/INFO]: Vanilla bootstrap took 4086 milliseconds
+[13:05:38] [modloading-worker-0/INFO]: Patching DataPackRegistries#<init>
+[13:05:41] [modloading-worker-0/INFO]: Patching LootTableManager#apply
+[13:05:41] [modloading-worker-0/INFO]: Forge mod loading, version 36.2.39, for MC 1.16.5 with MCP 20210115.111550
+[13:05:41] [modloading-worker-0/INFO]: MinecraftForge v36.2.39 Initialized
 sup.log:
- 12:23:39 mc=DA port=nu asculta log=15
- 12:23:55 mc=DA port=nu asculta log=44
- 12:24:10 mc=DA port=SUS log=167
- 12:24:25 mc=DA port=SUS log=192
- 12:24:40 mc=DA port=SUS log=247
- 12:24:56 mc=DA port=SUS log=335
+JAVA: /home/mndvasi9/.local/jdk17/bin/java -> openjdk version "17.0.20.1" 2026-08-18
+args: MEMORIE -Xmx 11884M (masina are 11884MB), -Xms 1485M, plafon=11884MB
+args: OK (CatServer-1.16.5-1d8d6313-server.jar, 37 linii)
+MC pornit. Adresa: 92.5.171.150:25565. Ctrl+C = opresti DOAR supervisorul (serverul ramane sus).
+ 13:05:25 mc=DA port=nu asculta log=734
+ 13:05:40 mc=DA port=nu asculta log=763
 ```
