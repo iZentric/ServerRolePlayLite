@@ -147,7 +147,7 @@ footer code{color:#9fb0c9}
 <tr><td><b>RAM total + set validat</b></td><td>-Xmx = MemTotal (11884 MB) + 32 flaguri validate pe Java 17 în CI</td><td>3192 MB</td><td>115.88 ms × 8</td><td><b>2.0 ms</b></td><td>13.664 s / 96.788 s</td><td style="color:var(--mut)"><small>analysis/RAM-ALL.md + BENCH-LIVE.md</small></td></tr>
 <tr><td><b>1.6.2</b></td><td>30 moduri (tuns), chunk-gc load-threshold=300, FerriteCore în mrpack</td><td>ne-măsurat încă</td><td>ne-măsurat încă</td><td><b>ne-măsurat încă</b></td><td>11.096 s / 59.972 s</td><td style="color:var(--mut)"><small>analysis/ACCEPTANCE.md + APPLY-LIVE.md</small></td></tr>
 <tr><td><b>1.6.3</b></td><td>FerriteCore ȘI pe server (slug 404 reparat) + manifest-cuantic.json în zip</td><td>BENCH după APPLY</td><td>BENCH după APPLY</td><td><b>BENCH după APPLY</b></td><td>BENCH dupa APPLY</td><td style="color:var(--mut)"><small>analysis/BENCH-LIVE.md</small></td></tr>
-<tr><td><b>1.6.4 (live, completat automat)</b></td><td>straturi de tuning ajunse și pe box (spigot/bukkit/catserver/commands) + max-tnt-per-tick + use-native-transport + MOTD corectat</td><td>3739 MB (vârf /proc)</td><td>`Can't keep up` = 0 · TPS 20.0</td><td><b>ne-măsurat</b></td><td>19.605 s / 69.838 s</td><td style="color:var(--mut)"><small>analysis/BENCH-LIVE.md · proba 2026-10-10 11:53:37</small></td></tr>
+<tr><td><b>BENCH de pe box (se actualizează singur)</b></td><td>straturi de tuning ajunse și pe box (spigot/bukkit/catserver/commands) + max-tnt-per-tick + use-native-transport + MOTD corectat</td><td>3739 MB (vârf /proc)</td><td>`Can't keep up` = 0 · TPS 20.0</td><td><b>ne-măsurat</b></td><td>19.605 s / 69.838 s</td><td style="color:var(--mut)"><small>analysis/BENCH-LIVE.md · proba 2026-10-10 11:53:37</small></td></tr>
 </table>
 <div class="sub" style="margin-top:10px"><b>Delta de la prima măsurătoare („1.5.9") până la setup-ul de maxim de azi:</b> p95 MSPT
 <b>4.9 → 2.0 ms (−59%)</b>, goluri de memorie de <b>3.1× mai rare</b> (25 → 8 pe fereastră),
@@ -225,7 +225,7 @@ Chunky pregen complet — discul gazdei (5 GB, 66% plin) nu încape; OpenJ9/Seme
 
 <h2>🤝 Ce primești și ce NU promitem</h2>
 <div class="grid">
-  <div class="card"><h3>📦 Pack-ul tău, intact</h3><p>Toate modurile pe care le-ai avut în Freeroam au rămas în client. Serverul a rămas cu 30-32 componente, fără nimic „doar că poate"</p><span class="src">1.6.4 · out/CUANTIC-Client-1.6.4.mrpack · ~126.9 MB</span></div>
+  <div class="card"><h3>📦 Pack-ul tău, intact</h3><p>Toate modurile pe care le-ai avut în Freeroam au rămas în client. Serverul a rămas cu 30-32 componente, fără nimic „doar că poate"</p><span class="src">1.6.4 · out/CUANTIC-Client-1.6.4.mrpack · 133.1 MB (1.6.3 = 126.9 MB; ceilalți 6 MB sunt moduri de client care acum se rezolvă, nu componente moarte)</span></div>
   <div class="card"><h3>🚪 Intri fără parolă</h3><p>Poarta de login (AuthMe + FastLogin) e <b>scoasă</b> de pe server. Vrei s-o punem înapoi? Un rând de scris către agent și reapare, cu tot cu conturi.</p><span class="src">analysis/NO-LOGIN.md</span></div>
   <div class="card"><h3>🩺 Se repară singur</h3><p>Dacă java moare, supervisorul o aprinde în ~15 s, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Fiecare schimbare vine cu snapshot + rollback.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
   <div class="card"><h3>🧾 Fiecare cifră are dovadă</h3><p>Tabelul de mai sus nu e scris de mână: e extras din fișierele de verdict ale joburilor. Le poți citi pe toate în repo, la <code>analysis/</code>.</p><span class="src">BENCH-LIVE.md · RAM-ALL.md · APPLY-LIVE.md</span></div>
@@ -252,7 +252,7 @@ Chunky pregen complet — discul gazdei (5 GB, 66% plin) nu încape; OpenJ9/Seme
 
 <h2>🥔 Merge și pe un calculator de bibliotecă?</h2>
 <div class="grid">
-  <div class="card"><h3>Clientul</h3><p>Pack-ul vine cu 7 motoare de FPS/ramură ușoară și un „mod cartof" pentru PC-uri vechi de ~2010, fără placă video. Marimea: <b>126.9 MB</b>, față de 133.5 MB cât avea pack-ul anterior.</p></div>
+  <div class="card"><h3>Clientul</h3><p>Pack-ul vine cu 7 motoare de FPS/ramură ușoară și un „mod cartof" pentru PC-uri vechi de ~2010, fără placă video. Marime: <b>133.1 MB</b> (1.6.3 = 126.9 MB; 1.5.9 = 133.5 MB) — aceleași funcții, fără nimic mort înăuntru.</p></div>
   <div class="card"><h3>Serverul</h3><p>Server gol = doarme (câteva procente de CPU). Mobilul e plafonat global și alive doar lângă jucători, deci consumul nu explodează când intră lumea.</p></div>
   <div class="card"><h3>Gazda</h3><p>Rulează acum pe un cont gratuit, 2 vCPU · 11.8 GB RAM · disc 5 GB (66% ocupat — limita reală a cutiei, nu a serverului).</p></div>
 </div>

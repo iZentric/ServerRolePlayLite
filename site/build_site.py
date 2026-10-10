@@ -196,7 +196,7 @@ if _bt or _bd or _bw:
     _boot = (f"{_bd.group(1)} s / {_bf.group(1)} s" if _bd and _bf else (f"{_bd.group(1)} s" if _bd else "ne-măsurat"))
     _keep = f"`Can't keep up` = {_bk.group(1)}" if _bk else "keep-up ne-măsurat"
     _tps = f"TPS {_bh.group(1)}" if _bh else ""
-    progres_rows.append(("1.6.4 (live, completat automat)",
+    progres_rows.append(("BENCH de pe box (se actualizează singur)",
         "straturi de tuning ajunse și pe box (spigot/bukkit/catserver/commands) + max-tnt-per-tick + use-native-transport + MOTD corectat",
         _rss, _keep + (f" · {_tps}" if _tps else ""), _p95, _boot,
         "analysis/BENCH-LIVE.md" + (f" · proba {_bwts.group(1)}" if _bwts else "")))
@@ -431,7 +431,7 @@ html = f"""<!DOCTYPE html>
 
 <h2>🤝 Ce primești și ce NU promitem</h2>
 <div class="grid">
-  <div class="card"><h3>📦 Pack-ul tău, intact</h3><p>Toate modurile pe care le-ai avut în Freeroam au rămas în client. Serverul a rămas cu 30-32 componente, fără nimic „doar că poate"</p><span class="src">1.6.4 · out/CUANTIC-Client-1.6.4.mrpack · ~126.9 MB</span></div>
+  <div class="card"><h3>📦 Pack-ul tău, intact</h3><p>Toate modurile pe care le-ai avut în Freeroam au rămas în client. Serverul a rămas cu 30-32 componente, fără nimic „doar că poate"</p><span class="src">1.6.4 · out/CUANTIC-Client-1.6.4.mrpack · 133.1 MB (1.6.3 = 126.9 MB; ceilalți 6 MB sunt moduri de client care acum se rezolvă, nu componente moarte)</span></div>
   <div class="card"><h3>🚪 Intri fără parolă</h3><p>Poarta de login (AuthMe + FastLogin) e <b>scoasă</b> de pe server. Vrei s-o punem înapoi? Un rând de scris către agent și reapare, cu tot cu conturi.</p><span class="src">analysis/NO-LOGIN.md</span></div>
   <div class="card"><h3>🩺 Se repară singur</h3><p>Dacă java moare, supervisorul o aprinde în ~15 s, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Fiecare schimbare vine cu snapshot + rollback.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
   <div class="card"><h3>🧾 Fiecare cifră are dovadă</h3><p>Tabelul de mai sus nu e scris de mână: e extras din fișierele de verdict ale joburilor. Le poți citi pe toate în repo, la <code>analysis/</code>.</p><span class="src">BENCH-LIVE.md · RAM-ALL.md · APPLY-LIVE.md</span></div>
@@ -458,7 +458,7 @@ html = f"""<!DOCTYPE html>
 
 <h2>🥔 Merge și pe un calculator de bibliotecă?</h2>
 <div class="grid">
-  <div class="card"><h3>Clientul</h3><p>Pack-ul vine cu 7 motoare de FPS/ramură ușoară și un „mod cartof" pentru PC-uri vechi de ~2010, fără placă video. Marimea: <b>126.9 MB</b>, față de 133.5 MB cât avea pack-ul anterior.</p></div>
+  <div class="card"><h3>Clientul</h3><p>Pack-ul vine cu 7 motoare de FPS/ramură ușoară și un „mod cartof" pentru PC-uri vechi de ~2010, fără placă video. Marime: <b>133.1 MB</b> (1.6.3 = 126.9 MB; 1.5.9 = 133.5 MB) — aceleași funcții, fără nimic mort înăuntru.</p></div>
   <div class="card"><h3>Serverul</h3><p>Server gol = doarme (câteva procente de CPU). Mobilul e plafonat global și alive doar lângă jucători, deci consumul nu explodează când intră lumea.</p></div>
   <div class="card"><h3>Gazda</h3><p>Rulează acum pe un cont gratuit, 2 vCPU · 11.8 GB RAM · disc 5 GB (66% ocupat — limita reală a cutiei, nu a serverului).</p></div>
 </div>
