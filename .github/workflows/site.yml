@@ -41,7 +41,7 @@ jobs:
             gh api -X POST "repos/$GITHUB_REPOSITORY/actions/workflows/up.yml/dispatches" \
               -f ref="$GITHUB_REF_NAME" -f "reason=site ALIVE: serverul nu raspunde" >/dev/null 2>&1 \
               && T="dispatch trimis" || T="dispatch refuzat"
-            echo "JOS ($T) - incerc pe cont: lipeste in Cloud Shell `bash <(curl -fsSL https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_REF_NAME/scripts/wake.sh)`" > /tmp/alive.txt
+            echo "JOS ($T) - one-liner de trezire in Cloud Shell: vezi scripts/wake.sh" > /tmp/alive.txt
             sleep 200
             curl -fsS --max-time 20 "https://api.mcsrvstat.us/3/92.5.171.150:25565" 2>/dev/null | grep -q '"online":true' \
               && echo "REPRIT automat dupa dispatch · $(date -u '+%H:%M:%S') UTC" > /tmp/alive.txt
