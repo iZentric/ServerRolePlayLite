@@ -1,19 +1,19 @@
-# CHK — 2026-10-10 19:47:36 UTC
+# CHK — 2026-10-10 20:03:23 UTC
 
 ```
-== CHK — 2026-10-10 19:47:36 UTC ==
-stare la intrare in CHK: java=97956 sup=97843 port25565=1 frpc=77520
-dupa ensure-up: java=97956 (RUNNER_TRACKING_ID=0
-0) | sup=97843 (RUNNER_TRACKING_ID=0
+== CHK — 2026-10-10 20:03:22 UTC ==
+stare la intrare in CHK: java=101321 sup=101208 port25565=1 frpc=77520
+dupa ensure-up: java=101321 (RUNNER_TRACKING_ID=0
+0) | sup=101208 (RUNNER_TRACKING_ID=0
 0) | frpc=77520
-uptime: 19:47:36 up  9:33,  0 users,  load average: 1.44, 0.76, 0.54
+uptime: 20:03:23 up  9:49,  0 users,  load average: 3.31, 1.02, 0.55
 ss 25565:
   LISTEN 0      4096               *:25565            *:*          
-live.log: 2125 linii | Done (14.469s)
-log final: [19:47:04] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m [19:47:04] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0).
+live.log: 2595 linii | Done (14.469s)
+log final: [20:02:49] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m [20:02:49] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0).
 disc: /dev/sdb1       5.0G  3.3G  1.8G  65% /home/mndvasi9
 fisiere: ADRESA banned-ips.json banned-players.json bind.log boot.log bore.log bukkit.yml bukkit.yml.bak.1791636852 bukkit.yml.bak.1791639103 CatServer-1.16.5-1d8d6313-server.jar catserver.yml chat.log cin CIT
-pack marcat: .pack=CUANTIC-Server-CatServer-1.7.4.zip | .pack.new=1.7.4
+pack marcat: .pack=CUANTIC-Server-CatServer-1.7.5.zip | .pack.new=1.7.5
 === INVENTAR COMPLET FISIERE SERVER LIVE (/home/mndvasi9/cuantic-live) ===
 --- 1. MODURI (/home/mndvasi9/cuantic-live/mods: 35 jar-uri) ---
   additional-guns-0.7.1-1.16.5.jar 97K
@@ -54,7 +54,7 @@ pack marcat: .pack=CUANTIC-Server-CatServer-1.7.4.zip | .pack.new=1.7.4
 --- 2. PLUGINURI (/home/mndvasi9/cuantic-live/plugins: 14 jar-uri) ---
   Chunky-1.2.217.jar 217K
   claimchunk-0.0.22.jar 161K
-  Cuantic-Brand-1.7.4.jar 4.7K
+  Cuantic-Brand-1.7.5.jar 4.7K
   EssentialsX-2.19.7.jar 2.9M
   EssentialsXAntiBuild-2.19.7.jar 18K
   EssentialsXChat-2.19.7.jar 27K
@@ -84,12 +84,8 @@ pack marcat: .pack=CUANTIC-Server-CatServer-1.7.4.zip | .pack.new=1.7.4
   [OK] ops.json (7 linii, 135 bytes)
   [OK] manifest-cuantic.json (64 linii, 1860 bytes)
 unix_args complet (39 linii): -Xms1024M -Xmx6144M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=37 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=23 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99 -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=256M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=122M -XX:NonProfiledCodeHeapSize=122M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:AllocatePrefetchStyle=3 -Dio.netty.allocator.maxOrder=9 -Dio.netty.leakDetection.level=DISABLED -jar CatServer-1.16.5-1d8d6313-server.jar nogui 
-erori-cheie: [19:45:29] [Thread-8/WARN]: 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:475)|[19:45:29] [Thread-8/WARN]: 	at org.h2.message.DbException.get(DbException.java:212)|[19:45:29] [Thread-8/WARN]: Caused by: java.lang.ClassNotFoundException: org.h2.api.ErrorCode|[19:45:29] [Thread-8/WARN]: Caused by: java.lang.ClassNotFoundException: org.h2.api.ErrorCode|[19:47:03] [Server thread/INFO]: Done (13.490s)! For help, type "help"|
+erori-cheie: [19:45:29] [Thread-8/WARN]: 	at org.h2.message.DbException.get(DbException.java:212)|[19:45:29] [Thread-8/WARN]: Caused by: java.lang.ClassNotFoundException: org.h2.api.ErrorCode|[19:45:29] [Thread-8/WARN]: Caused by: java.lang.ClassNotFoundException: org.h2.api.ErrorCode|[19:47:03] [Server thread/INFO]: Done (13.490s)! For help, type "help"|[20:02:48] [Server thread/INFO]: Done (12.938s)! For help, type "help"|
 === ISTORIC PORNIRI / OPRIRI / JUCATORI (live.log) ===
-1638:[19:38:29] [Server thread/WARN]: ATV (vehicle of iZentric) moved wrongly! 0.6345603466033936
-1639:[19:38:29] [Server thread/WARN]: ATV (vehicle of iZentric) moved wrongly! 1.0
-1640:[19:38:29] [Server thread/WARN]: ATV (vehicle of iZentric) moved wrongly! 1.0
-1641:[19:38:29] [Server thread/WARN]: ATV (vehicle of iZentric) moved wrongly! 0.6349281668663025
 1642:[19:38:30] [Server thread/WARN]: ATV (vehicle of iZentric) moved wrongly! 1.0
 1643:[19:38:30] [Server thread/WARN]: ATV (vehicle of iZentric) moved wrongly! 1.0
 1644:[19:38:30] [Server thread/WARN]: ATV (vehicle of iZentric) moved wrongly! 0.6222019195556641
@@ -131,105 +127,109 @@ erori-cheie: [19:45:29] [Thread-8/WARN]: 	at org.h2.message.DbException.getJdbcS
 1760:==== pornire 2026-10-10 19:45:53 UTC (memorie: -Xmx6144M, java: /home/mndvasi9/.local/jdk17/bin/java) ====
 2026:[19:46:54] [Server thread/INFO]: [Cuantic] Motor hibrid activ: Cuantic 1.7.4 (MC 1.16.5, API 1.16.5-R0.1-SNAPSHOT, motor CUANTIC) | based on: 1.16.5-1d8d6313 (MC: 1.16.5) | runtime-tech: keepSpawnInMemory=false, enableSkipEntityTick=true, enableSkipTileEntityTick=true, maxEntityCollision=2, worldGenMaxTickTime=8, disableFMLStatusModInfo=true, enableDynmapCompatible=false, enableMythicMobsPatcherCompatible=false, defaultInstallPluginSpark=false, versionCheck=false, forceSaveOnWatchdog=true, noHopperEvent=3w, autoUnloadDims=[-1,1], disableStatSaving=true, saveUserCacheOnStopOnly=true, logVillagerDeaths=false, movedWronglyThreshold=0.35, movedTooQuicklyMultiplier=25.0
 2097:[19:47:03] [Server thread/INFO]: Done (13.490s)! For help, type "help"
+2219:[20:01:16] [Server thread/INFO]: Stopping server
+2230:==== pornire 2026-10-10 20:01:39 UTC (memorie: -Xmx6144M, java: /home/mndvasi9/.local/jdk17/bin/java) ====
+2496:[20:02:39] [Server thread/INFO]: [Cuantic] Motor hibrid activ: Cuantic 1.7.5 (MC 1.16.5, API 1.16.5-R0.1-SNAPSHOT, motor CUANTIC) | based on: 1.16.5-1d8d6313 (MC: 1.16.5) | runtime-tech: keepSpawnInMemory=false, enableSkipEntityTick=true, enableSkipTileEntityTick=true, maxEntityCollision=2, worldGenMaxTickTime=8, disableFMLStatusModInfo=true, enableDynmapCompatible=false, enableMythicMobsPatcherCompatible=false, defaultInstallPluginSpark=false, versionCheck=false, forceSaveOnWatchdog=true, noHopperEvent=3w, autoUnloadDims=[-1,1], disableStatSaving=true, saveUserCacheOnStopOnly=true, logVillagerDeaths=false, movedWronglyThreshold=0.35, movedTooQuicklyMultiplier=25.0
+2567:[20:02:48] [Server thread/INFO]: Done (12.938s)! For help, type "help"
 === ULTIMELE 60 LINII DIN live.log ===
-[19:47:02] [Server thread/INFO]: [WorldGuard] (world) Fire spread is UNRESTRICTED.
-[19:47:02] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'world'
-[19:47:02] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
-[19:47:02] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
-[19:47:02] [Server thread/INFO]: [WorldGuard] (DIM-1) TNT ignition is PERMITTED.
-[19:47:02] [Server thread/INFO]: [WorldGuard] (DIM-1) Lighters are PERMITTED.
-[19:47:02] [Server thread/INFO]: [WorldGuard] (DIM-1) Lava fire is PERMITTED.
-[19:47:02] [Server thread/INFO]: [WorldGuard] (DIM-1) Fire spread is UNRESTRICTED.
-[19:47:02] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'DIM-1'
-[19:47:02] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
-[19:47:02] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
-[19:47:02] [Server thread/INFO]: [WorldGuard] (DIM1) TNT ignition is PERMITTED.
-[19:47:02] [Server thread/INFO]: [WorldGuard] (DIM1) Lighters are PERMITTED.
-[19:47:02] [Server thread/INFO]: [WorldGuard] (DIM1) Lava fire is PERMITTED.
-[19:47:02] [Server thread/INFO]: [WorldGuard] (DIM1) Fire spread is UNRESTRICTED.
-[19:47:02] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'DIM1'
-[19:47:02] [Server thread/INFO]: [WorldGuard] Loading region data...
-[19:47:02] [Server thread/INFO]: [WorldGuard] Unloading and saving region data that is currently loaded...
-[19:47:02] [Server thread/INFO]: [WorldGuard] Loading region data for loaded worlds...
-[19:47:02] [Server thread/INFO]: [WorldGuard] Loading region data...
-[19:47:02] [Server thread/INFO]: [WorldGuard] Regions saved after UUID migration! This won't happen again unless you change the relevant configuration option in WorldGuard's config.
-[19:47:02] [Server thread/INFO]: [ClaimChunk] Enabling ClaimChunk v0.0.21
-[19:47:02] [Server thread/INFO]: [ClaimChunk] PlaceholderAPI not found, not loading API.
-[19:47:02] [Server thread/INFO]: [ClaimChunk] Initialization complete.
-[19:47:02] [Server thread/INFO]: Server permissions file permissions.yml is empty, ignoring it
-[19:47:03] [Server thread/INFO]: Ksyxis: Speeding up the world loading... Delete the mod, if it got stuck after this message. (net.minecraft.server.dedicated.DedicatedServer func_213186_a)
-[19:47:03] [Server thread/INFO]: Preparing start region for dimension minecraft:overworld
-[19:47:03] [Server thread/WARN]: Method overwrite conflict for removeIf in modernfix-common.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin, previously written by me.jellysquid.mods.lithium.mixin.world.chunk_tickets.SortedArraySetMixin. Skipping method.
-[19:47:03] [Server thread/INFO]: Ksyxis: Enabled compatibility hack with ModernFix. (removeSpawnChunks: false)
-[19:47:03] [Server thread/INFO]: Preparing spawn area: 0%
-[19:47:03] [Server thread/INFO]: Time elapsed: 281 ms
-[19:47:03] [Server thread/INFO]: Done (13.490s)! For help, type "help"
-[19:47:03] [Server thread/INFO]: Loaded 0 license plates
-[19:47:03] [Server thread/WARN]: Garagenordner nicht gefunden!
-[19:47:03] [Server thread/WARN]: Running in offline mode - Voice chat encryption is not secure!
-[19:47:03] [Server thread/INFO]: Successfully initialized RadioManager
-[19:47:03] [Server thread/WARN]: Dedicated server took 70.6 seconds to load
-[19:47:03] [VoiceChatServerThread/INFO]: Server started at port 24454
-[19:47:03] [Server thread/INFO]: Essentials found a compatible payment resolution method: Vault Compatibility Layer (v1.7.3-b131)!
-[19:47:03] [Craft Scheduler Thread - 3/INFO]: Fetching version information...
-[19:47:03] [Craft Scheduler Thread - 1/INFO]: [Vault] Checking for Updates ... 
-[19:47:03] [Craft Scheduler Thread - 1/INFO]: [Vault] No new version available
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] [GitHubUpdate] Downloading update...
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] ----------------------------------------------
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     +==================+
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     |   SkinsRestorer  |
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     |------------------|
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     |  Standalone Mode |
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     +==================+
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] ----------------------------------------------
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     Current version: 14.2.12
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     New version: 15.12.6
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     A new version is available! Downloading it now...
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     Update downloaded successfully, it will be applied on the next restart.
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] ----------------------------------------------
-[19:47:04] [Craft Scheduler Thread - 3/WARN]: There is a new EssentialsX version available for download: 2.22.0.
-[19:47:04] [Craft Scheduler Thread - 3/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
-[19:47:04] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] [GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar
-[19:47:04] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
-[19:47:08] [Craft Scheduler Thread - 0/INFO]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
+[20:02:47] [Server thread/INFO]: [WorldGuard] (world) Fire spread is UNRESTRICTED.
+[20:02:47] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'world'
+[20:02:47] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
+[20:02:47] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
+[20:02:47] [Server thread/INFO]: [WorldGuard] (DIM-1) TNT ignition is PERMITTED.
+[20:02:47] [Server thread/INFO]: [WorldGuard] (DIM-1) Lighters are PERMITTED.
+[20:02:47] [Server thread/INFO]: [WorldGuard] (DIM-1) Lava fire is PERMITTED.
+[20:02:47] [Server thread/INFO]: [WorldGuard] (DIM-1) Fire spread is UNRESTRICTED.
+[20:02:47] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'DIM-1'
+[20:02:47] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
+[20:02:47] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
+[20:02:47] [Server thread/INFO]: [WorldGuard] (DIM1) TNT ignition is PERMITTED.
+[20:02:47] [Server thread/INFO]: [WorldGuard] (DIM1) Lighters are PERMITTED.
+[20:02:47] [Server thread/INFO]: [WorldGuard] (DIM1) Lava fire is PERMITTED.
+[20:02:47] [Server thread/INFO]: [WorldGuard] (DIM1) Fire spread is UNRESTRICTED.
+[20:02:47] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'DIM1'
+[20:02:47] [Server thread/INFO]: [WorldGuard] Loading region data...
+[20:02:47] [Server thread/INFO]: [WorldGuard] Unloading and saving region data that is currently loaded...
+[20:02:47] [Server thread/INFO]: [WorldGuard] Loading region data for loaded worlds...
+[20:02:47] [Server thread/INFO]: [WorldGuard] Loading region data...
+[20:02:47] [Server thread/INFO]: [WorldGuard] Regions saved after UUID migration! This won't happen again unless you change the relevant configuration option in WorldGuard's config.
+[20:02:47] [Server thread/INFO]: [ClaimChunk] Enabling ClaimChunk v0.0.21
+[20:02:47] [Server thread/INFO]: [ClaimChunk] PlaceholderAPI not found, not loading API.
+[20:02:47] [Server thread/INFO]: [ClaimChunk] Initialization complete.
+[20:02:47] [Server thread/INFO]: Server permissions file permissions.yml is empty, ignoring it
+[20:02:48] [Server thread/INFO]: Ksyxis: Speeding up the world loading... Delete the mod, if it got stuck after this message. (net.minecraft.server.dedicated.DedicatedServer func_213186_a)
+[20:02:48] [Server thread/INFO]: Preparing start region for dimension minecraft:overworld
+[20:02:48] [Server thread/WARN]: Method overwrite conflict for removeIf in modernfix-common.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin, previously written by me.jellysquid.mods.lithium.mixin.world.chunk_tickets.SortedArraySetMixin. Skipping method.
+[20:02:48] [Server thread/INFO]: Ksyxis: Enabled compatibility hack with ModernFix. (removeSpawnChunks: false)
+[20:02:48] [Server thread/INFO]: Preparing spawn area: 0%
+[20:02:48] [Server thread/INFO]: Time elapsed: 255 ms
+[20:02:48] [Server thread/INFO]: Done (12.938s)! For help, type "help"
+[20:02:48] [Server thread/INFO]: Loaded 0 license plates
+[20:02:48] [Server thread/WARN]: Garagenordner nicht gefunden!
+[20:02:48] [Server thread/WARN]: Running in offline mode - Voice chat encryption is not secure!
+[20:02:48] [Server thread/INFO]: Successfully initialized RadioManager
+[20:02:48] [Server thread/WARN]: Dedicated server took 69.66 seconds to load
+[20:02:48] [VoiceChatServerThread/INFO]: Server started at port 24454
+[20:02:48] [Server thread/INFO]: Essentials found a compatible payment resolution method: Vault Compatibility Layer (v1.7.3-b131)!
+[20:02:48] [Craft Scheduler Thread - 3/INFO]: Fetching version information...
+[20:02:48] [Craft Scheduler Thread - 1/INFO]: [Vault] Checking for Updates ... 
+[20:02:49] [Craft Scheduler Thread - 1/INFO]: [Vault] No new version available
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] [GitHubUpdate] Downloading update...
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] ----------------------------------------------
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     +==================+
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     |   SkinsRestorer  |
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     |------------------|
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     |  Standalone Mode |
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     +==================+
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] ----------------------------------------------
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     Current version: 14.2.12
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     New version: 15.12.6
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     A new version is available! Downloading it now...
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     Update downloaded successfully, it will be applied on the next restart.
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] ----------------------------------------------
+[20:02:49] [Craft Scheduler Thread - 3/WARN]: There is a new EssentialsX version available for download: 2.22.0.
+[20:02:49] [Craft Scheduler Thread - 3/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
+[20:02:49] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] [GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar
+[20:02:49] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
+[20:02:54] [Craft Scheduler Thread - 0/INFO]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
 === ULTIMELE 35 LINII DIN sup.log ===
  log blocat:
-[19:43:42] [Server thread/INFO]: iZentric issued server command: /pl
-[19:43:53] [Server thread/INFO]: iZentric issued server command: /tps
-[0m 19:44:38 mc=DA port=SUS log=1723
+[19:59:16] [Server thread/INFO]: Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
+[19:59:16] [Server thread/INFO]: [Cuantic/version] CONSOLE: » Cuantic 1.7.4 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
+[0m 20:00:16 mc=DA port=SUS log=2215
  log blocat:
-[19:43:42] [Server thread/INFO]: iZentric issued server command: /pl
-[19:43:53] [Server thread/INFO]: iZentric issued server command: /tps
-[0m 19:44:53 mc=DA port=SUS log=1723
+[19:59:16] [Server thread/INFO]: Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
+[19:59:16] [Server thread/INFO]: [Cuantic/version] CONSOLE: » Cuantic 1.7.4 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
+[0m 20:00:31 mc=DA port=SUS log=2215
  log blocat:
-[19:43:42] [Server thread/INFO]: iZentric issued server command: /pl
-[19:43:53] [Server thread/INFO]: iZentric issued server command: /tps
-[0m 19:45:09 mc=DA port=SUS log=1723
+[19:59:16] [Server thread/INFO]: Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
+[19:59:16] [Server thread/INFO]: [Cuantic/version] CONSOLE: » Cuantic 1.7.4 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
+[0m 20:00:47 mc=DA port=SUS log=2215
  log blocat:
-[19:43:42] [Server thread/INFO]: iZentric issued server command: /pl
-[19:43:53] [Server thread/INFO]: iZentric issued server command: /tps
-[0m 19:45:24 mc=DA port=SUS log=1723
+[19:59:16] [Server thread/INFO]: Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
+[19:59:16] [Server thread/INFO]: [Cuantic/version] CONSOLE: » Cuantic 1.7.4 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
+[0m 20:01:02 mc=DA port=SUS log=2215
  log blocat:
-[19:43:42] [Server thread/INFO]: iZentric issued server command: /pl
-[19:43:53] [Server thread/INFO]: iZentric issued server command: /tps
-[0mRULEAZA: pack CUANTIC-Server-CatServer-1.7.4.zip, java openjdk version "17.0.20.1" 2026-08-18
+[19:59:16] [Server thread/INFO]: Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
+[19:59:16] [Server thread/INFO]: [Cuantic/version] CONSOLE: » Cuantic 1.7.4 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
+[0mRULEAZA: pack CUANTIC-Server-CatServer-1.7.5.zip, java openjdk version "17.0.20.1" 2026-08-18
 JAVA: /home/mndvasi9/.local/jdk17/bin/java -> openjdk version "17.0.20.1" 2026-08-18
 args: MEMORIE -Xmx 6144M (masina are 11884MB), -Xms 1024M, plafon=niciodata
 args: OK (CatServer-1.16.5-1d8d6313-server.jar, 39 linii)
 MC pornit. Adresa: 92.5.171.150:25565. Ctrl+C = opresti DOAR supervisorul (serverul ramane sus).
- 19:45:53 mc=DA port=nu asculta log=1760
- 19:46:08 mc=DA port=nu asculta log=1791
- 19:46:23 mc=DA port=nu asculta log=1948
- 19:46:39 mc=DA port=SUS log=1973
- 19:46:54 mc=DA port=SUS log=2023
- 19:47:09 mc=DA port=SUS log=2125
- 19:47:24 mc=DA port=SUS log=2125
+ 20:01:39 mc=DA port=nu asculta log=2230
+ 20:01:54 mc=DA port=nu asculta log=2261
+ 20:02:09 mc=DA port=nu asculta log=2421
+ 20:02:25 mc=DA port=SUS log=2443
+ 20:02:40 mc=DA port=SUS log=2498
+ 20:02:56 mc=DA port=SUS log=2595
+ 20:03:11 mc=DA port=SUS log=2595
  log blocat:
-[19:47:04] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
-[19:47:08] [Craft Scheduler Thread - 0/INFO]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
+[20:02:49] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
+[20:02:54] [Craft Scheduler Thread - 0/INFO]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
 [0m=== CRASH REPORTS ===
 === DMESG OOM ===
-sup.log:  19:47:24 mc=DA port=SUS log=2125| log blocat:|[19:47:04] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/|[19:47:08] [Craft Scheduler Thread - 0/INFO]: [Cl
+sup.log:  20:03:11 mc=DA port=SUS log=2595| log blocat:|[20:02:49] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/|[20:02:54] [Craft Scheduler Thread - 0/INFO]: [Cl
 frpc.toml: 10
 adresa din fisier: 92.5.171.150:25565
   dinafara 1: "online":true | "version":"CUANTIC 1.16.5"
