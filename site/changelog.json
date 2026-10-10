@@ -50,5 +50,23 @@
    "t": "Badge de viață pe pagină",
    "p": "Fiecare actualizare de site sună de două ori la port și scrie SUS / REPRIT automat / JOS. Măsurătorile vechi nu mai pot trece drept „merge”."
   }
+ ],
+ "1.6.6": [
+  {
+   "t": "Poarta de login a ieșit din pack, nu doar de pe server",
+   "p": "`AuthMe` + `FastLogin` erau încă descărcate de `pack-rules.json` în toate cele 4 arhive ⇒ orice replay al build-ului le aducea înapoi și îți cerea parolă. Acum nu mai sunt în listă: intri pe `92.5.171.150:25565` fără cont. `SkinsRestorer` + `ProtocolLib` au rămas (skins), `LuckPerms` a rămas (grade)."
+  },
+  {
+   "t": "Zero componente fără motiv",
+   "p": "Am tăiat 2 jar-uri care nu produceau nimic altceva decât frecare la intrare. Ce a rămas în `plugins/`: EssentialsX (5 module) · ProtocolLib · SkinsRestorer · LuckPerms · Chunky · ClaimChunk · WorldEdit · WorldGuard · Vault · `Cuantic-Brand`. Fiecare are motiv, fiecare are cost (câte secunde la pornire, cât RAM)."
+  },
+  {
+   "t": "Brand Cuantic în `/version`, legat de build",
+   "p": "`Cuantic-Brand-1.6.5.jar` (același cod, urcă odată cu pack-ul) se compilează în CI pe niște antete locale și se montează în `plugins/` la CatServer, Arclight și Mist. A treia linie rămâne textul upstream: „based on / adapted from”."
+  },
+  {
+   "t": "Site-ul nu mai poate minți nici măcar 4 minute",
+   "p": "Dacă `pack_version` avansează înaintea publicării arhivei, pagina rămâne legată de ultimul asset care chiar există (fără link 404 și fără „None MB”); altfel linkurile, greutățile și titlul secțiunii se recitesc din release + `pack-rules.json`, la fiecare release, push pe analiză/site și în fiecare oră."
+  }
  ]
 }

@@ -351,7 +351,7 @@ straturi_rows = [
     ("Moduri de server", "AI-Improvements · In Control! · FastFurnace · FastWorkbench (+Placebo) · Bad Wither No Cookie · Get-It-Together-Drops · spark",
      "taie munca repetată (furneluri, craft, particule de crash, agregarea itemelor) + profilare mereu pornită",
      "12 componente de performanță pe server (Raport build), fiecare cu fișier și versiune în manifest", "analysis/ACCEPTANCE.md"),
-    ("Pluginuri", "LuckPerms · Chunky · AuthMe + FastLogin (scoatute la cererea ta, nu aruncate) · LuckPerms deja în listă",
+    ("Pluginuri", "LuckPerms · Chunky · AuthMe + FastLogin AU IEȘIT din pack în 1.6.6 (erau singura frână la poarta de login) · LuckPerms deja în listă",
      "Chunky pregătește chunk-urile dinainte, ca să nu le mai genereze în timp ce alergi",
      "pregen complet, restricționat de discul de 5 GB (66% plin) — altfel l-am rula Azi", "pack-rules.json"),
     ("Config", "spigot.yml: entity-activation-range 16/20/24/8, merge-radius 3.5/4.0, mob-spawn-range 3, item-despawn 2400, tick-inactive-villagers false",
@@ -415,8 +415,18 @@ def asset(tip, sufix):
         n = ("CUANTIC-%s-%s%s" % (tip, PACKV, sufix))
     mb = round(REL[n]["size"] / 1e6, 1) if n in REL else None
     return n, mb
+def _existent(tip, sufix):
+    """Daca pack_version a fost deja data inainte sa apuce CI-ul sa urce arhiva,
+    legam linkul de ultimul asset CARE EXISTA pe release, ca pagina sa nu dea 404."""
+    return next((k for k in sorted(REL, reverse=True) if tip in k and k.endswith(sufix)), None)
 CLIENT, CLIENT_MB = asset("Client", ".mrpack")
 SERVER, SERVER_MB = asset("Server-CatServer", ".zip")
+if CLIENT not in REL and _existent("Client", ".mrpack"):
+    CLIENT = _existent("Client", ".mrpack"); CLIENT_MB = round(REL[CLIENT]["size"]/1e6, 1)
+if SERVER not in REL and _existent("Server-CatServer", ".zip"):
+    SERVER = _existent("Server-CatServer", ".zip"); SERVER_MB = round(REL[SERVER]["size"]/1e6, 1)
+CLIENT_MB = CLIENT_MB if CLIENT_MB is not None else 0
+SERVER_MB = SERVER_MB if SERVER_MB is not None else 0
 DL = "https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/"
 print("pack %s | client %s (%s MB) | server %s (%s MB)" % (PACKV, CLIENT, CLIENT_MB, SERVER, SERVER_MB))
 
