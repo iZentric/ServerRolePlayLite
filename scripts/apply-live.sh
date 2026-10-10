@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
-# APPLY-LIVE — aduce serverul live la ULTIMA versiune de pe release `lite` si il porneste curat:
-# opreste supervisorul vechit, isi ia singur noul pack (world-ul ramane), pune flagurile de build,
-# reporneste frpc + java, si lasa verdictul in mesajul commitului.
-# Asta e UNEALTA de implantare/rollback: VETE_ASTEPTAT=1.6.0 -> aseaza fix versiunea aceea.
-# keepalive: orice iesire (si eroare, si Ctrl-C) reporneste ce am oprit noi
+unset RUNNER_TRACKING_ID
+export -n RUNNER_TRACKING_ID 2>/dev/null || true
 trap 'bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true' EXIT INT TERM
 D=$HOME/cuantic-live
 REPO=iZentric/ServerRolePlayLite

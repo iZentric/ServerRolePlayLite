@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# ENSURE-UP — lasa serverul PORNEST cand iese scriptul, chiar daca a crapat pe jumatate.
-# Il cheama tot ce opreste java (apply/tune/jvm-tune/ram-test/brand/no-login/op) prin `trap ... EXIT`
-# si il cheama si jobul de heartbit. Nu atinge lumea, nu rescrie configuri: doar aprinde ce lipseste.
+# ENSURE-UP — lasa serverul PORNIT cand iese scriptul, chiar daca a crapat pe jumatate.
+# CRITIC: stergem RUNNER_TRACKING_ID din mediu! Altfel GitHub Actions Runner omoara cu SIGKILL
+# toate procesele copil (c.sh, java, frpc) in secunda in care jobul se termina ("Complete job")!
+unset RUNNER_TRACKING_ID
+export -n RUNNER_TRACKING_ID 2>/dev/null || true
 D=$HOME/cuantic-live
 REPO=iZentric/ServerRolePlayLite
 BR=${ARENA_BRANCH:-arena/a29b4ef4-serverroleplaylite}
 cd "$D" 2>/dev/null || { echo "ensure-up: lipsa $D (ruleaza intai wake.sh)"; exit 0; }
+echo "92.5.171.150:25565" > "$D/ADRESA" 2>/dev/null || true
 
 # Proprietarul a cerut explicit "dai on la server" -> stergem orice OPRIT vechi
 rm -f "$D/OPRIT" 2>/dev/null || true
@@ -38,8 +41,8 @@ if ! pgrep -f 'bash .*c\.sh' >/dev/null 2>&1; then
   cp -f "$GITHUB_WORKSPACE/scripts/cuantic-live.sh" "$HOME/c.sh" 2>/dev/null || curl -fsSLo "$HOME/c.sh" --max-time 25 \
     "https://raw.githubusercontent.com/$REPO/$BR/scripts/cuantic-live.sh" || true
   if [ -f "$HOME/c.sh" ]; then
-    ( setsid bash "$HOME/c.sh" >> "$D/sup.log" 2>&1 < /dev/null & )
-    echo "ensure-up: supervisor PORNIT (el aprinde java in ~15 s)"
+    ( env -u RUNNER_TRACKING_ID setsid bash "$HOME/c.sh" >> "$D/sup.log" 2>&1 < /dev/null & )
+    echo "ensure-up: supervisor PORNIT (fara RUNNER_TRACKING_ID)"
   else
     echo "ensure-up: FARA c.sh - nu pot porni supervisorul"
   fi
@@ -54,7 +57,7 @@ fi
 if ! pgrep -f 'java @unix_args' >/dev/null 2>&1 && [ -f unix_args.txt ]; then
   J=$HOME/.local/jdk17/bin/java; [ -x "$J" ] || J=$(ls /usr/lib/jvm/java-17*/bin/java 2>/dev/null | head -1)
   [ -p in.fifo ] || mkfifo -m 600 in.fifo
-  ( setsid "$J" @unix_args.txt 3<>"$D/in.fifo" <&3 >> "$D/live.log" 2>&1 < /dev/null & )
+  ( env -u RUNNER_TRACKING_ID setsid "$J" @unix_args.txt 3<>"$D/in.fifo" <&3 >> "$D/live.log" 2>&1 < /dev/null & )
   echo "ensure-up: java pornita direct (fallback)"
 fi
 sleep 3
@@ -66,7 +69,7 @@ if [ ! -f "$HOME/frpc.toml" ]; then
   printf 'serverAddr = "92.5.171.150"\nserverPort = 443\nauth.method = "token"\nauth.token = "pateu-de-codru-7"\n\n[[proxies]]\nname = "mc"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 25565\nremotePort = 25565\n' > "$HOME/frpc.toml"
 fi
 if [ -x "$HOME/frpc" ] && ! pgrep -f 'frpc -c' >/dev/null 2>&1; then
-  ( setsid "$HOME/frpc" -c "$HOME/frpc.toml" >> "$HOME/frpc.log" 2>&1 < /dev/null & )
+  ( env -u RUNNER_TRACKING_ID setsid "$HOME/frpc" -c "$HOME/frpc.toml" >> "$HOME/frpc.log" 2>&1 < /dev/null & )
   sleep 2
   echo "ensure-up: frpc PORNIT ($(pgrep -f 'frpc -c' | head -1))"
 fi
@@ -75,9 +78,9 @@ fi
 #    ramanea neconsumat in fisier (verificat: cmd.in_neconsumat=[op iZentric list]).
 if [ -f "$D/cmd.in" ]; then
   if ! pgrep -f "cuantic-mov" >/dev/null 2>&1; then
-    printf '#!/usr/bin/env bash\n# cuantic-mov - duce comenzile din cmd.in in stdoin java\nD=%s\nwhile :; do\n  [ -p "$D/in.fifo" ] || mkfifo -m 600 "$D/in.fifo"\n  tail -n +$(( $(wc -l < "$D/cmd.in" 2>/dev/null || echo 0) + 1 )) -F "$D/cmd.in" >> "$D/in.fifo" 2>/dev/null\n  sleep 3\ndone\n' "$D" > "$D/cuantic-mov.sh"
+    printf '#!/usr/bin/env bash\n# cuantic-mov - duce comenzile din cmd.in in stdoin java\nunset RUNNER_TRACKING_ID\nD=%s\nwhile :; do\n  [ -p "$D/in.fifo" ] || mkfifo -m 600 "$D/in.fifo"\n  tail -n +$(( $(wc -l < "$D/cmd.in" 2>/dev/null || echo 0) + 1 )) -F "$D/cmd.in" >> "$D/in.fifo" 2>/dev/null\n  sleep 3\ndone\n' "$D" > "$D/cuantic-mov.sh"
     chmod +x "$D/cuantic-mov.sh"
-    ( setsid bash "$D/cuantic-mov.sh" >> "$D/mov.log" 2>&1 < /dev/null & )
+    ( env -u RUNNER_TRACKING_ID setsid bash "$D/cuantic-mov.sh" >> "$D/mov.log" 2>&1 < /dev/null & )
     echo "ensure-up: mover cmd.in->in.fifo PORNIT"
   else
     echo "ensure-up: mover alive"

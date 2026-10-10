@@ -16,6 +16,8 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
+env:
+  RUNNER_TRACKING_ID: ""
 jobs:
   vm:
     runs-on: [self-hosted]

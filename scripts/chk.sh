@@ -1,11 +1,30 @@
 #!/usr/bin/env bash
-# CHK — doar citeste: traieste serverul dupa job? e ascultat portul? raspunde dinafara?
+# CHK — verifica daca serverul traieste, curata RUNNER_TRACKING_ID si il porneste daca lipsea
+unset RUNNER_TRACKING_ID
+export -n RUNNER_TRACKING_ID 2>/dev/null || true
 LOG=/tmp/chk.txt; : > $LOG
 say(){ echo "$*" | tee -a $LOG; }
 DIR=$HOME/cuantic-live
 say "== CHK — $(date -u '+%F %T UTC') =="
-say "tmux: $(tmux ls 2>&1 | tr '\n' ';')"
-say "java: $(pgrep -fc 'unix_args.txt') procese | bore: $(pgrep -fc 'bore local')"
+JPID0=$(pgrep -f 'java @unix_args' | head -1)
+SPID0=$(pgrep -f 'bash .*c\.sh' | head -1)
+say "stare la intrare in CHK: java=${JPID0:-NU} sup=${SPID0:-NU} port25565=$(ss -lnt 2>/dev/null | grep -c ':25565') frpc=$(pgrep -f 'frpc -c' | head -1)"
+# Daca supervisorul vechi avea RUNNER_TRACKING_ID in /proc/PID/environ, il repornim curat!
+if [ -n "$SPID0" ] && grep -qa "RUNNER_TRACKING_ID" "/proc/$SPID0/environ" 2>/dev/null; then
+  say "ATENTIE: supervisorul $SPID0 avea RUNNER_TRACKING_ID -> il inlocuim cu unul imun la finalul jobului"
+  kill "$SPID0" 2>/dev/null || true; sleep 1
+fi
+if [ -z "$JPID0" ] || ! pgrep -f 'bash .*c\.sh' >/dev/null 2>&1 || ! pgrep -f 'frpc -c' >/dev/null 2>&1; then
+  bash "$(dirname "$0")/ensure-up.sh" >> $LOG 2>&1 || true
+  for _w in $(seq 1 18); do
+    ss -lnt 2>/dev/null | grep -q ':25565' && break
+    sleep 5
+  done
+fi
+JPID=$(pgrep -f 'java @unix_args' | head -1)
+SPID=$(pgrep -f 'bash .*c\.sh' | head -1)
+FPID=$(pgrep -f 'frpc -c' | head -1)
+say "dupa ensure-up: java=${JPID:-NU} (RUNNER_TRACKING_ID=$(grep -ac 'RUNNER_TRACKING_ID' /proc/${JPID:-1}/environ 2>/dev/null || echo 0)) | sup=${SPID:-NU} (RUNNER_TRACKING_ID=$(grep -ac 'RUNNER_TRACKING_ID' /proc/${SPID:-1}/environ 2>/dev/null || echo 0)) | frpc=${FPID:-NU}"
 say "uptime: $(uptime | sed 's/^ *//')"
 say "ss 25565:"; ss -lnt 2>/dev/null | grep -E '25565|24454' | sed 's/^/  /' >> $LOG
 say "live.log: $(wc -l < $DIR/live.log 2>/dev/null) linii | $(grep -m1 -oE 'Done \([0-9.]+s\)' $DIR/live.log 2>/dev/null)"

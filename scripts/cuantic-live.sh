@@ -1,7 +1,8 @@
 #!/bin/bash
 # CUANTIC live v5 — serverul + puntea de comenzi.
-# In aceeasi masina cu serverul: java isi tine stdin deschis printr-un fifo (fara EOF = fara "Stopping server" fantoma)
-# si citeste comenzi de consola din ~/cuantic-live/cmd.in (scrise din orice container, inclusiv de agent).
+# CRITIC: stergem RUNNER_TRACKING_ID ca GitHub Actions Runner sa NU omoare c.sh/java/frpc la finalul joburilor!
+unset RUNNER_TRACKING_ID
+export -n RUNNER_TRACKING_ID 2>/dev/null || true
 D=$HOME/cuantic-live
 REPO=iZentric/ServerRolePlayLite
 J=$HOME/.local/jdk17/bin/java
@@ -77,12 +78,12 @@ start_mc() {
   [ -f "$HOME/cuantic-args.sh" ] && bash "$HOME/cuantic-args.sh" "$D"
   fixargs
   echo "==== pornire $(date -u '+%F %T UTC') (memorie: $(grep -aoE '^-Xmx[^ ]*' unix_args.txt | head -1), java: $J) ====" >> live.log
-  setsid "$J" @unix_args.txt <&3 >> live.log 2>&1 &
+  env -u RUNNER_TRACKING_ID setsid "$J" @unix_args.txt <&3 >> live.log 2>&1 &
 }
 echo "JAVA: $J -> $("$J" -version 2>&1 | head -1)"
 [ -s "$(ls CatServer-*.jar 2>/dev/null | head -1)" ] || echo "!! jar absent - ruleaza jobul JAVA inainte"
 [ -f "$HOME/frpc.toml" ] || printf 'serverAddr = "92.5.171.150"\nserverPort = 443\nauth.method = "token"\nauth.token = "pateu-de-codru-7"\n\n[[proxies]]\nname = "mc"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 25565\nremotePort = 25565\n' > "$HOME/frpc.toml"
-pgrep -f 'frpc -c' >/dev/null 2>&1 || ( setsid "$HOME/frpc" -c "$HOME/frpc.toml" > "$HOME/frpc.log" 2>&1 < /dev/null & )
+pgrep -f 'frpc -c' >/dev/null 2>&1 || ( env -u RUNNER_TRACKING_ID setsid "$HOME/frpc" -c "$HOME/frpc.toml" > "$HOME/frpc.log" 2>&1 < /dev/null & )
 # pază de dublu-pornit: daca java e deja SUS (pornit de ex. de un job de diagnostic), il supervisez
 # si il folosesc, dar NU mai pornesc al doilea server pe aceeasi lume (ar bloca region lock-ul).
 if pgrep -f 'java @unix_args' >/dev/null 2>&1; then
