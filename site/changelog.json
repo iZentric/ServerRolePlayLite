@@ -1,4 +1,10 @@
 {
+ "1.7.5": [
+  {
+   "t": "Păstrat doar Oculus pe Client (fără CTM-MC) pentru fixul texturilor negru-mov cu consum minim de RAM",
+   "p": "Conform cerinței, în **1.7.5** păstrăm pe Client doar **Oculus 1.4.7** (cu `shaderPack=(off)` în `overrides/optionsshaders.txt` ca să nu scadă FPS-ul pe laptopuri vechi) și scoatem `CTM-MC` (`ConnectedTexturesMod`), păstrând fixul `ModernFix` (`dynamic_resources=false` pe client), `use_compact_vertex_format: false` în `rubidium-options.json` și texturile PNG `RGBA`/`RGB` intacte."
+  }
+ ],
  "1.7.4": [
   {
    "t": "Fix complet pentru texturile negru-mov pe iteme (Oculus + CTM păstrate pe Client, PNG RGBA 100% lossless, ModernFix ModelBakeEvent fix)",

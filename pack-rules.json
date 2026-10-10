@@ -1,11 +1,12 @@
 {
   "pack_name": "CUANTIC",
-  "pack_version": "1.7.4",
+  "pack_version": "1.7.5",
  "minecraft": "1.16.5",
  "forge": "36.2.42",
- "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE DE GAMEplay + Oculus + CTM-MC (necesare pt texturile/modelele din Pizzaland/ModernXL ca sa nu apara negru-mov). Se scot doar DynamicSurroundings, animatii duble si meniuri inutile.",
+ "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE DE GAMEplay + Oculus (necesar pt texturi/pipeline ca sa nu apara negru-mov). Se scot doar DynamicSurroundings, CTM-MC, animatii duble si meniuri inutile.",
  "remove_from_client": [
   "DynamicSurroundings",
+  "CTM-MC",
   "lightfallclient",
   "InGameAccountSwitcher",
   "notenoughanimations",
