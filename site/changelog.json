@@ -1,4 +1,14 @@
 {
+ "1.7.4": [
+  {
+   "t": "Fix complet pentru texturile negru-mov pe iteme (Oculus + CTM păstrate pe Client, PNG RGBA 100% lossless, ModernFix ModelBakeEvent fix)",
+   "p": "Am identificat și eliminat toate cele 4 cauze pentru care unele iteme apăreau cu textură negru-mov (`missingModel` / `MissingTextureSprite`): (1) am readus **Oculus 1.4.7** și **CTM (ConnectedTexturesMod) 1.1.2.6** în Client (cu `overrides/optionsshaders.txt` setat pe `shaderPack=(off)` ca să nu scadă FPS-ul pe laptopuri vechi); (2) în `overrides/config/modernfix-mixins.properties` pe Client am setat `mixin.perf.dynamic_resources=false` și `faster_item_rendering=false`, deoarece în codul `ModernFix` (`ModelBakeEventHelper.java`) activarea `dynamic_resources` returnează `missingModel` (cubul negru-mov) pentru modelele speciale înregistrate în `ModelBakeEvent` de `Pizzaland`, `ModernXL`, `CGM` și `Vehicle Mod`; (3) în `rubidium-options.json` am setat `use_compact_vertex_format: false` pentru compatibilitate UV 100% cu `Oculus`; (4) compresia PNG din `slim_client_jar` este acum 100% lossless în modul original `RGBA`/`RGB` (fără cuantizare în paletă indexată `P`)."
+  },
+  {
+   "t": "Toate optimizările de FPS și Server din 1.7.3 păstrate integral",
+   "p": "Păstrează configurile pre-tunate `rubidium-options.json` (`smooth_lighting: OFF`, `enable_clouds: false`, `always_defer_chunk_updates: true`), `sodium-extra-options.json` (`fog_distance: 33`, animații lavă/foc oprite), `entityculling.json` (`tracingDistance: 64`, `tickCulling: true`), `ferritecore-mixin.toml`, plus cele 35 de moduri și 14 pluginuri pe Server cu 0 erori în log."
+  }
+ ],
  "1.7.3": [
   {
    "t": "Configuri pre-tunate în Client pentru Rubidium, Rubidium Extra, EntityCulling și FerriteCore (FPS maxim din prima secundă)",

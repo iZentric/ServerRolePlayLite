@@ -284,10 +284,11 @@ def slim_client_jar(src_path, dst_path):
                         try:
                             im = Image.open(io.BytesIO(data))
                             im.load()
-                            if im.mode in ("RGBA", "RGB", "LA"):
-                                q = im.quantize(colors=256, method=Image.Quantize.FASTOCTREE)
+                            if im.mode in ("RGBA", "RGB"):
+                                # Recompresie 100% LOSSLESS in modul original RGBA/RGB (fara quantize 'P',
+                                # ca NativeImage/Oculus/CTM sa nu afiseze niciodata texturi negru-mov!)
                                 buf = io.BytesIO()
-                                q.save(buf, format="PNG", optimize=True, compress_level=9)
+                                im.save(buf, format="PNG", optimize=True, compress_level=9)
                                 nd = buf.getvalue()
                                 if 64 < len(nd) < len(data):
                                     data = nd
@@ -380,14 +381,30 @@ def strip_client_assets(jar_path):
 
 
 MODERNFIX_MIXINS_PROPS = """\
-# CUANTIC — deblocheaza optimizari ModernFix care sunt OFF by default in 1.16.5:
-# dynamic_resources = incarca modelele 3D (Pizzaland/Modernxl) doar cand sunt pe ecran (-1 GB RAM!)
+# CUANTIC SERVER — pe server nu se randeaza iteme, deci dynamic_resources e 100% sigur
 mixin.perf.dynamic_resources=true
-mixin.perf.faster_item_rendering=true
 mixin.perf.dedup_location=true
 mixin.perf.compact_bit_storage=true
 mixin.perf.thread_priorities=true
 mixin.bugfix.chunk_deadlock=true
+"""
+
+MODERNFIX_MIXINS_PROPS_CLIENT = """\
+# CUANTIC CLIENT — pastram dynamic_resources=false si faster_item_rendering=false (exact ca in
+# ModernFix default), fiindca pe Forge 1.16.5 ModelBakeEventHelper din dynamic_resources returneaza
+# missingModel (textura negru-mov!) pentru unele iteme 3D din Pizzaland / ModernXL / CGM / VehicleMod!
+mixin.perf.dynamic_resources=false
+mixin.perf.faster_item_rendering=false
+mixin.perf.dedup_location=true
+mixin.perf.compact_bit_storage=true
+mixin.perf.thread_priorities=true
+mixin.bugfix.chunk_deadlock=true
+"""
+
+OPTIONSSHADERS_TXT = """\
+# CUANTIC — Oculus este prezent pt compatibilitate texturi/pipeline, dar cu shaderele OPRITE by default
+# ca sa nu consume FPS pe laptopuri vechi. Pe PC bun poti activa orice shader din Video Settings -> Shader Packs.
+shaderPack=(off)
 """
 
 FERRITECORE_MIXIN_TOML = """\
@@ -425,7 +442,7 @@ RUBIDIUM_OPTIONS_JSON = """\
     "use_entity_culling": true,
     "use_particle_culling": true,
     "use_fog_occlusion": true,
-    "use_compact_vertex_format": true,
+    "use_compact_vertex_format": false,
     "use_block_face_culling": true,
     "allow_direct_memory_access": true,
     "ignore_driver_blacklist": false
@@ -1055,8 +1072,9 @@ def main():
     with zipfile.ZipFile(client_mrpack, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("modrinth.index.json", json.dumps(new_index, indent=2))
         z.writestr("overrides/options.txt", OPTIONS_LITE)
+        z.writestr("overrides/optionsshaders.txt", OPTIONSSHADERS_TXT)
         z.writestr("overrides/SETARI-PC-BUN.txt", GHID_PC_BUN)
-        z.writestr("overrides/config/modernfix-mixins.properties", MODERNFIX_MIXINS_PROPS)
+        z.writestr("overrides/config/modernfix-mixins.properties", MODERNFIX_MIXINS_PROPS_CLIENT)
         z.writestr("overrides/config/ferritecore-mixin.toml", FERRITECORE_MIXIN_TOML)
         z.writestr("overrides/config/rubidium-options.json", RUBIDIUM_OPTIONS_JSON)
         z.writestr("overrides/config/sodium-extra-options.json", RUBIDIUM_EXTRA_OPTIONS_JSON)
