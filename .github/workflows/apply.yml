@@ -1,0 +1,27 @@
+name: APPLY — aduce serverul live la ultimul release si il porneste
+on:
+  push:
+    paths: [ "scripts/apply-live.sh", "deploy/apply.txt", ".github/workflows/apply.yml" ]
+  workflow_dispatch:
+    inputs:
+      versiune: { description: "asteapta versiunea asta pe release `lite` (ex 1.6.0)", required: false, default: "1.6.0" }
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  a:
+    runs-on: [self-hosted]
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/apply-live.sh
+        env:
+          VETA_ASTEPTAT: ${{ github.event.inputs.versiune }}
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

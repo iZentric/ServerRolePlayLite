@@ -1,0 +1,71 @@
+name: Build Freeroam Lite
+on:
+  push:
+    branches: [ "arena/a29b4ef4-serverroleplaylite" ]
+    paths:
+      - "scripts/build_lite.py"
+      - "scripts/brand_engine.py"
+      - "pack-rules.json"
+      - "tools/cuantic-brand/**"
+      - ".github/workflows/build-lite.yml"
+  workflow_dispatch: {}
+permissions:
+  contents: write
+  actions: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download pack original
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download pack-original -p '*.mrpack' -O pack.mrpack
+      - name: Java 17 (acelasi Java de pe server) pentru validarea flagurilor
+        uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17" }
+      - name: Validare + taiere flaguri JVM (deploy/jvm-flags-17.txt)
+        run: |
+          python3 scripts/prune-flags.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f deploy/jvm-flags-17.txt >/dev/null 2>&1 || true
+          git diff --cached --quiet || { git commit -q -m "deploy/jvm-flags-17.txt: validate pe Java 17 in CI" || true; git pull --rebase -q origin ${{ github.ref_name }} || true; git push -q origin HEAD:${{ github.ref_name }} || true; }
+      - name: Build lite packs
+        run: |
+          pip install pillow -q
+          set -o pipefail
+          mkdir -p out
+          python3 scripts/build_lite.py pack.mrpack out 2>&1 | tee out/build.log
+      - name: Commit report
+        if: always()
+        run: |
+          mkdir -p analysis
+          cp out/REPORT.md analysis/REPORT.md 2>/dev/null || true
+          cp out/build.log analysis/build.log 2>/dev/null || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f analysis || true
+          git commit -m "analysis: raport build Freeroam Lite" || echo "nimic de comis"
+          git pull --rebase origin ${{ github.ref_name }} || true
+          git push || true
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete lite -y --cleanup-tag || true
+          sleep 3
+          VERSAJ=$(python3 -c "import json;print(json.load(open('pack-rules.json'))['pack_version'])")
+          gh release create lite out/*.mrpack out/*.zip \
+            --target ${{ github.sha }} \
+            --title "⚛️ CUANTIC $VERSAJ (client + server)" \
+            --notes-file out/REPORT.md
+
+
+      - name: VALIDARE FLAGURI JVM pe Java 11 real
+        uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17" }   # 1.6.0: ACEEASI Java pe care ruleaza serverul (11 -> 17)
+      - name: Testeaza flagurile (daca unul nu exista, build-ul pica aici, nu serverul)
+        run: |
+          FLAGS=$(python3 -c "import re;s=open('scripts/build_lite.py').read();m=re.search(r'AIKAR_FLAGS = \((.*?)\n\)',s,re.S);print(eval('('+m.group(1)+')'))")
+          java $FLAGS -Xms64M -Xmx256M -version && echo "TOATE FLAGURILE EXISTA SI MERG"

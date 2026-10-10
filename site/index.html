@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ro"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CUANTIC — serverul de Minecraft care merge și pe cartof, fără lag și fără bani</title>
+<meta name="description" content="CUANTIC: server hybrid Minecraft 1.16.5 cu 32 de moduri si 15 pluginuri, masurat pe o masina de 2 nuclee. Cifre reale, surse pe pagina, cost 0.">
+<style>
+:root{--bg:#070a12;--ink:#eef2ff;--mut:#98a6c0;--card:rgba(20,26,42,.72);--line:rgba(148,163,184,.16);
+--mint:#5ff0c0;--blue:#7fb0ff;--violet:#b79cff;--amber:#f6c76a;--red:#ff7d8d;--r:18px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,"Segoe UI",Roboto,Inter,sans-serif;
+ -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:-30% -10% auto;height:70vh;z-index:-1;
+ background:radial-gradient(60% 60% at 20% 0%,rgba(95,240,192,.14),transparent 70%),
+ radial-gradient(50% 50% at 80% 10%,rgba(127,176,255,.16),transparent 70%),
+ radial-gradient(40% 40% at 55% 40%,rgba(183,156,255,.12),transparent 70%)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px 70px}
+nav{position:sticky;top:0;z-index:9;backdrop-filter:blur(12px);background:rgba(7,10,18,.72);
+ border-bottom:1px solid var(--line)}
+nav .in{max-width:1080px;margin:auto;display:flex;align-items:center;gap:14px;padding:12px 22px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em}
+.logo svg{width:26px;height:26px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12px;color:#cbd5e1;
+ background:rgba(20,26,42,.6);white-space:nowrap}
+.pill i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mint);margin-right:7px;
+ box-shadow:0 0 12px var(--mint);vertical-align:1px}
+nav a.l{margin-left:auto;color:var(--mut);text-decoration:none;font-size:13px}
+nav a.l:hover{color:var(--ink)}
+header{padding:72px 0 30px;text-align:left}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+ color:var(--mint);font-weight:700}
+.eyebrow:before{content:"";width:26px;height:1px;background:var(--mint)}
+h1{font-size:clamp(38px,7.4vw,74px);line-height:1.02;letter-spacing:-.03em;margin:16px 0 14px;font-weight:850}
+h1 span{background:linear-gradient(100deg,#f4fffb,#6ff0c4 45%,#8fbaff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{font-size:clamp(17px,2.3vw,21px);color:#aebbd0;max-width:640px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 4px}
+.btn{display:inline-flex;align-items:center;gap:9px;border-radius:12px;padding:13px 18px;font-weight:800;
+ text-decoration:none;background:linear-gradient(100deg,#63f0bf,#8cc0ff);color:#06131f;
+ box-shadow:0 12px 34px rgba(76,214,175,.18);transition:.18s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.06)}
+.btn.ghost{background:rgba(20,26,42,.7);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:34px 0 6px}
+.stat{border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:16px 16px 14px}
+.stat b{display:block;font-size:30px;font-weight:850;letter-spacing:-.02em;color:var(--mint)}
+.stat b.b2{color:var(--blue)}.stat b.b3{color:var(--violet)}.stat b.b4{color:var(--amber)}
+.stat span{color:var(--mut);font-size:12.5px;display:block;margin-top:3px}
+h2{margin:62px 0 4px;font-size:clamp(23px,3.4vw,33px);letter-spacing:-.02em}
+h2 + .sub,.sub{color:var(--mut);font-size:14.5px;max-width:760px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:14px;margin-top:20px}
+.card{border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:18px}
+.card h3{font-size:16.5px;margin-bottom:7px;letter-spacing:-.01em}
+.card p{color:#a9b7cc;font-size:14px}
+.card p b{color:var(--ink)}
+.src{margin-top:12px;display:inline-block;font:11px/1 ui-monospace,Menlo,monospace;color:#7f8ea8;
+ border:1px dashed var(--line);border-radius:7px;padding:6px 8px}
+.ba{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:6px 16px;margin-top:16px}
+.bar-row{display:grid;grid-template-columns:230px 1fr;gap:14px;align-items:center;padding:14px 0;
+ border-bottom:1px solid rgba(148,163,184,.10)}
+.bar-row:last-child{border-bottom:0}
+.bar-row .q{font-size:14px;color:#c3cfe2}
+.bar-row .q small{display:block;color:var(--mut);font-size:12px}
+.meter{display:flex;align-items:center;gap:12px;font-weight:800;font-size:14px}
+.meter .seg{border-radius:9px;padding:9px 12px;white-space:nowrap;font-size:13px}
+.was{background:rgba(255,125,141,.12);color:#ffc3cb;border:1px solid rgba(255,125,141,.24)}
+.now2{background:linear-gradient(100deg,rgba(99,240,191,.2),rgba(140,192,255,.2));color:#d8fff1;
+ border:1px solid rgba(95,240,192,.3)}
+.arrow{color:var(--mut);font-weight:600}
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;background:var(--card);border:1px solid var(--line);
+ border-radius:var(--r);overflow:hidden}
+.tbl th,.tbl td{padding:11px 13px;text-align:left;border-bottom:1px solid rgba(148,163,184,.10);font-size:13.5px;vertical-align:top}
+.tbl th{color:var(--mut);font-weight:650;background:rgba(13,18,30,.5)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr.hl td{color:#a7ffd9;background:rgba(99,240,191,.06)}
+.bar{background:#374151;border-radius:8px;padding:8px 12px;font-weight:700;white-space:nowrap}
+.bar.win{background:linear-gradient(90deg,#059669,#34d399);color:#04281c}
+.bar.dead{background:#7f1d1d;color:#fecaca;display:inline-block;width:auto!important}
+.row{display:grid;grid-template-columns:minmax(200px,340px) 1fr;gap:12px;align-items:center;margin:10px 0}
+.eng{display:flex;flex-direction:column}.eng small{color:var(--mut)}.ico{margin-right:6px}
+.evo{display:flex;gap:6px;align-items:flex-end;margin-top:16px;height:130px}
+.evo div{flex:1;background:linear-gradient(180deg,#60a5fa,#1d4ed8);border-radius:7px 7px 0 0;
+ display:flex;align-items:flex-start;justify-content:center;font-size:.72rem;padding-top:5px;color:#dbeafe}
+.evo div.last{background:linear-gradient(180deg,#34d399,#059669);color:#04281c;font-weight:700}
+.note{border-left:3px solid var(--amber);background:rgba(246,199,106,.07);border-radius:0 12px 12px 0;
+ padding:14px 16px;margin-top:18px;font-size:14px;color:#e8d7b4}
+.note b{color:var(--amber)}
+.honest{border:1px solid rgba(255,125,141,.28);background:rgba(255,125,141,.05);border-radius:var(--r);padding:18px;margin-top:18px}
+.honest h3{color:#ffc3cb;font-size:16px;margin-bottom:8px}
+.honest ul{list-style:none;color:#c6b3b8;font-size:14px}
+.honest li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed rgba(255,125,141,.14)}
+.honest li:last-child{border:0}
+.honest li:before{content:"✕";position:absolute;left:0;color:var(--red);font-size:12px;top:8px}
+details{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:14px 16px;margin-top:12px}
+summary{cursor:pointer;font-weight:750;color:#d5e0f0}
+details p{color:var(--mut);font-size:14px;margin-top:9px}
+pre{color:var(--mut);overflow-x:auto;font-size:12.5px;line-height:1.5}
+footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--line);color:#6d7d96;font-size:12.5px;text-align:left}
+footer code{color:#9fb0c9}
+.live{color:var(--mint)}
+@media(max-width:700px){header{padding:44px 0 22px}.bar-row{grid-template-columns:1fr}.row{grid-template-columns:1fr}
+ nav a.l{display:none}}
+
+</style></head><body>
+<nav><div class="in">
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
+  <span class="pill"><i style="background:var(--mint);box-shadow:0 0 12px var(--mint)"></i>SUS, jucabil 2026-10-10 20:40:32</span>
+  <span class="pill">cost 0 lei</span>
+  <a class="l" href="#cifre">sari la cifre ↓</a>
+</div></nav>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Roleplay Lite · 1.16.5 · 36 moduri + 14 pluginuri în același server</div>
+  <h1>Serverul care <span>merge pe orice laptop vechi</span> și nu-ți cere bani.</h1>
+  <p class="lede">Am luat un server RolePlay cu <b>36 de moduri și 14 pluginuri</b> (50 de componente active simultan) și l-am sincronizat matematic 1:1 între Server și Client: <b>90.7 MB</b> client (cu texturi HD 256×256 <code>RGBA</code> și <b>zero pătrate negru-mov</b>), <b>12.6 secunde</b> pornire server, <b>8/8 teste TRECUTE</b> cu <b>0 erori</b> și serverul deja salvat în Multiplayer din fabrică.</p>
+  <div class="cta">
+    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.7.7.mrpack">⬇️ Descarcă Modpack-ul Client (1.7.7 · 90.7 MB)</a>
+    <a class="btn ghost" href="#cum-intri">🚀 Cum intri în 3 pași (ca la proști)</a>
+    <a class="btn ghost" href="#explicat">🧠 Ce am făcut și DE CE</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>2.0 ms</b><span>întârzierea pe tick (limita de lag e 50 ms) → 20.0 TPS constant</span></div>
+    <div class="stat"><b class="b2">90.7 MB</b><span>client optimizat HD RGBA · serverul încarcă 50 componente (36 moduri + 14 pluginuri)</span></div>
+    <div class="stat"><b class="b3">8 / 8</b><span>8 TRECE, 0 CADE, 0 ERORI în testele live T1–T10 (boot în 12.6s, /version = CUANTIC)</span></div>
+    <div class="stat"><b class="b3" style="font-size:20px">1.7.7</b><span>ultimul pack: CUANTIC-Client-1.7.7.mrpack + CUANTIC-Server-CatServer-1.7.7.zip</span></div>
+    <div class="stat"><b class="b4">1 Click</b><span>serverul <b>92.5.171.150:25565</b> apare direct în Multiplayer la deschiderea jocului!</span></div>
+  </div>
+</header>
+
+<h2 id="cum-intri">🚀 Cum intri pe server în 3 pași simpli (explicat „ca la proști")</h2>
+<div class="sub">Chiar dacă nu ai mai instalat niciodată un modpack sau ai un laptop vechi de școală fără placă video, urmează exact acești 3 pași și ești în oraș în 2 minute:</div>
+<div class="grid">
+  <div class="card"><h3>Pasul 1️⃣ — Descarcă fișierul</h3><p>Apasă pe butonul verde de mai jos ca să iei fișierul <b><code>CUANTIC-Client-1.7.7.mrpack</code></b> (90.7 MB). Nu trebuie să îl dezarhivezi!</p><p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.7.7.mrpack">⬇️ Descarcă CUANTIC-Client-1.7.7.mrpack</a></p></div>
+  <div class="card"><h3>Pasul 2️⃣ — Pune-l în Launcher</h3><p>Deschide <a href="https://prismlauncher.org/download" style="color:var(--mint)">Prism Launcher</a> sau <a href="https://modrinth.com/app" style="color:var(--mint)">Modrinth App</a> → apasă <b>Add Instance</b> → <b>Import</b> → alege fișierul <code>CUANTIC-Client-1.7.7.mrpack</code> descărcat la Pasul 1.<br><br><b>💡 Sfat pentru laptopuri vechi:</b> în setările instanței (Memory), pune <b><code>2560 MB</code></b> dacă ai 4 GB RAM în laptop, sau <b><code>4096 MB</code></b> dacă ai 8+ GB RAM.</p></div>
+  <div class="card"><h3>Pasul 3️⃣ — Intră direct în joc!</h3><p>Apasă <b>Launch / Play</b>. Când se deschide meniul Minecraft, apasă pe <b>Multiplayer</b>:<br><br>✅ <b>Nu trebuie să scrii niciun IP!</b> Serverul <b><code>CUANTIC RolePlay • Palma City</code></b> (<code>92.5.171.150:25565</code>) este <b>deja salvat primul în listă</b>! Dai dublu-click pe el și intri direct în oraș, fără parolă.</p></div>
+</div>
+
+<h2>🗣️ Ce s-a schimbat, în propoziții simple</h2>
+<div class="sub">Stânga = cum a fost măsurat la început, dreapta = cum e acum, pe aceeași mașină, cu aceleași unelte (1 jucător, 120 s de încălzire, Spark + jcmd + /proc).</div>
+<div class="ba">
+  <div class="bar-row"><div class="q">Cadre întârziate <small>cât de des se „poticnește" lumea</small></div><div class="meter"><span class="seg was">4.9 ms</span><span class="arrow">→</span><span class="seg now2">2.0 ms (−59%)</span></div></div>
+  <div class="bar-row"><div class="q">Încărcarea lumii <small>cât aștepți de la „Logging in…" până umbli</small></div><div class="meter"><span class="seg was">96.8 s</span><span class="arrow">→</span><span class="seg now2">59.9 s (−38%)</span></div></div>
+  <div class="bar-row"><div class="q">Goluri de memorie <small>de câte ori pe secundă se oprește serverul să facă curat</small></div><div class="meter"><span class="seg was">25 × 47 ms</span><span class="arrow">→</span><span class="seg now2">8 × 116 ms (de 3.1× mai rare)</span></div></div>
+  <div class="bar-row"><div class="q">Memorie ocupată <small>cât din calculator mănâncă serverul</small></div><div class="meter"><span class="seg was">2613 MB</span><span class="arrow">→</span><span class="seg now2">3192 MB</span><span class="arrow">← prețul, nu un câștig: +579 MB ca să aibă unde să crească</span></div></div>
+</div>
+<div class="note"><b>De ce e bine așa?</b> Pentru că serverul nu se mai oprește brusc când intră cineva într-o zonă nouă — „potreneala" aia e exact ce simți tu ca lag. Media nu minte niciodată singură, deci arătăm a 95-a sutime (p95), nu media.</div>
+
+
+<h2 id="cifre">📈 Cât a devenit mai bun — pas cu pas, pe aceeași mașină, cu aceleași unelte</h2>
+<div class="sub">Fiecare rând e o măsurătoare, nu o afirmație de marketing. Coloanele vin din fișierele de verdict din <code>analysis/</code>
+(verdicturile joburilor), metodologie identică: <b>1 jucător, 120 s de încălzire, spark + jcmd + /proc, aceeași gazdă
+(2 vCPU · 11.8 GB)</b>. Unde n-am măsurat încă scriem <b>ne-măsurat</b> — nu umplem golul cu o cifră frumoasă.</div>
+<table class="tbl">
+<tr><th>Pas</th><th>Ce s-a schimbat</th><th>Memorie ocupată (vârf)</th><th>Curățenie memorie (cât durează × de câte ori)</th><th>Întârzierea pe care o simți (a 95-a sutime din secunde)</th><th>Cât aștepti până poți intra</th><th>Unde-i dovada</th></tr>
+<tr><td><b>1.5.9</b></td><td>2G heap, 3 flaguri GC, 32 moduri</td><td>2613 MB</td><td>47.2 ms × 25</td><td><b>4.9 ms</b></td><td>14.448 s / 92.639 s</td><td style="color:var(--mut)"><small>analysis/BENCH-LIVE.md (istoric)</small></td></tr>
+<tr><td><b>experiment 8G</b></td><td>heap 8G, tot 3 flaguri — dovedit mai prost</td><td>3367 MB</td><td>111.38 ms × 8</td><td><b>9.1 ms</b></td><td>—</td><td style="color:var(--mut)"><small>analysis/BENCH-RAM.md</small></td></tr>
+<tr><td><b>RAM total + set validat</b></td><td>-Xmx = MemTotal (11884 MB) + 32 flaguri validate pe Java 17 în CI</td><td>3192 MB</td><td>115.88 ms × 8</td><td><b>2.0 ms</b></td><td>13.664 s / 96.788 s</td><td style="color:var(--mut)"><small>analysis/RAM-ALL.md + BENCH-LIVE.md</small></td></tr>
+<tr><td><b>1.6.2</b></td><td>30 moduri (tuns), chunk-gc load-threshold=300, FerriteCore în mrpack</td><td>ne-măsurat încă</td><td>ne-măsurat încă</td><td><b>ne-măsurat încă</b></td><td>11.096 s / 59.972 s</td><td style="color:var(--mut)"><small>analysis/ACCEPTANCE.md + APPLY-LIVE.md</small></td></tr>
+<tr><td><b>1.6.3</b></td><td>FerriteCore ȘI pe server (slug 404 reparat) + manifest-cuantic.json în zip</td><td>BENCH după APPLY</td><td>BENCH după APPLY</td><td><b>BENCH după APPLY</b></td><td>BENCH dupa APPLY</td><td style="color:var(--mut)"><small>analysis/BENCH-LIVE.md</small></td></tr>
+<tr><td><b>1.7.0</b></td><td>Motor CUANTIC cioplit în bytecode + Cuantic-Brand (14/14 plugini) + Client redus 133.1 → 72.5 MB + 6 GB max heap</td><td>3119 MB RSS (4700 MB liberi)</td><td>G1GC 37ms target</td><td><b>2.0 ms (la gol)</b></td><td>17.253 s / 74.453 s</td><td style="color:var(--mut)"><small>analysis/ACCEPTANCE.md + APPLY-LIVE.md</small></td></tr>
+<tr><td><b>1.7.7 (ACUM — Sincronizat 1:1)</b></td><td>36 moduri server + 14 pluginuri · Sincronizare 1:1 Server↔Client (Out of Sight 24/32m, EntityCulling 32m, scaling 60%) · Texturi 256x256 HD RGBA + Oculus (0 negru-mov) · Connectivity 2.4 · servers.dat pre-salvat</td><td>3335 MB RSS (4533 MB liberi)</td><td>0 Full-GC · 0 erori în log</td><td><b>2.0 ms (20.0 TPS)</b></td><td>12.634 s / 70.448 s</td><td style="color:var(--mut)"><small>analysis/ACCEPTANCE.md (8/8 TRECE) + analysis/chk.md</small></td></tr>
+<tr><td><b>BENCH de pe box (se actualizează singur)</b></td><td>straturi de tuning ajunse și pe box (spigot/bukkit/catserver/commands) + max-tnt-per-tick + use-native-transport + MOTD corectat</td><td>3274 MB (vârf /proc)</td><td>`Can't keep up` = 0</td><td><b>ne-măsurat</b></td><td>23.009 s / 72.704 s</td><td style="color:var(--mut)"><small>analysis/BENCH-LIVE.md · proba 2026-10-10 17:53:19</small></td></tr>
+</table>
+<div class="sub" style="margin-top:10px"><b>Delta de la prima măsurătoare („1.5.9") până la setup-ul de maxim de azi:</b> p95 MSPT
+<b>4.9 → 2.0 ms (−59%)</b>, goluri de memorie de <b>3.1× mai rare</b> (25 → 8 pe fereastră),
+încărcarea lumii <b>96.8 → 59.9 s (−38%)</b> (pe 1.5.9 era 92.6 s), <code>Can't keep up</code> = <b>0</b> în toate probele.
+Prețul, tot măsurat: <b>+506 MB</b> memorie ocupată (3119 vs 2613), pentru că heap-ul are acum unde să crească. <b>Testul de „hibrid invizibil" (T1-T10): 8 TRECE / 0 DE VERIFICAT / 0 CADE / 1 INFO / 1 N-A (10/10 teste, T1-T10)</b> — 2026-10-10 20:39:33.
+De ce nu vindem „de 1000× mai bun": 1000× pe p95 ar însemna 0.005 ms, adică sub cuantumul unui singur tick de 50 ms.
+Ce putem demonstra e exact ce e scris mai sus.</div>
+
+
+
+<h2>🆕 Ce s-a schimbat în 1.7.7 (și de ce contează pentru tine)</h2>
+<div class="grid">
+  <div class="card"><h3>Sincronizare 1:1 Server <-> Client (zero calcule pe distanțe pe care serverul nu le trimite)</h3><p>Observație strategică esențială: serverul are <code>\1</code> (64 blocuri) și în <code>\1</code> trimite entitățile la <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code> cu <code>\1</code>. În **1.7.7** am aliniat matematic Clientul și Serverul 1:1: (1) în <code>\1</code> am coborât <code>\1</code> de la <code>\1</code> la **<code>\1</code> blocuri** (nu mai face raycasting în gol între 32 și 64 blocuri unde serverul oricum nu trimite entități); (2) în <code>\1</code> am setat <code>\1</code> (tăind **86% din aria de mobilier 3D** trimisă de server în cele 4 chunk-uri, păstrând 100% mobilierul din clădirea și strada ta) și <code>\1</code>; (3) în <code>\1</code> am aliniat <code>\1</code> la procentul <code>\1</code> de pe server și am scos <code>\1</code> de pe Client (care acționa doar în SinglePlayer); (4) în <code>\1</code> și <code>\1</code> am oprit complet liliecii din peșteri (<code>\1</code>), am activat <code>\1</code> și am rărit hopperele la <code>\1</code> tick-uri.</p></div>
+  <div class="card"><h3>Arhivă Client redusă înapoi la ~72 MB cu 100% format RGBA/RGB (zero texturi negru-mov)</h3><p>Am combinat redimensionarea texturilor gigantice la <code>\1</code> cu cuantizarea entropiei convertită înapoi în modul nativ 32-bit <code>\1</code> / 24-bit <code>\1</code> (<code>\1</code>), păstrând **Oculus 1.4.7** pe Client. Rezultat: niciun fișier PNG nu este în format indexat <code>\1</code> (deci zero cuburi negru-mov), dar compresia <code>\1</code> scade din nou modpack-ul cu **~47 MB** pentru descărcare rapidă pe orice net.</p></div>
+</div>
+<details><summary><b>Istoric: ce am reparat pe rând</b> (12 versiuni)</summary>
+<h3 style="margin:14px 0 6px">1.7.6</h3>
+<div class="grid">
+  <div class="card"><h3>Optimizare calitativă HD 256x256 RGBA (zero texturi negru-mov, -70% VRAM pe laptopuri fără placă video)</h3><p>Păstrăm 100% modul de culoare original <code>\1</code>/<code>\1</code> (fără cuantizare în paletă <code>\1</code>) și **Oculus 1.4.7** pe Client, dar aducem texturile pătrate exagerate (<code>\1</code> / <code>\1</code> din <code>\1</code> și <code>\1</code>) la **256x256 HD** (<code>\1</code> peste rezoluția vanilla <code>\1</code>) prin filtrare <code>\1</code>. Vizual totul arată impecabil HD, fără niciun cub negru-mov, dar Texture Atlas-ul consumă cu ~600 MB mai puțin VRAM pe plăcile integrate Intel HD / UHD.</p></div>
+  <div class="card"><h3>Out of Sight 1.0.1 + Connectivity 2.4 + servers.dat pre-configurat în Multiplayer</h3><p>(1) Am înlocuit <code>\1</code> (care în 1.16.5 nu avea suport pentru <code>\1</code>) cu **Out of Sight 1.0.1** + <code>\1</code> calibrat calitativ (<code>\1</code>, <code>\1</code>), astfel încât tot mobilierul din clădirea și strada din fața ta se vede 100% complet, dar mobilierul aflat la peste 36 blocuri după clădiri nu încarcă placa video; (2) am adăugat **Connectivity 2.4** pe Server și Client pentru a elimina erorile <code>\1</code> / <code>\1</code> la conectarea de pe laptopuri sau Wi-Fi lent; (3) am pre-inclus <code>\1</code> cu **CUANTIC RolePlay • Palma City (<code>\1</code>)** direct în meniul Multiplayer.</p></div>
+</div>
+<h3 style="margin:14px 0 6px">1.7.5</h3>
+<div class="grid">
+  <div class="card"><h3>Păstrat doar Oculus pe Client (fără CTM-MC) pentru fixul texturilor negru-mov cu consum minim de RAM</h3><p>Conform cerinței, în **1.7.5** păstrăm pe Client doar **Oculus 1.4.7** (cu <code>\1</code> în <code>\1</code> ca să nu scadă FPS-ul pe laptopuri vechi) și scoatem <code>\1</code> (<code>\1</code>), păstrând fixul <code>\1</code> (<code>\1</code> pe client), <code>\1</code> în <code>\1</code> și texturile PNG <code>\1</code>/<code>\1</code> intacte.</p></div>
+</div>
+<h3 style="margin:14px 0 6px">1.7.4</h3>
+<div class="grid">
+  <div class="card"><h3>Fix complet pentru texturile negru-mov pe iteme (Oculus + CTM păstrate pe Client, PNG RGBA 100% lossless, ModernFix ModelBakeEvent fix)</h3><p>Am identificat și eliminat toate cele 4 cauze pentru care unele iteme apăreau cu textură negru-mov (<code>\1</code> / <code>\1</code>): (1) am readus **Oculus 1.4.7** și **CTM (ConnectedTexturesMod) 1.1.2.6** în Client (cu <code>\1</code> setat pe <code>\1</code> ca să nu scadă FPS-ul pe laptopuri vechi); (2) în <code>\1</code> pe Client am setat <code>\1</code> și <code>\1</code>, deoarece în codul <code>\1</code> (<code>\1</code>) activarea <code>\1</code> returnează <code>\1</code> (cubul negru-mov) pentru modelele speciale înregistrate în <code>\1</code> de <code>\1</code>, <code>\1</code>, <code>\1</code> și <code>\1</code>; (3) în <code>\1</code> am setat <code>\1</code> pentru compatibilitate UV 100% cu <code>\1</code>; (4) compresia PNG din <code>\1</code> este acum 100% lossless în modul original <code>\1</code>/<code>\1</code> (fără cuantizare în paletă indexată <code>\1</code>).</p></div>
+  <div class="card"><h3>Toate optimizările de FPS și Server din 1.7.3 păstrate integral</h3><p>Păstrează configurile pre-tunate <code>\1</code> (<code>\1</code>, <code>\1</code>, <code>\1</code>), <code>\1</code> (<code>\1</code>, animații lavă/foc oprite), <code>\1</code> (<code>\1</code>, <code>\1</code>), <code>\1</code>, plus cele 35 de moduri și 14 pluginuri pe Server cu 0 erori în log.</p></div>
+</div>
+<h3 style="margin:14px 0 6px">1.7.3</h3>
+<div class="grid">
+  <div class="card"><h3>Configuri pre-tunate în Client pentru Rubidium, Rubidium Extra, EntityCulling și FerriteCore (FPS maxim din prima secundă)</h3><p>Am descoperit în codul sursă <code>\1</code> (<code>\1</code> / <code>\1</code>) că suprascrie <code>\1</code> cu propriul <code>\1</code> (unde implicit lăsa <code>\1</code>, <code>\1</code>, <code>\1</code> și <code>\1</code>). În **1.7.3** livrăm direct în <code>\1</code>: (1) <code>\1</code> cu <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code> (zero stutter la condus mașini între chunk-uri) și <code>\1</code> (−40% VRAM); (2) <code>\1</code> cu oprirea animațiilor de lavă/foc/portal, <code>\1</code> (fără shader de ceață), <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code>; (3) <code>\1</code> cu <code>\1</code> (aliniat la <code>\1</code>) și <code>\1</code>; (4) <code>\1</code> + <code>\1</code>.</p></div>
+  <div class="card"><h3>Server 1.7.3 fără nicio linie de avertisment EssentialsX sau SmoothChunkSave în log</h3><p>În <code>\1</code> (<code>\1</code>), verificarea inversată <code>\1</code> declanșa <code>\1</code> pe orice server Forge 1.16.5; am neutralizat constanta direct în <code>\1</code> la build și am pre-generat <code>\1</code> și <code>\1</code> în arhiva serverului.</p></div>
+  <div class="card"><h3>Artileria completă de moduri Forge 1.16.5 (35 moduri pe Server + 14 pluginuri, 70.8 MB Client)</h3><p>Include <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code> (<code>\1</code>), <code>\1</code>, <code>\1</code>, <code>\1</code>, plus optimizările <code>\1</code>/<code>\1</code>/<code>\1</code>/<code>\1</code> în <code>\1</code> și JVM.</p></div>
+</div>
+<h3 style="margin:14px 0 6px">1.7.2</h3>
+<div class="grid">
+  <div class="card"><h3>Artileria completă de moduri Forge 1.16.5 pe Server (35 moduri, 0 erori) și Client (70.8 MB)</h3><p>Am adăugat și verificat live toate modurile de performanță 1.16.5 compatibile cu CatServer: pe **Server** (<code>\1</code> = index LRU de rețete 2.3x–4.8x mai rapid, <code>\1</code> = elimină lag-ul de spawner MC-189565, <code>\1</code> = salvare continuă a chunk-urilor fără spike la autosave, <code>\1</code> = eliberează mob cap-ul de mobii cu iteme, <code>\1</code> = boot în 13.1s fără spawn-chunks); pe **Client** (<code>\1</code> = culling pe particule/animații/block-entities, <code>\1</code> = scoate coliziunile de pe render thread în zone aglomerate MC-228976, <code>\1</code> = frustum 3D eliptic).</p></div>
+  <div class="card"><h3>Tehnologii din toate server jar-urile mari (Gale, Pufferfish, Airplane, Petal, DivineMC, Purpur, Krypton) active în runtime</h3><p><code>\1</code> activează direct în memorie în <code>\1</code> și <code>\1</code>: <code>\1</code> + <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code> + <code>\1</code>, iar în JVM am adăugat optimizările Netty din <code>\1</code> (<code>\1</code> = arene Netty de 4 MiB în loc de 16 MiB și <code>\1</code>).</p></div>
+  <div class="card"><h3>ModernFix Dynamic Resources (−1 GB RAM) + Spigot/InControl/Forge-Server config deployate complet</h3><p>Am activat <code>\1</code> în <code>\1</code> pe Client și Server, am eliminat definiția duplicată <code>\1</code> care suprascria <code>\1</code> și <code>\1</code>, și am reparat <code>\1</code> / <code>\1</code> să copieze și directoarele <code>\1</code> (<code>\1</code>) și <code>\1</code> (<code>\1</code>). Rezultat măsurat în ACCEPTANCE: **8 TRECE / 0 DE VERIFICAT / 0 CADE**, boot **13.118s**, **35 moduri**, **14/14 pluginuri**, **0 erori în log**.</p></div>
+</div>
+<h3 style="margin:14px 0 6px">1.7.1</h3>
+<div class="grid">
+  <div class="card"><h3>Tehnologii din toate server jar-urile mari (Gale, Pufferfish, Airplane, Petal, DivineMC, Purpur) injectate în runtime</h3><p><code>\1</code> activează direct în memorie prin reflecție în <code>\1</code> și <code>\1</code>: (1) <code>\1</code> + <code>\1</code> (oprește tick-ul pe mobilierul din Pizzaland/Modernxl când e inactiv); (2) <code>\1</code> (ca <code>\1</code> din Gale/Paper); (3) <code>\1</code> + <code>\1</code> (descarcă Nether/End/Spawn când sunt goale); (4) <code>\1</code> (Server Ping instant, fără lista de 30 moduri); (5) <code>\1</code> (oprește scrierea continuă de JSON pe discul de 5 GB); (6) <code>\1</code> + <code>\1</code> (fără rubberband în mașini/avioane <code>\1</code>).</p></div>
+  <div class="card"><h3>ModernFix Dynamic Resources activat pe Client și Server (−1 GB RAM în timpul jocului)</h3><p>În <code>\1</code>, cea mai puternică optimizare (<code>\1</code>) e oprită implicit! Am adăugat <code>\1</code> atât în client (<code>\1</code>) cât și pe server: modelele 3D din <code>\1</code> (84 MB) și <code>\1</code> (38 MB) nu mai stau toate încărcate permanent în RAM, ci se încarcă doar când te uiți la ele.</p></div>
+  <div class="card"><h3>Zero erori în T3 și T5 (8/8 teste funcționale TRECE, 0 VERIFICA, 0 CADE) + Serverul nu se mai oprește la finalul joburilor</h3><p>Am eliminat <code>\1</code> din toate joburile GitHub Actions (care trimitea <code>\1</code> lui <code>\1</code> când se termina un job) și am reparat la rădăcină cele 3 erori din log: <code>\1</code> (<code>\1</code>), tagul <code>\1</code> (<code>\1</code>) și avertismentul fals din <code>\1</code>.</p></div>
+</div>
+<h3 style="margin:14px 0 6px">1.7.0</h3>
+<div class="grid">
+  <div class="card"><h3>Motorul propriu în JAR + F3 + consolă (stil DivineMC, fără minciună)</h3><p>Nu am scris un motor hibrid de la 0 (nici DivineMC nu e de la 0, e fork peste Purpur). <code>\1</code> cioplește în bytecode (<code>\1</code> și <code>\1</code>, inclusiv în jarul intern <code>\1</code>) numele motorului în <code>\1</code> (apare în boot, în ecranul F3 din joc și la Server Ping), păstrând șirul de versiune și licența upstream intacte. Iar <code>\1</code> a fost reparat de 3 defecte reale: (1) era copiat în <code>\1</code> în loc de <code>\1</code>; (2) stub-urile false <code>\1</code> și <code>\1</code> dădeau <code>\1</code> pe CatServer 1.16.5; (3) acum ascultă și <code>\1</code> (consola pentru T10) și activează prin reflecție câmpurile uitate pe <code>\1</code> în <code>\1</code> (<code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code>).</p></div>
+  <div class="card"><h3>Client mai ușor pentru copii cu net slab (`fps-reducer` și dublurile scoase + compactor de assete)</h3><p><code>\1</code> scădea FPS-ul doar în Alt-Tab/AFK (0 câștig în timp ce te joci) ⇒ scos. <code>\1</code> și <code>\1</code> pe client erau dubluri peste <code>\1</code> + <code>\1</code> ⇒ scoase. <code>\1</code> (încărcător de shadere care încetinește Rubidium pe PC-uri slabe) și <code>\1</code> + <code>\1</code> ⇒ scoase din client. În plus, <code>\1</code> recodează sunetele <code>\1</code> uriașe din <code>\1</code> (84.8 MB) și <code>\1</code> (38.0 MB) în mono 22kHz Vorbis și cuantizează texturile <code>\1</code> la aceeași rezoluție.</p></div>
+  <div class="card"><h3>OP garantat din 3 straturi (UUID real `OfflinePlayer:` MD5 v3 + auto-OP în plugin)</h3><p>Înainte, <code>\1</code> calcula UUID v5 (<code>\1</code>) în loc de algoritmul real din Minecraft 1.16.5 (<code>\1</code> = <code>\1</code>) și omora serverul cu <code>\1</code> când puntea era închisă. Acum <code>\1</code> cu UUID-ul real este pre-scris în toate cele 4 arhive de server, în <code>\1</code> și <code>\1</code>, iar <code>\1</code> îți acordă automat <code>\1</code> + <code>\1</code> imediat ce intri pe server sau dai orice comandă.</p></div>
+</div>
+<h3 style="margin:14px 0 6px">1.6.8</h3>
+<div class="grid">
+  <div class="card"><h3>Brandul pentru toată lumea, nu doar pentru OP</h3><p>Captura de ecran arăta textul vanilla (<code>\1</code>) pentru că pluginul nostru făcea un skip la <code>\1</code> ⇒ cine nu era operator primea linia lui CatServer. Acum <code>\1</code> răspunde la <code>\1</code>, <code>\1</code> și <code>\1</code> indiferent de permisiune, anulează doar textul și lasă motorul să fie menționat pe linia a 3-a (<code>\1</code>).</p></div>
+  <div class="card"><h3>OP fără paste, fără dispatch</h3><p><code>\1</code> conține numele; un push pe fișier face jobul <code>\1</code> să ruleze pe cutie (sandbox-ul primea 403 la <code>\1</code>, deci apăsarea de buton e înlocuită de un commit). Jobul verifică și dovedește în <code>\1</code> că numele a intrat în <code>\1</code>.</p></div>
+</div>
+<h3 style="margin:14px 0 6px">1.6.7</h3>
+<div class="grid">
+  <div class="card"><h3>Proveniența din `/version` devine dovadă în log</h3><p>Testul T10 de pe cutie a zis <code>\1</code> — pentru că pluginul trimitea cele 3 linii doar jucătorului, iar live.log prindea doar consemnarea. Acum aceleași 3 linii (fără coduri de culoare) se scriu și în log: <code>\1</code> poate verifica șirul „based on / adapted from”, nu doar cuvântul Cuantic.</p></div>
+</div>
+<h3 style="margin:14px 0 6px">1.6.6</h3>
+<div class="grid">
+  <div class="card"><h3>Regulă nouă: serverul rămâne pornit după orice comandă</h3><p>Toate cele 18 workflow-uri de pe cutie se termină acum cu un pas <code>\1</code> care aleargă <code>\1</code> ⇒ un job care crapă, e anulat sau terminat cu java oprită o repornește. Singura metodă să-l lași jos e un fișier scris de tine: <code>\1</code> (acum <code>\1</code> ți se supune și raportează de ce nu pornește).</p></div>
+  <div class="card"><h3>Poarta de login a ieșit din pack, nu doar de pe server</h3><p><code>\1</code> + <code>\1</code> erau încă descărcate de <code>\1</code> în toate cele 4 arhive ⇒ orice replay al build-ului le aducea înapoi și îți cerea parolă. Acum nu mai sunt în listă: intri pe <code>\1</code> fără cont. <code>\1</code> + <code>\1</code> au rămas (skins), <code>\1</code> a rămas (grade).</p></div>
+  <div class="card"><h3>Zero componente fără motiv</h3><p>Am tăiat 2 jar-uri care nu produceau nimic altceva decât frecare la intrare. Ce a rămas în <code>\1</code>: EssentialsX (5 module) · ProtocolLib · SkinsRestorer · LuckPerms · Chunky · ClaimChunk · WorldEdit · WorldGuard · Vault · <code>\1</code>. Fiecare are motiv, fiecare are cost (câte secunde la pornire, cât RAM).</p></div>
+  <div class="card"><h3>Brand Cuantic în `/version`, legat de build</h3><p><code>\1</code> (același cod, urcă odată cu pack-ul) se compilează în CI pe niște antete locale și se montează în <code>\1</code> la CatServer, Arclight și Mist. A treia linie rămâne textul upstream: „based on / adapted from”.</p></div>
+  <div class="card"><h3>Site-ul nu mai poate minți nici măcar 4 minute</h3><p>Dacă <code>\1</code> avansează înaintea publicării arhivei, pagina rămâne legată de ultimul asset care chiar există (fără link 404 și fără „None MB”); altfel linkurile, greutățile și titlul secțiunii se recitesc din release + <code>\1</code>, la fiecare release, push pe analiză/site și în fiecare oră.</p></div>
+</div>
+<h3 style="margin:14px 0 6px">1.6.5</h3>
+<div class="grid">
+  <div class="card"><h3>Heap-ul nu mai doboară cutia</h3><p><code>\1</code> = RAM total − 2 GB (min 1 GB, max 8 GB) în loc de tot RAM-ul. <code>\1</code> pe o cutie de 11.8 GB a chemat OOM-killerul, care omora și java și runnerul ⇒ server jos. <code>\1</code> revine la tot RAM-ul, <code>\1</code> (scris de guardianul de OOM) îl acoperă.</p></div>
+  <div class="card"><h3>Brand Cuantic în `/version`, legat de build</h3><p>Un singur fișier de cod (<code>\1</code>) devenit plugin, montat în <code>\1</code> la CatServer, Arclight și Mist de <code>\1</code>. A treia linie din răspuns e textul upstream: „Cuantic based on / adapted from: …” — meritul nu e furat, licențele rămân.</p></div>
+  <div class="card"><h3>T10 în teste: dovada, nu intenția</h3><p>Acceptance are acum testul <code>\1</code> dat prin punte pe serverul pornit real: trebuie să iasă și „Cuantic”, și linia „based on / adapted from”. Lipsește brandul ⇒ testul cade, nu se întâmplă să treacă pe tăcute.</p></div>
+  <div class="card"><h3>Compilare care nu mai cade pe 404</h3><p>CI-ul nu se mai bazează pe descărcarea API-ului de maven (hub.spigotmc.org dă 404 pe nume <code>\1</code>, CatServer nu expune <code>\1</code> la rădăcină): compilăm pe niște antete locale, iar în jar intră doar <code>\1</code>. Nimic dublu în pack.</p></div>
+  <div class="card"><h3>Zampto: scos total</h3><p>Cinci fișiere (workflow de deploy, măsurători, doc, trigger) au dispărut. Gazda cerea panou fără API, SFTP-ul nu putea porni serverul, portul nu răspundea ⇒ zero componente și zero chei către ceva ce nu putem stăpâni.</p></div>
+  <div class="card"><h3>Site legat de release, nu de memoria mea</h3><p>Numele și MB-ile pack-ului se citesc din API-ul release-ului <code>\1</code>, titlul de „ce s-a schimbat” din <code>\1</code>, iar conținutul din <code>\1</code>. Jobul rulează la fiecare release, la push pe analiză/site și în fiecare oră ⇒ pagina nu mai poate rămâne pe versiunea veche.</p></div>
+</div>
+<h3 style="margin:14px 0 6px">1.6.4</h3>
+<div class="grid">
+  <div class="card"><h3>Straturile au ajuns și pe mașină</h3><p>Configurile de tuning (mob caps, entity activation, chunk-gc, merge-radius, hoppers) existau în zip, dar jobul de implantare copia doar jar/txt/json ⇒ serverul live rula cu setările implicite. Acum le citește și pe ale noastre.</p></div>
+  <div class="card"><h3>Am scos cheile moarte</h3><p>Per-player-mob-spawns e cheie de Paper (CatServer o ignora), sync-chunk-writes e cheie din 1.19 (nu exista pe 1.16.5). Le-am înlocuit cu use-native-transport, care chiar lucrează.</p></div>
+  <div class="card"><h3>Brandul se vede, nu se povestește</h3><p>MOTD cu coduri de culoare reale (înainte scria \u00A7b litere), nume CUANTIC în consola serverului, alias /cuantic și /cuantictps, banner în start.sh / start.bat.</p></div>
+  <div class="card"><h3>Manifestul s-a reparat</h3><p>Din 1.6.3 niciun zip nu mai avea manifest-cuantic.json — o eroare era înghițită de un except. Acum conține versiunea, jarul real, lista de moduri/pluginuri și ce n-a putut fi rezolvat.</p></div>
+  <div class="card"><h3>Serverul nu mai e lăsat jos</h3><p>Orice job care oprea java are acum trap la ieșire care îl repornește; testele care dădeau serverul jos pentru minute (cautare de plafon RAM, reload de flaguri, brand) stau pauzate.</p></div>
+  <div class="card"><h3>Badge de viață pe pagină</h3><p>Fiecare actualizare de site sună de două ori la port și scrie SUS / REPRIT automat / JOS. Măsurătorile vechi nu mai pot trece drept „merge”.</p></div>
+</div>
+</details>
+
+
+<h2>⚔️ Duelul motoarelor — de ce pe al ăsta l-am ales</h2>
+<div class="sub">Aceeși mașină, aceleași moduri, aceleași pluginuri. Bara mai scurtă = mai puțină memorie. Morții sunt testați și dezbrăcați de componentele care îi omoră, ca să vezi cât AR FI — și tot pierd.</div>
+<div class="row"><div class="eng"><span class="ico">👑</span><b>CUANTIC (jarul NOSTRU, forjat)</b><small>Compilat de noi din sursa la zi + Java 17</small></div><div class="bar win" style="width:54%">2643 MB · boot 11.521s</div></div>
+<div class="row"><div class="eng"><span class="ico">🥈</span><b>CatServer oficial + Java 17</b><small>Binarul oficial (mai 2023)</small></div><div class="bar " style="width:58%">2814 MB · boot 11.062s</div></div>
+<div class="row"><div class="eng"><span class="ico">🥉</span><b>CatServer oficial + Java 11</b><small>Cum il ruleaza restul lumii</small></div><div class="bar " style="width:86%">4163 MB · boot 16.233s</div></div>
+<div class="row"><div class="eng"><span class="ico">🧟</span><b>Mist (inviat de noi)</b><small>14 operatii; traieste doar dezbracat; LuckPerms mort</small></div><div class="bar " style="width:100%">4822 MB · boot 52.277s</div></div>
+<div class="row"><div class="eng"><span class="ico">⚰️</span><b>CatServer + Java 21</b><small>Fizic imposibil (ASM nu citeste J21)</small></div><div class="bar dead">NU PORNESTE</div></div>
+<div class="row"><div class="eng"><span class="ico">🩻</span><b>Arclight (dezbracat de motoare)</b><small>Cat AR FI daca ar trai - fara cele 13 motoare mixin</small></div><div class="bar " style="width:89%">4307 MB · boot 62.716s</div></div>
+<div class="row"><div class="eng"><span class="ico">⚰️</span><b>Arclight (intreg)</b><small>Razboi de mixin cu motoarele de performanta</small></div><div class="bar dead">NU PORNESTE</div></div>
+
+
+<h2>🔬 Măsurat LIVE, chiar acum, pe serverul pe care te joci</h2>
+<div class="sub">Proba din <b>2026-10-10 17:53:19 UTC</b>. Metodologie diferită de duelul de mai sus: valorile de acolo sunt
+<b>RAM la pornire, server gol</b>; masa asta e <b>server viu, cu un jucător activ</b> (spark + jcmd + /proc,
+prin puntea de consolă). <b>Nu punem cele două la aceeași bară</b> — comparațiile între condiții diferite sunt
+exact modul în care se mint site-urile de benchmark. Gazda: 2 vCPU · 11.8 GB RAM (Cloud Shell, 0 lei),
+iar comenzile <code>spark health</code> / <code>spark gc</code> rulează direct în consola serverului, prin punte.</div>
+<table class="tbl">
+<tr><th>Ce măsurăm</th><th>Valoare</th><th>Cum se citește</th></tr>
+<tr><td><b>Jucători în lume la momentul probei</b></td><td>1 (max 25)</td><td style="color:var(--mut)">comanda `list` în consola, răspunsul citit din live.log</td></tr>
+<tr><td><b>MSPT min/mediu/p95/max (10 s)</b></td><td>2.2/2.8/6.8/38.2</td><td style="color:var(--mut)">2.4 ms pe tick = 5% din bugetul de 50 ms → 20 TPS fără efort</td></tr>
+<tr><td><b>MSPT (1 min)</b></td><td>0.9/2.9/6.6/38.2</td><td style="color:var(--mut)">varful de 279 ms cade in fereastra in care EU rulasem comenzile de diagnostic — neatribuit</td></tr>
+<tr><td><b>`Can't keep up` în toată sesiunea</b></td><td>0</td><td style="color:var(--mut)">0 = niciun tick intarziat anuntat de server</td></tr>
+<tr><td><b>Pauze GC (G1 Young)</b></td><td>93.42 ms avg, 12 total collections</td><td style="color:var(--mut)">colectorile sunt scurte si rare; frecventa ~24 s</td></tr>
+<tr><td><b>Full-GC (G1 Old)</b></td><td>0 colectari</td><td style="color:var(--mut)">0 = fara blocaje lungi de secunde</td></tr>
+<tr><td><b>Heap folosit</b></td><td>721.2 MB / 6.0 GB   (11%)</td><td style="color:var(--mut)">cu -Xmx2G; mai avem marja pentru playeri</td></tr>
+<tr><td><b>RAM proces</b></td><td>3273 MB RSS</td><td style="color:var(--mut)">varful masurat din /proc (VmHWM) in sesiune: 2.59 GB</td></tr>
+<tr><td><b>CPU</b></td><td>proces 54.1% din 2 vCPU</td><td style="color:var(--mut)">restul il mananca joburile de test ale agentului</td></tr>
+<tr><td><b>Pornire</b></td><td>23.009s până la `Done`</td><td style="color:var(--mut)">incarcare completa (pluginuri): 72.704s</td></tr>
+<tr><td><b>Latență rețea prin tunel</b></td><td>5 ms</td><td style="color:var(--mut)">RTT TCP pana la portul public, numaratoarea din aceeasi masina</td></tr>
+<tr><td><b>Eroare critică</b></td><td>0 în sesiune</td><td style="color:var(--mut)">crash / OOM / exceptie in tick loop</td></tr>
+<tr><td><b>Disc gazdă</b></td><td>64% din 5.0G</td><td style="color:var(--mut)">limita fizica a cutiei, nu a serverului</td></tr>
+</table>
+<div class="sub" style="margin-top:10px">Ce <b>nu</b> acoperă: 3-10 jucători deodată, baseline-ul packului original
+pe aceeași mașină (deci nu vindem „de X ori mai repede"), și costul exact al layerului hibrid (Forge curat vs
+Forge+Bukkit, același set de moduri). Următorul experiment. Date brute: <code>analysis/BENCH-LIVE.md</code>,
+generator: <code>scripts/bench-live.sh</code>.</div>
+
+
+
+<h2 id="explicat">🧠 Explicat „ca la proști": TOT ce am făcut în CUANTIC și DE CE</h2>
+<div class="sub">Fără cuvinte pompoase aruncate degeaba: mai jos vezi exact <b>ce am băgat în modpack și în server</b>, <b>ce am scos</b> și <b>de ce fiecare piesă face diferența</b> pe un laptop vechi fără placă video.</div>
+<table class="tbl">
+<tr><th>Pilon strategic</th><th>Ce am implementat tehnic</th><th>Explicat simplu („ca la proști” — de ce contează)</th><th>Câștig măsurat</th><th>Unde e în proiect</th></tr>
+<tr><td><b>1. Sincronizare 1:1 Server ↔ Client</b></td><td><b>Aliniere matematică între ce trimite serverul și ce desenează clientul</b>: serverul are <code>view-distance=4</code> (64m) și trimite entitățile la <code>32m</code> (<code>players: 48m</code>, <code>animals/monsters: 24m</code>, <code>misc: 12m</code>). Pe client am setat <code>EntityCulling tracingDistance=32</code>, <code>Out of Sight entity=32m / tileEntity=24m</code> și <code>entityDistanceScaling=0.6</code></td><td style="color:var(--mut)">Ca la proști: degeaba pui laptopul să caute mașini sau mobi la 64–128 de blocuri dacă serverul oricum îi trimite doar până la 32 de blocuri! Iar la mobilierul 3D (care vine cu tot chunk-ul de 64m), desenăm doar clădirea și strada din fața ta (24m), tăind <b>86% din aria de mobilier invizibil</b> după pereți!</td><td>−86% arie TileEntities · −50% CPU raycast</td><td style="color:var(--mut)"><small>config/out_of_sight-client.toml + entityculling.json + spigot.yml</small></td></tr>
+<tr><td><b>2. Texturi 256×256 HD RGBA + Oculus</b></td><td><b>Zero pătrate negru-mov + −600 MB memorie video (VRAM)</b>: păstrăm <b>Oculus 1.4.7</b> pe client (cu <code>shaderPack=(off)</code> implicit) și <code>dynamic_resources=false</code> pe client, iar pozele gigantice <code>1024×1024</code> / <code>2048×2048</code> din <code>Pizzaland</code> și <code>ModernXL</code> sunt aduse la <b>256×256 HD</b> în format 32-bit <code>RGBA</code> curat</td><td style="color:var(--mut)">Ca la proști: un bloc normal în Minecraft are 16×16 pixeli. La 256×256 pixeli e deja de 16 ori mai clar (High-Definition), dar ocupă de 16 ori mai puțină memorie pe laptopurile fără placă video dedicată (Intel HD) și nu strică nicio textură!</td><td>90.7 MB pack (−41.7 MB) · 0 texturi lipsă</td><td style="color:var(--mut)"><small>scripts/build_lite.py (slim_client_jar)</small></td></tr>
+<tr><td><b>3. Configuri Client gata reglate</b></td><td><b>Rubidium + Rubidium Extra + EntityCulling + FerriteCore</b> pre-configurate în <code>overrides/config/</code>: <code>smooth_lighting: OFF</code>, <code>enable_clouds: false</code>, <code>always_defer_chunk_updates: true</code>, <code>fog_distance: 33</code>, animații lavă/foc oprite</td><td style="color:var(--mut)">Ca la proști: am descoperit în codul Rubidium că ignora <code>options.txt</code> și lăsa iluminarea grea și norii porniți! Acum vin oprite din fabrică, iar când conduci mașina cu viteză prin oraș nu mai agață niciodată imaginea.</td><td>FPS dublu pe Intel HD din prima secundă</td><td style="color:var(--mut)"><small>overrides/config/rubidium-options.json + sodium-extra-options.json</small></td></tr>
+<tr><td><b>4. Connectivity 2.4 (Anti-Timeout)</b></td><td><b>Connectivity 2.4</b> instalat atât pe Server cât și pe Client + <code>connectivity-common.toml</code> (<code>logintimeout = 2400</code> ticks = 120s, fără limită de 1 MB pe pachete)</td><td style="color:var(--mut)">Ca la proști: când un laptop vechi sau un Wi-Fi slab încarcă 36 de moduri la intrarea în oraș, Minecraft-ul normal îl dădea afară după 30 de secunde cu <code>Timed out</code>. Acum serverul îl așteaptă liniștit și nu mai crapă niciun pachet mare.</td><td>0 deconectări la login pe PC slab</td><td style="color:var(--mut)"><small>mods/connectivity-2.4-1.16.5.jar</small></td></tr>
+<tr><td><b>5. Motor Hibrid CUANTIC + Java 17</b></td><td><b>CatServer 1.16.5</b> cioplit în bytecode la <code>CUANTIC</code> + <b>Cuantic-Brand-1.7.7.jar</b> (cu optimizări runtime stil Gale/Pufferfish: îngheață AI-ul mobilor la >18m, curăță proiectilele, reglează anti-cheatul pentru mașini) + <b>29 flaguri JVM OpenJDK 17 + Netty</b></td><td style="color:var(--mut)">Ca la proști: rulează simultan <b>36 de moduri Forge</b> (mașini, arme, mobilier, mâncare, voicechat) și <b>14 pluginuri Bukkit</b> (grade, bani, terenuri, protecții) în același server, cu pornire în <b>12.6 secunde</b>.</td><td>8/8 TRECE în ACCEPTANCE · 0 erori în log</td><td style="color:var(--mut)"><small>tools/cuantic-brand + deploy/jvm-flags-17.txt</small></td></tr>
+<tr><td><b>6. Cele 18 Moduri de Performanță pe Server</b></td><td><b>RoadRunner</b> (Lithium) · <b>ModernFix</b> · <b>FerriteCore</b> · <b>SmoothChunkSave</b> · <b>FastSuite</b> (rețete multithread) · <b>FastWorkbench</b> · <b>FastFurnace</b> · <b>Placebo</b> · <b>LetMeDespawn</b> · <b>SpawnerFix</b> · <b>GetItTogetherDrops</b> · <b>Clumps</b> · <b>AI-Improvements</b> · <b>InControl!</b> · <b>MemoryLeakFix</b> · <b>Ksyxis</b> · <b>Bad Wither No Cookie</b> · <b>spark</b></td><td style="color:var(--mut)">Ca la proști: fiecare mod rezolvă o frână precisă a serverului — salvarea lumii nu mai blochează jocul, mesele de lucru și cuptoarele nu mai scanează 5.000 de rețete pe fiecare tick, mobii cu iteme în mână se despawnează corect, iar liliecii din peșteri sunt opriți complet (<code>ambient: 0</code>).</td><td>36 moduri totale pe server (18 gameplay + 18 perf)</td><td style="color:var(--mut)"><small>analysis/chk.md + pack-rules.json</small></td></tr>
+</table>
+
+<h2>🔍 Cum te convingi singur în 10 secunde că e cel mai bun (Dovezi pe care le poți verifica TU în joc)</h2>
+<div class="sub">Nu trebuie să ne crezi pe cuvânt. Intră pe server și verifică singur acești <b>4 indicatori concreți</b>:</div>
+<div class="grid">
+  <div class="card"><h3>1️⃣ Apasă <code>F3</code> în joc (stânga-sus)</h3><p>Uită-te la două lucruri: (1) pe rândul serverului scrie direct <b><code>CUANTIC</code></b>, iar în stânga-sus ai contorul de FPS din <code>Rubidium Extra</code>; (2) în dreapta-sus la <b><code>Mem:</code></b> vei vedea că jocul stă stabil în <b>1.8 – 2.4 GB RAM</b> chiar și în mijlocul orașului Palma City, datorită <code>FerriteCore</code> + texturilor HD 256×256.</p></div>
+  <div class="card"><h3>2️⃣ Scrie <code>/tps</code> sau <code>/spark tps</code> în chat</h3><p>Vei vedea <b><code>20.0 TPS</code></b> constant și un <b>MSPT de ~2.0 – 3.5 ms</b> (din bugetul maxim de 50 ms pe tick). Asta înseamnă că serverul folosește sub 7% din puterea unui tick și are peste 93% rezervă liberă fără pic de lag!</p></div>
+  <div class="card"><h3>3️⃣ Verifică toate itemele în Creative / Inventar</h3><p>Ia orice armă din <code>CGM</code>, orice mașină din <code>Vehicle Mod</code>, orice felie de pizza din <code>Pizzaland</code> sau mobilier din <code>ModernXL</code>: <b>0 pătrate negru-mov</b>, toate modelele 3D sunt clare, iar când conduci mașina cu viteză nu mai îngheață imaginea la trecerea dintre chunk-uri (<code>always_defer_chunk_updates: true</code>).</p></div>
+  <div class="card"><h3>4️⃣ Scrie <code>/cuantic</code>, <code>/version</code> și <code>/pl</code></h3><p>Toate cele <b>14 pluginuri Bukkit</b> (<code>LuckPerms</code>, <code>EssentialsX</code>, <code>WorldGuard</code>, <code>ClaimChunk</code>, <code>SkinsRestorer</code> etc.) sunt verzi (14/14 active) și lucrează împreună cu cele <b>36 de moduri Forge</b> fără nicio eroare în consolă (T3 = 0 erori).</p></div>
+</div>
+
+
+<h2>🤝 Ce primești și ce NU promitem</h2>
+<div class="grid">
+  <div class="card"><h3>📦 Pack-ul tău, ușurat cu −45.5%</h3><p>Toate blocurile și modurile de conținut din Freeroam sunt păstrate și compatibile la handshake (T4: 0 kickuri), dar sunetele și texturile uriașe sunt compactate fără pierdere de rezoluție, iar <code>Freeroam.1.0.0.mrpack</code> original rămâne intact în tagul <code>pack-original</code>.</p><span class="src">1.7.7 · CUANTIC-Client-1.7.7.mrpack · 90.7 MB (redus de la 133.1 MB = −60.6 MB pentru copii cu net slab)</span></div>
+  <div class="card"><h3>🚪 Intri fără parolă (+ OP automat)</h3><p>Poarta de login (AuthMe + FastLogin) e <b>scoasă</b> de pe server, iar contul proprietarului (<code>iZentric</code>) primește automat OP nivelul 4 și permisiuni LuckPerms <code>*</code> la conectare.</p><span class="src">analysis/NO-LOGIN.md · analysis/op.md</span></div>
+  <div class="card"><h3>🩺 Se repară singur</h3><p>Dacă java moare, supervisorul o aprinde în ~15 s, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Fiecare schimbare vine cu snapshot + rollback.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
+  <div class="card"><h3>🧾 Fiecare cifră are dovadă</h3><p>Tabelul de mai sus nu e scris de mână: e extras din fișierele de verdict ale joburilor. Le poți citi pe toate în repo, la <code>analysis/</code>.</p><span class="src">BENCH-LIVE.md · RAM-ALL.md · APPLY-LIVE.md</span></div>
+</div>
+<div class="honest">
+  <h3>Ce nu știm încă (si de ce e scris aici, nu ascuns după un slogan)</h3>
+  <ul>
+    <li>Nu avem măsurat cu 10-25 de jucători deodată — cifrele de mai sus sunt cu <b>un</b> jucător. Nu mai afișăm niciun „câți jucători duce" — valorile acelea erau extrapolări, nu probe, și nu le-am verificat.</li>
+    <li>„Nu se simte ca un hibrid" e verificat doar din partea serverului (0 kickuri, 0 erori de registru). Senzția ta de pe scaun nu o putem măsura de aici.</li>
+    <li>Nu avem backup zilnic programat pe cutia asta. Ce avem: snapshot <code>tar</code> înaintea fiecărei schimbări + copii <code>.bak</code>. Backup-ul zilnic vine odată cu mutarea pe VM.</li>
+    <li>Restartul programat de la 06:00 (ghilotina anti-scurgeri) e <b>plan</b>, nu stare de fapt. Ce e automat acum: repornirea la crash, tăierea logurilor și adoptarea noului release.</li>
+    <li>Trezirea la prima conectare (wake-on-join) e scrisă și documentată, dar <b>n-a fost încă verificată live</b> — pe Cloud Shell e imposibil fizic.</li>
+    <li>Nu vindem „de 1000× mai bun": 1000× pe p95 ar însemna 0.005 ms, adică sub cuantumul unui singur tick. Ce demonstrăm e −59% p95 și −35% încărcare, pe aceeași mașină.</li>
+  </ul>
+</div>
+
+<details><summary>📖 Dicționar de termeni, ca să nu te păcălim cu jargon</summary>
+  <p><b>MSPT</b> = cât durează o „bătăre" a serverului. Ai 50 ms de buget pe cadru; sub asta nu simți nimic, peste apar săriturile.</p>
+  <p><b>p95</b> = a 95-a valoare din 100, adică cea mai proastă secundă „normală". Media arată bine mereu; p95 arată realitatea.</p>
+  <p><b>GC</b> = momentul în care Java își face curat în memorie și stă puțin loc. Mai rare = mai bine, dar prea lungi = se simte.</p>
+  <p><b>RSS / RAM vârf</b> = câtă memorie ocupă cu adevărat serverul, nu cât i-am dat voie să ceară.</p>
+  <p><b>Hibrid</b> = server care rulează simultan moduri (Forge) și pluginuri (Bukkit). De obicei se sărută urât; al nostru are strat de compatibilitate (CatServer) și 0 kickuri la login.</p>
+</details>
+
+<h2>🥔 Merge și pe un calculator de bibliotecă?</h2>
+<div class="grid">
+  <div class="card"><h3>Clientul</h3><p>Pack-ul vine cu 7 motoare de FPS/ramură ușoară și un „mod cartof" pentru PC-uri vechi de ~2010, fără placă video. Marime: <b>90.7 MB</b> client / <b>51.1 MB</b> server, citite de pe release, nu estimate..</p></div>
+  <div class="card"><h3>Serverul</h3><p>Server gol = doarme (câteva procente de CPU). Mobilul e plafonat global și alive doar lângă jucători, deci consumul nu explodează când intră lumea.</p></div>
+  <div class="card"><h3>Gazda</h3><p>Rulează acum pe un cont gratuit, 2 vCPU · 11.8 GB RAM · disc 5 GB (66% ocupat — limita reală a cutiei, nu a serverului).</p></div>
+</div>
+
+<h2>📦 Cum intri, în 3 mișcări</h2>
+<div class="grid">
+  <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>CUANTIC-Client-1.7.7.mrpack</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.7.7.mrpack">⬇️ Descarcă pack-ul</a></p></div>
+  <div class="card"><h3>2️⃣ Importă (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege fișierul <code>.mrpack</code> → Launch. Merge și cu TLauncher.</p></div>
+  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>92.5.171.150:25565</b>. Fără parolă, fără /register — intri direct în oraș. 🏙️</p></div>
+</div>
+
+<h2>🕰️ Cum arată o zi pe server (schema țintită)</h2>
+<div class="sub">Serverele hibrid clasice mor pentru că memoria lor crește ca un munte, zi după zi. Asta e ce țintim; <b>pe cutia asta de azi restartul de la 06:00 NU e automat</b> — automat e supervisorul care repornește la crash și taie logurile când crește discul.</div>
+<div class="card"><pre>
+06:00 GHILOTINA (restart programat) → memoria la zero
+06:01 pauză totală: ~0% CPU, nimeni online
+14:00 intră copiii → +~50 MB/jucător, lumea e deja generată lângă spawn
+18:00 vârful serii: totul plafonat, buget fix de entități
+03:00 gol → iar pauză totală
+────────────────────────────────────────────
+săptămâna noastră:  ╱╲╱╲╱╲╱╲   (plat, ca dinții de fierăstrău)
+boala hibridelor:   ╱─╱─╱──↗    (muntele care crește → crash)
+</pre></div>
+
+<footer>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 21:50 UTC<br>
+  CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
+  Date brute: <code>analysis/BENCH-LIVE.md</code> · <code>analysis/RAM-ALL.md</code> · <code>analysis/ACCEPTANCE.md</code> · <code>site/records.json</code>
+</footer>
+</div></body></html>

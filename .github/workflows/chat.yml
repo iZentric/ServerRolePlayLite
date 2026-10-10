@@ -1,0 +1,23 @@
+name: CHAT — puntea de chat Minecraft <-> agent (prin GitHub)
+on:
+  push:
+    paths: [ "deploy/chat.txt", "deploy/CHAT-REPLY.txt", "scripts/chat-bridge.sh", ".github/workflows/chat.yml" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  c:
+    runs-on: [self-hosted]
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/chat-bridge.sh
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

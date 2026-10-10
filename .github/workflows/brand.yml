@@ -1,0 +1,23 @@
+name: BRAND — numele CUANTIC in lista de servere
+on:
+  push:
+    paths: [ "scripts/brand.sh", "deploy/brand.txt", ".github/workflows/brand.yml" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  b:
+    runs-on: [self-hosted]
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/brand.sh
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

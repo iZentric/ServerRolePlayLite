@@ -1,0 +1,9 @@
+# commands.yml - CUANTIC: aliasuri de consola + numele serverului (brand unde se vede)
+name: CUANTIC
+filter: §
+commands: {}
+alias:
+  cuantic:
+  - version
+  cuantictps:
+  - spark health

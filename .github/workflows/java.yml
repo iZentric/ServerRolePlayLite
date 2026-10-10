@@ -1,0 +1,23 @@
+name: JAVA — Java noastra + pack reasamblat + test real de boot
+on:
+  push:
+    paths: [ "deploy/java.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  j:
+    runs-on: [self-hosted]
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/java.sh || true
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

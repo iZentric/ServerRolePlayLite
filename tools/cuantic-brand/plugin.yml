@@ -1,0 +1,12 @@
+name: Cuantic-Brand
+main: cloud.cuantic.brand.CuanticBrandPlugin
+version: __VER__
+api-version: 1.16
+author: Cuantic
+description: Motor & brand Cuantic pentru /version, consola si tuning runtime (stil DivineMC); upstream-ul ramane vizibil.
+website: https://github.com/iZentric/ServerRolePlayLite
+commands:
+  cuantic:
+    description: Afiseaza versiunea motorului Cuantic si provenienta upstream
+    usage: /cuantic
+    aliases: [cver]

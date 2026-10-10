@@ -1,0 +1,23 @@
+name: RAMALL — serverul pe toata RAM-ul masinii (+ plafon gasit prin test)
+on:
+  push:
+    paths: [ "deploy/ramall.txt", "scripts/ram-all.sh", "scripts/cuantic-args.sh", ".github/workflows/ramall.yml" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  r:
+    runs-on: [self-hosted]
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/ram-all.sh
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

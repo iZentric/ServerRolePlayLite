@@ -1,0 +1,184 @@
+{
+ "1.7.7": [
+  {
+   "t": "Sincronizare 1:1 Server <-> Client (zero calcule pe distanțe pe care serverul nu le trimite)",
+   "p": "Observație strategică esențială: serverul are `view-distance=4` (64 blocuri) și în `spigot.yml` trimite entitățile la `other: 32`, `animals/monsters: 24`, `misc: 12`, `players: 48` cu `entity-broadcast-range-percentage=60`. În **1.7.7** am aliniat matematic Clientul și Serverul 1:1: (1) în `EntityCulling` am coborât `tracingDistance` de la `64` la **`32` blocuri** (nu mai face raycasting în gol între 32 și 64 blocuri unde serverul oricum nu trimite entități); (2) în `Out of Sight` am setat `tileEntityRenderRangeMax = 24.0` (tăind **86% din aria de mobilier 3D** trimisă de server în cele 4 chunk-uri, păstrând 100% mobilierul din clădirea și strada ta) și `entityRenderRangeMax = 32.0`; (3) în `options.txt` am aliniat `entityDistanceScaling: 0.6` la procentul `60%` de pe server și am scos `Ksyxis` de pe Client (care acționa doar în SinglePlayer); (4) în `spigot.yml` și `bukkit.yml` am oprit complet liliecii din peșteri (`ambient: 0`), am activat `nerf-spawner-mobs: true` și am rărit hopperele la `24` tick-uri."
+  },
+  {
+   "t": "Arhivă Client redusă înapoi la ~72 MB cu 100% format RGBA/RGB (zero texturi negru-mov)",
+   "p": "Am combinat redimensionarea texturilor gigantice la `256x256 HD` cu cuantizarea entropiei convertită înapoi în modul nativ 32-bit `RGBA` / 24-bit `RGB` (`quantize(256).convert(orig_mode)`), păstrând **Oculus 1.4.7** pe Client. Rezultat: niciun fișier PNG nu este în format indexat `P` (deci zero cuburi negru-mov), dar compresia `DEFLATE` scade din nou modpack-ul cu **~47 MB** pentru descărcare rapidă pe orice net."
+  }
+ ],
+ "1.7.6": [
+  {
+   "t": "Optimizare calitativă HD 256x256 RGBA (zero texturi negru-mov, -70% VRAM pe laptopuri fără placă video)",
+   "p": "Păstrăm 100% modul de culoare original `RGBA`/`RGB` (fără cuantizare în paletă `P`) și **Oculus 1.4.7** pe Client, dar aducem texturile pătrate exagerate (`1024x1024` / `2048x2048` din `Pizzaland` și `ModernXL`) la **256x256 HD** (`16x` peste rezoluția vanilla `16x16`) prin filtrare `LANCZOS`. Vizual totul arată impecabil HD, fără niciun cub negru-mov, dar Texture Atlas-ul consumă cu ~600 MB mai puțin VRAM pe plăcile integrate Intel HD / UHD."
+  },
+  {
+   "t": "Out of Sight 1.0.1 + Connectivity 2.4 + servers.dat pre-configurat în Multiplayer",
+   "p": "(1) Am înlocuit `betterfpsdist 1.1` (care în 1.16.5 nu avea suport pentru `Rubidium`) cu **Out of Sight 1.0.1** + `out_of_sight-client.toml` calibrat calitativ (`tileEntityRenderRangeMax = 36.0`, `entityRenderRangeMax = 56.0`), astfel încât tot mobilierul din clădirea și strada din fața ta se vede 100% complet, dar mobilierul aflat la peste 36 blocuri după clădiri nu încarcă placa video; (2) am adăugat **Connectivity 2.4** pe Server și Client pentru a elimina erorile `Timed out` / `PacketTooLargeException` la conectarea de pe laptopuri sau Wi-Fi lent; (3) am pre-inclus `overrides/servers.dat` cu **CUANTIC RolePlay • Palma City (`92.5.171.150:25565`)** direct în meniul Multiplayer."
+  }
+ ],
+ "1.7.5": [
+  {
+   "t": "Păstrat doar Oculus pe Client (fără CTM-MC) pentru fixul texturilor negru-mov cu consum minim de RAM",
+   "p": "Conform cerinței, în **1.7.5** păstrăm pe Client doar **Oculus 1.4.7** (cu `shaderPack=(off)` în `overrides/optionsshaders.txt` ca să nu scadă FPS-ul pe laptopuri vechi) și scoatem `CTM-MC` (`ConnectedTexturesMod`), păstrând fixul `ModernFix` (`dynamic_resources=false` pe client), `use_compact_vertex_format: false` în `rubidium-options.json` și texturile PNG `RGBA`/`RGB` intacte."
+  }
+ ],
+ "1.7.4": [
+  {
+   "t": "Fix complet pentru texturile negru-mov pe iteme (Oculus + CTM păstrate pe Client, PNG RGBA 100% lossless, ModernFix ModelBakeEvent fix)",
+   "p": "Am identificat și eliminat toate cele 4 cauze pentru care unele iteme apăreau cu textură negru-mov (`missingModel` / `MissingTextureSprite`): (1) am readus **Oculus 1.4.7** și **CTM (ConnectedTexturesMod) 1.1.2.6** în Client (cu `overrides/optionsshaders.txt` setat pe `shaderPack=(off)` ca să nu scadă FPS-ul pe laptopuri vechi); (2) în `overrides/config/modernfix-mixins.properties` pe Client am setat `mixin.perf.dynamic_resources=false` și `faster_item_rendering=false`, deoarece în codul `ModernFix` (`ModelBakeEventHelper.java`) activarea `dynamic_resources` returnează `missingModel` (cubul negru-mov) pentru modelele speciale înregistrate în `ModelBakeEvent` de `Pizzaland`, `ModernXL`, `CGM` și `Vehicle Mod`; (3) în `rubidium-options.json` am setat `use_compact_vertex_format: false` pentru compatibilitate UV 100% cu `Oculus`; (4) compresia PNG din `slim_client_jar` este acum 100% lossless în modul original `RGBA`/`RGB` (fără cuantizare în paletă indexată `P`)."
+  },
+  {
+   "t": "Toate optimizările de FPS și Server din 1.7.3 păstrate integral",
+   "p": "Păstrează configurile pre-tunate `rubidium-options.json` (`smooth_lighting: OFF`, `enable_clouds: false`, `always_defer_chunk_updates: true`), `sodium-extra-options.json` (`fog_distance: 33`, animații lavă/foc oprite), `entityculling.json` (`tracingDistance: 64`, `tickCulling: true`), `ferritecore-mixin.toml`, plus cele 35 de moduri și 14 pluginuri pe Server cu 0 erori în log."
+  }
+ ],
+ "1.7.3": [
+  {
+   "t": "Configuri pre-tunate în Client pentru Rubidium, Rubidium Extra, EntityCulling și FerriteCore (FPS maxim din prima secundă)",
+   "p": "Am descoperit în codul sursă `Rubidium` (`MixinMinecraftClient` / `MixinGameOptions`) că suprascrie `options.txt` cu propriul `config/rubidium-options.json` (unde implicit lăsa `smooth_lighting: HIGH`, `enable_clouds: true`, `enable_vignette: true` și `always_defer_chunk_updates: false`). În **1.7.3** livrăm direct în `.mrpack`: (1) `rubidium-options.json` cu `smooth_lighting: OFF`, `enable_clouds: false`, `enable_vignette: false`, `always_defer_chunk_updates: true` (zero stutter la condus mașini între chunk-uri) și `use_compact_vertex_format: true` (−40% VRAM); (2) `sodium-extra-options.json` cu oprirea animațiilor de lavă/foc/portal, `fog_distance: 33` (fără shader de ceață), `show_fps: true`, `show_coords: true`, `instant_sneak: true`, `use_fast_random: true`; (3) `entityculling.json` cu `tracingDistance: 64` (aliniat la `view-distance=4`) și `tickCulling: true`; (4) `ferritecore-mixin.toml` + `modernfix-mixins.properties`."
+  },
+  {
+   "t": "Server 1.7.3 fără nicio linie de avertisment EssentialsX sau SmoothChunkSave în log",
+   "p": "În `EssentialsX 2.19.7` (`VersionUtil.class`), verificarea inversată `!net.minecraft.server.v1_16_R3.MinecraftServer` declanșa `NMS_CLEANROOM` pe orice server Forge 1.16.5; am neutralizat constanta direct în `VersionUtil.class` la build și am pre-generat `config/smoothchunk-common.toml` și `config/ferritecore-mixin.toml` în arhiva serverului."
+  },
+  {
+   "t": "Artileria completă de moduri Forge 1.16.5 (35 moduri pe Server + 14 pluginuri, 70.8 MB Client)",
+   "p": "Include `FastSuite 1.1.1`, `SpawnerFix 1.0.0.3`, `SmoothChunkSave 2.0`, `LetMeDespawn 1.0.2a`, `Ksyxis 1.4.6`, `RoadRunner 1.5.2`, `FerriteCore 2.1.1`, `ModernFix 5.18.0` (`dynamic_resources=true`), `Rubidium Extra 0.4.18`, `Entity Collision FPS Fix 1.0.1`, `Better FPS Render Distance 1.1`, plus optimizările `Gale`/`Pufferfish`/`Purpur`/`Krypton` în `Cuantic-Brand` și JVM."
+  }
+ ],
+ "1.7.2": [
+  {
+   "t": "Artileria completă de moduri Forge 1.16.5 pe Server (35 moduri, 0 erori) și Client (70.8 MB)",
+   "p": "Am adăugat și verificat live toate modurile de performanță 1.16.5 compatibile cu CatServer: pe **Server** (`FastSuite 1.1.1` = index LRU de rețete 2.3x–4.8x mai rapid, `SpawnerFix 1.0.0.3` = elimină lag-ul de spawner MC-189565, `SmoothChunkSave 2.0` = salvare continuă a chunk-urilor fără spike la autosave, `LetMeDespawn 1.0.2a` = eliberează mob cap-ul de mobii cu iteme, `Ksyxis 1.4.6` = boot în 13.1s fără spawn-chunks); pe **Client** (`Rubidium Extra 0.4.18` = culling pe particule/animații/block-entities, `Entity Collision FPS Fix 1.0.1` = scoate coliziunile de pe render thread în zone aglomerate MC-228976, `Better FPS Render Distance 1.1` = frustum 3D eliptic)."
+  },
+  {
+   "t": "Tehnologii din toate server jar-urile mari (Gale, Pufferfish, Airplane, Petal, DivineMC, Purpur, Krypton) active în runtime",
+   "p": "`Cuantic-Brand` activează direct în memorie în `CatServerConfig` și `SpigotConfig`: `enableSkipEntityTick=true` + `enableSkipTileEntityTick=true`, `disableHopperMoveEventWorlds`, `autoUnloadDimensions=[-1, 1]`, `keepSpawnInMemory=false`, `disableFMLStatusModInfo=true`, `disableStatSaving=true`, `movedWronglyThreshold=0.35` + `movedTooQuicklyMultiplier=25.0`, iar în JVM am adăugat optimizările Netty din `KryptonReforged` (`-Dio.netty.allocator.maxOrder=9` = arene Netty de 4 MiB în loc de 16 MiB și `-Dio.netty.leakDetection.level=DISABLED`)."
+  },
+  {
+   "t": "ModernFix Dynamic Resources (−1 GB RAM) + Spigot/InControl/Forge-Server config deployate complet",
+   "p": "Am activat `mixin.perf.dynamic_resources=true` în `config/modernfix-mixins.properties` pe Client și Server, am eliminat definiția duplicată `SPIGOT_YML` care suprascria `max-entity-collisions: 2` și `tick-inactive-villagers: false`, și am reparat `apply-live.sh` / `cuantic-live.sh` să copieze și directoarele `config/` (`incontrol/spawn.json`) și `defaultconfigs/` (`forge-server.toml`). Rezultat măsurat în ACCEPTANCE: **8 TRECE / 0 DE VERIFICAT / 0 CADE**, boot **13.118s**, **35 moduri**, **14/14 pluginuri**, **0 erori în log**."
+  }
+ ],
+ "1.7.1": [
+  {
+   "t": "Tehnologii din toate server jar-urile mari (Gale, Pufferfish, Airplane, Petal, DivineMC, Purpur) injectate în runtime",
+   "p": "`Cuantic-Brand` activează direct în memorie prin reflecție în `CatServerConfig` și `SpigotConfig`: (1) `enableSkipEntityTick=true` + `enableSkipTileEntityTick=true` (oprește tick-ul pe mobilierul din Pizzaland/Modernxl când e inactiv); (2) `disableHopperMoveEventWorlds=[world, DIM-1, DIM1]` (ca `hopper.disable-move-event` din Gale/Paper); (3) `autoUnloadDimensions=[-1, 1]` + `keepSpawnInMemory=false` (descarcă Nether/End/Spawn când sunt goale); (4) `disableFMLStatusModInfo=true` (Server Ping instant, fără lista de 30 moduri); (5) `disableStatSaving=true` (oprește scrierea continuă de JSON pe discul de 5 GB); (6) `movedWronglyThreshold=0.35` + `movedTooQuicklyMultiplier=25.0` (fără rubberband în mașini/avioane `vehicle-mod`)."
+  },
+  {
+   "t": "ModernFix Dynamic Resources activat pe Client și Server (−1 GB RAM în timpul jocului)",
+   "p": "În `ModernFix`, cea mai puternică optimizare (`mixin.perf.dynamic_resources=true`) e oprită implicit! Am adăugat `config/modernfix-mixins.properties` atât în client (`overrides/config/`) cât și pe server: modelele 3D din `Pizzaland` (84 MB) și `Modernxl` (38 MB) nu mai stau toate încărcate permanent în RAM, ci se încarcă doar când te uiți la ele."
+  },
+  {
+   "t": "Zero erori în T3 și T5 (8/8 teste funcționale TRECE, 0 VERIFICA, 0 CADE) + Serverul nu se mai oprește la finalul joburilor",
+   "p": "Am eliminat `RUNNER_TRACKING_ID` din toate joburile GitHub Actions (care trimitea `SIGKILL` lui `java` când se termina un job) și am reparat la rădăcină cele 3 erori din log: `pizzamod.mixin.json` (`minVersion: 0.8`), tagul `supplementaries:planter_rich` (`required: false`) și avertismentul fals din `EssentialsX`."
+  }
+ ],
+ "1.6.5": [
+  {
+   "t": "Heap-ul nu mai doboară cutia",
+   "p": "`-Xmx` = RAM total − 2 GB (min 1 GB, max 8 GB) în loc de tot RAM-ul. `11884M` pe o cutie de 11.8 GB a chemat OOM-killerul, care omora și java și runnerul ⇒ server jos. `CUANTIC_RAM=all` revine la tot RAM-ul, `ramceil` (scris de guardianul de OOM) îl acoperă."
+  },
+  {
+   "t": "Brand Cuantic în `/version`, legat de build",
+   "p": "Un singur fișier de cod (`tools/cuantic-brand/`) devenit plugin, montat în `plugins/` la CatServer, Arclight și Mist de `scripts/build_lite.py`. A treia linie din răspuns e textul upstream: „Cuantic based on / adapted from: …” — meritul nu e furat, licențele rămân."
+  },
+  {
+   "t": "T10 în teste: dovada, nu intenția",
+   "p": "Acceptance are acum testul `/version` dat prin punte pe serverul pornit real: trebuie să iasă și „Cuantic”, și linia „based on / adapted from”. Lipsește brandul ⇒ testul cade, nu se întâmplă să treacă pe tăcute."
+  },
+  {
+   "t": "Compilare care nu mai cade pe 404",
+   "p": "CI-ul nu se mai bazează pe descărcarea API-ului de maven (hub.spigotmc.org dă 404 pe nume `-SNAPSHOT`, CatServer nu expune `org.bukkit.*` la rădăcină): compilăm pe niște antete locale, iar în jar intră doar `cloud.cuantic.*`. Nimic dublu în pack."
+  },
+  {
+   "t": "Zampto: scos total",
+   "p": "Cinci fișiere (workflow de deploy, măsurători, doc, trigger) au dispărut. Gazda cerea panou fără API, SFTP-ul nu putea porni serverul, portul nu răspundea ⇒ zero componente și zero chei către ceva ce nu putem stăpâni."
+  },
+  {
+   "t": "Site legat de release, nu de memoria mea",
+   "p": "Numele și MB-ile pack-ului se citesc din API-ul release-ului `lite`, titlul de „ce s-a schimbat” din `pack-rules.json`, iar conținutul din `site/changelog.json`. Jobul rulează la fiecare release, la push pe analiză/site și în fiecare oră ⇒ pagina nu mai poate rămâne pe versiunea veche."
+  }
+ ],
+ "1.6.4": [
+  {
+   "t": "Straturile au ajuns și pe mașină",
+   "p": "Configurile de tuning (mob caps, entity activation, chunk-gc, merge-radius, hoppers) existau în zip, dar jobul de implantare copia doar jar/txt/json ⇒ serverul live rula cu setările implicite. Acum le citește și pe ale noastre."
+  },
+  {
+   "t": "Am scos cheile moarte",
+   "p": "Per-player-mob-spawns e cheie de Paper (CatServer o ignora), sync-chunk-writes e cheie din 1.19 (nu exista pe 1.16.5). Le-am înlocuit cu use-native-transport, care chiar lucrează."
+  },
+  {
+   "t": "Brandul se vede, nu se povestește",
+   "p": "MOTD cu coduri de culoare reale (înainte scria \\u00A7b litere), nume CUANTIC în consola serverului, alias /cuantic și /cuantictps, banner în start.sh / start.bat."
+  },
+  {
+   "t": "Manifestul s-a reparat",
+   "p": "Din 1.6.3 niciun zip nu mai avea manifest-cuantic.json — o eroare era înghițită de un except. Acum conține versiunea, jarul real, lista de moduri/pluginuri și ce n-a putut fi rezolvat."
+  },
+  {
+   "t": "Serverul nu mai e lăsat jos",
+   "p": "Orice job care oprea java are acum trap la ieșire care îl repornește; testele care dădeau serverul jos pentru minute (cautare de plafon RAM, reload de flaguri, brand) stau pauzate."
+  },
+  {
+   "t": "Badge de viață pe pagină",
+   "p": "Fiecare actualizare de site sună de două ori la port și scrie SUS / REPRIT automat / JOS. Măsurătorile vechi nu mai pot trece drept „merge”."
+  }
+ ],
+ "1.6.6": [
+  {
+   "t": "Regulă nouă: serverul rămâne pornit după orice comandă",
+   "p": "Toate cele 18 workflow-uri de pe cutie se termină acum cu un pas `if: always()` care aleargă `scripts/ensure-up.sh` ⇒ un job care crapă, e anulat sau terminat cu java oprită o repornește. Singura metodă să-l lași jos e un fișier scris de tine: `touch $HOME/cuantic-live/OPRIT` (acum `ensure-up` ți se supune și raportează de ce nu pornește)."
+  },
+  {
+   "t": "Poarta de login a ieșit din pack, nu doar de pe server",
+   "p": "`AuthMe` + `FastLogin` erau încă descărcate de `pack-rules.json` în toate cele 4 arhive ⇒ orice replay al build-ului le aducea înapoi și îți cerea parolă. Acum nu mai sunt în listă: intri pe `92.5.171.150:25565` fără cont. `SkinsRestorer` + `ProtocolLib` au rămas (skins), `LuckPerms` a rămas (grade)."
+  },
+  {
+   "t": "Zero componente fără motiv",
+   "p": "Am tăiat 2 jar-uri care nu produceau nimic altceva decât frecare la intrare. Ce a rămas în `plugins/`: EssentialsX (5 module) · ProtocolLib · SkinsRestorer · LuckPerms · Chunky · ClaimChunk · WorldEdit · WorldGuard · Vault · `Cuantic-Brand`. Fiecare are motiv, fiecare are cost (câte secunde la pornire, cât RAM)."
+  },
+  {
+   "t": "Brand Cuantic în `/version`, legat de build",
+   "p": "`Cuantic-Brand-1.6.5.jar` (același cod, urcă odată cu pack-ul) se compilează în CI pe niște antete locale și se montează în `plugins/` la CatServer, Arclight și Mist. A treia linie rămâne textul upstream: „based on / adapted from”."
+  },
+  {
+   "t": "Site-ul nu mai poate minți nici măcar 4 minute",
+   "p": "Dacă `pack_version` avansează înaintea publicării arhivei, pagina rămâne legată de ultimul asset care chiar există (fără link 404 și fără „None MB”); altfel linkurile, greutățile și titlul secțiunii se recitesc din release + `pack-rules.json`, la fiecare release, push pe analiză/site și în fiecare oră."
+  }
+ ],
+ "1.6.7": [
+  {
+   "t": "Proveniența din `/version` devine dovadă în log",
+   "p": "Testul T10 de pe cutie a zis `brand apare, dar linia de proveniență lipsește` — pentru că pluginul trimitea cele 3 linii doar jucătorului, iar live.log prindea doar consemnarea. Acum aceleași 3 linii (fără coduri de culoare) se scriu și în log: `analysis/ACCEPTANCE.md` poate verifica șirul „based on / adapted from”, nu doar cuvântul Cuantic."
+  }
+ ],
+ "1.6.8": [
+  {
+   "t": "Brandul pentru toată lumea, nu doar pentru OP",
+   "p": "Captura de ecran arăta textul vanilla (`This server is running CatServer version 1.16.5-1d8d6313 …`) pentru că pluginul nostru făcea un skip la `hasPermission(\"bukkit.command.version\")` ⇒ cine nu era operator primea linia lui CatServer. Acum `Cuantic-Brand` răspunde la `/version`, `/ver` și `/about` indiferent de permisiune, anulează doar textul și lasă motorul să fie menționat pe linia a 3-a (`based on / adapted from`)."
+  },
+  {
+   "t": "OP fără paste, fără dispatch",
+   "p": "`deploy/op.txt` conține numele; un push pe fișier face jobul `OP` să ruleze pe cutie (sandbox-ul primea 403 la `workflow_dispatch`, deci apăsarea de buton e înlocuită de un commit). Jobul verifică și dovedește în `analysis/op.md` că numele a intrat în `ops.json`."
+  }
+ ],
+ "1.7.0": [
+  {
+   "t": "Motorul propriu în JAR + F3 + consolă (stil DivineMC, fără minciună)",
+   "p": "Nu am scris un motor hibrid de la 0 (nici DivineMC nu e de la 0, e fork peste Purpur). `scripts/brand_engine.py` cioplește în bytecode (`CraftServer.class` și `BrandingControl.class`, inclusiv în jarul intern `data/forge-*-universal.jar`) numele motorului în `CUANTIC` (apare în boot, în ecranul F3 din joc și la Server Ping), păstrând șirul de versiune și licența upstream intacte. Iar `Cuantic-Brand` a fost reparat de 3 defecte reale: (1) era copiat în `plugins/plugins/` în loc de `plugins/`; (2) stub-urile false `MessageSender` și `Bukkit.getMinecraftVersion()` dădeau `NoSuchMethodError` pe CatServer 1.16.5; (3) acum ascultă și `ServerCommandEvent` (consola pentru T10) și activează prin reflecție câmpurile uitate pe `// TODO` în `CatServerConfig` (`enableSkipEntityTick`, `enableSkipTileEntityTick`, `maxEntityCollision=4`, `worldGenMaxTickTime=10`)."
+  },
+  {
+   "t": "Client mai ușor pentru copii cu net slab (`fps-reducer` și dublurile scoase + compactor de assete)",
+   "p": "`fps-reducer` scădea FPS-ul doar în Alt-Tab/AFK (0 câștig în timp ce te joci) ⇒ scos. `saturn` și `memoryleakfix` pe client erau dubluri peste `FerriteCore 2.1.1` + `ModernFix 5.18.0` ⇒ scoase. `oculus` (încărcător de shadere care încetinește Rubidium pe PC-uri slabe) și `notenoughanimations` + `TRansliterationLib` ⇒ scoase din client. În plus, `slim_client_jar` recodează sunetele `.ogg` uriașe din `Pizzaland_v68.jar` (84.8 MB) și `Modernxl` (38.0 MB) în mono 22kHz Vorbis și cuantizează texturile `.png` la aceeași rezoluție."
+  },
+  {
+   "t": "OP garantat din 3 straturi (UUID real `OfflinePlayer:` MD5 v3 + auto-OP în plugin)",
+   "p": "Înainte, `op.sh` calcula UUID v5 (`Player_iZentric`) în loc de algoritmul real din Minecraft 1.16.5 (`UUID.nameUUIDFromBytes(\"OfflinePlayer:iZentric\")` = `0e2f8d53-21b4-32a4-a498-0967ed108270`) și omora serverul cu `pkill java` când puntea era închisă. Acum `ops.json` cu UUID-ul real este pre-scris în toate cele 4 arhive de server, în `op.sh` și `ensure-up.sh`, iar `CuanticBrandPlugin` îți acordă automat `setOp(true)` + `lp user iZentric permission set * true` imediat ce intri pe server sau dai orice comandă."
+  }
+ ]
+}

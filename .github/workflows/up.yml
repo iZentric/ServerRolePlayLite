@@ -1,0 +1,23 @@
+name: UP — server CUANTIC pe Cloud Shell (tmux) + adresa
+on:
+  push:
+    paths: [ "deploy/up.txt" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  up:
+    runs-on: [self-hosted]
+    timeout-minutes: 34
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/up.sh || true
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh
