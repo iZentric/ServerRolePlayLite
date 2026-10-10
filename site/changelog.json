@@ -1,4 +1,18 @@
 {
+ "1.7.2": [
+  {
+   "t": "Artileria completă de moduri Forge 1.16.5 pe Server (35 moduri, 0 erori) și Client (70.8 MB)",
+   "p": "Am adăugat și verificat live toate modurile de performanță 1.16.5 compatibile cu CatServer: pe **Server** (`FastSuite 1.1.1` = index LRU de rețete 2.3x–4.8x mai rapid, `SpawnerFix 1.0.0.3` = elimină lag-ul de spawner MC-189565, `SmoothChunkSave 2.0` = salvare continuă a chunk-urilor fără spike la autosave, `LetMeDespawn 1.0.2a` = eliberează mob cap-ul de mobii cu iteme, `Ksyxis 1.4.6` = boot în 13.1s fără spawn-chunks); pe **Client** (`Rubidium Extra 0.4.18` = culling pe particule/animații/block-entities, `Entity Collision FPS Fix 1.0.1` = scoate coliziunile de pe render thread în zone aglomerate MC-228976, `Better FPS Render Distance 1.1` = frustum 3D eliptic)."
+  },
+  {
+   "t": "Tehnologii din toate server jar-urile mari (Gale, Pufferfish, Airplane, Petal, DivineMC, Purpur, Krypton) active în runtime",
+   "p": "`Cuantic-Brand` activează direct în memorie în `CatServerConfig` și `SpigotConfig`: `enableSkipEntityTick=true` + `enableSkipTileEntityTick=true`, `disableHopperMoveEventWorlds`, `autoUnloadDimensions=[-1, 1]`, `keepSpawnInMemory=false`, `disableFMLStatusModInfo=true`, `disableStatSaving=true`, `movedWronglyThreshold=0.35` + `movedTooQuicklyMultiplier=25.0`, iar în JVM am adăugat optimizările Netty din `KryptonReforged` (`-Dio.netty.allocator.maxOrder=9` = arene Netty de 4 MiB în loc de 16 MiB și `-Dio.netty.leakDetection.level=DISABLED`)."
+  },
+  {
+   "t": "ModernFix Dynamic Resources (−1 GB RAM) + Spigot/InControl/Forge-Server config deployate complet",
+   "p": "Am activat `mixin.perf.dynamic_resources=true` în `config/modernfix-mixins.properties` pe Client și Server, am eliminat definiția duplicată `SPIGOT_YML` care suprascria `max-entity-collisions: 2` și `tick-inactive-villagers: false`, și am reparat `apply-live.sh` / `cuantic-live.sh` să copieze și directoarele `config/` (`incontrol/spawn.json`) și `defaultconfigs/` (`forge-server.toml`). Rezultat măsurat în ACCEPTANCE: **8 TRECE / 0 DE VERIFICAT / 0 CADE**, boot **13.118s**, **35 moduri**, **14/14 pluginuri**, **0 erori în log**."
+  }
+ ],
  "1.7.1": [
   {
    "t": "Tehnologii din toate server jar-urile mari (Gale, Pufferfish, Airplane, Petal, DivineMC, Purpur) injectate în runtime",
