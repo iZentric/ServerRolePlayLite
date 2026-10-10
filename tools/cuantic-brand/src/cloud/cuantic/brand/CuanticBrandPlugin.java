@@ -41,6 +41,6 @@ public class CuanticBrandPlugin extends JavaPlugin implements Listener {
         e.getPlayer().sendMessage("\u00A77Minecraft \u00A7f" + Bukkit.getMinecraftVersion()
             + " \u00A77· API \u00A7f" + Bukkit.getBukkitVersion() + " \u00A77· motor \u00A7f" + Bukkit.getName());
         e.getPlayer().sendMessage("\u00A77Cuantic based on / adapted from: \u00A7f" + Bukkit.getVersion());
-        Bukkit.getConsoleSender().sendMessage(sender + " a dat /version → brand Cuantic " + cuantic());
+        getServer().getConsoleSender().sendMessage(sender + " a dat /version → brand Cuantic " + cuantic());
     }
 }
