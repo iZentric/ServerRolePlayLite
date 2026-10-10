@@ -528,7 +528,18 @@ def build_brand_plugin(out_root, server_jar_path, dest_dirs):
         with open(os.path.join(bdir, "plugin.yml"), "w", encoding="utf-8") as f:
             f.write(yml)
         jar = os.path.join(out_root, "Cuantic-Brand-%s.jar" % ver)
-        cp = server_jar_path if os.path.isfile(server_jar_path) else ""
+        # CatServer nu expune org.bukkit.* la radacina jar-ului (le descarca/remapeaza la primul
+        # boot), deci ne legam de API-ul official de la Spigot HQ. E dependinta DOAR de build:
+        # in runtime pluginul foloseste API-ul din server, asa ca nu dublam nimic in pack.
+        api = os.path.join(ROOT, "tools", "cuantic-brand", "spigot-api-1.16.5.jar")
+        if not os.path.isfile(api):
+            try:
+                download("https://hub.spigotmc.org/nexus/content/repositories/snapshots/org/spigotmc/"
+                         "spigot-api/1.16.5-R0.1-SNAPSHOT/spigot-api-1.16.5-R0.1-SNAPSHOT.jar", api)
+                log("  brand: spigot-api descarcat pentru compilare (doar build-time)")
+            except Exception as e:  # noqa: BLE001
+                log("  brand: spigot-api indescarcabil (" + str(e)[:80] + ") -> incerc cu jarul serverului")
+        cp = api if os.path.isfile(api) else (server_jar_path if os.path.isfile(server_jar_path) else "")
         cmd = ["javac", "--release", "8", "-nowarn"]
         if cp:
             cmd += ["-cp", cp]
