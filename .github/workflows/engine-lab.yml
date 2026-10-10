@@ -1,0 +1,61 @@
+# Laborator izolat: NICIODATA nu publica release-ul "lite" si nu atinge serverul live.
+name: ENGINE LAB — CatServer upstream 1.16.5 + test CUANTIC
+on:
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-lab.txt", "scripts/engine_lab.py", ".github/workflows/engine-lab.yml"]
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      GH_TOKEN: ${{ github.token }}
+      # 1.16.5 upstream: contine fixul hopper-event (98eabb0, Aug 2023)
+      # si fixurile de respawn (1c92118, Apr 2024). Live = 1d8d631 (Mai 2023).
+      CATSERVER_REV: 1c92118fcca69ffac97a48c8e1f6e1bb861b41d1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: |
+            8
+            17
+      - name: Compileaza CatServer 1.16.5 upstream intr-un director temporar
+        run: |
+          curl -fL --retry 3 --retry-delay 5 \
+            "https://codeload.github.com/Luohuayu/CatServer/tar.gz/${CATSERVER_REV}" -o /tmp/catserver-source.tgz
+          mkdir -p /tmp/catserver-source
+          tar -xzf /tmp/catserver-source.tgz -C /tmp/catserver-source --strip-components=1
+          cd /tmp/catserver-source
+          chmod +x gradlew
+          ./gradlew --no-daemon setup buildCatServer
+          find . -type f -iname '*server.jar' -size +5M | head -20
+      - name: Pregateste candidatul, fara sa publice/deployeze
+        run: |
+          set -euo pipefail
+          mkdir -p engine-lab stage
+          jar=$(find /tmp/catserver-source -type f -iname 'CatServer*server.jar' -size +5M | head -1)
+          test -n "$jar"
+          cp "$jar" engine-lab/CatServer-upstream-candidate.jar
+          cp /tmp/catserver-source/LICENSE engine-lab/CATSERVER-LICENSE.txt
+          printf 'Upstream source: https://github.com/Luohuayu/CatServer/tree/%s (LGPL-3.0)\nBranding source: scripts/brand_engine.py in this repository\n' "$CATSERVER_REV" > engine-lab/SOURCE.txt
+          python3 scripts/brand_engine.py engine-lab/CatServer-upstream-candidate.jar engine-lab/CUANTIC-CatServer-candidate.jar > engine-lab/brand.json
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O /tmp/live-pack.zip
+          unzip -q /tmp/live-pack.zip -d stage
+          test -f stage/CatServer-1.16.5-1d8d6313-server.jar
+          cp engine-lab/CUANTIC-CatServer-candidate.jar stage/CatServer-1.16.5-1d8d6313-server.jar
+          echo 'TESTARE STAGING — NU ESTE SERVER LIVE' > engine-lab/README.txt
+          sha256sum engine-lab/*jar > engine-lab/SHA256SUMS.txt
+      - name: Smoke test cu cele 36 moduri si 14 pluginuri reale
+        run: python3 scripts/engine_lab.py stage engine-lab/boot.log
+      - name: Arhiveaza rezultatul (nu publica release-ul si nu reporneste live-ul)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cuantic-engine-upstream-candidate
+          path: engine-lab/
+          retention-days: 7
