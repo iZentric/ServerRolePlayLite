@@ -42,7 +42,7 @@
   - taiat din client (stil rust): CTM-MC1.16.1-1.1.2.6.jar
   - taiat din client (stil rust): DynamicSurroundings-1.16.5-4.0.5.0.jar
   - taiat din client (stil rust): lightfallclient-1.0.0.jar
-  => out/CUANTIC-Client-1.6.6.mrpack (133.1 MB)
+  => out/CUANTIC-Client-1.6.7.mrpack (133.1 MB)
 == ULTRA: dezbrac jar-urile de server de assets client ==
     ✂ Modernxl 1.16.5.jar: 38.0 -> 6.8 MB
     ✂ Pizzaland_v68.jar: 84.8 -> 1.7 MB
@@ -71,7 +71,7 @@
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  => out/CUANTIC-Server-MaxLite-1.6.6.zip (35.0 MB)
+  => out/CUANTIC-Server-MaxLite-1.6.7.zip (35.0 MB)
 == SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar
@@ -88,14 +88,14 @@
   ↓ plugin: Chunky-1.2.217.jar
   ↓ Arclight
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  => out/CUANTIC-Server-Arclight-1.6.6.zip (52.0 MB)
+  => out/CUANTIC-Server-Arclight-1.6.7.zip (52.0 MB)
 == SERVER Mist (hibrid experimental cu patch-uri Paper) ==
   ↓ Mist
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.6.6.zip (51.6 MB)
+  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.6.7.zip (51.6 MB)
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  + brand /version: Cuantic-Brand-1.6.6.jar montat in 3 servere (stubs locale)
-  => out/CUANTIC-Server-CatServer-1.6.6.zip (51.0 MB)
+  + brand /version: Cuantic-Brand-1.6.7.jar montat in 3 servere (stubs locale)
+  => out/CUANTIC-Server-CatServer-1.6.7.zip (51.0 MB)
 GATA.
