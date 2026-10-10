@@ -97,6 +97,15 @@ while :; do
   if ss -lnt | grep -q ':25565'; then S="SUS"; else S="nu asculta"; fi
   echo " $(date +%T) mc=$ALIVE port=$S log=$NOW"
   if [ "$ALIVE" = NU ]; then
+    # guardian de memorie: daca java a murit fara sa apuce "Done (" si logul zice OOM/Killed,
+    # coboram plafonul cu 18% si il blocam in fisier - altfel am reintra la nesfarsit in groapa.
+    if ! grep -aq 'Done (' live.log 2>/dev/null && grep -aqiE 'Killed process|OutOfMemoryError|GC overhead limit' live.log 2>/dev/null; then
+      CUR=$(grep -aoE '^[0-9]{3,7}$' "$D/ramceil" 2>/dev/null | head -1)
+      [ -n "$CUR" ] || CUR=$(awk '/MemTotal/{print int($2/1024)}' /proc/meminfo)
+      NEW=$(( CUR * 82 / 100 )); [ "$NEW" -lt 1024 ] && NEW=1024
+      echo "$NEW" > "$D/ramceil"; echo "$(date +%T) OOM la ${CUR}MB -> plafon ${NEW}MB" >> "$D/ram.log"
+      echo " ram OOM: ${CUR}MB -> ${NEW}MB"
+    fi
     echo " mc mort -> repornesc"; [ -f unix_args.txt ] && start_mc; LAST=0
   elif [ "$NOW" = "$LAST" ]; then
     echo " log blocat:"; tail -2 live.log; tail -1 "$HOME/frpc.log" 2>/dev/null

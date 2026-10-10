@@ -15,6 +15,27 @@ for pat in 'CatServer-*.jar' 'arclight-*.jar' 'Mist-*.jar' 'forge-*.jar' 'server
 done
 [ -n "$JAR" ] || { echo "args: niciun jar de server in $(pwd) - ruleaza intai deploy-ul (c.sh)"; exit 1; }
 
+
+# ===== POLITICA DE MEMORIE (cerere utilizator: serverul sa aiba TOATA RAM-ul masinii) =====
+# Heap-ul se scrie inainte de fiecare pornire, din /proc/meminfo. Daca guardianul din c.sh a
+# descoperit ca OOM-killerul o omora, plafonul gazduit in ramceil este cel folosit (nu mai sarim
+# inapuce in groapa la fiecare restart). CUANTIC_RAM=2G suprascrie totul (mod manual).
+TOT_MB=$(awk '/MemTotal/{print int($2/1024)}' /proc/meminfo 2>/dev/null)
+[ -n "$TOT_MB" ] || TOT_MB=2048
+CEIL=$(grep -aoE '^[0-9]{3,7}$' "$D/ramceil" 2>/dev/null | head -1)
+HEAP="${TOT_MB}M"
+[ -n "$CEIL" ] && HEAP="${CEIL}M"
+[ -n "${CUANTIC_RAM:-}" ] && [ "${CUANTIC_RAM}" != "all" ] && HEAP="$CUANTIC_RAM"
+XMS=$(( TOT_MB / 8 )); [ "$XMS" -lt 512 ] && XMS=512
+[ -n "$CEIL" ] && XMS=$(( CEIL / 8 )); [ "$XMS" -gt 2048 ] && XMS=2048
+if [ "${CUANTIC_RAM:-all}" != "all" ]; then XMS=1024; fi
+if ! grep -qxF -- "-Xmx$HEAP" unix_args.txt; then
+  cp unix_args.txt "unix_args.txt.bak.$(date +%s)"
+  grep -vE '^-(Xms|Xmx)[0-9]+[MGmg]?$' unix_args.txt > /tmp/args.mem
+  { printf -- '-Xms%sM\n-Xmx%s\n' "$XMS" "$HEAP"; cat /tmp/args.mem; } > unix_args.txt
+  echo "args: MEMORIE -Xmx $HEAP (masina are ${TOT_MB}MB), -Xms ${XMS}M, plafon=$( [ -n "$CEIL" ] && echo ${CEIL}MB || echo 'niciodata' )"
+fi
+
 if ! grep -qx -- '-jar' unix_args.txt; then
   cp unix_args.txt "unix_args.txt.bak.$(date +%s)"
   grep -v -x -- '-jar' unix_args.txt | grep -v -x -- 'nogui' | grep -vE '^(CatServer|arclight|Mist|forge)[^ ]*\.jar$' > /tmp/args.head
