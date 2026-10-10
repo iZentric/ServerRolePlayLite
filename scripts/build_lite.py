@@ -211,17 +211,17 @@ UNRESOLVED = []
 
 SERVER_PROPERTIES = r"""\
 #Minecraft server properties - CUANTIC (consum minim)
-motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7ov2 \u00A7f| \u00A7aruleaza din viitor: orice PC, zero lag\u00A7f| \u00A7dOras+Survival+Claims
+motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7o__VER__ \u00A7f| \u00A7aorice PC, zero lag \u00A7f| \u00A7dOras+Survival+Claims \u00A7f| \u00A7ecost 0
 max-players=25
 view-distance=4
 player-idle-timeout=0
-sync-chunk-writes=false
+# sync-chunk-writes exista doar din 1.19; pe 1.16.5 punem transportul nativ (epoll), care chiar exista
+use-native-transport=true
 network-compression-threshold=512
 spawn-protection=0
 allow-flight=true
 enable-command-block=true
 max-tick-time=-1
-sync-chunk-writes=false
 entity-broadcast-range-percentage=60
 online-mode=false
 pvp=true
@@ -233,7 +233,8 @@ white-list=false
 """
 
 SPIGOT_YML = """\
-# spigot.yml - performanta maxima (doar varianta Arclight)
+# spigot.yml - stratul de tuning CUANTIC (acelasi fisier il primesc si CatServer si Mist)
+# Surse chei: docs.dedicatedmc.io/server-optimization, wabbanode blog, builtbybit thread 187104
 settings:
   save-user-cache-on-stop-only: true
   netty-threads: 2
@@ -256,6 +257,10 @@ world-settings:
       monsters: 32
       misc: 16
       other: 32
+    # per-player-mob-spawns (Spigot 1.16.5): plafonul de mobi se imparte pe jucatori, deci
+    # 10 copii nu inseamna de 10x mai multi mobi care sa manance tick-ul.
+    per-player-mob-spawns: true
+    max-tnt-per-tick: 20
     merge-radius:
       item: 3.5
       exp: 4.0
@@ -273,7 +278,7 @@ world-settings:
 """
 
 BUKKIT_YML = """\
-# bukkit.yml - performanta maxima (doar varianta Arclight)
+# bukkit.yml - stratul de tuning CUANTIC (limitare mobi + chunk-gc), identic pe toate variantele
 settings:
   allow-end: false
 spawn-limits:
@@ -295,6 +300,18 @@ ticks-per:
   autosave: 6000
 """
 
+
+COMMANDS_YML = """\
+# commands.yml - CUANTIC: aliasuri de consola + numele serverului (brand unde se vede)
+name: CUANTIC
+filter: §
+commands: {}
+alias:
+  cuantic:
+  - version
+  cuantictps:
+  - spark health
+"""
 
 CATSERVER_YML = """\
 # catserver.yml - tunat pe cheile reale (autopsia tribunalului, 8 oct)
@@ -501,21 +518,38 @@ def write_start_scripts(sdir, server_jar):
                        "mods": sorted(os.listdir(os.path.join(sdir, "mods"))) if os.path.isdir(os.path.join(sdir, "mods")) else [],
                        "plugins": sorted(os.listdir(os.path.join(sdir, "plugins"))) if os.path.isdir(os.path.join(sdir, "plugins")) else [],
                        "unresolved": UNRESOLVED,
+                       "straturi_tuning": sorted(x for x in os.listdir(sdir)
+                                                   if x in ("spigot.yml", "bukkit.yml", "catserver.yml", "commands.yml", "paper.yml")),
                        "jvm": "a se vedea unix_args.txt"}, f, ensure_ascii=False, indent=1)
     except Exception as e:
         log(f"  !! manifest: {e}")
+    VER = rules.get("pack_version", "?")
+    BN = "=============================================="
     with open(os.path.join(sdir, "start.sh"), "w") as f:
-        f.write(f"#!/bin/sh\njava -Xms1G -Xmx2G {FLAGS_17} -jar {server_jar} nogui\n")
+        f.write("#!/bin/sh" + chr(10)
+                + "echo '" + BN + "'" + chr(10)
+                + "echo '  CUANTIC " + VER + " - motor forjat de noi'" + chr(10)
+                + "echo '  orice PC / zero lag / cost 0'" + chr(10)
+                + "echo '" + BN + "'" + chr(10)
+                + "exec java -Xms1G -Xmx2G " + FLAGS_17 + " -jar " + server_jar + " nogui" + chr(10))
     with open(os.path.join(sdir, "start.bat"), "w") as f:
-        f.write(f"java -Xms1G -Xmx2G {FLAGS_17} -jar {server_jar} nogui\r\npause\r\n")
+        f.write("@echo off" + chr(13) + chr(10)
+                + "echo " + BN + chr(13) + chr(10)
+                + "echo   CUANTIC " + VER + " - motor forjat de noi" + chr(13) + chr(10)
+                + "echo   orice PC / zero lag / cost 0" + chr(13) + chr(10)
+                + "echo " + BN + chr(13) + chr(10)
+                + "java -Xms1G -Xmx2G " + FLAGS_17 + " -jar " + server_jar + " nogui" + chr(13) + chr(10)
+                + "pause" + chr(13) + chr(10))
     with open(os.path.join(sdir, "server.properties"), "w") as f:
-        f.write(SERVER_PROPERTIES)
+        f.write(SERVER_PROPERTIES.replace("__VER__", rules.get("pack_version", "?")))
     # TRUCUL ZAMPTO: unix_args.txt = panoul foloseste flagurile si jar-ul NOSTRU
     with open(os.path.join(sdir, "unix_args.txt"), "w") as f:
         f.write("-Xms1G\n-Xmx2G\n")
         for fl in AIKAR_FLAGS.split():
             f.write(fl + "\n")
         f.write(f"-jar\n{server_jar}\nnogui\n")
+    with open(os.path.join(sdir, "commands.yml"), "w") as f:
+        f.write(COMMANDS_YML)
     with open(os.path.join(sdir, "eula.txt"), "w") as f:
         f.write("# Prin folosirea acestui pachet acceptati https://aka.ms/MinecraftEULA\neula=true\n")
     icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "server-icon.png")

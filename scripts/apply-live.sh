@@ -41,11 +41,13 @@ if [ -n "$RURL" ] && curl -fL --max-time 400 -o "$ZP" "$RURL" >/dev/null 2>&1 &&
   ( cd "$D" && rm -rf mods plugins && mkdir -p mods plugins
     for f in /tmp/pk/*; do b=$(basename "$f"); case "$b" in
       mods|plugins) cp -r "$f" ./ ;;
-      *.jar|*.txt|*.json) cp "$f" ./ ;;
+      *.jar|*.txt|*.json|*.yml) cp "$f" ./ ;;
     esac; done )
   echo "CUANTIC" > /dev/null
   echo "$AS" > "$D/.pack.new"
   V="$V moduri=$(ls "$D"/mods/*.jar 2>/dev/null | wc -l) plugini=$(ls "$D"/plugins/*.jar 2>/dev/null | wc -l)"
+  STRAT=0; for y in spigot.yml bukkit.yml catserver.yml commands.yml; do [ -f "$D/$y" ] && STRAT=$((STRAT+1)); done
+  V="$V straturi-tuning=$STRAT/4"
   echo "$V" > /tmp/apply-v.txt
 else
   V="$V descarcare-esuata"

@@ -1,99 +1,100 @@
 {
-  "pack_name": "CUANTIC",
-  "pack_version": "1.6.3",
-  "minecraft": "1.16.5",
-  "forge": "36.2.42",
-  "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
-  "remove_from_client": [
-    "DynamicSurroundings",
-    "CTM-MC",
-    "lightfallclient",
-    "InGameAccountSwitcher"
-  ],
-  "_comentariu_server": "De pe SERVER se scot DOAR modurile client-only (randare/meniuri — pe server nu fac absolut nimic, doar maresc timpul de pornire si RAM-ul). Jucatorii NU sunt afectati: clientul lor le are pe toate.",
-  "remove_from_server": [
-    "rubidium",
-    "oculus",
-    "TextruesRubidiumOptions",
-    "InGameAccountSwitcher",
-    "DynamicSurroundings",
-    "notenoughanimations",
-    "lightfallclient",
-    "CTM-MC",
-    "TRansliterationLib"
-  ],
-  "_comentariu_adaugate": "Doar moduri de PERFORMANTA, zero schimbari de gameplay. Daca un slug nu are versiune pt 1.16.5 Forge pe Modrinth, e sarit automat fara sa strice build-ul.",
-  "add_client_modrinth": [
-    "radon",
-    "entityculling",
-    "fps-reducer",
-    "saturn",
-    "memoryleakfix",
-    "ksyxis"
-  ],
-  "_comentariu_serverpause": "GUILLOTINA 1.5.4: Prism nu instala modurile din lista externa a mrpack-ului => clientii ramaneau FARA jar => kick pe canal. serverpause scos din AMBELE parti si jarul sters de pe server la deploy.",
-  "add_server_modrinth": [
-    "clumps",
-    "memoryleakfix",
-    "ai-improvements",
-    "in-control",
-    "ferrite-core",
-    "spark"
-  ],
-  "_comentariu_perf_extra": "Artileria grea de performanta pt 1.16.5 (RoadRunner=Lithium, Radon=Phosphor etc). Cautate pe Modrinth apoi CurseForge; sarite daca nu exista. Performant si MCMT sunt excluse intentionat (conflicte).",
-  "add_server_extra_perf": [
-    "roadrunner",
-    "placebo",
-    "fastfurnace",
-    "fastworkbench",
-    "get-it-together-drops",
-    "bad-wither-no-cookie-reloaded"
-  ],
-  "_comentariu_maxlite": "Moduri server-side care inlocuiesc pluginurile in varianta MaxLite (Forge pur, consum minim).",
-  "maxlite_command_mods": [
-    "ftb-library-forge|ftb-library|ftblibrary",
-    "ftb-essentials",
-    "ftb-ranks"
-  ],
-  "_comentariu_pluginuri": "Server hibrid Arclight = moduri Forge + pluginuri Bukkit simultan. Pluginurile de pe GitHub se descarca direct, cele de pe Modrinth se rezolva automat (sarite daca nu exista pt 1.16.5 bukkit).",
-  "server_type": "arclight",
-  "arclight_url": "https://github.com/IzzelAliz/Arclight/releases/download/1.16%2F1.0.25/arclight-forge-1.16.5-1.0.25.jar",
-  "arclight_jar": "arclight-forge-1.16.5-1.0.25.jar",
-  "mist_url": "https://github.com/MinecraftMist/Mist/releases/download/1.16.5-33/mist-1.16.5-33-server.jar",
-  "mist_jar": "mist-1.16.5-33-server.jar",
-  "catserver_url": "https://github.com/Luohuayu/CatServer/releases/download/23.05.26-1/CatServer-1.16.5-1d8d6313-server.jar",
-  "catserver_jar": "CatServer-1.16.5-1d8d6313-server.jar",
-  "plugins_github": [
-    "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsX-2.19.7.jar",
-    "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXChat-2.19.7.jar",
-    "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXSpawn-2.19.7.jar",
-    "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXAntiBuild-2.19.7.jar",
-    "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXProtect-2.19.7.jar",
-    "https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar",
-    "https://edge.forgecdn.net/files/3283/695/worldedit-bukkit-7.2.5-dist.jar",
-    "https://edge.forgecdn.net/files/3342/964/worldguard-bukkit-7.0.5-dist.jar",
-    "https://github.com/AuthMe/AuthMeReloaded/releases/download/5.6.0/AuthMe-5.6.0.jar",
-    "https://github.com/SkinsRestorer/SkinsRestorer/releases/download/14.2.12/SkinsRestorer.jar",
-    "https://github.com/dmulloy2/ProtocolLib/releases/download/4.8.0/ProtocolLib.jar",
-    "https://github.com/TuxCoding/FastLogin/releases/download/1.11/FastLoginBukkit.jar",
-    "https://github.com/cjburkey01/ClaimChunk/releases/download/0.0.22/claimchunk-0.0.22.jar"
-  ],
-  "plugins_spiget": [],
-  "plugins_modrinth": [
-    "luckperms",
-    "chunky@^1\\.2\\."
-  ],
-  "maxlite_extreme_mods": [
-    "mcmt|mcmt-multithreading",
-    "performant"
-  ],
-  "ultra_strip_assets": true,
-  "mirror_on_client": [
-    "clumps",
-    "ferritecore"
-  ],
-  "_comentariu_mirror": "Doar clumps: e SINGURUL mod de pe server cu intrari in registru (entity_type clumps:xp_orb_big). Celelalte 6 (placebo, fastfurnace, fastbench, aiimprovements, incontrol, bwncr) NU inregistreaza nimic si au stat degeaba pe client (-6 moduri, -1.2MB). Dovada: logul client 1.5.8 arata eroarea fatala doar la minecraft:entity_type. Daca apare din nou 'Missing registry data' pentru alta insta, se adauga slug-ul aici.",
-  "_comentariu_taieri_160": "1.6.0 FASTSLEP: fastsuite = accelerador de JUnit (nu exista teste in productii), smooth-boot = ordinea de pornire a CLIENTULUI, ksyxis/saturn = optimizari de client (memorie/assete), adaptive-performance-tweaks = scade view-distance dinamic = se bate cu configul nostru si cu survivalul. Zero din ele nu aduceau FPS/RAM pe server.",
-  "_comentariu_162": "FerriteCore 2.1.1-forge (MIT, 106 KB, 1.16.5 Forge, client+server) = singurul mod adaugat de la research: rescrie BlockState-urile (600 MB + 170 MB in pachete mari), NBT-ul chunk-urilor partial incarcate (90-100 MB, server-side) si deduplica stringuri. Surse: https://github.com/malte0811/FerriteCore/blob/main/summary.md , https://modrinth.com/mod/ferrite-core/version/2.1.1-forge . Se oglindeste NEAPARAT pe client: lista de moduri trebuie sa fie identica, altfel FML da kick la login (a fost cauzasi serverpause in 1.5.4). Chunky (https://dev.bukkit.org/projects/chunky-pregenerator) RESPINS pe Cloud Shell: pregen ul umfla discul, iar home-ul are 5 GB cu 63% ocupati; ramane optiune pe VM (disc mare). LazyDFU/SmoothBoot respinse: ModernFix e deja in pack si face acelasi lucru. Arclight/Mohist/Magma respinse ca motor: CatServer 1.16.5 = singurul marcat LTS/STABLE (https://github.com/Luohuayu/CatServer/blob/1.16.5/docs/README_EN.md, LGPL-3.0) si masurat: 2814 MB/11.1 s vs Arclight intreg = NU PORNESTE.",
-  "_comentariu_163": "1.6.3 = corecturi descoperite in build.log, nu optiuni noi: (a) slug 'ferritecore' era gresit si dadea 404 pe Modrinth+CurseForge => FerriteCore ajungea DOAR pe client, niciodata pe server (slug corect = ferrite-core); (b) 'starlight-forge' si 'connectivity' nu exista pentru 1.16.5 Forge => scoase din liste, erau zgomot in fiecare build; (c) build-ul scrie ACUM manifest-cuantic.json in fiecare zip si varsa UNRESOLVED in corpul release-ului: numarul de moduri nu mai poate deriva lin (32 -> 30 s-a intamplat exact din cauza asta)."
+ "pack_name": "CUANTIC",
+ "pack_version": "1.6.4",
+ "minecraft": "1.16.5",
+ "forge": "36.2.42",
+ "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
+ "remove_from_client": [
+  "DynamicSurroundings",
+  "CTM-MC",
+  "lightfallclient",
+  "InGameAccountSwitcher"
+ ],
+ "_comentariu_server": "De pe SERVER se scot DOAR modurile client-only (randare/meniuri — pe server nu fac absolut nimic, doar maresc timpul de pornire si RAM-ul). Jucatorii NU sunt afectati: clientul lor le are pe toate.",
+ "remove_from_server": [
+  "rubidium",
+  "oculus",
+  "TextruesRubidiumOptions",
+  "InGameAccountSwitcher",
+  "DynamicSurroundings",
+  "notenoughanimations",
+  "lightfallclient",
+  "CTM-MC",
+  "TRansliterationLib"
+ ],
+ "_comentariu_adaugate": "Doar moduri de PERFORMANTA, zero schimbari de gameplay. Daca un slug nu are versiune pt 1.16.5 Forge pe Modrinth, e sarit automat fara sa strice build-ul.",
+ "add_client_modrinth": [
+  "radon",
+  "entityculling",
+  "fps-reducer",
+  "saturn",
+  "memoryleakfix",
+  "ksyxis"
+ ],
+ "_comentariu_serverpause": "GUILLOTINA 1.5.4: Prism nu instala modurile din lista externa a mrpack-ului => clientii ramaneau FARA jar => kick pe canal. serverpause scos din AMBELE parti si jarul sters de pe server la deploy.",
+ "add_server_modrinth": [
+  "clumps",
+  "memoryleakfix",
+  "ai-improvements",
+  "in-control",
+  "ferrite-core",
+  "spark"
+ ],
+ "_comentariu_perf_extra": "Artileria grea de performanta pt 1.16.5 (RoadRunner=Lithium, Radon=Phosphor etc). Cautate pe Modrinth apoi CurseForge; sarite daca nu exista. Performant si MCMT sunt excluse intentionat (conflicte).",
+ "add_server_extra_perf": [
+  "roadrunner",
+  "placebo",
+  "fastfurnace",
+  "fastworkbench",
+  "get-it-together-drops",
+  "bad-wither-no-cookie-reloaded"
+ ],
+ "_comentariu_maxlite": "Moduri server-side care inlocuiesc pluginurile in varianta MaxLite (Forge pur, consum minim).",
+ "maxlite_command_mods": [
+  "ftb-library-forge|ftb-library|ftblibrary",
+  "ftb-essentials",
+  "ftb-ranks"
+ ],
+ "_comentariu_pluginuri": "Server hibrid Arclight = moduri Forge + pluginuri Bukkit simultan. Pluginurile de pe GitHub se descarca direct, cele de pe Modrinth se rezolva automat (sarite daca nu exista pt 1.16.5 bukkit).",
+ "server_type": "arclight",
+ "arclight_url": "https://github.com/IzzelAliz/Arclight/releases/download/1.16%2F1.0.25/arclight-forge-1.16.5-1.0.25.jar",
+ "arclight_jar": "arclight-forge-1.16.5-1.0.25.jar",
+ "mist_url": "https://github.com/MinecraftMist/Mist/releases/download/1.16.5-33/mist-1.16.5-33-server.jar",
+ "mist_jar": "mist-1.16.5-33-server.jar",
+ "catserver_url": "https://github.com/Luohuayu/CatServer/releases/download/23.05.26-1/CatServer-1.16.5-1d8d6313-server.jar",
+ "catserver_jar": "CatServer-1.16.5-1d8d6313-server.jar",
+ "plugins_github": [
+  "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsX-2.19.7.jar",
+  "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXChat-2.19.7.jar",
+  "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXSpawn-2.19.7.jar",
+  "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXAntiBuild-2.19.7.jar",
+  "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsXProtect-2.19.7.jar",
+  "https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar",
+  "https://edge.forgecdn.net/files/3283/695/worldedit-bukkit-7.2.5-dist.jar",
+  "https://edge.forgecdn.net/files/3342/964/worldguard-bukkit-7.0.5-dist.jar",
+  "https://github.com/AuthMe/AuthMeReloaded/releases/download/5.6.0/AuthMe-5.6.0.jar",
+  "https://github.com/SkinsRestorer/SkinsRestorer/releases/download/14.2.12/SkinsRestorer.jar",
+  "https://github.com/dmulloy2/ProtocolLib/releases/download/4.8.0/ProtocolLib.jar",
+  "https://github.com/TuxCoding/FastLogin/releases/download/1.11/FastLoginBukkit.jar",
+  "https://github.com/cjburkey01/ClaimChunk/releases/download/0.0.22/claimchunk-0.0.22.jar"
+ ],
+ "plugins_spiget": [],
+ "plugins_modrinth": [
+  "luckperms",
+  "chunky@^1\\.2\\."
+ ],
+ "maxlite_extreme_mods": [
+  "mcmt|mcmt-multithreading",
+  "performant"
+ ],
+ "ultra_strip_assets": true,
+ "mirror_on_client": [
+  "clumps",
+  "ferritecore"
+ ],
+ "_comentariu_mirror": "Doar clumps: e SINGURUL mod de pe server cu intrari in registru (entity_type clumps:xp_orb_big). Celelalte 6 (placebo, fastfurnace, fastbench, aiimprovements, incontrol, bwncr) NU inregistreaza nimic si au stat degeaba pe client (-6 moduri, -1.2MB). Dovada: logul client 1.5.8 arata eroarea fatala doar la minecraft:entity_type. Daca apare din nou 'Missing registry data' pentru alta insta, se adauga slug-ul aici.",
+ "_comentariu_taieri_160": "1.6.0 FASTSLEP: fastsuite = accelerador de JUnit (nu exista teste in productii), smooth-boot = ordinea de pornire a CLIENTULUI, ksyxis/saturn = optimizari de client (memorie/assete), adaptive-performance-tweaks = scade view-distance dinamic = se bate cu configul nostru si cu survivalul. Zero din ele nu aduceau FPS/RAM pe server.",
+ "_comentariu_162": "FerriteCore 2.1.1-forge (MIT, 106 KB, 1.16.5 Forge, client+server) = singurul mod adaugat de la research: rescrie BlockState-urile (600 MB + 170 MB in pachete mari), NBT-ul chunk-urilor partial incarcate (90-100 MB, server-side) si deduplica stringuri. Surse: https://github.com/malte0811/FerriteCore/blob/main/summary.md , https://modrinth.com/mod/ferrite-core/version/2.1.1-forge . Se oglindeste NEAPARAT pe client: lista de moduri trebuie sa fie identica, altfel FML da kick la login (a fost cauzasi serverpause in 1.5.4). Chunky (https://dev.bukkit.org/projects/chunky-pregenerator) RESPINS pe Cloud Shell: pregen ul umfla discul, iar home-ul are 5 GB cu 63% ocupati; ramane optiune pe VM (disc mare). LazyDFU/SmoothBoot respinse: ModernFix e deja in pack si face acelasi lucru. Arclight/Mohist/Magma respinse ca motor: CatServer 1.16.5 = singurul marcat LTS/STABLE (https://github.com/Luohuayu/CatServer/blob/1.16.5/docs/README_EN.md, LGPL-3.0) si masurat: 2814 MB/11.1 s vs Arclight intreg = NU PORNESTE.",
+ "_comentariu_163": "1.6.3 = corecturi descoperite in build.log, nu optiuni noi: (a) slug 'ferritecore' era gresit si dadea 404 pe Modrinth+CurseForge => FerriteCore ajungea DOAR pe client, niciodata pe server (slug corect = ferrite-core); (b) 'starlight-forge' si 'connectivity' nu exista pentru 1.16.5 Forge => scoase din liste, erau zgomot in fiecare build; (c) build-ul scrie ACUM manifest-cuantic.json in fiecare zip si varsa UNRESOLVED in corpul release-ului: numarul de moduri nu mai poate deriva lin (32 -> 30 s-a intamplat exact din cauza asta).",
+ "_comentariu_164": "Straturi noi: (1) spigot.yml+bukkit.yml+catserver.yml+commands.yml AJUNGE SI PE BOX (apply-live copia doar jar/txt/json => live-ul ramanese cu configurile implicite CatServer, de aceea semana cu 'CatServer oficial + Java 17'); (2) per-player-mob-spawns + max-tnt-per-tick in spigot; (3) use-native-transport=true in loc de sync-chunk-writes (cheia aia e din 1.19, pe 1.16.5 nu facea nimic); (4) MOTD cu backslash unic (Java Properties citea \\u00A7 litéral); (5) /cuantic + alias in commands.yml; (6) banner CUANTIC in start.sh/start.bat. RESPINSE cu motiv: Starlight(Forge)=1.17.1+, nu exista 1.16.5 (curseforge/files/all); Starlight x Create 1.16.5 = All Rights Reserved + provenienta neprobata; LazyDFU=Fabric; OpenJ9/Semeru=pauze bune dar risc mixin pe Forge 1.16.5, de testat separat; Chunky pregen=in limită de disc (5 GB, 66% plin). Duel GC: A B C D prin scripts/gc-duel.sh, verdict analysis/GC-DUEL.md."
 }

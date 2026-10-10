@@ -1,0 +1,17 @@
+# catserver.yml - tunat pe cheile reale (autopsia tribunalului, 8 oct)
+world:
+  keepSpawnInMemory: false
+  forceSaveOnWatchdog: true
+fakePlayer:
+  permissions:
+  - essentials.build
+  eventPass: false
+plugin:
+  patcher:
+    enableDynmapCompatible: false
+    enableEssentialsNewVersionCompatible: true
+    enableMythicMobsPatcherCompatible: false
+    enableWorldEditCompatible: true
+disableFMLStatusModInfo: true
+disableAsyncCatchWarn: true
+versionCheck: false
