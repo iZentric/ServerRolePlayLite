@@ -1,5 +1,5 @@
-# ALIVE CUANTIC — 2026-10-10 13:40:06 UTC
+# ALIVE CUANTIC — 2026-10-10 13:58:18 UTC
 
 ```
-REPRIT automat dupa dispatch · 13:40:06 UTC
+JOS (dispatch refuzat) - one-liner de trezire in Cloud Shell: vezi scripts/wake.sh
 ```
