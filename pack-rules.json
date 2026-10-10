@@ -1,6 +1,6 @@
 {
   "pack_name": "CUANTIC",
-  "pack_version": "1.6.1",
+  "pack_version": "1.6.2",
   "minecraft": "1.16.5",
   "forge": "36.2.42",
   "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
@@ -50,7 +50,8 @@
     "fastworkbench",
     "get-it-together-drops",
     "connectivity",
-    "bad-wither-no-cookie-reloaded"
+    "bad-wither-no-cookie-reloaded",
+    "ferrite-core"
   ],
   "_comentariu_maxlite": "Moduri server-side care inlocuiesc pluginurile in varianta MaxLite (Forge pur, consum minim).",
   "maxlite_command_mods": [
@@ -92,8 +93,10 @@
   ],
   "ultra_strip_assets": true,
   "mirror_on_client": [
-    "clumps"
+    "clumps",
+    "ferritecore"
   ],
   "_comentariu_mirror": "Doar clumps: e SINGURUL mod de pe server cu intrari in registru (entity_type clumps:xp_orb_big). Celelalte 6 (placebo, fastfurnace, fastbench, aiimprovements, incontrol, bwncr) NU inregistreaza nimic si au stat degeaba pe client (-6 moduri, -1.2MB). Dovada: logul client 1.5.8 arata eroarea fatala doar la minecraft:entity_type. Daca apare din nou 'Missing registry data' pentru alta insta, se adauga slug-ul aici.",
-  "_comentariu_taieri_160": "1.6.0 FASTSLEP: fastsuite = accelerador de JUnit (nu exista teste in productii), smooth-boot = ordinea de pornire a CLIENTULUI, ksyxis/saturn = optimizari de client (memorie/assete), adaptive-performance-tweaks = scade view-distance dinamic = se bate cu configul nostru si cu survivalul. Zero din ele nu aduceau FPS/RAM pe server."
+  "_comentariu_taieri_160": "1.6.0 FASTSLEP: fastsuite = accelerador de JUnit (nu exista teste in productii), smooth-boot = ordinea de pornire a CLIENTULUI, ksyxis/saturn = optimizari de client (memorie/assete), adaptive-performance-tweaks = scade view-distance dinamic = se bate cu configul nostru si cu survivalul. Zero din ele nu aduceau FPS/RAM pe server.",
+  "_comentariu_162": "FerriteCore 2.1.1-forge (MIT, 106 KB, 1.16.5 Forge, client+server) = singurul mod adaugat de la research: rescrie BlockState-urile (600 MB + 170 MB in pachete mari), NBT-ul chunk-urilor partial incarcate (90-100 MB, server-side) si deduplica stringuri. Surse: https://github.com/malte0811/FerriteCore/blob/main/summary.md , https://modrinth.com/mod/ferrite-core/version/2.1.1-forge . Se oglindeste NEAPARAT pe client: lista de moduri trebuie sa fie identica, altfel FML da kick la login (a fost cauzasi serverpause in 1.5.4). Chunky (https://dev.bukkit.org/projects/chunky-pregenerator) RESPINS pe Cloud Shell: pregen ul umfla discul, iar home-ul are 5 GB cu 63% ocupati; ramane optiune pe VM (disc mare). LazyDFU/SmoothBoot respinse: ModernFix e deja in pack si face acelasi lucru. Arclight/Mohist/Magma respinse ca motor: CatServer 1.16.5 = singurul marcat LTS/STABLE (https://github.com/Luohuayu/CatServer/blob/1.16.5/docs/README_EN.md, LGPL-3.0) si masurat: 2814 MB/11.1 s vs Arclight intreg = NU PORNESTE."
 }

@@ -1,0 +1,14 @@
+name: ACCEPTANCE — testele de invizibilitate ale hibridului (T1-T9)
+on:
+  push:
+    paths: [ "scripts/acceptance.sh", "deploy/accept.txt", ".github/workflows/acceptance.yml", "pack-rules.json" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  a:
+    runs-on: [self-hosted]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/acceptance.sh

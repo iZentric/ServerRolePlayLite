@@ -280,6 +280,9 @@ spawn-limits:
   ambient: 5
 chunk-gc:
   period-in-ticks: 400
+  # load-threshold=0 = functia e DEZACTIVATA implicit; cu 300 elibereaza chunk-urile libere (RAM).
+  # Ghid: https://builtbybit.com/threads/guide-optimizing-spigot-remove-lag-fix-tps-improve-performance.187104/
+  load-threshold: 300
 ticks-per:
   animal-spawns: 400
   monster-spawns: 4
