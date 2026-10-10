@@ -6,7 +6,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: cuantic-box
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   up:
