@@ -102,7 +102,7 @@ footer code{color:#9fb0c9}
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
-  <span class="pill"><i style="background:var(--mint);box-shadow:0 0 12px var(--mint)"></i>SUS, jucabil 2026-10-10 20:25:29</span>
+  <span class="pill"><i style="background:var(--mint);box-shadow:0 0 12px var(--mint)"></i>SUS, jucabil 2026-10-10 20:27:56</span>
   <span class="pill">cost 0 lei</span>
   <a class="l" href="#cifre">sari la cifre ↓</a>
 </div></nav>
@@ -113,7 +113,7 @@ footer code{color:#9fb0c9}
   <h1>Serverul care <span>nu te face să aștepți</span> și nu-ți cere bani.</h1>
   <p class="lede">Am luat un server cu <b>30 de moduri și 14 pluginuri</b> (44 de componente active) și un pack de client de 133.1 MB — l-am redus la <b>119.3 MB (−45.5%)</b> pentru copii cu net slab și l-am făcut să meargă în <b>3119 MB RAM</b> pe o mașină gratuită cu 2 nuclee. Fiecare cifră de pe pagina asta e măsurată pe mașina reală și are sursa ei.</p>
   <div class="cta">
-    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.7.6.mrpack">⬇️ Ia pack-ul de client (1.7.6 · 119.3 MB)</a>
+    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.7.6.mrpack">⬇️ Ia pack-ul de client (1.7.7 · 119.3 MB)</a>
     <a class="btn ghost" href="#cifre">📊 Vezi cifrele și de unde vin</a>
     <a class="btn ghost" href="https://github.com/iZentric/ServerRolePlayLite">⭐ Codul, pe GitHub</a>
   </div>
@@ -121,7 +121,7 @@ footer code{color:#9fb0c9}
     <div class="stat"><b>2.0 ms</b><span>întârzierea pe care o simți (95 din 100 de cadre) — limita la care începe lag-ul e 50 ms</span></div>
     <div class="stat"><b class="b2">119.3 MB</b><span>pack-ul de client (−45.5% față de 133.1 MB) · serverul încarcă 44 componente (30 moduri + 14 pluginuri)</span></div>
     <div class="stat"><b class="b3">6 / 0</b><span>6 TRECE, 0 CADE în testele live T1–T10 (14/14 pluginuri activate, /version = CUANTIC)</span></div>
-    <div class="stat"><b class="b3" style="font-size:20px">1.7.6</b><span> ultimul pack: CUANTIC-Client-1.7.6.mrpack + CUANTIC-Server-CatServer-1.7.6.zip</span></div>
+    <div class="stat"><b class="b3" style="font-size:20px">1.7.7</b><span> ultimul pack: CUANTIC-Client-1.7.6.mrpack + CUANTIC-Server-CatServer-1.7.6.zip</span></div>
     <div class="stat"><b class="b4">0 lei</b><span>total: mașina e cont gratuit, codul e al nostru, uneltele open-source</span></div>
   </div>
 </header>
@@ -160,12 +160,17 @@ Ce putem demonstra e exact ce e scris mai sus.</div>
 
 
 
-<h2>🆕 Ce s-a schimbat în 1.7.6 (și de ce contează pentru tine)</h2>
+<h2>🆕 Ce s-a schimbat în 1.7.7 (și de ce contează pentru tine)</h2>
+<div class="grid">
+  <div class="card"><h3>Sincronizare 1:1 Server <-> Client (zero calcule pe distanțe pe care serverul nu le trimite)</h3><p>Observație strategică esențială: serverul are <code>\1</code> (64 blocuri) și în <code>\1</code> trimite entitățile la <code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code> cu <code>\1</code>. În **1.7.7** am aliniat matematic Clientul și Serverul 1:1: (1) în <code>\1</code> am coborât <code>\1</code> de la <code>\1</code> la **<code>\1</code> blocuri** (nu mai face raycasting în gol între 32 și 64 blocuri unde serverul oricum nu trimite entități); (2) în <code>\1</code> am setat <code>\1</code> (tăind **86% din aria de mobilier 3D** trimisă de server în cele 4 chunk-uri, păstrând 100% mobilierul din clădirea și strada ta) și <code>\1</code>; (3) în <code>\1</code> am aliniat <code>\1</code> la procentul <code>\1</code> de pe server și am scos <code>\1</code> de pe Client (care acționa doar în SinglePlayer); (4) în <code>\1</code> și <code>\1</code> am oprit complet liliecii din peșteri (<code>\1</code>), am activat <code>\1</code> și am rărit hopperele la <code>\1</code> tick-uri.</p></div>
+  <div class="card"><h3>Arhivă Client redusă înapoi la ~72 MB cu 100% format RGBA/RGB (zero texturi negru-mov)</h3><p>Am combinat redimensionarea texturilor gigantice la <code>\1</code> cu cuantizarea entropiei convertită înapoi în modul nativ 32-bit <code>\1</code> / 24-bit <code>\1</code> (<code>\1</code>), păstrând **Oculus 1.4.7** pe Client. Rezultat: niciun fișier PNG nu este în format indexat <code>\1</code> (deci zero cuburi negru-mov), dar compresia <code>\1</code> scade din nou modpack-ul cu **~47 MB** pentru descărcare rapidă pe orice net.</p></div>
+</div>
+<details><summary><b>Istoric: ce am reparat pe rând</b> (12 versiuni)</summary>
+<h3 style="margin:14px 0 6px">1.7.6</h3>
 <div class="grid">
   <div class="card"><h3>Optimizare calitativă HD 256x256 RGBA (zero texturi negru-mov, -70% VRAM pe laptopuri fără placă video)</h3><p>Păstrăm 100% modul de culoare original <code>\1</code>/<code>\1</code> (fără cuantizare în paletă <code>\1</code>) și **Oculus 1.4.7** pe Client, dar aducem texturile pătrate exagerate (<code>\1</code> / <code>\1</code> din <code>\1</code> și <code>\1</code>) la **256x256 HD** (<code>\1</code> peste rezoluția vanilla <code>\1</code>) prin filtrare <code>\1</code>. Vizual totul arată impecabil HD, fără niciun cub negru-mov, dar Texture Atlas-ul consumă cu ~600 MB mai puțin VRAM pe plăcile integrate Intel HD / UHD.</p></div>
   <div class="card"><h3>Out of Sight 1.0.1 + Connectivity 2.4 + servers.dat pre-configurat în Multiplayer</h3><p>(1) Am înlocuit <code>\1</code> (care în 1.16.5 nu avea suport pentru <code>\1</code>) cu **Out of Sight 1.0.1** + <code>\1</code> calibrat calitativ (<code>\1</code>, <code>\1</code>), astfel încât tot mobilierul din clădirea și strada din fața ta se vede 100% complet, dar mobilierul aflat la peste 36 blocuri după clădiri nu încarcă placa video; (2) am adăugat **Connectivity 2.4** pe Server și Client pentru a elimina erorile <code>\1</code> / <code>\1</code> la conectarea de pe laptopuri sau Wi-Fi lent; (3) am pre-inclus <code>\1</code> cu **CUANTIC RolePlay • Palma City (<code>\1</code>)** direct în meniul Multiplayer.</p></div>
 </div>
-<details><summary><b>Istoric: ce am reparat pe rând</b> (11 versiuni)</summary>
 <h3 style="margin:14px 0 6px">1.7.5</h3>
 <div class="grid">
   <div class="card"><h3>Păstrat doar Oculus pe Client (fără CTM-MC) pentru fixul texturilor negru-mov cu consum minim de RAM</h3><p>Conform cerinței, în **1.7.5** păstrăm pe Client doar **Oculus 1.4.7** (cu <code>\1</code> în <code>\1</code> ca să nu scadă FPS-ul pe laptopuri vechi) și scoatem <code>\1</code> (<code>\1</code>), păstrând fixul <code>\1</code> (<code>\1</code> pe client), <code>\1</code> în <code>\1</code> și texturile PNG <code>\1</code>/<code>\1</code> intacte.</p></div>
@@ -305,7 +310,7 @@ Chunky pregen complet — discul gazdei (5 GB, 66% plin) nu încape; OpenJ9/Seme
 
 <h2>🤝 Ce primești și ce NU promitem</h2>
 <div class="grid">
-  <div class="card"><h3>📦 Pack-ul tău, ușurat cu −45.5%</h3><p>Toate blocurile și modurile de conținut din Freeroam sunt păstrate și compatibile la handshake (T4: 0 kickuri), dar sunetele și texturile uriașe sunt compactate fără pierdere de rezoluție, iar <code>Freeroam.1.0.0.mrpack</code> original rămâne intact în tagul <code>pack-original</code>.</p><span class="src">1.7.6 · CUANTIC-Client-1.7.6.mrpack · 119.3 MB (redus de la 133.1 MB = −60.6 MB pentru copii cu net slab)</span></div>
+  <div class="card"><h3>📦 Pack-ul tău, ușurat cu −45.5%</h3><p>Toate blocurile și modurile de conținut din Freeroam sunt păstrate și compatibile la handshake (T4: 0 kickuri), dar sunetele și texturile uriașe sunt compactate fără pierdere de rezoluție, iar <code>Freeroam.1.0.0.mrpack</code> original rămâne intact în tagul <code>pack-original</code>.</p><span class="src">1.7.7 · CUANTIC-Client-1.7.6.mrpack · 119.3 MB (redus de la 133.1 MB = −60.6 MB pentru copii cu net slab)</span></div>
   <div class="card"><h3>🚪 Intri fără parolă (+ OP automat)</h3><p>Poarta de login (AuthMe + FastLogin) e <b>scoasă</b> de pe server, iar contul proprietarului (<code>iZentric</code>) primește automat OP nivelul 4 și permisiuni LuckPerms <code>*</code> la conectare.</p><span class="src">analysis/NO-LOGIN.md · analysis/op.md</span></div>
   <div class="card"><h3>🩺 Se repară singur</h3><p>Dacă java moare, supervisorul o aprinde în ~15 s, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Fiecare schimbare vine cu snapshot + rollback.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
   <div class="card"><h3>🧾 Fiecare cifră are dovadă</h3><p>Tabelul de mai sus nu e scris de mână: e extras din fișierele de verdict ale joburilor. Le poți citi pe toate în repo, la <code>analysis/</code>.</p><span class="src">BENCH-LIVE.md · RAM-ALL.md · APPLY-LIVE.md</span></div>
@@ -358,7 +363,7 @@ boala hibridelor:   ╱─╱─╱──↗    (muntele care crește → crash)
 </pre></div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 20:27 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 20:35 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>analysis/BENCH-LIVE.md</code> · <code>analysis/RAM-ALL.md</code> · <code>analysis/ACCEPTANCE.md</code> · <code>site/records.json</code>
 </footer>
