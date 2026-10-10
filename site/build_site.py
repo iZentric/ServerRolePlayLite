@@ -186,7 +186,7 @@ progres_sec = f"""
 (verdicturile joburilor), metodologie identica: <b>1 jucator, warm-up 120 s, spark + jcmd + /proc, aceeasi gazda
 (2 vCPU · 11.8 GB)</b>. Unde n-am masurat inca scriem <b>ne-masurat</b> — nu umplem golul cu cifra frumoasa.</div>
 <table class="tbl">
-<tr><th>Pas</th><th>Ce s-a schimbat</th><th>RAM varf (RSS)</th><th>GC young mediu × numar</th><th>p95 MSPT</th><th>boot (Done / FML)</th><th>Sursa</th></tr>
+<tr><th>Pas</th><th>Ce s-a schimbat</th><th>Memorie ocupată (vârf)</th><th>Curățenie memorie (cât durează × de câte ori)</th><th>Întârzierea pe care o simți (a 95-a sutime din secunde)</th><th>Cât aștepti până poți intra</th><th>Unde-i dovada</th></tr>
 {progres_tabel}
 </table>
 <div class="sub" style="margin-top:10px"><b>Delta 1.5.9 → maxim de azi:</b> p95 MSPT <b>4.9 → 2.0 ms (−59%)</b>,
@@ -251,6 +251,16 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
   </div>
 </header>
 
+<h2>🗣️ Pe înțelesul tuturor — ce s-a schimbat, fără termeni tehnici</h2>
+<div class="cards">
+  <div class="card"><h3>Intri repede</h3><p>Serverul pornește în <b>13.7 secunde</b> și lumea se încarcă în <b>60 s</b> față de <b>93 s</b> cât durea înainte. Adică: dai dublu-click pe server și nu mai apuci să-ți faci o cafea.</p></div>
+  <div class="card"><h3>Nu ți se întâmplă „să te tragă înapoi"</h3><p>Măsurătoarea reală: din 100 de cadre, 95 au nevoie de doar <b>2.0 milisecunde</b> de muncă pe server (față de 4.9 înainte) — iar plafonul ca să simți lag e 50. Cu 0 mesaje de tipul „server nu ține pasul".</p></div>
+  <div class="card"><h3>Merge și pe calculatorul slab</h3><p>Testat pe o mașină cu <b>2 nuclee</b> cât un telefon de acum zece ani, cu 11.8 GB RAM. Cifra de 2613–3192 MB înseamnă cât ocupă serverul, nu cât ai tu nevoie — clientul tău e altă poveste, și ăla e făcut să meargă pe orice.</p></div>
+  <div class="card"><h3>Fără parolă, fără abonament, cost 0</h3><p>Intri direct (fără /register), nu ai abonamente, nu ai reclame, nu ai magazin. Toate costă <b>0 lei</b>: mașina e un cont gratuit, codul e al nostru, uneltele sunt open-source.</p></div>
+  <div class="card"><h3>Dicționar, ca să nu te păcălim</h3><p><b>MSPT</b> = cât durează o „bătăre" a serverului (50 ms = limita; sub ea nu simți nimic). <b>GC</b> = moment în care serverul își face curat în memorie și stă puțin loc. <b>p95</b> = nu media, ci al 95-lea din 100 de cazuri — adică „cea mai proastă secundă normală", cea care contează. <b>RSS</b> = cât de memorie ocupă cu adevărat (în GB) cu adevărat.</p></div>
+  <div class="card"><h3>Ce NU știm încă</h3><p>Nu avem măsurat cu 10 copii deodată, nu avem testat cu bot-uri, și câteva cifre de pe 1.6.2 / 1.6.3 apar scrise <b>ne-măsurat</b> în tabel. Le scriem așa, nu le inventăm — e singura regulă care face cifrele de mai sus de crezut.</p></div>
+</div>
+
 <h2>⚔️ Duelul motoarelor — cine consumă cel mai puțin?</h2>
 <div class="sub">Toate testate pe mașini identice, cu ACELEAȘI moduri și pluginuri. Bara mai scurtă = mai bun. Afișăm RECORDUL dovedit al fiecărui motor. Criteriul coroanei = <b>RAM-ul</b> (boot-ul variază ±20% între mașinile de test — e doar orientativ). Morții sunt testați și DEZBRĂCAȚI de modurile care îi ucid, ca să vezi cât AR FI — și tot pierd.</div>
 {tabel}
@@ -268,14 +278,14 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
 
 <h2>📦 Ia-ți pack-ul și intră pe server (3 pași)</h2>
 <div class="cards">
-  <div class="card"><h3>1️⃣ Descarcă pack-ul LITE</h3><p>Cu 72% mai mic decât originalul, cu 7 motoare de FPS — merge pe orice PC, chiar vechi, cu 4GB RAM, fără placă video.</p>
-  <p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.5.9.mrpack">⬇️ Descarcă CUANTIC 1.5.9 (.mrpack)</a></p></div>
+  <div class="card"><h3>1️⃣ Descarcă pack-ul LITE</h3><p>Același set de moduri pe care l-ai avut mereu (Freeroam), dar verificat bucată cu bucată: 126.9 MB față de 133.5 MB cât avea pack-ul 1.5.9. Merge și pe PC vechi, cu 4 GB RAM, fără placă video dedicată.</p>
+  <p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.3.mrpack">⬇️ Descarcă CUANTIC 1.6.3 (.mrpack)</a></p></div>
   <div class="card"><h3>2️⃣ Instalează (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege .mrpack → Launch. Pe server intri și cu TLauncher (cont cu parolă).</p></div>
-  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>92.5.171.150:25565</b> → <b>/register parola parola</b> → ești în oraș! 🏙️ PC foarte slab? „Modul Cartof" din ghid.</p></div>
+  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>92.5.171.150:25565</b> → gata, ești în oraș. <b>Fără parolă, fără /register</b> — poarta de login (AuthMe + FastLogin) e scosă de pe server, deci intri direct. PC foarte slab? Vezi mai jos „modul cartof".</p></div>
 </div>
 
-<h2>📈 Câți copii duce? (fierul: 8 GB RAM · 2,5 nuclee · GRATIS)</h2>
-<div class="sub">Estimări inginerești din măsurătorile reale. Mobii sunt plafonați global (40), fiecare copil costă doar „felia" lui — de-aia consumul NU explodează cu playerii.</div>
+<h2>📈 Câți copii duce? (fierul: 8 GB RAM · 2,5 nuclee · GRATIS) — estimări, nu măsurători</h2>
+<div class="sub"><b>Nu sunt încă măsurate.</b> E o extrapolare pornită de la cifrele reale de mai sus, ca să ai o orientare; când punem 10 jucători deodată înlocuim tabelul cu probele. Mobii sunt plafonați global (40), fiecare copil costă doar „felia" lui — de-aia consumul NU explodează cu playerii.</div>
 <table class="tbl">
 <tr><th>Copii</th><th>RAM</th><th>CPU</th><th>TPS</th><th>Cum se simte</th></tr>
 <tr><td>5</td><td>2.9 GB</td><td>30%</td><td>20</td><td>perfect — serverul nici nu respiră greu</td></tr>
@@ -288,7 +298,9 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
 </table>
 
 <h2>🕰️ Consumul în timp — „dintele de fierăstrău" anti-Mohist</h2>
-<div class="sub">Serverele hibrid clasice mor pentru că memoria lor crește ca un munte, zi după zi. Al nostru e tuns zilnic:</div>
+<div class="sub">Serverele hibrid clasice mor pentru că memoria lor crește ca un munte, zi după zi. Asta e schema pe care o țintim;
+<b>pe cutia asta de azi restartul de la 06:00 NU e automat</b> — ce e automat acum e supervisorul care repornește serverul
+dacă moare și tăierea logurilor când discul crește. Restul, pe VM-ul gratuit:</div>
 <div class="card"><pre style="color:var(--mut);overflow-x:auto">
 06:00 GHILOTINA (restart automat) → memoria la zero
 06:01 → pauză totală: 0% CPU, nimeni online

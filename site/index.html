@@ -52,6 +52,16 @@ footer{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}
   </div>
 </header>
 
+<h2>🗣️ Pe înțelesul tuturor — ce s-a schimbat, fără termeni tehnici</h2>
+<div class="cards">
+  <div class="card"><h3>Intri repede</h3><p>Serverul pornește în <b>13.7 secunde</b> și lumea se încarcă în <b>60 s</b> față de <b>93 s</b> cât durea înainte. Adică: dai dublu-click pe server și nu mai apuci să-ți faci o cafea.</p></div>
+  <div class="card"><h3>Nu ți se întâmplă „să te tragă înapoi"</h3><p>Măsurătoarea reală: din 100 de cadre, 95 au nevoie de doar <b>2.0 milisecunde</b> de muncă pe server (față de 4.9 înainte) — iar plafonul ca să simți lag e 50. Cu 0 mesaje de tipul „server nu ține pasul".</p></div>
+  <div class="card"><h3>Merge și pe calculatorul slab</h3><p>Testat pe o mașină cu <b>2 nuclee</b> cât un telefon de acum zece ani, cu 11.8 GB RAM. Cifra de 2613–3192 MB înseamnă cât ocupă serverul, nu cât ai tu nevoie — clientul tău e altă poveste, și ăla e făcut să meargă pe orice.</p></div>
+  <div class="card"><h3>Fără parolă, fără abonament, cost 0</h3><p>Intri direct (fără /register), nu ai abonamente, nu ai reclame, nu ai magazin. Toate costă <b>0 lei</b>: mașina e un cont gratuit, codul e al nostru, uneltele sunt open-source.</p></div>
+  <div class="card"><h3>Dicționar, ca să nu te păcălim</h3><p><b>MSPT</b> = cât durează o „bătăre" a serverului (50 ms = limita; sub ea nu simți nimic). <b>GC</b> = moment în care serverul își face curat în memorie și stă puțin loc. <b>p95</b> = nu media, ci al 95-lea din 100 de cazuri — adică „cea mai proastă secundă normală", cea care contează. <b>RSS</b> = cât de memorie ocupă cu adevărat (în GB) cu adevărat.</p></div>
+  <div class="card"><h3>Ce NU știm încă</h3><p>Nu avem măsurat cu 10 copii deodată, nu avem testat cu bot-uri, și câteva cifre de pe 1.6.2 / 1.6.3 apar scrise <b>ne-măsurat</b> în tabel. Le scriem așa, nu le inventăm — e singura regulă care face cifrele de mai sus de crezut.</p></div>
+</div>
+
 <h2>⚔️ Duelul motoarelor — cine consumă cel mai puțin?</h2>
 <div class="sub">Toate testate pe mașini identice, cu ACELEAȘI moduri și pluginuri. Bara mai scurtă = mai bun. Afișăm RECORDUL dovedit al fiecărui motor. Criteriul coroanei = <b>RAM-ul</b> (boot-ul variază ±20% între mașinile de test — e doar orientativ). Morții sunt testați și DEZBRĂCAȚI de modurile care îi ucid, ca să vezi cât AR FI — și tot pierd.</div>
 <div class="row"><div class="eng"><span class="ico">👑</span><b>CUANTIC (jarul NOSTRU, forjat)</b><small>Compilat de noi din sursa la zi + Java 17</small></div><div class="bar win" style="width:54%">2643 MB · boot 11.521s</div></div>
@@ -95,7 +105,7 @@ generator: <code>scripts/bench-live.sh</code>.</div>
 (verdicturile joburilor), metodologie identica: <b>1 jucator, warm-up 120 s, spark + jcmd + /proc, aceeasi gazda
 (2 vCPU · 11.8 GB)</b>. Unde n-am masurat inca scriem <b>ne-masurat</b> — nu umplem golul cu cifra frumoasa.</div>
 <table class="tbl">
-<tr><th>Pas</th><th>Ce s-a schimbat</th><th>RAM varf (RSS)</th><th>GC young mediu × numar</th><th>p95 MSPT</th><th>boot (Done / FML)</th><th>Sursa</th></tr>
+<tr><th>Pas</th><th>Ce s-a schimbat</th><th>Memorie ocupată (vârf)</th><th>Curățenie memorie (cât durează × de câte ori)</th><th>Întârzierea pe care o simți (a 95-a sutime din secunde)</th><th>Cât aștepti până poți intra</th><th>Unde-i dovada</th></tr>
 <tr><td><b>1.5.9</b></td><td>2G heap, 3 flaguri GC, 32 moduri</td><td>2613 MB</td><td>47.2 ms × 25</td><td><b>4.9 ms</b></td><td>14.448 s / 92.639 s</td><td style="color:var(--mut)"><small>analysis/BENCH-LIVE.md (istoric)</small></td></tr>
 <tr><td><b>experiment 8G</b></td><td>heap 8G, tot 3 flaguri — dovedit mai prost</td><td>3367 MB</td><td>111.38 ms × 8</td><td><b>9.1 ms</b></td><td>—</td><td style="color:var(--mut)"><small>analysis/BENCH-RAM.md</small></td></tr>
 <tr><td><b>RAM total + set validat</b></td><td>-Xmx = MemTotal (11884 MB) + 32 flaguri validate pe Java 17 in CI</td><td>3192 MB</td><td>115.88 ms × 8</td><td><b>2.0 ms</b></td><td>13.664 s / 96.788 s</td><td style="color:var(--mut)"><small>analysis/RAM-ALL.md + BENCH-LIVE.md</small></td></tr>
@@ -105,7 +115,7 @@ generator: <code>scripts/bench-live.sh</code>.</div>
 <div class="sub" style="margin-top:10px"><b>Delta 1.5.9 → maxim de azi:</b> p95 MSPT <b>4.9 → 2.0 ms (−59%)</b>,
 GC-uri de <b>3.1× mai rare</b> (25 → 8 pe fereastra), timp de incarcare FML <b>92.6 → 59.9 s (−35%)</b>,
 <code>Can't keep up</code> = <b>0</b> in toate probele. Pretul, tot masurat: RSS <b>+579 MB</b> (3192 vs 2613) pentru
-ca heap-ul are unde sa creasca. <b>Testul de „hibrid invizibil" (T1-T9): 2 TRECE / 3 DE VERIFICAT / 2 CADE</b> — 2026-10-10 11:58:33.
+ca heap-ul are unde sa creasca. <b>Testul de „hibrid invizibil" (T1-T9): 2 TRECE / 3 DE VERIFICAT / 2 CADE</b> — 2026-10-10 11:59:58.
 De ce nu vindem „de 1000× mai bun": 1000× pe p95 ar insemna 0.005 ms, adică sub cuantumul unui tick de 50 ms —
 ce putem demonstra e ce e scris mai sus.</div>
 
@@ -121,14 +131,14 @@ ce putem demonstra e ce e scris mai sus.</div>
 
 <h2>📦 Ia-ți pack-ul și intră pe server (3 pași)</h2>
 <div class="cards">
-  <div class="card"><h3>1️⃣ Descarcă pack-ul LITE</h3><p>Cu 72% mai mic decât originalul, cu 7 motoare de FPS — merge pe orice PC, chiar vechi, cu 4GB RAM, fără placă video.</p>
-  <p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.5.9.mrpack">⬇️ Descarcă CUANTIC 1.5.9 (.mrpack)</a></p></div>
+  <div class="card"><h3>1️⃣ Descarcă pack-ul LITE</h3><p>Același set de moduri pe care l-ai avut mereu (Freeroam), dar verificat bucată cu bucată: 126.9 MB față de 133.5 MB cât avea pack-ul 1.5.9. Merge și pe PC vechi, cu 4 GB RAM, fără placă video dedicată.</p>
+  <p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.3.mrpack">⬇️ Descarcă CUANTIC 1.6.3 (.mrpack)</a></p></div>
   <div class="card"><h3>2️⃣ Instalează (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege .mrpack → Launch. Pe server intri și cu TLauncher (cont cu parolă).</p></div>
-  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>92.5.171.150:25565</b> → <b>/register parola parola</b> → ești în oraș! 🏙️ PC foarte slab? „Modul Cartof" din ghid.</p></div>
+  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>92.5.171.150:25565</b> → gata, ești în oraș. <b>Fără parolă, fără /register</b> — poarta de login (AuthMe + FastLogin) e scosă de pe server, deci intri direct. PC foarte slab? Vezi mai jos „modul cartof".</p></div>
 </div>
 
-<h2>📈 Câți copii duce? (fierul: 8 GB RAM · 2,5 nuclee · GRATIS)</h2>
-<div class="sub">Estimări inginerești din măsurătorile reale. Mobii sunt plafonați global (40), fiecare copil costă doar „felia" lui — de-aia consumul NU explodează cu playerii.</div>
+<h2>📈 Câți copii duce? (fierul: 8 GB RAM · 2,5 nuclee · GRATIS) — estimări, nu măsurători</h2>
+<div class="sub"><b>Nu sunt încă măsurate.</b> E o extrapolare pornită de la cifrele reale de mai sus, ca să ai o orientare; când punem 10 jucători deodată înlocuim tabelul cu probele. Mobii sunt plafonați global (40), fiecare copil costă doar „felia" lui — de-aia consumul NU explodează cu playerii.</div>
 <table class="tbl">
 <tr><th>Copii</th><th>RAM</th><th>CPU</th><th>TPS</th><th>Cum se simte</th></tr>
 <tr><td>5</td><td>2.9 GB</td><td>30%</td><td>20</td><td>perfect — serverul nici nu respiră greu</td></tr>
@@ -141,7 +151,9 @@ ce putem demonstra e ce e scris mai sus.</div>
 </table>
 
 <h2>🕰️ Consumul în timp — „dintele de fierăstrău" anti-Mohist</h2>
-<div class="sub">Serverele hibrid clasice mor pentru că memoria lor crește ca un munte, zi după zi. Al nostru e tuns zilnic:</div>
+<div class="sub">Serverele hibrid clasice mor pentru că memoria lor crește ca un munte, zi după zi. Asta e schema pe care o țintim;
+<b>pe cutia asta de azi restartul de la 06:00 NU e automat</b> — ce e automat acum e supervisorul care repornește serverul
+dacă moare și tăierea logurilor când discul crește. Restul, pe VM-ul gratuit:</div>
 <div class="card"><pre style="color:var(--mut);overflow-x:auto">
 06:00 GHILOTINA (restart automat) → memoria la zero
 06:01 → pauză totală: 0% CPU, nimeni online
@@ -172,7 +184,7 @@ boala Mohist:      ╱─╱─╱──↗  muntele care crește → crash
 </div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din rezultatele testelor · ultima actualizare: 10 Oct 2026, 11:59 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din rezultatele testelor · ultima actualizare: 10 Oct 2026, 12:20 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit · set de flaguri validat pe Java 17 in CI
 </footer>
 </div></body></html>
