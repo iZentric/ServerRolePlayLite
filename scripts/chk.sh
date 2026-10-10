@@ -31,8 +31,29 @@ say "live.log: $(wc -l < $DIR/live.log 2>/dev/null) linii | $(grep -m1 -oE 'Done
 say "log final: $(tail -3 $DIR/live.log 2>/dev/null | tr '\n' ' ' | cut -c1-260)"
 say "disc: $(df -h "$HOME" 2>/dev/null | tail -1)"
 say "fisiere: $(ls "$DIR" 2>/dev/null | tr '\n' ' ' | cut -c1-200)"
-say "pack marcat: $(cat "$DIR/.pack" 2>/dev/null || echo FARA-MARCARE)"
-say "unix_args: $(head -4 "$DIR/unix_args.txt" 2>/dev/null | tr '\n' ' ')"
+say "pack marcat: .pack=$(cat "$DIR/.pack" 2>/dev/null || echo FARA) | .pack.new=$(cat "$DIR/.pack.new" 2>/dev/null || echo FARA)"
+say "=== INVENTAR COMPLET FISIERE SERVER LIVE ($DIR) ==="
+say "--- 1. MODURI ($DIR/mods: $(ls -1 "$DIR"/mods/*.jar 2>/dev/null | wc -l) jar-uri) ---"
+ls -lh "$DIR"/mods/*.jar 2>/dev/null | awk '{printf "  %-52s %s\n", $9, $5}' | sed "s|$DIR/mods/||" >> $LOG
+say "--- 2. PLUGINURI ($DIR/plugins: $(ls -1 "$DIR"/plugins/*.jar 2>/dev/null | wc -l) jar-uri) ---"
+ls -lh "$DIR"/plugins/*.jar 2>/dev/null | awk '{printf "  %-52s %s\n", $9, $5}' | sed "s|$DIR/plugins/||" >> $LOG
+say "--- 3. CONFIG & DEFAULTCONFIGS ---"
+for cf in "$DIR/config/modernfix-mixins.properties" "$DIR/config/incontrol/spawn.json" "$DIR/config/forge-common.toml" "$DIR/config/smoothchunk-common.toml" "$DIR/defaultconfigs/forge-server.toml"; do
+  if [ -f "$cf" ]; then
+    say "  [OK] ${cf#$DIR/} ($(wc -c < "$cf") bytes): $(grep -v '^#' "$cf" | tr '\n' ' ' | cut -c1-120)"
+  else
+    say "  [LIPSA] ${cf#$DIR/}"
+  fi
+done
+say "--- 4. STRATURI TUNING & ROOT ($DIR) ---"
+for rf in CatServer-1.16.5-1d8d6313-server.jar unix_args.txt server.properties spigot.yml bukkit.yml catserver.yml commands.yml eula.txt ops.json manifest-cuantic.json; do
+  if [ -f "$DIR/$rf" ]; then
+    say "  [OK] $rf ($(wc -l < "$DIR/$rf") linii, $(wc -c < "$DIR/$rf") bytes)"
+  else
+    say "  [LIPSA] $rf"
+  fi
+done
+say "unix_args complet ($(wc -l < "$DIR/unix_args.txt" 2>/dev/null) linii): $(tr '\n' ' ' < "$DIR/unix_args.txt" 2>/dev/null)"
 say "erori-cheie: $(grep -aiE 'error|exception|Unrecognized|Address already|Done \(' "$DIR/live.log" 2>/dev/null | tail -5 | cut -c1-140 | tr '\n' '|')"
 say "=== ISTORIC PORNIRI / OPRIRI / JUCATORI (live.log) ==="
 grep -anE '==== pornire|Done \(|Stopping|Server closed|iZentric|lost connection|disconnect|CrashReport|OutOfMemory|Killed|watchdog|Watchdog' "$DIR/live.log" 2>/dev/null | tail -45 >> $LOG
@@ -58,8 +79,13 @@ for i in 1 2 3; do
 done
 mkdir -p "$GITHUB_WORKSPACE/analysis"; cd "$GITHUB_WORKSPACE"
 { printf '# CHK — %s\n\n' "$(date -u '+%F %T UTC')"; echo '```'; cat $LOG; echo '```'; } > analysis/chk.md
-git add -f analysis/chk.md; git commit -q -m "chk" || true
-git pull --rebase -q origin "$GITHUB_REF_NAME" || true; git push -q origin "$GITHUB_REF_NAME" || true
+git config user.name "cuantic-bot"; git config user.email "bot@cuantic.local"
+git add -f analysis/chk.md; git commit -q -m "chk: inventar complet 1.7.2" || true
+for _t in 1 2 3 4; do
+  git pull --rebase -X theirs -q origin "$GITHUB_REF_NAME" || true
+  git push -q origin "$GITHUB_REF_NAME" && break
+  sleep 3
+done
 say "GATA"; exit 0
 
 # PROBĂ PLUGINS/BRAND (cerută de verdictul T5=0 linii de incarcare si T10CADE): catologul zice
