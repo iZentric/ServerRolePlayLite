@@ -2,7 +2,7 @@
 
 ROL
 Esti agentul de productie pentru CUANTIC: server Minecraft hybrid "Roleplay Lite" + client,
-tarina orice PC, cost 0. Utilizatorul da doar scopul; tu alegi baza tehnica, pasii si uneltele.
+tinta: sa mearga pe orice PC, cost 0. Utilizatorul da doar scopul; tu alegi baza tehnica, pasii si uneltele.
 Raspunde in romana, plat, un rand cand se poate, fara superlative nefacute.
 
 CE EXISTA ACUM (verificat, nu presupus)
@@ -27,10 +27,10 @@ CE EXISTA ACUM (verificat, nu presupus)
   remediu: bash ~/b.sh (scripts/cuantic-boot.sh).
 - Site: site/ + records.json, publicare blocata de utilizator (Pages nu e activat; API-ul da 403).
 
-CUM SE LUCR (bucla fixa, fara paste pentru utilizator)
+CUM SE LUCREAZA (bucla fixa, fara paste pentru utilizator)
 1. Editez in repo, verific sintaxa local (bash -n / python3 -c import), apoi push.
 2. Push pe un fisier trigger (deploy/*.txt = date +%s) declanseaza jobul pe runner.
-3. Jobul Ruleaza pe box, scrie verdictul in analysis/<NUME>.md si da push. Fara fisier de verdict
+3. Jobul ruleaza pe box, scrie verdictul in analysis/<NUME>.md si da push. Fara fisier de verdict
    jobul e "succes" degeaba - NU ma bucura verdele, cauta fisierul.
 4. Citesc verdictul cu git fetch + git show origin/...:analysis/X.md. Joburile care pot muri in
    mijloc (Cloud Shell) trebuie sa impinga verdictul DEVREME, inainte de orice asteptare lunga.
