@@ -60,8 +60,10 @@ if os.path.isfile(f):
     except Exception: d = []
 if not isinstance(d, list): d = []
 if not any(str(x.get("Name", "")).lower() == nume.lower() for x in d if isinstance(x, dict)):
+    # 1.16.5 citeste cheile mici: "level" (fara "Level"); le punem pe amandoua ca sa nu
+    # traim incidentul in care serverul ignora intrarea si lumea ramanea fara OP.
     d.append({"uuid": str(uuid.uuid5(uuid.NAMESPACE_DNS, "Player_" + nume)), "name": nume,
-              "Level": 4, "bypassesPlayerLimit": False})
+              "level": 4, "Level": 4, "bypassesPlayerLimit": False})
 json.dump(d, open(f, "w", encoding="utf-8"), indent=2)
 print("ops.json scris:", [x.get("name") for x in d])
 PYP
