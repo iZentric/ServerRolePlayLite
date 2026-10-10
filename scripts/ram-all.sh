@@ -24,12 +24,20 @@ rm -f "$D/ramceil"
 TOT=$(awk '/MemTotal/{print int($2/1024)}' /proc/meminfo); AV0=$(awk '/MemAvailable/{print int($2/1024)}' /proc/meminfo)
 say "masina: MemTotal=${TOT}MB MemAvailable=${AV0}MB swap=$(awk '/SwapTotal/{print int($2/1024)}' /proc/meminfo)MB"
 
+# Cursa care a facut cautarea plafonului sa dea erori false: supervisorul c.sh isi reporneste
+# singur java la 15 s, in timp ce jobul meu o porneste manual => al doilea proces da in
+# SessionLockManager (AlreadyLockedException) si iese in ~6 s, iar eu notam "plafonul e prea mare".
+# Asa ca pe toata durata cautarii supervisorul sta oprit, iar la final il pornim inapoi cu plafonul ales.
+SUP_OPRA=NU
+if pgrep -f 'bash .*c\.sh' >/dev/null 2>&1; then pkill -f 'bash .*c\.sh'; sleep 3; SUP_OPRA=DA; fi
+
 try_boot() {  # $1 = plafon in MB
   echo "$1" > "$D/ramceil" 2>/dev/null
   bash "$HOME/cuantic-args.sh" "$D" >> $RPT 2>&1
   say "  incercare -Xmx${1}M -> $(grep -aoE '^-Xmx[^ ]*' "$D/unix_args.txt" | head -1)"
+  pkill -f 'java @unix_args' 2>/dev/null
+  for k in 1 2 3 4 5 6 7 8 9 10; do pgrep -f 'java @unix_args' >/dev/null 2>&1 || break; sleep 2; done
   : > "$D/live.log" 2>/dev/null
-  pkill -f 'java @unix_args' 2>/dev/null; sleep 6
   ( cd "$D" && mkfifo -m 600 in.fifo 2>/dev/null; setsid "$J" @unix_args.txt < in.fifo > live.log 2>&1 & )
   for i in $(seq 1 28); do
     sleep 6
@@ -58,7 +66,7 @@ if [ -n "$OK" ] && [ -n "$PID" ]; then
   say "  boot: $(grep -ao 'Done ([0-9.]*s)' "$D/live.log" | tail -1) | Can't keep up: $(grep -ac "Can't keep up" "$D/live.log" 2>/dev/null)"
   say "  port 25565: $(ss -lnt 2>/dev/null | grep -c ':25565')"
   # supervisorul trebuie sa apara inapoi peste procesul pornit de job, altfel n-am cine sa primeasca comenzi
-  pgrep -f 'bash .*c\.sh' >/dev/null || { ( setsid bash "$HOME/c.sh" >> "$D/sup.log" 2>&1 & ) ; say "  supervisor repornit"; }
+  pgrep -f 'bash .*c\.sh' >/dev/null || { ( setsid bash "$HOME/c.sh" >> "$D/sup.log" 2>&1 & ) ; say "  supervisor repornit (a stat oprit $SUP_OPRA pe toata cautarea)"; }
 else
   [ -n "$PID" ] && kill $PID 2>/dev/null
   echo $(( CEIL )) > "$D/ramceil"; say "NICIUN plafon nu a mers (ultima incercare ${CEIL}MB) - revin la varianta sigura:"
