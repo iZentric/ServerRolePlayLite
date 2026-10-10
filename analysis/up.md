@@ -1,7 +1,8 @@
-# UP — 2026-10-09 21:10:21 UTC
+# UP — 2026-10-10 16:39:35 UTC
 
 ```
 adresa: 92.5.171.150:25565
-[0m[1;31m2026-10-09 20:41:15.063 [E] [proxy/proxy.go:237] [2565a3d716494b61] [mc] connect to local service [127.0.0.1:25565] error: dial tcp 127.0.0.1:25565: connect: connection refused
-[0m[1;31m2026-10-09 20:41:16.152 [E] [proxy/proxy.go:237] [2565a3d716494b61] [mc] connect to local service [127.0.0.1:25565] error: dial tcp 127.0.0.1:25565: connect: connection refused
+LISTEN 1      4096               *:25565            *:*          
+[0m[1;34m2026-10-10 16:39:04.444 [I] [proxy/proxy_manager.go:183] [25358ba425c0be9e] proxy added: [mc]
+[0m[1;34m2026-10-10 16:39:04.446 [I] [client/control.go:174] [25358ba425c0be9e] [mc] start proxy success
 [0m```
