@@ -14,7 +14,15 @@ import re
 import shutil
 import sys
 import urllib.parse
-UNRESOLVED = []  # slug-uri care nu au rezolvat pe catalog -> devin vizibile, nu se mai pierd in liniste
+UNRESOLVED = []
+
+def packv():
+    """Versiunea din pack-rules.json, citita de oriunde (main() are `rules` local)."""
+    try:
+        return json.load(open(os.path.join(ROOT, "pack-rules.json"), encoding="utf-8"))["pack_version"]
+    except Exception:
+        return "?"
+  # slug-uri care nu au rezolvat pe catalog -> devin vizibile, nu se mai pierd in liniste
 import urllib.request
 import zipfile
 
@@ -514,7 +522,7 @@ def write_start_scripts(sdir, server_jar):
     # fara sa tipe nimeni, pentru ca un slug 404 era "sarit" in liniste)
     try:
         with open(os.path.join(sdir, "manifest-cuantic.json"), "w") as f:
-            json.dump({"pack_version": rules["pack_version"], "engine": "CatServer 1.16.5",
+            json.dump({"pack_version": packv(), "engine": os.path.basename(server_jar),
                        "mods": sorted(os.listdir(os.path.join(sdir, "mods"))) if os.path.isdir(os.path.join(sdir, "mods")) else [],
                        "plugins": sorted(os.listdir(os.path.join(sdir, "plugins"))) if os.path.isdir(os.path.join(sdir, "plugins")) else [],
                        "unresolved": UNRESOLVED,
@@ -523,7 +531,7 @@ def write_start_scripts(sdir, server_jar):
                        "jvm": "a se vedea unix_args.txt"}, f, ensure_ascii=False, indent=1)
     except Exception as e:
         log(f"  !! manifest: {e}")
-    VER = rules.get("pack_version", "?")
+    VER = packv()
     BN = "=============================================="
     with open(os.path.join(sdir, "start.sh"), "w") as f:
         f.write("#!/bin/sh" + chr(10)
@@ -541,7 +549,7 @@ def write_start_scripts(sdir, server_jar):
                 + "java -Xms1G -Xmx2G " + FLAGS_17 + " -jar " + server_jar + " nogui" + chr(13) + chr(10)
                 + "pause" + chr(13) + chr(10))
     with open(os.path.join(sdir, "server.properties"), "w") as f:
-        f.write(SERVER_PROPERTIES.replace("__VER__", rules.get("pack_version", "?")))
+        f.write(SERVER_PROPERTIES.replace("__VER__", packv()))
     # TRUCUL ZAMPTO: unix_args.txt = panoul foloseste flagurile si jar-ul NOSTRU
     with open(os.path.join(sdir, "unix_args.txt"), "w") as f:
         f.write("-Xms1G\n-Xmx2G\n")
