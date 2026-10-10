@@ -15,6 +15,18 @@ say "fisiere: $(ls "$DIR" 2>/dev/null | tr '\n' ' ' | cut -c1-200)"
 say "pack marcat: $(cat "$DIR/.pack" 2>/dev/null || echo FARA-MARCARE)"
 say "unix_args: $(head -4 "$DIR/unix_args.txt" 2>/dev/null | tr '\n' ' ')"
 say "erori-cheie: $(grep -aiE 'error|exception|Unrecognized|Address already|Done \(' "$DIR/live.log" 2>/dev/null | tail -5 | cut -c1-140 | tr '\n' '|')"
+say "=== ISTORIC PORNIRI / OPRIRI / JUCATORI (live.log) ==="
+grep -anE '==== pornire|Done \(|Stopping|Server closed|iZentric|lost connection|disconnect|CrashReport|OutOfMemory|Killed|watchdog|Watchdog' "$DIR/live.log" 2>/dev/null | tail -45 >> $LOG
+say "=== ULTIMELE 60 LINII DIN live.log ==="
+tail -60 "$DIR/live.log" 2>/dev/null | sed "s/$(printf '\033')\[[0-9;]*[a-zA-Z]//g" >> $LOG
+say "=== ULTIMELE 35 LINII DIN sup.log ==="
+tail -35 "$DIR/sup.log" 2>/dev/null >> $LOG
+say "=== CRASH REPORTS ==="
+ls -lt "$DIR/crash-reports" 2>/dev/null | head -5 >> $LOG
+LATEST_CRASH=$(ls -t "$DIR/crash-reports"/*.txt 2>/dev/null | head -1)
+[ -n "$LATEST_CRASH" ] && head -45 "$LATEST_CRASH" >> $LOG
+say "=== DMESG OOM ==="
+dmesg -T 2>/dev/null | grep -iE 'oom|killed process|java' | tail -10 >> $LOG || true
 say "sup.log: $(tail -5 "$DIR/sup.log" 2>/dev/null | tr '\n' '|' | cut -c1-260)"
 say "frpc.toml: $(grep -c . "$HOME/frpc.toml" 2>/dev/null || echo NICIFISIER)"
 A=$(cat $DIR/ADRESA 2>/dev/null)
