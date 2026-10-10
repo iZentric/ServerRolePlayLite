@@ -101,6 +101,14 @@ while :; do
   elif [ "$NOW" = "$LAST" ]; then
     echo " log blocat:"; tail -2 live.log; tail -1 "$HOME/frpc.log" 2>/dev/null
   fi
+  # runner-ul GitHub: cat timp traieste acest loop, traieste si accesul agentului pe masina.
+  if ! pgrep -f 'runsvc.sh|actions-runner/run.sh|./run.sh' >/dev/null 2>&1; then
+    R=$(ls -d "$HOME"/actions-runner* "$HOME"/*/actions-runner* 2>/dev/null | head -1)
+    if [ -n "$R" ] && [ -x "$R/run.sh" ]; then
+      ( cd "$R" && setsid ./run.sh </dev/null >/dev/null 2>&1 & )
+      echo " runner jos -> repornit din $R"
+    fi
+  fi
   tmux ls 2>/dev/null | grep -q '^frpc:' || { echo " frpc jos -> pornit"; tmux new -s frpc -d "exec $HOME/frpc -c $HOME/frpc.toml > $HOME/frpc.log 2>&1"; }
   LAST=$NOW
   sleep 15
