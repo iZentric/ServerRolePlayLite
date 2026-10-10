@@ -98,5 +98,11 @@
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
+  !! brand /version esuat: Command '['javac', '--release', '8', '-nowarn', '-cp', 'out/srv-catserver/CatServer-1.16.5-1d8d6313-server.jar', '-d', 'out/brand-build/classes', '/home/runner/work/ServerRolePlayLite/ServerRolePlayLi
+     /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/tools/cuantic-brand/src/cloud/cuantic/brand/CuanticBrandPlugin.java:3: error: package org.bukkit does not exist
+import org.bukkit.Bukkit;
+                 ^
+/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/tools/cuantic-brand/src/cloud/cuantic/brand/CuanticBrandPlugin.java:4: error: package org.bukkit.event does not exist
+import org.bu
   => out/CUANTIC-Server-CatServer-1.6.4.zip (66.5 MB)
 GATA.
