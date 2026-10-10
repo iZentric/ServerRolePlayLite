@@ -6,7 +6,7 @@ on:
     paths: ["deploy/engine-lab.txt", "scripts/engine_lab.py", ".github/workflows/engine-lab.yml"]
   workflow_dispatch: {}
 permissions:
-  contents: read
+  contents: write
 jobs:
   engine:
     runs-on: ubuntu-latest
@@ -26,13 +26,15 @@ jobs:
             17
       - name: Compileaza CatServer 1.16.5 upstream intr-un director temporar
         run: |
+          mkdir -p engine-lab
           curl -fL --retry 3 --retry-delay 5 \
             "https://codeload.github.com/Luohuayu/CatServer/tar.gz/${CATSERVER_REV}" -o /tmp/catserver-source.tgz
           mkdir -p /tmp/catserver-source
           tar -xzf /tmp/catserver-source.tgz -C /tmp/catserver-source --strip-components=1
           cd /tmp/catserver-source
           chmod +x gradlew
-          ./gradlew --no-daemon setup buildCatServer
+          set -o pipefail
+          ./gradlew --no-daemon setup buildCatServer 2>&1 | tee "$GITHUB_WORKSPACE/engine-lab/build.log"
           find . -type f -iname '*server.jar' -size +5M | head -20
       - name: Pregateste candidatul, fara sa publice/deployeze
         run: |
@@ -52,7 +54,22 @@ jobs:
           sha256sum engine-lab/*jar > engine-lab/SHA256SUMS.txt
       - name: Smoke test cu cele 36 moduri si 14 pluginuri reale
         run: python3 scripts/engine_lab.py stage engine-lab/boot.log
-      - name: Arhiveaza rezultatul (nu publica release-ul si nu reporneste live-ul)
+      - name: Salveaza diagnosticul pe ramura sesiunii (fara deploy)
+        if: always()
+        run: |
+          { echo '# ENGINE LAB — build izolat'; echo; echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID";
+            echo; echo 'Ultimele linii din compilare (nu sunt cifre de TPS):'; echo '```';
+            tail -80 engine-lab/build.log 2>/dev/null || echo 'Compilarea a esuat inainte de Gradle.';
+            echo '```'; echo; echo 'Smoke:'; echo '```';
+            cat engine-lab/smoke-result.json 2>/dev/null || echo 'NU RULAT'; echo '```';
+          } > docs/ENGINE-LAB-RESULT.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/ENGINE-LAB-RESULT.md
+          git commit -m 'engine lab: rezultat build izolat' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true
+      - name: Arhiveaza candidatul (nu publica release-ul si nu reporneste live-ul)
         if: always()
         uses: actions/upload-artifact@v4
         with:
