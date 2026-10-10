@@ -101,7 +101,8 @@
     (reincerc 1/3 dupa eroare: HTTP Error 404: Not Found)
     (reincerc 2/3 dupa eroare: HTTP Error 404: Not Found)
     (reincerc 3/3 dupa eroare: HTTP Error 404: Not Found)
-  brand: spigot-api indescarcabil (HTTP Error 404: Not Found) -> incerc cu jarul serverului
+  brand: spigot-api esueaza (HTTP Error 404: Not Found)
+  brand: paper-api esueaza (HTTP Error 404: Not Found)
   !! brand /version esuat: Command '['javac', '--release', '8', '-nowarn', '-cp', 'out/srv-catserver/CatServer-1.16.5-1d8d6313-server.jar', '-d', 'out/brand-build/classes', '/home/runner/work/ServerRolePlayLite/ServerRolePlayLi
      /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/tools/cuantic-brand/src/cloud/cuantic/brand/CuanticBrandPlugin.java:3: error: package org.bukkit does not exist
 import org.bukkit.Bukkit;
