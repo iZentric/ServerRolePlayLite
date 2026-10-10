@@ -1,4 +1,20 @@
 #!/usr/bin/env bash
+REPO=iZentric/ServerRolePlayLite
+BR=arena/a29b4ef4-serverroleplaylite
+exec > >(tee /tmp/boot.log) 2>&1
+raport() {
+  # trimite ce am vazut inapoi in repo (analysis/BOOT.md) - asa aflu si eu starea,
+  # fara runner si fara sa lipesc tu comenzi.
+  local sha
+  sha=$(gh api "repos/$REPO/contents/analysis/BOOT.md?ref=$BR" --jq .sha 2>/dev/null || true)
+  if gh api -X PUT "repos/$REPO/contents/analysis/BOOT.md" -f message="boot: raport automat $(date -u +%H:%M:%S)" \
+        -f content="$(base64 -w0 /tmp/boot.log)" -f branch="$BR" ${sha:+-f sha=$sha} >/dev/null 2>&1; then
+    echo "(raportul a fost trimis in repo: analysis/BOOT.md)"
+  else
+    echo "(nu am putut trimite raportul - gh nu e autentificat aici?)"
+  fi
+}
+trap raport EXIT
 # CUANTIC BOOT — trezeste masina dintr-o rasuflare.
 # De ce exista: Cloud Shell omoara TOT ce ai pornit in el (java, frpc, runner-ul GitHub) cand
 # terminalul se inchide sau cand sesiunea e recyclata. Home-ul ramane, procesele nu.
@@ -44,4 +60,18 @@ echo "== 4. porturi =="
 ss -lnt 2>/dev/null | grep -E ':25565|:25566' || echo "   nimic nu asculta inca"
 echo "== 5. din exterior (prin frp pe 92.5.171.150) =="
 curl -s --max-time 15 "https://api.mcsrvstat.us/3/92.5.171.150:25565" | head -c 160; echo
+echo "== 6. diagnostc daca n-a pornit =="
+if ! ss -lnt 2>/dev/null | grep -q ':25565'; then
+  echo "   live.log (ultimele 25 linii relevante):"
+  sed -e "s/$(printf '\033')\[[0-9;]*[a-zA-Z]//g" "$HOME/cuantic-live/live.log" 2>/dev/null | grep -aiE 'error|exception|Unrecognized|Done \(|Killed|No such|denied|Address already|EULA' | tail -12 | cut -c1-170 | sed 's/^/     /'
+  echo "   sup.log:"; tail -8 "$HOME/cuantic-live/sup.log" 2>/dev/null | cut -c1-170 | sed 's/^/     /'
+  echo "   java: $(pgrep -fa 'java @unix_args' | head -2 | cut -c1-120)"
+  echo "   unix_args: $(head -4 "$HOME/cuantic-live/unix_args.txt" 2>/dev/null | tr '\n' ' ')"
+  echo "   fisiere: $(ls "$HOME/cuantic-live" 2>/dev/null | tr '\n' ' ' | cut -c1-200)"
+  echo "   marcare pack: $(cat "$HOME/cuantic-live/.pack" 2>/dev/null || echo FARA)"
+  echo "   disc: $(df -h "$HOME" 2>/dev/null | tail -1)"
+  echo "   memorie: $(free -m | awk 'NR==2{print $2" total, "$7" libera"}')"
+  echo "   gh: $(gh auth status 2>&1 | head -2 | tr '\n' ' ' | cut -c1-120)"
+  echo "   FRAPORT: $(pgrep -fa frpc | head -1 | cut -c1-100)"
+fi
 echo "GATA. Daca la pct. 5 vezi \"online\":true, dai Join in Minecraft."
