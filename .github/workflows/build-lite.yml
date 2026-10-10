@@ -4,6 +4,7 @@ on:
     branches: [ "arena/a29b4ef4-serverroleplaylite" ]
     paths:
       - "scripts/build_lite.py"
+      - "scripts/brand_engine.py"
       - "pack-rules.json"
       - "tools/cuantic-brand/**"
       - ".github/workflows/build-lite.yml"

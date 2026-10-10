@@ -1,14 +1,17 @@
 {
  "pack_name": "CUANTIC",
- "pack_version": "1.6.8",
+ "pack_version": "1.7.0",
  "minecraft": "1.16.5",
  "forge": "36.2.42",
- "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE ORIGINALE. Nu se scoate nimic — doar se adauga moduri de optimizare si setari mai bune (options.txt).",
+ "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE DE GAMEplay. Se scot doar modurile client-only inutile pe PC/net slab (shadere Oculus, animatii duble, fps-reducer, dubluri de memorie) si se compacteaza assetele audio/PNG.",
  "remove_from_client": [
   "DynamicSurroundings",
   "CTM-MC",
   "lightfallclient",
-  "InGameAccountSwitcher"
+  "InGameAccountSwitcher",
+  "oculus",
+  "notenoughanimations",
+  "TRansliterationLib"
  ],
  "_comentariu_server": "De pe SERVER se scot DOAR modurile client-only (randare/meniuri — pe server nu fac absolut nimic, doar maresc timpul de pornire si RAM-ul). Jucatorii NU sunt afectati: clientul lor le are pe toate.",
  "remove_from_server": [
@@ -22,13 +25,10 @@
   "CTM-MC",
   "TRansliterationLib"
  ],
- "_comentariu_adaugate": "Doar moduri de PERFORMANTA, zero schimbari de gameplay. Daca un slug nu are versiune pt 1.16.5 Forge pe Modrinth, e sarit automat fara sa strice build-ul.",
+ "_comentariu_adaugate": "Doar moduri de PERFORMANTA reala in timpul jocului (fara fps-reducer care scade FPS doar in Alt-Tab si fara saturn care e dublura peste FerriteCore+ModernFix).",
  "add_client_modrinth": [
   "radon",
   "entityculling",
-  "fps-reducer",
-  "saturn",
-  "memoryleakfix",
   "ksyxis"
  ],
  "_comentariu_serverpause": "GUILLOTINA 1.5.4: Prism nu instala modurile din lista externa a mrpack-ului => clientii ramaneau FARA jar => kick pe canal. serverpause scos din AMBELE parti si jarul sters de pe server la deploy.",

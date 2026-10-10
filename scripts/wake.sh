@@ -47,6 +47,6 @@ for i in $(seq 1 30); do
     PORNIT=DA; break
   fi
 done
-D=$(sed -e "s/$(printf '\033')\[[0-9;]*[a-zA-Z]//g" "$D/live.log" 2>/dev/null | grep -aoE 'Done \([0-9.]+s\)' | tail -1)
-echo "== $( [ "$PORNIT" = DA ] && echo "SUS: $D, jucabil pe 92.5.171.150:25565" || echo "NU S-A APRINS inca - mai ruleaza o data linia asta si uita-te in $D/live.log" )"
+DONE_STR=$(sed -e "s/$(printf '\033')\[[0-9;]*[a-zA-Z]//g" "$D/live.log" 2>/dev/null | grep -aoE 'Done \([0-9.]+s\)' | tail -1)
+echo "== $( [ "$PORNIT" = DA ] && echo "SUS: $DONE_STR, jucabil pe 92.5.171.150:25565" || echo "NU S-A APRINS inca - mai ruleaza o data linia asta si uita-te in $D/live.log" )"
 echo "   supervisor: $(pgrep -f 'bash .*c\.sh' >/dev/null && echo alive || echo mort) | runner: $(pgrep -f 'runsvc.sh|actions-runner/run.sh' >/dev/null && echo alive || echo mort) | frpc: $(pgrep -x frpc >/dev/null && echo alive || echo mort)"

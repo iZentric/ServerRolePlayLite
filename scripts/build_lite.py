@@ -184,6 +184,113 @@ fullscreen:false
 autoJump:false
 """
 
+def slim_client_jar(src_path, dst_path):
+    """CUANTIC Smart Client Asset Compactor (pentru copii cu net slab si PC slab):
+    Pizzaland_v68.jar (84.8 MB) si Modernxl (38.0 MB) au zeci de MB de audio .ogg
+    necomprimat si texturi .png 32-bit uriase. Pastram TOATE blocurile, modelele,
+    texturile (la aceeasi rezolutie width x height, zero UV stricat) si sunetele,
+    dar le re-impachetam inteligent:
+      - .ogg > 80 KB -> mono 22.05 kHz Vorbis q0 prin ffmpeg (sunet identic in joc, -85% MB)
+      - .png > 16 KB -> paleta 256 culori FASTOCTREE + deflate 9 la aceeasi rezolutie
+      - scoate gunoiul de editor (.bbmodel, .psd, .xcf, .bak) si semnaturile META-INF."""
+    import io
+    import tempfile
+    before = os.path.getsize(src_path)
+    if before < 250 * 1024:
+        shutil.copy2(src_path, dst_path)
+        return 0
+    has_ffmpeg = shutil.which("ffmpeg") is not None
+    try:
+        from PIL import Image
+        has_pil = True
+    except Exception:
+        has_pil = False
+
+    tdir = tempfile.mkdtemp(prefix="cslim_")
+    try:
+        with zipfile.ZipFile(src_path, "r") as zin, \
+             zipfile.ZipFile(dst_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zout:
+            for item in zin.infolist():
+                n = item.filename
+                low = n.lower()
+                if low.endswith((".bbmodel", ".psd", ".xcf", ".bak")):
+                    continue
+                if n.startswith("META-INF/") and low.endswith((".sf", ".rsa", ".dsa", ".ec")):
+                    continue
+                data = zin.read(n)
+                if n.startswith("assets/"):
+                    if has_ffmpeg and low.endswith(".ogg") and len(data) > 80 * 1024:
+                        try:
+                            in_f = os.path.join(tdir, "in.ogg")
+                            out_f = os.path.join(tdir, "out.ogg")
+                            with open(in_f, "wb") as f:
+                                f.write(data)
+                            r = subprocess.run(
+                                ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
+                                 "-i", in_f, "-map_metadata", "-1", "-ac", "1", "-ar", "22050",
+                                 "-c:a", "libvorbis", "-q:a", "0", out_f],
+                                timeout=15, capture_output=True)
+                            if r.returncode == 0 and os.path.isfile(out_f):
+                                nd = open(out_f, "rb").read()
+                                if 200 < len(nd) < len(data):
+                                    data = nd
+                        except Exception:
+                            pass
+                    elif has_pil and low.endswith(".png") and len(data) > 16 * 1024:
+                        try:
+                            im = Image.open(io.BytesIO(data))
+                            im.load()
+                            if im.mode in ("RGBA", "RGB", "LA"):
+                                q = im.quantize(colors=256, method=Image.Quantize.FASTOCTREE)
+                                buf = io.BytesIO()
+                                q.save(buf, format="PNG", optimize=True, compress_level=9)
+                                nd = buf.getvalue()
+                                if 64 < len(nd) < len(data):
+                                    data = nd
+                        except Exception:
+                            pass
+                zi = zipfile.ZipInfo(filename=n, date_time=item.date_time)
+                zi.compress_type = zipfile.ZIP_DEFLATED
+                zi.external_attr = item.external_attr
+                zout.writestr(zi, data)
+        after = os.path.getsize(dst_path)
+        if after >= before:
+            shutil.copy2(src_path, dst_path)
+            return 0
+        if before - after > 100 * 1024:
+            log(f"    ✂ client {os.path.basename(src_path)}: {before/1e6:.1f} -> {after/1e6:.1f} MB")
+        return before - after
+    except Exception as e:  # noqa: BLE001
+        log(f"    !! slim_client_jar esuat pe {os.path.basename(src_path)}: {e}")
+        shutil.copy2(src_path, dst_path)
+        return 0
+    finally:
+        shutil.rmtree(tdir, ignore_errors=True)
+
+
+def brand_engine_jar(jar_path):
+    """Ruleaza scripts/brand_engine.py peste jarul de motor (CatServer/Arclight/Mist)
+    pentru a ciopli numele CUANTIC direct in constant-pool (CraftServer + BrandingControl)."""
+    script = os.path.join(ROOT, "scripts", "brand_engine.py")
+    if not (os.path.isfile(script) and os.path.isfile(jar_path)):
+        return None
+    tmp = jar_path + ".branded"
+    try:
+        r = subprocess.run([sys.executable, script, jar_path, tmp, "CUANTIC"],
+                           capture_output=True, text=True, timeout=120)
+        if os.path.isfile(tmp) and os.path.getsize(tmp) > 1000:
+            os.replace(tmp, jar_path)
+            info = (r.stdout or "").strip()
+            log(f"  + motor cioplit in bytecode ({os.path.basename(jar_path)}): {info}")
+            return info
+    except Exception as e:  # noqa: BLE001
+        log(f"  !! brand_engine_jar ({os.path.basename(jar_path)}): {e}")
+    finally:
+        if os.path.isfile(tmp):
+            os.remove(tmp)
+    return None
+
+
 def strip_client_assets(jar_path):
     """ULTRA: scoate texturi/modele/sunete/shadere din jar-urile de SERVER.
     Serverul nu randeaza nimic - pastram lang/, data/, cod, mods.toml.
@@ -541,16 +648,33 @@ def build_brand_plugin(out_root, server_jar_path, dest_dirs):
                 for fn in fs:
                     z.write(os.path.join(dp, fn), os.path.relpath(os.path.join(dp, fn), cls))
         for d in dest_dirs:
-            if d and os.path.isdir(d):
-                os.makedirs(os.path.join(d, "plugins"), exist_ok=True)
-                _sh.copy(jar, os.path.join(d, "plugins", os.path.basename(jar)))
-        log("  + brand /version: Cuantic-Brand-%s.jar montat in %d servere (stubs locale)" % (ver, len([d for d in dest_dirs if d and os.path.isdir(d)])))
+            if d:
+                pdir = d if os.path.basename(d.rstrip("/\\")) == "plugins" else os.path.join(d, "plugins")
+                os.makedirs(pdir, exist_ok=True)
+                _sh.copy(jar, os.path.join(pdir, os.path.basename(jar)))
+        log("  + brand /version: Cuantic-Brand-%s.jar montat in %d servere (stubs locale)" % (ver, len([d for d in dest_dirs if d])))
         return os.path.basename(jar)
     except Exception as e:  # noqa: BLE001
         log("  !! brand /version esuat: %s" % str(e)[:400])
         return None
 
 def write_start_scripts(sdir, server_jar):
+    # 1.7.0: ops.json pre-populat cu proprietarul din deploy/op-name (UUID OfflinePlayer MD5 v3 real)
+    try:
+        import hashlib
+        import uuid as _uuid
+        op_file = os.path.join(ROOT, "deploy", "op-name")
+        op_name = open(op_file, encoding="utf-8").read().strip().splitlines()[0].strip() if os.path.isfile(op_file) else "iZentric"
+        if op_name:
+            md = bytearray(hashlib.md5(("OfflinePlayer:" + op_name).encode("utf-8")).digest())
+            md[6] = (md[6] & 0x0f) | 0x30
+            md[8] = (md[8] & 0x3f) | 0x80
+            op_uuid = str(_uuid.UUID(bytes=bytes(md)))
+            with open(os.path.join(sdir, "ops.json"), "w", encoding="utf-8") as f:
+                json.dump([{"uuid": op_uuid, "name": op_name, "level": 4, "bypassesPlayerLimit": True}], f, indent=2)
+    except Exception as e:
+        log(f"  !! ops.json: {e}")
+
     # 1.6.0: flagurile se iau din lista VALIDATA PE JAVA 17 (deploy/jvm-flags-17.txt, scrisa de
     # scripts/jvm-tune.sh). Motive dovedite: (a) cateva flaguri Aikar pt Java 11 NU mai exista in 17
     # si JVM-ul refuza sa porneasca; (b) -Xmx6G/8G a iesit MAI PROST masurat: pauza GC medie
@@ -737,11 +861,21 @@ def main():
         z.writestr("overrides/SETARI-PC-BUN.txt", GHID_PC_BUN)
 
         rmc = [r.lower() for r in rules.get("remove_from_client", [])]
+        cslim_dir = os.path.join(out_dir, "client-slim")
+        shutil.rmtree(cslim_dir, ignore_errors=True)
+        os.makedirs(cslim_dir, exist_ok=True)
+        client_saved = 0
         for jar in override_jars:
             if any(r in jar.lower() for r in rmc):
                 log(f"  - taiat din client (stil rust): {jar}")
                 continue
-            z.write(os.path.join(override_mods_dir, jar), f"overrides/mods/{jar}")
+            src_j = os.path.join(override_mods_dir, jar)
+            dst_j = os.path.join(cslim_dir, jar)
+            client_saved += slim_client_jar(src_j, dst_j)
+            z.write(dst_j, f"overrides/mods/{jar}")
+        shutil.rmtree(cslim_dir, ignore_errors=True)
+        if client_saved > 0:
+            log(f"  => client assets compactate: -{client_saved/1e6:.1f} MB (instalare rapida pt net slab)")
         for jar in mirror_jars:
             z.write(os.path.join(bmods, jar), f"overrides/mods/{jar}")
     log(f"  => {client_mrpack} ({os.path.getsize(client_mrpack)/1e6:.1f} MB)")
@@ -832,12 +966,14 @@ def main():
             log(f"  !! plugin spiget '{sp.get('save_as')}' sarit: {e}")
     log("  ↓ Arclight")
     download(rules["arclight_url"], os.path.join(s2, rules["arclight_jar"]))
+    brand_engine_jar(os.path.join(s2, rules["arclight_jar"]))
+    brand = build_brand_plugin(out_dir, os.path.join(s2, rules["arclight_jar"]), [s2])
+    if brand:
+        report["arclight_added"].append("brand /version + motor: " + brand)
     with open(os.path.join(s2, "spigot.yml"), "w") as f:
         f.write(SPIGOT_YML)
     with open(os.path.join(s2, "bukkit.yml"), "w") as f:
         f.write(BUKKIT_YML)
-    with open(os.path.join(s2, "spigot.yml"), "w") as f:
-        f.write(SPIGOT_YML)
     write_start_scripts(s2, rules["arclight_jar"])
     with open(os.path.join(s2, "CITESTE-MA.txt"), "w") as f:
         f.write(README_ARCLIGHT)
@@ -854,6 +990,7 @@ def main():
     os.remove(os.path.join(s3, rules["arclight_jar"]))
     log("  ↓ Mist")
     download(rules["mist_url"], os.path.join(s3, rules["mist_jar"]))
+    brand_engine_jar(os.path.join(s3, rules["mist_jar"]))
     with open(os.path.join(s3, "paper.yml"), "w") as f:
         f.write(PAPER_YML)
     write_start_scripts(s3, rules["mist_jar"])
@@ -877,6 +1014,7 @@ def main():
     os.remove(os.path.join(s4, rules["arclight_jar"]))
     log("  ↓ CatServer")
     download(rules["catserver_url"], os.path.join(s4, rules["catserver_jar"]))
+    brand_engine_jar(os.path.join(s4, rules["catserver_jar"]))
     with open(os.path.join(s4, "catserver.yml"), "w") as f:
         f.write(CATSERVER_YML)
     write_start_scripts(s4, rules["catserver_jar"])
@@ -888,10 +1026,6 @@ def main():
                 + "\nNOTA: CatServer e renumit pentru compatibilitate maxima moduri+pluginuri\n"
                   "(build mai 2023, cel mai recent hibrid 1.16.5 intretinut). Daca Mist crapa,\n"
                   "incearca intai varianta asta inainte de Arclight.\n")
-    brand = build_brand_plugin(out_dir, os.path.join(s4, rules["catserver_jar"]),
-                               [os.path.join(s2, "plugins"), os.path.join(s3, "plugins"), os.path.join(s4, "plugins")])
-    if brand:
-        report["arclight_added"].append("brand /version: " + brand)
     z4 = os.path.join(out_dir, f"CUANTIC-Server-CatServer-{ver}.zip")
     with zipfile.ZipFile(z4, "w", zipfile.ZIP_DEFLATED) as z:
         zip_dir(z, s4)

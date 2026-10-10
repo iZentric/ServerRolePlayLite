@@ -22,7 +22,8 @@ if [ -n "$AS" ]; then
 fi
 
 # ---- 2. supervisorul vechi jos (altfel isi tine propriul java in memorie veche) ----
-# ---- snapshot inainte de orice atingere (ruleaza pe discul de 5 GB, de-asa comprimat) ----
+# ---- snapshot inainte de orice atingere (ruleaza pe discul de 5 GB, pastram doar ultimul) ----
+rm -f "$D"/snapshot-*.tar.gz 2>/dev/null || true
 SNAP="$D/snapshot-$(date +%s).tar.gz"
 tar -czf "$SNAP" -C "$D" mods plugins unix_args.txt server.properties 2>/dev/null
 echo "SNAP: $SNAP ($(du -h "$SNAP" 2>/dev/null | cut -f1))" >> /tmp/apply.txt
@@ -44,7 +45,8 @@ if [ -n "$RURL" ] && curl -fL --max-time 400 -o "$ZP" "$RURL" >/dev/null 2>&1 &&
     for f in /tmp/pk/*; do b=$(basename "$f"); case "$b" in
       mods|plugins) cp -r "$f" ./ ;;
       *.jar|*.txt|*.json|*.yml) cp "$f" ./ ;;
-    esac; done )
+    esac; done
+    if [ -d "$D/plugins/plugins" ]; then mv -f "$D"/plugins/plugins/*.jar "$D/plugins/" 2>/dev/null || true; rmdir "$D/plugins/plugins" 2>/dev/null || true; fi )
   echo "CUANTIC" > /dev/null
   echo "$AS" > "$D/.pack.new"
   V="$V moduri=$(ls "$D"/mods/*.jar 2>/dev/null | wc -l) plugini=$(ls "$D"/plugins/*.jar 2>/dev/null | wc -l)"

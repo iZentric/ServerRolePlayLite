@@ -14,6 +14,27 @@ if [ -f "$D/OPRIT" ]; then
   exit 0
 fi
 
+# 0) Repara dublura veche plugins/plugins/ si asigura OP in ops.json (UUID real OfflinePlayer MD5 v3)
+if [ -d "$D/plugins/plugins" ]; then
+  mv -f "$D"/plugins/plugins/*.jar "$D/plugins/" 2>/dev/null || true
+  rmdir "$D/plugins/plugins" 2>/dev/null || true
+fi
+python3 - "$D/ops.json" "iZentric" <<'PYP' 2>/dev/null || true
+import hashlib, json, os, sys, uuid
+f, nume = sys.argv[1], sys.argv[2]
+b = bytearray(hashlib.md5(("OfflinePlayer:" + nume).encode("utf-8")).digest())
+b[6] = (b[6] & 0x0f) | 0x30; b[8] = (b[8] & 0x3f) | 0x80
+u = str(uuid.UUID(bytes=bytes(b)))
+d = []
+if os.path.isfile(f):
+    try: d = json.load(open(f, encoding="utf-8"))
+    except Exception: d = []
+if not isinstance(d, list): d = []
+d = [x for x in d if isinstance(x, dict) and str(x.get("name", x.get("Name", ""))).lower() != nume.lower()]
+d.append({"uuid": u, "name": nume, "level": 4, "bypassesPlayerLimit": True})
+json.dump(d, open(f, "w", encoding="utf-8"), indent=2)
+PYP
+
 # 1) supervisorul = cel care tine java, runner-ul GitHub si frpc-ul in viata
 if ! pgrep -f 'bash .*c\.sh' >/dev/null 2>&1; then
   [ -f "$HOME/c.sh" ] || curl -fsSLo "$HOME/c.sh" --max-time 25 \

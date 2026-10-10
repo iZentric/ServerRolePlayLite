@@ -102,7 +102,7 @@ footer code{color:#9fb0c9}
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
-  <span class="pill"><i style="background:var(--mint);box-shadow:0 0 12px var(--mint)"></i>SUS, jucabil 2026-10-10 16:07:20</span>
+  <span class="pill"><i style="background:var(--mint);box-shadow:0 0 12px var(--mint)"></i>SUS, jucabil 2026-10-10 16:11:11</span>
   <span class="pill">cost 0 lei</span>
   <a class="l" href="#cifre">sari la cifre ↓</a>
 </div></nav>
@@ -113,7 +113,7 @@ footer code{color:#9fb0c9}
   <h1>Serverul care <span>nu te face să aștepți</span> și nu-ți cere bani.</h1>
   <p class="lede">Am luat un server cu <b>32 de moduri și 15 pluginuri</b> — genul care de obicei zboară pe 8-16 GB RAM — și l-am adus să meargă pe o mașină cât un telefon mai vechi. Fiecare cifră de pe pagina asta e măsurată de roboții noștri pe mașina reală, cu un jucător în lume, și are sursa ei.</p>
   <div class="cta">
-    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.7.mrpack">⬇️ Ia pack-ul de client (1.6.8)</a>
+    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.8.mrpack">⬇️ Ia pack-ul de client (1.7.0)</a>
     <a class="btn ghost" href="#cifre">📊 Vezi cifrele și de unde vin</a>
     <a class="btn ghost" href="https://github.com/iZentric/ServerRolePlayLite">⭐ Codul, pe GitHub</a>
   </div>
@@ -121,7 +121,7 @@ footer code{color:#9fb0c9}
     <div class="stat"><b>2.0 ms</b><span>întârzierea pe care o simți (95 din 100 de cadre) — limita la care începe lag-ul e 50 ms</span></div>
     <div class="stat"><b class="b2">13.7 s</b><span>până serverul e viu, cu 47 de componente încărcate (47 = 32 moduri + 15 pluginuri)</span></div>
     <div class="stat"><b class="b3">0</b><span>mesaje de tip „serverul nu ține pasul" în toate probele</span></div>
-    <div class="stat"><b class="b3" style="font-size:20px">1.6.8</b><span> ultimul pack: CUANTIC-Client-1.6.7.mrpack + CUANTIC-Server-CatServer-1.6.7.zip</span></div>
+    <div class="stat"><b class="b3" style="font-size:20px">1.7.0</b><span> ultimul pack: CUANTIC-Client-1.6.8.mrpack + CUANTIC-Server-CatServer-1.6.8.zip</span></div>
     <div class="stat"><b class="b4">0 lei</b><span>total: mașina e cont gratuit, codul e al nostru, uneltele open-source</span></div>
   </div>
 </header>
@@ -153,18 +153,24 @@ footer code{color:#9fb0c9}
 <div class="sub" style="margin-top:10px"><b>Delta de la prima măsurătoare („1.5.9") până la setup-ul de maxim de azi:</b> p95 MSPT
 <b>4.9 → 2.0 ms (−59%)</b>, goluri de memorie de <b>3.1× mai rare</b> (25 → 8 pe fereastră),
 încărcarea lumii <b>96.8 → 59.9 s (−38%)</b> (pe 1.5.9 era 92.6 s), <code>Can't keep up</code> = <b>0</b> în toate probele.
-Prețul, tot măsurat: <b>+579 MB</b> memorie ocupată (3192 vs 2613), pentru că heap-ul are acum unde să crească. <b>Testul de „hibrid invizibil" (T1-T9): 5 TRECE / 2 DE VERIFICAT / 1 CADE</b> — 2026-10-10 16:07:20.
+Prețul, tot măsurat: <b>+579 MB</b> memorie ocupată (3192 vs 2613), pentru că heap-ul are acum unde să crească. <b>Testul de „hibrid invizibil" (T1-T9): 5 TRECE / 2 DE VERIFICAT / 1 CADE</b> — 2026-10-10 16:11:10.
 De ce nu vindem „de 1000× mai bun": 1000× pe p95 ar însemna 0.005 ms, adică sub cuantumul unui singur tick de 50 ms.
 Ce putem demonstra e exact ce e scris mai sus.</div>
 
 
 
-<h2>🆕 Ce s-a schimbat în 1.6.8 (și de ce contează pentru tine)</h2>
+<h2>🆕 Ce s-a schimbat în 1.7.0 (și de ce contează pentru tine)</h2>
+<div class="grid">
+  <div class="card"><h3>Motorul propriu în JAR + F3 + consolă (stil DivineMC, fără minciună)</h3><p>Nu am scris un motor hibrid de la 0 (nici DivineMC nu e de la 0, e fork peste Purpur). <code>\1</code> cioplește în bytecode (<code>\1</code> și <code>\1</code>, inclusiv în jarul intern <code>\1</code>) numele motorului în <code>\1</code> (apare în boot, în ecranul F3 din joc și la Server Ping), păstrând șirul de versiune și licența upstream intacte. Iar <code>\1</code> a fost reparat de 3 defecte reale: (1) era copiat în <code>\1</code> în loc de <code>\1</code>; (2) stub-urile false <code>\1</code> și <code>\1</code> dădeau <code>\1</code> pe CatServer 1.16.5; (3) acum ascultă și <code>\1</code> (consola pentru T10) și activează prin reflecție câmpurile uitate pe <code>\1</code> în <code>\1</code> (<code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code>).</p></div>
+  <div class="card"><h3>Client mai ușor pentru copii cu net slab (`fps-reducer` și dublurile scoase + compactor de assete)</h3><p><code>\1</code> scădea FPS-ul doar în Alt-Tab/AFK (0 câștig în timp ce te joci) ⇒ scos. <code>\1</code> și <code>\1</code> pe client erau dubluri peste <code>\1</code> + <code>\1</code> ⇒ scoase. <code>\1</code> (încărcător de shadere care încetinește Rubidium pe PC-uri slabe) și <code>\1</code> + <code>\1</code> ⇒ scoase din client. În plus, <code>\1</code> recodează sunetele <code>\1</code> uriașe din <code>\1</code> (84.8 MB) și <code>\1</code> (38.0 MB) în mono 22kHz Vorbis și cuantizează texturile <code>\1</code> la aceeași rezoluție.</p></div>
+  <div class="card"><h3>OP garantat din 3 straturi (UUID real `OfflinePlayer:` MD5 v3 + auto-OP în plugin)</h3><p>Înainte, <code>\1</code> calcula UUID v5 (<code>\1</code>) în loc de algoritmul real din Minecraft 1.16.5 (<code>\1</code> = <code>\1</code>) și omora serverul cu <code>\1</code> când puntea era închisă. Acum <code>\1</code> cu UUID-ul real este pre-scris în toate cele 4 arhive de server, în <code>\1</code> și <code>\1</code>, iar <code>\1</code> îți acordă automat <code>\1</code> + <code>\1</code> imediat ce intri pe server sau dai orice comandă.</p></div>
+</div>
+<details><summary><b>Istoric: ce am reparat pe rând</b> (5 versiuni)</summary>
+<h3 style="margin:14px 0 6px">1.6.8</h3>
 <div class="grid">
   <div class="card"><h3>Brandul pentru toată lumea, nu doar pentru OP</h3><p>Captura de ecran arăta textul vanilla (<code>\1</code>) pentru că pluginul nostru făcea un skip la <code>\1</code> ⇒ cine nu era operator primea linia lui CatServer. Acum <code>\1</code> răspunde la <code>\1</code>, <code>\1</code> și <code>\1</code> indiferent de permisiune, anulează doar textul și lasă motorul să fie menționat pe linia a 3-a (<code>\1</code>).</p></div>
   <div class="card"><h3>OP fără paste, fără dispatch</h3><p><code>\1</code> conține numele; un push pe fișier face jobul <code>\1</code> să ruleze pe cutie (sandbox-ul primea 403 la <code>\1</code>, deci apăsarea de buton e înlocuită de un commit). Jobul verifică și dovedește în <code>\1</code> că numele a intrat în <code>\1</code>.</p></div>
 </div>
-<details><summary><b>Istoric: ce am reparat pe rând</b> (4 versiuni)</summary>
 <h3 style="margin:14px 0 6px">1.6.7</h3>
 <div class="grid">
   <div class="card"><h3>Proveniența din `/version` devine dovadă în log</h3><p>Testul T10 de pe cutie a zis <code>\1</code> — pentru că pluginul trimitea cele 3 linii doar jucătorului, iar live.log prindea doar consemnarea. Acum aceleași 3 linii (fără coduri de culoare) se scriu și în log: <code>\1</code> poate verifica șirul „based on / adapted from”, nu doar cuvântul Cuantic.</p></div>
@@ -300,7 +306,7 @@ Chunky pregen complet — discul gazdei (5 GB, 66% plin) nu încape; OpenJ9/Seme
 
 <h2>📦 Cum intri, în 3 mișcări</h2>
 <div class="grid">
-  <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>CUANTIC-Client-1.6.7.mrpack</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.7.mrpack">⬇️ Descarcă pack-ul</a></p></div>
+  <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>CUANTIC-Client-1.6.8.mrpack</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.8.mrpack">⬇️ Descarcă pack-ul</a></p></div>
   <div class="card"><h3>2️⃣ Importă (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege fișierul <code>.mrpack</code> → Launch. Merge și cu TLauncher.</p></div>
   <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>92.5.171.150:25565</b>. Fără parolă, fără /register — intri direct în oraș. 🏙️</p></div>
 </div>
@@ -319,7 +325,7 @@ boala hibridelor:   ╱─╱─╱──↗    (muntele care crește → crash)
 </pre></div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 16:11 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 17:04 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>analysis/BENCH-LIVE.md</code> · <code>analysis/RAM-ALL.md</code> · <code>analysis/ACCEPTANCE.md</code> · <code>site/records.json</code>
 </footer>

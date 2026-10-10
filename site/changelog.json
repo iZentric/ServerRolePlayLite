@@ -88,5 +88,19 @@
    "t": "OP fără paste, fără dispatch",
    "p": "`deploy/op.txt` conține numele; un push pe fișier face jobul `OP` să ruleze pe cutie (sandbox-ul primea 403 la `workflow_dispatch`, deci apăsarea de buton e înlocuită de un commit). Jobul verifică și dovedește în `analysis/op.md` că numele a intrat în `ops.json`."
   }
+ ],
+ "1.7.0": [
+  {
+   "t": "Motorul propriu în JAR + F3 + consolă (stil DivineMC, fără minciună)",
+   "p": "Nu am scris un motor hibrid de la 0 (nici DivineMC nu e de la 0, e fork peste Purpur). `scripts/brand_engine.py` cioplește în bytecode (`CraftServer.class` și `BrandingControl.class`, inclusiv în jarul intern `data/forge-*-universal.jar`) numele motorului în `CUANTIC` (apare în boot, în ecranul F3 din joc și la Server Ping), păstrând șirul de versiune și licența upstream intacte. Iar `Cuantic-Brand` a fost reparat de 3 defecte reale: (1) era copiat în `plugins/plugins/` în loc de `plugins/`; (2) stub-urile false `MessageSender` și `Bukkit.getMinecraftVersion()` dădeau `NoSuchMethodError` pe CatServer 1.16.5; (3) acum ascultă și `ServerCommandEvent` (consola pentru T10) și activează prin reflecție câmpurile uitate pe `// TODO` în `CatServerConfig` (`enableSkipEntityTick`, `enableSkipTileEntityTick`, `maxEntityCollision=4`, `worldGenMaxTickTime=10`)."
+  },
+  {
+   "t": "Client mai ușor pentru copii cu net slab (`fps-reducer` și dublurile scoase + compactor de assete)",
+   "p": "`fps-reducer` scădea FPS-ul doar în Alt-Tab/AFK (0 câștig în timp ce te joci) ⇒ scos. `saturn` și `memoryleakfix` pe client erau dubluri peste `FerriteCore 2.1.1` + `ModernFix 5.18.0` ⇒ scoase. `oculus` (încărcător de shadere care încetinește Rubidium pe PC-uri slabe) și `notenoughanimations` + `TRansliterationLib` ⇒ scoase din client. În plus, `slim_client_jar` recodează sunetele `.ogg` uriașe din `Pizzaland_v68.jar` (84.8 MB) și `Modernxl` (38.0 MB) în mono 22kHz Vorbis și cuantizează texturile `.png` la aceeași rezoluție."
+  },
+  {
+   "t": "OP garantat din 3 straturi (UUID real `OfflinePlayer:` MD5 v3 + auto-OP în plugin)",
+   "p": "Înainte, `op.sh` calcula UUID v5 (`Player_iZentric`) în loc de algoritmul real din Minecraft 1.16.5 (`UUID.nameUUIDFromBytes(\"OfflinePlayer:iZentric\")` = `0e2f8d53-21b4-32a4-a498-0967ed108270`) și omora serverul cu `pkill java` când puntea era închisă. Acum `ops.json` cu UUID-ul real este pre-scris în toate cele 4 arhive de server, în `op.sh` și `ensure-up.sh`, iar `CuanticBrandPlugin` îți acordă automat `setOp(true)` + `lp user iZentric permission set * true` imediat ce intri pe server sau dai orice comandă."
+  }
  ]
 }
