@@ -11,6 +11,7 @@ REPO=iZentric/ServerRolePlayLite
 BR=$ARENA_BRANCH
 [ -n "$BR" ] || BR=arena/a29b4ef4-serverroleplaylite
 cd "$D" 2>/dev/null || { echo "TUNE: lipsa $D" > /tmp/tune.txt; exit 0; }
+if pgrep -f "java @unix_args" >/dev/null 2>&1 && [ -f "$D/catserver.yml" ]; then echo "TUNE: straturile sunt deja pe disc si serverul e SUS -> nu opresc java!"; exit 0; fi
 
 tmp=$(mktemp -d)
 for y in spigot.yml bukkit.yml catserver.yml commands.yml server.properties; do

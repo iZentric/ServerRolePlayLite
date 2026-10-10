@@ -4,6 +4,7 @@ D=$HOME/cuantic-live
 S=92.5.171.150
 T=pateu-de-codru-7
 mkdir -p "$D"; cd "$D" || exit 1
+if pgrep -f "java @unix_args" >/dev/null 2>&1 && ss -lnt 2>/dev/null | grep -q ":25565"; then echo "UP: serverul e deja SUS pe :25565 -> nu il opresc!"; exit 0; fi
 
 if [ ! -f unix_args.txt ]; then
   URL=$(curl -fsS https://api.github.com/repos/iZentric/ServerRolePlayLite/releases/tags/lite | grep -o '"browser_download_url": *"[^"]*Server-CatServer[^"]*"' | head -1 | sed 's/.*"\(http[^"]*\)".*/\1/')

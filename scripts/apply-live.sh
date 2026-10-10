@@ -6,6 +6,10 @@ D=$HOME/cuantic-live
 REPO=iZentric/ServerRolePlayLite
 AS=${VETA_ASTEPTAT:-}
 [ -n "$AS" ] || AS=$(python3 -c "import json;print(json.load(open('$GITHUB_WORKSPACE/pack-rules.json'))['pack_version'])" 2>/dev/null)
+if [ "${FORTEAZA_APPLY:-0}" != "1" ] && [ "$(cat "$D/.pack.new" 2>/dev/null)" = "$AS" ] && pgrep -f 'java @unix_args' >/dev/null 2>&1 && ss -lnt 2>/dev/null | grep -q ':25565'; then
+  echo "APPLY: $AS e deja instalat si serverul e SUS pe :25565 -> nu opresc java!"
+  exit 0
+fi
 V="APPLY: incepe"
 
 # ---- 1. aşteaptă release-ul aşteptat (build-ul trebuie sa termine inainte) ----
