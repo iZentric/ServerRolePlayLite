@@ -1,4 +1,4 @@
-# ACCEPTANCE CUANTIC — 2026-10-10 11:58:33 UTC (live.log: 434 linii)
+# ACCEPTANCE CUANTIC — 2026-10-10 11:59:58 UTC (live.log: 434 linii)
 [CADE] T1 proces java + port: java=nil port25565=0
 [TRECE] T2 boot: Done (19.605s) | Dedicated server took 69.838 seconds
 [VERIFICA] T3 erori in log (ultimele 4000 linii, filtering pe cunoscute-nevinovate): 5
@@ -9,7 +9,7 @@
 [VERIFICA] T5 plugini: pe disk: 15 jar; 0 linii de incarcare | esuati: 1
 [CADE] T6 punte console: niciun raspuns la 'list' in 24 s
 [VERIFICA] T7 salvare lume: 'Saved the game'=NU | level.dat mtime 1791633105->1791633105 | regiuni 12->12
-[INFO] T8 resurse: disc liber 1750MB (ocupat 66%), MemAvailable 7918MB, RSS java ?MB, swap 5111MB liber
+[INFO] T8 resurse: disc liber 1750MB (ocupat 66%), MemAvailable 7917MB, RSS java ?MB, swap 5111MB liber
 [N-A] T9 testate DOAR din server. Lipsesc cu client real: latența clientului (ping real de pe scaunul
       lui), desync/rubberband vizual, dublagi de itemi, interactiuni cu moduri de client,
       jucatori multi. Acestea se raporteaza de la client, nu de aici - nu le declara trecute.
