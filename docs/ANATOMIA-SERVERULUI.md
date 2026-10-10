@@ -9,15 +9,12 @@
 
 | Piesa | Acum | Alternative existente | Verdict |
 |---|---|---|---|
-| Host | **Zampto free** (8 GB, server "Evor", id 17192) | MineStrator, EternalZero, MCServerHost, HidenCloud, FreemcHosting (toate testate în docs/HOSTING.md) | Zampto = cel mai bun gratis |
-| Panou | Pterodactyl (dash.zampto.net) | — (dat de host) | fix |
-| Acces automat | SFTP node12.zampto.net:2022 (robot GitHub) | API-ul lor (mort — verificat) | SFTP e singura cale |
+n/a
 
 ## ETAJUL 1 — MAȘINA VIRTUALĂ JAVA
 
 | Piesa | Acum | Alternative | Verdict |
 |---|---|---|---|
-| JVM | Java 11 (imaginea Zampto) | OpenJ9 (−30-40% RAM), GraalVM | ❌ blocate — Zampto nu lasă JVM custom |
 | Garbage Collector | **G1GC cu flagurile Aikar + StringDeduplication** | ZGC (experimental pe 11), Shenandoah | G1+Aikar = standardul optim pentru MC |
 | Memorie | Xms 1G → Xmx 4G (crește doar la nevoie) | fix | optim |
 
@@ -91,8 +88,6 @@
 | Robot | Stare |
 |---|---|
 | build-lite (construiește tot la orice schimbare) | ✅ viu |
-| deploy-zampto (urcă pe server prin SFTP) | ✅ viu, trăgaci manual |
-| backup-zampto (lumea salvată noaptea la 3:00) | ✅ scris, pornește singur |
 | decompile-pizzaland (sursa v68 pentru studiu) | ⚙️ 90%, un bug rămas |
 | fabrica de lume | 🔲 următoarea |
 | monitor TPS/RAM/online | 🔲 după IP:port de la tine |

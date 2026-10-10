@@ -22,7 +22,6 @@
 ## Cum se aplica automat:
 - pack-rules.json = singura sursa de adevar; build-ul face si serverul si
   clientul din ea => regula se aplica AUTOMAT la amandoua.
-- Tribunalul jarurilor testeaza fiecare schimbare pe Java-ul real Zampto.
 - Post-lansare: spark decide urmatoarea taietura, niciodata moda sau graba.
 
 *Sigilata la cererea patronului: "cel mai mic posibil si modificat sa mearga."*

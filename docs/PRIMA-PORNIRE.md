@@ -65,7 +65,6 @@ chunky start
 (genereaza harta incet in fundal; opresti oricand cu `chunky pause`)
 
 ## 0. INAINTE DE START (decis la tribunal, 8 oct):
-Panou Zampto -> Startup -> Docker Image -> **JAVA 17** (yolks:java_17)
 Motiv (masurat, nu parere): boot 11.7s vs 21.6s pe Java 11 (-46%), RAM -22%.
 
 ## 00. JARUL SERVERULUI (8 oct, dupa-amiaza):

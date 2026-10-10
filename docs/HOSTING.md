@@ -9,7 +9,6 @@ Din România, ping-ul cel mai bun îl ai pe locații din **Germania, Polonia, It
 | # | Host | RAM | CPU | Stocare | Locație | 24/7 | Rating | Link |
 |---|------|-----|-----|---------|---------|------|--------|------|
 | 🥇 | **Eternal Zero** | **6 GB** | 3 core (Xeon W-2295) | 20 GB | Finlanda / Canada | ✅ DA | 4.6★ | [eternalzero.cloud](https://eternalzero.cloud/) |
-| 🥈 | **Zampto** | **8 GB** | 2.5 core (E5-2680v4) | 10 GB | **Germania** / Italia | ❌ | 4.5★ | [zampto.net](https://zampto.net/) |
 | 🥉 | **FreemcHosting** | 4 GB | 2 core (E5-2650v2) | **25 GB** | **Germania** | ✅ DA | 4.3★ | [freemchosting.com](https://client.freemchosting.com/) |
 | 4 | **MineStrator** | 4 GB | 2 core (Xeon Gold 6230R) | 8 GB | Franța | ✅ DA | 4.8★ | [minestrator.com](https://minestrator.com/en/order/myboxfree) |
 | 5 | **AxentHost** | 2+ GB | 2 core (Ryzen 9 3900) | 5+ GB | **Germania** / SUA | ✅ DA | 4.4★ | [axenthost.com](https://axenthost.com/) |
@@ -21,9 +20,7 @@ Din România, ping-ul cel mai bun îl ai pe locații din **Germania, Polonia, It
 - 20 GB stocare = încape pack-ul + harta fără probleme
 - Finlanda = ping decent din RO (~45-60ms)
 
-### De ce Zampto pe locul 2
-- 8 GB RAM (cea mai multă!) și servere în **Germania** (ping ~30-40ms din RO)
-- minus: nu garantează 24/7 (serverul se poate opri când nu joacă nimeni și trebuie repornit din panou)
+### Renunțat
 
 ### Alternative de rezervă
 | Host | Specificații | Observații |

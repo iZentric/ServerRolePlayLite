@@ -67,8 +67,3 @@ jobs:
         run: |
           FLAGS=$(python3 -c "import re;s=open('scripts/build_lite.py').read();m=re.search(r'AIKAR_FLAGS = \((.*?)\n\)',s,re.S);print(eval('('+m.group(1)+')'))")
           java $FLAGS -Xms64M -Xmx256M -version && echo "TOATE FLAGURILE EXISTA SI MERG"
-      - name: AUTO-DEPLOY pe Zampto (lant automat)
-        if: success()
-        run: gh workflow run deploy-zampto.yml --ref "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

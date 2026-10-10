@@ -24,7 +24,6 @@
 | Forge modat | **~100–175 MB** | 1 core ≈ 8-15 jucători (moduri grele) |
 | cu per-player-mob-spawns (doar Mist) | −20-30% din costul mobilor | ✓ |
 
-→ Pe Zampto (8 GB): **MaxLite ține lejer 10-15 jucători** cu pack-ul tău.
 
 ## 3. Impactul SETĂRILOR (astea fac diferența cea mai mare!)
 
@@ -54,7 +53,6 @@
 | FastFurnace/Workbench | CPU rețete | recalculări eliminate |
 | LazyDFU | pornire + RAM | DFU nu se mai încarcă degeaba |
 
-## 5. CONCLUZIA cu cifre (pentru serverul tău de pe Zampto)
 
 | Variantă | RAM idle (est.) | RAM cu 5 jucători (est.) | CPU | Pluginuri |
 |---|---|---|---|---|

@@ -37,6 +37,6 @@ byte-cu-byte din acest repo, oricând, pe orice mașină.
 
 ## Start rapid
 
-1. Client: ultimul release → `CUANTIC-Client-x.y.z.mrpack` → Import în Prism → Join `node12.zampto.net:26252`
+1. Client: ultimul release → `CUANTIC-Client-x.y.z.mrpack` → Import în Prism → Join adresa din `deploy/play-address.txt` (in clipul asta `92.5.171.150:25565`)
 2. Server: totul automat prin workflow-urile de mai sus
 3. `GHID_PC_BUN.txt` din arhivă = setările pentru PC-uri bune (nu sunt obligatorii — cartofii merg oricum)

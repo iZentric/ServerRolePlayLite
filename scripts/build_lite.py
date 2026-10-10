@@ -456,7 +456,7 @@ din moduri server-side (jucatorii NU instaleaza nimic in plus):
 
 CERINTE: Java 8 sau Java 11 (NU 17+). RAM: porneste de la 1 GB, maxim 4 GB.
 
---- PE HOST (Zampto etc.) ---
+--- PE HOST (panou cu SFTP sau VM) ---
 1. Urca TOT continutul acestui zip in folderul serverului.
 2. Ruleaza o data installerul (consola: java -jar forge-1.16.5-36.2.42-installer.jar --installServer)
    sau alege direct Forge 1.16.5 din panou.
@@ -481,7 +481,7 @@ Consum putin mai mare decat varianta MaxLite, dar accepta orice plugin Spigot.
 
 CERINTE: Java 8 sau Java 11 (NU 17+). RAM: porneste de la 1 GB, maxim 4 GB.
 
---- PE HOST (Zampto etc.) ---
+--- PE HOST (panou cu SFTP sau VM) ---
 1. Urca TOT continutul acestui zip in folderul serverului.
 2. Startup -> JAR: arclight-forge-1.16.5-1.0.25.jar ; Java version: 11 (sau 8).
 3. Start. Prima pornire: 3-6 minute (Arclight isi descarca librariile).
@@ -550,7 +550,7 @@ def write_start_scripts(sdir, server_jar):
                 + "pause" + chr(13) + chr(10))
     with open(os.path.join(sdir, "server.properties"), "w") as f:
         f.write(SERVER_PROPERTIES.replace("__VER__", packv()))
-    # TRUCUL ZAMPTO: unix_args.txt = panoul foloseste flagurile si jar-ul NOSTRU
+    # TRUCUL PANOURUI: unix_args.txt = panoul foloseste flagurile si jar-ul NOSTRU
     with open(os.path.join(sdir, "unix_args.txt"), "w") as f:
         f.write("-Xms1G\n-Xmx2G\n")
         for fl in AIKAR_FLAGS.split():
