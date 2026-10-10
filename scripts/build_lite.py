@@ -533,13 +533,27 @@ def build_brand_plugin(out_root, server_jar_path, dest_dirs):
         # in runtime pluginul foloseste API-ul din server, asa ca nu dublam nimic in pack.
         api = os.path.join(ROOT, "tools", "cuantic-brand", "spigot-api-1.16.5.jar")
         if not os.path.isfile(api):
-            try:
-                download("https://hub.spigotmc.org/nexus/content/repositories/snapshots/org/spigotmc/"
-                         "spigot-api/1.16.5-R0.1-SNAPSHOT/spigot-api-1.16.5-R0.1-SNAPSHOT.jar", api)
-                log("  brand: spigot-api descarcat pentru compilare (doar build-time)")
-            except Exception as e:  # noqa: BLE001
-                log("  brand: spigot-api indescarcabil (" + str(e)[:80] + ") -> incerc cu jarul serverului")
-        cp = api if os.path.isfile(api) else (server_jar_path if os.path.isfile(server_jar_path) else "")
+            # un SNAPSHOT maven nu are nume fix: se citeste ultimul timestamp din maven-metadata.xml
+            for base, art in (("https://hub.spigotmc.org/nexus/content/repositories/snapshots", "org/spigotmc/spigot-api"),
+                              ("https://repo.papermc.io/repository/maven-public/io/papermc/paper", "paper-api")):
+                grp = art.split("/")[-1]
+                ver = "1.16.5-R0.1-SNAPSHOT"
+                url_dir = (base + "/" + art + "/" + ver) if grp == "spigot-api" else (base + "/" + grp + "/" + ver)
+                try:
+                    md = http_json.__wrapped__ if False else None
+                except Exception:
+                    md = None
+                try:
+                    import urllib.request as _rq
+                    xml = _rq.urlopen(url_dir + "/maven-metadata.xml", timeout=30).read().decode("utf-8", "replace")
+                    val = re.search(r"<value>([^<]+)</value>", xml).group(1)
+                    fname = "%s-%s-%s.jar" % (grp, "1.16.5-R0.1", val)
+                    download(url_dir + "/" + fname, api)
+                    log("  brand: API de compilare = %s (%s)" % (grp, val))
+                    break
+                except Exception as e:  # noqa: BLE001
+                    log("  brand: %s esueaza (%s)" % (grp, str(e)[:70]))
+        cp = api if os.path.isfile(api) and os.path.getsize(api) > 100000 else (server_jar_path if os.path.isfile(server_jar_path) else "")
         cmd = ["javac", "--release", "8", "-nowarn"]
         if cp:
             cmd += ["-cp", cp]
