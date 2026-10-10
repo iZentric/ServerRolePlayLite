@@ -41,3 +41,16 @@ fi
 sleep 3
 P=$(ss -ltn 2>/dev/null | grep -c ':25565')
 echo "ensure-up: java=$(pgrep -f 'java @unix_args' >/dev/null && echo DA || echo NU) port25565=$P"
+
+# 3) MOVER pentru puntea de comenzi: cmd.in -> stdin java (in.fifo). Fara el, `op NUME`
+#    ramanea neconsumat in fisier (verificat: cmd.in_neconsumat=[op iZentric list]).
+if [ -f "$D/cmd.in" ]; then
+  if ! pgrep -f "cuantic-mov" >/dev/null 2>&1; then
+    printf '#!/usr/bin/env bash\n# cuantic-mov - duce comenzile din cmd.in in stdoin java\nD=%s\nwhile :; do\n  [ -p "$D/in.fifo" ] || mkfifo -m 600 "$D/in.fifo"\n  tail -n +$(( $(wc -l < "$D/cmd.in" 2>/dev/null || echo 0) + 1 )) -F "$D/cmd.in" >> "$D/in.fifo" 2>/dev/null\n  sleep 3\ndone\n' "$D" > "$D/cuantic-mov.sh"
+    chmod +x "$D/cuantic-mov.sh"
+    ( setsid bash "$D/cuantic-mov.sh" >> "$D/mov.log" 2>&1 < /dev/null & )
+    echo "ensure-up: mover cmd.in->in.fifo PORNIT"
+  else
+    echo "ensure-up: mover alive"
+  fi
+fi
