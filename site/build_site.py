@@ -295,6 +295,64 @@ footer code{color:#9fb0c9}
  nav a.l{display:none}}
 """
 
+# ===== STRATURILE CUANTIC — de ce nu e "CatServer + Java 17" gol =====
+straturi_rows = [
+    ("Motor", "CatServer 1.16.5 <b>compilat de noi</b> din sursa la zi (nu binarul din 2023 pe care-l ia toata lumea)",
+     "e stratul care face ca 32 de moduri Forge și 15 pluginuri să trăiască în același proces, fără kick",
+     "masurat: 2643 MB vs 2814 MB cat are CatServer oficial cu acelasi setup", "site/records.json"),
+    ("Runtime", "Java 17 (Temurin) + <b>32 de flaguri GC validate in CI</b> pe Java 17, nu luate de pe net",
+     "flagurile „Aikar” clasice pentru Java 11 refuzau JVM-ul 17; le-am tăiat măsurat, unul câte unul",
+     "masurat: pauza GC medie 47.2 ms × 25 (set vechi) → 115.9 ms × 8 (set nou) = de 3.1× mai rar", "analysis/BENCH-LIVE.md"),
+    ("Mod de server", "RoadRunner (port Forge al lui Lithium) — AI-ul entitatilor, chunk builder, cache-uri",
+     "motorul clasic stă 90% din timp calculând AI pentru vaci pe care nu le vede nimeni",
+     "384 KB, 12.8M descarcari, 1.16.5 ✓", "curseforge.com/minecraft/mc-mods/roadrunner"),
+    ("Mod de server", "FerriteCore <b>si pe server, nu doar in client</b> (1.6.3) + Clumps + MemoryLeakFix",
+     "retine blockstate-urile o singura data si toarna memoria eliberata in heap",
+     "106 KB, MIT; autorul raportează ~600 MB pe lumi mari — la noi nemăsurat separat", "github.com/malte0811/FerriteCore"),
+    ("Moduri de server", "AI-Improvements · In Control! · FastFurnace · FastWorkbench (+Placebo) · Bad Wither No Cookie · Get-It-Together-Drops · spark",
+     "taie munca repetată (furneluri, craft, particule de crash, agregarea itemelor) + profilare mereu pornită",
+     "12 componente de performanță pe server (Raport build), fiecare cu fișier și versiune în manifest", "analysis/ACCEPTANCE.md"),
+    ("Pluginuri", "LuckPerms · Chunky · AuthMe + FastLogin (scoatute la cererea ta, nu aruncate) · LuckPerms deja în listă",
+     "Chunky pregătește chunk-urile dinainte, ca să nu le mai genereze în timp ce alergi",
+     "pregen complet, restricționat de discul de 5 GB (66% plin) — altfel l-am rula Azi", "pack-rules.json"),
+    ("Config", "spigot.yml: entity-activation-range 16/20/24/8, merge-radius 3.5/4.0, mob-spawn-range 3, item-despawn 2400, tick-inactive-villagers false",
+     "astea sunt cheile care schimbă MSPT-ul când intră lumea înăuntru, nu flagurile „de modă”",
+     "în 1.6.4 AJUNG ȘI PE SERVERUL LIVE (până acum zip-ul le avea, cutia nu)", "docs.dedicatedmc.io, wabbanode, builtbybit 187104"),
+    ("Config", "bukkit.yml: spawn-limits 40/8/3/5, chunk-gc.load-threshold 300, autosave la 5 minute",
+     "chunk-urile goale se eliberează, salvarea nu mai întrerupe tick-ul la 45 s",
+     "cheie cu efect masurat pe RAM, nu pe senzatii", "builtbybit.com thread 187104"),
+    ("Config", "catserver.yml: keepSpawnInMemory false, forceSaveOnWatchdog true, versionCheck false, patcheri dezactivati cit nu-s folositi",
+     "spawn-ul nu stă încărcat când nimeni nu e acolo; la crash forțează salvarea, ca să nu pierzi progresul",
+     "numele cheilor le-am verificat în sursa CatServer, nu le-am ghicit", "github.com/Luohuayu/CatServer"),
+    ("Config", "server.properties: view-distance=4, entity-broadcast-range-percentage=60, use-native-transport=true, max-tick-time=-1, network-compression-threshold=512",
+     "mai puține chunk-uri și mai puține pachete trimise per jucător = clientul slab nu se îneacă",
+     "am scos sync-chunk-writes (cheie din 1.19, ignorată pe 1.16.5) — zero chei moarte", "minecraft.wiki/fandom server.properties"),
+    ("Client", "ce am sudat noi în client: Radon · EntityCulling · Saturn · Ksyxis · FPS Reducer · MemoryLeakFix + oglinzile Clumps și FerriteCore; Rubidium (Sodium pe Forge), Oculus și ModernFix veneau din pack-ul original",
+     "6 adăugate + 2 oglinzi; toate rămân DOAR în client — pe server le-am scos, ca să nu-l încarce",
+     "client only — verificat in lista de taiere din pack-rules.json", "pack-rules.json"),
+    ("Casnice", "supervisor care aprinde java în ~15 s, tăiere de loguri, snapshot înainte de orice schimbare, punte de chat în două sensuri, wake-on-join",
+     "serverul se trezește singur și nu rămâne mort când crapă ceva",
+     "wake-on-join: scris, dar <b>nemăsurat încă</b> pe Cloud Shell", "scripts/cuantic-live.sh"),
+]
+straturi_tabel = "\n".join(
+    f'<tr><td><b>{a}</b></td><td>{b}</td><td style="color:var(--mut)">{c}</td><td>{d}</td>'
+    f'<td style="color:var(--mut)"><small>{e}</small></td></tr>' for a, b, c, d, e in straturi_rows)
+straturi_sec = f"""
+<h2>🧬 Ce are înăuntru ce CatServer gol nu are</h2>
+<div class="sub">Întrebarea corectă nu e „de ce CatServer", ci <b>ce am pus lângă el</b>. Asta e motorul
+și tot ce i s-a sudat în jur — ce face fiecare bucată și cu ce cifră se apără. Ceea ce e <b>în test</b>
+scrie așa, nu-l vopsim frumos.</div>
+<table class="tbl">
+<tr><th>Strat</th><th>Ce am pus</th><th>De ce conteaza</th><th>Cifra / starea</th><th>Sursa</th></tr>
+{straturi_tabel}
+</table>
+<div class="sub" style="margin-top:10px"><b>Ce am respins, ca să nu umflăm pack-ul:</b>
+Starlight (Forge) — are doar 1.17.1+, „1.16.5" e un fork All Rights Reserved cu provenienta neprobata;
+LazyDFU — doar Fabric, pe Forge e deja acoperit; Arclight întreg si CatServer+Java 21 — <b>nu pornesc deloc</b> pe setupul nostru (măsurat in duel);
+Mist traieste doar „dezbracat" si cu LuckPerms mort; Sync-chunk-writes — cheie din 1.19, ignorată pe 1.16.5;
+Chunky pregen complet — discul gazdei (5 GB, 66% plin) nu încape; OpenJ9/Semeru — RAM mai mic pe hârtie, dar risc mixin pe Forge 1.16.5, îl măsuram separat înainte sa-l punem.</div>
+"""
+
 html = f"""<!DOCTYPE html>
 <html lang="ro"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -315,7 +373,7 @@ html = f"""<!DOCTYPE html>
   <h1>Serverul care <span>nu te face să aștepți</span> și nu-ți cere bani.</h1>
   <p class="lede">Am luat un server cu <b>32 de moduri și 15 pluginuri</b> — genul care de obicei zboară pe 8-16 GB RAM — și l-am adus să meargă pe o mașină cât un telefon mai vechi. Fiecare cifră de pe pagina asta e măsurată de roboții noștri pe mașina reală, cu un jucător în lume, și are sursa ei.</p>
   <div class="cta">
-    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.3.mrpack">⬇️ Ia pack-ul de client (1.6.3)</a>
+    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.4.mrpack">⬇️ Ia pack-ul de client (1.6.4)</a>
     <a class="btn ghost" href="#cifre">📊 Vezi cifrele și de unde vin</a>
     <a class="btn ghost" href="https://github.com/iZentric/ServerRolePlayLite">⭐ Codul, pe GitHub</a>
   </div>
@@ -345,9 +403,11 @@ html = f"""<!DOCTYPE html>
 
 {live_sec}
 
+{straturi_sec}
+
 <h2>🤝 Ce primești și ce NU promitem</h2>
 <div class="grid">
-  <div class="card"><h3>📦 Pack-ul tău, intact</h3><p>Toate modurile pe care le-ai avut în Freeroam au rămas în client. Serverul a rămas cu 30-32 componente, fără nimic „doar că poate"</p><span class="src">1.6.3 · out/CUANTIC-Client-1.6.3.mrpack · 126.9 MB</span></div>
+  <div class="card"><h3>📦 Pack-ul tău, intact</h3><p>Toate modurile pe care le-ai avut în Freeroam au rămas în client. Serverul a rămas cu 30-32 componente, fără nimic „doar că poate"</p><span class="src">1.6.4 · out/CUANTIC-Client-1.6.4.mrpack · ~126.9 MB</span></div>
   <div class="card"><h3>🚪 Intri fără parolă</h3><p>Poarta de login (AuthMe + FastLogin) e <b>scoasă</b> de pe server. Vrei s-o punem înapoi? Un rând de scris către agent și reapare, cu tot cu conturi.</p><span class="src">analysis/NO-LOGIN.md</span></div>
   <div class="card"><h3>🩺 Se repară singur</h3><p>Dacă java moare, supervisorul o aprinde în ~15 s, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Fiecare schimbare vine cu snapshot + rollback.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
   <div class="card"><h3>🧾 Fiecare cifră are dovadă</h3><p>Tabelul de mai sus nu e scris de mână: e extras din fișierele de verdict ale joburilor. Le poți citi pe toate în repo, la <code>analysis/</code>.</p><span class="src">BENCH-LIVE.md · RAM-ALL.md · APPLY-LIVE.md</span></div>
