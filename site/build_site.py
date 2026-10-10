@@ -392,6 +392,34 @@ Mist traieste doar „dezbracat" si cu LuckPerms mort; Sync-chunk-writes — che
 Chunky pregen complet — discul gazdei (5 GB, 66% plin) nu încape; OpenJ9/Semeru — RAM mai mic pe hârtie, dar risc mixin pe Forge 1.16.5, îl măsuram separat înainte sa-l punem.</div>
 """
 
+# ===== DETALIIILE PACK-ULUI SE CITESC DIN RELEASE, NU DIN MEMORIE =====
+import json as _json, urllib.request as _rq
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PACKV = "?"
+try:
+    PACKV = _json.load(open(os.path.join(ROOT, "pack-rules.json"), encoding="utf-8"))["pack_version"]
+except Exception:
+    pass
+REL, RTAG = {}, ""
+try:
+    with _rq.urlopen("https://api.github.com/repos/iZentric/ServerRolePlayLite/releases/tags/lite", timeout=25) as _r:
+        _d = _json.load(_r)
+        REL = {a["name"]: a for a in _d.get("assets", [])}
+        RTAG = _d.get("name", "")
+except Exception:
+    pass
+def asset(tip, sufix):
+    """Numele + marimea reala a asset-ului de pe release; fallback = nume derivat din pack_version."""
+    n = next((k for k in REL if tip in k and k.endswith(sufix)), None)
+    if not n:
+        n = ("CUANTIC-%s-%s%s" % (tip, PACKV, sufix))
+    mb = round(REL[n]["size"] / 1e6, 1) if n in REL else None
+    return n, mb
+CLIENT, CLIENT_MB = asset("Client", ".mrpack")
+SERVER, SERVER_MB = asset("Server-CatServer", ".zip")
+DL = "https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/"
+print("pack %s | client %s (%s MB) | server %s (%s MB)" % (PACKV, CLIENT, CLIENT_MB, SERVER, SERVER_MB))
+
 ADRESA = "92.5.171.150:25565"
 try:
     _pa = open(os.path.join(os.path.dirname(__file__), "..", "deploy", "play-address.txt"), encoding="utf-8").read().strip()
@@ -431,7 +459,7 @@ html = f"""<!DOCTYPE html>
   <h1>Serverul care <span>nu te face să aștepți</span> și nu-ți cere bani.</h1>
   <p class="lede">Am luat un server cu <b>32 de moduri și 15 pluginuri</b> — genul care de obicei zboară pe 8-16 GB RAM — și l-am adus să meargă pe o mașină cât un telefon mai vechi. Fiecare cifră de pe pagina asta e măsurată de roboții noștri pe mașina reală, cu un jucător în lume, și are sursa ei.</p>
   <div class="cta">
-    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.4.mrpack">⬇️ Ia pack-ul de client (1.6.4)</a>
+    <a class="btn" href="{DL}{CLIENT}">⬇️ Ia pack-ul de client ({PACKV})</a>
     <a class="btn ghost" href="#cifre">📊 Vezi cifrele și de unde vin</a>
     <a class="btn ghost" href="https://github.com/iZentric/ServerRolePlayLite">⭐ Codul, pe GitHub</a>
   </div>
@@ -439,6 +467,7 @@ html = f"""<!DOCTYPE html>
     <div class="stat"><b>2.0 ms</b><span>întârzierea pe care o simți (95 din 100 de cadre) — limita la care începe lag-ul e 50 ms</span></div>
     <div class="stat"><b class="b2">13.7 s</b><span>până serverul e viu, cu 47 de componente încărcate (47 = 32 moduri + 15 pluginuri)</span></div>
     <div class="stat"><b class="b3">0</b><span>mesaje de tip „serverul nu ține pasul" în toate probele</span></div>
+    <div class="stat"><b class="b3" style="font-size:20px">{PACKV}</b><span> ultimul pack: {CLIENT}{SERVER_MB and " + " + SERVER or ""}</span></div>
     <div class="stat"><b class="b4">0 lei</b><span>total: mașina e cont gratuit, codul e al nostru, uneltele open-source</span></div>
   </div>
 </header>
@@ -494,14 +523,14 @@ html = f"""<!DOCTYPE html>
 
 <h2>🥔 Merge și pe un calculator de bibliotecă?</h2>
 <div class="grid">
-  <div class="card"><h3>Clientul</h3><p>Pack-ul vine cu 7 motoare de FPS/ramură ușoară și un „mod cartof" pentru PC-uri vechi de ~2010, fără placă video. Marime: <b>133.1 MB</b> (1.6.3 = 126.9 MB; 1.5.9 = 133.5 MB) — aceleași funcții, fără nimic mort înăuntru.</p></div>
+  <div class="card"><h3>Clientul</h3><p>Pack-ul vine cu 7 motoare de FPS/ramură ușoară și un „mod cartof" pentru PC-uri vechi de ~2010, fără placă video. Marime: <b>{CLIENT_MB} MB</b> client / <b>{SERVER_MB} MB</b> server, citite de pe release, nu estimate..</p></div>
   <div class="card"><h3>Serverul</h3><p>Server gol = doarme (câteva procente de CPU). Mobilul e plafonat global și alive doar lângă jucători, deci consumul nu explodează când intră lumea.</p></div>
   <div class="card"><h3>Gazda</h3><p>Rulează acum pe un cont gratuit, 2 vCPU · 11.8 GB RAM · disc 5 GB (66% ocupat — limita reală a cutiei, nu a serverului).</p></div>
 </div>
 
 <h2>📦 Cum intri, în 3 mișcări</h2>
 <div class="grid">
-  <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>CUANTIC-Client-1.6.3.mrpack</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.3.mrpack">⬇️ Descarcă pack-ul</a></p></div>
+  <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>CUANTIC-Client-1.6.3.mrpack</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="{DL}{CLIENT}">⬇️ Descarcă pack-ul</a></p></div>
   <div class="card"><h3>2️⃣ Importă (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege fișierul <code>.mrpack</code> → Launch. Merge și cu TLauncher.</p></div>
   <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>{ADRESA}</b>. Fără parolă, fără /register — intri direct în oraș. 🏙️</p></div>
 </div>

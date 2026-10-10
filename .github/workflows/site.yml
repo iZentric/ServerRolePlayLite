@@ -1,7 +1,12 @@
 name: Site CUANTIC (auto-update)
 on:
   push:
-    paths: ["analysis/**", "site/**"]
+    paths: ["analysis/**", "site/**", "pack-rules.json", "deploy/play-address.txt"]
+  release:
+    types: [published, edited]
+  workflow_dispatch: {}
+  schedule:
+    - cron: "17 * * * *"
   workflow_dispatch: {}
 permissions:
   contents: write
