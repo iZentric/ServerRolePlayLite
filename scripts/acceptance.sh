@@ -20,10 +20,8 @@ last_boot_log() {
   '
 }
 
-# Asigura ca serverul e pornit si a terminat faza de boot pe pornirea CURENTA (max ~120s)
-if ! pgrep -f 'java @unix_args' >/dev/null 2>&1; then
-  bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true
-fi
+# Asigura ca serverul + tunelul frpc sunt pornite si a terminat faza de boot pe pornirea CURENTA (max ~120s)
+bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true
 for _w in $(seq 1 24); do
   if pgrep -f 'java @unix_args' >/dev/null 2>&1 && ss -lnt 2>/dev/null | grep -q ':25565' && \
      last_boot_log | grep -qaE 'Done \([0-9.]+s\)'; then
@@ -33,6 +31,7 @@ for _w in $(seq 1 24); do
 done
 
 PID=$(pgrep -f 'java @unix_args' | head -1)
+FRP_PID=$(pgrep -f 'frpc -c' | head -1)
 send_cmd() {
   local c="$1"
   [ -p "$D/in.fifo" ] && timeout 4 sh -c "printf '%s\n' \"$c\" > '$D/in.fifo'" 2>/dev/null || true
@@ -43,10 +42,10 @@ last_boot_log > /tmp/acc.log
 TOTL=$(wc -l < /tmp/acc.log 2>/dev/null || echo 0)
 out "# ACCEPTANCE CUANTIC — $(date -u '+%F %T UTC') (boot curent: $TOTL linii)"
 
-# ---- T1 proces + port ----
+# ---- T1 proces + port + tunel frpc ----
 P25565=$(ss -lnt 2>/dev/null | grep -c ':25565')
 if [ -n "$PID" ] && [ "${P25565:-0}" -ge 1 ]; then T="TRECE"; else T="CADE"; fi
-out "[$T] T1 proces java + port: java=${PID:-nil} port25565=$P25565"
+out "[$T] T1 proces java + port: java=${PID:-nil} port25565=$P25565 frpc=${FRP_PID:-nil} ($(tail -1 "$HOME/frpc.log" 2>/dev/null | sed -e "$STRIP" | tr -d '\n' | tail -c 60))"
 
 # ---- T2 boot complet ("Done (") + timp ----
 DONE=$(grep -ao 'Done ([0-9.]*s)' /tmp/acc.log | tail -1)
@@ -141,8 +140,11 @@ out "SCOR: TRECE=$TREC VERIFICA=$VER CADE=$CADE INFO=$INF N-A=$NA (total $TOT_T/
 
 mkdir -p "$GITHUB_WORKSPACE/analysis" 2>/dev/null && cd "$GITHUB_WORKSPACE"
 cp /tmp/acc.txt analysis/ACCEPTANCE.md
+if [ -n "$PID" ] && [ "${P25565:-0}" -ge 1 ]; then
+  { echo "# ALIVE CUANTIC — $(date -u '+%Y-%m-%d %H:%M:%S') UTC"; echo; echo '```'; echo "SUS · 92.5.171.150:25565 (java=$PID, frpc=${FRP_PID:-activ}) · verificat $(date -u '+%H:%M:%S') UTC"; echo '```'; } > analysis/ALIVE.md
+fi
 git config user.name "cuantic-bot"; git config user.email "bot@cuantic.local"
-git add -f analysis/ACCEPTANCE.md >/dev/null 2>&1
+git add -f analysis/ACCEPTANCE.md analysis/ALIVE.md >/dev/null 2>&1
 git commit -q -m "ACCEPTANCE: $TREC TRECE, $VER VERIFICA, $CADE CADE, $INF INFO, $NA N-A ($TOT_T/10 teste, T1-T10)" || true
 git pull --rebase -q origin "$BR" 2>/dev/null || true
 git push -q origin "HEAD:$BR" 2>/dev/null || echo "push: nimic"

@@ -81,8 +81,8 @@ start_mc() {
 }
 echo "JAVA: $J -> $("$J" -version 2>&1 | head -1)"
 [ -s "$(ls CatServer-*.jar 2>/dev/null | head -1)" ] || echo "!! jar absent - ruleaza jobul JAVA inainte"
-tmux kill-session -t frpc 2>/dev/null
-tmux new -s frpc -d "exec $HOME/frpc -c $HOME/frpc.toml > $HOME/frpc.log 2>&1"
+[ -f "$HOME/frpc.toml" ] || printf 'serverAddr = "92.5.171.150"\nserverPort = 443\nauth.method = "token"\nauth.token = "pateu-de-codru-7"\n\n[[proxies]]\nname = "mc"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 25565\nremotePort = 25565\n' > "$HOME/frpc.toml"
+pgrep -f 'frpc -c' >/dev/null 2>&1 || ( setsid "$HOME/frpc" -c "$HOME/frpc.toml" > "$HOME/frpc.log" 2>&1 < /dev/null & )
 # pază de dublu-pornit: daca java e deja SUS (pornit de ex. de un job de diagnostic), il supervisez
 # si il folosesc, dar NU mai pornesc al doilea server pe aceeasi lume (ar bloca region lock-ul).
 if pgrep -f 'java @unix_args' >/dev/null 2>&1; then
@@ -138,7 +138,7 @@ while :; do
       echo " runner jos -> repornit din $R"
     fi
   fi
-  tmux ls 2>/dev/null | grep -q '^frpc:' || { echo " frpc jos -> pornit"; tmux new -s frpc -d "exec $HOME/frpc -c $HOME/frpc.toml > $HOME/frpc.log 2>&1"; }
+  pgrep -f 'frpc -c' >/dev/null 2>&1 || { echo " frpc jos -> pornit"; ( setsid "$HOME/frpc" -c "$HOME/frpc.toml" >> "$HOME/frpc.log" 2>&1 < /dev/null & ); }
   LAST=$NOW
   sleep 15
 done
