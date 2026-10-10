@@ -1,4 +1,4 @@
-# Raport build Freeroam Lite (1.7.0)
+# Raport build Freeroam Lite (1.7.1)
 
 Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
@@ -33,7 +33,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ plugin: claimchunk-0.0.22.jar
 - ✅ plugin: LuckPerms-Bukkit-5.5.71.jar
 - ✅ plugin: Chunky-1.2.217.jar
-- ✅ brand /version + motor: Cuantic-Brand-1.7.0.jar
+- ✅ brand /version + motor: Cuantic-Brand-1.7.1.jar
 
 ## Comune ambelor servere
 
