@@ -5,6 +5,7 @@ on:
     paths:
       - "scripts/build_lite.py"
       - "pack-rules.json"
+      - "tools/cuantic-brand/**"
       - ".github/workflows/build-lite.yml"
   workflow_dispatch: {}
 permissions:
