@@ -392,6 +392,13 @@ Mist traieste doar „dezbracat" si cu LuckPerms mort; Sync-chunk-writes — che
 Chunky pregen complet — discul gazdei (5 GB, 66% plin) nu încape; OpenJ9/Semeru — RAM mai mic pe hârtie, dar risc mixin pe Forge 1.16.5, îl măsuram separat înainte sa-l punem.</div>
 """
 
+ADRESA = "92.5.171.150:25565"
+try:
+    _pa = open(os.path.join(os.path.dirname(__file__), "..", "deploy", "play-address.txt"), encoding="utf-8").read().strip()
+    if _pa and ":" in _pa:
+        ADRESA = _pa
+except Exception:
+    pass
 html = f"""<!DOCTYPE html>
 <html lang="ro"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -482,7 +489,7 @@ html = f"""<!DOCTYPE html>
 <div class="grid">
   <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>CUANTIC-Client-1.6.3.mrpack</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.3.mrpack">⬇️ Descarcă pack-ul</a></p></div>
   <div class="card"><h3>2️⃣ Importă (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege fișierul <code>.mrpack</code> → Launch. Merge și cu TLauncher.</p></div>
-  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>92.5.171.150:25565</b>. Fără parolă, fără /register — intri direct în oraș. 🏙️</p></div>
+  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>{ADRESA}</b>. Fără parolă, fără /register — intri direct în oraș. 🏙️</p></div>
 </div>
 
 <h2>🕰️ Cum arată o zi pe server (schema țintită)</h2>

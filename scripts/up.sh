@@ -54,7 +54,7 @@ git add -f analysis/up.md
 git commit -q -m "up: $S:25565" || true
 git pull --rebase -q origin "$GITHUB_REF_NAME" || true
 git push -q origin "$GITHUB_REF_NAME" || true
-echo "ADRESA=$S:25565"
+bash "$GITHUB_WORKSPACE/scripts/oci-takeover.sh" 2>&1 | tail -6 || echo "oci takeover: nu a mers (ramanem pe Cloud Shell)"
 
 END=$(( $(date +%s) + 1500 ))
 while [ "$(date +%s)" -lt "$END" ]; do

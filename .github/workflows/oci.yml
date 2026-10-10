@@ -1,0 +1,14 @@
+name: OCI — mută serverul pe VM-ul care nu doarme (systemd, Restart=always)
+on:
+  push:
+    paths: [ "scripts/oci-takeover.sh", "deploy/oci.txt", ".github/workflows/oci.yml" ]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  a:
+    runs-on: [self-hosted]
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/oci-takeover.sh
