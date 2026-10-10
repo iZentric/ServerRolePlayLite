@@ -38,11 +38,15 @@ try_boot() {  # $1 = plafon in MB
   pkill -f 'java @unix_args' 2>/dev/null
   for k in 1 2 3 4 5 6 7 8 9 10; do pgrep -f 'java @unix_args' >/dev/null 2>&1 || break; sleep 2; done
   : > "$D/live.log" 2>/dev/null
-  ( cd "$D" && mkfifo -m 600 in.fifo 2>/dev/null; setsid "$J" @unix_args.txt < in.fifo > live.log 2>&1 & )
+  # NU folosim "< in.fifo" de-aici: deschiderea FIFO-ului pentru citire BLOCAZA pana apare un
+  # scriitor, iar in timpul cautarii supervisorul (care tine fd-ul 3 deschis) e oprit => java nu
+  # apuca sa existe si notam fals "a murit la 6s" pentru fiecare plafon. Solutia: deschidem fifo-ul
+  # read-write (nu blocheaza niciodata) si il dam lui java ca stdin.
+  ( cd "$D" && mkfifo -m 600 in.fifo 2>/dev/null; setsid "$J" @unix_args.txt 3<>"$D/in.fifo" <&3 >> live.log 2>&1 & )
   for i in $(seq 1 28); do
     sleep 6
     grep -aq 'Done (' "$D/live.log" 2>/dev/null && return 0
-    pgrep -f 'java @unix_args' >/dev/null || { say "  java a murit la $(($i*6))s: $(tail -2 "$D/live.log" | tr '\n' ' ' | cut -c1-140)"; return 1; }
+    pgrep -f 'java @unix_args' >/dev/null || { say "  java nu e SUS la $(($i*6))s (log: $(wc -l < \"$D/live.log\")) : $(tail -2 "$D/live.log" | tr '\n' ' ' | cut -c1-140)"; return 1; }
   done
   say "  168s fara linie Done ( : $(tail -2 "$D/live.log" | tr '\n' ' ' | cut -c1-140)"; return 1
 }
