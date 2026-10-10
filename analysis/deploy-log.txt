@@ -1,4 +1,4 @@
-# Deploy Zampto - Sat Oct 10 12:00:20 UTC 2026
+# Deploy Zampto - Sat Oct 10 12:01:12 UTC 2026
 
 put: /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/test -f srv/unix_args.txt: No such file or directory
 put: /unix_args.txt: No such file or directory
@@ -6,7 +6,6 @@ put: /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/test -f srv/server.
 put: /server.properties: No such file or directory
 put: /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/test -f srv/spigot.yml: No such file or directory
 put: /spigot.yml: No such file or directory
-Transferring file `manifest-cuantic.json'
 Transferring file `server.properties'
 Transferring file `spigot.yml'
 Transferring file `unix_args.txt'
