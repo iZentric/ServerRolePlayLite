@@ -46,8 +46,10 @@ fixargs() {
     # validam DOAR flagurile: daca am fi pus si "-jar x.jar" inainte de -version, java ar fi
     # interpretat -version ca ARGUMENT al serverului si ar fi PORNIT un al doilea server.
     FLAGS_ONLY=$(sed '/^-jar$/,$d' unix_args.txt | tr '\n' ' ')
-    ERR=$("$J" $FLAGS_ONLY -version 2>&1 >/dev/null)
-    [ -z "$ERR" ] && return 0
+    # java -version scrie INTOTDEAUNA pe stderr, deci stderr-ul nu e dovada esecului:
+    # judecam codul de iesire (altfel cada-ul ar crede ca toate flagurile-s stricate).
+    if "$J" $FLAGS_ONLY -version >/dev/null 2>&1; then return 0; fi
+    ERR=$("$J" $FLAGS_ONLY -version 2>&1 | head -6)
     BAD=$(printf '%s' "$ERR" | grep -aoE "Unrecognized VM option '[^']+'" | head -1 | sed "s/.*'\([^']*\)'.*/\1/" | cut -d= -f1)
     [ -z "$BAD" ] && BAD=$(printf '%s' "$ERR" | grep -aoE "VM option '[^']+' is experimental" | head -1 | sed "s/.*'\([^']*\)'.*/\1/" | cut -d= -f1)
     if [ -z "$BAD" ]; then echo "!! unix_args respins, mesaj necunoscut: $(printf '%s' "$ERR" | head -2 | tr '\n' ' ' | cut -c1-160)"; return 1; fi
