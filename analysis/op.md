@@ -1,4 +1,4 @@
-op sh -- 2026-10-10 13:11:28 UTC
-OP: nume=iZentric java=SUS port=ASCULTA consola=NU cmd.in_neconsumat=[op iZentric list ] restart=PORNIT
-DOVEZI: [12:53:25] [Server thread/INFO]: There are 0 out of maximum 25 players online.|
-live.log final: [13:11:25] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[34;1mWant to support SkinsRestorer or receive priority support? Become a supporter: [33;1mhttps://skinsrestorer.net/pricing[0;39m [13:11:25] [Server thread/INFO]: [F
+op sh -- 2026-10-10 16:14:23 UTC
+OP: nume=iZentric java=SUS port=ASCULTA consola=NU cmd.in_neconsumat=[gol] restart=PORNIT
+DOVEZI: [16:07:22] [Server thread/INFO]: There are 0 out of maximum 25 players online.|[16:07:27] [User Authenticator #1/INFO]: UUID of player iZentric is 0e2f8d53-21b4-32a4-a498-0967ed108270|[16:11:24] [Server thread/INFO]: There are 1 out of maximum 25 players online.|
+live.log final: [16:14:23] [VoiceChatServerThread/INFO]: Server started at port 24454 [16:14:23] [Server thread/INFO]: Essentials found a compatible payment resolution method: Vault Compatibility Layer (v1.7.3-b131)! [16:14:23] [Craft Scheduler Thread - 5/INFO]: Fetching vers
