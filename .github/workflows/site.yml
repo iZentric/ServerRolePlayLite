@@ -2,6 +2,7 @@ name: Site CUANTIC (auto-update)
 on:
   push:
     paths: ["analysis/**", "site/**"]
+  workflow_dispatch: {}
 permissions:
   contents: write
   pages: write
