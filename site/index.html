@@ -47,7 +47,7 @@ footer{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}
   <div class="big">
     <div class="stat"><b>2643 MB</b><span>cel mai mic vârf de RAM măsurat<br>la pornire, server gol (32 moduri + 15 pluginuri)</span></div>
     <div class="stat"><b>~12 s</b><span>pornirea serverului<br>(normal: ~90s)</span></div>
-    <div class="stat"><b>1</b><span>jucător dovedit în live<br>(plafon setat: 25 · 0 erori critice)</span></div>
+    <div class="stat"><b>?</b><span>jucător dovedit în live<br>(plafon setat:  · 0 erori critice)</span></div>
     <div class="stat"><b>0 lei</b><span>costul total<br>al întregii mașinării</span></div>
   </div>
 </header>
@@ -63,26 +63,26 @@ footer{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}
 <div class="row"><div class="eng"><span class="ico">⚰️</span><b>Arclight (intreg)</b><small>Razboi de mixin cu motoarele de performanta</small></div><div class="bar dead">NU PORNESTE</div></div>
 
 <h2>🔬 Măsurat LIVE, pe serverul care rulează acum, cu jucător în lume</h2>
-<div class="sub">Proba din <b>2026-10-09 23:12:33 UTC</b>. Metodologie DIFFERIT de duelul de mai sus: benzile de acolo sunt
+<div class="sub">Proba din <b>2026-10-10 11:35:53 UTC</b>. Metodologie DIFFERIT de duelul de mai sus: benzile de acolo sunt
 <b>RAM la pornire, server gol</b>; masa asta e <b>server viu, cu un jucător activ</b> (spark + jcmd + /proc,
 prin puntea de consolă). <b>Nu punem cele două la aceeași bară</b> — comparațiile între condiții diferite sunt
 exact modul în care se mint site-urile de benchmark. Gazda: 2 vCPU · 11.8 GB RAM (Cloud Shell, 0 lei),
 iar comenzile <code>spark health</code> / <code>spark gc</code> rulează direct în consola serverului, prin punte.</div>
 <table class="tbl">
 <tr><th>Ce măsurăm</th><th>Valoare</th><th>Cum se citește</th></tr>
-<tr><td><b>Jucători în lume la momentul probei</b></td><td>1 (max 25)</td><td style="color:var(--mut)">comanda `list` în consola, răspunsul citit din live.log</td></tr>
-<tr><td><b>MSPT min/mediu/p95/max (10 s)</b></td><td>1.6/2.4/4.9/12.5</td><td style="color:var(--mut)">2.4 ms pe tick = 5% din bugetul de 50 ms → 20 TPS fără efort</td></tr>
-<tr><td><b>MSPT (1 min)</b></td><td>0.8/2.4/7.8/278.9</td><td style="color:var(--mut)">varful de 279 ms cade in fereastra in care EU rulasem comenzile de diagnostic — neatribuit</td></tr>
+<tr><td><b>Jucători în lume la momentul probei</b></td><td>— (max 25)</td><td style="color:var(--mut)">comanda `list` în consola, răspunsul citit din live.log</td></tr>
+<tr><td><b>MSPT min/mediu/p95/max (10 s)</b></td><td>0.6/1.6/354.1/354.1</td><td style="color:var(--mut)">2.4 ms pe tick = 5% din bugetul de 50 ms → 20 TPS fără efort</td></tr>
+<tr><td><b>MSPT (1 min)</b></td><td>0.6/1.6/354.1/354.1</td><td style="color:var(--mut)">varful de 279 ms cade in fereastra in care EU rulasem comenzile de diagnostic — neatribuit</td></tr>
 <tr><td><b>`Can't keep up` în toată sesiunea</b></td><td>0</td><td style="color:var(--mut)">0 = niciun tick intarziat anuntat de server</td></tr>
-<tr><td><b>Pauze GC (G1 Young)</b></td><td>47.2 ms avg, 25 total collections</td><td style="color:var(--mut)">colectorile sunt scurte si rare; frecventa ~24 s</td></tr>
+<tr><td><b>Pauze GC (G1 Young)</b></td><td>140.25 ms avg, 4 total collections</td><td style="color:var(--mut)">colectorile sunt scurte si rare; frecventa ~24 s</td></tr>
 <tr><td><b>Full-GC (G1 Old)</b></td><td>0 colectari</td><td style="color:var(--mut)">0 = fara blocaje lungi de secunde</td></tr>
-<tr><td><b>Heap folosit</b></td><td>742.7 MB / 2.0 GB   (36%)</td><td style="color:var(--mut)">cu -Xmx2G; mai avem marja pentru playeri</td></tr>
-<tr><td><b>RAM proces</b></td><td>2613 MB RSS</td><td style="color:var(--mut)">varful masurat din /proc (VmHWM) in sesiune: 2.59 GB</td></tr>
-<tr><td><b>CPU</b></td><td>proces 32.4% din 2 vCPU</td><td style="color:var(--mut)">restul il mananca joburile de test ale agentului</td></tr>
-<tr><td><b>Pornire</b></td><td>14.448s până la `Done`</td><td style="color:var(--mut)">incarcare completa (pluginuri): 92.639s</td></tr>
-<tr><td><b>Latență rețea prin tunel</b></td><td>4 ms</td><td style="color:var(--mut)">RTT TCP pana la portul public, numaratoarea din aceeasi masina</td></tr>
+<tr><td><b>Heap folosit</b></td><td>—</td><td style="color:var(--mut)">cu -Xmx2G; mai avem marja pentru playeri</td></tr>
+<tr><td><b>RAM proces</b></td><td>4647 MB RSS</td><td style="color:var(--mut)">varful masurat din /proc (VmHWM) in sesiune: 2.59 GB</td></tr>
+<tr><td><b>CPU</b></td><td>proces 108% din 2 vCPU</td><td style="color:var(--mut)">restul il mananca joburile de test ale agentului</td></tr>
+<tr><td><b>Pornire</b></td><td>11.504s până la `Done`</td><td style="color:var(--mut)">incarcare completa (pluginuri): 61.181s</td></tr>
+<tr><td><b>Latență rețea prin tunel</b></td><td>5 ms</td><td style="color:var(--mut)">RTT TCP pana la portul public, numaratoarea din aceeasi masina</td></tr>
 <tr><td><b>Eroare critică</b></td><td>0 în sesiune</td><td style="color:var(--mut)">crash / OOM / exceptie in tick loop</td></tr>
-<tr><td><b>Disc gazdă</b></td><td>63% din 5.0G</td><td style="color:var(--mut)">limita fizica a cutiei, nu a serverului</td></tr>
+<tr><td><b>Disc gazdă</b></td><td>65% din 5.0G</td><td style="color:var(--mut)">limita fizica a cutiei, nu a serverului</td></tr>
 </table>
 <div class="sub" style="margin-top:10px">Ce <b>nu</b> acoperă: 3-10 jucători deodată, baseline-ul packului original
 pe aceeași mașină (deci nu vindem „de X ori mai repede"), și costul exact al layerului hibrid (Forge curat vs
@@ -152,7 +152,7 @@ boala Mohist:      ╱─╱─╱──↗  muntele care crește → crash
 </div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din rezultatele testelor · ultima actualizare: 10 Oct 2026, 10:44 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din rezultatele testelor · ultima actualizare: 10 Oct 2026, 11:51 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit · set de flaguri validat pe Java 17 in CI
 </footer>
 </div></body></html>
