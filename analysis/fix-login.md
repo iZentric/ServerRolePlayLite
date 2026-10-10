@@ -1,11 +1,11 @@
-unbreak-login -- 2026-10-09 22:54:27 UTC
-FIX: nume=iZentric db=TOTAL randuri desmarcate: 1 config=SCOS restart=DA online=DA
+unbreak-login -- 2026-10-10 13:27:51 UTC
+FIX: nume=iZentric db=0-randuri config=LIPSA restart=DA online=DA
 
 baze gasite: 4
-  luckperms-h2-v2.mv.db deschidere esuata: database is locked
-  FastLogin.db:premium.Premium inainte=[('iZentric', 1)] dupa=[('iZentric', 0)] randuri_update=1
-TOTAL randuri desmarcate: 1
+  luckperms-h2-v2.mv.db deschidere esuata: file is not a database
+  FastLogin.db:premium.Premium inainte=[] dupa=[] randuri_update=0
+TOTAL randuri desmarcate: 0
 log final:
-[22:54:15] [Craft Scheduler Thread - 3/WARN]: There is a new EssentialsX version available for download: 2.22.0.
-[22:54:15] [Craft Scheduler Thread - 3/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
-[22:54:19] [Craft Scheduler Thread - 0/INFO]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
+[13:27:46] [Craft Scheduler Thread - 3/WARN]: 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+[13:27:46] [Craft Scheduler Thread - 3/WARN]: 	at java.base/java.lang.Thread.run(Thread.java:840)
+[13:27:51] [User Authenticator #1/INFO]: UUID of player iZentric is 0e2f8d53-21b4-32a4-a498-0967ed108270
