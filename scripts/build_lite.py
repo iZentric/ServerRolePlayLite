@@ -527,7 +527,7 @@ def build_brand_plugin(out_root, server_jar_path, dest_dirs):
         cls = os.path.join(bdir, "classes"); os.makedirs(cls, exist_ok=True)
         with open(plg, encoding="utf-8") as f:
             open(os.path.join(bdir, "plugin.yml"), "w", encoding="utf-8").write(f.read().replace("__VER__", ver))
-        surse = [src] + [os.path.join(dp, fn) for dp, _, fn in os.walk(stubs) if fn.endswith(".java")]
+        surse = [src] + [os.path.join(dp, fn) for dp, _, fns in os.walk(stubs) for fn in fns if fn.endswith(".java")]
         r = subprocess.run(["javac", "--release", "8", "-nowarn", "-d", cls] + surse, capture_output=True, text=True)
         if r.returncode != 0:
             raise RuntimeError((r.stderr or r.stdout or "javac a esuat")[:400])
