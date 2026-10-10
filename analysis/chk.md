@@ -1,19 +1,20 @@
-# CHK — 2026-10-10 11:55:22 UTC
+# CHK — 2026-10-10 13:33:58 UTC
 
 ```
-== CHK — 2026-10-10 11:54:57 UTC ==
-tmux: no server running on /tmp/tmux-1101/default;
-java: 0 procese | bore: 0
-uptime: 11:54:57 up  1:41,  0 users,  load average: 0.52, 0.83, 0.65
+== CHK — 2026-10-10 13:33:32 UTC ==
+tmux: frpc: 1 windows (created Sat Oct 10 13:32:25 2026) [80x24];
+java: 1 procese | bore: 0
+uptime: 13:33:32 up  3:19,  0 users,  load average: 3.34, 2.63, 1.72
 ss 25565:
-live.log: 434 linii | Done (19.605s)
-log final: [11:53:10] [Server thread/INFO]: iZentric issued server command: /pl [11:53:23] [Server thread/INFO]: iZentric issued server command: / [11:53:35] [Server thread/INFO]: [Server] agent: puntea de comanda functioneaza (test) 
-disc: /dev/sdb1       5.0G  3.3G  1.8G  66% /home/mndvasi9
-fisiere: ADRESA banned-ips.json banned-players.json bind.log boot.log bore.log bukkit.yml CatServer-1.16.5-1d8d6313-server.jar catserver.yml chat.log cin CITESTE-MA.txt cmd.in commands.yml config defaultconfig
-pack marcat: CUANTIC-Server-CatServer-1.6.2.zip
+  LISTEN 1      4096               *:25565            *:*          
+live.log: 975 linii | Done (18.128s)
+log final: [13:33:30] [Server thread/INFO]: No kits found to migrate. [13:33:30] [Server thread/INFO]: Loaded 853 items from items.csv. [13:33:30] [Server thread/WARN]: Initializing Legacy Material Support. Unless you have legacy plugins and/or data this is a bug! 
+disc: /dev/sdb1       5.0G  3.6G  1.5G  71% /home/mndvasi9
+fisiere: ADRESA banned-ips.json banned-players.json bind.log boot.log bore.log bukkit.yml bukkit.yml.bak.1791636852 bukkit.yml.bak.1791639103 CatServer-1.16.5-1d8d6313-server.jar catserver.yml chat.log cin CIT
+pack marcat: CUANTIC-Server-CatServer-1.6.4.zip
 unix_args: -Xms1485M -Xmx11884M -XX:+UseG1GC -XX:+ParallelRefProcEnabled 
-erori-cheie: [11:51:43] [Worker-Main-1/ERROR]: Couldn't load block tag farmersdelight:mushroom_colony_growable_on as it is missing following references: |[11:52:02] [Server thread/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39mRenaming SkinErrorCooldown to commands.skinErrorCooldown[0;39|[11:52:11] [Server thread/ERROR]: You are running a server that does not properly support Bukkit plugins. Bukkit plugins should not be used |[11:52:28] [Server thread/INFO]: Done (19.605s)! For help, type "help"|[11:52:28] [Craft Scheduler Thread - 5/WARN]: [AuthMe] Could not download GeoLiteAPI database [FileNotFoundException]: plugins/AuthMe/GeoLit|
-sup.log:  11:52:50 mc=DA port=SUS log=394| 11:53:05 mc=DA port=SUS log=430| 11:53:20 mc=DA port=SUS log=432|[11:53:35] trimis: say agent: puntea de comanda functioneaza (test)| 11:53:35 mc=DA port=SUS log=433|
+erori-cheie: [13:29:42] [Craft Scheduler Thread - 0/WARN]: java.io.IOException: Server returned HTTP response code: 403 for URL: https://api.github.com/r|[13:31:58] [main/ERROR]: Mixin config pizzamod.mixin.json does not specify "minVersion" property|[13:32:14] [main/ERROR]: Mixin config pizzamod.mixin.json does not specify "minVersion" property|[13:32:44] [Worker-Main-1/ERROR]: Couldn't load block tag farmersdelight:mushroom_colony_growable_on as it is missing following references: |[13:33:28] [Server thread/ERROR]: You are running a server that does not properly support Bukkit plugins. Bukkit plugins should not be used |
+sup.log:  frpc jos -> pornit| 13:32:40 mc=DA port=nu asculta log=858| 13:32:56 mc=DA port=SUS log=908| 13:33:11 mc=DA port=SUS log=929| 13:33:27 mc=DA port=SUS log=968|
 frpc.toml: 10
 adresa din fisier: bore.pub:18122
   dinafara 1: "online":false |  |  "message":"Failed to connect or create a socket: 111 (Connection refused)"
