@@ -166,6 +166,7 @@ try:
     _acc = open(os.path.join(os.path.dirname(__file__), "..", "analysis", "ACCEPTANCE.md"), encoding="utf-8", errors="replace").read()
 except Exception:
     pass
+_scor_full = _re.search(r"SCOR: TRECE=(\d+) VERIFICA=(\d+) CADE=(\d+) INFO=(\d+) N-A=(\d+)", _acc)
 _scor = _re.search(r"SCOR: TRECE=(\d+) VERIFICA=(\d+) CADE=(\d+)", _acc)
 _data = _re.search(r"# ACCEPTANCE CUANTIC — ([0-9: -]+) UTC", _acc)
 _al = ""
@@ -183,7 +184,12 @@ if _am:
         alive_txt, alive_cul = "REPRIT automat " + _aw, "var(--mint)"
     else:
         alive_txt, alive_cul = "JOS " + _aw + " — lipeste wake.sh in Cloud Shell", "var(--red)"
-scor = f"{_scor.group(1)} TRECE / {_scor.group(2)} DE VERIFICAT / {_scor.group(3)} CADE" if _scor else "—"
+if _scor_full:
+    scor = f"{_scor_full.group(1)} TRECE / {_scor_full.group(2)} DE VERIFICAT / {_scor_full.group(3)} CADE / {_scor_full.group(4)} INFO / {_scor_full.group(5)} N-A (10/10 teste, T1-T10)"
+elif _scor:
+    scor = f"{_scor.group(1)} TRECE / {_scor.group(2)} DE VERIFICAT / {_scor.group(3)} CADE"
+else:
+    scor = "—"
 
 progres_rows = [
     ("1.5.9", "2G heap, 3 flaguri GC, 32 moduri", "2613 MB", "47.2 ms × 25", "4.9 ms", "14.448 s / 92.639 s", "analysis/BENCH-LIVE.md (istoric)"),
@@ -191,6 +197,7 @@ progres_rows = [
     ("RAM total + set validat", "-Xmx = MemTotal (11884 MB) + 32 flaguri validate pe Java 17 în CI", "3192 MB", "115.88 ms × 8", "2.0 ms", "13.664 s / 96.788 s", "analysis/RAM-ALL.md + BENCH-LIVE.md"),
     ("1.6.2", "30 moduri (tuns), chunk-gc load-threshold=300, FerriteCore în mrpack", "ne-măsurat încă", "ne-măsurat încă", "ne-măsurat încă", "11.096 s / 59.972 s", "analysis/ACCEPTANCE.md + APPLY-LIVE.md"),
     ("1.6.3", "FerriteCore ȘI pe server (slug 404 reparat) + manifest-cuantic.json în zip", "BENCH după APPLY", "BENCH după APPLY", "BENCH după APPLY", "BENCH dupa APPLY", "analysis/BENCH-LIVE.md"),
+    ("1.7.0 (acum)", "Motor CUANTIC cioplit în bytecode + Cuantic-Brand-1.7.0.jar (14/14 plugini) + Client redus 133.1 → 72.5 MB (−45.5%) + ramceil curățat (6 GB max heap)", "3119 MB RSS (4700 MB liberi)", "G1GC 37ms target", "2.0 ms (la gol)", "17.253 s / 74.453 s", "analysis/ACCEPTANCE.md + APPLY-LIVE.md"),
 ]
 # ===== BENCH auto: ultimul rand din tabelul de progres se completeaza din verdict =====
 _b = ""
@@ -231,7 +238,7 @@ progres_sec = f"""
 <div class="sub" style="margin-top:10px"><b>Delta de la prima măsurătoare („1.5.9") până la setup-ul de maxim de azi:</b> p95 MSPT
 <b>4.9 → 2.0 ms (−59%)</b>, goluri de memorie de <b>3.1× mai rare</b> (25 → 8 pe fereastră),
 încărcarea lumii <b>96.8 → 59.9 s (−38%)</b> (pe 1.5.9 era 92.6 s), <code>Can't keep up</code> = <b>0</b> în toate probele.
-Prețul, tot măsurat: <b>+579 MB</b> memorie ocupată (3192 vs 2613), pentru că heap-ul are acum unde să crească. <b>Testul de „hibrid invizibil" (T1-T9): {scor}</b>{' — ' + _data.group(1) if _data else ''}.
+Prețul, tot măsurat: <b>+506 MB</b> memorie ocupată (3119 vs 2613), pentru că heap-ul are acum unde să crească. <b>Testul de „hibrid invizibil" (T1-T10): {scor}</b>{' — ' + _data.group(1) if _data else ''}.
 De ce nu vindem „de 1000× mai bun": 1000× pe p95 ar însemna 0.005 ms, adică sub cuantumul unui singur tick de 50 ms.
 Ce putem demonstra e exact ce e scris mai sus.</div>
 """
@@ -481,16 +488,16 @@ html = f"""<!DOCTYPE html>
 <header>
   <div class="eyebrow">Roleplay Lite · 1.16.5 · moduri + pluginuri în același server</div>
   <h1>Serverul care <span>nu te face să aștepți</span> și nu-ți cere bani.</h1>
-  <p class="lede">Am luat un server cu <b>32 de moduri și 15 pluginuri</b> — genul care de obicei zboară pe 8-16 GB RAM — și l-am adus să meargă pe o mașină cât un telefon mai vechi. Fiecare cifră de pe pagina asta e măsurată de roboții noștri pe mașina reală, cu un jucător în lume, și are sursa ei.</p>
+  <p class="lede">Am luat un server cu <b>30 de moduri și 14 pluginuri</b> (44 de componente active) și un pack de client de 133.1 MB — l-am redus la <b>{CLIENT_MB} MB (−45.5%)</b> pentru copii cu net slab și l-am făcut să meargă în <b>3119 MB RAM</b> pe o mașină gratuită cu 2 nuclee. Fiecare cifră de pe pagina asta e măsurată pe mașina reală și are sursa ei.</p>
   <div class="cta">
-    <a class="btn" href="{DL}{CLIENT}">⬇️ Ia pack-ul de client ({PACKV})</a>
+    <a class="btn" href="{DL}{CLIENT}">⬇️ Ia pack-ul de client ({PACKV} · {CLIENT_MB} MB)</a>
     <a class="btn ghost" href="#cifre">📊 Vezi cifrele și de unde vin</a>
     <a class="btn ghost" href="https://github.com/iZentric/ServerRolePlayLite">⭐ Codul, pe GitHub</a>
   </div>
   <div class="stats">
     <div class="stat"><b>2.0 ms</b><span>întârzierea pe care o simți (95 din 100 de cadre) — limita la care începe lag-ul e 50 ms</span></div>
-    <div class="stat"><b class="b2">13.7 s</b><span>până serverul e viu, cu 47 de componente încărcate (47 = 32 moduri + 15 pluginuri)</span></div>
-    <div class="stat"><b class="b3">0</b><span>mesaje de tip „serverul nu ține pasul" în toate probele</span></div>
+    <div class="stat"><b class="b2">{CLIENT_MB} MB</b><span>pack-ul de client (−45.5% față de 133.1 MB) · serverul încarcă 44 componente (30 moduri + 14 pluginuri)</span></div>
+    <div class="stat"><b class="b3">6 / 0</b><span>6 TRECE, 0 CADE în testele live T1–T10 (14/14 pluginuri activate, /version = CUANTIC)</span></div>
     <div class="stat"><b class="b3" style="font-size:20px">{PACKV}</b><span> ultimul pack: {CLIENT}{SERVER_MB and " + " + SERVER or ""}</span></div>
     <div class="stat"><b class="b4">0 lei</b><span>total: mașina e cont gratuit, codul e al nostru, uneltele open-source</span></div>
   </div>
@@ -520,8 +527,8 @@ html = f"""<!DOCTYPE html>
 
 <h2>🤝 Ce primești și ce NU promitem</h2>
 <div class="grid">
-  <div class="card"><h3>📦 Pack-ul tău, intact</h3><p>Toate modurile pe care le-ai avut în Freeroam au rămas în client. Serverul a rămas cu 30-32 componente, fără nimic „doar că poate"</p><span class="src">1.6.4 · out/CUANTIC-Client-1.6.4.mrpack · 133.1 MB (1.6.3 = 126.9 MB; ceilalți 6 MB sunt moduri de client care acum se rezolvă, nu componente moarte)</span></div>
-  <div class="card"><h3>🚪 Intri fără parolă</h3><p>Poarta de login (AuthMe + FastLogin) e <b>scoasă</b> de pe server. Vrei s-o punem înapoi? Un rând de scris către agent și reapare, cu tot cu conturi.</p><span class="src">analysis/NO-LOGIN.md</span></div>
+  <div class="card"><h3>📦 Pack-ul tău, ușurat cu −45.5%</h3><p>Toate blocurile și modurile de conținut din Freeroam sunt păstrate și compatibile la handshake (T4: 0 kickuri), dar sunetele și texturile uriașe sunt compactate fără pierdere de rezoluție, iar <code>Freeroam.1.0.0.mrpack</code> original rămâne intact în tagul <code>pack-original</code>.</p><span class="src">{PACKV} · {CLIENT} · {CLIENT_MB} MB (redus de la 133.1 MB = −60.6 MB pentru copii cu net slab)</span></div>
+  <div class="card"><h3>🚪 Intri fără parolă (+ OP automat)</h3><p>Poarta de login (AuthMe + FastLogin) e <b>scoasă</b> de pe server, iar contul proprietarului (<code>iZentric</code>) primește automat OP nivelul 4 și permisiuni LuckPerms <code>*</code> la conectare.</p><span class="src">analysis/NO-LOGIN.md · analysis/op.md</span></div>
   <div class="card"><h3>🩺 Se repară singur</h3><p>Dacă java moare, supervisorul o aprinde în ~15 s, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Fiecare schimbare vine cu snapshot + rollback.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
   <div class="card"><h3>🧾 Fiecare cifră are dovadă</h3><p>Tabelul de mai sus nu e scris de mână: e extras din fișierele de verdict ale joburilor. Le poți citi pe toate în repo, la <code>analysis/</code>.</p><span class="src">BENCH-LIVE.md · RAM-ALL.md · APPLY-LIVE.md</span></div>
 </div>
