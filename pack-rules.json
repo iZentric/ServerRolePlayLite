@@ -1,6 +1,6 @@
 {
   "pack_name": "CUANTIC",
-  "pack_version": "1.7.5",
+  "pack_version": "1.7.6",
  "minecraft": "1.16.5",
  "forge": "36.2.42",
  "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE DE GAMEplay + Oculus (necesar pt texturi/pipeline ca sa nu apara negru-mov). Se scot doar DynamicSurroundings, CTM-MC, animatii duble si meniuri inutile.",
@@ -31,7 +31,8 @@
   "ksyxis",
   "rubidium-extra",
   "entity-collision-fps-fix",
-  "better-fps-render-distance"
+  "out-of-sight",
+  "connectivity"
  ],
  "_comentariu_serverpause": "GUILLOTINA 1.5.4: Prism nu instala modurile din lista externa a mrpack-ului => clientii ramaneau FARA jar => kick pe canal. serverpause scos din AMBELE parti si jarul sters de pe server la deploy.",
  "add_server_modrinth": [
@@ -54,7 +55,8 @@
   "bad-wither-no-cookie-reloaded",
   "spawner-fix",
   "smooth-chunk-save",
-  "let-me-despawn"
+  "let-me-despawn",
+  "connectivity"
  ],
  "_comentariu_maxlite": "Moduri server-side care inlocuiesc pluginurile in varianta MaxLite (Forge pur, consum minim).",
  "maxlite_command_mods": [

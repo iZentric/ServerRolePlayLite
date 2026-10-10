@@ -87,6 +87,7 @@ CURSEFORGE_PINNED_1165 = {
     "let-me-despawn": (4025350, "letmedespawn-forge-1.16-1.0.2a.jar"),
     "entity-collision-fps-fix": (3809513, "entitycollisionfpsfix-1.16-1.0.1.jar"),
     "better-fps-render-distance": (3543461, "betterfpsdist-1.1.jar"),
+    "out-of-sight": (3143752, "out_of_sight-1.16.4-1.0.1.jar"),
     "connectivity": (3510357, "connectivity-2.4-1.16.5.jar"),
 }
 
@@ -252,6 +253,7 @@ def slim_client_jar(src_path, dst_path):
     try:
         with zipfile.ZipFile(src_path, "r") as zin, \
              zipfile.ZipFile(dst_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zout:
+            all_names = set(zin.namelist())
             for item in zin.infolist():
                 n = item.filename
                 low = n.lower()
@@ -285,8 +287,16 @@ def slim_client_jar(src_path, dst_path):
                             im = Image.open(io.BytesIO(data))
                             im.load()
                             if im.mode in ("RGBA", "RGB"):
-                                # Recompresie 100% LOSSLESS in modul original RGBA/RGB (fara quantize 'P',
-                                # ca NativeImage/Oculus/CTM sa nu afiseze niciodata texturi negru-mov!)
+                                # Pastram 100% modul original RGBA/RGB (fara quantize 'P' ca sa nu apara negru-mov!).
+                                # Doar daca o textura patrata power-of-two fara .mcmeta si in afara GUI/font depaseste
+                                # 256x256 (ex. poze brute 1024x1024 / 2048x2048 din Pizzaland/ModernXL), o aducem la
+                                # 256x256 HD (16x rezolutia vanilla!) cu LANCZOS — calitate vizuala impecabila si -70% VRAM pe Intel HD!
+                                if (im.width == im.height and im.width > 256
+                                        and (im.width & (im.width - 1)) == 0
+                                        and (n + ".mcmeta") not in all_names
+                                        and "/gui/" not in low and "/font/" not in low):
+                                    resample = getattr(getattr(Image, "Resampling", Image), "LANCZOS", Image.BICUBIC)
+                                    im = im.resize((256, 256), resample)
                                 buf = io.BytesIO()
                                 im.save(buf, format="PNG", optimize=True, compress_level=9)
                                 nd = buf.getvalue()
@@ -406,6 +416,35 @@ OPTIONSSHADERS_TXT = """\
 # ca sa nu consume FPS pe laptopuri vechi. Pe PC bun poti activa orice shader din Video Settings -> Shader Packs.
 shaderPack=(off)
 """
+
+OUT_OF_SIGHT_CLIENT_TOML = """\
+#General mod settings
+[general]
+\t#Range: 1.0 ~ 30000.0
+\ttileEntityRenderRangeMax = 36.0
+\t#Range: 1.0 ~ 30000.0
+\tentityRenderRangeMax = 56.0
+\ttileEntityRenderLimitModdedOnly = false
+\tentityRenderLimitModdedOnly = false
+"""
+
+
+def build_servers_dat(name="§b§lCUANTIC RolePlay §8• §aPalma City", ip="92.5.171.150:25565"):
+    """Genereaza fisierul binar NBT necomprimat overrides/servers.dat (formatul oficial ServerList 1.16.5)
+    astfel incat serverul sa apara direct primul in Multiplayer la deschiderea modpack-ului."""
+    import struct
+    def nbt_str(s):
+        b = s.encode("utf-8")
+        return struct.pack(">H", len(b)) + b
+    out = bytearray()
+    out += b"\x0a" + nbt_str("")  # Root TAG_Compound("")
+    out += b"\x09" + nbt_str("servers") + b"\x0a" + struct.pack(">i", 1)  # TAG_List("servers") of 1 TAG_Compound
+    out += b"\x08" + nbt_str("name") + nbt_str(name)
+    out += b"\x08" + nbt_str("ip") + nbt_str(ip)
+    out += b"\x01" + nbt_str("acceptTextures") + b"\x01"
+    out += b"\x00"  # End entry compound
+    out += b"\x00"  # End root compound
+    return bytes(out)
 
 FERRITECORE_MIXIN_TOML = """\
 # CUANTIC — toate optimizarile de memorie FerriteCore activate explicit
@@ -1073,6 +1112,7 @@ def main():
         z.writestr("modrinth.index.json", json.dumps(new_index, indent=2))
         z.writestr("overrides/options.txt", OPTIONS_LITE)
         z.writestr("overrides/optionsshaders.txt", OPTIONSSHADERS_TXT)
+        z.writestr("overrides/servers.dat", build_servers_dat())
         z.writestr("overrides/SETARI-PC-BUN.txt", GHID_PC_BUN)
         z.writestr("overrides/config/modernfix-mixins.properties", MODERNFIX_MIXINS_PROPS_CLIENT)
         z.writestr("overrides/config/ferritecore-mixin.toml", FERRITECORE_MIXIN_TOML)
@@ -1080,6 +1120,7 @@ def main():
         z.writestr("overrides/config/sodium-extra-options.json", RUBIDIUM_EXTRA_OPTIONS_JSON)
         z.writestr("overrides/config/rubidium_extra-options.json", RUBIDIUM_EXTRA_OPTIONS_JSON)
         z.writestr("overrides/config/entityculling.json", ENTITYCULLING_JSON)
+        z.writestr("overrides/config/out_of_sight-client.toml", OUT_OF_SIGHT_CLIENT_TOML)
 
         rmc = [r.lower() for r in rules.get("remove_from_client", [])]
         cslim_dir = os.path.join(out_dir, "client-slim")

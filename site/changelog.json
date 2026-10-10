@@ -1,4 +1,14 @@
 {
+ "1.7.6": [
+  {
+   "t": "Optimizare calitativă HD 256x256 RGBA (zero texturi negru-mov, -70% VRAM pe laptopuri fără placă video)",
+   "p": "Păstrăm 100% modul de culoare original `RGBA`/`RGB` (fără cuantizare în paletă `P`) și **Oculus 1.4.7** pe Client, dar aducem texturile pătrate exagerate (`1024x1024` / `2048x2048` din `Pizzaland` și `ModernXL`) la **256x256 HD** (`16x` peste rezoluția vanilla `16x16`) prin filtrare `LANCZOS`. Vizual totul arată impecabil HD, fără niciun cub negru-mov, dar Texture Atlas-ul consumă cu ~600 MB mai puțin VRAM pe plăcile integrate Intel HD / UHD."
+  },
+  {
+   "t": "Out of Sight 1.0.1 + Connectivity 2.4 + servers.dat pre-configurat în Multiplayer",
+   "p": "(1) Am înlocuit `betterfpsdist 1.1` (care în 1.16.5 nu avea suport pentru `Rubidium`) cu **Out of Sight 1.0.1** + `out_of_sight-client.toml` calibrat calitativ (`tileEntityRenderRangeMax = 36.0`, `entityRenderRangeMax = 56.0`), astfel încât tot mobilierul din clădirea și strada din fața ta se vede 100% complet, dar mobilierul aflat la peste 36 blocuri după clădiri nu încarcă placa video; (2) am adăugat **Connectivity 2.4** pe Server și Client pentru a elimina erorile `Timed out` / `PacketTooLargeException` la conectarea de pe laptopuri sau Wi-Fi lent; (3) am pre-inclus `overrides/servers.dat` cu **CUANTIC RolePlay • Palma City (`92.5.171.150:25565`)** direct în meniul Multiplayer."
+  }
+ ],
  "1.7.5": [
   {
    "t": "Păstrat doar Oculus pe Client (fără CTM-MC) pentru fixul texturilor negru-mov cu consum minim de RAM",
