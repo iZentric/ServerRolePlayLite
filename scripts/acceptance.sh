@@ -146,7 +146,10 @@ fi
 git config user.name "cuantic-bot"; git config user.email "bot@cuantic.local"
 git add -f analysis/ACCEPTANCE.md analysis/ALIVE.md >/dev/null 2>&1
 git commit -q -m "ACCEPTANCE: $TREC TRECE, $VER VERIFICA, $CADE CADE, $INF INFO, $NA N-A ($TOT_T/10 teste, T1-T10)" || true
-git pull --rebase -q origin "$BR" 2>/dev/null || true
-git push -q origin "HEAD:$BR" 2>/dev/null || echo "push: nimic"
+for _p in 1 2 3 4; do
+  git pull --rebase -X ours -q origin "$BR" 2>/dev/null || git rebase --abort 2>/dev/null || true
+  git push -q origin "HEAD:$BR" 2>/dev/null && break
+  sleep 4
+done
 cat /tmp/acc.txt
 exit 0
