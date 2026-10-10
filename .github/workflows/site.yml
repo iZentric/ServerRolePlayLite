@@ -5,6 +5,7 @@ on:
   workflow_dispatch: {}
 permissions:
   contents: write
+  actions: write
   pages: write
   id-token: write
 concurrency:
@@ -25,6 +26,32 @@ jobs:
           git commit -m "cartea recordurilor actualizata" || true
           git pull --rebase -X ours || true
           git push || true
+      - name: ALIVE — suna la port, si daca e jos trezim cutia
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          SUS=NU
+          for i in 1 2; do
+            R=$(curl -fsS --max-time 20 "https://api.mcsrvstat.us/3/92.5.171.150:25565" 2>/dev/null || echo "")
+            printf '%s' "$R" | grep -q '"online":true' && { SUS=DA; PJ=$(printf '%s' "$R" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d.get('players',{}).get('online',0))" 2>/dev/null); break; }
+            sleep 95
+          done
+          if [ "$SUS" = DA ]; then
+            echo "SUS · $PJ jucatori · verificat $(date -u '+%H:%M:%S') UTC" > /tmp/alive.txt
+          else
+            gh api -X POST "repos/$GITHUB_REPOSITORY/actions/workflows/up.yml/dispatches" \
+              -f ref="$GITHUB_REF_NAME" -f "reason=site ALIVE: serverul nu raspunde" >/dev/null 2>&1 \
+              && T="dispatch trimis" || T="dispatch refuzat"
+            echo "JOS ($T) - incerc pe cont: lipeste in Cloud Shell `bash <(curl -fsSL https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_REF_NAME/scripts/wake.sh)`" > /tmp/alive.txt
+            sleep 200
+            curl -fsS --max-time 20 "https://api.mcsrvstat.us/3/92.5.171.150:25565" 2>/dev/null | grep -q '"online":true' \
+              && echo "REPRIT automat dupa dispatch · $(date -u '+%H:%M:%S') UTC" > /tmp/alive.txt
+          fi
+          { echo "# ALIVE CUANTIC — $(date -u '+%Y-%m-%d %H:%M:%S') UTC"; echo; echo '```'; cat /tmp/alive.txt; echo '```'; } > analysis/ALIVE.md
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add analysis/ALIVE.md; git commit -m "ALIVE: $(head -c 120 /tmp/alive.txt)" || true
+          for i in 1 2 3; do git pull --rebase origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || git rebase --abort 2>/dev/null; git push origin "HEAD:$GITHUB_REF_NAME" && break; sleep 10; done
+          cp /tmp/alive.txt _site/ALIVE.txt 2>/dev/null || true
+
       - uses: actions/upload-pages-artifact@v3
         with: { path: _site }
       - uses: actions/deploy-pages@v4
