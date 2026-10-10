@@ -1,9 +1,10 @@
-# RAM-ALL — 2026-10-10 12:02:05 UTC
+# RAM-ALL — 2026-10-10 12:03:28 UTC
 
 ```
 args.sh: actualizat
 c.sh: actualizat (guardian OOM inclus)
-masina: MemTotal=11884MB MemAvailable=7926MB swap=5119MB
+masina: MemTotal=11884MB MemAvailable=7927MB swap=5119MB
+args: MEMORIE -Xmx 11884M (masina are 11884MB), -Xms 1485M, plafon=11884MB
 args: OK (CatServer-1.16.5-1d8d6313-server.jar, 37 linii)
   incercare -Xmx11884M -> -Xmx11884M
   java a murit la 6s: 
