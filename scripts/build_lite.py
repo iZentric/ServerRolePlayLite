@@ -14,6 +14,7 @@ import re
 import shutil
 import sys
 import urllib.parse
+UNRESOLVED = []  # slug-uri care nu au rezolvat pe catalog -> devin vizibile, nu se mai pierd in liniste
 import urllib.request
 import zipfile
 
@@ -100,6 +101,7 @@ def resolve_any(slug, mc, loader):
                 return info
             except Exception as e:  # noqa: BLE001
                 log(f"    ({src}: {alias} -> {e})")
+    UNRESOLVED.append(slug)
     log(f"  !! '{slug}' sarit (nu exista pt {mc} {loader} nicaieri)")
     return None
 
@@ -594,6 +596,7 @@ def main():
         try:
             info = resolve_modrinth(slug, mc, "forge")
         except Exception as e:  # noqa: BLE001
+            UNRESOLVED.append(f"{slug}:client")
             log(f"  !! '{slug}' sarit (client): {e}")
             continue
         client_files.append({
@@ -840,3 +843,15 @@ if __name__ == "__main__":
     main()
 
 # trigger-build: 2026-10-08 (ruleaza intregul lant: 1.5.3 -> release -> deploy)
+
+
+# 1.6.2 a derivat de la 32 la 30 moduri fara sa tipe nimeni: un slug 404 era sarit in liniste.
+# Acum lista celor sarite iese ca fisier in out/ - jobul de build il da mai departe la release.
+try:
+    os.makedirs(os.path.join(ROOT, "out"), exist_ok=True)
+    with open(os.path.join(ROOT, "out", "UNRESOLVED.txt"), "w") as f:
+        f.write("\n".join(sorted(set(UNRESOLVED))) + ("\n" if UNRESOLVED else ""))
+    if UNRESOLVED:
+        log("!! UNRESOLVED (" + str(len(set(UNRESOLVED))) + "): " + ", ".join(sorted(set(UNRESOLVED))))
+except Exception as _e:
+    log(f"  !! UNRESOLVED.txt: {_e}")

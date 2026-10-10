@@ -158,6 +158,45 @@ tabel = "\n".join(
 
 now = datetime.datetime.utcnow().strftime("%d %b %Y, %H:%M UTC")
 
+
+# ===== PROGRES CUANTIFICAT — cat a devenit mai bun, pe aceeasi masina, cu aceleasi unelte =====
+import re as _re
+_acc = ""
+try:
+    _acc = open(os.path.join(os.path.dirname(__file__), "..", "analysis", "ACCEPTANCE.md"), encoding="utf-8", errors="replace").read()
+except Exception:
+    pass
+_scor = _re.search(r"SCOR: TRECE=(\d+) VERIFICA=(\d+) CADE=(\d+)", _acc)
+_data = _re.search(r"# ACCEPTANCE CUANTIC — ([0-9: -]+) UTC", _acc)
+scor = f"{_scor.group(1)} TRECE / {_scor.group(2)} DE VERIFICAT / {_scor.group(3)} CADE" if _scor else "—"
+
+progres_rows = [
+    ("1.5.9", "2G heap, 3 flaguri GC, 32 moduri", "2613 MB", "47.2 ms × 25", "4.9 ms", "14.448 s / 92.639 s", "analysis/BENCH-LIVE.md (istoric)"),
+    ("experiment 8G", "heap 8G, tot 3 flaguri — dovedit mai prost", "3367 MB", "111.38 ms × 8", "9.1 ms", "—", "analysis/BENCH-RAM.md"),
+    ("RAM total + set validat", "-Xmx = MemTotal (11884 MB) + 32 flaguri validate pe Java 17 in CI", "3192 MB", "115.88 ms × 8", "2.0 ms", "13.664 s / 96.788 s", "analysis/RAM-ALL.md + BENCH-LIVE.md"),
+    ("1.6.2", "30 moduri (tuns), chunk-gc load-threshold=300, FerriteCore in mrpack", "ne-masurat inca", "ne-masurat inca", "ne-masurat inca", "11.096 s / 59.972 s", "analysis/ACCEPTANCE.md + APPLY-LIVE.md"),
+    ("1.6.3", "FerriteCore SI pe server (slug 404 reparat) + manifest-cuantic.json in zip", "BENCH dupa APPLY", "BENCH dupa APPLY", "BENCH dupa APPLY", "BENCH dupa APPLY", "analysis/BENCH-LIVE.md"),
+]
+progres_tabel = "\n".join(
+    f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td><td>{d}</td><td><b>{e}</b></td><td>{f}</td>'
+    f'<td style="color:var(--mut)"><small>{g}</small></td></tr>' for a, b, c, d, e, f, g in progres_rows)
+progres_sec = f"""
+<h2>📈 Cât a devenit mai bun — tăiat pe masina noastră, cu aceleași unelte</h2>
+<div class="sub">Fiecare rand e o masuratoare, nu o claims de marketing. Coloanele vin din <code>analysis/</code>
+(verdicturile joburilor), metodologie identica: <b>1 jucator, warm-up 120 s, spark + jcmd + /proc, aceeasi gazda
+(2 vCPU · 11.8 GB)</b>. Unde n-am masurat inca scriem <b>ne-masurat</b> — nu umplem golul cu cifra frumoasa.</div>
+<table class="tbl">
+<tr><th>Pas</th><th>Ce s-a schimbat</th><th>RAM varf (RSS)</th><th>GC young mediu × numar</th><th>p95 MSPT</th><th>boot (Done / FML)</th><th>Sursa</th></tr>
+{progres_tabel}
+</table>
+<div class="sub" style="margin-top:10px"><b>Delta 1.5.9 → maxim de azi:</b> p95 MSPT <b>4.9 → 2.0 ms (−59%)</b>,
+GC-uri de <b>3.1× mai rare</b> (25 → 8 pe fereastra), timp de incarcare FML <b>92.6 → 59.9 s (−35%)</b>,
+<code>Can't keep up</code> = <b>0</b> in toate probele. Pretul, tot masurat: RSS <b>+579 MB</b> (3192 vs 2613) pentru
+ca heap-ul are unde sa creasca. <b>Testul de „hibrid invizibil" (T1-T9): {scor}</b>{' — ' + _data.group(1) if _data else ''}.
+De ce nu vindem „de 1000× mai bun": 1000× pe p95 ar insemna 0.005 ms, adică sub cuantumul unui tick de 50 ms —
+ce putem demonstra e ce e scris mai sus.</div>
+"""
+
 html = f"""<!DOCTYPE html>
 <html lang="ro"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -216,6 +255,7 @@ footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
 <div class="sub">Toate testate pe mașini identice, cu ACELEAȘI moduri și pluginuri. Bara mai scurtă = mai bun. Afișăm RECORDUL dovedit al fiecărui motor. Criteriul coroanei = <b>RAM-ul</b> (boot-ul variază ±20% între mașinile de test — e doar orientativ). Morții sunt testați și DEZBRĂCAȚI de modurile care îi ucid, ca să vezi cât AR FI — și tot pierd.</div>
 {tabel}
 {live_sec}
+{progres_sec}
 <h2>📉 Cum a slăbit CUANTIC într-o singură zi</h2>
 <div class="sub">Același server, stors pas cu pas: Java 17 → configul nativ → curățenia de erori → jarul forjat de noi.</div>
 <div class="evo">

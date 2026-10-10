@@ -1,4 +1,4 @@
-name: Site EvoKode (auto-update)
+name: Site CUANTIC (auto-update)
 on:
   push:
     paths: ["analysis/**", "site/**"]

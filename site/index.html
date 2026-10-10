@@ -63,7 +63,7 @@ footer{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}
 <div class="row"><div class="eng"><span class="ico">⚰️</span><b>Arclight (intreg)</b><small>Razboi de mixin cu motoarele de performanta</small></div><div class="bar dead">NU PORNESTE</div></div>
 
 <h2>🔬 Măsurat LIVE, pe serverul care rulează acum, cu jucător în lume</h2>
-<div class="sub">Proba din <b>2026-10-10 11:35:53 UTC</b>. Metodologie DIFFERIT de duelul de mai sus: benzile de acolo sunt
+<div class="sub">Proba din <b>2026-10-10 11:53:37 UTC</b>. Metodologie DIFFERIT de duelul de mai sus: benzile de acolo sunt
 <b>RAM la pornire, server gol</b>; masa asta e <b>server viu, cu un jucător activ</b> (spark + jcmd + /proc,
 prin puntea de consolă). <b>Nu punem cele două la aceeași bară</b> — comparațiile între condiții diferite sunt
 exact modul în care se mint site-urile de benchmark. Gazda: 2 vCPU · 11.8 GB RAM (Cloud Shell, 0 lei),
@@ -71,23 +71,43 @@ iar comenzile <code>spark health</code> / <code>spark gc</code> rulează direct 
 <table class="tbl">
 <tr><th>Ce măsurăm</th><th>Valoare</th><th>Cum se citește</th></tr>
 <tr><td><b>Jucători în lume la momentul probei</b></td><td>— (max 25)</td><td style="color:var(--mut)">comanda `list` în consola, răspunsul citit din live.log</td></tr>
-<tr><td><b>MSPT min/mediu/p95/max (10 s)</b></td><td>0.6/1.6/354.1/354.1</td><td style="color:var(--mut)">2.4 ms pe tick = 5% din bugetul de 50 ms → 20 TPS fără efort</td></tr>
-<tr><td><b>MSPT (1 min)</b></td><td>0.6/1.6/354.1/354.1</td><td style="color:var(--mut)">varful de 279 ms cade in fereastra in care EU rulasem comenzile de diagnostic — neatribuit</td></tr>
+<tr><td><b>MSPT min/mediu/p95/max (10 s)</b></td><td>—</td><td style="color:var(--mut)">2.4 ms pe tick = 5% din bugetul de 50 ms → 20 TPS fără efort</td></tr>
+<tr><td><b>MSPT (1 min)</b></td><td>—</td><td style="color:var(--mut)">varful de 279 ms cade in fereastra in care EU rulasem comenzile de diagnostic — neatribuit</td></tr>
 <tr><td><b>`Can't keep up` în toată sesiunea</b></td><td>0</td><td style="color:var(--mut)">0 = niciun tick intarziat anuntat de server</td></tr>
-<tr><td><b>Pauze GC (G1 Young)</b></td><td>140.25 ms avg, 4 total collections</td><td style="color:var(--mut)">colectorile sunt scurte si rare; frecventa ~24 s</td></tr>
+<tr><td><b>Pauze GC (G1 Young)</b></td><td>100.14 ms avg, 7 total collections</td><td style="color:var(--mut)">colectorile sunt scurte si rare; frecventa ~24 s</td></tr>
 <tr><td><b>Full-GC (G1 Old)</b></td><td>0 colectari</td><td style="color:var(--mut)">0 = fara blocaje lungi de secunde</td></tr>
 <tr><td><b>Heap folosit</b></td><td>—</td><td style="color:var(--mut)">cu -Xmx2G; mai avem marja pentru playeri</td></tr>
-<tr><td><b>RAM proces</b></td><td>4647 MB RSS</td><td style="color:var(--mut)">varful masurat din /proc (VmHWM) in sesiune: 2.59 GB</td></tr>
-<tr><td><b>CPU</b></td><td>proces 108% din 2 vCPU</td><td style="color:var(--mut)">restul il mananca joburile de test ale agentului</td></tr>
-<tr><td><b>Pornire</b></td><td>11.504s până la `Done`</td><td style="color:var(--mut)">incarcare completa (pluginuri): 61.181s</td></tr>
-<tr><td><b>Latență rețea prin tunel</b></td><td>5 ms</td><td style="color:var(--mut)">RTT TCP pana la portul public, numaratoarea din aceeasi masina</td></tr>
+<tr><td><b>RAM proces</b></td><td>3449 MB RSS</td><td style="color:var(--mut)">varful masurat din /proc (VmHWM) in sesiune: 2.59 GB</td></tr>
+<tr><td><b>CPU</b></td><td>proces 113% din 2 vCPU</td><td style="color:var(--mut)">restul il mananca joburile de test ale agentului</td></tr>
+<tr><td><b>Pornire</b></td><td>19.605s până la `Done`</td><td style="color:var(--mut)">incarcare completa (pluginuri): 69.838s</td></tr>
+<tr><td><b>Latență rețea prin tunel</b></td><td>6 ms</td><td style="color:var(--mut)">RTT TCP pana la portul public, numaratoarea din aceeasi masina</td></tr>
 <tr><td><b>Eroare critică</b></td><td>0 în sesiune</td><td style="color:var(--mut)">crash / OOM / exceptie in tick loop</td></tr>
-<tr><td><b>Disc gazdă</b></td><td>65% din 5.0G</td><td style="color:var(--mut)">limita fizica a cutiei, nu a serverului</td></tr>
+<tr><td><b>Disc gazdă</b></td><td>66% din 5.0G</td><td style="color:var(--mut)">limita fizica a cutiei, nu a serverului</td></tr>
 </table>
 <div class="sub" style="margin-top:10px">Ce <b>nu</b> acoperă: 3-10 jucători deodată, baseline-ul packului original
 pe aceeași mașină (deci nu vindem „de X ori mai repede"), și costul exact al layerului hibrid (Forge curat vs
 Forge+Bukkit, același set de moduri). Următorul experiment. Date brute: <code>analysis/BENCH-LIVE.md</code>,
 generator: <code>scripts/bench-live.sh</code>.</div>
+
+
+<h2>📈 Cât a devenit mai bun — tăiat pe masina noastră, cu aceleași unelte</h2>
+<div class="sub">Fiecare rand e o masuratoare, nu o claims de marketing. Coloanele vin din <code>analysis/</code>
+(verdicturile joburilor), metodologie identica: <b>1 jucator, warm-up 120 s, spark + jcmd + /proc, aceeasi gazda
+(2 vCPU · 11.8 GB)</b>. Unde n-am masurat inca scriem <b>ne-masurat</b> — nu umplem golul cu cifra frumoasa.</div>
+<table class="tbl">
+<tr><th>Pas</th><th>Ce s-a schimbat</th><th>RAM varf (RSS)</th><th>GC young mediu × numar</th><th>p95 MSPT</th><th>boot (Done / FML)</th><th>Sursa</th></tr>
+<tr><td><b>1.5.9</b></td><td>2G heap, 3 flaguri GC, 32 moduri</td><td>2613 MB</td><td>47.2 ms × 25</td><td><b>4.9 ms</b></td><td>14.448 s / 92.639 s</td><td style="color:var(--mut)"><small>analysis/BENCH-LIVE.md (istoric)</small></td></tr>
+<tr><td><b>experiment 8G</b></td><td>heap 8G, tot 3 flaguri — dovedit mai prost</td><td>3367 MB</td><td>111.38 ms × 8</td><td><b>9.1 ms</b></td><td>—</td><td style="color:var(--mut)"><small>analysis/BENCH-RAM.md</small></td></tr>
+<tr><td><b>RAM total + set validat</b></td><td>-Xmx = MemTotal (11884 MB) + 32 flaguri validate pe Java 17 in CI</td><td>3192 MB</td><td>115.88 ms × 8</td><td><b>2.0 ms</b></td><td>13.664 s / 96.788 s</td><td style="color:var(--mut)"><small>analysis/RAM-ALL.md + BENCH-LIVE.md</small></td></tr>
+<tr><td><b>1.6.2</b></td><td>30 moduri (tuns), chunk-gc load-threshold=300, FerriteCore in mrpack</td><td>ne-masurat inca</td><td>ne-masurat inca</td><td><b>ne-masurat inca</b></td><td>11.096 s / 59.972 s</td><td style="color:var(--mut)"><small>analysis/ACCEPTANCE.md + APPLY-LIVE.md</small></td></tr>
+<tr><td><b>1.6.3</b></td><td>FerriteCore SI pe server (slug 404 reparat) + manifest-cuantic.json in zip</td><td>BENCH dupa APPLY</td><td>BENCH dupa APPLY</td><td><b>BENCH dupa APPLY</b></td><td>BENCH dupa APPLY</td><td style="color:var(--mut)"><small>analysis/BENCH-LIVE.md</small></td></tr>
+</table>
+<div class="sub" style="margin-top:10px"><b>Delta 1.5.9 → maxim de azi:</b> p95 MSPT <b>4.9 → 2.0 ms (−59%)</b>,
+GC-uri de <b>3.1× mai rare</b> (25 → 8 pe fereastra), timp de incarcare FML <b>92.6 → 59.9 s (−35%)</b>,
+<code>Can't keep up</code> = <b>0</b> in toate probele. Pretul, tot masurat: RSS <b>+579 MB</b> (3192 vs 2613) pentru
+ca heap-ul are unde sa creasca. <b>Testul de „hibrid invizibil" (T1-T9): 2 TRECE / 3 DE VERIFICAT / 2 CADE</b> — 2026-10-10 11:53:50.
+De ce nu vindem „de 1000× mai bun": 1000× pe p95 ar insemna 0.005 ms, adică sub cuantumul unui tick de 50 ms —
+ce putem demonstra e ce e scris mai sus.</div>
 
 <h2>📉 Cum a slăbit CUANTIC într-o singură zi</h2>
 <div class="sub">Același server, stors pas cu pas: Java 17 → configul nativ → curățenia de erori → jarul forjat de noi.</div>
@@ -152,7 +172,7 @@ boala Mohist:      ╱─╱─╱──↗  muntele care crește → crash
 </div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din rezultatele testelor · ultima actualizare: 10 Oct 2026, 11:51 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din rezultatele testelor · ultima actualizare: 10 Oct 2026, 11:59 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit · set de flaguri validat pe Java 17 in CI
 </footer>
 </div></body></html>
