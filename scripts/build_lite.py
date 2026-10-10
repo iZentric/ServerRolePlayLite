@@ -257,9 +257,9 @@ world-settings:
       monsters: 32
       misc: 16
       other: 32
-    # per-player-mob-spawns (Spigot 1.16.5): plafonul de mobi se imparte pe jucatori, deci
-    # 10 copii nu inseamna de 10x mai multi mobi care sa manance tick-ul.
-    per-player-mob-spawns: true
+    # NU punem aici per-player-mob-spawns: e cheie de Paper, nu de Spigot 1.16.5, si pe
+    # CatServer ar fi ignorata in liniste (cheie moarta = exact ce refuzam). Ea ramane in
+    # paper.yml pentru varianta Mist, care intr-adevar are patch-uri Paper.
     max-tnt-per-tick: 20
     merge-radius:
       item: 3.5
