@@ -71,13 +71,32 @@
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  !! manifest: name 'rules' is not defined
-Traceback (most recent call last):
-  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/build_lite.py", line 877, in <module>
-    main()
-  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/build_lite.py", line 734, in main
-    write_start_scripts(s1, f"forge-{mc}-{forge}.jar")
-  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/build_lite.py", line 526, in write_start_scripts
-    VER = rules.get("pack_version", "?")
-          ^^^^^
-NameError: name 'rules' is not defined
+  => out/CUANTIC-Server-MaxLite-1.6.4.zip (35.0 MB)
+== SERVER Arclight (hibrid cu pluginuri) ==
+  ↓ plugin: EssentialsX-2.19.7.jar
+  ↓ plugin: EssentialsXChat-2.19.7.jar
+  ↓ plugin: EssentialsXSpawn-2.19.7.jar
+  ↓ plugin: EssentialsXAntiBuild-2.19.7.jar
+  ↓ plugin: EssentialsXProtect-2.19.7.jar
+  ↓ plugin: Vault.jar
+  ↓ plugin: worldedit-bukkit-7.2.5-dist.jar
+  ↓ plugin: worldguard-bukkit-7.0.5-dist.jar
+  ↓ plugin: AuthMe-5.6.0.jar
+  ↓ plugin: SkinsRestorer.jar
+  ↓ plugin: ProtocolLib.jar
+  ↓ plugin: FastLoginBukkit.jar
+  ↓ plugin: claimchunk-0.0.22.jar
+  ↓ plugin: LuckPerms-Bukkit-5.5.71.jar
+  ↓ plugin: Chunky-1.2.217.jar
+  ↓ Arclight
+  flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
+  => out/CUANTIC-Server-Arclight-1.6.4.zip (67.6 MB)
+== SERVER Mist (hibrid experimental cu patch-uri Paper) ==
+  ↓ Mist
+  flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
+  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.6.4.zip (67.2 MB)
+== SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
+  ↓ CatServer
+  flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
+  => out/CUANTIC-Server-CatServer-1.6.4.zip (66.5 MB)
+GATA.
