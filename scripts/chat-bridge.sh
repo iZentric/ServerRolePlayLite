@@ -19,10 +19,18 @@ if [ -s "$REPLY_FILE" ]; then
   TXT=$(head -c 900 "$REPLY_FILE" | tr '\n' ' ')
   HASH=$(printf '%s' "$TXT" | md5sum | cut -c1-12)
   if [ "$HASH" != "$(cat "$D/.replyhash" 2>/dev/null)" ]; then
-    printf 'say CUANTIC agent: %s\n' "$TXT" >> "$D/cmd.in"
+    # Scriem pe FIFO (stdin-ul JVM-ului), nu pe cmd.in: cmd.in are nevoie de supervisorul c.sh,
+    # care moare odata cu sesiunea Cloud Shell. Scrierea pe fifo blocheaza daca nimeni nu citeste,
+    # deci timeout 6s ca sa nu atarnam jobul.
+    LINIE=$(printf 'say CUANTIC agent: %s' "$TXT")
+    if timeout 6 sh -c "printf '%s\n' \"$1\" > \"$D/in.fifo\"" _ "$LINIE" 2>/dev/null; then
+      V="$V spus-prin-fifo=$HASH"
+    else
+      printf 'say CUANTIC agent: %s\n' "$TXT" >> "$D/cmd.in"
+      V="$V fifo-plin->cmd.in"
+    fi
     echo "$HASH" > "$D/.replyhash"
-    V="$V spus-in-joc=$HASH"
-    sleep 6
+    sleep 4
   else
     V="$V mesaj-vechi-ignorat"
   fi
@@ -35,10 +43,11 @@ POS=$(cat "$D/.chatpos" 2>/dev/null || echo 0)
 TOT=$(wc -l < "$L" 2>/dev/null || echo 0)
 sed -e "$STRIP" "$L" 2>/dev/null | tail -n +$(( POS + 1 )) > /tmp/chat-window.txt
 grep -aoE '<[A-Za-z0-9_]{2,16}> [^|]{1,140}' /tmp/chat-window.txt 2>/dev/null | tail -40 > /tmp/chat-new.txt
-grep -aoE '\]: [A-Za-z0-9_]{2,16}: [^|]{1,140}' /tmp/chat-window.txt 2>/dev/null | sed 's/^\]: /[: /' | tail -20 >> /tmp/chat-new.txt
+grep -aoE '\]: [A-Za-z0-9_]{2,16} (joined the game|lost connection[^|]{0,60}|left the game)' /tmp/chat-window.txt 2>/dev/null | tail -10 >> /tmp/chat-new.txt
+grep -aoE 'CUANTIC agent: .*' /tmp/chat-window.txt 2>/dev/null | tail -3 >> /tmp/chat-new.txt
 N=$(wc -l < /tmp/chat-new.txt 2>/dev/null || echo 0)
 [ "$TOT" -gt 0 ] && echo "$TOT" > "$D/.chatpos"
-V="$V linii-nou=$N poz=$TOT"
+V="$V linii-nou=$N poz=$TOT supervisor=$(pgrep -f 'bash .*c\.sh' >/dev/null && echo DA || echo NU)"
 cat /tmp/chat-new.txt >> "$D/chat.log" 2>/dev/null
 tail -1 /tmp/chat-new.txt >/dev/null 2>&1 && grep -ac . "$D/chat.log" >/dev/null 2>&1
 
