@@ -5,6 +5,8 @@
 # serverul cere sesiune valida de la Mojang unui cont cracked => "Invalid session" / "Failed to verify username".
 # Remediu: scoate flag-ul premium din bazele SQLite ale pluginurilor, dezactivea comanda /premium
 # pentru ca sa nu se mai intample, apoi reporneste serverul ca sa citeasca noile valori.
+# keepalive: orice iesire (si eroare, si Ctrl-C) reporneste ce am oprit noi
+trap 'bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true' EXIT INT TERM
 D=$HOME/cuantic-live
 J=$HOME/.local/jdk17/bin/java
 [ -x "$J" ] || J=$(ls /usr/lib/jvm/java-17*/bin/java 2>/dev/null | head -1)

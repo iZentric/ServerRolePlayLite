@@ -2,6 +2,8 @@
 # GC-DUEL — masoara collectorii de gunoi pe serverul LIVE, pe aceeasi masina, si lasa cifrele
 # in analysis/GC-DUEL.md. NU alege el nimic si NU lasa nimic schimbat: restabileste
 # unix_args.txt din backupul facut la inceput, chiar daca o axa crapa.
+# keepalive: orice iesire (si eroare, si Ctrl-C) reporneste ce am oprit noi
+trap 'bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true' EXIT INT TERM
 D=$HOME/cuantic-live
 cd "$D" 2>/dev/null || { echo "DUEL: lipsa $D" > /tmp/gcduel.txt; exit 0; }
 BK="$D/unix_args.txt.duel.bak"

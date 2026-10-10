@@ -2,6 +2,8 @@
 # BRAND — pune numele CUANTIC curat in lista de servere.
 # Cauza reala a "Â§rÂ§bÂ§lCUANTIC": server.properties are §-uri scrise cu UTF-8, iar Java citeste
 # fisierul ca Latin-1. Corect = secvente ASCII \u00A7 (build_lite.py e reparat la fel, raw string).
+# keepalive: orice iesire (si eroare, si Ctrl-C) reporneste ce am oprit noi
+trap 'bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true' EXIT INT TERM
 D=$HOME/cuantic-live
 J=$HOME/.local/jdk17/bin/java
 [ -x "$J" ] || J=$(ls /usr/lib/jvm/java-17*/bin/java 2>/dev/null | head -1)

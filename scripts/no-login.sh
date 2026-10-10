@@ -2,6 +2,8 @@
 # NO-LOGIN — scoate temporar logarea cu parola (AuthMe + FastLogin), la cererea proprietarului.
 # Nu stergeti nimic: pluginurile sunt REDENUMITE in *.disabled-<ts>. Revenirea = cativa `mv`.
 # Repornirea se face prin punte (cmd.in), nu prin pkill, ca sa testam si puntea.
+# keepalive: orice iesire (si eroare, si Ctrl-C) reporneste ce am oprit noi
+trap 'bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true' EXIT INT TERM
 D=$HOME/cuantic-live
 L=$D/live.log
 REPO=iZentric/ServerRolePlayLite

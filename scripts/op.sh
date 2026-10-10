@@ -3,6 +3,8 @@
 # 1) afla numele de jucator din live.log  2) trimite "op NUME" in consola prin cmd.in (puntea vie)
 # 3) scrie ops.json cu UUID-ul offline (sa supravietuiasca restart-ului)
 # 4) verdictul in MESAJUL commitului (logurile runnerului self-hosted nu se vad).
+# keepalive: orice iesire (si eroare, si Ctrl-C) reporneste ce am oprit noi
+trap 'bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true' EXIT INT TERM
 D=$HOME/cuantic-live
 L=$D/live.log
 J=$HOME/.local/jdk17/bin/java

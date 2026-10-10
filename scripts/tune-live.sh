@@ -4,6 +4,8 @@
 # apply-live copiau doar jar/txt/json => serverul live a ramas cu configurile IMPLICITE CatServer.
 # Adica, corect: semana cu „CatServer oficial + Java 17". Scriptul asta inchide diferenta.
 # Idempotent, cu backup la fiecare fisier atins, si raporteaza per cheie: veche -> noua.
+# keepalive: orice iesire (si eroare, si Ctrl-C) reporneste ce am oprit noi
+trap 'bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true' EXIT INT TERM
 D=$HOME/cuantic-live
 REPO=iZentric/ServerRolePlayLite
 BR=$ARENA_BRANCH

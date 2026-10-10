@@ -168,6 +168,21 @@ except Exception:
     pass
 _scor = _re.search(r"SCOR: TRECE=(\d+) VERIFICA=(\d+) CADE=(\d+)", _acc)
 _data = _re.search(r"# ACCEPTANCE CUANTIC — ([0-9: -]+) UTC", _acc)
+_al = ""
+try:
+    _al = open(os.path.join(os.path.dirname(__file__), "..", "analysis", "ALIVE.md"), encoding="utf-8", errors="replace").read()
+except Exception:
+    pass
+_am = _re.search(r"# ALIVE CUANTIC — ([0-9: -]+) UTC.*?```\n(.+?)\n```", _al, _re.S)
+alive_txt, alive_cul = "stare neconfirmata", "var(--mut)"
+if _am:
+    _at = _am.group(2).strip(); _aw = _am.group(1)
+    if _at.startswith("SUS"):
+        alive_txt, alive_cul = "SUS, jucabil " + _aw, "var(--mint)"
+    elif _at.startswith("REPRIT"):
+        alive_txt, alive_cul = "REPRIT automat " + _aw, "var(--mint)"
+    else:
+        alive_txt, alive_cul = "JOS " + _aw + " — lipeste wake.sh in Cloud Shell", "var(--red)"
 scor = f"{_scor.group(1)} TRECE / {_scor.group(2)} DE VERIFICAT / {_scor.group(3)} CADE" if _scor else "—"
 
 progres_rows = [
@@ -386,7 +401,7 @@ html = f"""<!DOCTYPE html>
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
-  <span class="pill"><i></i>live · {L.get("players", "0") or "0"} jucatori în lume</span>
+  <span class="pill"><i style="background:{alive_cul};box-shadow:0 0 12px {alive_cul}"></i>{alive_txt}</span>
   <span class="pill">cost 0 lei</span>
   <a class="l" href="#cifre">sari la cifre ↓</a>
 </div></nav>

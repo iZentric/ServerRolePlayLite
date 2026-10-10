@@ -2,6 +2,8 @@
 # RAM-TEST — cit de mult RAM II PRINDE serverului? Schimba -Xmx in unix_args.txt,
 # lasa supervisorul (c.sh) sa reporneasca java (asta dovedeste si supervizarea),
 # incalzeste 120s, apoi masoara cu.spark + jcmd si compara cu proba de dinainte (2G).
+# keepalive: orice iesire (si eroare, si Ctrl-C) reporneste ce am oprit noi
+trap 'bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true' EXIT INT TERM
 D=$HOME/cuantic-live
 L=$D/live.log
 J=$HOME/.local/jdk17/bin/java
