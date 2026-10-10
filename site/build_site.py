@@ -197,142 +197,213 @@ De ce nu vindem „de 1000× mai bun": 1000× pe p95 ar insemna 0.005 ms, adică
 ce putem demonstra e ce e scris mai sus.</div>
 """
 
+
+STYLE = r"""
+:root{--bg:#070a12;--ink:#eef2ff;--mut:#98a6c0;--card:rgba(20,26,42,.72);--line:rgba(148,163,184,.16);
+--mint:#5ff0c0;--blue:#7fb0ff;--violet:#b79cff;--amber:#f6c76a;--red:#ff7d8d;--r:18px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,"Segoe UI",Roboto,Inter,sans-serif;
+ -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:-30% -10% auto;height:70vh;z-index:-1;
+ background:radial-gradient(60% 60% at 20% 0%,rgba(95,240,192,.14),transparent 70%),
+ radial-gradient(50% 50% at 80% 10%,rgba(127,176,255,.16),transparent 70%),
+ radial-gradient(40% 40% at 55% 40%,rgba(183,156,255,.12),transparent 70%)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px 70px}
+nav{position:sticky;top:0;z-index:9;backdrop-filter:blur(12px);background:rgba(7,10,18,.72);
+ border-bottom:1px solid var(--line)}
+nav .in{max-width:1080px;margin:auto;display:flex;align-items:center;gap:14px;padding:12px 22px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em}
+.logo svg{width:26px;height:26px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12px;color:#cbd5e1;
+ background:rgba(20,26,42,.6);white-space:nowrap}
+.pill i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mint);margin-right:7px;
+ box-shadow:0 0 12px var(--mint);vertical-align:1px}
+nav a.l{margin-left:auto;color:var(--mut);text-decoration:none;font-size:13px}
+nav a.l:hover{color:var(--ink)}
+header{padding:72px 0 30px;text-align:left}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+ color:var(--mint);font-weight:700}
+.eyebrow:before{content:"";width:26px;height:1px;background:var(--mint)}
+h1{font-size:clamp(38px,7.4vw,74px);line-height:1.02;letter-spacing:-.03em;margin:16px 0 14px;font-weight:850}
+h1 span{background:linear-gradient(100deg,#f4fffb,#6ff0c4 45%,#8fbaff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{font-size:clamp(17px,2.3vw,21px);color:#aebbd0;max-width:640px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 4px}
+.btn{display:inline-flex;align-items:center;gap:9px;border-radius:12px;padding:13px 18px;font-weight:800;
+ text-decoration:none;background:linear-gradient(100deg,#63f0bf,#8cc0ff);color:#06131f;
+ box-shadow:0 12px 34px rgba(76,214,175,.18);transition:.18s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.06)}
+.btn.ghost{background:rgba(20,26,42,.7);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:34px 0 6px}
+.stat{border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:16px 16px 14px}
+.stat b{display:block;font-size:30px;font-weight:850;letter-spacing:-.02em;color:var(--mint)}
+.stat b.b2{color:var(--blue)}.stat b.b3{color:var(--violet)}.stat b.b4{color:var(--amber)}
+.stat span{color:var(--mut);font-size:12.5px;display:block;margin-top:3px}
+h2{margin:62px 0 4px;font-size:clamp(23px,3.4vw,33px);letter-spacing:-.02em}
+h2 + .sub,.sub{color:var(--mut);font-size:14.5px;max-width:760px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:14px;margin-top:20px}
+.card{border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:18px}
+.card h3{font-size:16.5px;margin-bottom:7px;letter-spacing:-.01em}
+.card p{color:#a9b7cc;font-size:14px}
+.card p b{color:var(--ink)}
+.src{margin-top:12px;display:inline-block;font:11px/1 ui-monospace,Menlo,monospace;color:#7f8ea8;
+ border:1px dashed var(--line);border-radius:7px;padding:6px 8px}
+.ba{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:6px 16px;margin-top:16px}
+.bar-row{display:grid;grid-template-columns:230px 1fr;gap:14px;align-items:center;padding:14px 0;
+ border-bottom:1px solid rgba(148,163,184,.10)}
+.bar-row:last-child{border-bottom:0}
+.bar-row .q{font-size:14px;color:#c3cfe2}
+.bar-row .q small{display:block;color:var(--mut);font-size:12px}
+.meter{display:flex;align-items:center;gap:12px;font-weight:800;font-size:14px}
+.meter .seg{border-radius:9px;padding:9px 12px;white-space:nowrap;font-size:13px}
+.was{background:rgba(255,125,141,.12);color:#ffc3cb;border:1px solid rgba(255,125,141,.24)}
+.now2{background:linear-gradient(100deg,rgba(99,240,191,.2),rgba(140,192,255,.2));color:#d8fff1;
+ border:1px solid rgba(95,240,192,.3)}
+.arrow{color:var(--mut);font-weight:600}
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;background:var(--card);border:1px solid var(--line);
+ border-radius:var(--r);overflow:hidden}
+.tbl th,.tbl td{padding:11px 13px;text-align:left;border-bottom:1px solid rgba(148,163,184,.10);font-size:13.5px;vertical-align:top}
+.tbl th{color:var(--mut);font-weight:650;background:rgba(13,18,30,.5)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr.hl td{color:#a7ffd9;background:rgba(99,240,191,.06)}
+.bar{background:#374151;border-radius:8px;padding:8px 12px;font-weight:700;white-space:nowrap}
+.bar.win{background:linear-gradient(90deg,#059669,#34d399);color:#04281c}
+.bar.dead{background:#7f1d1d;color:#fecaca;display:inline-block;width:auto!important}
+.row{display:grid;grid-template-columns:minmax(200px,340px) 1fr;gap:12px;align-items:center;margin:10px 0}
+.eng{display:flex;flex-direction:column}.eng small{color:var(--mut)}.ico{margin-right:6px}
+.evo{display:flex;gap:6px;align-items:flex-end;margin-top:16px;height:130px}
+.evo div{flex:1;background:linear-gradient(180deg,#60a5fa,#1d4ed8);border-radius:7px 7px 0 0;
+ display:flex;align-items:flex-start;justify-content:center;font-size:.72rem;padding-top:5px;color:#dbeafe}
+.evo div.last{background:linear-gradient(180deg,#34d399,#059669);color:#04281c;font-weight:700}
+.note{border-left:3px solid var(--amber);background:rgba(246,199,106,.07);border-radius:0 12px 12px 0;
+ padding:14px 16px;margin-top:18px;font-size:14px;color:#e8d7b4}
+.note b{color:var(--amber)}
+.honest{border:1px solid rgba(255,125,141,.28);background:rgba(255,125,141,.05);border-radius:var(--r);padding:18px;margin-top:18px}
+.honest h3{color:#ffc3cb;font-size:16px;margin-bottom:8px}
+.honest ul{list-style:none;color:#c6b3b8;font-size:14px}
+.honest li{padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed rgba(255,125,141,.14)}
+.honest li:last-child{border:0}
+.honest li:before{content:"✕";position:absolute;left:0;color:var(--red);font-size:12px;top:8px}
+details{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:14px 16px;margin-top:12px}
+summary{cursor:pointer;font-weight:750;color:#d5e0f0}
+details p{color:var(--mut);font-size:14px;margin-top:9px}
+pre{color:var(--mut);overflow-x:auto;font-size:12.5px;line-height:1.5}
+footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--line);color:#6d7d96;font-size:12.5px;text-align:left}
+footer code{color:#9fb0c9}
+.live{color:var(--mint)}
+@media(max-width:700px){header{padding:44px 0 22px}.bar-row{grid-template-columns:1fr}.row{grid-template-columns:1fr}
+ nav a.l{display:none}}
+"""
+
 html = f"""<!DOCTYPE html>
 <html lang="ro"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CUANTIC — motorul forjat pentru copii cu PC-uri slabe</title>
-<style>
-:root{{--bg:#0b0d12;--card:#141824;--acc:#e879f9;--ok:#34d399;--txt:#e5e7eb;--mut:#9ca3af}}
-*{{box-sizing:border-box;margin:0;padding:0}}
-body{{background:var(--bg);color:var(--txt);font-family:system-ui,Segoe UI,Roboto,sans-serif;line-height:1.5}}
-.wrap{{max-width:980px;margin:0 auto;padding:24px}}
-header{{text-align:center;padding:48px 0 24px}}
-h1{{font-size:clamp(2.2rem,6vw,4rem);background:linear-gradient(90deg,#e879f9,#60a5fa,#34d399);-webkit-background-clip:text;background-clip:text;color:transparent}}
-.tag{{color:var(--mut);margin-top:8px;font-size:1.1rem}}
-.big{{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:28px 0}}
-.stat{{background:var(--card);border:1px solid #232a3d;border-radius:14px;padding:18px 22px;text-align:center;min-width:130px}}
-.stat b{{font-size:1.9rem;color:var(--ok);display:block}}
-.stat span{{color:var(--mut);font-size:.85rem}}
-h2{{margin:40px 0 6px;font-size:1.5rem}}
-.sub{{color:var(--mut);margin-bottom:16px}}
-.row{{display:grid;grid-template-columns:minmax(200px,340px) 1fr;gap:12px;align-items:center;margin:10px 0}}
-.eng{{display:flex;flex-direction:column}}
-.eng small{{color:var(--mut)}}
-.ico{{margin-right:6px}}
-.bar{{background:#374151;border-radius:8px;padding:8px 12px;font-weight:700;white-space:nowrap}}
-.bar.win{{background:linear-gradient(90deg,#059669,#34d399);color:#04281c}}
-.bar.dead{{background:#7f1d1d;color:#fecaca;width:auto!important;display:inline-block}}
-.cards{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:16px}}
-.card{{background:var(--card);border:1px solid #232a3d;border-radius:14px;padding:18px}}
-.card h3{{margin-bottom:6px;font-size:1.05rem}}
-.card p{{color:var(--mut);font-size:.92rem}}
-.evo{{display:flex;gap:6px;align-items:flex-end;margin-top:14px;height:120px}}
-.evo div{{flex:1;background:linear-gradient(180deg,#60a5fa,#1d4ed8);border-radius:6px 6px 0 0;display:flex;align-items:flex-start;justify-content:center;font-size:.72rem;padding-top:4px;color:#dbeafe}}
-.evo div.last{{background:linear-gradient(180deg,#34d399,#059669);color:#04281c;font-weight:700}}
-footer{{text-align:center;color:var(--mut);padding:40px 0;font-size:.85rem}}
-.live{{color:var(--ok)}}
-.btn{{display:inline-block;background:linear-gradient(90deg,#059669,#34d399);color:#04281c;font-weight:800;padding:10px 16px;border-radius:10px;text-decoration:none}}
-.btn:hover{{filter:brightness(1.1)}}
-.card a{{color:#60a5fa}}
-.tbl{{width:100%;border-collapse:collapse;margin-top:12px;background:var(--card);border-radius:12px;overflow:hidden}}
-.tbl th,.tbl td{{padding:9px 12px;text-align:left;border-bottom:1px solid #232a3d;font-size:.92rem}}
-.tbl th{{color:var(--mut);font-weight:600}}
-.tbl tr.hl{{background:#0b2e22}}
-.tbl tr.hl td{{color:#6ee7b7}}
-</style></head><body><div class="wrap">
+<title>CUANTIC — serverul de Minecraft care merge și pe cartof, fără lag și fără bani</title>
+<meta name="description" content="CUANTIC: server hybrid Minecraft 1.16.5 cu 32 de moduri si 15 pluginuri, masurat pe o masina de 2 nuclee. Cifre reale, surse pe pagina, cost 0.">
+<style{STYLE}</style></head><body>
+<nav><div class="in">
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
+  <span class="pill"><i></i>live · {L.get("players", "0") or "0"} jucatori în lume</span>
+  <span class="pill">cost 0 lei</span>
+  <a class="l" href="#cifre">sari la cifre ↓</a>
+</div></nav>
+<div class="wrap">
+
 <header>
-  <h1>CUANTIC</h1>
-  <div class="tag">Motorul FORJAT de noi — ca mulți copii cu PC-uri slabe să se joace fără lag, GRATIS</div>
-  <div class="big">
-    <div class="stat"><b>{min(ok_rams) if ok_rams else "?"} MB</b><span>cel mai mic vârf de RAM măsurat<br>la pornire, server gol (32 moduri + 15 pluginuri)</span></div>
-    <div class="stat"><b>~12 s</b><span>pornirea serverului<br>(normal: ~90s)</span></div>
-    <div class="stat"><b>{L.get("players", "?") or "?"}</b><span>jucător dovedit în live<br>(plafon setat: {L.get("maxp","25")} · 0 erori critice)</span></div>
-    <div class="stat"><b>0 lei</b><span>costul total<br>al întregii mașinării</span></div>
+  <div class="eyebrow">Roleplay Lite · 1.16.5 · moduri + pluginuri în același server</div>
+  <h1>Serverul care <span>nu te face să aștepți</span> și nu-ți cere bani.</h1>
+  <p class="lede">Am luat un server cu <b>32 de moduri și 15 pluginuri</b> — genul care de obicei zboară pe 8-16 GB RAM — și l-am adus să meargă pe o mașină cât un telefon mai vechi. Fiecare cifră de pe pagina asta e măsurată de roboții noștri pe mașina reală, cu un jucător în lume, și are sursa ei.</p>
+  <div class="cta">
+    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.3.mrpack">⬇️ Ia pack-ul de client (1.6.3)</a>
+    <a class="btn ghost" href="#cifre">📊 Vezi cifrele și de unde vin</a>
+    <a class="btn ghost" href="https://github.com/iZentric/ServerRolePlayLite">⭐ Codul, pe GitHub</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>2.0 ms</b><span>întârzierea pe care o simți (95 din 100 de cadre) — limita la care începe lag-ul e 50 ms</span></div>
+    <div class="stat"><b class="b2">13.7 s</b><span>până serverul e viu, cu 47 de componente încărcate (47 = 32 moduri + 15 pluginuri)</span></div>
+    <div class="stat"><b class="b3">0</b><span>mesaje de tip „serverul nu ține pasul" în toate probele</span></div>
+    <div class="stat"><b class="b4">0 lei</b><span>total: mașina e cont gratuit, codul e al nostru, uneltele open-source</span></div>
   </div>
 </header>
 
-<h2>🗣️ Pe înțelesul tuturor — ce s-a schimbat, fără termeni tehnici</h2>
-<div class="cards">
-  <div class="card"><h3>Intri repede</h3><p>Serverul pornește în <b>13.7 secunde</b> și lumea se încarcă în <b>60 s</b> față de <b>93 s</b> cât durea înainte. Adică: dai dublu-click pe server și nu mai apuci să-ți faci o cafea.</p></div>
-  <div class="card"><h3>Nu ți se întâmplă „să te tragă înapoi"</h3><p>Măsurătoarea reală: din 100 de cadre, 95 au nevoie de doar <b>2.0 milisecunde</b> de muncă pe server (față de 4.9 înainte) — iar plafonul ca să simți lag e 50. Cu 0 mesaje de tipul „server nu ține pasul".</p></div>
-  <div class="card"><h3>Merge și pe calculatorul slab</h3><p>Testat pe o mașină cu <b>2 nuclee</b> cât un telefon de acum zece ani, cu 11.8 GB RAM. Cifra de 2613–3192 MB înseamnă cât ocupă serverul, nu cât ai tu nevoie — clientul tău e altă poveste, și ăla e făcut să meargă pe orice.</p></div>
-  <div class="card"><h3>Fără parolă, fără abonament, cost 0</h3><p>Intri direct (fără /register), nu ai abonamente, nu ai reclame, nu ai magazin. Toate costă <b>0 lei</b>: mașina e un cont gratuit, codul e al nostru, uneltele sunt open-source.</p></div>
-  <div class="card"><h3>Dicționar, ca să nu te păcălim</h3><p><b>MSPT</b> = cât durează o „bătăre" a serverului (50 ms = limita; sub ea nu simți nimic). <b>GC</b> = moment în care serverul își face curat în memorie și stă puțin loc. <b>p95</b> = nu media, ci al 95-lea din 100 de cazuri — adică „cea mai proastă secundă normală", cea care contează. <b>RSS</b> = cât de memorie ocupă cu adevărat (în GB) cu adevărat.</p></div>
-  <div class="card"><h3>Ce NU știm încă</h3><p>Nu avem măsurat cu 10 copii deodată, nu avem testat cu bot-uri, și câteva cifre de pe 1.6.2 / 1.6.3 apar scrise <b>ne-măsurat</b> în tabel. Le scriem așa, nu le inventăm — e singura regulă care face cifrele de mai sus de crezut.</p></div>
+<h2>🗣️ Ce s-a schimbat, în propoziții simple</h2>
+<div class="sub">Stânga = cum a fost măsurat la început, dreapta = cum e acum, pe aceeași mașină, cu aceleași unelte (1 jucător, 120 s de încălzire, Spark + jcmd + /proc).</div>
+<div class="ba">
+  <div class="bar-row"><div class="q">Cadre întârziate <small>cât de des se „poticnește" lumea</small></div><div class="meter"><span class="seg was">4.9 ms</span><span class="arrow">→</span><span class="seg now2">2.0 ms (−59%)</span></div></div>
+  <div class="bar-row"><div class="q">Încărcarea lumii <small>cât aștepți de la „Logging in…" până umbli</small></div><div class="meter"><span class="seg was">96.8 s</span><span class="arrow">→</span><span class="seg now2">59.9 s (−38%)</span></div></div>
+  <div class="bar-row"><div class="q">Goluri de memorie <small>de câte ori pe secundă se oprește serverul să facă curat</small></div><div class="meter"><span class="seg was">25 × 47 ms</span><span class="arrow">→</span><span class="seg now2">8 × 116 ms (de 3.1× mai rare)</span></div></div>
+  <div class="bar-row"><div class="q">Memorie ocupată <small>cât din calculator mănâncă serverul</small></div><div class="meter"><span class="seg was">2613 MB</span><span class="arrow">→</span><span class="seg now2">3192 MB</span><span class="arrow">← prețul, nu un câștig: +579 MB ca să aibă unde să crească</span></div></div>
 </div>
+<div class="note"><b>De ce e bine așa?</b> Pentru că serverul nu se mai oprește brusc când intră cineva într-o zonă nouă — „potreneala" aia e exact ce simți tu ca lag. Media nu minte niciodată singură, deci arătăm a 95-a sutime (p95), nu media.</div>
 
-<h2>⚔️ Duelul motoarelor — cine consumă cel mai puțin?</h2>
-<div class="sub">Toate testate pe mașini identice, cu ACELEAȘI moduri și pluginuri. Bara mai scurtă = mai bun. Afișăm RECORDUL dovedit al fiecărui motor. Criteriul coroanei = <b>RAM-ul</b> (boot-ul variază ±20% între mașinile de test — e doar orientativ). Morții sunt testați și DEZBRĂCAȚI de modurile care îi ucid, ca să vezi cât AR FI — și tot pierd.</div>
-{tabel}
-{live_sec}
+<h2 id="cifre">📈 Cât a devenit mai bun — pas cu pas, nu din vorbe</h2>
 {progres_sec}
-<h2>📉 Cum a slăbit CUANTIC într-o singură zi</h2>
-<div class="sub">Același server, stors pas cu pas: Java 17 → configul nativ → curățenia de erori → jarul forjat de noi.</div>
-<div class="evo">
-  <div style="height:100%">4256 MB<br>dimineața</div>
-  <div style="height:78%">3314<br>Java 17</div>
-  <div style="height:71%">3030<br>config nativ</div>
-  <div style="height:66%">2814<br>curățenie</div>
-  <div class="last" style="height:62%">2656<br>JARUL NOSTRU</div>
+
+<h2>⚔️ Duelul motoarelor — de ce pe al ăsta l-am ales</h2>
+<div class="sub">Aceeși mașină, aceleași moduri, aceleași pluginuri. Bara mai scurtă = mai puțină memorie. Morții sunt testați și dezbrăcați de componentele care îi omorâs, ca să vezi cât AR FI — și tot pierd.</div>
+{tabel}
+
+<h2>🔬 Măsurat LIVE, chiar acum, pe serverul pe care te joci</h2>
+{live_sec}
+
+<h2>🤝 Ce primești și ce NU promitem</h2>
+<div class="grid">
+  <div class="card"><h3>📦 Pack-ul tău, intact</h3><p>Toate modurile pe care le-ai avut în Freeroam au rămas în client. Serverul a rămas cu 30-32 componente, fără nimic „doar că poate"</p><span class="src">1.6.3 · out/CUANTIC-Client-1.6.3.mrpack · 126.9 MB</span></div>
+  <div class="card"><h3>🚪 Intri fără parolă</h3><p>Poarta de login (AuthMe + FastLogin) e <b>scoasă</b> de pe server. Vrei s-o punem înapoi? Un rând de scris către agent și reapare, cu tot cu conturi.</p><span class="src">analysis/NO-LOGIN.md</span></div>
+  <div class="card"><h3>🩺 Se repară singur</h3><p>Dacă java moare, supervisorul o aprinde în ~15 s, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Fiecare schimbare vine cu snapshot + rollback.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
+  <div class="card"><h3>🧾 Fiecare cifră are dovadă</h3><p>Tabelul de mai sus nu e scris de mână: e extras din fișierele de verdict ale joburilor. Le poți citi pe toate în repo, la <code>analysis/</code>.</p><span class="src">BENCH-LIVE.md · RAM-ALL.md · APPLY-LIVE.md</span></div>
+</div>
+<div class="honest">
+  <h3>Ce nu știm încă (si de ce e scris aici, nu ascuns după un slogan)</h3>
+  <ul>
+    <li>Nu avem măsurat cu 10-25 de jucători deodată — cifrele de mai sus sunt cu <b>un</b> jucător. Tabelul de capacitate e <b>estimare</b>, nu probă.</li>
+    <li>„Nu se simte ca un hibrid" e verificat doar din partea serverului (0 kickuri, 0 erori de registru). Senzția ta de pe scaun nu o putem măsura de aici.</li>
+    <li>Nu avem backup zilnic programat pe cutia asta. Ce avem: snapshot <code>tar</code> înaintea fiecărei schimbări + copii <code>.bak</code>. Backup-ul zilnic vine odată cu mutarea pe VM.</li>
+    <li>Restartul programat de la 06:00 (ghilotina anti-scurgeri) e <b>plan</b>, nu stare de fapt. Ce e automat acum: repornirea la crash, tăierea logurilor, adoptarearelease-ului nou.</li>
+    <li>Trezirea la prima conectare (wake-on-join) e scrisă și documentată, dar <b>n-a fost încă verificată live</b> — pe Cloud Shell e imposibil fizic.</li>
+    <li>Nu vindem „de 1000× mai bun": 1000× pe p95 ar însemna 0.005 ms, adică sub cuantumul unui singur tick. Ce demonstrăm e −59% p95 și −35% încărcare, pe aceeași mașină.</li>
+  </ul>
 </div>
 
-<h2>📦 Ia-ți pack-ul și intră pe server (3 pași)</h2>
-<div class="cards">
-  <div class="card"><h3>1️⃣ Descarcă pack-ul LITE</h3><p>Același set de moduri pe care l-ai avut mereu (Freeroam), dar verificat bucată cu bucată: 126.9 MB față de 133.5 MB cât avea pack-ul 1.5.9. Merge și pe PC vechi, cu 4 GB RAM, fără placă video dedicată.</p>
-  <p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.3.mrpack">⬇️ Descarcă CUANTIC 1.6.3 (.mrpack)</a></p></div>
-  <div class="card"><h3>2️⃣ Instalează (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege .mrpack → Launch. Pe server intri și cu TLauncher (cont cu parolă).</p></div>
-  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>92.5.171.150:25565</b> → gata, ești în oraș. <b>Fără parolă, fără /register</b> — poarta de login (AuthMe + FastLogin) e scosă de pe server, deci intri direct. PC foarte slab? Vezi mai jos „modul cartof".</p></div>
+<details><summary>📖 Dicționar de termeni, ca să nu te păcălim cu jargon</summary>
+  <p><b>MSPT</b> = cât durează o „bătăre" a serverului. Ai 50 ms de buget pe cadru; sub asta nu simți nimic, peste apar săriturile.</p>
+  <p><b>p95</b> = a 95-a valoare din 100, adică cea mai proastă secundă „normală". Media arată bine mereu; p95 arată realitatea.</p>
+  <p><b>GC</b> = momentul în care Java își face curat în memorie și stă puțin loc. Mai rare = mai bine, dar prea lungi = se simte.</p>
+  <p><b>RSS / RAM vârf</b> = câtă memorie ocupă cu adevărat serverul, nu cât i-am dat voie să ceară.</p>
+  <p><b>Hibrid</b> = server care rulează simultan moduri (Forge) și pluginuri (Bukkit). De obicei se sărută urât; al nostru are strat de compatibilitate (CatServer) și 0 kickuri la login.</p>
+</details>
+
+<h2>🥔 Merge și pe un calculator de bibliotecă?</h2>
+<div class="grid">
+  <div class="card"><h3>Clientul</h3><p>Pack-ul vine cu 7 motoare de FPS/ramură ușoară și un „mod cartof" pentru PC-uri vechi de ~2010, fără placă video. Marimea: <b>126.9 MB</b>, față de 133.5 MB cât avea pack-ul anterior.</p></div>
+  <div class="card"><h3>Serverul</h3><p>Server gol = doarme (câteva procente de CPU). Mobilul e plafonat global și alive doar lângă jucători, deci consumul nu explodează când intră lumea.</p></div>
+  <div class="card"><h3>Gazda</h3><p>Rulează acum pe un cont gratuit, 2 vCPU · 11.8 GB RAM · disc 5 GB (66% ocupat — limita reală a cutiei, nu a serverului).</p></div>
 </div>
 
-<h2>📈 Câți copii duce? (fierul: 8 GB RAM · 2,5 nuclee · GRATIS) — estimări, nu măsurători</h2>
-<div class="sub"><b>Nu sunt încă măsurate.</b> E o extrapolare pornită de la cifrele reale de mai sus, ca să ai o orientare; când punem 10 jucători deodată înlocuim tabelul cu probele. Mobii sunt plafonați global (40), fiecare copil costă doar „felia" lui — de-aia consumul NU explodează cu playerii.</div>
-<table class="tbl">
-<tr><th>Copii</th><th>RAM</th><th>CPU</th><th>TPS</th><th>Cum se simte</th></tr>
-<tr><td>5</td><td>2.9 GB</td><td>30%</td><td>20</td><td>perfect — serverul nici nu respiră greu</td></tr>
-<tr><td>10</td><td>3.1 GB</td><td>50%</td><td>20</td><td>croazieră</td></tr>
-<tr><td>15</td><td>3.4 GB</td><td>80%</td><td>19-20</td><td>excelent</td></tr>
-<tr><td>20</td><td>3.7 GB</td><td>120%</td><td>18-20</td><td>foarte bine</td></tr>
-<tr><td>25</td><td>4.0 GB</td><td>160%</td><td>17-19</td><td>bine — se trag manetele de criză</td></tr>
-<tr class="hl"><td><b>30</b></td><td>4.3 GB</td><td>200%</td><td>16-19</td><td><b>ținta — playabil cu manetele trase</b></td></tr>
-<tr><td>35</td><td>4.6 GB</td><td>240%</td><td>14-17</td><td>eroic, la limita fizicii</td></tr>
-</table>
+<h2>📦 Cum intri, în 3 mișcări</h2>
+<div class="grid">
+  <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>CUANTIC-Client-1.6.3.mrpack</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.3.mrpack">⬇️ Descarcă pack-ul</a></p></div>
+  <div class="card"><h3>2️⃣ Importă (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege fișierul <code>.mrpack</code> → Launch. Merge și cu TLauncher.</p></div>
+  <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>92.5.171.150:25565</b>. Fără parolă, fără /register — intri direct în oraș. 🏙️</p></div>
+</div>
 
-<h2>🕰️ Consumul în timp — „dintele de fierăstrău" anti-Mohist</h2>
-<div class="sub">Serverele hibrid clasice mor pentru că memoria lor crește ca un munte, zi după zi. Asta e schema pe care o țintim;
-<b>pe cutia asta de azi restartul de la 06:00 NU e automat</b> — ce e automat acum e supervisorul care repornește serverul
-dacă moare și tăierea logurilor când discul crește. Restul, pe VM-ul gratuit:</div>
-<div class="card"><pre style="color:var(--mut);overflow-x:auto">
-06:00 GHILOTINA (restart automat) → memoria la zero
-06:01 → pauză totală: 0% CPU, nimeni online
-14:00 intră copiii → trezire instant, +~50 MB/copil
-18:00 vârful serii: 15-25 copii, totul plafonat
+<h2>🕰️ Cum arată o zi pe server (schema țintită)</h2>
+<div class="sub">Serverele hibrid clasice mor pentru că memoria lor crește ca un munte, zi după zi. Asta e ce țintim; <b>pe cutia asta de azi restartul de la 06:00 NU e automat</b> — automat e supervisorul care repornește la crash și taie logurile când crește discul.</div>
+<div class="card"><pre>
+06:00 GHILOTINA (restart programat) → memoria la zero
+06:01 pauză totală: ~0% CPU, nimeni online
+14:00 intră copiii → +~50 MB/jucător, lumea e deja generată lângă spawn
+18:00 vârful serii: totul plafonat, buget fix de entități
 03:00 gol → iar pauză totală
-06:00 ghilotina iar → orice scurgere = decapitată
-─────────────────────────────────────────────
-grafic săptămânal: ╱╲╱╲╱╲╱╲  plat ca dinții de fierăstrău
-boala Mohist:      ╱─╱─╱──↗  muntele care crește → crash
+────────────────────────────────────────────
+săptămâna noastră:  ╱╲╱╲╱╲╱╲   (plat, ca dinții de fierăstrău)
+boala hibridelor:   ╱─╱─╱──↗    (muntele care crește → crash)
 </pre></div>
 
-<h2>🛡️ Dacă se strică ceva? (planul morții)</h2>
-<div class="cards">
-  <div class="card"><h3>💥 Un mod crapă</h3><p>Scutul anti-crash ȘTERGE entitatea vinovată și serverul merge mai departe. Panoul repornește automat în ~15s dacă e ceva grav.</p></div>
-  <div class="card"><h3>🧠 Scurgere de memorie</h3><p>spark o vede cu numele ei, ghilotina de la 06:00 o taie zilnic, inginerul o execută definitiv. Boala posibilă — moartea NU.</p></div>
-  <div class="card"><h3>💾 Corupție / dezastru</h3><p>Backup automat în fiecare zi. Maxim 24 de ore de progres pierdut, în cel mai negru scenariu.</p></div>
-</div>
-
-<h2>👑 De ce CUANTIC și nu altceva?</h2>
-<div class="cards">
-  <div class="card"><h3>⚒️ Forjat, nu descărcat</h3><p>Nu rulăm un jar de pe net — l-am COMPILAT noi din sursa la zi. E mai nou și mai mic decât binarul oficial pe care-l folosește toată lumea.</p></div>
-  <div class="card"><h3>⚖️ Totul dovedit la tribunal</h3><p>11 motoare, 3 versiuni de Java, 2 motoare de tick — toate judecate pe mașini reale. Nimic ales „din auzite". Cifrele de pe pagina asta sunt măsurători, nu reclame.</p></div>
-  <div class="card"><h3>🚪 Ușa deschisă pentru TLauncher</h3><p>AuthMe + FastLogin + SkinsRestorer — copiii fără cont premium intră, au skin și cont cu parolă. Alte motoare rapide (Forge pur) nu pot face asta deloc.</p></div>
-  <div class="card"><h3>🥔 Merge pe orice PC</h3><p>Pack-ul copiilor e cu 72% mai mic, cu 7 motoare de FPS. Plus „Modul Cartof" pentru calculatoarele de bibliotecă din 2010.</p></div>
-  <div class="card"><h3>🦀 Filozofia Rust</h3><p>Server gol = ~0% CPU (doarme). Mobii trăiesc doar lângă copii. Nimic nu consumă dacă nimeni nu-l vede. Buget FIX: oricâți copii intră, costul nu explodează.</p></div>
-  <div class="card"><h3>🔄 Se îmbunătățește singur</h3><p>Roboți pe GitHub: testează fiecare schimbare, curăță lumea, fac backup zilnic. Pagina asta se actualizează AUTOMAT la fiecare test nou.</p></div>
-</div>
-
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din rezultatele testelor · ultima actualizare: {now}<br>
-  CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit · set de flaguri validat pe Java 17 in CI
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: {now}<br>
+  CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
+  Date brute: <code>analysis/BENCH-LIVE.md</code> · <code>analysis/RAM-ALL.md</code> · <code>analysis/ACCEPTANCE.md</code> · <code>site/records.json</code>
 </footer>
 </div></body></html>"""
 
