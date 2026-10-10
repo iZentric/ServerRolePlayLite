@@ -1,6 +1,6 @@
 {
   "pack_name": "CUANTIC",
-  "pack_version": "1.7.1",
+  "pack_version": "1.7.2",
  "minecraft": "1.16.5",
  "forge": "36.2.42",
  "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE DE GAMEplay. Se scot doar modurile client-only inutile pe PC/net slab (shadere Oculus, animatii duble, fps-reducer, dubluri de memorie) si se compacteaza assetele audio/PNG.",
@@ -29,7 +29,10 @@
  "add_client_modrinth": [
   "radon",
   "entityculling",
-  "ksyxis"
+  "ksyxis",
+  "rubidium-extra",
+  "entity-collision-fps-fix",
+  "better-fps-render-distance"
  ],
  "_comentariu_serverpause": "GUILLOTINA 1.5.4: Prism nu instala modurile din lista externa a mrpack-ului => clientii ramaneau FARA jar => kick pe canal. serverpause scos din AMBELE parti si jarul sters de pe server la deploy.",
  "add_server_modrinth": [
@@ -38,6 +41,7 @@
   "ai-improvements",
   "in-control",
   "ferrite-core",
+  "ksyxis",
   "spark"
  ],
  "_comentariu_perf_extra": "Artileria grea de performanta pt 1.16.5 (RoadRunner=Lithium, Radon=Phosphor etc). Cautate pe Modrinth apoi CurseForge; sarite daca nu exista. Performant si MCMT sunt excluse intentionat (conflicte).",
@@ -46,8 +50,12 @@
   "placebo",
   "fastfurnace",
   "fastworkbench",
+  "fastsuite",
   "get-it-together-drops",
-  "bad-wither-no-cookie-reloaded"
+  "bad-wither-no-cookie-reloaded",
+  "spawner-fix",
+  "smooth-chunk-save",
+  "let-me-despawn"
  ],
  "_comentariu_maxlite": "Moduri server-side care inlocuiesc pluginurile in varianta MaxLite (Forge pur, consum minim).",
  "maxlite_command_mods": [

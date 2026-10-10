@@ -32,10 +32,10 @@ if [ -n "$NEW" ] && [ "$NEW" != "$CUR" ]; then
   Z="/tmp/$NEW"; rm -rf /tmp/pk "$Z"; mkdir -p /tmp/pk
   if [ -n "$RURL" ] && curl -fL --max-time 400 -o "$Z" "$RURL" >/dev/null 2>&1 && [ -s "$Z" ]; then
     unzip -oq "$Z" -d /tmp/pk
-    ( cd "$D" && rm -rf mods plugins && mkdir -p mods plugins
+    ( cd "$D" && rm -rf mods plugins && mkdir -p mods plugins config defaultconfigs
       for f in /tmp/pk/*; do b=$(basename "$f"); case "$b" in
-        mods|plugins) cp -r "$f" ./ ;;
-        *.jar|*.txt|*.json) cp "$f" ./ ;;
+        mods|plugins|config|defaultconfigs) cp -r "$f" ./ ;;
+        *.jar|*.txt|*.json|*.yml|server.properties) cp "$f" ./ ;;
       esac; done )
     echo "$NEW" > "$D/.pack"
     echo "PACK: actualizat -> $(ls "$D"/*.jar 2>/dev/null | xargs -n1 basename 2>/dev/null | tr '\n' ' ')"

@@ -80,8 +80,23 @@ def resolve_modrinth(slug, mc, loader):
             "size": f.get("size", 0)}
 
 
+CURSEFORGE_PINNED_1165 = {
+    "fastsuite": (3419895, "FastSuite-1.16.4-1.1.1.jar"),
+    "spawner-fix": (5962957, "SpawnerFix-1.16.2-1.0.0.3.jar"),
+    "smooth-chunk-save": (4453876, "smoothchunk1.16.5-2.0.jar"),
+    "let-me-despawn": (4025350, "letmedespawn-forge-1.16-1.0.2a.jar"),
+    "entity-collision-fps-fix": (3809513, "entitycollisionfpsfix-1.16-1.0.1.jar"),
+    "better-fps-render-distance": (3543461, "betterfpsdist-1.1.jar"),
+    "connectivity": (3510357, "connectivity-2.4-1.16.5.jar"),
+}
+
+
 def resolve_curseforge(slug, mc, loader):
-    """Rezolva prin api.cfwidget.com (fara cheie API) + edge.forgecdn.net."""
+    """Rezolva prin tabelul verificat 1.16.5 sau api.cfwidget.com + edge.forgecdn.net."""
+    if mc == "1.16.5" and loader.lower() == "forge" and slug in CURSEFORGE_PINNED_1165:
+        fid, name = CURSEFORGE_PINNED_1165[slug]
+        url = f"https://edge.forgecdn.net/files/{fid // 1000}/{fid % 1000}/{urllib.parse.quote(name)}"
+        return {"filename": name, "url": url, "hashes": {}, "size": 0}
     data = http_json(f"https://api.cfwidget.com/minecraft/mc-mods/{slug}")
     all_mc = [f for f in data.get("files", []) if mc in f.get("versions", [])]
     files = [f for f in all_mc if loader.capitalize() in f.get("versions", [])]
@@ -330,6 +345,8 @@ def strip_client_assets(jar_path):
         before = os.path.getsize(jar_path)
         fd, tmp = tempfile.mkstemp(suffix=".jar", dir=os.path.dirname(jar_path))
         os.close(fd)
+        stripped_any = False
+        fixed_bug = False
         with zipfile.ZipFile(jar_path) as zin, \
              zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as zout:
             for item in zin.infolist():
@@ -338,18 +355,25 @@ def strip_client_assets(jar_path):
                 if n.startswith("assets/") and "/lang/" not in low and (
                         any(d in low for d in CLIENT_DIRS)
                         or low.endswith((".png", ".ogg", ".wav", ".fsh", ".vsh", ".bbmodel"))):
+                    stripped_any = True
                     continue
                 if n.startswith("META-INF/") and low.endswith((".sf", ".rsa", ".dsa", ".ec")):
                     continue
                 data = zin.read(n)
                 if low.endswith(".json"):
-                    data = fix_json_and_mixin_bytes(n, data)
+                    nd = fix_json_and_mixin_bytes(n, data)
+                    if ("mixin" in low or "mushroom_colony" in low) and nd != data:
+                        fixed_bug = True
+                    data = nd
                 zout.writestr(item, data)
+        if not stripped_any and not fixed_bug:
+            os.remove(tmp)
+            return 0
         os.replace(tmp, jar_path)
         after = os.path.getsize(jar_path)
         if before - after > 1024 * 100:
             log(f"    ✂ {os.path.basename(jar_path)}: {before/1e6:.1f} -> {after/1e6:.1f} MB")
-        return before - after
+        return max(0, before - after)
     except Exception as e:  # noqa: BLE001
         log(f"    !! strip esuat pe {os.path.basename(jar_path)}: {e} (ramane intreg)")
         return 0
@@ -550,41 +574,10 @@ world-settings:
     creative-arrow-despawn-rate: 60
 """
 
-SPIGOT_YML = """\
-# CUANTIC ULTRA - raze de activare taiate (mobii departe de jucatori dorm)
-settings:
-  save-user-cache-on-stop-only: true
-  netty-threads: 2
-world-settings:
-  default:
-    entity-activation-range:
-      animals: 12
-      monsters: 20
-      raiders: 24
-      misc: 6
-    entity-tracking-range:
-      players: 48
-      animals: 32
-      monsters: 32
-      misc: 16
-      other: 32
-    mob-spawn-range: 3
-    nerf-spawner-mobs: false
-    merge-radius:
-      item: 3.5
-      exp: 4.0
-    ticks-per:
-      hopper-transfer: 8
-      hopper-check: 8
-      monster-spawns: 2
-    max-tick-time:
-      tile: 20
-      entity: 20
-"""
-
 AIKAR_FLAGS = (
     # Generatia post-Aikar: brucethemoose/Minecraft-Performance-Flags-Benchmarks
-    # adaptate pt OpenJDK 11 + host partajat (fara root/LargePages/AlwaysPreTouch)
+    # adaptate pt OpenJDK 17 + host partajat (fara root/LargePages/AlwaysPreTouch)
+    # + optimizarile Netty din KryptonReforged (arena 4MiB in loc de 16MiB + leakDetection OFF)
     "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=37 "
     "-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC "
     "-XX:G1NewSizePercent=23 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 "
@@ -595,7 +588,8 @@ AIKAR_FLAGS = (
     "-XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps "
     "-XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=256M -XX:NonNMethodCodeHeapSize=12M "
     "-XX:ProfiledCodeHeapSize=122M -XX:NonProfiledCodeHeapSize=122M -XX:-DontCompileHugeMethods "
-    "-XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:AllocatePrefetchStyle=3"
+    "-XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:AllocatePrefetchStyle=3 "
+    "-Dio.netty.allocator.maxOrder=9 -Dio.netty.leakDetection.level=DISABLED"
 )
 
 README_MAXLITE = """\
@@ -847,22 +841,33 @@ def main():
     log("== CLIENT lite (.mrpack) - toate modurile originale pastrate ==")
     rmc0 = [r.lower() for r in rules.get("remove_from_client", [])]
     client_files = [f for f in index["files"] if not any(r in f.get("path","").lower() for r in rmc0)]
+    c_extra_dir = os.path.join(out_dir, "client-extra")
+    shutil.rmtree(c_extra_dir, ignore_errors=True)
+    os.makedirs(c_extra_dir, exist_ok=True)
+    client_cf_jars = []
     for slug in rules["add_client_modrinth"]:
         try:
             info = resolve_modrinth(slug, mc, "forge")
-        except Exception as e:  # noqa: BLE001
-            UNRESOLVED.append(f"{slug}:client")
-            log(f"  !! '{slug}' sarit (client): {e}")
-            continue
-        client_files.append({
-            "path": f"mods/{info['filename']}",
-            "hashes": info["hashes"],
-            "env": {"client": "required", "server": "unsupported"},
-            "downloads": [info["url"]],
-            "fileSize": info["size"],
-        })
-        report["client_added"].append(info["filename"])
-        log(f"  + {info['filename']}")
+            client_files.append({
+                "path": f"mods/{info['filename']}",
+                "hashes": info["hashes"],
+                "env": {"client": "required", "server": "unsupported"},
+                "downloads": [info["url"]],
+                "fileSize": info["size"],
+            })
+            report["client_added"].append(info["filename"])
+            log(f"  + {info['filename']} [modrinth]")
+        except Exception:  # noqa: BLE001
+            info = resolve_any(slug, mc, "forge")
+            if info:
+                dest_cf = os.path.join(c_extra_dir, info["filename"])
+                download(info["url"], dest_cf)
+                client_cf_jars.append(info["filename"])
+                report["client_added"].append(info["filename"])
+                log(f"  + {info['filename']} [{info['source']} -> overrides/mods]")
+            else:
+                UNRESOLVED.append(f"{slug}:client")
+                log(f"  !! '{slug}' sarit (client)")
 
     # 1.5.9 FIX (cauza reala a "Failed to synchronize registry data"): orice mod de pe
     # server care INREGISTREAZA lucruri (Clumps = entity_type `clumps:xp_orb_big`) trebuie
@@ -925,6 +930,9 @@ def main():
         shutil.rmtree(cslim_dir, ignore_errors=True)
         if client_saved > 0:
             log(f"  => client assets compactate: -{client_saved/1e6:.1f} MB (instalare rapida pt net slab)")
+        for jar in client_cf_jars:
+            z.write(os.path.join(c_extra_dir, jar), f"overrides/mods/{jar}")
+        shutil.rmtree(c_extra_dir, ignore_errors=True)
         for jar in mirror_jars:
             z.write(os.path.join(bmods, jar), f"overrides/mods/{jar}")
     log(f"  => {client_mrpack} ({os.path.getsize(client_mrpack)/1e6:.1f} MB)")
