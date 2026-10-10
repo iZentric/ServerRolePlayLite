@@ -507,14 +507,16 @@ FORGE_COMMON_CLEAN = """\
 
 
 def build_brand_plugin(out_root, server_jar_path, dest_dirs):
-    """Compileaza pluginul Cuantic pentru /version impreuna cu jarul de server.
+    """Compileaza pluginul Cuantic pentru /version (brand + provenienta upstream vizibila).
 
-    Il legam de jarul serverului (CatServer contine clasele org.bukkit.*), deci nu
-    avem nevoie de maven si API-ul e exact cel de runtime. ESUATUL NU opreste build-ul:
-    raportam lipsa, ca sa nu fim prinsi vindand un brand care nu exista.
+    Compilam pe `tools/cuantic-brand/stubs` (antete API 1.16.5) ca build-ul sa fie determinist:
+    maven Spigot/Paper a dat 404 in CI, iar jarurile CatServer/Mist nu expun org.bukkit.*
+    la radacina (le descarca/remapeaza la boot). In runtime legarea se face pe API-ul real
+    al serverului, deci stuburile nu adauga nimic in pack. ESUATUL NU opreste build-ul.
     """
     src = os.path.join(ROOT, "tools", "cuantic-brand", "src", "cloud", "cuantic", "brand", "CuanticBrandPlugin.java")
     plg = os.path.join(ROOT, "tools", "cuantic-brand", "plugin.yml")
+    stubs = os.path.join(ROOT, "tools", "cuantic-brand", "stubs")
     if not (os.path.isfile(src) and os.path.isfile(plg)):
         log("  !! brand /version: surse lipsa, sarim"); return None
     ver = packv()
@@ -522,61 +524,31 @@ def build_brand_plugin(out_root, server_jar_path, dest_dirs):
     try:
         import shutil as _sh
         _sh.rmtree(bdir, ignore_errors=True)
-        os.makedirs(os.path.join(bdir, "classes"), exist_ok=True)
+        cls = os.path.join(bdir, "classes"); os.makedirs(cls, exist_ok=True)
         with open(plg, encoding="utf-8") as f:
-            yml = f.read().replace("__VER__", ver)
-        with open(os.path.join(bdir, "plugin.yml"), "w", encoding="utf-8") as f:
-            f.write(yml)
+            open(os.path.join(bdir, "plugin.yml"), "w", encoding="utf-8").write(f.read().replace("__VER__", ver))
+        surse = [src] + [os.path.join(dp, fn) for dp, _, fn in os.walk(stubs) if fn.endswith(".java")]
+        r = subprocess.run(["javac", "--release", "8", "-nowarn", "-d", cls] + surse, capture_output=True, text=True)
+        if r.returncode != 0:
+            raise RuntimeError((r.stderr or r.stdout or "javac a esuat")[:400])
+        cuantic = os.path.join(cls, "cloud")
+        if not os.path.isdir(cuantic):
+            raise RuntimeError("javac a iesit fara clase cloud.cuantic.*")
         jar = os.path.join(out_root, "Cuantic-Brand-%s.jar" % ver)
-        # CatServer nu expune org.bukkit.* la radacina jar-ului (le descarca/remapeaza la primul
-        # boot), deci ne legam de API-ul official de la Spigot HQ. E dependinta DOAR de build:
-        # in runtime pluginul foloseste API-ul din server, asa ca nu dublam nimic in pack.
-        api = os.path.join(ROOT, "tools", "cuantic-brand", "spigot-api-1.16.5.jar")
-        if not os.path.isfile(api):
-            # un SNAPSHOT maven nu are nume fix: se citeste ultimul timestamp din maven-metadata.xml
-            for base, art in (("https://hub.spigotmc.org/nexus/content/repositories/snapshots", "org/spigotmc/spigot-api"),
-                              ("https://repo.papermc.io/repository/maven-public/io/papermc/paper", "paper-api")):
-                grp = art.split("/")[-1]
-                ver = "1.16.5-R0.1-SNAPSHOT"
-                url_dir = (base + "/" + art + "/" + ver) if grp == "spigot-api" else (base + "/" + grp + "/" + ver)
-                try:
-                    md = http_json.__wrapped__ if False else None
-                except Exception:
-                    md = None
-                try:
-                    import urllib.request as _rq
-                    xml = _rq.urlopen(url_dir + "/maven-metadata.xml", timeout=30).read().decode("utf-8", "replace")
-                    val = re.search(r"<value>([^<]+)</value>", xml).group(1)
-                    fname = "%s-%s-%s.jar" % (grp, "1.16.5-R0.1", val)
-                    download(url_dir + "/" + fname, api)
-                    log("  brand: API de compilare = %s (%s)" % (grp, val))
-                    break
-                except Exception as e:  # noqa: BLE001
-                    log("  brand: %s esueaza (%s)" % (grp, str(e)[:70]))
-        cp = api if os.path.isfile(api) and os.path.getsize(api) > 100000 else (server_jar_path if os.path.isfile(server_jar_path) else "")
-        cmd = ["javac", "--release", "8", "-nowarn"]
-        if cp:
-            cmd += ["-cp", cp]
-        cmd += ["-d", os.path.join(bdir, "classes"), src]
-        subprocess.run(cmd, check=True, capture_output=True, text=True)
         with zipfile.ZipFile(jar, "w", zipfile.ZIP_DEFLATED) as z:
             z.write(os.path.join(bdir, "plugin.yml"), "plugin.yml")
-            for r, _, fs in os.walk(os.path.join(bdir, "classes")):
+            for dp, _, fs in os.walk(cuantic):
                 for fn in fs:
-                    z.write(os.path.join(r, fn), os.path.relpath(os.path.join(r, fn), os.path.join(bdir, "classes")))
+                    z.write(os.path.join(dp, fn), os.path.relpath(os.path.join(dp, fn), cls))
         for d in dest_dirs:
-            if os.path.isdir(d):
-                shutil.copy2(jar, os.path.join(d, os.path.basename(jar)))
-                log("  + brand /version: %s -> %s" % (os.path.basename(jar), os.path.relpath(d, ROOT)))
+            if d and os.path.isdir(d):
+                os.makedirs(os.path.join(d, "plugins"), exist_ok=True)
+                _sh.copy(jar, os.path.join(d, "plugins", os.path.basename(jar)))
+        log("  + brand /version: Cuantic-Brand-%s.jar montat in %d servere (stubs locale)" % (ver, len([d for d in dest_dirs if d and os.path.isdir(d)])))
         return os.path.basename(jar)
     except Exception as e:  # noqa: BLE001
-        log("  !! brand /version esuat: " + (str(e) or e.__class__.__name__)[:200])
-        try:
-            log("     " + (e.stderr or "")[:400])  # noqa: BLE001
-        except Exception:
-            pass
+        log("  !! brand /version esuat: %s" % str(e)[:400])
         return None
-
 
 def write_start_scripts(sdir, server_jar):
     # 1.6.0: flagurile se iau din lista VALIDATA PE JAVA 17 (deploy/jvm-flags-17.txt, scrisa de

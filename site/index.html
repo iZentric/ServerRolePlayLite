@@ -102,7 +102,7 @@ footer code{color:#9fb0c9}
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
-  <span class="pill"><i style="background:var(--mint);box-shadow:0 0 12px var(--mint)"></i>REPRIT automat 2026-10-10 13:40:06</span>
+  <span class="pill"><i style="background:var(--red);box-shadow:0 0 12px var(--red)"></i>JOS 2026-10-10 13:58:18 — lipeste wake.sh in Cloud Shell</span>
   <span class="pill">cost 0 lei</span>
   <a class="l" href="#cifre">sari la cifre ↓</a>
 </div></nav>
@@ -113,7 +113,7 @@ footer code{color:#9fb0c9}
   <h1>Serverul care <span>nu te face să aștepți</span> și nu-ți cere bani.</h1>
   <p class="lede">Am luat un server cu <b>32 de moduri și 15 pluginuri</b> — genul care de obicei zboară pe 8-16 GB RAM — și l-am adus să meargă pe o mașină cât un telefon mai vechi. Fiecare cifră de pe pagina asta e măsurată de roboții noștri pe mașina reală, cu un jucător în lume, și are sursa ei.</p>
   <div class="cta">
-    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.4.mrpack">⬇️ Ia pack-ul de client (1.6.5)</a>
+    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.5.mrpack">⬇️ Ia pack-ul de client (1.6.5)</a>
     <a class="btn ghost" href="#cifre">📊 Vezi cifrele și de unde vin</a>
     <a class="btn ghost" href="https://github.com/iZentric/ServerRolePlayLite">⭐ Codul, pe GitHub</a>
   </div>
@@ -121,7 +121,7 @@ footer code{color:#9fb0c9}
     <div class="stat"><b>2.0 ms</b><span>întârzierea pe care o simți (95 din 100 de cadre) — limita la care începe lag-ul e 50 ms</span></div>
     <div class="stat"><b class="b2">13.7 s</b><span>până serverul e viu, cu 47 de componente încărcate (47 = 32 moduri + 15 pluginuri)</span></div>
     <div class="stat"><b class="b3">0</b><span>mesaje de tip „serverul nu ține pasul" în toate probele</span></div>
-    <div class="stat"><b class="b3" style="font-size:20px">1.6.5</b><span> ultimul pack: CUANTIC-Client-1.6.4.mrpack + CUANTIC-Server-CatServer-1.6.4.zip</span></div>
+    <div class="stat"><b class="b3" style="font-size:20px">1.6.5</b><span> ultimul pack: CUANTIC-Client-1.6.5.mrpack + CUANTIC-Server-CatServer-1.6.5.zip</span></div>
     <div class="stat"><b class="b4">0 lei</b><span>total: mașina e cont gratuit, codul e al nostru, uneltele open-source</span></div>
   </div>
 </header>
@@ -159,15 +159,26 @@ Ce putem demonstra e exact ce e scris mai sus.</div>
 
 
 
-<h2>🆕 Ce s-a schimbat în 1.6.4 (și de ce contează pentru tine)</h2>
+<h2>🆕 Ce s-a schimbat în 1.6.5 (și de ce contează pentru tine)</h2>
+<div class="grid">
+  <div class="card"><h3>Heap-ul nu mai doboară cutia</h3><p><code>\1</code> = RAM total − 2 GB (min 1 GB, max 8 GB) în loc de tot RAM-ul. <code>\1</code> pe o cutie de 11.8 GB a chemat OOM-killerul, care omora și java și runnerul ⇒ server jos. <code>\1</code> revine la tot RAM-ul, <code>\1</code> (scris de guardianul de OOM) îl acoperă.</p></div>
+  <div class="card"><h3>Brand Cuantic în `/version`, legat de build</h3><p>Un singur fișier de cod (<code>\1</code>) devenit plugin, montat în <code>\1</code> la CatServer, Arclight și Mist de <code>\1</code>. A treia linie din răspuns e textul upstream: „Cuantic based on / adapted from: …” — meritul nu e furat, licențele rămân.</p></div>
+  <div class="card"><h3>T10 în teste: dovada, nu intenția</h3><p>Acceptance are acum testul <code>\1</code> dat prin punte pe serverul pornit real: trebuie să iasă și „Cuantic”, și linia „based on / adapted from”. Lipsește brandul ⇒ testul cade, nu se întâmplă să treacă pe tăcute.</p></div>
+  <div class="card"><h3>Compilare care nu mai cade pe 404</h3><p>CI-ul nu se mai bazează pe descărcarea API-ului de maven (hub.spigotmc.org dă 404 pe nume <code>\1</code>, CatServer nu expune <code>\1</code> la rădăcină): compilăm pe niște antete locale, iar în jar intră doar <code>\1</code>. Nimic dublu în pack.</p></div>
+  <div class="card"><h3>Zampto: scos total</h3><p>Cinci fișiere (workflow de deploy, măsurători, doc, trigger) au dispărut. Gazda cerea panou fără API, SFTP-ul nu putea porni serverul, portul nu răspundea ⇒ zero componente și zero chei către ceva ce nu putem stăpâni.</p></div>
+  <div class="card"><h3>Site legat de release, nu de memoria mea</h3><p>Numele și MB-ile pack-ului se citesc din API-ul release-ului <code>\1</code>, titlul de „ce s-a schimbat” din <code>\1</code>, iar conținutul din <code>\1</code>. Jobul rulează la fiecare release, la push pe analiză/site și în fiecare oră ⇒ pagina nu mai poate rămâne pe versiunea veche.</p></div>
+</div>
+<details><summary><b>Istoric: ce am reparat pe rând</b> (1 versiuni)</summary>
+<h3 style="margin:14px 0 6px">1.6.4</h3>
 <div class="grid">
   <div class="card"><h3>Straturile au ajuns și pe mașină</h3><p>Configurile de tuning (mob caps, entity activation, chunk-gc, merge-radius, hoppers) existau în zip, dar jobul de implantare copia doar jar/txt/json ⇒ serverul live rula cu setările implicite. Acum le citește și pe ale noastre.</p></div>
   <div class="card"><h3>Am scos cheile moarte</h3><p>Per-player-mob-spawns e cheie de Paper (CatServer o ignora), sync-chunk-writes e cheie din 1.19 (nu exista pe 1.16.5). Le-am înlocuit cu use-native-transport, care chiar lucrează.</p></div>
-  <div class="card"><h3>Brandul se vede, nu se povestește</h3><p>MOTD cu coduri de culoare reale (înainte scria §b litere), nume CUANTIC în consola serverului, alias /cuantic și /cuantictps, banner în start.sh / start.bat.</p></div>
-  <div class="card"><h3>Manifestul s-a reparat</h3><td></td><p>Din 1.6.3 niciun zip nu mai avea manifest-cuantic.json — o eroare era înghițită de un except. Acum conține versiunea, jarul real, lista de moduri/pluginuri și ce n-a putut fi rezolvat.</p></div>
+  <div class="card"><h3>Brandul se vede, nu se povestește</h3><p>MOTD cu coduri de culoare reale (înainte scria \u00A7b litere), nume CUANTIC în consola serverului, alias /cuantic și /cuantictps, banner în start.sh / start.bat.</p></div>
+  <div class="card"><h3>Manifestul s-a reparat</h3><p>Din 1.6.3 niciun zip nu mai avea manifest-cuantic.json — o eroare era înghițită de un except. Acum conține versiunea, jarul real, lista de moduri/pluginuri și ce n-a putut fi rezolvat.</p></div>
   <div class="card"><h3>Serverul nu mai e lăsat jos</h3><p>Orice job care oprea java are acum trap la ieșire care îl repornește; testele care dădeau serverul jos pentru minute (cautare de plafon RAM, reload de flaguri, brand) stau pauzate.</p></div>
   <div class="card"><h3>Badge de viață pe pagină</h3><p>Fiecare actualizare de site sună de două ori la port și scrie SUS / REPRIT automat / JOS. Măsurătorile vechi nu mai pot trece drept „merge”.</p></div>
 </div>
+</details>
 
 
 <h2>⚔️ Duelul motoarelor — de ce pe al ăsta l-am ales</h2>
@@ -272,7 +283,7 @@ Chunky pregen complet — discul gazdei (5 GB, 66% plin) nu încape; OpenJ9/Seme
 
 <h2>📦 Cum intri, în 3 mișcări</h2>
 <div class="grid">
-  <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>CUANTIC-Client-1.6.4.mrpack</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.4.mrpack">⬇️ Descarcă pack-ul</a></p></div>
+  <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>CUANTIC-Client-1.6.5.mrpack</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.6.5.mrpack">⬇️ Descarcă pack-ul</a></p></div>
   <div class="card"><h3>2️⃣ Importă (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege fișierul <code>.mrpack</code> → Launch. Merge și cu TLauncher.</p></div>
   <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>92.5.171.150:25565</b>. Fără parolă, fără /register — intri direct în oraș. 🏙️</p></div>
 </div>
@@ -291,7 +302,7 @@ boala hibridelor:   ╱─╱─╱──↗    (muntele care crește → crash)
 </pre></div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 13:51 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 14:03 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>analysis/BENCH-LIVE.md</code> · <code>analysis/RAM-ALL.md</code> · <code>analysis/ACCEPTANCE.md</code> · <code>site/records.json</code>
 </footer>

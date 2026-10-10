@@ -393,7 +393,7 @@ Chunky pregen complet — discul gazdei (5 GB, 66% plin) nu încape; OpenJ9/Seme
 """
 
 # ===== DETALIIILE PACK-ULUI SE CITESC DIN RELEASE, NU DIN MEMORIE =====
-import json as _json, urllib.request as _rq
+import json as _json, re as _re, urllib.request as _rq
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PACKV = "?"
 try:
@@ -428,17 +428,31 @@ try:
 except Exception:
     pass
 
-noutati_sec = """
-<h2>🆕 Ce s-a schimbat în 1.6.4 (și de ce contează pentru tine)</h2>
-<div class="grid">
-  <div class="card"><h3>Straturile au ajuns și pe mașină</h3><p>Configurile de tuning (mob caps, entity activation, chunk-gc, merge-radius, hoppers) existau în zip, dar jobul de implantare copia doar jar/txt/json ⇒ serverul live rula cu setările implicite. Acum le citește și pe ale noastre.</p></div>
-  <div class="card"><h3>Am scos cheile moarte</h3><p>Per-player-mob-spawns e cheie de Paper (CatServer o ignora), sync-chunk-writes e cheie din 1.19 (nu exista pe 1.16.5). Le-am înlocuit cu use-native-transport, care chiar lucrează.</p></div>
-  <div class="card"><h3>Brandul se vede, nu se povestește</h3><p>MOTD cu coduri de culoare reale (înainte scria \u00A7b litere), nume CUANTIC în consola serverului, alias /cuantic și /cuantictps, banner în start.sh / start.bat.</p></div>
-  <div class="card"><h3>Manifestul s-a reparat</h3><td></td><p>Din 1.6.3 niciun zip nu mai avea manifest-cuantic.json — o eroare era înghițită de un except. Acum conține versiunea, jarul real, lista de moduri/pluginuri și ce n-a putut fi rezolvat.</p></div>
-  <div class="card"><h3>Serverul nu mai e lăsat jos</h3><p>Orice job care oprea java are acum trap la ieșire care îl repornește; testele care dădeau serverul jos pentru minute (cautare de plafon RAM, reload de flaguri, brand) stau pauzate.</p></div>
-  <div class="card"><h3>Badge de viață pe pagină</h3><p>Fiecare actualizare de site sună de două ori la port și scrie SUS / REPRIT automat / JOS. Măsurătorile vechi nu mai pot trece drept „merge”.</p></div>
-</div>
-"""
+# Sectiunea „ce s-a schimbat" se citeste din site/changelog.json, iar titlul din
+# pack-rules.json (PACKV) — text batut de mana in HTML ramanea in urma pack-ului.
+CARDS = {}
+_cl = os.path.join(os.path.dirname(__file__), "changelog.json")
+if os.path.isfile(_cl):
+    try:
+        CARDS = _json.load(open(_cl, encoding="utf-8"))
+    except Exception as e:  # noqa: BLE001
+        print("!! changelog.json citit gresit: %s" % str(e)[:120])
+def _card(c):
+    txt = _re.sub(r"`([^`]+)`", r"<code>\\1</code>", c["p"])
+    return '  <div class="card"><h3>%s</h3><p>%s</p></div>' % (c["t"], txt)
+
+_noua = CARDS.get(PACKV) or []
+_istoric = [(v, CARDS[v]) for v in sorted((v for v in CARDS if v != PACKV), reverse=True)]
+noutati_sec = ""
+if _noua:
+    noutati_sec = '\n<h2>🆕 Ce s-a schimbat în %s (și de ce contează pentru tine)</h2>\n<div class="grid">\n%s\n</div>\n' % (
+        PACKV, "\n".join(_card(c) for c in _noua))
+if _noua and _istoric:
+        noutati_sec += '<details><summary><b>Istoric: ce am reparat pe rând</b> (%d versiuni)</summary>\n' % len(_istoric)
+        for v, cs in _istoric:
+            noutati_sec += '<h3 style="margin:14px 0 6px">%s</h3>\n<div class="grid">\n%s\n</div>\n' % (v, "\n".join(_card(c) for c in cs))
+        noutati_sec += '</details>\n'
+
 html = f"""<!DOCTYPE html>
 <html lang="ro"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">

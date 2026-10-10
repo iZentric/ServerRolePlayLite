@@ -1,0 +1,54 @@
+{
+ "1.6.5": [
+  {
+   "t": "Heap-ul nu mai doboară cutia",
+   "p": "`-Xmx` = RAM total − 2 GB (min 1 GB, max 8 GB) în loc de tot RAM-ul. `11884M` pe o cutie de 11.8 GB a chemat OOM-killerul, care omora și java și runnerul ⇒ server jos. `CUANTIC_RAM=all` revine la tot RAM-ul, `ramceil` (scris de guardianul de OOM) îl acoperă."
+  },
+  {
+   "t": "Brand Cuantic în `/version`, legat de build",
+   "p": "Un singur fișier de cod (`tools/cuantic-brand/`) devenit plugin, montat în `plugins/` la CatServer, Arclight și Mist de `scripts/build_lite.py`. A treia linie din răspuns e textul upstream: „Cuantic based on / adapted from: …” — meritul nu e furat, licențele rămân."
+  },
+  {
+   "t": "T10 în teste: dovada, nu intenția",
+   "p": "Acceptance are acum testul `/version` dat prin punte pe serverul pornit real: trebuie să iasă și „Cuantic”, și linia „based on / adapted from”. Lipsește brandul ⇒ testul cade, nu se întâmplă să treacă pe tăcute."
+  },
+  {
+   "t": "Compilare care nu mai cade pe 404",
+   "p": "CI-ul nu se mai bazează pe descărcarea API-ului de maven (hub.spigotmc.org dă 404 pe nume `-SNAPSHOT`, CatServer nu expune `org.bukkit.*` la rădăcină): compilăm pe niște antete locale, iar în jar intră doar `cloud.cuantic.*`. Nimic dublu în pack."
+  },
+  {
+   "t": "Zampto: scos total",
+   "p": "Cinci fișiere (workflow de deploy, măsurători, doc, trigger) au dispărut. Gazda cerea panou fără API, SFTP-ul nu putea porni serverul, portul nu răspundea ⇒ zero componente și zero chei către ceva ce nu putem stăpâni."
+  },
+  {
+   "t": "Site legat de release, nu de memoria mea",
+   "p": "Numele și MB-ile pack-ului se citesc din API-ul release-ului `lite`, titlul de „ce s-a schimbat” din `pack-rules.json`, iar conținutul din `site/changelog.json`. Jobul rulează la fiecare release, la push pe analiză/site și în fiecare oră ⇒ pagina nu mai poate rămâne pe versiunea veche."
+  }
+ ],
+ "1.6.4": [
+  {
+   "t": "Straturile au ajuns și pe mașină",
+   "p": "Configurile de tuning (mob caps, entity activation, chunk-gc, merge-radius, hoppers) existau în zip, dar jobul de implantare copia doar jar/txt/json ⇒ serverul live rula cu setările implicite. Acum le citește și pe ale noastre."
+  },
+  {
+   "t": "Am scos cheile moarte",
+   "p": "Per-player-mob-spawns e cheie de Paper (CatServer o ignora), sync-chunk-writes e cheie din 1.19 (nu exista pe 1.16.5). Le-am înlocuit cu use-native-transport, care chiar lucrează."
+  },
+  {
+   "t": "Brandul se vede, nu se povestește",
+   "p": "MOTD cu coduri de culoare reale (înainte scria \\u00A7b litere), nume CUANTIC în consola serverului, alias /cuantic și /cuantictps, banner în start.sh / start.bat."
+  },
+  {
+   "t": "Manifestul s-a reparat",
+   "p": "Din 1.6.3 niciun zip nu mai avea manifest-cuantic.json — o eroare era înghițită de un except. Acum conține versiunea, jarul real, lista de moduri/pluginuri și ce n-a putut fi rezolvat."
+  },
+  {
+   "t": "Serverul nu mai e lăsat jos",
+   "p": "Orice job care oprea java are acum trap la ieșire care îl repornește; testele care dădeau serverul jos pentru minute (cautare de plafon RAM, reload de flaguri, brand) stau pauzate."
+  },
+  {
+   "t": "Badge de viață pe pagină",
+   "p": "Fiecare actualizare de site sună de două ori la port și scrie SUS / REPRIT automat / JOS. Măsurătorile vechi nu mai pot trece drept „merge”."
+  }
+ ]
+}
