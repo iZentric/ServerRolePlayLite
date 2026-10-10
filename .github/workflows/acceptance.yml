@@ -1,4 +1,4 @@
-name: ACCEPTANCE — testele de invizibilitate ale hibridului (T1-T9)
+name: ACCEPTANCE — testele de invizibilitate ale hibridului (T1-T10)
 on:
   push:
     paths: [ "scripts/acceptance.sh", "deploy/accept.txt", ".github/workflows/acceptance.yml", "pack-rules.json" ]
