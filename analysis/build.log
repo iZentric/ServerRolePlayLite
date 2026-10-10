@@ -39,6 +39,8 @@
   + perf: smoothchunk1.16.5-2.0.jar [curseforge]
     (modrinth: let-me-despawn -> HTTP Error 404: Not Found)
   + perf: letmedespawn-forge-1.16-1.0.2a.jar [curseforge]
+    (modrinth: connectivity -> HTTP Error 404: Not Found)
+  + perf: connectivity-2.4-1.16.5.jar [curseforge]
 == CLIENT lite (.mrpack) - toate modurile originale pastrate ==
   + radon-0.8.0a.jar [modrinth]
   + entityculling-forge-mc1.16.5-1.5.2.jar [modrinth]
@@ -46,21 +48,23 @@
   + rubidium-extra-0.4.18+mc1.16.5-build.107.jar [modrinth]
     (modrinth: entity-collision-fps-fix -> nicio versiune)
   + entitycollisionfpsfix-1.16-1.0.1.jar [curseforge -> overrides/mods]
-    (modrinth: better-fps-render-distance -> HTTP Error 404: Not Found)
-  + betterfpsdist-1.1.jar [curseforge -> overrides/mods]
+    (modrinth: out-of-sight -> nicio versiune)
+  + out_of_sight-1.16.4-1.0.1.jar [curseforge -> overrides/mods]
+    (modrinth: connectivity -> HTTP Error 404: Not Found)
+  + connectivity-2.4-1.16.5.jar [curseforge -> overrides/mods]
   + mirror in client: Clumps-6.0.0.28.jar
   = mirror 'ferritecore' era deja in client: ferritecore-2.1.1-forge.jar
   - taiat din client (stil rust): CTM-MC1.16.1-1.1.2.6.jar
   - taiat din client (stil rust): DynamicSurroundings-1.16.5-4.0.5.0.jar
-    ✂ client Modernxl 1.16.5.jar: 38.0 -> 32.4 MB
-    ✂ client Pizzaland_v68.jar: 84.8 -> 82.1 MB
+    ✂ client Modernxl 1.16.5.jar: 38.0 -> 31.1 MB
+    ✂ client Pizzaland_v68.jar: 84.8 -> 81.1 MB
   - taiat din client (stil rust): TRansliterationLib-1.0.4.jar
   - taiat din client (stil rust): lightfallclient-1.0.0.jar
     ✂ client modernlife-1.16.5-1.15.jar: 3.7 -> 3.5 MB
   - taiat din client (stil rust): notenoughanimations-1.2.4.jar
-    ✂ client vehicle-mod-0.45.2-1.16.5 (1).jar: 6.7 -> 6.1 MB
-  => client assets compactate: -9.1 MB (instalare rapida pt net slab)
-  => out/CUANTIC-Client-1.7.5.mrpack (123.3 MB)
+    ✂ client vehicle-mod-0.45.2-1.16.5 (1).jar: 6.7 -> 4.4 MB
+  => client assets compactate: -13.2 MB (instalare rapida pt net slab)
+  => out/CUANTIC-Client-1.7.6.mrpack (119.3 MB)
 == ULTRA: dezbrac jar-urile de server de assets client ==
     ✂ Modernxl 1.16.5.jar: 38.0 -> 6.8 MB
     ✂ Pizzaland_v68.jar: 84.8 -> 1.7 MB
@@ -89,7 +93,7 @@
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  => out/CUANTIC-Server-MaxLite-1.7.5.zip (35.0 MB)
+  => out/CUANTIC-Server-MaxLite-1.7.6.zip (35.1 MB)
 == SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar
@@ -106,17 +110,17 @@
   ↓ plugin: Chunky-1.2.217.jar
   ↓ Arclight
   + motor cioplit in bytecode (arclight-forge-1.16.5-1.0.25.jar): {"clase_scanate": 5329, "clase_cioplite": 8, "nume": "CUANTIC", "pe_craftserver": false, "pe_f3_brand": false, "primele": ["ArclightMain.class:Arclight", "CraftServerMixin.class:Arclight", "ItemStackMixin.class:Arclight", "ArclightConnector.class:Arclight", "ArclightMod.class:Arclight", "BukkitRegistry.class:Arclight", "ArclightRemapper.class:Arclight", "ClassLoaderRemapper.class:Arclight"]}
-  + brand /version: Cuantic-Brand-1.7.5.jar montat in 1 servere (stubs locale)
+  + brand /version: Cuantic-Brand-1.7.6.jar montat in 1 servere (stubs locale)
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  => out/CUANTIC-Server-Arclight-1.7.5.zip (52.1 MB)
+  => out/CUANTIC-Server-Arclight-1.7.6.zip (52.1 MB)
 == SERVER Mist (hibrid experimental cu patch-uri Paper) ==
   ↓ Mist
   + motor cioplit in bytecode (mist-1.16.5-33-server.jar): {"clase_scanate": 3346, "clase_cioplite": 4, "nume": "CUANTIC", "pe_craftserver": true, "pe_f3_brand": true, "primele": ["Metrics$MohistMetrics.class:Mohist", "MohistMC.class:Mohist", "BrandingControl.class:forge", "CraftServer.class:Mist"]}
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.7.5.zip (51.7 MB)
+  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.7.6.zip (51.7 MB)
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
   + motor cioplit in bytecode (CatServer-1.16.5-1d8d6313-server.jar): {"clase_scanate": 3205, "clase_cioplite": 3, "nume": "CUANTIC", "pe_craftserver": true, "pe_f3_brand": true, "primele": ["CatServer.class:CatServer", "BrandingControl.class:forge", "CraftServer.class:CatServer"]}
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  => out/CUANTIC-Server-CatServer-1.7.5.zip (51.0 MB)
+  => out/CUANTIC-Server-CatServer-1.7.6.zip (51.1 MB)
 GATA.

@@ -1,4 +1,4 @@
-# Raport build Freeroam Lite (1.7.5)
+# Raport build Freeroam Lite (1.7.6)
 
 Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
@@ -10,7 +10,8 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ Ksyxis-1.4.6.jar
 - ✅ rubidium-extra-0.4.18+mc1.16.5-build.107.jar
 - ✅ entitycollisionfpsfix-1.16-1.0.1.jar
-- ✅ betterfpsdist-1.1.jar
+- ✅ out_of_sight-1.16.4-1.0.1.jar
+- ✅ connectivity-2.4-1.16.5.jar
 
 ## 🖥️ SERVER MaxLite (Forge pur — CONSUM MINIM, recomandat)
 
@@ -36,7 +37,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ plugin: claimchunk-0.0.22.jar
 - ✅ plugin: LuckPerms-Bukkit-5.5.71.jar
 - ✅ plugin: Chunky-1.2.217.jar
-- ✅ brand /version + motor: Cuantic-Brand-1.7.5.jar
+- ✅ brand /version + motor: Cuantic-Brand-1.7.6.jar
 
 ## Comune ambelor servere
 
@@ -69,6 +70,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ SpawnerFix-1.16.2-1.0.0.3.jar
 - ✅ smoothchunk1.16.5-2.0.jar
 - ✅ letmedespawn-forge-1.16-1.0.2a.jar
+- ✅ connectivity-2.4-1.16.5.jar
 
 ### Setari consum minim
 - JVM: porneste la 1 GB, creste doar la nevoie (max 4 GB), G1GC Aikar
