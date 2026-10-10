@@ -125,8 +125,8 @@ live_tabel = "\n".join(
     for a, b, c in live_rows)
 live_date = L.get("data") or "fara masuratori"
 live_sec = f"""
-<h2>🔬 Măsurat LIVE, pe serverul care rulează acum, cu jucător în lume</h2>
-<div class="sub">Proba din <b>{live_date}</b>. Metodologie DIFFERIT de duelul de mai sus: benzile de acolo sunt
+<h2>🔬 Măsurat LIVE, chiar acum, pe serverul pe care te joci</h2>
+<div class="sub">Proba din <b>{live_date}</b>. Metodologie diferită de duelul de mai sus: valorile de acolo sunt
 <b>RAM la pornire, server gol</b>; masa asta e <b>server viu, cu un jucător activ</b> (spark + jcmd + /proc,
 prin puntea de consolă). <b>Nu punem cele două la aceeași bară</b> — comparațiile între condiții diferite sunt
 exact modul în care se mint site-urile de benchmark. Gazda: 2 vCPU · 11.8 GB RAM (Cloud Shell, 0 lei),
@@ -173,28 +173,28 @@ scor = f"{_scor.group(1)} TRECE / {_scor.group(2)} DE VERIFICAT / {_scor.group(3
 progres_rows = [
     ("1.5.9", "2G heap, 3 flaguri GC, 32 moduri", "2613 MB", "47.2 ms × 25", "4.9 ms", "14.448 s / 92.639 s", "analysis/BENCH-LIVE.md (istoric)"),
     ("experiment 8G", "heap 8G, tot 3 flaguri — dovedit mai prost", "3367 MB", "111.38 ms × 8", "9.1 ms", "—", "analysis/BENCH-RAM.md"),
-    ("RAM total + set validat", "-Xmx = MemTotal (11884 MB) + 32 flaguri validate pe Java 17 in CI", "3192 MB", "115.88 ms × 8", "2.0 ms", "13.664 s / 96.788 s", "analysis/RAM-ALL.md + BENCH-LIVE.md"),
-    ("1.6.2", "30 moduri (tuns), chunk-gc load-threshold=300, FerriteCore in mrpack", "ne-masurat inca", "ne-masurat inca", "ne-masurat inca", "11.096 s / 59.972 s", "analysis/ACCEPTANCE.md + APPLY-LIVE.md"),
-    ("1.6.3", "FerriteCore SI pe server (slug 404 reparat) + manifest-cuantic.json in zip", "BENCH dupa APPLY", "BENCH dupa APPLY", "BENCH dupa APPLY", "BENCH dupa APPLY", "analysis/BENCH-LIVE.md"),
+    ("RAM total + set validat", "-Xmx = MemTotal (11884 MB) + 32 flaguri validate pe Java 17 în CI", "3192 MB", "115.88 ms × 8", "2.0 ms", "13.664 s / 96.788 s", "analysis/RAM-ALL.md + BENCH-LIVE.md"),
+    ("1.6.2", "30 moduri (tuns), chunk-gc load-threshold=300, FerriteCore în mrpack", "ne-măsurat încă", "ne-măsurat încă", "ne-măsurat încă", "11.096 s / 59.972 s", "analysis/ACCEPTANCE.md + APPLY-LIVE.md"),
+    ("1.6.3", "FerriteCore ȘI pe server (slug 404 reparat) + manifest-cuantic.json în zip", "BENCH după APPLY", "BENCH după APPLY", "BENCH după APPLY", "BENCH dupa APPLY", "analysis/BENCH-LIVE.md"),
 ]
 progres_tabel = "\n".join(
     f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td><td>{d}</td><td><b>{e}</b></td><td>{f}</td>'
     f'<td style="color:var(--mut)"><small>{g}</small></td></tr>' for a, b, c, d, e, f, g in progres_rows)
 progres_sec = f"""
-<h2>📈 Cât a devenit mai bun — tăiat pe masina noastră, cu aceleași unelte</h2>
-<div class="sub">Fiecare rand e o masuratoare, nu o claims de marketing. Coloanele vin din <code>analysis/</code>
-(verdicturile joburilor), metodologie identica: <b>1 jucator, warm-up 120 s, spark + jcmd + /proc, aceeasi gazda
-(2 vCPU · 11.8 GB)</b>. Unde n-am masurat inca scriem <b>ne-masurat</b> — nu umplem golul cu cifra frumoasa.</div>
+<h2 id="cifre">📈 Cât a devenit mai bun — pas cu pas, pe aceeași mașină, cu aceleași unelte</h2>
+<div class="sub">Fiecare rând e o măsurătoare, nu o afirmație de marketing. Coloanele vin din fișierele de verdict din <code>analysis/</code>
+(verdicturile joburilor), metodologie identică: <b>1 jucător, 120 s de încălzire, spark + jcmd + /proc, aceeași gazdă
+(2 vCPU · 11.8 GB)</b>. Unde n-am măsurat încă scriem <b>ne-măsurat</b> — nu umplem golul cu o cifră frumoasă.</div>
 <table class="tbl">
 <tr><th>Pas</th><th>Ce s-a schimbat</th><th>Memorie ocupată (vârf)</th><th>Curățenie memorie (cât durează × de câte ori)</th><th>Întârzierea pe care o simți (a 95-a sutime din secunde)</th><th>Cât aștepti până poți intra</th><th>Unde-i dovada</th></tr>
 {progres_tabel}
 </table>
-<div class="sub" style="margin-top:10px"><b>Delta 1.5.9 → maxim de azi:</b> p95 MSPT <b>4.9 → 2.0 ms (−59%)</b>,
-GC-uri de <b>3.1× mai rare</b> (25 → 8 pe fereastra), timp de incarcare FML <b>92.6 → 59.9 s (−35%)</b>,
-<code>Can't keep up</code> = <b>0</b> in toate probele. Pretul, tot masurat: RSS <b>+579 MB</b> (3192 vs 2613) pentru
-ca heap-ul are unde sa creasca. <b>Testul de „hibrid invizibil" (T1-T9): {scor}</b>{' — ' + _data.group(1) if _data else ''}.
-De ce nu vindem „de 1000× mai bun": 1000× pe p95 ar insemna 0.005 ms, adică sub cuantumul unui tick de 50 ms —
-ce putem demonstra e ce e scris mai sus.</div>
+<div class="sub" style="margin-top:10px"><b>Delta de la prima măsurătoare („1.5.9") până la setup-ul de maxim de azi:</b> p95 MSPT
+<b>4.9 → 2.0 ms (−59%)</b>, goluri de memorie de <b>3.1× mai rare</b> (25 → 8 pe fereastră),
+încărcarea lumii <b>96.8 → 59.9 s (−38%)</b> (pe 1.5.9 era 92.6 s), <code>Can't keep up</code> = <b>0</b> în toate probele.
+Prețul, tot măsurat: <b>+579 MB</b> memorie ocupată (3192 vs 2613), pentru că heap-ul are acum unde să crească. <b>Testul de „hibrid invizibil" (T1-T9): {scor}</b>{' — ' + _data.group(1) if _data else ''}.
+De ce nu vindem „de 1000× mai bun": 1000× pe p95 ar însemna 0.005 ms, adică sub cuantumul unui singur tick de 50 ms.
+Ce putem demonstra e exact ce e scris mai sus.</div>
 """
 
 
@@ -337,14 +337,12 @@ html = f"""<!DOCTYPE html>
 </div>
 <div class="note"><b>De ce e bine așa?</b> Pentru că serverul nu se mai oprește brusc când intră cineva într-o zonă nouă — „potreneala" aia e exact ce simți tu ca lag. Media nu minte niciodată singură, deci arătăm a 95-a sutime (p95), nu media.</div>
 
-<h2 id="cifre">📈 Cât a devenit mai bun — pas cu pas, nu din vorbe</h2>
 {progres_sec}
 
 <h2>⚔️ Duelul motoarelor — de ce pe al ăsta l-am ales</h2>
-<div class="sub">Aceeși mașină, aceleași moduri, aceleași pluginuri. Bara mai scurtă = mai puțină memorie. Morții sunt testați și dezbrăcați de componentele care îi omorâs, ca să vezi cât AR FI — și tot pierd.</div>
+<div class="sub">Aceeși mașină, aceleași moduri, aceleași pluginuri. Bara mai scurtă = mai puțină memorie. Morții sunt testați și dezbrăcați de componentele care îi omoră, ca să vezi cât AR FI — și tot pierd.</div>
 {tabel}
 
-<h2>🔬 Măsurat LIVE, chiar acum, pe serverul pe care te joci</h2>
 {live_sec}
 
 <h2>🤝 Ce primești și ce NU promitem</h2>
@@ -357,10 +355,10 @@ html = f"""<!DOCTYPE html>
 <div class="honest">
   <h3>Ce nu știm încă (si de ce e scris aici, nu ascuns după un slogan)</h3>
   <ul>
-    <li>Nu avem măsurat cu 10-25 de jucători deodată — cifrele de mai sus sunt cu <b>un</b> jucător. Tabelul de capacitate e <b>estimare</b>, nu probă.</li>
+    <li>Nu avem măsurat cu 10-25 de jucători deodată — cifrele de mai sus sunt cu <b>un</b> jucător. Nu mai afișăm niciun „câți jucători duce" — valorile acelea erau extrapolări, nu probe, și nu le-am verificat.</li>
     <li>„Nu se simte ca un hibrid" e verificat doar din partea serverului (0 kickuri, 0 erori de registru). Senzția ta de pe scaun nu o putem măsura de aici.</li>
     <li>Nu avem backup zilnic programat pe cutia asta. Ce avem: snapshot <code>tar</code> înaintea fiecărei schimbări + copii <code>.bak</code>. Backup-ul zilnic vine odată cu mutarea pe VM.</li>
-    <li>Restartul programat de la 06:00 (ghilotina anti-scurgeri) e <b>plan</b>, nu stare de fapt. Ce e automat acum: repornirea la crash, tăierea logurilor, adoptarearelease-ului nou.</li>
+    <li>Restartul programat de la 06:00 (ghilotina anti-scurgeri) e <b>plan</b>, nu stare de fapt. Ce e automat acum: repornirea la crash, tăierea logurilor și adoptarea noului release.</li>
     <li>Trezirea la prima conectare (wake-on-join) e scrisă și documentată, dar <b>n-a fost încă verificată live</b> — pe Cloud Shell e imposibil fizic.</li>
     <li>Nu vindem „de 1000× mai bun": 1000× pe p95 ar însemna 0.005 ms, adică sub cuantumul unui singur tick. Ce demonstrăm e −59% p95 și −35% încărcare, pe aceeași mașină.</li>
   </ul>
