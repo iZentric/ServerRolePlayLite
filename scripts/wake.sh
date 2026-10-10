@@ -39,4 +39,14 @@ if [ -n "$R" ] && [ -x "$R/run.sh" ] && ! pgrep -f 'runsvc.sh|actions-runner/run
   ( cd "$R" && setsid ./run.sh >/dev/null 2>&1 < /dev/null & ); echo "runner: repornit"
 fi
 tmux ls 2>/dev/null | grep -q '^frpc:' || { [ -x "$HOME/frpc" ] && tmux new -s frpc -d "exec $HOME/frpc -c $HOME/frpc.toml > $HOME/frpc.log 2>&1" && echo "frpc: pornit"; }
-echo "== gata. Serverul isi ia singur 5 secunde sa apara pe port; urmareste cu: tail -f $D/live.log"
+echo "== astept sa urce pe port (max ~150 s, atit dureaza FML cu 30 moduri + 15 pluginuri)"
+PORNIT=NU
+for i in $(seq 1 30); do
+  sleep 5
+  if ss -lnt 2>/dev/null | grep -q ':25565' && sed -e "s/$(printf '\033')\[[0-9;]*[a-zA-Z]//g" "$D/live.log" 2>/dev/null | grep -qaE 'Done \([0-9.]+s\)'; then
+    PORNIT=DA; break
+  fi
+done
+D=$(sed -e "s/$(printf '\033')\[[0-9;]*[a-zA-Z]//g" "$D/live.log" 2>/dev/null | grep -aoE 'Done \([0-9.]+s\)' | tail -1)
+echo "== $( [ "$PORNIT" = DA ] && echo "SUS: $D, jucabil pe 92.5.171.150:25565" || echo "NU S-A APRINS inca - mai ruleaza o data linia asta si uita-te in $D/live.log" )"
+echo "   supervisor: $(pgrep -f 'bash .*c\.sh' >/dev/null && echo alive || echo mort) | runner: $(pgrep -f 'runsvc.sh|actions-runner/run.sh' >/dev/null && echo alive || echo mort) | frpc: $(pgrep -x frpc >/dev/null && echo alive || echo mort)"
