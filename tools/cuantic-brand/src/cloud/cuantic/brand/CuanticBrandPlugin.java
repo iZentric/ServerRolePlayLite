@@ -35,9 +35,12 @@ public class CuanticBrandPlugin extends JavaPlugin implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onCommand(PlayerCommandPreprocessEvent e) {
         String m = e.getMessage().toLowerCase();
-        if (!m.equals("/version") && !m.equals("/ver") && !m.equals("/bukkit:version")
-                && !m.equals("/bukkit:ver") && !m.startsWith("/cuantic")) return;
-        if (!e.getPlayer().hasPermission("bukkit.command.version") && !m.startsWith("/cuantic")) return;
+        // Aliasurile reale ale comenzii /version din Bukkit: version, about, ver (+ /cuantic).
+        // FARA poarta de permisiune: inainte, un jucator care nu e OP primea textul vanilla
+        // pentru ca skill-ul nostru se dadea la o parte din teama de a incurca API-ul.
+        if (!m.equals("/version") && !m.equals("/ver") && !m.equals("/about")
+                && !m.equals("/bukkit:version") && !m.equals("/bukkit:ver") && !m.equals("/bukkit:about")
+                && !m.startsWith("/cuantic")) return;
         e.setCancelled(true);
         String sender = e.getPlayer().getName();
         String l1 = "\u00A76\u00A7l\u00BB \u00A7b\u00A7lCuantic \u00A7f" + cuantic()

@@ -78,5 +78,15 @@
    "t": "Proveniența din `/version` devine dovadă în log",
    "p": "Testul T10 de pe cutie a zis `brand apare, dar linia de proveniență lipsește` — pentru că pluginul trimitea cele 3 linii doar jucătorului, iar live.log prindea doar consemnarea. Acum aceleași 3 linii (fără coduri de culoare) se scriu și în log: `analysis/ACCEPTANCE.md` poate verifica șirul „based on / adapted from”, nu doar cuvântul Cuantic."
   }
+ ],
+ "1.6.8": [
+  {
+   "t": "Brandul pentru toată lumea, nu doar pentru OP",
+   "p": "Captura de ecran arăta textul vanilla (`This server is running CatServer version 1.16.5-1d8d6313 …`) pentru că pluginul nostru făcea un skip la `hasPermission(\"bukkit.command.version\")` ⇒ cine nu era operator primea linia lui CatServer. Acum `Cuantic-Brand` răspunde la `/version`, `/ver` și `/about` indiferent de permisiune, anulează doar textul și lasă motorul să fie menționat pe linia a 3-a (`based on / adapted from`)."
+  },
+  {
+   "t": "OP fără paste, fără dispatch",
+   "p": "`deploy/op.txt` conține numele; un push pe fișier face jobul `OP` să ruleze pe cutie (sandbox-ul primea 403 la `workflow_dispatch`, deci apăsarea de buton e înlocuită de un commit). Jobul verifică și dovedește în `analysis/op.md` că numele a intrat în `ops.json`."
+  }
  ]
 }

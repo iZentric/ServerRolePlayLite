@@ -13,6 +13,10 @@ V="OP: inca nu stiu"
 
 # ---- 1. numele lui, extras din log (ANSI curatat; mai intai UUID-ul vanilie, apoi join/lost) ----
 CLEAN=$(sed -e 's/\x1b\[[0-9;]*[a-zA-Z]//g' -e 's/\r/\n/g' "$L" 2>/dev/null)
+# numele: deploy/op-name (conventiarepozitoriului); deploy/op.txt ramane doar butonul de declansare
+for F in "$GITHUB_WORKSPACE/deploy/op-name" deploy/op-name; do
+  [ -s "$F" ] && NUME_TAU=$(head -1 "$F" | tr -d ' \r') && break
+done
 N=${NUME_TAU:-}
 if [ -z "$N" ]; then
   N=$(printf '%s\n' "$CLEAN" | grep -aoE 'UUID of player [A-Za-z0-9_]{3,16}' | tail -1 | awk '{print $4}')
