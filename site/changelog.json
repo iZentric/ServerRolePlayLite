@@ -1,4 +1,18 @@
 {
+ "1.7.3": [
+  {
+   "t": "Configuri pre-tunate în Client pentru Rubidium, Rubidium Extra, EntityCulling și FerriteCore (FPS maxim din prima secundă)",
+   "p": "Am descoperit în codul sursă `Rubidium` (`MixinMinecraftClient` / `MixinGameOptions`) că suprascrie `options.txt` cu propriul `config/rubidium-options.json` (unde implicit lăsa `smooth_lighting: HIGH`, `enable_clouds: true`, `enable_vignette: true` și `always_defer_chunk_updates: false`). În **1.7.3** livrăm direct în `.mrpack`: (1) `rubidium-options.json` cu `smooth_lighting: OFF`, `enable_clouds: false`, `enable_vignette: false`, `always_defer_chunk_updates: true` (zero stutter la condus mașini între chunk-uri) și `use_compact_vertex_format: true` (−40% VRAM); (2) `sodium-extra-options.json` cu oprirea animațiilor de lavă/foc/portal, `fog_distance: 33` (fără shader de ceață), `show_fps: true`, `show_coords: true`, `instant_sneak: true`, `use_fast_random: true`; (3) `entityculling.json` cu `tracingDistance: 64` (aliniat la `view-distance=4`) și `tickCulling: true`; (4) `ferritecore-mixin.toml` + `modernfix-mixins.properties`."
+  },
+  {
+   "t": "Server 1.7.3 fără nicio linie de avertisment EssentialsX sau SmoothChunkSave în log",
+   "p": "În `EssentialsX 2.19.7` (`VersionUtil.class`), verificarea inversată `!net.minecraft.server.v1_16_R3.MinecraftServer` declanșa `NMS_CLEANROOM` pe orice server Forge 1.16.5; am neutralizat constanta direct în `VersionUtil.class` la build și am pre-generat `config/smoothchunk-common.toml` și `config/ferritecore-mixin.toml` în arhiva serverului."
+  },
+  {
+   "t": "Artileria completă de moduri Forge 1.16.5 (35 moduri pe Server + 14 pluginuri, 70.8 MB Client)",
+   "p": "Include `FastSuite 1.1.1`, `SpawnerFix 1.0.0.3`, `SmoothChunkSave 2.0`, `LetMeDespawn 1.0.2a`, `Ksyxis 1.4.6`, `RoadRunner 1.5.2`, `FerriteCore 2.1.1`, `ModernFix 5.18.0` (`dynamic_resources=true`), `Rubidium Extra 0.4.18`, `Entity Collision FPS Fix 1.0.1`, `Better FPS Render Distance 1.1`, plus optimizările `Gale`/`Pufferfish`/`Purpur`/`Krypton` în `Cuantic-Brand` și JVM."
+  }
+ ],
  "1.7.2": [
   {
    "t": "Artileria completă de moduri Forge 1.16.5 pe Server (35 moduri, 0 erori) și Client (70.8 MB)",

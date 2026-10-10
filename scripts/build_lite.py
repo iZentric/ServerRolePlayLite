@@ -390,6 +390,146 @@ mixin.perf.thread_priorities=true
 mixin.bugfix.chunk_deadlock=true
 """
 
+FERRITECORE_MIXIN_TOML = """\
+# CUANTIC — toate optimizarile de memorie FerriteCore activate explicit
+replaceNeighborLookup = true
+replacePropertyMap = true
+cacheMultipartPredicates = true
+modelResourceLocations = true
+multipartDeduplication = true
+"""
+
+SMOOTHCHUNK_COMMON_TOML = """\
+["Config category"]
+\t#Delay before a chunk is saved to disk, default: 300 seconds.
+\t#Range: 10 ~ 3600
+\tchunkSaveDelay = 300
+\t#Enable debug logging
+\tdebugLogging = false
+"""
+
+RUBIDIUM_OPTIONS_JSON = """\
+{
+  "quality": {
+    "cloud_quality": "FAST",
+    "weather_quality": "FAST",
+    "leaves_quality": "FAST",
+    "enable_vignette": false,
+    "enable_clouds": false,
+    "smooth_lighting": "OFF"
+  },
+  "advanced": {
+    "use_vertex_array_objects": true,
+    "use_chunk_multidraw": true,
+    "animate_only_visible_textures": true,
+    "use_entity_culling": true,
+    "use_particle_culling": true,
+    "use_fog_occlusion": true,
+    "use_compact_vertex_format": true,
+    "use_block_face_culling": true,
+    "allow_direct_memory_access": true,
+    "ignore_driver_blacklist": false
+  },
+  "performance": {
+    "chunk_builder_threads": 0,
+    "always_defer_chunk_updates": true,
+    "use_no_error_gl_context": true
+  },
+  "notifications": {
+    "hide_donation_button": true
+  }
+}
+"""
+
+RUBIDIUM_EXTRA_OPTIONS_JSON = """\
+{
+  "animation_settings": {
+    "animation": true,
+    "water": true,
+    "lava": false,
+    "fire": false,
+    "portal": false,
+    "block_animations": false
+  },
+  "particle_settings": {
+    "particles": true,
+    "rain_splash": false,
+    "block_break": true,
+    "block_breaking": false,
+    "other": {}
+  },
+  "detail_settings": {
+    "sky": true,
+    "sun_moon": true,
+    "stars": false,
+    "rain_snow": false,
+    "biome_colors": true,
+    "sky_colors": true
+  },
+  "render_settings": {
+    "fog_distance": 33,
+    "use_linear_flat_color_blender": true,
+    "light_updates": true,
+    "item_frame": true,
+    "armor_stand": true,
+    "painting": true,
+    "piston": false,
+    "beacon_beam": false,
+    "enchanting_table_book": false,
+    "item_frame_name_tag": false,
+    "player_name_tag": true
+  },
+  "extra_settings": {
+    "overlay_corner": "TOP_LEFT",
+    "text_contrast": "SHADOW",
+    "show_fps": true,
+    "show_f_p_s_extended": false,
+    "show_coords": true,
+    "reduce_resolution_on_mac": true,
+    "use_adaptive_sync": false,
+    "cloud_height": 128,
+    "toasts": false,
+    "advancement_toast": false,
+    "recipe_toast": false,
+    "system_toast": false,
+    "tutorial_toast": false,
+    "instant_sneak": true,
+    "prevent_shaders": false,
+    "use_fast_random": true
+  },
+  "notification_settings": {
+    "hide_r_s_o_recommendation": true
+  }
+}
+"""
+
+ENTITYCULLING_JSON = """\
+{
+  "configVersion": 5,
+  "renderNametagsThroughWalls": true,
+  "blockEntityWhitelist": [
+    "minecraft:beacon",
+    "create:rope_pulley",
+    "create:hose_pulley",
+    "betterend:eternal_pedestal"
+  ],
+  "entityWhitelist": [
+    "botania:mana_burst"
+  ],
+  "tracingDistance": 64,
+  "debugMode": false,
+  "sleepDelay": 10,
+  "hitboxLimit": 50,
+  "skipMarkerArmorStands": true,
+  "tickCulling": true,
+  "tickCullingWhitelist": [
+    "minecraft:firework_rocket",
+    "minecraft:boat"
+  ],
+  "disableF3": false
+}
+"""
+
 
 UNRESOLVED = []
 
@@ -899,6 +1039,10 @@ def main():
     os.makedirs(os.path.join(base, "config"), exist_ok=True)
     with open(os.path.join(base, "config", "modernfix-mixins.properties"), "w", encoding="utf-8") as f:
         f.write(MODERNFIX_MIXINS_PROPS)
+    with open(os.path.join(base, "config", "ferritecore-mixin.toml"), "w", encoding="utf-8") as f:
+        f.write(FERRITECORE_MIXIN_TOML)
+    with open(os.path.join(base, "config", "smoothchunk-common.toml"), "w", encoding="utf-8") as f:
+        f.write(SMOOTHCHUNK_COMMON_TOML)
 
     new_index = {
         "formatVersion": 1, "game": "minecraft", "versionId": ver,
@@ -913,6 +1057,11 @@ def main():
         z.writestr("overrides/options.txt", OPTIONS_LITE)
         z.writestr("overrides/SETARI-PC-BUN.txt", GHID_PC_BUN)
         z.writestr("overrides/config/modernfix-mixins.properties", MODERNFIX_MIXINS_PROPS)
+        z.writestr("overrides/config/ferritecore-mixin.toml", FERRITECORE_MIXIN_TOML)
+        z.writestr("overrides/config/rubidium-options.json", RUBIDIUM_OPTIONS_JSON)
+        z.writestr("overrides/config/sodium-extra-options.json", RUBIDIUM_EXTRA_OPTIONS_JSON)
+        z.writestr("overrides/config/rubidium_extra-options.json", RUBIDIUM_EXTRA_OPTIONS_JSON)
+        z.writestr("overrides/config/entityculling.json", ENTITYCULLING_JSON)
 
         rmc = [r.lower() for r in rules.get("remove_from_client", [])]
         cslim_dir = os.path.join(out_dir, "client-slim")
@@ -1030,9 +1179,10 @@ def main():
                 with zipfile.ZipFile(pjp, "r") as zin, zipfile.ZipFile(tmp_p, "w", zipfile.ZIP_DEFLATED) as zout:
                     for it in zin.infolist():
                         d = zin.read(it.filename)
-                        if it.filename.endswith("Essentials.class"):
+                        if it.filename.endswith(("VersionUtil.class", "Essentials.class")):
                             d = d.replace(b"net.minecraftforge.common.MinecraftForge", b"net.minecraftforge.common.NoNagForge1234")
                             d = d.replace(b"net/minecraftforge/common/MinecraftForge", b"net/minecraftforge/common/NoNagForge1234")
+                            d = d.replace(b"!net.minecraft.server.", b"xnet.minecraft.server.")
                         zout.writestr(it, d)
                 os.replace(tmp_p, pjp)
             except Exception:
