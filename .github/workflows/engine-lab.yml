@@ -3,7 +3,7 @@ name: ENGINE LAB — CatServer upstream 1.16.5 + test CUANTIC
 on:
   push:
     branches: ["arena/a29b4ef4-serverroleplaylite"]
-    paths: ["deploy/engine-lab.txt", "scripts/engine_lab.py", ".github/workflows/engine-lab.yml"]
+    paths: ["deploy/engine-lab.txt"]
   workflow_dispatch: {}
 permissions:
   contents: write

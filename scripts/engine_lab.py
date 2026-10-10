@@ -19,10 +19,11 @@ POST_BOOT_SECONDS = 15
 
 def summarize(log: str, jar_name: str, exit_code: int, timeout: bool) -> dict:
     dones = re.findall(r"\bDone \(([0-9.]+)s\)", log)
-    enabled = re.findall(r"\[Server thread/INFO\]: Enabling (\S+)", log)
+    # Bukkit/Spigot prefix: [Server thread/INFO]: [ClaimChunk] Enabling ClaimChunk v0.0.21
+    enabled = re.findall(r"\bEnabling ([A-Za-z0-9_.-]+) v", log)
     failures = [line[:250] for line in log.splitlines() if re.search(
-        r"Mixin apply failed|Could not (load|enable)|Exception in server tick loop|"
-        r"Failed to start the minecraft server|OutOfMemoryError", line, re.I)]
+        r"Mixin apply failed|Could not (load|enable) plugin|Error occurred while enabling|"
+        r"Exception in server tick loop|Failed to start the minecraft server|OutOfMemoryError", line, re.I)]
     return {
         "jar": jar_name,
         "done_seconds": dones[-1] if dones else None,
