@@ -464,6 +464,17 @@ SMOOTHCHUNK_COMMON_TOML = """\
 \tdebugLogging = false
 """
 
+CONNECTIVITY_COMMON_TOML = """\
+["Connectivity settings"]
+\tdisableLoginLimits = true
+\tdisablePacketLimits = true
+\tdebugPrintMessages = false
+\tlogintimeout = 2400
+\tdisconnectTimeout = 60
+\tpacketHistoryMinutes = 5
+\tshowFullResourceLocationException = false
+"""
+
 RUBIDIUM_OPTIONS_JSON = """\
 {
   "quality": {
@@ -1099,6 +1110,8 @@ def main():
         f.write(FERRITECORE_MIXIN_TOML)
     with open(os.path.join(base, "config", "smoothchunk-common.toml"), "w", encoding="utf-8") as f:
         f.write(SMOOTHCHUNK_COMMON_TOML)
+    with open(os.path.join(base, "config", "connectivity-common.toml"), "w", encoding="utf-8") as f:
+        f.write(CONNECTIVITY_COMMON_TOML)
 
     new_index = {
         "formatVersion": 1, "game": "minecraft", "versionId": ver,
@@ -1121,6 +1134,7 @@ def main():
         z.writestr("overrides/config/rubidium_extra-options.json", RUBIDIUM_EXTRA_OPTIONS_JSON)
         z.writestr("overrides/config/entityculling.json", ENTITYCULLING_JSON)
         z.writestr("overrides/config/out_of_sight-client.toml", OUT_OF_SIGHT_CLIENT_TOML)
+        z.writestr("overrides/config/connectivity-common.toml", CONNECTIVITY_COMMON_TOML)
 
         rmc = [r.lower() for r in rules.get("remove_from_client", [])]
         cslim_dir = os.path.join(out_dir, "client-slim")
