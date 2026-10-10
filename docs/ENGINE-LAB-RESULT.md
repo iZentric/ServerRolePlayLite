@@ -1,51 +1,73 @@
 # ENGINE LAB — build izolat
 
-Run: https://github.com/iZentric/ServerRolePlayLite/actions/runs/38091260752
+Run: https://github.com/iZentric/ServerRolePlayLite/actions/runs/38091297299
 
 Ultimele linii din compilare (nu sunt cifre de TPS):
 ```
-Downloading https://services.gradle.org/distributions/gradle-7.3.3-bin.zip
-...........10%...........20%...........30%...........40%...........50%...........60%...........70%...........80%...........90%...........100%
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:64: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.SlimeEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:65: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.SpellcastingIllagerEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:66: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.SpiderEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:67: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.StrayEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:68: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.VexEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:69: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.VindicatorEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:70: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.WitchEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:71: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.WitherSkeletonEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:72: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.ZoglinEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:73: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.ZombieEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:74: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.ZombieVillagerEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/org/bukkit/craftbukkit/v1_16_R3/entity/CraftEntity.java:75: error: package net.minecraft.entity.monster does not exist
+import net.minecraft.entity.monster.ZombifiedPiglinEntity;
+                                   ^
+/tmp/catserver-source/src/main/java/catserver/server/remapper/MappingLoader.java:84: warning: sun.misc.Unsafe is internal proprietary API and may be removed in a future release
+                sun.misc.Unsafe unsafe = (sun.misc.Unsafe) unsafeField.get(null);
+                        ^
+/tmp/catserver-source/src/main/java/catserver/server/remapper/MappingLoader.java:84: warning: sun.misc.Unsafe is internal proprietary API and may be removed in a future release
+                sun.misc.Unsafe unsafe = (sun.misc.Unsafe) unsafeField.get(null);
+                                                  ^
 
-Welcome to Gradle 7.3.3!
-
-Here are the highlights of this release:
- - Easily declare new test suites in Java projects
- - Support for Java 17
- - Support for Scala 3
-
-For more details see https://docs.gradle.org/7.3.3/release-notes.html
-
-To honour the JVM settings for this build a single-use Daemon process will be forked. See https://docs.gradle.org/7.3.3/userguide/gradle_daemon.html#sec:disabling_the_daemon.
-Could not write standard input to Gradle build daemon.
-java.io.IOException: Stream closed
-	at java.base/java.lang.ProcessBuilder$NullOutputStream.write(ProcessBuilder.java:445)
-	at java.base/java.io.OutputStream.write(OutputStream.java:162)
-	at java.base/java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:81)
-	at java.base/java.io.BufferedOutputStream.flush(BufferedOutputStream.java:142)
-	at org.gradle.process.internal.streams.ExecOutputHandleRunner.forwardContent(ExecOutputHandleRunner.java:68)
-	at org.gradle.process.internal.streams.ExecOutputHandleRunner.run(ExecOutputHandleRunner.java:53)
-	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
-	at org.gradle.internal.concurrent.ManagedExecutorImpl$1.run(ManagedExecutorImpl.java:48)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at org.gradle.internal.concurrent.ThreadFactoryImpl$ManagedThreadRunnable.run(ThreadFactoryImpl.java:61)
-	at java.base/java.lang.Thread.run(Thread.java:840)
+> Task :mcp:setupMCP
+ > Running 'forgeAccessTransformer'
+[22:26:50] [main/INFO]: Access Transformer processor running version 8.0.7+8.0.7+master.43473d43
+[22:26:50] [main/INFO]: Command line arguments [--inJar, /tmp/catserver-source/projects/mcp/build/mcp/mcinject/output.jar, --outJar, /tmp/catserver-source/projects/mcp/build/mcp/forgeAccessTransformer/output.jar, --atFile, /tmp/catserver-source/src/main/resources/META-INF/accesstransformer.cfg]
+[22:26:50] [main/INFO]: Reading from /tmp/catserver-source/projects/mcp/build/mcp/mcinject/output.jar
+[22:26:50] [main/INFO]: Writing to /tmp/catserver-source/projects/mcp/build/mcp/forgeAccessTransformer/output.jar
+[22:26:50] [main/INFO]: Transformer file /tmp/catserver-source/src/main/resources/META-INF/accesstransformer.cfg
+[22:26:50] [main/WARN]: Found existing output jar /tmp/catserver-source/projects/mcp/build/mcp/forgeAccessTransformer/output.jar, overwriting
+[22:26:52] [main/INFO]: JAR transformation complete /tmp/catserver-source/projects/mcp/build/mcp/forgeAccessTransformer/output.jar
+ > Running 'forgeSideStripper'
+ > Running 'decompile'
+ > Running 'inject'
+ > Running 'patch'
+MCP environment setup is complete
 
 FAILURE: Build failed with an exception.
 
 * What went wrong:
-Unable to start the daemon process.
-This problem might be caused by incorrect configuration of the daemon.
-For example, an unrecognized jvm option is used.
-Please refer to the User Manual chapter on the daemon at https://docs.gradle.org/7.3.3/userguide/gradle_daemon.html
-Process command line: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.invoke=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.prefs/java.util.prefs=ALL-UNNAMED --add-opens java.prefs/java.util.prefs=ALL-UNNAMED --add-opens java.base/java.nio.charset=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/java.util.concurrent.atomic=ALL-UNNAMED -Xmx3G -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -cp /home/runner/.gradle/wrapper/dists/gradle-7.3.3-bin/6a41zxkdtcxs8rphpq6y0069z/gradle-7.3.3/lib/gradle-launcher-7.3.3.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 7.3.3
-Please read the following process output to find out more:
------------------------
-Unrecognized VM option 'MaxPermSize=512m'
-Error: Could not create the Java Virtual Machine.
-Error: A fatal exception has occurred. Program will exit.
-
+Execution failed for task ':forge:compileJava'.
+> java.lang.NullPointerException
 
 * Try:
 > Run with --stacktrace option to get the stack trace.
@@ -53,6 +75,15 @@ Error: A fatal exception has occurred. Program will exit.
 > Run with --scan to get full insights.
 
 * Get more help at https://help.gradle.org
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+See https://docs.gradle.org/7.3.3/userguide/command_line_interface.html#sec:command_line_warnings
+
+BUILD FAILED in 3m 44s
+16 actionable tasks: 16 executed
 ```
 
 Smoke:
