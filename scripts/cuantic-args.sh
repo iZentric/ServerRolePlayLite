@@ -23,7 +23,14 @@ done
 TOT_MB=$(awk '/MemTotal/{print int($2/1024)}' /proc/meminfo 2>/dev/null)
 [ -n "$TOT_MB" ] || TOT_MB=2048
 CEIL=$(grep -aoE '^[0-9]{3,7}$' "$D/ramceil" 2>/dev/null | head -1)
-HEAP="${TOT_MB}M"
+# 1.6.4: plafonul implicit = MemTotal minus 2 GB (jumatate din RAM-ul masinii),
+# nu tot RAM-ul. Motiv masurat: cu -Xmx11884M pe 11.8 GB, OOM-killerul omora java
+# si lua si runner-ul GitHub => serverul ramanea JOS. MemTotal-2G lasa marja pentru
+# sistem + supervisor + frpc, iar guardianul de OOM (ramceil) poate cobori mai mult.
+SAFE=$(( TOT_MB - 2048 )); [ "$SAFE" -lt 1024 ] && SAFE=1024
+[ "$SAFE" -gt 8192 ] && SAFE=8192
+[ -n "${CUANTIC_RAM:-}" ] && [ "$CUANTIC_RAM" = "all" ] && SAFE=$TOT_MB
+HEAP="${SAFE}M"
 [ -n "$CEIL" ] && HEAP="${CEIL}M"
 [ -n "${CUANTIC_RAM:-}" ] && [ "${CUANTIC_RAM}" != "all" ] && HEAP="$CUANTIC_RAM"
 XMS=$(( TOT_MB / 8 )); [ "$XMS" -lt 512 ] && XMS=512

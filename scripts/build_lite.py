@@ -12,6 +12,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import urllib.parse
 UNRESOLVED = []
@@ -25,6 +26,7 @@ def packv():
   # slug-uri care nu au rezolvat pe catalog -> devin vizibile, nu se mai pierd in liniste
 import urllib.request
 import zipfile
+import subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UA = {"User-Agent": "iZentric/ServerRolePlayLite build_lite (github)"}
@@ -505,6 +507,53 @@ FORGE_COMMON_CLEAN = """\
 """
 
 
+def build_brand_plugin(out_root, server_jar_path, dest_dirs):
+    """Compileaza pluginul Cuantic pentru /version impreuna cu jarul de server.
+
+    Il legam de jarul serverului (CatServer contine clasele org.bukkit.*), deci nu
+    avem nevoie de maven si API-ul e exact cel de runtime. ESUATUL NU opreste build-ul:
+    raportam lipsa, ca sa nu fim prinsi vindand un brand care nu exista.
+    """
+    src = os.path.join(ROOT, "tools", "cuantic-brand", "src", "cloud", "cuantic", "brand", "CuanticBrandPlugin.java")
+    plg = os.path.join(ROOT, "tools", "cuantic-brand", "plugin.yml")
+    if not (os.path.isfile(src) and os.path.isfile(plg)):
+        log("  !! brand /version: surse lipsa, sarim"); return None
+    ver = packv()
+    bdir = os.path.join(out_root, "brand-build")
+    try:
+        import shutil as _sh
+        _sh.rmtree(bdir, ignore_errors=True)
+        os.makedirs(os.path.join(bdir, "classes"), exist_ok=True)
+        with open(plg, encoding="utf-8") as f:
+            yml = f.read().replace("__VER__", ver)
+        with open(os.path.join(bdir, "plugin.yml"), "w", encoding="utf-8") as f:
+            f.write(yml)
+        jar = os.path.join(out_root, "Cuantic-Brand-%s.jar" % ver)
+        cp = server_jar_path if os.path.isfile(server_jar_path) else ""
+        cmd = ["javac", "--release", "8", "-nowarn"]
+        if cp:
+            cmd += ["-cp", cp]
+        cmd += ["-d", os.path.join(bdir, "classes"), src]
+        subprocess.run(cmd, check=True, capture_output=True, text=True)
+        with zipfile.ZipFile(jar, "w", zipfile.ZIP_DEFLATED) as z:
+            z.write(os.path.join(bdir, "plugin.yml"), "plugin.yml")
+            for r, _, fs in os.walk(os.path.join(bdir, "classes")):
+                for fn in fs:
+                    z.write(os.path.join(r, fn), os.path.relpath(os.path.join(r, fn), os.path.join(bdir, "classes")))
+        for d in dest_dirs:
+            if os.path.isdir(d):
+                shutil.copy2(jar, os.path.join(d, os.path.basename(jar)))
+                log("  + brand /version: %s -> %s" % (os.path.basename(jar), os.path.relpath(d, ROOT)))
+        return os.path.basename(jar)
+    except Exception as e:  # noqa: BLE001
+        log("  !! brand /version esuat: " + (str(e) or e.__class__.__name__)[:200])
+        try:
+            log("     " + (e.stderr or "")[:400])  # noqa: BLE001
+        except Exception:
+            pass
+        return None
+
+
 def write_start_scripts(sdir, server_jar):
     # 1.6.0: flagurile se iau din lista VALIDATA PE JAVA 17 (deploy/jvm-flags-17.txt, scrisa de
     # scripts/jvm-tune.sh). Motive dovedite: (a) cateva flaguri Aikar pt Java 11 NU mai exista in 17
@@ -843,6 +892,10 @@ def main():
                 + "\nNOTA: CatServer e renumit pentru compatibilitate maxima moduri+pluginuri\n"
                   "(build mai 2023, cel mai recent hibrid 1.16.5 intretinut). Daca Mist crapa,\n"
                   "incearca intai varianta asta inainte de Arclight.\n")
+    brand = build_brand_plugin(out_dir, os.path.join(s4, rules["catserver_jar"]),
+                               [os.path.join(s2, "plugins"), os.path.join(s3, "plugins"), os.path.join(s4, "plugins")])
+    if brand:
+        report["arclight_added"].append("brand /version: " + brand)
     z4 = os.path.join(out_dir, f"CUANTIC-Server-CatServer-{ver}.zip")
     with zipfile.ZipFile(z4, "w", zipfile.ZIP_DEFLATED) as z:
         zip_dir(z, s4)

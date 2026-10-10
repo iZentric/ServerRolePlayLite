@@ -1,0 +1,7 @@
+name: Cuantic-Brand
+main: cloud.cuantic.brand.CuanticBrandPlugin
+version: __VER__
+api-version: 1.16
+author: Cuantic
+description: Brand Cuantic pentru /version; upstream-ul ramane vizibil pe linia a doua.
+website: https://github.com/iZentric/ServerRolePlayLite
