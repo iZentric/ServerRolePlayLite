@@ -38,7 +38,18 @@ jobs:
           set -o pipefail
           # ForgeGradle patcher needs MCP setup fully completed BEFORE compileJava.
           ./gradlew --no-daemon --no-parallel setup 2>&1 | tee "$GITHUB_WORKSPACE/engine-lab/build.log"
-          ./gradlew --no-daemon --no-parallel buildCatServer 2>&1 | tee -a "$GITHUB_WORKSPACE/engine-lab/build.log"
+          # Javac-ul Java 8 ruleaza separat de daemonul Gradle 17. Heapul Gradle
+          # de 5G nu ajuta compilatorul care murea cu GC overhead; dam 4G javac.
+          cat >> build.gradle <<'EOF'
+          project(':forge') {
+              tasks.withType(JavaCompile).configureEach {
+                  options.fork = true
+                  options.forkOptions.memoryMaximumSize = '4g'
+              }
+          }
+          EOF
+          sed -i 's/-Xmx5G/-Xmx2G/g' gradle.properties
+          ./gradlew --no-daemon --no-parallel --max-workers=1 buildCatServer 2>&1 | tee -a "$GITHUB_WORKSPACE/engine-lab/build.log"
           find . -type f -iname '*server.jar' -size +5M | head -20
       - name: Pregateste candidatul, fara sa publice/deployeze
         run: |
