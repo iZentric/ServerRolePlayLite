@@ -36,8 +36,10 @@ json.dump(d, open(f, "w", encoding="utf-8"), indent=2)
 PYP
 
 # 1) supervisorul = cel care tine java, runner-ul GitHub si frpc-ul in viata
+cp -f "$GITHUB_WORKSPACE/scripts/cuantic-args.sh" "$HOME/cuantic-args.sh" 2>/dev/null || curl -fsSLo "$HOME/cuantic-args.sh" --max-time 15 "https://raw.githubusercontent.com/$REPO/$BR/scripts/cuantic-args.sh" 2>/dev/null || true
+[ -f "$HOME/cuantic-args.sh" ] && bash "$HOME/cuantic-args.sh" "$D" >/dev/null 2>&1 || true
 if ! pgrep -f 'bash .*c\.sh' >/dev/null 2>&1; then
-  [ -f "$HOME/c.sh" ] || curl -fsSLo "$HOME/c.sh" --max-time 25 \
+  cp -f "$GITHUB_WORKSPACE/scripts/cuantic-live.sh" "$HOME/c.sh" 2>/dev/null || curl -fsSLo "$HOME/c.sh" --max-time 25 \
     "https://raw.githubusercontent.com/$REPO/$BR/scripts/cuantic-live.sh" || true
   if [ -f "$HOME/c.sh" ]; then
     ( setsid bash "$HOME/c.sh" >> "$D/sup.log" 2>&1 < /dev/null & )

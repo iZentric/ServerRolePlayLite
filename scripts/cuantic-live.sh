@@ -73,7 +73,7 @@ fixargs() {
 }
 RAW=https://raw.githubusercontent.com/iZentric/ServerRolePlayLite/arena/a29b4ef4-serverroleplaylite/scripts
 start_mc() {
-  [ -f "$HOME/cuantic-args.sh" ] || curl -fsSLo "$HOME/cuantic-args.sh" "$RAW/cuantic-args.sh" 2>/dev/null
+  curl -fsSLo "$HOME/cuantic-args.sh" "$RAW/cuantic-args.sh" 2>/dev/null || true
   [ -f "$HOME/cuantic-args.sh" ] && bash "$HOME/cuantic-args.sh" "$D"
   fixargs
   echo "==== pornire $(date -u '+%F %T UTC') (memorie: $(grep -aoE '^-Xmx[^ ]*' unix_args.txt | head -1), java: $J) ====" >> live.log

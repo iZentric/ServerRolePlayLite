@@ -35,7 +35,8 @@ sleep 20
 pgrep -f 'java @unix_args' >/dev/null 2>&1 && { pkill -KILL -f 'java @unix_args'; sleep 6; }
 
 # ---- 3. scriptul de run la zi + packul cel nou ----
-curl -fsSLo "$HOME/c.sh" "https://raw.githubusercontent.com/$REPO/arena/a29b4ef4-serverroleplaylite/scripts/cuantic-live.sh" || V="$V c.sh=ESUAT"
+cp -f "$GITHUB_WORKSPACE/scripts/cuantic-live.sh" "$HOME/c.sh" 2>/dev/null || curl -fsSLo "$HOME/c.sh" "https://raw.githubusercontent.com/$REPO/arena/a29b4ef4-serverroleplaylite/scripts/cuantic-live.sh" || V="$V c.sh=ESUAT"
+cp -f "$GITHUB_WORKSPACE/scripts/cuantic-args.sh" "$HOME/cuantic-args.sh" 2>/dev/null || curl -fsSLo "$HOME/cuantic-args.sh" "https://raw.githubusercontent.com/$REPO/arena/a29b4ef4-serverroleplaylite/scripts/cuantic-args.sh" || true
 ( cd "$D" 2>/dev/null && rm -f .pack ) 2>/dev/null
 ZP="/tmp/apply-pack.zip"
 RURL=$(curl -fsSLo - --max-time 25 "https://api.github.com/repos/$REPO/releases/tags/lite" 2>/dev/null | python3 -c "import sys,json;print(next((a['browser_download_url'] for a in json.load(sys.stdin).get('assets',[]) if 'Server-CatServer' in a['name']),''))" 2>/dev/null)
