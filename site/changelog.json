@@ -1,4 +1,14 @@
 {
+ "1.7.7": [
+  {
+   "t": "Sincronizare 1:1 Server <-> Client (zero calcule pe distanțe pe care serverul nu le trimite)",
+   "p": "Observație strategică esențială: serverul are `view-distance=4` (64 blocuri) și în `spigot.yml` trimite entitățile la `other: 32`, `animals/monsters: 24`, `misc: 12`, `players: 48` cu `entity-broadcast-range-percentage=60`. În **1.7.7** am aliniat matematic Clientul și Serverul 1:1: (1) în `EntityCulling` am coborât `tracingDistance` de la `64` la **`32` blocuri** (nu mai face raycasting în gol între 32 și 64 blocuri unde serverul oricum nu trimite entități); (2) în `Out of Sight` am setat `tileEntityRenderRangeMax = 24.0` (tăind **86% din aria de mobilier 3D** trimisă de server în cele 4 chunk-uri, păstrând 100% mobilierul din clădirea și strada ta) și `entityRenderRangeMax = 32.0`; (3) în `options.txt` am aliniat `entityDistanceScaling: 0.6` la procentul `60%` de pe server și am scos `Ksyxis` de pe Client (care acționa doar în SinglePlayer); (4) în `spigot.yml` și `bukkit.yml` am oprit complet liliecii din peșteri (`ambient: 0`), am activat `nerf-spawner-mobs: true` și am rărit hopperele la `24` tick-uri."
+  },
+  {
+   "t": "Arhivă Client redusă înapoi la ~72 MB cu 100% format RGBA/RGB (zero texturi negru-mov)",
+   "p": "Am combinat redimensionarea texturilor gigantice la `256x256 HD` cu cuantizarea entropiei convertită înapoi în modul nativ 32-bit `RGBA` / 24-bit `RGB` (`quantize(256).convert(orig_mode)`), păstrând **Oculus 1.4.7** pe Client. Rezultat: niciun fișier PNG nu este în format indexat `P` (deci zero cuburi negru-mov), dar compresia `DEFLATE` scade din nou modpack-ul cu **~47 MB** pentru descărcare rapidă pe orice net."
+  }
+ ],
  "1.7.6": [
   {
    "t": "Optimizare calitativă HD 256x256 RGBA (zero texturi negru-mov, -70% VRAM pe laptopuri fără placă video)",

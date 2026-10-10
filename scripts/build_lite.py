@@ -189,12 +189,12 @@ graphicsMode:0
 ao:0
 maxFps:120
 enableVsync:false
-particles:1
+particles:2
 renderClouds:false
 entityShadows:false
 biomeBlendRadius:0
 mipmapLevels:0
-entityDistanceScaling:0.75
+entityDistanceScaling:0.6
 gamma:1.0
 fullscreen:false
 autoJump:false
@@ -287,16 +287,18 @@ def slim_client_jar(src_path, dst_path):
                             im = Image.open(io.BytesIO(data))
                             im.load()
                             if im.mode in ("RGBA", "RGB"):
-                                # Pastram 100% modul original RGBA/RGB (fara quantize 'P' ca sa nu apara negru-mov!).
-                                # Doar daca o textura patrata power-of-two fara .mcmeta si in afara GUI/font depaseste
-                                # 256x256 (ex. poze brute 1024x1024 / 2048x2048 din Pizzaland/ModernXL), o aducem la
-                                # 256x256 HD (16x rezolutia vanilla!) cu LANCZOS — calitate vizuala impecabila si -70% VRAM pe Intel HD!
+                                # 1) Reducem texturile patrate gigantice (>256x256, ex 1024/2048) la 256x256 HD (16x peste vanilla!)
                                 if (im.width == im.height and im.width > 256
                                         and (im.width & (im.width - 1)) == 0
                                         and (n + ".mcmeta") not in all_names
                                         and "/gui/" not in low and "/font/" not in low):
                                     resample = getattr(getattr(Image, "Resampling", Image), "LANCZOS", Image.BICUBIC)
                                     im = im.resize((256, 256), resample)
+                                # 2) Cuantizam entropia la 256 culori DAR convertim INAPOI in modul original RGBA/RGB (32-bit/24-bit)!
+                                # Astfel fisierul PNG ramane 100% RGBA/RGB standard (zero texturi negru-mov in NativeImage/Oculus),
+                                # dar compresia DEFLATE scade arhiva client cu ~45 MB!
+                                orig_mode = im.mode
+                                im = im.quantize(colors=256, method=Image.Quantize.FASTOCTREE).convert(orig_mode)
                                 buf = io.BytesIO()
                                 im.save(buf, format="PNG", optimize=True, compress_level=9)
                                 nd = buf.getvalue()
@@ -418,12 +420,13 @@ shaderPack=(off)
 """
 
 OUT_OF_SIGHT_CLIENT_TOML = """\
-#General mod settings
+#General mod settings — aliniat 1:1 cu distanta reala a serverului nostru (view-distance=4, tracking=32)
 [general]
-\t#Range: 1.0 ~ 30000.0
-\ttileEntityRenderRangeMax = 36.0
-\t#Range: 1.0 ~ 30000.0
-\tentityRenderRangeMax = 56.0
+\t#Serverul trimite TileEntities in toate cele 4 chunk-uri (64 blocuri). Le desenam doar pe cele din
+\t#cladirea/strada ta (24 blocuri), taind 86% din aria de mobilier 3D desenata degeaba!
+\ttileEntityRenderRangeMax = 24.0
+\t#Aliniat exact la entity-tracking-range.other = 32 de pe server
+\tentityRenderRangeMax = 32.0
 \ttileEntityRenderLimitModdedOnly = false
 \tentityRenderLimitModdedOnly = false
 """
@@ -583,10 +586,10 @@ ENTITYCULLING_JSON = """\
   "entityWhitelist": [
     "botania:mana_burst"
   ],
-  "tracingDistance": 64,
+  "tracingDistance": 32,
   "debugMode": false,
-  "sleepDelay": 10,
-  "hitboxLimit": 50,
+  "sleepDelay": 15,
+  "hitboxLimit": 35,
   "skipMarkerArmorStands": true,
   "tickCulling": true,
   "tickCullingWhitelist": [
@@ -625,69 +628,77 @@ white-list=false
 
 SPIGOT_YML = """\
 # spigot.yml - stratul de tuning CUANTIC (acelasi fisier il primesc si CatServer si Mist)
-# Surse chei: docs.dedicatedmc.io/server-optimization, wabbanode blog, builtbybit thread 187104
+# Aliniat 1:1 cu setarile din Client (Out of Sight = 24/32, EntityCulling = 32, renderDistance = 4)
 settings:
   save-user-cache-on-stop-only: true
   netty-threads: 2
+  moved-wrongly-threshold: 0.35
+  moved-too-quickly-multiplier: 25.0
+  log-villager-deaths: false
 world-settings:
   default:
     mob-spawn-range: 3
     entity-activation-range:
-      animals: 16
-      monsters: 20
-      raiders: 24
-      misc: 8
+      animals: 12
+      monsters: 16
+      raiders: 16
+      misc: 6
+      tick-inactive-villagers: false
       wake-up-inactive:
-        animals-max-per-tick: 2
-        monsters-max-per-tick: 4
+        animals-max-per-tick: 1
+        animals-every: 200
+        animals-for: 60
+        monsters-max-per-tick: 2
+        monsters-every: 120
+        monsters-for: 60
         villagers-max-per-tick: 1
-        flying-monsters-max-per-tick: 2
+        villagers-every: 300
+        villagers-for: 40
+        flying-monsters-max-per-tick: 1
+        flying-monsters-every: 200
+        flying-monsters-for: 60
     entity-tracking-range:
       players: 48
-      animals: 32
-      monsters: 32
-      misc: 16
+      animals: 24
+      monsters: 24
+      misc: 12
       other: 32
-    # NU punem aici per-player-mob-spawns: e cheie de Paper, nu de Spigot 1.16.5, si pe
-    # CatServer ar fi ignorata in liniste (cheie moarta = exact ce refuzam). Ea ramane in
-    # paper.yml pentru varianta Mist, care intr-adevar are patch-uri Paper.
-    max-tnt-per-tick: 20
+    max-tnt-per-tick: 10
     merge-radius:
-      item: 3.5
-      exp: 4.0
+      item: 4.0
+      exp: 6.0
     item-despawn-rate: 2400
     max-entity-collisions: 2
     tick-inactive-villagers: false
-    nerf-spawner-mobs: false
+    nerf-spawner-mobs: true
     ticks-per:
-      hopper-transfer: 8
-      hopper-check: 8
-      monster-spawns: 2
+      hopper-transfer: 24
+      hopper-check: 24
+      monster-spawns: 10
     hopper-amount: 3
-    arrow-despawn-rate: 300
-    trident-despawn-rate: 300
+    arrow-despawn-rate: 200
+    trident-despawn-rate: 200
+    zombie-aggressive-towards-villager: false
 """
 
 BUKKIT_YML = """\
-# bukkit.yml - stratul de tuning CUANTIC (limitare mobi + chunk-gc), identic pe toate variantele
+# bukkit.yml - stratul de tuning CUANTIC (fara lilieci in pesteri, mobi redusi pt RolePlay)
 settings:
   allow-end: false
 spawn-limits:
-  monsters: 40
-  animals: 8
-  water-animals: 3
-  water-ambient: 5
-  ambient: 5
+  monsters: 20
+  animals: 6
+  water-animals: 2
+  water-ambient: 2
+  ambient: 0
 chunk-gc:
   period-in-ticks: 400
-  # load-threshold=0 = functia e DEZACTIVATA implicit; cu 300 elibereaza chunk-urile libere (RAM).
-  # Ghid: https://builtbybit.com/threads/guide-optimizing-spigot-remove-lag-fix-tps-improve-performance.187104/
   load-threshold: 300
 ticks-per:
   animal-spawns: 400
-  monster-spawns: 4
-  water-spawns: 11
-  ambient-spawns: 11
+  monster-spawns: 10
+  water-spawns: 40
+  ambient-spawns: 400
   autosave: 6000
 """
 

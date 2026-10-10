@@ -1,6 +1,6 @@
 {
   "pack_name": "CUANTIC",
-  "pack_version": "1.7.6",
+  "pack_version": "1.7.7",
  "minecraft": "1.16.5",
  "forge": "36.2.42",
  "_comentariu_client": "CLIENTUL PASTREAZA TOATE MODURILE DE GAMEplay + Oculus (necesar pt texturi/pipeline ca sa nu apara negru-mov). Se scot doar DynamicSurroundings, CTM-MC, animatii duble si meniuri inutile.",
@@ -24,11 +24,10 @@
   "CTM-MC",
   "TRansliterationLib"
  ],
- "_comentariu_adaugate": "Doar moduri de PERFORMANTA reala in timpul jocului (fara fps-reducer care scade FPS doar in Alt-Tab si fara saturn care e dublura peste FerriteCore+ModernFix).",
+ "_comentariu_adaugate": "Doar moduri de PERFORMANTA reala in timpul jocului pe serverul nostru (fara ksyxis pe client care e doar pt SinglePlayer, fara betterfpsdist 1.1 care nu suporta Rubidium in 1.16.5).",
  "add_client_modrinth": [
   "radon",
   "entityculling",
-  "ksyxis",
   "rubidium-extra",
   "entity-collision-fps-fix",
   "out-of-sight",
