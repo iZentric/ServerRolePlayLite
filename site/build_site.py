@@ -345,7 +345,7 @@ straturi_rows = [
     ("Mod de server", "RoadRunner (port Forge al lui Lithium) — AI-ul entitatilor, chunk builder, cache-uri",
      "motorul clasic stă 90% din timp calculând AI pentru vaci pe care nu le vede nimeni",
      "384 KB, 12.8M descarcari, 1.16.5 ✓", "curseforge.com/minecraft/mc-mods/roadrunner"),
-    ("Mod de server", "FerriteCore <b>si pe server, nu doar in client</b> (1.6.3) + Clumps + MemoryLeakFix",
+    ("Mod de server", "FerriteCore <b>si pe server, nu doar in client</b> (din 1.6.3) + Clumps + MemoryLeakFix",
      "retine blockstate-urile o singura data si toarna memoria eliberata in heap",
      "106 KB, MIT; autorul raportează ~600 MB pe lumi mari — la noi nemăsurat separat", "github.com/malte0811/FerriteCore"),
     ("Moduri de server", "AI-Improvements · In Control! · FastFurnace · FastWorkbench (+Placebo) · Bad Wither No Cookie · Get-It-Together-Drops · spark",
@@ -530,7 +530,7 @@ html = f"""<!DOCTYPE html>
 
 <h2>📦 Cum intri, în 3 mișcări</h2>
 <div class="grid">
-  <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>CUANTIC-Client-1.6.3.mrpack</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="{DL}{CLIENT}">⬇️ Descarcă pack-ul</a></p></div>
+  <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>{CLIENT}</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="{DL}{CLIENT}">⬇️ Descarcă pack-ul</a></p></div>
   <div class="card"><h3>2️⃣ Importă (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege fișierul <code>.mrpack</code> → Launch. Merge și cu TLauncher.</p></div>
   <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>{ADRESA}</b>. Fără parolă, fără /register — intri direct în oraș. 🏙️</p></div>
 </div>
