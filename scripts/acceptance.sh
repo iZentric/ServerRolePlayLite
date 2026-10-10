@@ -11,13 +11,22 @@ BR=arena/a29b4ef4-serverroleplaylite
 : > /tmp/acc.txt
 out() { echo "$1" >> /tmp/acc.txt; }
 
-# Asigura ca serverul e pornit si a terminat faza de boot daca tocmai a fost repornit de APPLY
+# Extrage DOAR logul ultimei porniri (de la ultimul 'ModLauncher running:' sau '==== pornire')
+last_boot_log() {
+  sed -e "$STRIP" "$L" 2>/dev/null | awk '
+    /ModLauncher running:|==== pornire/ { buf = "" }
+    { buf = buf $0 "\n" }
+    END { printf "%s", buf }
+  '
+}
+
+# Asigura ca serverul e pornit si a terminat faza de boot pe pornirea CURENTA (max ~120s)
 if ! pgrep -f 'java @unix_args' >/dev/null 2>&1; then
   bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true
 fi
-for _w in $(seq 1 15); do
+for _w in $(seq 1 24); do
   if pgrep -f 'java @unix_args' >/dev/null 2>&1 && ss -lnt 2>/dev/null | grep -q ':25565' && \
-     sed -e "$STRIP" "$L" 2>/dev/null | grep -qaE 'Done \([0-9.]+s\)'; then
+     last_boot_log | grep -qaE 'Done \([0-9.]+s\)'; then
     break
   fi
   sleep 5
@@ -30,9 +39,9 @@ send_cmd() {
   [ -w "$D/cmd.in" ] && printf '%s\n' "$c" >> "$D/cmd.in" 2>/dev/null || true
 }
 
-sed -e "$STRIP" "$L" > /tmp/acc.log 2>/dev/null
+last_boot_log > /tmp/acc.log
 TOTL=$(wc -l < /tmp/acc.log 2>/dev/null || echo 0)
-out "# ACCEPTANCE CUANTIC — $(date -u '+%F %T UTC') (live.log: $TOTL linii)"
+out "# ACCEPTANCE CUANTIC — $(date -u '+%F %T UTC') (boot curent: $TOTL linii)"
 
 # ---- T1 proces + port ----
 P25565=$(ss -lnt 2>/dev/null | grep -c ':25565')

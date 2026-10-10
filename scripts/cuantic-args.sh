@@ -27,15 +27,19 @@ CEIL=$(grep -aoE '^[0-9]{3,7}$' "$D/ramceil" 2>/dev/null | head -1)
 # nu tot RAM-ul. Motiv masurat: cu -Xmx11884M pe 11.8 GB, OOM-killerul omora java
 # si lua si runner-ul GitHub => serverul ramanea JOS. MemTotal-2G lasa marja pentru
 # sistem + supervisor + frpc, iar guardianul de OOM (ramceil) poate cobori mai mult.
-SAFE=$(( TOT_MB - 2048 )); [ "$SAFE" -lt 1024 ] && SAFE=1024
-[ "$SAFE" -gt 8192 ] && SAFE=8192
+SAFE=$(( TOT_MB - 3072 )); [ "$SAFE" -lt 1024 ] && SAFE=1024
+[ "$SAFE" -gt 6144 ] && SAFE=6144
+# Daca ramceil de pe disc avea o valoare veche mai mare decat SAFE (ex. 11884 scris de ram-all),
+# o stergem ca sa nu suprascrie SAFE si sa cheme OOM-killerul!
+if [ -n "$CEIL" ] && [ "$CEIL" -gt "$SAFE" ]; then
+  rm -f "$D/ramceil" 2>/dev/null || true
+  CEIL=""
+fi
 [ -n "${CUANTIC_RAM:-}" ] && [ "$CUANTIC_RAM" = "all" ] && SAFE=$TOT_MB
 HEAP="${SAFE}M"
 [ -n "$CEIL" ] && HEAP="${CEIL}M"
 [ -n "${CUANTIC_RAM:-}" ] && [ "${CUANTIC_RAM}" != "all" ] && HEAP="$CUANTIC_RAM"
-XMS=$(( TOT_MB / 8 )); [ "$XMS" -lt 512 ] && XMS=512
-[ -n "$CEIL" ] && XMS=$(( CEIL / 8 )); [ "$XMS" -gt 2048 ] && XMS=2048
-if [ "${CUANTIC_RAM:-all}" != "all" ]; then XMS=1024; fi
+XMS=1024
 if ! grep -qxF -- "-Xmx$HEAP" unix_args.txt; then
   cp unix_args.txt "unix_args.txt.bak.$(date +%s)"
   grep -vE '^-(Xms|Xmx)[0-9]+[MGmg]?$' unix_args.txt > /tmp/args.mem
