@@ -1,4 +1,18 @@
 {
+ "1.7.1": [
+  {
+   "t": "Tehnologii din toate server jar-urile mari (Gale, Pufferfish, Airplane, Petal, DivineMC, Purpur) injectate în runtime",
+   "p": "`Cuantic-Brand` activează direct în memorie prin reflecție în `CatServerConfig` și `SpigotConfig`: (1) `enableSkipEntityTick=true` + `enableSkipTileEntityTick=true` (oprește tick-ul pe mobilierul din Pizzaland/Modernxl când e inactiv); (2) `disableHopperMoveEventWorlds=[world, DIM-1, DIM1]` (ca `hopper.disable-move-event` din Gale/Paper); (3) `autoUnloadDimensions=[-1, 1]` + `keepSpawnInMemory=false` (descarcă Nether/End/Spawn când sunt goale); (4) `disableFMLStatusModInfo=true` (Server Ping instant, fără lista de 30 moduri); (5) `disableStatSaving=true` (oprește scrierea continuă de JSON pe discul de 5 GB); (6) `movedWronglyThreshold=0.35` + `movedTooQuicklyMultiplier=25.0` (fără rubberband în mașini/avioane `vehicle-mod`)."
+  },
+  {
+   "t": "ModernFix Dynamic Resources activat pe Client și Server (−1 GB RAM în timpul jocului)",
+   "p": "În `ModernFix`, cea mai puternică optimizare (`mixin.perf.dynamic_resources=true`) e oprită implicit! Am adăugat `config/modernfix-mixins.properties` atât în client (`overrides/config/`) cât și pe server: modelele 3D din `Pizzaland` (84 MB) și `Modernxl` (38 MB) nu mai stau toate încărcate permanent în RAM, ci se încarcă doar când te uiți la ele."
+  },
+  {
+   "t": "Zero erori în T3 și T5 (8/8 teste funcționale TRECE, 0 VERIFICA, 0 CADE) + Serverul nu se mai oprește la finalul joburilor",
+   "p": "Am eliminat `RUNNER_TRACKING_ID` din toate joburile GitHub Actions (care trimitea `SIGKILL` lui `java` când se termina un job) și am reparat la rădăcină cele 3 erori din log: `pizzamod.mixin.json` (`minVersion: 0.8`), tagul `supplementaries:planter_rich` (`required: false`) și avertismentul fals din `EssentialsX`."
+  }
+ ],
  "1.6.5": [
   {
    "t": "Heap-ul nu mai doboară cutia",

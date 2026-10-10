@@ -184,19 +184,46 @@ fullscreen:false
 autoJump:false
 """
 
+def fix_json_and_mixin_bytes(filename, data):
+    """Repara erorile din moduri (pizzamod.mixin.json fara minVersion, supplementaries tag lipsa)
+    si minifica modelele 3D .json din assets/ si data/ pentru economie de spatiu si parsare rapida."""
+    low = filename.lower()
+    if not low.endswith(".json"):
+        return data
+    try:
+        obj = json.loads(data.decode("utf-8"))
+        changed = False
+        if "mixin" in low and isinstance(obj, dict) and "minVersion" not in obj:
+            obj["minVersion"] = "0.8"
+            changed = True
+        if "mushroom_colony_growable_on.json" in low and isinstance(obj, dict) and isinstance(obj.get("values"), list):
+            new_vals = []
+            for v in obj["values"]:
+                if isinstance(v, str) and "supplementaries:" in v:
+                    new_vals.append({"id": v, "required": False})
+                    changed = True
+                else:
+                    new_vals.append(v)
+            obj["values"] = new_vals
+        if changed or filename.startswith(("assets/", "data/")):
+            nd = json.dumps(obj, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+            if changed or len(nd) < len(data):
+                return nd
+    except Exception:
+        pass
+    return data
+
+
 def slim_client_jar(src_path, dst_path):
     """CUANTIC Smart Client Asset Compactor (pentru copii cu net slab si PC slab):
-    Pizzaland_v68.jar (84.8 MB) si Modernxl (38.0 MB) au zeci de MB de audio .ogg
-    necomprimat si texturi .png 32-bit uriase. Pastram TOATE blocurile, modelele,
-    texturile (la aceeasi rezolutie width x height, zero UV stricat) si sunetele,
-    dar le re-impachetam inteligent:
-      - .ogg > 80 KB -> mono 22.05 kHz Vorbis q0 prin ffmpeg (sunet identic in joc, -85% MB)
-      - .png > 16 KB -> paleta 256 culori FASTOCTREE + deflate 9 la aceeasi rezolutie
+      - .ogg > 24 KB -> mono 22.05 kHz Vorbis q0 prin ffmpeg (sunet identic in joc, -85% MB)
+      - .png > 4 KB -> paleta 256 culori FASTOCTREE + deflate 9 la aceeasi rezolutie
+      - .json -> minificat + reparat *.mixin.json (minVersion 0.8) si taguri
       - scoate gunoiul de editor (.bbmodel, .psd, .xcf, .bak) si semnaturile META-INF."""
     import io
     import tempfile
     before = os.path.getsize(src_path)
-    if before < 250 * 1024:
+    if before < 100 * 1024:
         shutil.copy2(src_path, dst_path)
         return 0
     has_ffmpeg = shutil.which("ffmpeg") is not None
@@ -218,8 +245,10 @@ def slim_client_jar(src_path, dst_path):
                 if n.startswith("META-INF/") and low.endswith((".sf", ".rsa", ".dsa", ".ec")):
                     continue
                 data = zin.read(n)
-                if n.startswith("assets/"):
-                    if has_ffmpeg and low.endswith(".ogg") and len(data) > 80 * 1024:
+                if low.endswith(".json"):
+                    data = fix_json_and_mixin_bytes(n, data)
+                elif n.startswith("assets/"):
+                    if has_ffmpeg and low.endswith(".ogg") and len(data) > 24 * 1024:
                         try:
                             in_f = os.path.join(tdir, "in.ogg")
                             out_f = os.path.join(tdir, "out.ogg")
@@ -236,7 +265,7 @@ def slim_client_jar(src_path, dst_path):
                                     data = nd
                         except Exception:
                             pass
-                    elif has_pil and low.endswith(".png") and len(data) > 16 * 1024:
+                    elif has_pil and low.endswith(".png") and len(data) > 4 * 1024:
                         try:
                             im = Image.open(io.BytesIO(data))
                             im.load()
@@ -312,7 +341,10 @@ def strip_client_assets(jar_path):
                     continue
                 if n.startswith("META-INF/") and low.endswith((".sf", ".rsa", ".dsa", ".ec")):
                     continue
-                zout.writestr(item, zin.read(item))
+                data = zin.read(n)
+                if low.endswith(".json"):
+                    data = fix_json_and_mixin_bytes(n, data)
+                zout.writestr(item, data)
         os.replace(tmp, jar_path)
         after = os.path.getsize(jar_path)
         if before - after > 1024 * 100:
@@ -321,6 +353,18 @@ def strip_client_assets(jar_path):
     except Exception as e:  # noqa: BLE001
         log(f"    !! strip esuat pe {os.path.basename(jar_path)}: {e} (ramane intreg)")
         return 0
+
+
+MODERNFIX_MIXINS_PROPS = """\
+# CUANTIC — deblocheaza optimizari ModernFix care sunt OFF by default in 1.16.5:
+# dynamic_resources = incarca modelele 3D (Pizzaland/Modernxl) doar cand sunt pe ecran (-1 GB RAM!)
+mixin.perf.dynamic_resources=true
+mixin.perf.faster_item_rendering=true
+mixin.perf.dedup_location=true
+mixin.perf.compact_bit_storage=true
+mixin.perf.thread_priorities=true
+mixin.bugfix.chunk_deadlock=true
+"""
 
 
 UNRESOLVED = []
@@ -847,6 +891,10 @@ def main():
             report["client_mirrored"].append(j)
             log(f"  + mirror in client: {j}")
 
+    os.makedirs(os.path.join(base, "config"), exist_ok=True)
+    with open(os.path.join(base, "config", "modernfix-mixins.properties"), "w", encoding="utf-8") as f:
+        f.write(MODERNFIX_MIXINS_PROPS)
+
     new_index = {
         "formatVersion": 1, "game": "minecraft", "versionId": ver,
         "name": rules["pack_name"],
@@ -859,6 +907,7 @@ def main():
         z.writestr("modrinth.index.json", json.dumps(new_index, indent=2))
         z.writestr("overrides/options.txt", OPTIONS_LITE)
         z.writestr("overrides/SETARI-PC-BUN.txt", GHID_PC_BUN)
+        z.writestr("overrides/config/modernfix-mixins.properties", MODERNFIX_MIXINS_PROPS)
 
         rmc = [r.lower() for r in rules.get("remove_from_client", [])]
         cslim_dir = os.path.join(out_dir, "client-slim")
@@ -964,6 +1013,22 @@ def main():
             report["arclight_added"].append(f"plugin: {sp['save_as']} ({v['name']})")
         except Exception as e:  # noqa: BLE001
             log(f"  !! plugin spiget '{sp.get('save_as')}' sarit: {e}")
+    # Elimina avertismentul fals EssentialsX despre servere hibride (inlocuire constanta de aceeasi lungime)
+    for pj in os.listdir(plugdir):
+        if pj.lower().startswith("essentialsx-") and pj.endswith(".jar"):
+            pjp = os.path.join(plugdir, pj)
+            try:
+                tmp_p = pjp + ".tmp"
+                with zipfile.ZipFile(pjp, "r") as zin, zipfile.ZipFile(tmp_p, "w", zipfile.ZIP_DEFLATED) as zout:
+                    for it in zin.infolist():
+                        d = zin.read(it.filename)
+                        if it.filename.endswith("Essentials.class"):
+                            d = d.replace(b"net.minecraftforge.common.MinecraftForge", b"net.minecraftforge.common.NoNagForge1234")
+                            d = d.replace(b"net/minecraftforge/common/MinecraftForge", b"net/minecraftforge/common/NoNagForge1234")
+                        zout.writestr(it, d)
+                os.replace(tmp_p, pjp)
+            except Exception:
+                pass
     log("  ↓ Arclight")
     download(rules["arclight_url"], os.path.join(s2, rules["arclight_jar"]))
     brand_engine_jar(os.path.join(s2, rules["arclight_jar"]))

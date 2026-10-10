@@ -49,16 +49,64 @@ public class CuanticBrandPlugin extends JavaPlugin implements Listener {
             Method getCfg = catCls.getMethod("getConfig");
             Object cfg = getCfg.invoke(null);
             if (cfg != null) {
+                setField(cfg, "keepSpawnInMemory", Boolean.FALSE, sb);
                 setField(cfg, "enableSkipEntityTick", Boolean.TRUE, sb);
                 setField(cfg, "enableSkipTileEntityTick", Boolean.TRUE, sb);
-                setField(cfg, "maxEntityCollision", Integer.valueOf(4), sb);
-                setField(cfg, "worldGenMaxTickTime", Integer.valueOf(10), sb);
+                setField(cfg, "maxEntityCollision", Integer.valueOf(2), sb);
+                setField(cfg, "worldGenMaxTickTime", Integer.valueOf(8), sb);
+                setField(cfg, "disableFMLStatusModInfo", Boolean.TRUE, sb);
+                setField(cfg, "enableDynmapCompatible", Boolean.FALSE, sb);
+                setField(cfg, "enableMythicMobsPatcherCompatible", Boolean.FALSE, sb);
+                setField(cfg, "defaultInstallPluginSpark", Boolean.FALSE, sb);
                 setField(cfg, "versionCheck", Boolean.FALSE, sb);
+                setField(cfg, "forceSaveOnWatchdog", Boolean.TRUE, sb);
+                try {
+                    Field fHop = cfg.getClass().getDeclaredField("disableHopperMoveEventWorlds");
+                    fHop.setAccessible(true);
+                    @SuppressWarnings("unchecked")
+                    java.util.List<String> hop = (java.util.List<String>) fHop.get(cfg);
+                    if (hop != null) {
+                        hop.clear();
+                        hop.add("world");
+                        hop.add("DIM-1");
+                        hop.add("DIM1");
+                        sb.append(", noHopperEvent=3w");
+                    }
+                    Field fDim = cfg.getClass().getDeclaredField("autoUnloadDimensions");
+                    fDim.setAccessible(true);
+                    @SuppressWarnings("unchecked")
+                    java.util.List<Integer> dims = (java.util.List<Integer>) fDim.get(cfg);
+                    if (dims != null) {
+                        dims.clear();
+                        dims.add(Integer.valueOf(-1));
+                        dims.add(Integer.valueOf(1));
+                        sb.append(", autoUnloadDims=[-1,1]");
+                    }
+                } catch (Throwable ignored) {}
             }
         } catch (Throwable ignored) {
             // Pe Arclight / Mist nu exista clasa CatServer; ignora in liniste
         }
+        // Stratul 2: SpigotConfig (Gale/Pufferfish/Purpur runtime tuning + anti-rubberband vehicule)
+        try {
+            Class<?> spg = Class.forName("org.spigotmc.SpigotConfig");
+            setStaticField(spg, "disableStatSaving", Boolean.TRUE, sb);
+            setStaticField(spg, "saveUserCacheOnStopOnly", Boolean.TRUE, sb);
+            setStaticField(spg, "logVillagerDeaths", Boolean.FALSE, sb);
+            setStaticField(spg, "movedWronglyThreshold", Double.valueOf(0.35D), sb);
+            setStaticField(spg, "movedTooQuicklyMultiplier", Double.valueOf(25.0D), sb);
+        } catch (Throwable ignored) {}
         return sb.length() > 0 ? sb.toString() : "standard";
+    }
+
+    private static void setStaticField(Class<?> cls, String name, Object val, StringBuilder sb) {
+        try {
+            Field f = cls.getDeclaredField(name);
+            f.setAccessible(true);
+            f.set(null, val);
+            if (sb.length() > 0) sb.append(", ");
+            sb.append(name).append("=").append(val);
+        } catch (Throwable ignored) {}
     }
 
     private static void setField(Object target, String name, Object val, StringBuilder sb) {

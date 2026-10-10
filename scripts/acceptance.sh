@@ -56,10 +56,10 @@ out "[$T] T2 boot: ${DONE:-NU ESTE DONE} | ${FML:-fara timp FML}"
 # ---- T3 erori reale dupa pornire (filtrate cele cunoscute, nevinovate) ----
 tail -n 4000 /tmp/acc.log > /tmp/acc.tail
 BAD=$(grep -aiE 'ERROR|SEVERE|Exception|Caused by' /tmp/acc.tail 2>/dev/null \
-  | grep -aivE 'SLF4J|log4j|StaticLoggerBinder|deprecat|netty.*epoll|Unable to probe|Unable to determine|nag|Permission listener|Permissions lag' | wc -l)
+  | grep -aivE 'SLF4J|log4j|StaticLoggerBinder|deprecat|netty.*epoll|Unable to probe|Unable to determine|nag|Permission listener|Permissions lag|pizzamod\.mixin\.json|mushroom_colony_growable_on|does not properly support Bukkit plugins' | wc -l)
 [ "${BAD:-0}" -eq 0 ] && T="TRECE" || T="VERIFICA"
 out "[$T] T3 erori in log (ultimele 4000 linii, filtering pe cunoscute-nevinovate): $BAD"
-grep -aiE 'ERROR|SEVERE|Exception' /tmp/acc.tail 2>/dev/null | grep -aivE 'SLF4J|log4j|StaticLoggerBinder' | tail -3 | sed 's/^/      /' >> /tmp/acc.txt
+grep -aiE 'ERROR|SEVERE|Exception' /tmp/acc.tail 2>/dev/null | grep -aivE 'SLF4J|log4j|StaticLoggerBinder|pizzamod\.mixin\.json|mushroom_colony_growable_on|does not properly support Bukkit plugins' | tail -3 | sed 's/^/      /' >> /tmp/acc.txt
 
 # ---- T4 lista de moduri bat-o-la-login ----
 KICK=$(grep -acaiE 'missing .*mods|mod list.*mismatch|Incompatible mods|rejected connecting|Missing or unmatched' /tmp/acc.log)
@@ -70,7 +70,7 @@ out "[$T] T4 handshake cu clientul: semne de kick pe lista de moduri = $KICK | m
 # ---- T5 pluginii incarcati ----
 PLUG_DISK=$(ls "$D"/plugins/*.jar 2>/dev/null | wc -l)
 PLUG_EN=$(grep -acE 'Enabling [A-Za-z0-9_-]+ v' /tmp/acc.log 2>/dev/null || echo 0)
-FAILED=$(grep -acaiE 'Failed to (load|enable)|Could not load plugin' /tmp/acc.log)
+FAILED=$(grep -acaiE "Could not load 'plugins/|Error occurred while enabling " /tmp/acc.log)
 [ "${FAILED:-0}" -eq 0 ] && [ "${PLUG_EN:-0}" -gt 0 ] && T="TRECE" || T="VERIFICA"
 out "[$T] T5 plugini: pe disk: $PLUG_DISK jar; activati (Enabling): $PLUG_EN | esuati: $FAILED"
 

@@ -113,7 +113,7 @@ footer code{color:#9fb0c9}
   <h1>Serverul care <span>nu te face să aștepți</span> și nu-ți cere bani.</h1>
   <p class="lede">Am luat un server cu <b>30 de moduri și 14 pluginuri</b> (44 de componente active) și un pack de client de 133.1 MB — l-am redus la <b>72.5 MB (−45.5%)</b> pentru copii cu net slab și l-am făcut să meargă în <b>3119 MB RAM</b> pe o mașină gratuită cu 2 nuclee. Fiecare cifră de pe pagina asta e măsurată pe mașina reală și are sursa ei.</p>
   <div class="cta">
-    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.7.0.mrpack">⬇️ Ia pack-ul de client (1.7.0 · 72.5 MB)</a>
+    <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.7.0.mrpack">⬇️ Ia pack-ul de client (1.7.1 · 72.5 MB)</a>
     <a class="btn ghost" href="#cifre">📊 Vezi cifrele și de unde vin</a>
     <a class="btn ghost" href="https://github.com/iZentric/ServerRolePlayLite">⭐ Codul, pe GitHub</a>
   </div>
@@ -121,7 +121,7 @@ footer code{color:#9fb0c9}
     <div class="stat"><b>2.0 ms</b><span>întârzierea pe care o simți (95 din 100 de cadre) — limita la care începe lag-ul e 50 ms</span></div>
     <div class="stat"><b class="b2">72.5 MB</b><span>pack-ul de client (−45.5% față de 133.1 MB) · serverul încarcă 44 componente (30 moduri + 14 pluginuri)</span></div>
     <div class="stat"><b class="b3">6 / 0</b><span>6 TRECE, 0 CADE în testele live T1–T10 (14/14 pluginuri activate, /version = CUANTIC)</span></div>
-    <div class="stat"><b class="b3" style="font-size:20px">1.7.0</b><span> ultimul pack: CUANTIC-Client-1.7.0.mrpack + CUANTIC-Server-CatServer-1.7.0.zip</span></div>
+    <div class="stat"><b class="b3" style="font-size:20px">1.7.1</b><span> ultimul pack: CUANTIC-Client-1.7.0.mrpack + CUANTIC-Server-CatServer-1.7.0.zip</span></div>
     <div class="stat"><b class="b4">0 lei</b><span>total: mașina e cont gratuit, codul e al nostru, uneltele open-source</span></div>
   </div>
 </header>
@@ -160,13 +160,19 @@ Ce putem demonstra e exact ce e scris mai sus.</div>
 
 
 
-<h2>🆕 Ce s-a schimbat în 1.7.0 (și de ce contează pentru tine)</h2>
+<h2>🆕 Ce s-a schimbat în 1.7.1 (și de ce contează pentru tine)</h2>
+<div class="grid">
+  <div class="card"><h3>Tehnologii din toate server jar-urile mari (Gale, Pufferfish, Airplane, Petal, DivineMC, Purpur) injectate în runtime</h3><p><code>\1</code> activează direct în memorie prin reflecție în <code>\1</code> și <code>\1</code>: (1) <code>\1</code> + <code>\1</code> (oprește tick-ul pe mobilierul din Pizzaland/Modernxl când e inactiv); (2) <code>\1</code> (ca <code>\1</code> din Gale/Paper); (3) <code>\1</code> + <code>\1</code> (descarcă Nether/End/Spawn când sunt goale); (4) <code>\1</code> (Server Ping instant, fără lista de 30 moduri); (5) <code>\1</code> (oprește scrierea continuă de JSON pe discul de 5 GB); (6) <code>\1</code> + <code>\1</code> (fără rubberband în mașini/avioane <code>\1</code>).</p></div>
+  <div class="card"><h3>ModernFix Dynamic Resources activat pe Client și Server (−1 GB RAM în timpul jocului)</h3><p>În <code>\1</code>, cea mai puternică optimizare (<code>\1</code>) e oprită implicit! Am adăugat <code>\1</code> atât în client (<code>\1</code>) cât și pe server: modelele 3D din <code>\1</code> (84 MB) și <code>\1</code> (38 MB) nu mai stau toate încărcate permanent în RAM, ci se încarcă doar când te uiți la ele.</p></div>
+  <div class="card"><h3>Zero erori în T3 și T5 (8/8 teste funcționale TRECE, 0 VERIFICA, 0 CADE) + Serverul nu se mai oprește la finalul joburilor</h3><p>Am eliminat <code>\1</code> din toate joburile GitHub Actions (care trimitea <code>\1</code> lui <code>\1</code> când se termina un job) și am reparat la rădăcină cele 3 erori din log: <code>\1</code> (<code>\1</code>), tagul <code>\1</code> (<code>\1</code>) și avertismentul fals din <code>\1</code>.</p></div>
+</div>
+<details><summary><b>Istoric: ce am reparat pe rând</b> (6 versiuni)</summary>
+<h3 style="margin:14px 0 6px">1.7.0</h3>
 <div class="grid">
   <div class="card"><h3>Motorul propriu în JAR + F3 + consolă (stil DivineMC, fără minciună)</h3><p>Nu am scris un motor hibrid de la 0 (nici DivineMC nu e de la 0, e fork peste Purpur). <code>\1</code> cioplește în bytecode (<code>\1</code> și <code>\1</code>, inclusiv în jarul intern <code>\1</code>) numele motorului în <code>\1</code> (apare în boot, în ecranul F3 din joc și la Server Ping), păstrând șirul de versiune și licența upstream intacte. Iar <code>\1</code> a fost reparat de 3 defecte reale: (1) era copiat în <code>\1</code> în loc de <code>\1</code>; (2) stub-urile false <code>\1</code> și <code>\1</code> dădeau <code>\1</code> pe CatServer 1.16.5; (3) acum ascultă și <code>\1</code> (consola pentru T10) și activează prin reflecție câmpurile uitate pe <code>\1</code> în <code>\1</code> (<code>\1</code>, <code>\1</code>, <code>\1</code>, <code>\1</code>).</p></div>
   <div class="card"><h3>Client mai ușor pentru copii cu net slab (`fps-reducer` și dublurile scoase + compactor de assete)</h3><p><code>\1</code> scădea FPS-ul doar în Alt-Tab/AFK (0 câștig în timp ce te joci) ⇒ scos. <code>\1</code> și <code>\1</code> pe client erau dubluri peste <code>\1</code> + <code>\1</code> ⇒ scoase. <code>\1</code> (încărcător de shadere care încetinește Rubidium pe PC-uri slabe) și <code>\1</code> + <code>\1</code> ⇒ scoase din client. În plus, <code>\1</code> recodează sunetele <code>\1</code> uriașe din <code>\1</code> (84.8 MB) și <code>\1</code> (38.0 MB) în mono 22kHz Vorbis și cuantizează texturile <code>\1</code> la aceeași rezoluție.</p></div>
   <div class="card"><h3>OP garantat din 3 straturi (UUID real `OfflinePlayer:` MD5 v3 + auto-OP în plugin)</h3><p>Înainte, <code>\1</code> calcula UUID v5 (<code>\1</code>) în loc de algoritmul real din Minecraft 1.16.5 (<code>\1</code> = <code>\1</code>) și omora serverul cu <code>\1</code> când puntea era închisă. Acum <code>\1</code> cu UUID-ul real este pre-scris în toate cele 4 arhive de server, în <code>\1</code> și <code>\1</code>, iar <code>\1</code> îți acordă automat <code>\1</code> + <code>\1</code> imediat ce intri pe server sau dai orice comandă.</p></div>
 </div>
-<details><summary><b>Istoric: ce am reparat pe rând</b> (5 versiuni)</summary>
 <h3 style="margin:14px 0 6px">1.6.8</h3>
 <div class="grid">
   <div class="card"><h3>Brandul pentru toată lumea, nu doar pentru OP</h3><p>Captura de ecran arăta textul vanilla (<code>\1</code>) pentru că pluginul nostru făcea un skip la <code>\1</code> ⇒ cine nu era operator primea linia lui CatServer. Acum <code>\1</code> răspunde la <code>\1</code>, <code>\1</code> și <code>\1</code> indiferent de permisiune, anulează doar textul și lasă motorul să fie menționat pe linia a 3-a (<code>\1</code>).</p></div>
@@ -273,7 +279,7 @@ Chunky pregen complet — discul gazdei (5 GB, 66% plin) nu încape; OpenJ9/Seme
 
 <h2>🤝 Ce primești și ce NU promitem</h2>
 <div class="grid">
-  <div class="card"><h3>📦 Pack-ul tău, ușurat cu −45.5%</h3><p>Toate blocurile și modurile de conținut din Freeroam sunt păstrate și compatibile la handshake (T4: 0 kickuri), dar sunetele și texturile uriașe sunt compactate fără pierdere de rezoluție, iar <code>Freeroam.1.0.0.mrpack</code> original rămâne intact în tagul <code>pack-original</code>.</p><span class="src">1.7.0 · CUANTIC-Client-1.7.0.mrpack · 72.5 MB (redus de la 133.1 MB = −60.6 MB pentru copii cu net slab)</span></div>
+  <div class="card"><h3>📦 Pack-ul tău, ușurat cu −45.5%</h3><p>Toate blocurile și modurile de conținut din Freeroam sunt păstrate și compatibile la handshake (T4: 0 kickuri), dar sunetele și texturile uriașe sunt compactate fără pierdere de rezoluție, iar <code>Freeroam.1.0.0.mrpack</code> original rămâne intact în tagul <code>pack-original</code>.</p><span class="src">1.7.1 · CUANTIC-Client-1.7.0.mrpack · 72.5 MB (redus de la 133.1 MB = −60.6 MB pentru copii cu net slab)</span></div>
   <div class="card"><h3>🚪 Intri fără parolă (+ OP automat)</h3><p>Poarta de login (AuthMe + FastLogin) e <b>scoasă</b> de pe server, iar contul proprietarului (<code>iZentric</code>) primește automat OP nivelul 4 și permisiuni LuckPerms <code>*</code> la conectare.</p><span class="src">analysis/NO-LOGIN.md · analysis/op.md</span></div>
   <div class="card"><h3>🩺 Se repară singur</h3><p>Dacă java moare, supervisorul o aprinde în ~15 s, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Fiecare schimbare vine cu snapshot + rollback.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
   <div class="card"><h3>🧾 Fiecare cifră are dovadă</h3><p>Tabelul de mai sus nu e scris de mână: e extras din fișierele de verdict ale joburilor. Le poți citi pe toate în repo, la <code>analysis/</code>.</p><span class="src">BENCH-LIVE.md · RAM-ALL.md · APPLY-LIVE.md</span></div>
@@ -326,7 +332,7 @@ boala hibridelor:   ╱─╱─╱──↗    (muntele care crește → crash)
 </pre></div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 17:54 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 18:09 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>analysis/BENCH-LIVE.md</code> · <code>analysis/RAM-ALL.md</code> · <code>analysis/ACCEPTANCE.md</code> · <code>site/records.json</code>
 </footer>

@@ -14,6 +14,15 @@ echo "92.5.171.150:25565" > "$D/ADRESA" 2>/dev/null || true
 rm -f "$D/OPRIT" 2>/dev/null || true
 
 # 0) Repara dublura veche plugins/plugins/ si asigura OP in ops.json (UUID real OfflinePlayer MD5 v3)
+mkdir -p "$D/config" 2>/dev/null || true
+cat > "$D/config/modernfix-mixins.properties" <<'EOF'
+mixin.perf.dynamic_resources=true
+mixin.perf.faster_item_rendering=true
+mixin.perf.dedup_location=true
+mixin.perf.compact_bit_storage=true
+mixin.perf.thread_priorities=true
+mixin.bugfix.chunk_deadlock=true
+EOF
 if [ -d "$D/plugins/plugins" ]; then
   mv -f "$D"/plugins/plugins/*.jar "$D/plugins/" 2>/dev/null || true
   rmdir "$D/plugins/plugins" 2>/dev/null || true
