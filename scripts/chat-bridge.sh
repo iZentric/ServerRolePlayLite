@@ -54,9 +54,10 @@ tail -1 /tmp/chat-new.txt >/dev/null 2>&1 && grep -ac . "$D/chat.log" >/dev/null
 mkdir -p "$GITHUB_WORKSPACE/analysis" 2>/dev/null && cd "$GITHUB_WORKSPACE"
 { echo "# CHAT CUANTIC — $(date -u '+%F %T UTC')"; echo
   echo "$V"; echo
-  echo '```'
-  tail -40 "$D/chat.log" 2>/dev/null || echo "(nimic in chat.log)"
-  echo '```'
+  echo "### noile linii din acest tur:"; echo '```'
+  cat /tmp/chat-new.txt 2>/dev/null || true; echo '```'
+  echo "### istoric (ultimele 25):"; echo '```'
+  tail -25 "$D/chat.log" 2>/dev/null || echo "(nimic)"; echo '```'
   echo
   echo "pozitie in live.log: $TOT | cmd.in marime: $(wc -c < "$D/cmd.in" 2>/dev/null || echo 0) bytes | java: $(pgrep -f 'java @unix_args' >/dev/null && echo SUS || echo JOS)"
   echo "port: $(ss -lnt 2>/dev/null | grep -c ':25565') | login-pluginuri in .fara-login: $(ls "$D/plugins/.fara-login" 2>/dev/null | grep -c jar)"
