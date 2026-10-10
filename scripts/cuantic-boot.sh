@@ -38,7 +38,9 @@ else
 fi
 
 echo "== 2. serverul + tunelul frp =="
-curl -fsSLo "$HOME/c.sh" "$RAW/cuantic-live.sh" && chmod +x "$HOME/c.sh"
+rm -f "$HOME/c.sh" "$HOME/cuantic-args.sh"   # forteaza varianta proaspata, nu cea din memorie
+curl -fsSLo "$HOME/c.sh" "$RAW/cuantic-live.sh"
+curl -fsSLo "$HOME/cuantic-args.sh" "$RAW/cuantic-args.sh" && chmod +x "$HOME/c.sh"
 if pgrep -f 'java @unix_args' >/dev/null 2>&1; then
   echo "   java e deja SUS — doar ma uit dupa ea"
 else

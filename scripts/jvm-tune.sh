@@ -57,7 +57,11 @@ printf '%s\n' $FLAGI > "$GITHUB_WORKSPACE/deploy/jvm-flags-17.txt" 2>/dev/null |
 
 # ---- 3. aplica (cu backup) ----
 cp unix_args.txt "unix_args.txt.bak.$(date +%s)"
-{ echo "-Xms1G"; echo "-Xmx$HEAP"; printf '%s\n' $FLAGI; } > unix_args.txt
+# PAZA: unix_args.txt trebuie sa pastreze coada `-jar <server.jar> nogui`, altfel java nu are
+# main-class si moare instant ( supervisorul o reporneste la nesfarsit).
+TAIL=$(awk '/^-jar$/{f=1} f' unix_args.txt)
+{ echo "-Xms1G"; echo "-Xmx$HEAP"; printf '%s\n' $FLAGI; [ -n "$TAIL" ] && printf '%s\n' "$TAIL"; } > unix_args.txt
+bash "$HOME/cuantic-args.sh" "$D" 2>/dev/null || true
 V="$V scris=DA"
 
 # ---- 4. repornire prin supervisor ----

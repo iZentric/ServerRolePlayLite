@@ -43,7 +43,10 @@ exec 3<>in.fifo
 fixargs() {
   local n=0 ERR BAD
   while :; do
-    ERR=$("$J" $(tr '\n' ' ' < unix_args.txt) -version 2>&1 >/dev/null)
+    # validam DOAR flagurile: daca am fi pus si "-jar x.jar" inainte de -version, java ar fi
+    # interpretat -version ca ARGUMENT al serverului si ar fi PORNIT un al doilea server.
+    FLAGS_ONLY=$(sed '/^-jar$/,$d' unix_args.txt | tr '\n' ' ')
+    ERR=$("$J" $FLAGS_ONLY -version 2>&1 >/dev/null)
     [ -z "$ERR" ] && return 0
     BAD=$(printf '%s' "$ERR" | grep -aoE "Unrecognized VM option '[^']+'" | head -1 | sed "s/.*'\([^']*\)'.*/\1/" | cut -d= -f1)
     [ -z "$BAD" ] && BAD=$(printf '%s' "$ERR" | grep -aoE "VM option '[^']+' is experimental" | head -1 | sed "s/.*'\([^']*\)'.*/\1/" | cut -d= -f1)
@@ -53,7 +56,13 @@ fixargs() {
     n=$((n+1)); [ $n -gt 40 ] && return 1
   done
 }
-start_mc() { fixargs; setsid "$J" @unix_args.txt < in.fifo > live.log 2>&1 & }
+RAW=https://raw.githubusercontent.com/iZentric/ServerRolePlayLite/arena/a29b4ef4-serverroleplaylite/scripts
+start_mc() {
+  [ -f "$HOME/cuantic-args.sh" ] || curl -fsSLo "$HOME/cuantic-args.sh" "$RAW/cuantic-args.sh" 2>/dev/null
+  [ -f "$HOME/cuantic-args.sh" ] && bash "$HOME/cuantic-args.sh" "$D"
+  fixargs
+  setsid "$J" @unix_args.txt < in.fifo > live.log 2>&1 &
+}
 echo "JAVA: $J -> $("$J" -version 2>&1 | head -1)"
 [ -s "$(ls CatServer-*.jar 2>/dev/null | head -1)" ] || echo "!! jar absent - ruleaza jobul JAVA inainte"
 tmux kill-session -t frpc 2>/dev/null
