@@ -110,6 +110,12 @@ while :; do
   elif [ "$NOW" = "$LAST" ]; then
     echo " log blocat:"; tail -2 live.log; tail -1 "$HOME/frpc.log" 2>/dev/null
   fi
+  # paza de disc: home-ul din Cloud Shell are 5 GB si live.log creste la nesfarsit (spark +
+  # 32 moduri). La 200 MB taiem si pastram ultimele 20000 de linii; altfel intr-o saptamana
+  # discul se umple si java moare cu "No space left on device", simptom greu de banuit.
+  if [ -f live.log ] && [ "$(stat -c %s live.log 2>/dev/null || echo 0)" -gt 209715200 ]; then
+    tail -20000 live.log > /tmp/live.trim && mv /tmp/live.trim live.log && echo " disc: live.log trimsat la 20000 linii"
+  fi
   # runner-ul GitHub: cat timp traieste acest loop, traieste si accesul agentului pe masina.
   if ! pgrep -f 'runsvc.sh|actions-runner/run.sh|./run.sh' >/dev/null 2>&1; then
     R=$(ls -d "$HOME"/actions-runner* "$HOME"/*/actions-runner* 2>/dev/null | head -1)
