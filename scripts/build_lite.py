@@ -205,6 +205,8 @@ def strip_client_assets(jar_path):
         return 0
 
 
+UNRESOLVED = []
+
 SERVER_PROPERTIES = r"""\
 #Minecraft server properties - CUANTIC (consum minim)
 motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7ov2 \u00A7f| \u00A7aruleaza din viitor: orice PC, zero lag\u00A7f| \u00A7dOras+Survival+Claims
@@ -489,6 +491,17 @@ def write_start_scripts(sdir, server_jar):
             FLAGS_17 = cand
             log(f"  flaguri luate din {os.path.relpath(vfile, os.getcwd())} (validate pe Java 17)")
 
+    # manifest = singura dovada ca in zip e chiar ce credem ca e (numarul de moduri a derives 32->30
+    # fara sa tipe nimeni, pentru ca un slug 404 era "sarit" in liniste)
+    try:
+        with open(os.path.join(sdir, "manifest-cuantic.json"), "w") as f:
+            json.dump({"pack_version": rules["pack_version"], "engine": "CatServer 1.16.5",
+                       "mods": sorted(os.listdir(os.path.join(sdir, "mods"))) if os.path.isdir(os.path.join(sdir, "mods")) else [],
+                       "plugins": sorted(os.listdir(os.path.join(sdir, "plugins"))) if os.path.isdir(os.path.join(sdir, "plugins")) else [],
+                       "unresolved": UNRESOLVED,
+                       "jvm": "a se vedea unix_args.txt"}, f, ensure_ascii=False, indent=1)
+    except Exception as e:
+        log(f"  !! manifest: {e}")
     with open(os.path.join(sdir, "start.sh"), "w") as f:
         f.write(f"#!/bin/sh\njava -Xms1G -Xmx2G {FLAGS_17} -jar {server_jar} nogui\n")
     with open(os.path.join(sdir, "start.bat"), "w") as f:
