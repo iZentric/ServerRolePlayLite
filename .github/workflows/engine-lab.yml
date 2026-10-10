@@ -34,7 +34,7 @@ jobs:
           cd /tmp/catserver-source
           chmod +x gradlew
           # Flag Java 8 scos din Java 17; nu schimbam codul/motorul, doar JVM-ul de build.
-          sed -i -e 's/-XX:MaxPermSize=512m//g' -e 's/org.gradle.parallel=true/org.gradle.parallel=false/' -e 's/org.gradle.configureondemand=true/org.gradle.configureondemand=false/' gradle.properties
+          sed -i -e 's/-XX:MaxPermSize=512m//g' -e 's/-Xmx3G/-Xmx5G/g' -e 's/org.gradle.parallel=true/org.gradle.parallel=false/' -e 's/org.gradle.configureondemand=true/org.gradle.configureondemand=false/' gradle.properties
           set -o pipefail
           # ForgeGradle patcher needs MCP setup fully completed BEFORE compileJava.
           ./gradlew --no-daemon --no-parallel setup 2>&1 | tee "$GITHUB_WORKSPACE/engine-lab/build.log"
