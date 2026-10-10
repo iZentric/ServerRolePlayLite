@@ -38,6 +38,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ plugin: claimchunk-0.0.22.jar
 - ✅ plugin: LuckPerms-Bukkit-5.5.71.jar
 - ✅ plugin: Chunky-1.2.217.jar
+- ✅ brand /version: Cuantic-Brand-1.6.5.jar
 
 ## Comune ambelor servere
 

@@ -98,12 +98,6 @@
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  !! brand /version esuat: /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/tools/cuantic-brand/src/cloud/cuantic/brand/CuanticBrandPlugin.java:44: error: cannot find symbol
-        Bukkit.getConsoleSender().sendMessage(sender + " a dat /version → brand Cuantic " + cuantic());
-              ^
-  symbol:   method getConsoleSender()
-  location: class Bukkit
-1 error
-
+  + brand /version: Cuantic-Brand-1.6.5.jar montat in 3 servere (stubs locale)
   => out/CUANTIC-Server-CatServer-1.6.5.zip (66.5 MB)
 GATA.
