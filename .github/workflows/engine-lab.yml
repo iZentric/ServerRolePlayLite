@@ -33,6 +33,8 @@ jobs:
           tar -xzf /tmp/catserver-source.tgz -C /tmp/catserver-source --strip-components=1
           cd /tmp/catserver-source
           chmod +x gradlew
+          # Flag Java 8 scos din Java 17; nu schimbam codul/motorul, doar JVM-ul de build.
+          sed -i 's/-XX:MaxPermSize=512m//g' gradle.properties
           set -o pipefail
           ./gradlew --no-daemon setup buildCatServer 2>&1 | tee "$GITHUB_WORKSPACE/engine-lab/build.log"
           find . -type f -iname '*server.jar' -size +5M | head -20
