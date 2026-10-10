@@ -1,4 +1,4 @@
-# Raport build Freeroam Lite (1.6.0)
+# Raport build Freeroam Lite (1.6.1)
 
 Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
