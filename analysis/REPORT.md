@@ -1,4 +1,4 @@
-# Raport build Freeroam Lite (1.6.1)
+# Raport build Freeroam Lite (1.6.3)
 
 Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
@@ -57,6 +57,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ memoryleakfix-forge-pre1.17-1.1.5.jar
 - ✅ AI-Improvements-1.16.5-0.5.0.jar
 - ✅ incontrol-1.16-5.2.12.jar
+- ✅ ferritecore-2.1.1-forge.jar
 - ✅ spark-1.9.1-forge.jar
 - ✅ RoadRunner-mc1.16.5-1.5.2.jar
 - ✅ Placebo-1.16.5-4.7.1.jar

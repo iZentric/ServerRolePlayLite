@@ -20,9 +20,7 @@
   !! 'starlight-forge' sarit (nu exista pt 1.16.5 forge nicaieri)
   + perf: AI-Improvements-1.16.5-0.5.0.jar [modrinth]
   + perf: incontrol-1.16-5.2.12.jar [modrinth]
-    (modrinth: ferritecore -> HTTP Error 404: Not Found)
-    (curseforge: ferritecore -> HTTP Error 404: Not Found)
-  !! 'ferritecore' sarit (nu exista pt 1.16.5 forge nicaieri)
+  + perf: ferritecore-2.1.1-forge.jar [modrinth]
   + perf: spark-1.9.1-forge.jar [modrinth]
     (modrinth: roadrunner -> HTTP Error 404: Not Found)
   + perf: RoadRunner-mc1.16.5-1.5.2.jar [curseforge]
@@ -33,9 +31,6 @@
     (modrinth: fastworkbench -> nicio versiune)
   + perf: FastWorkbench-1.16.5-4.6.2.jar [curseforge]
   + perf: getittogetherdrops-1.16.5-v1.2.jar [modrinth]
-    (modrinth: connectivity -> HTTP Error 404: Not Found)
-    (curseforge: connectivity -> HTTP Error 404: Not Found)
-  !! 'connectivity' sarit (nu exista pt 1.16.5 forge nicaieri)
     (modrinth: bad-wither-no-cookie-reloaded -> HTTP Error 404: Not Found)
   + perf: bwncr-1.16.5-3.10.16.jar [curseforge]
 == CLIENT lite (.mrpack) - toate modurile originale pastrate ==
@@ -45,12 +40,12 @@
   + saturn-mc1.16.5-0.0.3.jar
   + memoryleakfix-forge-pre1.17-1.1.5.jar
   + Ksyxis-1.4.6.jar
-  !! 'connectivity' sarit (client): HTTP Error 404: Not Found
   + mirror in client: Clumps-6.0.0.28.jar
+  = mirror 'ferritecore' era deja in client: ferritecore-2.1.1-forge.jar
   - taiat din client (stil rust): CTM-MC1.16.1-1.1.2.6.jar
   - taiat din client (stil rust): DynamicSurroundings-1.16.5-4.0.5.0.jar
   - taiat din client (stil rust): lightfallclient-1.0.0.jar
-  => out/CUANTIC-Client-1.6.1.mrpack (133.1 MB)
+  => out/CUANTIC-Client-1.6.3.mrpack (133.1 MB)
 == ULTRA: dezbrac jar-urile de server de assets client ==
     ✂ Modernxl 1.16.5.jar: 38.0 -> 6.8 MB
     ✂ Pizzaland_v68.jar: 84.8 -> 1.7 MB
@@ -79,7 +74,8 @@
   + EXTREME: performant-1.16.2-5-4.1m.jar [curseforge]
   ↓ Forge installer
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  => out/CUANTIC-Server-MaxLite-1.6.1.zip (35.0 MB)
+  !! manifest: name 'rules' is not defined
+  => out/CUANTIC-Server-MaxLite-1.6.3.zip (35.0 MB)
 == SERVER Arclight (hibrid cu pluginuri) ==
   ↓ plugin: EssentialsX-2.19.7.jar
   ↓ plugin: EssentialsXChat-2.19.7.jar
@@ -98,13 +94,16 @@
   ↓ plugin: Chunky-1.2.217.jar
   ↓ Arclight
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  => out/CUANTIC-Server-Arclight-1.6.1.zip (67.5 MB)
+  !! manifest: name 'rules' is not defined
+  => out/CUANTIC-Server-Arclight-1.6.3.zip (67.5 MB)
 == SERVER Mist (hibrid experimental cu patch-uri Paper) ==
   ↓ Mist
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.6.1.zip (67.2 MB)
+  !! manifest: name 'rules' is not defined
+  => out/CUANTIC-Server-Mist-EXPERIMENTAL-1.6.3.zip (67.2 MB)
 == SERVER CatServer (hibrid stabil moduri+pluginuri, build 2023) ==
   ↓ CatServer
   flaguri luate din deploy/jvm-flags-17.txt (validate pe Java 17)
-  => out/CUANTIC-Server-CatServer-1.6.1.zip (66.5 MB)
+  !! manifest: name 'rules' is not defined
+  => out/CUANTIC-Server-CatServer-1.6.3.zip (66.5 MB)
 GATA.
