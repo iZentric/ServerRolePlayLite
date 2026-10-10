@@ -3,6 +3,10 @@ on:
   push:
     paths: [ "scripts/bench-live.sh", "deploy/bench.txt", ".github/workflows/bench.yml" ]
   workflow_dispatch: {}
+
+  workflow_run:
+    workflows: ["APPLY — aduce serverul live la ultimul release CUANTIC"]
+    types: [completed]
 permissions:
   contents: write
 jobs:

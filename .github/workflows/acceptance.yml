@@ -3,6 +3,10 @@ on:
   push:
     paths: [ "scripts/acceptance.sh", "deploy/accept.txt", ".github/workflows/acceptance.yml", "pack-rules.json" ]
   workflow_dispatch: {}
+
+  workflow_run:
+    workflows: ["APPLY — aduce serverul live la ultimul release CUANTIC"]
+    types: [completed]
 permissions:
   contents: write
 jobs:
