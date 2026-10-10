@@ -1,9 +1,10 @@
-unbreak-login -- 2026-10-10 14:45:29 UTC
+unbreak-login -- 2026-10-10 16:30:27 UTC
 FIX: nume=iZentric db=0-randuri config=LIPSA restart=DA online=NU
 
-baze gasite: 0
+baze gasite: 2
+  luckperms-h2-v2.mv.db deschidere esuata: file is not a database
 TOTAL randuri desmarcate: 0
 log final:
-[14:45:21] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
-[14:45:21] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] [GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar
-[14:45:25] [Craft Scheduler Thread - 2/INFO]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
+[16:30:19] [Craft Scheduler Thread - 3/WARN]: There is a new EssentialsX version available for download: 2.22.0.
+[16:30:19] [Craft Scheduler Thread - 3/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
+[16:30:24] [Craft Scheduler Thread - 0/INFO]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
