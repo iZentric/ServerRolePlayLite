@@ -38,7 +38,7 @@ if ! pgrep -f 'java @unix_args' >/dev/null 2>&1; then
     cd "$D" || true
     [ -p in.fifo ] || mkfifo -m 600 in.fifo
     setsid tail -f /dev/null > "$D/in.fifo" &
-    setsid "$J" @unix_args.txt < "$D/in.fifo" > "$D/live.log" 2>&1 &
+    setsid "$J" @unix_args.txt 3<>"$D/in.fifo" <&3 > "$D/live.log" 2>&1 &
     sleep 90
   fi
 fi
@@ -47,6 +47,27 @@ ss -lnt 2>/dev/null | grep -q ':25565' && V="$V port=ASCULTA" || V="$V port=NU"
 
 # ---- 3. consola prin punte ----
 CONS=NU
+# --- ops.json direct (fara consola, nu depinde de punte): singura cale care functioneaza si
+#     cand serverul are consola moarta. Serverul il citeste la pornire; /reload il reciteste.
+if [ -n "$N" ]; then
+  echo "ops.json direct pentru $N"   # marcaj pentru verificare
+  python3 - "$D/ops.json" "$N" <<'PYP'
+import json, sys, os, uuid
+f, nume = sys.argv[1], sys.argv[2]
+d = []
+if os.path.isfile(f):
+    try: d = json.load(open(f, encoding="utf-8"))
+    except Exception: d = []
+if not isinstance(d, list): d = []
+if not any(str(x.get("Name", "")).lower() == nume.lower() for x in d if isinstance(x, dict)):
+    d.append({"uuid": str(uuid.uuid5(uuid.NAMESPACE_DNS, "Player_" + nume)), "name": nume,
+              "Level": 4, "bypassesPlayerLimit": False})
+json.dump(d, open(f, "w", encoding="utf-8"), indent=2)
+print("ops.json scris:", [x.get("name") for x in d])
+PYP
+  echo "ops.json direct" # marcaj
+fi
+
 if [ -n "$N" ] && [ -w "$D/cmd.in" ]; then
   printf 'op %s\nlist\n' "$N" > "$D/cmd.in"
   for i in 1 2 3 4 5 6 7 8; do
@@ -67,7 +88,7 @@ if [ "$CONS" != DA ] && [ -n "$N" ]; then
   cd "$D" || true
   [ -p in.fifo ] || mkfifo -m 600 in.fifo
   setsid tail -f /dev/null > "$D/in.fifo" &
-  setsid "$J" @unix_args.txt < "$D/in.fifo" > "$D/live.log" 2>&1 &
+  setsid "$J" @unix_args.txt 3<>"$D/in.fifo" <&3 > "$D/live.log" 2>&1 &
   for i in $(seq 1 40); do
     sleep 5
     sed -e 's/\x1b\[[0-9;]*[a-zA-Z]//g' "$D/live.log" 2>/dev/null | grep -qaE 'Done \([0-9.]+s\)|For voicechat binding' && break

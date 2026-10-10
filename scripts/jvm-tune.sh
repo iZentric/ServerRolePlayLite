@@ -81,7 +81,7 @@ sleep 15
 if ! pgrep -f 'java @unix_args' >/dev/null 2>&1; then
   [ -p in.fifo ] || mkfifo -m 600 in.fifo
   setsid tail -f /dev/null > "$D/in.fifo" &
-  setsid "$J" @unix_args.txt < in.fifo > live.log 2>&1 &
+  setsid "$J" @unix_args.txt 3<>in.fifo <&3 > live.log 2>&1 &
   SUP="$SUP+manual"
 fi
 PORNIT=NU

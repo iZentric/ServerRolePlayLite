@@ -77,7 +77,7 @@ start_mc() {
   [ -f "$HOME/cuantic-args.sh" ] && bash "$HOME/cuantic-args.sh" "$D"
   fixargs
   echo "==== pornire $(date -u '+%F %T UTC') (memorie: $(grep -aoE '^-Xmx[^ ]*' unix_args.txt | head -1), java: $J) ====" >> live.log
-  setsid "$J" @unix_args.txt < in.fifo >> live.log 2>&1 &
+  setsid "$J" @unix_args.txt <&3 >> live.log 2>&1 &
 }
 echo "JAVA: $J -> $("$J" -version 2>&1 | head -1)"
 [ -s "$(ls CatServer-*.jar 2>/dev/null | head -1)" ] || echo "!! jar absent - ruleaza jobul JAVA inainte"

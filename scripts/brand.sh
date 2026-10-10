@@ -26,7 +26,7 @@ pkill -TERM -f 'java @unix_args' 2>/dev/null; sleep 20
 pgrep -f 'java @unix_args' >/dev/null 2>&1 && { pkill -KILL -f 'java @unix_args'; sleep 6; }
 [ -p in.fifo ] || mkfifo -m 600 in.fifo
 setsid tail -f /dev/null > "$D/in.fifo" &
-setsid "$J" @unix_args.txt < "$D/in.fifo" > "$D/live.log" 2>&1 &
+setsid "$J" @unix_args.txt 3<>"$D/in.fifo" <&3 > "$D/live.log" 2>&1 &
 PORNIT=NU
 for i in $(seq 1 45); do
   sleep 5

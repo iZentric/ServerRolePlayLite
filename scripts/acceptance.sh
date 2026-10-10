@@ -90,7 +90,7 @@ out "      jucatori multi. Acestea se raporteaza de la client, nu de aici - nu l
 
 # ---- T10: brand Cuantic in /version (cerut: dovada pe build-ul real) ----
 if [ -p "$D/in.fifo" ] || [ -p "$D/cmd.in" ]; then
-  F="$D/cmd.in"; [ -p "$F" ] || F="$D/in.fifo"
+  F="$D/in.fifo"; [ -p "$F" ] || F="$D/cmd.in"
   L0=$(wc -l < "$D/live.log" 2>/dev/null || echo 0)
   echo "version" > "$F" 2>/dev/null; sleep 6; echo "cuantic" > "$F" 2>/dev/null; sleep 6
   NEW=$(tail -n +$((L0+1)) "$D/live.log" 2>/dev/null | sed -e "s/\x1b\[[0-9;]*[a-zA-Z]//g")
