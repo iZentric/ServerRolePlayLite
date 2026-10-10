@@ -20,6 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Curata coada self-hosted de joburi vechi care ar reporni java inutil
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          gh run list -L 25 --json databaseId,status,name --jq '.[] | select(.status == "queued") | select(.name | test("^(APPLY|OCI|VMNEW|UP|TUNE|BENCH|CHAT|FIXLOGIN|NOLOGIN|JVMTUNE|RAMALL|BRAND)")) | .databaseId' | xargs -r -n1 -I{} gh api -X POST "repos/$GITHUB_REPOSITORY/actions/runs/{}/cancel" || true
       - uses: actions/checkout@v4
       - name: Regenereaza site-ul din verdictele reale
         run: python3 site/build_site.py && mkdir -p _site && cp site/index.html _site/
