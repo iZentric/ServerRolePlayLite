@@ -7,6 +7,9 @@ on:
       xmx: { description: "-Xmx nou (ex 4G, 8G)", required: false, default: "8G" }
 permissions:
   contents: write
+concurrency:
+  group: cuantic-box
+  cancel-in-progress: false
 jobs:
   r:
     runs-on: [self-hosted]

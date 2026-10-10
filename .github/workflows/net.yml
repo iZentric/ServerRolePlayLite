@@ -5,6 +5,9 @@ on:
   workflow_dispatch: {}
 permissions:
   contents: write
+concurrency:
+  group: cuantic-box
+  cancel-in-progress: false
 jobs:
   n:
     runs-on: [self-hosted]

@@ -7,6 +7,9 @@ on:
       actiune: { description: "scoage | baga", required: false, default: "scoage" }
 permissions:
   contents: write
+concurrency:
+  group: cuantic-box
+  cancel-in-progress: false
 jobs:
   n:
     runs-on: [self-hosted]

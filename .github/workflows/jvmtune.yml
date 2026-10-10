@@ -7,6 +7,9 @@ on:
       heap: { description: "-Xmx tinta", required: false, default: "2G" }
 permissions:
   contents: write
+concurrency:
+  group: cuantic-box
+  cancel-in-progress: false
 jobs:
   t:
     runs-on: [self-hosted]

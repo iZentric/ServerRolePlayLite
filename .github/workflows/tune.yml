@@ -7,6 +7,9 @@ on:
       axe: { description: "axe de GC de alergat (gol = doar tune; ex: A B C D)", required: false, default: "" }
 permissions:
   contents: write
+concurrency:
+  group: cuantic-box
+  cancel-in-progress: false
 jobs:
   a:
     runs-on: [self-hosted]

@@ -6,8 +6,8 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: play-cuantic
-  cancel-in-progress: true
+  group: cuantic-box
+  cancel-in-progress: false
 jobs:
   up:
     runs-on: [self-hosted]

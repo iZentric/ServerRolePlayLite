@@ -13,6 +13,9 @@ on:
       - ".github/workflows/vmnew.yml"
   workflow_dispatch: {}
 
+concurrency:
+  group: cuantic-box
+  cancel-in-progress: false
 jobs:
   vm:
     runs-on: [self-hosted]

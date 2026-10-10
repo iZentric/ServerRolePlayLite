@@ -7,6 +7,9 @@ on:
       versiune: { description: "asteapta versiunea asta pe release `lite` (ex 1.6.0)", required: false, default: "1.6.0" }
 permissions:
   contents: write
+concurrency:
+  group: cuantic-box
+  cancel-in-progress: false
 jobs:
   a:
     runs-on: [self-hosted]
