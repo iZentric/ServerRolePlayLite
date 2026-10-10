@@ -1,16 +1,19 @@
-# CHK — 2026-10-10 20:39:15 UTC
+# CHK — 2026-10-10 21:55:43 UTC
 
 ```
-== CHK — 2026-10-10 20:39:14 UTC ==
-stare la intrare in CHK: java=108870 sup=108757 port25565=1 frpc=77520
-dupa ensure-up: java=108870 (RUNNER_TRACKING_ID=0
-0) | sup=108757 (RUNNER_TRACKING_ID=0
-0) | frpc=77520
-uptime: 20:39:15 up 10:25,  0 users,  load average: 1.61, 0.80, 0.49
+== CHK — 2026-10-10 21:54:48 UTC ==
+stare la intrare in CHK: java=NU sup=NU port25565=0 frpc=
+ensure-up: supervisor PORNIT (fara RUNNER_TRACKING_ID)
+ensure-up: java=DA port25565=0
+ensure-up: mover cmd.in->in.fifo PORNIT
+dupa ensure-up: java=113985 (RUNNER_TRACKING_ID=0
+0) | sup=113871 (RUNNER_TRACKING_ID=0
+0) | frpc=113935
+uptime: 21:55:17 up 11:41,  0 users,  load average: 1.03, 0.36, 0.27
 ss 25565:
   LISTEN 0      4096               *:25565            *:*          
-live.log: 3592 linii | Done (14.469s)
-log final: [20:38:52] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/ [20:38:52] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitH
+live.log: 3795 linii | Done (14.469s)
+log final: [21:55:16] [Server thread/WARN]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose. [21:55:16] [Server thread/WARN]: To change this, set "online-mode" to "true"
 disc: /dev/sdb1       5.0G  3.3G  1.8G  65% /home/mndvasi9
 fisiere: ADRESA banned-ips.json banned-players.json bind.log boot.log bore.log bukkit.yml bukkit.yml.bak.1791636852 bukkit.yml.bak.1791639103 CatServer-1.16.5-1d8d6313-server.jar catserver.yml chat.log cin CIT
 pack marcat: .pack=CUANTIC-Server-CatServer-1.7.7.zip | .pack.new=1.7.7
@@ -68,7 +71,7 @@ pack marcat: .pack=CUANTIC-Server-CatServer-1.7.7.zip | .pack.new=1.7.7
   worldedit-bukkit-7.2.5-dist.jar 4.2M
   worldguard-bukkit-7.0.5-dist.jar 1.1M
 --- 3. CONFIG & DEFAULTCONFIGS ---
-  [OK] config/modernfix-mixins.properties (206 bytes): mixin.perf.dynamic_resources=true mixin.perf.faster_item_rendering=true mixin.perf.dedup_location=true mixin.perf.compac
+  [OK] config/modernfix-mixins.properties (5336 bytes): mixin.perf.dynamic_resources=true mixin.perf.faster_item_rendering=true 
   [OK] config/incontrol/spawn.json (58 bytes): [   {"hostile": true, "maxcount": 50, "result": "deny"} ] 
   [OK] config/forge-common.toml (303 bytes):  [general] 	#Defines a default world type to use. The vanilla default world type is represented by 'default'. 	#The modd
   [OK] config/smoothchunk-common.toml (298 bytes):  ["Config category"] 	#Delay before a chunk is saved to disk, default: 300 seconds. If you enable the noSaveAll config, 
@@ -85,9 +88,8 @@ pack marcat: .pack=CUANTIC-Server-CatServer-1.7.7.zip | .pack.new=1.7.7
   [OK] ops.json (7 linii, 135 bytes)
   [OK] manifest-cuantic.json (65 linii, 1893 bytes)
 unix_args complet (39 linii): -Xms1024M -Xmx6144M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=37 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=23 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99 -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=256M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=122M -XX:NonProfiledCodeHeapSize=122M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:AllocatePrefetchStyle=3 -Dio.netty.allocator.maxOrder=9 -Dio.netty.leakDetection.level=DISABLED -jar CatServer-1.16.5-1d8d6313-server.jar nogui 
-erori-cheie: [19:47:03] [Server thread/INFO]: Done (13.490s)! For help, type "help"|[20:02:48] [Server thread/INFO]: Done (12.938s)! For help, type "help"|[20:21:58] [main/WARN]: Incorrect key Connectivity settings.showFullResourceLocationException was corrected from null to its default, false.|[20:22:53] [Server thread/INFO]: Done (12.510s)! For help, type "help"|[20:38:50] [Server thread/INFO]: Done (12.634s)! For help, type "help"|
+erori-cheie: [20:02:48] [Server thread/INFO]: Done (12.938s)! For help, type "help"|[20:21:58] [main/WARN]: Incorrect key Connectivity settings.showFullResourceLocationException was corrected from null to its default, false.|[20:22:53] [Server thread/INFO]: Done (12.510s)! For help, type "help"|[20:38:50] [Server thread/INFO]: Done (12.634s)! For help, type "help"|[21:01:44] [Netty Server IO #2/ERROR]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,sele|
 === ISTORIC PORNIRI / OPRIRI / JUCATORI (live.log) ===
-1651:[19:38:42] [Server thread/INFO]: iZentric issued server command: /pl
 1652:[19:38:44] [Server thread/INFO]: iZentric issued server command: /tps
 1653:[19:38:48] [Server thread/INFO]: iZentric issued server command: /tps
 1654:[19:38:51] [Server thread/INFO]: iZentric issued server command: /tps
@@ -132,137 +134,110 @@ erori-cheie: [19:47:03] [Server thread/INFO]: Done (13.490s)! For help, type "he
 3225:==== pornire 2026-10-10 20:37:40 UTC (memorie: -Xmx6144M, java: /home/mndvasi9/.local/jdk17/bin/java) ====
 3493:[20:38:41] [Server thread/INFO]: [Cuantic] Motor hibrid activ: Cuantic 1.7.7 (MC 1.16.5, API 1.16.5-R0.1-SNAPSHOT, motor CUANTIC) | based on: 1.16.5-1d8d6313 (MC: 1.16.5) | runtime-tech: keepSpawnInMemory=false, enableSkipEntityTick=true, enableSkipTileEntityTick=true, maxEntityCollision=2, worldGenMaxTickTime=8, disableFMLStatusModInfo=true, enableDynmapCompatible=false, enableMythicMobsPatcherCompatible=false, defaultInstallPluginSpark=false, versionCheck=false, forceSaveOnWatchdog=true, noHopperEvent=3w, autoUnloadDims=[-1,1], disableStatSaving=true, saveUserCacheOnStopOnly=true, logVillagerDeaths=false, movedWronglyThreshold=0.35, movedTooQuicklyMultiplier=25.0
 3564:[20:38:50] [Server thread/INFO]: Done (12.634s)! For help, type "help"
+3640:==== pornire 2026-10-10 21:54:49 UTC (memorie: -Xmx6144M, java: /home/mndvasi9/.local/jdk17/bin/java) ====
 === ULTIMELE 60 LINII DIN live.log ===
-[20:38:49] [Server thread/INFO]: [WorldGuard] (world) Fire spread is UNRESTRICTED.
-[20:38:49] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'world'
-[20:38:49] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
-[20:38:49] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
-[20:38:49] [Server thread/INFO]: [WorldGuard] (DIM-1) TNT ignition is PERMITTED.
-[20:38:49] [Server thread/INFO]: [WorldGuard] (DIM-1) Lighters are PERMITTED.
-[20:38:49] [Server thread/INFO]: [WorldGuard] (DIM-1) Lava fire is PERMITTED.
-[20:38:49] [Server thread/INFO]: [WorldGuard] (DIM-1) Fire spread is UNRESTRICTED.
-[20:38:49] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'DIM-1'
-[20:38:49] [Server thread/INFO]: [WorldGuard] Default configuration file written: config_world.yml
-[20:38:49] [Server thread/INFO]: [WorldGuard] Default configuration file written: blacklist.txt
-[20:38:49] [Server thread/INFO]: [WorldGuard] (DIM1) TNT ignition is PERMITTED.
-[20:38:49] [Server thread/INFO]: [WorldGuard] (DIM1) Lighters are PERMITTED.
-[20:38:49] [Server thread/INFO]: [WorldGuard] (DIM1) Lava fire is PERMITTED.
-[20:38:49] [Server thread/INFO]: [WorldGuard] (DIM1) Fire spread is UNRESTRICTED.
-[20:38:49] [Server thread/INFO]: [WorldGuard] Loaded configuration for world 'DIM1'
-[20:38:49] [Server thread/INFO]: [WorldGuard] Loading region data...
-[20:38:49] [Server thread/INFO]: [WorldGuard] Unloading and saving region data that is currently loaded...
-[20:38:49] [Server thread/INFO]: [WorldGuard] Loading region data for loaded worlds...
-[20:38:49] [Server thread/INFO]: [WorldGuard] Loading region data...
-[20:38:49] [Server thread/INFO]: [WorldGuard] Regions saved after UUID migration! This won't happen again unless you change the relevant configuration option in WorldGuard's config.
-[20:38:50] [Server thread/INFO]: [ClaimChunk] Enabling ClaimChunk v0.0.21
-[20:38:50] [Server thread/INFO]: [ClaimChunk] PlaceholderAPI not found, not loading API.
-[20:38:50] [Server thread/INFO]: [ClaimChunk] Initialization complete.
-[20:38:50] [Server thread/INFO]: Server permissions file permissions.yml is empty, ignoring it
-[20:38:50] [Server thread/INFO]: Ksyxis: Speeding up the world loading... Delete the mod, if it got stuck after this message. (net.minecraft.server.dedicated.DedicatedServer func_213186_a)
-[20:38:50] [Server thread/INFO]: Preparing start region for dimension minecraft:overworld
-[20:38:50] [Server thread/WARN]: Method overwrite conflict for removeIf in modernfix-common.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin, previously written by me.jellysquid.mods.lithium.mixin.world.chunk_tickets.SortedArraySetMixin. Skipping method.
-[20:38:50] [Server thread/INFO]: Ksyxis: Enabled compatibility hack with ModernFix. (removeSpawnChunks: false)
-[20:38:50] [Server thread/INFO]: Preparing spawn area: 0%
-[20:38:50] [Server thread/INFO]: Time elapsed: 202 ms
-[20:38:50] [Server thread/INFO]: Done (12.634s)! For help, type "help"
-[20:38:51] [Server thread/INFO]: Loaded 0 license plates
-[20:38:51] [Server thread/WARN]: Garagenordner nicht gefunden!
-[20:38:51] [Server thread/WARN]: Running in offline mode - Voice chat encryption is not secure!
-[20:38:51] [Server thread/INFO]: Successfully initialized RadioManager
-[20:38:51] [Server thread/WARN]: Dedicated server took 70.448 seconds to load
-[20:38:51] [VoiceChatServerThread/INFO]: Server started at port 24454
-[20:38:51] [Server thread/INFO]: Essentials found a compatible payment resolution method: Vault Compatibility Layer (v1.7.3-b131)!
-[20:38:51] [Craft Scheduler Thread - 3/INFO]: Fetching version information...
-[20:38:51] [Craft Scheduler Thread - 1/INFO]: [Vault] Checking for Updates ... 
-[20:38:51] [Craft Scheduler Thread - 1/INFO]: [Vault] No new version available
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] [GitHubUpdate] Downloading update...
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] ----------------------------------------------
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     +==================+
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     |   SkinsRestorer  |
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     |------------------|
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     |  Standalone Mode |
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     +==================+
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] ----------------------------------------------
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     Current version: 14.2.12
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     New version: 15.12.6
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     A new version is available! Downloading it now...
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer]     Update downloaded successfully, it will be applied on the next restart.
-[20:38:51] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] ----------------------------------------------
-[20:38:51] [Craft Scheduler Thread - 3/WARN]: There is a new EssentialsX version available for download: 2.22.0.
-[20:38:51] [Craft Scheduler Thread - 3/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
-[20:38:52] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
-[20:38:52] [Craft Scheduler Thread - 0/INFO]: [SkinsRestorer] [GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar
-[20:38:56] [Craft Scheduler Thread - 0/INFO]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
+[21:55:10] [modloading-worker-0/INFO]: Loaded vehicle properties for vehicle:shopping_cart from classpath:/assets/vehicle/vehicles/shopping_cart.json
+[21:55:10] [modloading-worker-0/INFO]: Loaded vehicle properties for vehicle:jet_ski from classpath:/assets/vehicle/vehicles/jet_ski.json
+[21:55:10] [modloading-worker-0/INFO]: Loaded vehicle properties for vehicle:smart_car from classpath:/assets/vehicle/vehicles/smart_car.json
+[21:55:10] [modloading-worker-0/INFO]: Loaded vehicle properties for vehicle:police_investigation_car from classpath:/assets/vehicle/vehicles/police_investigation_car.json
+[21:55:10] [modloading-worker-0/INFO]: Loaded vehicle properties for vehicle:golf_cart from classpath:/assets/vehicle/vehicles/golf_cart.json
+[21:55:10] [modloading-worker-0/INFO]: Loaded vehicle properties for vehicle:basilico_gt from classpath:/assets/vehicle/vehicles/basilico_gt.json
+[21:55:10] [modloading-worker-0/INFO]: Loaded vehicle properties for vehicle:moped from classpath:/assets/vehicle/vehicles/moped.json
+[21:55:10] [modloading-worker-0/INFO]: Loaded vehicle properties for vehicle:helicopter from classpath:/assets/vehicle/vehicles/helicopter.json
+[21:55:10] [modloading-worker-0/INFO]: Loaded vehicle properties for vehicle:police_transport_car from classpath:/assets/vehicle/vehicles/police_transport_car.json
+[21:55:10] [modloading-worker-0/INFO]: Loaded vehicle properties for vehicle:sports_plane from classpath:/assets/vehicle/vehicles/sports_plane.json
+[21:55:10] [modloading-worker-0/INFO]: Loaded vehicle properties for vehicle:mini_bus from classpath:/assets/vehicle/vehicles/mini_bus.json
+[21:55:10] [modloading-worker-0/INFO]: 12 Karten erfolgreich geladen.
+[21:55:10] [Thread-0/INFO]: Please use /mfsrc to reload any changed mod config files
+[21:55:11] [main/WARN]: Method overwrite conflict for func_225532_a_ in modernfix-common.mixins.json:perf.biome_zoomer.FuzzyOffsetBiomeZoomerMixin, previously written by me.jellysquid.mods.lithium.mixin.gen.voronoi_biomes.VoronoiBiomeAccessTypeMixin. Skipping method.
+[21:55:11] [main/INFO]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[21:55:12] [main/INFO]: Reloading ResourceManager: Default, Modernxl 1.16.5.jar, voicechat-forge-1.16.5-2.3.23.jar, getittogetherdrops-1.16.5-v1.2.jar, cgm-1.2.6-1.16.5.jar, player-animation-lib-forge-0.4.0+1.16.5.jar, incontrol-1.16-5.2.12.jar, spark-1.9.1-forge.jar, pamhc2foodcore-1.16.3-1.0.2.jar, Clumps-6.0.0.28.jar, FastWorkbench-1.16.5-4.6.2.jar, RoadRunner-mc1.16.5-1.5.2.jar, Placebo-1.16.5-4.7.1.jar, modernlife-1.16.5-1.15.jar, modernfix-forge-5.18.0+mc1.16.5.jar, additional-guns-0.7.1-1.16.5.jar, obfuscate-0.6.3-1.16.5.jar, vehicle-mod-0.45.2-1.16.5 (1).jar, lazydfu-0.1.3.jar, FastFurnace-1.16.5-4.5.0.jar, cfm-7.0.0pre22-1.16.3.jar, mapperbase-1.16.5-2.4.0.0.jar, roadstuff-1.16.5-4.3.0.jar, ferritecore-2.1.1-forge.jar, AI-Improvements-1.16.5-0.5.0.jar, memoryleakfix-forge-pre1.17-1.1.5.jar, bwncr-1.16.5-3.10.16.jar, forge-1.16.5-36.2.39-universal.jar, supplementaries-1.16.5-0.18.4b.jar, Pizzaland_v68.jar, emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar, selene-1.16.5-1.9.0.jar, bukkit, smoothchunk1.16.5-2.0.jar, Ksyxis-1.4.6.jar, SpawnerFix-1.16.2-1.0.0.3.jar, FastSuite-1.16.4-1.1.1.jar, letmedespawn-forge-1.16-1.0.2a.jar, connectivity-2.4-1.16.5.jar
+[21:55:12] [main/INFO]: Invalidating pack caches
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:brass_lantern as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:gold_gate as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:candelabra_silver as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:inspirations/blackboard_clear as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:inspirations/flag_clear as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:blackstone_tile_vertical_slab as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:firefly_jar_tf as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:deepslate_lamp as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:planter_rich as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:inspirations/flag_dye as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:stone_tile_vertical_slab as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:planter_rich_soul as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:copper_lantern_2 as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:checker_vertical_slab as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:brass_lantern as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:gold_gate as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:candelabra_silver as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:inspirations/blackboard_clear as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:inspirations/flag_clear as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:blackstone_tile_vertical_slab as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:firefly_jar_tf as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:deepslate_lamp as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:planter_rich as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:inspirations/flag_dye as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:stone_tile_vertical_slab as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:planter_rich_soul as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:copper_lantern_2 as it's serializer returned null
+[21:55:13] [Worker-Main-1/INFO]: Skipping loading recipe supplementaries:checker_vertical_slab as it's serializer returned null
+[21:55:14] [Worker-Main-1/INFO]: Registered 0 additional loot tables.
+[21:55:14] [Worker-Main-1/INFO]: Loaded 1861 advancements
+[21:55:14] [Worker-Main-1/INFO]: Registered 0 additional recipes.
+[21:55:14] [Worker-Main-1/INFO]: Successfully processed 2391 recipes into the AuxRecipeManager.
+[21:55:15] [Server thread/INFO]: Starting minecraft server version 1.16.5
+[21:55:15] [Server thread/INFO]: Loading properties
+[21:55:15] [Server thread/INFO]: Default game type: SURVIVAL
+[21:55:15] [Server thread/INFO]: Generating keypair
+[21:55:16] [Server thread/INFO]: Starting Minecraft server on *:25565
+[21:55:16] [Server thread/INFO]: Using default channel type
+[21:55:16] [Server thread/WARN]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[21:55:16] [Server thread/WARN]: The server will make no attempt to authenticate usernames. Beware.
+[21:55:16] [Server thread/WARN]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[21:55:16] [Server thread/WARN]: To change this, set "online-mode" to "true" in the server.properties file.
+[21:55:16] [Server thread/INFO]: This server is running CUANTIC version 1.16.5-1d8d6313 (MC: 1.16.5) (Implementing API version 1.16.5-R0.1-SNAPSHOT, Forge version 36.2.39)
 === ULTIMELE 35 LINII DIN sup.log ===
+[21:01:44] [Netty Server IO #2/INFO]: Disconnecting VANILLA connection attempt: This server has mods that require Forge to be installed on the client. Contact your server admin for more details.
+[0m 21:28:07 mc=DA port=SUS log=3639
  log blocat:
-[20:35:20] [Server thread/INFO]: Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[20:35:20] [Server thread/INFO]: [Cuantic/version] CONSOLE: » Cuantic 1.7.6 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[0m 20:36:20 mc=DA port=SUS log=3210
+[21:01:44] [Netty Server IO #2/ERROR]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecraftmodernxl,cgm:play,supplementaries:network,modernlife:network] rejected vanilla connections
+[21:01:44] [Netty Server IO #2/INFO]: Disconnecting VANILLA connection attempt: This server has mods that require Forge to be installed on the client. Contact your server admin for more details.
+[0m 21:28:23 mc=DA port=SUS log=3639
  log blocat:
-[20:35:20] [Server thread/INFO]: Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[20:35:20] [Server thread/INFO]: [Cuantic/version] CONSOLE: » Cuantic 1.7.6 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[0m 20:36:35 mc=DA port=SUS log=3210
+[21:01:44] [Netty Server IO #2/ERROR]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecraftmodernxl,cgm:play,supplementaries:network,modernlife:network] rejected vanilla connections
+[21:01:44] [Netty Server IO #2/INFO]: Disconnecting VANILLA connection attempt: This server has mods that require Forge to be installed on the client. Contact your server admin for more details.
+[0m 21:28:38 mc=DA port=SUS log=3639
  log blocat:
-[20:35:20] [Server thread/INFO]: Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[20:35:20] [Server thread/INFO]: [Cuantic/version] CONSOLE: » Cuantic 1.7.6 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[0m 20:36:51 mc=DA port=SUS log=3210
+[21:01:44] [Netty Server IO #2/ERROR]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecraftmodernxl,cgm:play,supplementaries:network,modernlife:network] rejected vanilla connections
+[21:01:44] [Netty Server IO #2/INFO]: Disconnecting VANILLA connection attempt: This server has mods that require Forge to be installed on the client. Contact your server admin for more details.
+[0m 21:28:53 mc=DA port=SUS log=3639
  log blocat:
-[20:35:20] [Server thread/INFO]: Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[20:35:20] [Server thread/INFO]: [Cuantic/version] CONSOLE: » Cuantic 1.7.6 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[0m 20:37:06 mc=DA port=SUS log=3210
+[21:01:44] [Netty Server IO #2/ERROR]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecraftmodernxl,cgm:play,supplementaries:network,modernlife:network] rejected vanilla connections
+[21:01:44] [Netty Server IO #2/INFO]: Disconnecting VANILLA connection attempt: This server has mods that require Forge to be installed on the client. Contact your server admin for more details.
+[0m 21:29:08 mc=DA port=SUS log=3639
  log blocat:
-[20:35:20] [Server thread/INFO]: Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[20:35:20] [Server thread/INFO]: [Cuantic/version] CONSOLE: » Cuantic 1.7.6 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
+[21:01:44] [Netty Server IO #2/ERROR]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecraftmodernxl,cgm:play,supplementaries:network,modernlife:network] rejected vanilla connections
+[21:01:44] [Netty Server IO #2/INFO]: Disconnecting VANILLA connection attempt: This server has mods that require Forge to be installed on the client. Contact your server admin for more details.
+[0m 21:29:23 mc=DA port=SUS log=3639
+ log blocat:
+[21:01:44] [Netty Server IO #2/ERROR]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecraftmodernxl,cgm:play,supplementaries:network,modernlife:network] rejected vanilla connections
+[21:01:44] [Netty Server IO #2/INFO]: Disconnecting VANILLA connection attempt: This server has mods that require Forge to be installed on the client. Contact your server admin for more details.
+[0m 21:29:38 mc=DA port=SUS log=3639
+ log blocat:
+[21:01:44] [Netty Server IO #2/ERROR]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecraftmodernxl,cgm:play,supplementaries:network,modernlife:network] rejected vanilla connections
+[21:01:44] [Netty Server IO #2/INFO]: Disconnecting VANILLA connection attempt: This server has mods that require Forge to be installed on the client. Contact your server admin for more details.
 [0mRULEAZA: pack CUANTIC-Server-CatServer-1.7.7.zip, java openjdk version "17.0.20.1" 2026-08-18
 JAVA: /home/mndvasi9/.local/jdk17/bin/java -> openjdk version "17.0.20.1" 2026-08-18
-args: MEMORIE -Xmx 6144M (masina are 11884MB), -Xms 1024M, plafon=niciodata
 args: OK (CatServer-1.16.5-1d8d6313-server.jar, 39 linii)
 MC pornit. Adresa: 92.5.171.150:25565. Ctrl+C = opresti DOAR supervisorul (serverul ramane sus).
- 20:37:40 mc=DA port=nu asculta log=3225
- 20:37:55 mc=DA port=nu asculta log=3256
- 20:38:11 mc=DA port=nu asculta log=3418
- 20:38:26 mc=DA port=SUS log=3438
- 20:38:41 mc=DA port=SUS log=3491
- 20:38:57 mc=DA port=SUS log=3592
- 20:39:12 mc=DA port=SUS log=3592
- log blocat:
-[20:38:52] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m
-[20:38:56] [Craft Scheduler Thread - 0/INFO]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
-[0m=== CRASH REPORTS ===
+ 21:54:49 mc=DA port=nu asculta log=3640
+ 21:55:04 mc=DA port=nu asculta log=3674
+=== CRASH REPORTS ===
 === DMESG OOM ===
-sup.log:  20:39:12 mc=DA port=SUS log=3592| log blocat:|[20:38:52] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m|[20:38:56] [Craft Scheduler Thread - 0/INFO]: [Clai
+sup.log: JAVA: /home/mndvasi9/.local/jdk17/bin/java -> openjdk version "17.0.20.1" 2026-08-18|args: OK (CatServer-1.16.5-1d8d6313-server.jar, 39 linii)|MC pornit. Adresa: 92.5.171.150:25565. Ctrl+C = opresti DOAR supervisorul (serverul ramane sus).| 21:54:49 mc=DA port
 frpc.toml: 10
 adresa din fisier: 92.5.171.150:25565
-  dinafara 1: "online":true | "version":"CUANTIC 1.16.5"
-"version":"0.7.1"
-"version":"0.4.0"
-"version":"1.16.5-3.10.16"
-"version":"7.0.0-pre22"
-"version":"1.2.6"
-"version":"6.0.0.28"
-"version":"2.2.7-b.build.47"
-"version":"4.6.2"
-"version":"4.5.0"
-"version":"1.1.1"
-"version":"ANY"
-"version":"1.16-5.2.12"
-"version":"1.4.6"
-"version":"0.1.3"
-"version":"1.16.5-forge-1.16-1.0.2a"
-"version":"1.16.5-2.4.0.0"
-"version":"1.1.5"
-"version":"1.16.5"
-"version":"1.0.0"
-"version":"1.16.5-1.15"
-"version":"0.6.3"
-"version":"version"
-"version":"68"
-"version":"4.7.1"
-"version":"0.4.0+1.16.5"
-"version":"1.16.5-4.3.0"
-"version":"1.16.5-1.0"
-"version":"2.0"
-"version":"0.18.2"
-"version":"12"
-"version":"15" |  "message":"Failed to read from socket."
+  dinafara 1: "online":false |  |  "message":"Failed to connect or create a socket: 111 (Connection refused)"
+  dinafara 2: "online":false |  |  "message":"Failed to connect or create a socket: 111 (Connection refused)"
+  dinafara 3: "online":false |  |  "message":"Failed to connect or create a socket: 111 (Connection refused)"
 ```
