@@ -14,3 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: bash scripts/no-login.sh
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

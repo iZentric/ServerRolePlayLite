@@ -17,3 +17,7 @@ jobs:
         env:
           XMX_NOU: ${{ github.event.inputs.xmx || '8G' }}
         run: bash scripts/ram-test.sh
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

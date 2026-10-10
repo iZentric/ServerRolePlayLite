@@ -65,3 +65,7 @@ jobs:
           git push -q origin "HEAD:$GITHUB_REF_NAME" >/dev/null 2>&1 || echo "push: esuat"
           echo "===== VERDICT (si in commit) ====="
           sed 's/^/  /' $OUT | tail -30
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

@@ -53,6 +53,10 @@
  ],
  "1.6.6": [
   {
+   "t": "Regulă nouă: serverul rămâne pornit după orice comandă",
+   "p": "Toate cele 18 workflow-uri de pe cutie se termină acum cu un pas `if: always()` care aleargă `scripts/ensure-up.sh` ⇒ un job care crapă, e anulat sau terminat cu java oprită o repornește. Singura metodă să-l lași jos e un fișier scris de tine: `touch $HOME/cuantic-live/OPRIT` (acum `ensure-up` ți se supune și raportează de ce nu pornește)."
+  },
+  {
    "t": "Poarta de login a ieșit din pack, nu doar de pe server",
    "p": "`AuthMe` + `FastLogin` erau încă descărcate de `pack-rules.json` în toate cele 4 arhive ⇒ orice replay al build-ului le aducea înapoi și îți cerea parolă. Acum nu mai sunt în listă: intri pe `92.5.171.150:25565` fără cont. `SkinsRestorer` + `ProtocolLib` au rămas (skins), `LuckPerms` a rămas (grade)."
   },

@@ -12,3 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: bash scripts/java.sh || true
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

@@ -16,3 +16,7 @@ jobs:
       - run: bash scripts/jvm-tune.sh
         env:
           HEAP_TINTA: ${{ github.event.inputs.heap || '2G' }}
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

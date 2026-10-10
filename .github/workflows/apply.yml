@@ -16,3 +16,7 @@ jobs:
       - run: bash scripts/apply-live.sh
         env:
           VETA_ASTEPTAT: ${{ github.event.inputs.versiune }}
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

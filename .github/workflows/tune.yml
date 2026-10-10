@@ -37,3 +37,7 @@ jobs:
           done
           test -f analysis/TUNE-LIVE.md && echo "verdict: $(head -c 300 analysis/TUNE-LIVE.md | tr '\n' ' ')"
           git ls-remote origin "$GITHUB_REF_NAME" | head -1 | cut -c1-12
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

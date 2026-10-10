@@ -17,3 +17,7 @@ jobs:
         env:
           NUME_TAU: ${{ github.event.inputs.nume || 'iZentric' }}
         run: bash scripts/unbreak-login.sh
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

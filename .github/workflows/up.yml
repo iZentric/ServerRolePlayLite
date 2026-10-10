@@ -15,3 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: bash scripts/up.sh || true
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

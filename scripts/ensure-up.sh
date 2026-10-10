@@ -7,6 +7,13 @@ REPO=iZentric/ServerRolePlayLite
 BR=${ARENA_BRANCH:-arena/a29b4ef4-serverroleplaylite}
 cd "$D" 2>/dev/null || { echo "ensure-up: lipsa $D (ruleaza intai wake.sh)"; exit 0; }
 
+# REGULA NOUA (2026-10-10): serverul trebuie sa ramana pornit dupa orice comanda/job.
+# Singura cale sa-l lasi jos e un fisier de stare scris de proprietar: touch $HOME/cuantic-live/OPRIT
+if [ -f "$D/OPRIT" ]; then
+  echo "ensure-up: OPRIT de proprietar ($D/OPRIT exista) - nu pornim, asta e comanda umana, nu un uitat"
+  exit 0
+fi
+
 # 1) supervisorul = cel care tine java, runner-ul GitHub si frpc-ul in viata
 if ! pgrep -f 'bash .*c\.sh' >/dev/null 2>&1; then
   [ -f "$HOME/c.sh" ] || curl -fsSLo "$HOME/c.sh" --max-time 25 \
