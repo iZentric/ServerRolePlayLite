@@ -1,4 +1,4 @@
-# Raport build Freeroam Lite (1.7.6)
+# Raport build Freeroam Lite (1.7.7)
 
 Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 
@@ -7,7 +7,6 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 ### Adaugat (doar FPS/RAM)
 - ✅ radon-0.8.0a.jar
 - ✅ entityculling-forge-mc1.16.5-1.5.2.jar
-- ✅ Ksyxis-1.4.6.jar
 - ✅ rubidium-extra-0.4.18+mc1.16.5-build.107.jar
 - ✅ entitycollisionfpsfix-1.16-1.0.1.jar
 - ✅ out_of_sight-1.16.4-1.0.1.jar
@@ -37,7 +36,7 @@ Pack original: **PL2 Gambo 1.0.0** — MC 1.16.5, Forge 36.2.42
 - ✅ plugin: claimchunk-0.0.22.jar
 - ✅ plugin: LuckPerms-Bukkit-5.5.71.jar
 - ✅ plugin: Chunky-1.2.217.jar
-- ✅ brand /version + motor: Cuantic-Brand-1.7.6.jar
+- ✅ brand /version + motor: Cuantic-Brand-1.7.7.jar
 
 ## Comune ambelor servere
 
