@@ -1,3 +1,4 @@
+# generat de scripts/prune-flags.py in CI, pe Java 17 (nu ghicit)
 -XX:+UseG1GC
 -XX:+ParallelRefProcEnabled
 -XX:MaxGCPauseMillis=37
