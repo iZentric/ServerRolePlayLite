@@ -44,9 +44,10 @@ MODS=$(ls "$D"/mods/*.jar 2>/dev/null | wc -l)
 out "[$T] T4 handshake cu clientul: semne de kick pe lista de moduri = $KICK | moduri pe server: $MODS"
 
 # ---- T5 pluginii incarcati ----
-PLUG=$(grep -ao 'This server is running [0-9]* plugins* of [0-9]*' /tmp/acc.log | tail -1)
+PLUG=$(grep -ao 'This server is running [0-9]* plugin[^\n]*' /tmp/acc.log | tail -1)
+[ -n "$PLUG" ] || PLUG="pe disk: $(ls "$D"/plugins/*.jar 2>/dev/null | wc -l) jar; $(grep -aco 'Loading [0-9]* plugins' /tmp/acc.log 2>/dev/null | head -1) linii de incarcare"
 FAILED=$(grep -acaiE 'Failed to (load|enable)|Could not load plugin' /tmp/acc.log)
-[ -n "$PLUG" ] && [ "${FAILED:-0}" -eq 0 ] && T="TRECE" || T="VERIFICA"
+[ "${FAILED:-0}" -eq 0 ] && T="TRECE" || T="VERIFICA"
 out "[$T] T5 plugini: ${PLUG:-niciun rand 'This server is running'} | esuati: $FAILED"
 
 # ---- T6 puntea de comenzi e vie (raspuns in log) ----

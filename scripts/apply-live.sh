@@ -19,6 +19,11 @@ if [ -n "$AS" ]; then
 fi
 
 # ---- 2. supervisorul vechi jos (altfel isi tine propriul java in memorie veche) ----
+# ---- snapshot inainte de orice atingere (ruleaza pe discul de 5 GB, de-asa comprimat) ----
+SNAP="$D/snapshot-$(date +%s).tar.gz"
+tar -czf "$SNAP" -C "$D" mods plugins unix_args.txt server.properties 2>/dev/null
+echo "SNAP: $SNAP ($(du -h "$SNAP" 2>/dev/null | cut -f1))" >> /tmp/apply.txt
+echo "$NEW" > "$D/.pack.target"
 pkill -f 'bash .*c\.sh' 2>/dev/null && V="$V sup=oprit" || V="$V sup=nimic"
 sleep 3
 pkill -TERM -f 'java @unix_args' 2>/dev/null
