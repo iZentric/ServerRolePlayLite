@@ -30,5 +30,10 @@ jobs:
           git config user.name bot; git config user.email bot@users.noreply.github.com
           git add analysis/TUNE-LIVE.md analysis/GC-DUEL.md 2>/dev/null || true
           git commit -m "$(head -c 500 /tmp/tune.txt 2>/dev/null | tr '\n' ' ')" || true
-          git pull --rebase origin "$GITHUB_REF_NAME" || true
-          git push origin "HEAD:$GITHUB_REF_NAME" || true
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || git rebase --abort 2>/dev/null
+            git push origin "HEAD:$GITHUB_REF_NAME" && break
+            sleep 8
+          done
+          test -f analysis/TUNE-LIVE.md && echo "verdict: $(head -c 300 analysis/TUNE-LIVE.md | tr '\n' ' ')"
+          git ls-remote origin "$GITHUB_REF_NAME" | head -1 | cut -c1-12

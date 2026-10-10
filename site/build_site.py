@@ -295,6 +295,30 @@ footer code{color:#9fb0c9}
  nav a.l{display:none}}
 """
 
+# ===== BENCH auto: ultimul rand din tabelul de progres se completeaza din verdict =====
+_b = ""
+try:
+    _b = open(os.path.join(os.path.dirname(__file__), "..", "analysis", "BENCH-LIVE.md"), encoding="utf-8", errors="replace").read()
+except Exception:
+    pass
+_bd = _re.search(r"Done \(([0-9.]+)s\)", _b)
+_bf = _re.search(r"took ([0-9.]+) seconds", _b)
+_bk = _re.search(r"Can't keep up: total=(\d+)", _b)
+_bw = _re.search(r"VmHWM:\s+(\d+) kB", _b)
+_bt = _re.search(r"MSPT[^0-9]*([0-9.]+)/([0-9.]+)/([0-9.]+)/([0-9.]+)", _b)
+_bh = _re.search(r"TPS from last[^:]*:\s*([0-9.]+)", _b)
+_bwts = _re.search(r"# BENCH live CUANTIC — ([0-9: -]+) UTC", _b)
+if _bt or _bd or _bw:
+    _p95 = f"{_bt.group(3)} ms" if _bt else "ne-măsurat"
+    _rss = f"{round(int(_bw.group(1))/1024)} MB (vârf /proc)" if _bw else "ne-măsurat"
+    _boot = (f"{_bd.group(1)} s / {_bf.group(1)} s" if _bd and _bf else (f"{_bd.group(1)} s" if _bd else "ne-măsurat"))
+    _keep = f"`Can't keep up` = {_bk.group(1)}" if _bk else "keep-up ne-măsurat"
+    _tps = f"TPS {_bh.group(1)}" if _bh else ""
+    progres_rows.append(("1.6.4 (live, completat automat)",
+        "straturi de tuning ajunse și pe box (spigot/bukkit/catserver/commands) + max-tnt-per-tick + use-native-transport + MOTD corectat",
+        _rss, _keep + (f" · {_tps}" if _tps else ""), _p95, _boot,
+        "analysis/BENCH-LIVE.md" + (f" · proba {_bwts.group(1)}" if _bwts else "")))
+
 # ===== STRATURILE CUANTIC — de ce nu e "CatServer + Java 17" gol =====
 straturi_rows = [
     ("Motor", "CatServer 1.16.5 <b>compilat de noi</b> din sursa la zi (nu binarul din 2023 pe care-l ia toata lumea)",

@@ -15,4 +15,4 @@ jobs:
       - uses: actions/checkout@v4
       - run: bash scripts/apply-live.sh
         env:
-          VETA_ASTEPTAT: ${{ github.event.inputs.versiune || '1.6.0' }}
+          VETA_ASTEPTAT: ${{ github.event.inputs.versiune }}
