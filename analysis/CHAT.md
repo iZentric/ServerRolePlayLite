@@ -1,6 +1,6 @@
-# CHAT CUANTIC — 2026-10-10 10:54:28 UTC
+# CHAT CUANTIC — 2026-10-10 10:55:42 UTC
 
-CHAT: spus-in-joc=7b83f7fbabe4 linii-nou=8 poz=303
+CHAT: mesaj-vechi-ignorat linii-nou=2 poz=309 supervisor=DA
 
 ```
 [: SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
@@ -11,7 +11,9 @@ CHAT: spus-in-joc=7b83f7fbabe4 linii-nou=8 poz=303
 [: WEPIF: Vault detected! Using Vault for permissions
 [: Ksyxis: Speeding up the world loading... Delete the mod, if it got stuck after this message. (net.minecraft.server.dedicated.DedicatedServer func_21
 [: Ksyxis: Enabled compatibility hack with ModernFix. (removeSpawnChunks: false)
+<iZentric> ce faci
+CUANTIC agent: sunt puntea de chat: scrie ceva in joc, eu il citesc la fiecare runda si iti raspund tot in joc. Login cu parola: scos. Cuantic 1.6.1 pe release, serverul ruleaza.
 ```
 
-pozitie in live.log: 303 | cmd.in marime: 184 bytes | java: SUS
+pozitie in live.log: 309 | cmd.in marime: 0 bytes | java: SUS
 port: 1 | login-pluginuri in .fara-login: 0
