@@ -23,7 +23,11 @@ jobs:
       - name: Curata coada self-hosted de joburi vechi care ar reporni java inutil
         env: { GH_TOKEN: "${{ github.token }}" }
         run: |
-          gh run list -L 25 --json databaseId,status,name --jq '.[] | select(.status == "queued") | select(.name | test("^(APPLY|OCI|VMNEW|UP|TUNE|BENCH|CHAT|FIXLOGIN|NOLOGIN|JVMTUNE|RAMALL|BRAND)")) | .databaseId' | xargs -r -n1 -I{} gh api -X POST "repos/$GITHUB_REPOSITORY/actions/runs/{}/cancel" || true
+          for wf in apply.yml up.yml tune.yml bench.yml chat.yml fixlogin.yml nologin.yml jvmtune.yml brand.yml; do
+            for id in $(gh run list --workflow="$wf" -L 5 --json databaseId,status --jq '.[] | select(.status == "queued") | .databaseId' 2>/dev/null); do
+              gh api -X POST "repos/$GITHUB_REPOSITORY/actions/runs/$id/cancel" || true
+            done
+          done
       - uses: actions/checkout@v4
       - name: Regenereaza site-ul din verdictele reale
         run: python3 site/build_site.py && mkdir -p _site && cp site/index.html _site/
