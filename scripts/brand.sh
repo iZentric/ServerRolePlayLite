@@ -3,6 +3,10 @@
 # Cauza reala a "Â§rÂ§bÂ§lCUANTIC": server.properties are §-uri scrise cu UTF-8, iar Java citeste
 # fisierul ca Latin-1. Corect = secvente ASCII \u00A7 (build_lite.py e reparat la fel, raw string).
 # keepalive: orice iesire (si eroare, si Ctrl-C) reporneste ce am oprit noi
+# PAUZAT la cererea „serverul sa fie mereu pornit": joburile astea opresc java minute intregi
+# (ram-test/jvm-tune cautaplafone, brand/no-login repornesc). Scoate randurile urmatoare ca sa le
+# rulezi din nou:
+case "${CUANTIC_FORTEAZA:-}" in ""|0) echo "PAUZAT deliberate (nu pun serverul jos pentru un test neesential). CUANTIC_FORTEAZA=1 forteaza." >&2; exit 0;; esac
 trap 'bash "$(dirname "$0")/ensure-up.sh" >/dev/null 2>&1 || true' EXIT INT TERM
 D=$HOME/cuantic-live
 J=$HOME/.local/jdk17/bin/java
