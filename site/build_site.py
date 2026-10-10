@@ -300,7 +300,8 @@ html = f"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CUANTIC — serverul de Minecraft care merge și pe cartof, fără lag și fără bani</title>
 <meta name="description" content="CUANTIC: server hybrid Minecraft 1.16.5 cu 32 de moduri si 15 pluginuri, masurat pe o masina de 2 nuclee. Cifre reale, surse pe pagina, cost 0.">
-<style{STYLE}</style></head><body>
+<style>{STYLE}
+</style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
   <span class="pill"><i></i>live · {L.get("players", "0") or "0"} jucatori în lume</span>
@@ -406,6 +407,9 @@ boala hibridelor:   ╱─╱─╱──↗    (muntele care crește → crash)
   Date brute: <code>analysis/BENCH-LIVE.md</code> · <code>analysis/RAM-ALL.md</code> · <code>analysis/ACCEPTANCE.md</code> · <code>site/records.json</code>
 </footer>
 </div></body></html>"""
+
+if '</style' in STYLE[1:-3] or '<style>' not in html or ':root{' not in html.split('<style>',1)[1].split('</style>',1)[0]:
+    raise SystemExit('CSS malformat: blocul <style> nu e inchis corect')
 
 out = os.path.join(os.path.dirname(__file__), "index.html")
 open(out, "w", encoding="utf-8").write(html)
