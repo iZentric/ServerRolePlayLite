@@ -399,6 +399,18 @@ try:
         ADRESA = _pa
 except Exception:
     pass
+
+noutati_sec = """
+<h2>🆕 Ce s-a schimbat în 1.6.4 (și de ce contează pentru tine)</h2>
+<div class="grid">
+  <div class="card"><h3>Straturile au ajuns și pe mașină</h3><p>Configurile de tuning (mob caps, entity activation, chunk-gc, merge-radius, hoppers) existau în zip, dar jobul de implantare copia doar jar/txt/json ⇒ serverul live rula cu setările implicite. Acum le citește și pe ale noastre.</p></div>
+  <div class="card"><h3>Am scos cheile moarte</h3><p>Per-player-mob-spawns e cheie de Paper (CatServer o ignora), sync-chunk-writes e cheie din 1.19 (nu exista pe 1.16.5). Le-am înlocuit cu use-native-transport, care chiar lucrează.</p></div>
+  <div class="card"><h3>Brandul se vede, nu se povestește</h3><p>MOTD cu coduri de culoare reale (înainte scria \u00A7b litere), nume CUANTIC în consola serverului, alias /cuantic și /cuantictps, banner în start.sh / start.bat.</p></div>
+  <div class="card"><h3>Manifestul s-a reparat</h3><td></td><p>Din 1.6.3 niciun zip nu mai avea manifest-cuantic.json — o eroare era înghițită de un except. Acum conține versiunea, jarul real, lista de moduri/pluginuri și ce n-a putut fi rezolvat.</p></div>
+  <div class="card"><h3>Serverul nu mai e lăsat jos</h3><p>Orice job care oprea java are acum trap la ieșire care îl repornește; testele care dădeau serverul jos pentru minute (cautare de plafon RAM, reload de flaguri, brand) stau pauzate.</p></div>
+  <div class="card"><h3>Badge de viață pe pagină</h3><p>Fiecare actualizare de site sună de două ori la port și scrie SUS / REPRIT automat / JOS. Măsurătorile vechi nu mai pot trece drept „merge”.</p></div>
+</div>
+"""
 html = f"""<!DOCTYPE html>
 <html lang="ro"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -442,6 +454,8 @@ html = f"""<!DOCTYPE html>
 <div class="note"><b>De ce e bine așa?</b> Pentru că serverul nu se mai oprește brusc când intră cineva într-o zonă nouă — „potreneala" aia e exact ce simți tu ca lag. Media nu minte niciodată singură, deci arătăm a 95-a sutime (p95), nu media.</div>
 
 {progres_sec}
+
+{noutati_sec}
 
 <h2>⚔️ Duelul motoarelor — de ce pe al ăsta l-am ales</h2>
 <div class="sub">Aceeși mașină, aceleași moduri, aceleași pluginuri. Bara mai scurtă = mai puțină memorie. Morții sunt testați și dezbrăcați de componentele care îi omoră, ca să vezi cât AR FI — și tot pierd.</div>

@@ -157,6 +157,18 @@ De ce nu vindem „de 1000× mai bun": 1000× pe p95 ar însemna 0.005 ms, adic�
 Ce putem demonstra e exact ce e scris mai sus.</div>
 
 
+
+<h2>🆕 Ce s-a schimbat în 1.6.4 (și de ce contează pentru tine)</h2>
+<div class="grid">
+  <div class="card"><h3>Straturile au ajuns și pe mașină</h3><p>Configurile de tuning (mob caps, entity activation, chunk-gc, merge-radius, hoppers) existau în zip, dar jobul de implantare copia doar jar/txt/json ⇒ serverul live rula cu setările implicite. Acum le citește și pe ale noastre.</p></div>
+  <div class="card"><h3>Am scos cheile moarte</h3><p>Per-player-mob-spawns e cheie de Paper (CatServer o ignora), sync-chunk-writes e cheie din 1.19 (nu exista pe 1.16.5). Le-am înlocuit cu use-native-transport, care chiar lucrează.</p></div>
+  <div class="card"><h3>Brandul se vede, nu se povestește</h3><p>MOTD cu coduri de culoare reale (înainte scria §b litere), nume CUANTIC în consola serverului, alias /cuantic și /cuantictps, banner în start.sh / start.bat.</p></div>
+  <div class="card"><h3>Manifestul s-a reparat</h3><td></td><p>Din 1.6.3 niciun zip nu mai avea manifest-cuantic.json — o eroare era înghițită de un except. Acum conține versiunea, jarul real, lista de moduri/pluginuri și ce n-a putut fi rezolvat.</p></div>
+  <div class="card"><h3>Serverul nu mai e lăsat jos</h3><p>Orice job care oprea java are acum trap la ieșire care îl repornește; testele care dădeau serverul jos pentru minute (cautare de plafon RAM, reload de flaguri, brand) stau pauzate.</p></div>
+  <div class="card"><h3>Badge de viață pe pagină</h3><p>Fiecare actualizare de site sună de două ori la port și scrie SUS / REPRIT automat / JOS. Măsurătorile vechi nu mai pot trece drept „merge”.</p></div>
+</div>
+
+
 <h2>⚔️ Duelul motoarelor — de ce pe al ăsta l-am ales</h2>
 <div class="sub">Aceeși mașină, aceleași moduri, aceleași pluginuri. Bara mai scurtă = mai puțină memorie. Morții sunt testați și dezbrăcați de componentele care îi omoră, ca să vezi cât AR FI — și tot pierd.</div>
 <div class="row"><div class="eng"><span class="ico">👑</span><b>CUANTIC (jarul NOSTRU, forjat)</b><small>Compilat de noi din sursa la zi + Java 17</small></div><div class="bar win" style="width:54%">2643 MB · boot 11.521s</div></div>
@@ -278,7 +290,7 @@ boala hibridelor:   ╱─╱─╱──↗    (muntele care crește → crash)
 </pre></div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 13:32 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 10 Oct 2026, 13:33 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>analysis/BENCH-LIVE.md</code> · <code>analysis/RAM-ALL.md</code> · <code>analysis/ACCEPTANCE.md</code> · <code>site/records.json</code>
 </footer>
