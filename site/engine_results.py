@@ -165,6 +165,11 @@ def panel():
                      f'<td>{tested_pair(key, "official", decimals)} {unit}</td>'
                      f'<td>{tested_pair(key, "patched", decimals)} {unit}</td>'
                      f'<td>{"Da" if c["pass"] else "<b>NU</b>"}</td></tr>')
+        labels = {"rss_steady_median_mb": "RAM RSS", "cpu_steady_s": "CPU stabil",
+                  "p95_ms": "p95 MSPT", "boot_internal_done_s": "Done intern",
+                  "boot_wall_s": "boot extern"}
+        good = ", ".join(labels[k] for k in required if checks[k]["pass"]) or "niciuna"
+        bad = ", ".join(labels[k] for k in required if not checks[k]["pass"]) or "niciuna"
         strict_panel = (f'<h3 style="margin-top:24px">Patch REAL în JAR — verdict: '
                         f'{"doar pre-calificare sintetică" if strict["screen"]["synthetic_screen_pass"] else "RESPINS la pragul strict"}</h3>'
                         '<p class="sub">JAR recompilat cu optimizare în <code>SortedArraySet.removeIf</code> '
@@ -173,8 +178,10 @@ def panel():
                         'bună probă din ambele baseline-uri, pe FIECARE măsură.</p>'
                         '<div class="table-scroll"><table class="tbl"><tr><th>Indicator</th><th>Live 1/2</th>'
                         f'<th>Oficial 1/2</th><th>Patch 1/2</th><th>Trece?</th></tr>{rows}</table></div>'
-                        '<p class="sub">CPU și p95 mai bune în acest scenariu, dar RAM și pornirea '
-                        '<b>nu trec</b>; boot-ul extern este măsurat cu verificări la ~'
+                        f'<p class="sub">În această rundă, trec: {good}; <b>nu trec: {bad}</b>. '
+                        'Un rezultat favorabil din runda anterioară la CPU/p95 s-a inversat la repetare; '
+                        'diferențele mici nu sunt un avantaj stabil demonstrat. '
+                        'Boot-ul extern este măsurat cu verificări la ~'
                         f'{strict["patched-C1"].get("boot_wall_poll_interval_seconds", 2)} secunde, nu un cronometru perfect. '
                         'Doar 2 probe/motor, fără jucători și vehicule. <b>Nu am lansat JAR-ul.</b> '
                         f'<a href="{REPO_DOCS}ENGINE-STRICT-RESULT.md">Toate probele, SHA și limitele →</a></p>')

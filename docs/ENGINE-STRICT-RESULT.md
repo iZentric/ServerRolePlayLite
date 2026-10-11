@@ -10,6 +10,20 @@ Criteriu: **cea mai slabă probă a candidatului < cea mai bună probă a ambelo
 
 Niciun JAR live/release schimbat. „Mai bun decât orice motor pe orice sarcină” nu poate fi dovedit prin probe finite.
 
+## Verdict runda repetată: RESPINS — patch-ul nu e un upgrade complet
+
+Toate cele 6 porniri au trecut validarea 36 moduri / 14 pluginuri. Candidatul este **JAR compilat cu patch real `SortedArraySet.removeIf`**, SHA `b081735815f53e1118608464c39659b537b10fc74fa96458a4a922b7d1215ee3`. Boot-ul extern este verificat la ~0,25 s (anterior era ~2 s).
+
+| Indicator, două runde per motor | CUANTIC live | CatServer oficial | CUANTIC patch | Pragul strict |
+| --- | ---: | ---: | ---: | --- |
+| CPU pe 75 s stabile | 3,78 / 3,68 s | 3,82 / 4,03 s | **4,41 / 3,72 s** | **NU** |
+| p95 MSPT | 1,3 / 1,4 ms | 1,4 / 1,3 ms | **1,6 / 1,3 ms** | **NU** |
+| RSS stabil | 2402 / 2042 MiB | 2550 / 2488 MiB | **2202 / 2529 MiB** | **NU** |
+| `Done` intern | 10,305 / 10,644 s | 10,418 / 10,705 s | **10,193 / 10,710 s** | **NU** |
+| Pornire externă java → `Done` | 89,16 / 87,89 s | 87,40 / 89,90 s | **85,15 / 85,89 s** | **DA, doar aici și doar în această rundă** |
+
+În [runda anterioară, cu boot extern verificat la 2 s](https://github.com/iZentric/ServerRolePlayLite/actions/runs/38181841511), candidatul trecea pragul strict la CPU/p95, dar nu la RSS/boot. Repetarea cu detectarea mai fină de boot **a inversat rezultatul CPU/p95** și a văzut boot extern mai scurt; asta arată variabilitate, **nu câștig global repetabil**. Datele provin din câte două probe/variantă, lumi proaspete, fără jucători sau vehicule. Pornirea efectivă până la login modat nu a fost măsurată. **Nu lansăm candidat care ratează orice indicator cerut.**
+
 ```json
 {
   "method": "A/B/C/C/B/A; same runner Java17, same release pack, -Xms1G -Xmx3G, seed and 64 forced chunks + 40 zombies; 55s warmup/75s steady, fresh world per run",
