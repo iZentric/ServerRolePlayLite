@@ -2,7 +2,7 @@ name: Site CUANTIC (rezultate verificate)
 on:
   push:
     branches: ["arena/a29b4ef4-serverroleplaylite"]
-    paths: ["analysis/**", "docs/ENGINE-*.md", "docs/BENCHMARK-MOTOARE-CUANTIC-2026-10-12.md", "docs/STRATEGIE-ROLEPLAY-SURVIVAL.md", "site/**", "tests/test_site_claims.py", "pack-rules.json", "deploy/play-address.txt", ".github/workflows/site.yml"]
+    paths: ["analysis/**", "docs/ENGINE-*.md", "docs/BENCHMARK-MOTOARE-CUANTIC-2026-10-12.md", "docs/STRATEGIE-ROLEPLAY-SURVIVAL.md", "docs/INCIDENT-*.md", "site/**", "tests/test_site_claims.py", "pack-rules.json", "deploy/play-address.txt", ".github/workflows/site.yml"]
   workflow_dispatch: {}
 permissions:
   contents: write

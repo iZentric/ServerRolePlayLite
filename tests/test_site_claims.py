@@ -32,6 +32,14 @@ class SiteClaimsTest(unittest.TestCase):
         self.assertIn("nu funcții declarate deja lansate", page)
         self.assertIn("STRATEGIE-ROLEPLAY-SURVIVAL.md", page)
         self.assertIn("OptiFine + modurile normale", page)
+        self.assertIn("INCIDENT-2026-10-11-STATUS.md", page)
+
+    def test_tunnel_config_requires_external_credential(self):
+        import re
+        for name in ("cuantic-live.sh", "ensure-up.sh", "frps-install.sh", "up.sh"):
+            source = (ROOT / "scripts" / name).read_text()
+            self.assertNotRegex(source, r'auth\.token = \\?"(?!%s)[^"\\]+\\?"', name)
+        self.assertIn("FRP_AUTH_TOKEN", (ROOT / "scripts" / "frps-install.sh").read_text())
 
     def test_built_page_contains_benchmark_download_and_strategy(self):
         page = (ROOT / "site" / "index.html").read_text(encoding="utf-8")

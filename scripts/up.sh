@@ -2,7 +2,10 @@
 # CUANTIC — pornire completa pe Cloud Shell, facuta de robot, si TINE serverul cat traieste jobul (~27 min).
 D=$HOME/cuantic-live
 S=92.5.171.150
-T=pateu-de-codru-7
+# Păstrăm configurația locală; pentru instalare nouă, tokenul se furnizează sigur.
+if [ ! -f "$HOME/frpc.toml" ]; then
+  : "${FRP_AUTH_TOKEN:?Set FRP_AUTH_TOKEN securely before creating frpc.toml}"
+fi
 mkdir -p "$D"; cd "$D" || exit 1
 if pgrep -f "java @unix_args" >/dev/null 2>&1 && ss -lnt 2>/dev/null | grep -q ":25565"; then echo "UP: serverul e deja SUS pe :25565 -> nu il opresc!"; exit 0; fi
 
@@ -16,7 +19,10 @@ sed -i 's/^online-mode=.*/online-mode=false/; s/^server-ip=.*/server-ip=/' serve
 J=$(ls /usr/lib/jvm/java-17*/bin/java 2>/dev/null | head -1)
 echo "java: $J"
 
-printf 'serverAddr = "%s"\nserverPort = 443\nauth.method = "token"\nauth.token = "%s"\n\n[[proxies]]\nname = "mc"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 25565\nremotePort = 25565\n' "$S" "$T" > "$HOME/frpc.toml"
+if [ ! -f "$HOME/frpc.toml" ]; then
+  umask 077
+  printf 'serverAddr = "%s"\nserverPort = 443\nauth.method = "token"\nauth.token = "%s"\n\n[[proxies]]\nname = "mc"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 25565\nremotePort = 25565\n' "$S" "$FRP_AUTH_TOKEN" > "$HOME/frpc.toml"
+fi
 if [ ! -x "$HOME/frpc" ]; then
   VER=$(curl -fsS https://api.github.com/repos/fatedier/frp/releases/latest | grep -oE '"tag_name": *"v[0-9.]+"' | head -1 | grep -oE '[0-9.]+')
   ARCH=$(uname -m); case $ARCH in aarch64) A=arm64;; *) A=amd64;; esac

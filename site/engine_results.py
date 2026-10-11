@@ -174,4 +174,6 @@ nu sacrificăm clientul Forge ca să obținem un TPS frumos pe hârtie.
  apoi conținut RP. Un JAR nou intră pe live doar după test reprezentativ, backup,
  fereastră fără jucători și rollback verificat. Problemele confirmate se documentează și se repară,
  nu se ascund în marketing. <a href="{REPO_DOCS}STRATEGIE-ROLEPLAY-SURVIVAL.md">Vezi planul cu criterii de acceptare →</a></div>
+<p class="sub" style="margin-top:12px">Transparență: <a href="{REPO_DOCS}INCIDENT-2026-10-11-STATUS.md">serverul a fost indisponibil la 22:13 UTC, recuperat și verificat local/public la 22:16 UTC</a>.
+Cauza opririi este încă necunoscută; verifică badge-ul datat de sus pentru ultima probă, nu presupune uptime permanent.</p>
 </section>'''

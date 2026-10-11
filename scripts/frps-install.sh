@@ -1,6 +1,8 @@
 #!/bin/bash
 # CUANTIC — se ruleaza ca root:  sudo bash frps-install.sh
-set -x
+set -u
+: "${FRP_AUTH_TOKEN:?Set FRP_AUTH_TOKEN securely before installing frps}"
+umask 077
 cd /tmp
 ARCH=$(uname -m); case $ARCH in aarch64) A=arm64;; *) A=amd64;; esac
 VER=$(curl -fsS https://api.github.com/repos/fatedier/frp/releases/latest | grep -oE '"tag_name": *"v[0-9.]+"' | head -1 | grep -oE '[0-9.]+')
@@ -15,7 +17,8 @@ fi
 /opt/frp/frps --version
 iptables -C INPUT -p tcp -m multiport --dports 443,25565 -j ACCEPT 2>/dev/null || iptables -I INPUT -p tcp -m multiport --dports 443,25565 -j ACCEPT
 nft list ruleset 2>/dev/null | grep -m1 -E 'dport (443|25565)'
-printf 'bindAddr = "0.0.0.0"\nbindPort = 443\nauth.method = "token"\nauth.token = "pateu-de-codru-7"\n' > /etc/frps.toml
+printf 'bindAddr = "0.0.0.0"\nbindPort = 443\nauth.method = "token"\nauth.token = "%s"\n' "$FRP_AUTH_TOKEN" > /etc/frps.toml
+unset FRP_AUTH_TOKEN
 printf '[Unit]\nDescription=CUANTIC frp server\nAfter=network.target\n[Service]\nExecStartPre=/bin/sh -c "iptables -C INPUT -p tcp -m multiport --dports 443,25565 -j ACCEPT 2>/dev/null || iptables -I INPUT -p tcp -m multiport --dports 443,25565 -j ACCEPT"\nExecStart=/opt/frp/frps -c /etc/frps.toml\nRestart=always\nRestartSec=5\n[Install]\nWantedBy=multi-user.target\n' > /etc/systemd/system/frps.service
 systemctl daemon-reload
 systemctl enable --now frps

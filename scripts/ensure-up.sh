@@ -75,9 +75,9 @@ echo "ensure-up: java=$(pgrep -f 'java @unix_args' >/dev/null && echo DA || echo
 
 # 2b) Tunelul public frpc -> 92.5.171.150:25565 (fara el, portul 25565 e doar pe localhost!)
 if [ ! -f "$HOME/frpc.toml" ]; then
-  printf 'serverAddr = "92.5.171.150"\nserverPort = 443\nauth.method = "token"\nauth.token = "pateu-de-codru-7"\n\n[[proxies]]\nname = "mc"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 25565\nremotePort = 25565\n' > "$HOME/frpc.toml"
+  echo "ensure-up: frpc.toml lipsește; configurează credențialele separat. Nu generăm un token public."
 fi
-if [ -x "$HOME/frpc" ] && ! pgrep -f 'frpc -c' >/dev/null 2>&1; then
+if [ -f "$HOME/frpc.toml" ] && [ -x "$HOME/frpc" ] && ! pgrep -f 'frpc -c' >/dev/null 2>&1; then
   ( env -u RUNNER_TRACKING_ID setsid "$HOME/frpc" -c "$HOME/frpc.toml" >> "$HOME/frpc.log" 2>&1 < /dev/null & )
   sleep 2
   echo "ensure-up: frpc PORNIT ($(pgrep -f 'frpc -c' | head -1))"
