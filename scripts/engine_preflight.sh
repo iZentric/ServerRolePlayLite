@@ -15,6 +15,13 @@ printf 'memory:\n'; free -m | head -2
 LEVEL=$(sed -n 's/^level-name=//p' "$D/server.properties" | tail -1)
 LEVEL=${LEVEL:-world}
 for w in "$LEVEL" "${LEVEL}_nether" "${LEVEL}_the_end"; do [ ! -e "$D/$w" ] || du -sh "$D/$w"; done
+printf 'voice chat config locations and UDP ports (no secrets):\n'
+for dir in "$D/config" "$D/defaultconfigs" "$D/world/serverconfig"; do
+  [ ! -d "$dir" ] || find "$dir" -maxdepth 3 -type f -iname '*voice*' -print 2>/dev/null | head -12
+done
+for p in "$D/config/voicechat/voicechat-server.properties" "$D/world/serverconfig/voicechat-server.toml" "$D/config/voicechat-server.toml"; do
+  [ ! -f "$p" ] || grep -E '^([[:space:]]*port[[:space:]]*=|[[:space:]]*voice_port[[:space:]]*=)' "$p" | head -3 || true
+done
 printf 'log cursor: '; wc -l < "$D/live.log" 2>/dev/null || true
 if [ -f "$D/cmd.in" ]; then
   n=$(wc -l < "$D/live.log" 2>/dev/null || echo 0)
