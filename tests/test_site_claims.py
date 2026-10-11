@@ -15,6 +15,8 @@ class SiteClaimsTest(unittest.TestCase):
         self.assertIn(engine_results.JAR_URL, page)
         self.assertIn("96f824793ab3a685a390d82305202403ea8cbe5c011a1c79ce0ec024a4d7789c", page)
         self.assertIn("identic byte-cu-byte", page)
+        self.assertIn("nu e declarat mai rapid", page)
+        self.assertNotIn("🏆 Cel mai bun rezultat", page)
         self.assertIn("nu este upgrade demonstrat", page)
         self.assertIn("Arclight cu pack-ul complet", page)
         self.assertIn("Mist pe Java 11", page)

@@ -173,7 +173,7 @@ păstrăm motorul CatServer CUANTIC deja folosit pe server. Am construit un JAR 
 comparat fork-uri în copii izolate pe GitHub; <b>niciunul nu a demonstrat un câștig simultan
 CPU + p95 și compatibilitate în joc cu vehicule</b>. Nu schimbăm live-ul pentru un scor fără probe.</div>
 <div class="card" style="margin-top:18px;border-color:rgba(95,240,192,.38)">
-<h3>🏆 Cel mai bun rezultat validat acum: JAR-ul live</h3>
+<h3>JAR-ul de producție: pornește pack-ul, nu e declarat mai rapid</h3>
 <p>Compatibilitatea pack-ului a fost verificată în smoke cu 36/14. Alte motoare care nu pornesc cu
 același pack nu sunt clasate fictiv ca „mai rapide”.</p>
 <div class="cta">{winner_button}<a class="btn ghost" href="{REPO_DOCS}BENCHMARK-MOTOARE-CUANTIC-2026-10-12.md">📊 Vezi benchmarkul integral</a></div>
