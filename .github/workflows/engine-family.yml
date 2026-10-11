@@ -1,0 +1,49 @@
+# GitHub-hosted disposable worlds only; NEVER touches the running server.
+name: ENGINE FAMILY — same CUANTIC pack compatibility gate
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-family.txt"]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: Fetch unmodified pack, alternative JARs and our built experimental JAR
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/engine-family-releases
+          for engine in CatServer Arclight Mist-EXPERIMENTAL; do
+            gh release download lite --repo "$GITHUB_REPOSITORY" -p "CUANTIC-Server-$engine-1.7.7.zip" -D /tmp/engine-family-releases
+          done
+          gh run download 38175428475 --repo "$GITHUB_REPOSITORY" -n cuantic-engine-ticket-EXPERIMENTAL -D /tmp/engine-family-releases
+          cat /tmp/engine-family-releases/SHA256SUMS.txt
+          expected=$(cut -d' ' -f1 /tmp/engine-family-releases/SHA256SUMS.txt)
+          actual=$(sha256sum /tmp/engine-family-releases/CUANTIC-CatServer-ticket-experimental.jar | cut -d' ' -f1)
+          test "$expected" = "$actual"
+      - name: Four isolated boots with exact same 36 mod and 14 plugin files
+        run: python3 scripts/engine_family_smoke.py /tmp/engine-family-releases /tmp/engine-family-report
+      - name: Publish compatibility table without declaring any engine faster
+        if: always()
+        run: |
+          { echo '# Hybrid engine family — same CUANTIC 1.16.5 modpack compatibility'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; echo;
+            echo 'GitHub-hosted isolated boots only; the live world and JAR are untouched.';
+            echo 'A successful smoke does not prove modded login, vehicle compatibility or speed superiority.'; echo;
+            echo '```json'; cat /tmp/engine-family-report/result.json 2>/dev/null || echo 'NO RESULT'; echo '```';
+          } > docs/ENGINE-FAMILY-RESULT.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/ENGINE-FAMILY-RESULT.md
+          git commit -m 'engine family: compatibility gate for identical modpack' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true
