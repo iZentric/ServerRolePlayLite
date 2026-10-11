@@ -15,9 +15,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verifica direct protocolul Minecraft, nu numai un cache extern
         run: |
-          set +e
-          R=$(python3 scripts/minecraft_status.py 92.5.171.150 25565)
-          if [ $? -eq 0 ]; then
+          STATUS=0
+          R=$(python3 scripts/minecraft_status.py 92.5.171.150 25565) || STATUS=$?
+          if [ "$STATUS" -eq 0 ]; then
             echo "SUS public (status handshake, nu login modat): $R" > /tmp/alive.txt
           else
             echo "NECONFIRMAT extern — $R; nu repornim serverul fara test local" > /tmp/alive.txt
