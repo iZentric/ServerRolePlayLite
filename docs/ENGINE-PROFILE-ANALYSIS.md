@@ -66,3 +66,10 @@ Times below are sampled stack weights, not per-tick costs or proof of speedup.
 
 Nodes: 1334; distinct methods: 812.
 Spark sample time includes waiting/parking if those frames were sampled; do not treat it as 50 s of CPU.
+
+## Interpretare și limitări
+
+- Căile dominante sunt încărcarea/tick-ul chunk-urilor, tick-ul lumii și scanarea ticketelor; nu există în acest profil un hot path demonstrat pentru patch-urile anterioare de hopper.
+- `SortedArraySet.removeIf` apare cu ~1.292 ms cumulat în stiva eșantionată (~2,6% din 50.433 ms). Acesta este un **plafon teoretic** dacă metoda ar deveni gratuită, nu o estimare a îmbunătățirii reale.
+- Comenzile consolei au raportat 1 jucător la începutul și sfârșitul profilării; metadatele Spark din export au `playerCount: 0`. Această discrepanță înseamnă că profilul **nu demonstrează** prezența continuă a jucătorului sau încărcarea cu vehicule în cele 60 s.
+- [Prototype-ul CatServer cu scanare optimizată a ticketelor](ENGINE-TICKET-RESULT.md) a trecut compilarea și smoke-ul, dar [testul de stare stabilă](ENGINE-TICKET-STEADY-RESULT.md) nu a îmbunătățit simultan CPU și p95. Nu înlocuiește JAR-ul live.
