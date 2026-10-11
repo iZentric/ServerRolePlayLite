@@ -1,0 +1,70 @@
+# Retest only rejected hybrids: Arclight root cause on J17 and Mist on J8.
+# All tests use an isolated copy of the exact production mod/plugin pack.
+name: ENGINE ALTERNATIVES — Arclight diagnostic and Mist Java 8
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-alt-jvm.txt"]
+permissions:
+  contents: write
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download the three unchanged 1.7.7 server archives
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/engine-family-releases
+          for engine in CatServer Arclight Mist-EXPERIMENTAL; do
+            gh release download lite --repo "$GITHUB_REPOSITORY" -p "CUANTIC-Server-$engine-1.7.7.zip" -D /tmp/engine-family-releases
+          done
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: Arclight 1.16.5 exact-pack J17 failure diagnosis
+        env: { ENGINE_FAMILY_ONLY: 'Arclight' }
+        run: python3 scripts/engine_family_smoke.py /tmp/engine-family-releases /tmp/arclight-diagnostic
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '8' }
+      - name: Live CatServer and Mist exact-pack J8 gate
+        id: gate
+        env: { ENGINE_FAMILY_ONLY: 'live-CatServer,Mist' }
+        run: |
+          python3 scripts/engine_family_smoke.py /tmp/engine-family-releases /tmp/mist-java8-smoke
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          data=json.load(open('/tmp/mist-java8-smoke/result.json'))['candidates']
+          print('qualified='+str(int(all(data[x].get('qualified_for_performance_A_B') for x in ('live-CatServer','Mist')))))
+          PY
+      - name: One preliminary equal-pack J8 A/B only if BOTH engines boot
+        if: steps.gate.outputs.qualified == '1'
+        run: |
+          python3 - <<'PY'
+          import zipfile
+          z=zipfile.ZipFile('/tmp/engine-family-releases/CUANTIC-Server-Mist-EXPERIMENTAL-1.7.7.zip')
+          n=[x for x in z.namelist() if x.lower().startswith('mist') and x.endswith('.jar') and '/' not in x]
+          assert len(n)==1, n
+          open('/tmp/mist-j8.jar','wb').write(z.read(n[0]))
+          PY
+          python3 scripts/engine_ab.py /tmp/engine-family-releases/CUANTIC-Server-CatServer-1.7.7.zip /tmp/mist-j8.jar /tmp/mist-java8-bench
+      - name: Record compatibility verdict and any preliminary A/B only
+        if: always()
+        run: |
+          { echo '# Arclight Java 17 and Mist Java 8 — exact CUANTIC pack'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; echo;
+            echo 'Isolated hosted VM, same 36 mods/14 plugins; no client login, vehicles or live deploy.';
+            echo 'Different Java versions cannot be compared numerically: baseline J8 is used only against Mist J8.'; echo;
+            echo '## Arclight on J17'; echo '```json'; cat /tmp/arclight-diagnostic/result.json 2>/dev/null || echo 'NOT RUN'; echo '```';
+            echo '## CatServer vs Mist on J8'; echo '```json'; cat /tmp/mist-java8-smoke/result.json 2>/dev/null || echo 'NOT RUN'; echo '```';
+            echo '## Preliminary J8 A/B only if both passed'; echo '```json'; cat /tmp/mist-java8-bench/result.json 2>/dev/null || echo 'NOT RUN'; echo '```';
+          } > docs/ENGINE-ALT-JVM-RESULT.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/ENGINE-ALT-JVM-RESULT.md
+          git commit -m 'engine alternatives: same-pack Java compatibility verdict' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true

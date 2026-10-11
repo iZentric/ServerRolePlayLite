@@ -6,7 +6,9 @@ A successful smoke is NOT modded login, vehicle gameplay or speed superiority.
 """
 import hashlib
 import json
+import os
 from pathlib import Path
+import re
 import shutil
 import sys
 import zipfile
@@ -55,7 +57,10 @@ def main(root, report):
         ('Mist', root / 'CUANTIC-Server-Mist-EXPERIMENTAL-1.7.7.zip', 'mist'),
     ]
     engine_lab.BOOT_TIMEOUT = 180
+    only = set(filter(None, os.environ.get('ENGINE_FAMILY_ONLY', '').split(',')))
     for label, source, hint in mapping:
+        if only and label not in only:
+            continue
         row = {'same_mod_plugin_payload_sha256': True, 'smoke': None, 'candidate_pack_inventory': None}
         output['candidates'][label] = row
         try:
@@ -96,6 +101,8 @@ def main(root, report):
             # Short diagnostic excerpts, not full log, user or world data.
             if not row['qualified_for_performance_A_B']:
                 text = smoke_log.read_text(errors='replace')
+                row['diagnostic_key_lines'] = [line[-360:] for line in text.splitlines()
+                    if re.search(r'Caused by:|Exception in thread|IllegalAccessError|MixinApplyError|InjectionError|InvalidInjection|failed injection|critical injection|Fail to launch|Mod loading error|NoClassDefFoundError|UnsupportedClassVersion', line, re.I)][:25]
                 row['diagnostic_tail'] = text[-1800:]
         except Exception as e:
             row['error'] = f'{type(e).__name__}: {e}'
