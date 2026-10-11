@@ -5,69 +5,9 @@ from engine_results import latest_status, panel, strategy_panel
 
 AN = os.path.join(os.path.dirname(__file__), "..", "analysis")
 
-def parse_verdict(path):
-    try:
-        txt = open(path, encoding="utf-8", errors="replace").read()
-    except Exception:
-        return None
-    m_res = re.search(r"REZULTAT: \*\*(\w+)\*\*", txt)
-    m_ram = re.search(r"RAM: \*\*(\d+)MB\*\*", txt)
-    m_done = re.search(r"Done \(([\d.]+)s\)", txt)
-    m_date = re.search(r"\((\w{3} \w{3}\s+\d+ [\d:]+ UTC \d+)\)", txt)
-    return {
-        "rezultat": m_res.group(1) if m_res else "?",
-        "ram": int(m_ram.group(1)) if m_ram else None,
-        "boot": float(m_done.group(1)) if m_done else None,
-        "data": m_date.group(1) if m_date else "",
-    }
-
-ENGINES = [
-    ("CUANTIC 1.7.7 (CatServer + config/brand)", "test-boot-CatServer-CUSTOM.md", "👑", "JAR public actual: CatServer 2023, brandingul nu accelerează tickurile", True),
-    ("CatServer oficial + Java 17",    "test-boot-CatServer-J17.md",    "🥈", "Binarul oficial (mai 2023)", False),
-    ("CatServer oficial + Java 11",    "test-boot-CatServer.md",        "🥉", "Cum il ruleaza restul lumii", False),
-    ("Mist (inviat de noi)",           "mist-lab.md",                   "🧟", "14 operatii; traieste doar dezbracat; LuckPerms mort", False),
-    ("CatServer + Java 21",            "test-boot-CatServer-J21.md",    "⚰️", "Fizic imposibil (ASM nu citeste J21)", False),
-    ("Arclight (dezbracat de motoare)", "test-boot-Arclight-STRIP.md",  "🩻", "Cat AR FI daca ar trai - fara cele 13 motoare mixin", False),
-    ("Arclight (intreg)",              "test-boot-Arclight.md",         "⚰️", "Razboi de mixin cu motoarele de performanta", False),
-]
-
-import json
-REC_PATH = os.path.join(os.path.dirname(__file__), "records.json")
-try:
-    records = json.load(open(REC_PATH))
-except Exception:
-    records = {}
-
-rows = []
-for nume, f, ico, nota, e_al_nostru in ENGINES:
-    v = parse_verdict(os.path.join(AN, f)) or {}
-    rec = records.get(f, {})
-    # CUANTIC trage cu 3 tevi pe runda - toate alimenteaza ACELASI record
-    extra = []
-    if "CUSTOM.md" in f:
-        extra = [parse_verdict(os.path.join(AN, f"test-boot-CatServer-CUSTOM{i}.md")) for i in (2,3,4,5)]
-    for ev in extra:
-        if ev and ev.get("rezultat") == "PORNIT" and ev.get("ram"):
-            if not rec.get("ram") or ev["ram"] < rec["ram"]:
-                rec["ram"] = ev["ram"]
-            if ev.get("boot") and (not rec.get("boot") or ev["boot"] < rec["boot"]):
-                rec["boot"] = ev["boot"]
-    # CARTEA RECORDURILOR: pastram cea mai buna masuratoare DOVEDITA
-    # (cantarele masinilor de test variaza +-15% intre runde - recordul e adevarul stabil)
-    if v.get("rezultat") == "PORNIT" and v.get("ram"):
-        if not rec.get("ram") or v["ram"] < rec["ram"]:
-            rec["ram"] = v["ram"]
-        if v.get("boot") and (not rec.get("boot") or v["boot"] < rec["boot"]):
-            rec["boot"] = v["boot"]
-        records[f] = rec
-    shown = dict(v)
-    if rec.get("ram"):
-        shown["ram"], shown["boot"] = rec["ram"], rec.get("boot")
-        shown["rezultat"] = "PORNIT"
-    rows.append({"nume": nume, "ico": ico, "nota": nota, "al_nostru": e_al_nostru, **shown})
-
-json.dump(records, open(REC_PATH, "w"), indent=1)
-
+# Historical boot minima (site/records.json) had no retained source logs and
+# even combined the lowest RAM and fastest boot from different runs. They are
+# archival notes, NOT a ranking; only controlled same-run A/B appears on site.
 
 # ===== SECTIUNEA LIVE: masuratori pe serverul care ruleaza ACUM, cu un jucator in lume =====
 LIVE_PATH = os.path.join(AN, "BENCH-LIVE.md")
@@ -140,21 +80,6 @@ pe aceeași mașină (deci nu vindem „de X ori mai repede"), și costul exact 
 Forge+Bukkit, același set de moduri). Următorul experiment. Date brute: <code>analysis/BENCH-LIVE.md</code>,
 generator: <code>scripts/bench-live.sh</code>.</div>
 """
-
-ok_rams = [r["ram"] for r in rows if r.get("ram")]
-max_ram = max(ok_rams) if ok_rams else 5000
-
-def bar(r):
-    if not r.get("ram"):
-        return '<div class="bar dead">NU PORNESTE</div>'
-    pct = int(r["ram"] / max_ram * 100)
-    cls = "win" if r["al_nostru"] else ""
-    boot = f' · boot {r["boot"]}s' if r.get("boot") else ""
-    return f'<div class="bar {cls}" style="width:{max(pct,30)}%">{r["ram"]} MB{boot}</div>'
-
-tabel = "\n".join(
-    f'<div class="row"><div class="eng"><span class="ico">{r["ico"]}</span><b>{r["nume"]}</b>'
-    f'<small>{r["nota"]}</small></div>{bar(r)}</div>' for r in rows)
 
 now = datetime.datetime.utcnow().strftime("%d %b %Y, %H:%M UTC")
 
@@ -498,10 +423,6 @@ Sub 50 ms pe tick nu înseamnă FPS garantat pe laptop sau 20 TPS cu 25 jucător
 {progres_sec}
 
 {noutati_sec}
-
-<h2>⚔️ Experimente istorice de pornire (nu un clasament 2026)</h2>
-<div class="sub">Rezultate istorice din alte runde și configurații: RAM la pornire, nu MSPT cu jucători. Barele nu demonstrează că un motor este mai rapid decât toate celelalte. Unele variante au avut incompatibilități cu pack-ul; comparația actuală controlată este în secțiunea de mai sus.</div>
-{tabel}
 
 {live_sec}
 

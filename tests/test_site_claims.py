@@ -48,6 +48,9 @@ class SiteClaimsTest(unittest.TestCase):
         self.assertIn('id="viziune"', page)
         self.assertNotIn("merge și pe cartof, fără lag", page)
         self.assertNotIn("32 de moduri si 15 pluginuri", page)
+        # These two minima had missing source logs and were never a paired A/B.
+        self.assertNotIn("2643 MB · boot 11.521s", page)
+        self.assertNotIn("2814 MB · boot 11.062s", page)
 
 
 if __name__ == "__main__":

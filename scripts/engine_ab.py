@@ -61,6 +61,7 @@ def prepare(pack, dest, candidate=None):
 def run(label, dest, report_dir, hopper_workload=False, ticket_workload=False):
     logfile = report_dir / f"{label}.log"
     rss = []
+    rss_steady = []
     cpu_workload = None
     done_at = None
     proc = None
@@ -111,6 +112,7 @@ def run(label, dest, report_dir, hopper_workload=False, ticket_workload=False):
                         sample = rss_mb(proc.pid)
                         if sample is not None:
                             rss.append(sample)
+                            rss_steady.append(sample)
                         time.sleep(2)
                 cpu_end = cpu_time_seconds(proc.pid)
                 if cpu_start is not None and cpu_end is not None:
@@ -149,10 +151,13 @@ def run(label, dest, report_dir, hopper_workload=False, ticket_workload=False):
     return {
         "label": label,
         "boot_done_s": float(boot[-1]) if boot else None,
+        "boot_wall_seconds": round(done_at - started, 2) if done_at else None,
         "plugins_enabled": len(plugins),
         "mods_on_disk": len(list((dest / "mods").glob("*.jar"))),
         "rss_median_mb": round(statistics.median(rss), 1) if rss else None,
         "rss_peak_mb": round(max(rss), 1) if rss else None,
+        "rss_steady_median_mb": round(statistics.median(rss_steady), 1) if rss_steady else None,
+        "rss_steady_peak_mb": round(max(rss_steady), 1) if rss_steady else None,
         "cpu_seconds_during_command_and_warmup": cpu_workload if not ticket_workload else None,
         "cpu_seconds_steady_after_55s": cpu_workload if ticket_workload else None,
         "spark_tick_min_median_p95_max_ms_1m": mspt,
@@ -166,7 +171,9 @@ def run(label, dest, report_dir, hopper_workload=False, ticket_workload=False):
         "hopper_data_merge_responses": merged if hopper_workload else None,
         "hopper_fill_256_confirmed": filled if hopper_workload else None,
         "command_feedback_last": feedback[-8:],
-        "valid": bool(boot and len(plugins) >= 14 and not critical and stopped and mspt and workload_ok),
+        "valid": bool(boot and len(plugins) >= 14 and len(list((dest / "mods").glob("*.jar"))) == 36
+                      and not critical and stopped and mspt and workload_ok
+                      and (not ticket_workload or len(rss_steady) >= 20)),
     }
 
 
