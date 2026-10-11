@@ -49,7 +49,7 @@ def prepare(pack, dest, candidate=None):
     (dest / "eula.txt").write_text("eula=true\n")
 
 
-def run(label, dest, report_dir):
+def run(label, dest, report_dir, hopper_workload=False):
     logfile = report_dir / f"{label}.log"
     rss = []
     done_at = None
@@ -72,12 +72,18 @@ def run(label, dest, report_dir):
                 time.sleep(2)
             if done_at is not None:
                 # Ensure an identical, ticking chunk without human accounts.
-                commands = ["gamerule doMobSpawning false", "forceload add 0 0", "fill 0 75 0 15 75 15 minecraft:hopper"]
+                block = "minecraft:hopper[facing=east]" if hopper_workload else "minecraft:hopper"
+                commands = ["gamerule doMobSpawning false", "forceload add 0 0", f"fill 0 75 0 15 75 15 {block}"]
+                if hopper_workload:
+                    # Every hopper receives items, not just an empty container: this
+                    # exercises the engine's actual InventoryMoveItemEvent hot path.
+                    commands += [f'data merge block {x} 75 {z} {{Items:[{{Slot:0b,id:"minecraft:stone",Count:64b}}]}}'
+                                 for x in range(16) for z in range(16)]
                 commands += ["summon minecraft:zombie 8 76 8"] * 40
                 for cmd in commands:
                     proc.stdin.write(cmd + "\n")
                 proc.stdin.flush()
-                until = time.monotonic() + WARMUP
+                until = time.monotonic() + (85 if hopper_workload else WARMUP)
                 while time.monotonic() < until and proc.poll() is None:
                     sample = rss_mb(proc.pid)
                     if sample is not None:
@@ -109,7 +115,10 @@ def run(label, dest, report_dir):
     boot = re.findall(r"Done \(([\d.]+)s\)", text)
     mspt = metrics_from_log(text)
     feedback = [line[-170:] for line in text.splitlines() if re.search(
-        r"forceload|force.load|filled [0-9]+ blocks|summoned new zombie|unable to|unknown command|error executing", line, re.I)]
+        r"forceload|force.load|filled [0-9]+ blocks|modified block data|summoned new zombie|unable to|unknown command|error executing", line, re.I)]
+    merged = len(re.findall(r"Modified block data of", text, re.I))
+    filled = bool(re.search(r"Successfully filled 256 blocks", text, re.I))
+    workload_ok = not hopper_workload or (merged == 256 and filled)
     return {
         "label": label,
         "boot_done_s": float(boot[-1]) if boot else None,
@@ -121,9 +130,11 @@ def run(label, dest, report_dir):
         "critical_errors": critical[:10],
         "exit_code": proc.returncode if proc else None,
         "clean_stop": stopped,
-        "synthetic_workload_requested": "one forced chunk + 256 empty hoppers + 40 zombies, no players",
+        "synthetic_workload_requested": "one forced chunk + 256 filled hoppers + 40 zombies, no players" if hopper_workload else "one forced chunk + 256 empty hoppers + 40 zombies, no players",
+        "hopper_data_merge_responses": merged if hopper_workload else None,
+        "hopper_fill_256_confirmed": filled if hopper_workload else None,
         "command_feedback_last": feedback[-8:],
-        "valid": bool(boot and len(plugins) >= 14 and not critical and stopped and mspt),
+        "valid": bool(boot and len(plugins) >= 14 and not critical and stopped and mspt and workload_ok),
     }
 
 
