@@ -9,11 +9,12 @@ DOCS = ROOT / "docs"
 REPO_DOCS = "https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/"
 
 
-def result(name):
+def result(name, section=0):
     try:
         text = (DOCS / name).read_text(encoding="utf-8")
-        return json.loads(re.search(r"```json\s*(\{.*?\})\s*```", text, re.S).group(1))
-    except (OSError, AttributeError, ValueError):
+        blocks = re.findall(r"```json\s*(\{.*?\})\s*```", text, re.S)
+        return json.loads(blocks[section])
+    except (OSError, IndexError, ValueError):
         return {}
 
 
@@ -39,8 +40,8 @@ def latest_status():
 def panel():
     ci = result("ENGINE-AB-GITHUB.md")
     host = result("ENGINE-AB-HOST.md")
-    filled = result("ENGINE-CURRENT-RESULT.md").get("summary", {})
-    empty = result("ENGINE-EMPTY-RESULT.md").get("summary", {})
+    filled = result("ENGINE-CURRENT-RESULT.md", section=1).get("summary", {})
+    empty = result("ENGINE-EMPTY-RESULT.md", section=1).get("summary", {})
     old, new = ci.get("baseline-2023", {}), ci.get("candidate-2024", {})
     if not old.get("valid") or not new.get("valid"):
         row = '<tr><td colspan="3">Comparația CI lipsește sau nu a trecut verificările.</td></tr>'
