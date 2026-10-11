@@ -2,7 +2,7 @@ name: Site CUANTIC (rezultate verificate)
 on:
   push:
     branches: ["arena/a29b4ef4-serverroleplaylite"]
-    paths: ["analysis/**", "docs/ENGINE-*.md", "site/**", "pack-rules.json", "deploy/play-address.txt", ".github/workflows/site.yml"]
+    paths: ["analysis/**", "docs/ENGINE-*.md", "docs/BENCHMARK-MOTOARE-CUANTIC-2026-10-12.md", "docs/STRATEGIE-ROLEPLAY-SURVIVAL.md", "site/**", "tests/test_site_claims.py", "pack-rules.json", "deploy/play-address.txt", ".github/workflows/site.yml"]
   workflow_dispatch: {}
 permissions:
   contents: write
@@ -28,8 +28,11 @@ jobs:
             echo "NECONFIRMAT extern — $R; fara restart din testul site-ului" > /tmp/alive.txt
           fi
           { echo "# ALIVE CUANTIC — $(date -u '+%Y-%m-%d %H:%M:%S') UTC"; echo; echo '```'; cat /tmp/alive.txt; echo '```'; } > analysis/ALIVE.md
-      - name: Regenereaza site-ul din probele reale
-        run: python3 site/build_site.py && mkdir -p _site && cp site/index.html _site/
+      - name: Regenereaza site-ul din probele reale si verifica afirmatiile
+        run: |
+          python3 site/build_site.py
+          python3 -m unittest discover -s tests -p 'test_site_claims.py'
+          mkdir -p _site && cp site/index.html _site/
       - uses: actions/upload-pages-artifact@v3
         with: { path: _site }
       - uses: actions/deploy-pages@v4

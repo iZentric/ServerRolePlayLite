@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generatorul site-ului CUANTIC - citeste verdictele reale din analysis/ si naste index.html"""
 import os, re, glob, datetime
-from engine_results import latest_status, panel
+from engine_results import latest_status, panel, strategy_panel
 
 AN = os.path.join(os.path.dirname(__file__), "..", "analysis")
 
@@ -126,12 +126,11 @@ live_tabel = "\n".join(
     for a, b, c in live_rows)
 live_date = L.get("data") or "fara masuratori"
 live_sec = f"""
-<h2>🔬 Măsurat LIVE, chiar acum, pe serverul pe care te joci</h2>
-<div class="sub">Proba din <b>{live_date}</b>. Metodologie diferită de duelul de mai sus: valorile de acolo sunt
-<b>RAM la pornire, server gol</b>; masa asta e <b>server viu, cu un jucător activ</b> (spark + jcmd + /proc,
-prin puntea de consolă). <b>Nu punem cele două la aceeași bară</b> — comparațiile între condiții diferite sunt
-exact modul în care se mint site-urile de benchmark. Gazda: 2 vCPU · 11.8 GB RAM (Cloud Shell, 0 lei),
-iar comenzile <code>spark health</code> / <code>spark gc</code> rulează direct în consola serverului, prin punte.</div>
+<h2>🔬 Arhiva măsurătorilor de pe gazda reală (nu în timp real)</h2>
+<div class="sub">Proba istorică din <b>{live_date}</b>. Este separată de
+<a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-PLAYER-RESULT.md">cele trei citiri cu un jucător din 11 octombrie 2026</a>.
+Nu presupunem că jucătorii, traficul sau starea serverului de atunci sunt valabile acum.
+Valorile de aici nu se compară numeric cu probele CI de boot: sarcina și timpul diferă.</div>
 <table class="tbl">
 <tr><th>Ce măsurăm</th><th>Valoare</th><th>Cum se citește</th></tr>
 {live_tabel}
@@ -301,6 +300,8 @@ h2 + .sub,.sub{color:var(--mut);font-size:14.5px;max-width:760px}
 .tbl th{color:var(--mut);font-weight:650;background:rgba(13,18,30,.5)}
 .tbl tr:last-child td{border-bottom:0}
 .tbl tr.hl td{color:#a7ffd9;background:rgba(99,240,191,.06)}
+.table-scroll{max-width:100%;overflow-x:auto}.table-scroll .tbl{min-width:650px}
+.card a:not(.btn),.sub a,.note a{color:var(--mint)}
 .bar{background:#374151;border-radius:8px;padding:8px 12px;font-weight:700;white-space:nowrap}
 .bar.win{background:linear-gradient(90deg,#059669,#34d399);color:#04281c}
 .bar.dead{background:#7f1d1d;color:#fecaca;display:inline-block;width:auto!important}
@@ -333,22 +334,22 @@ footer code{color:#9fb0c9}
 # ===== STRATURILE CUANTIC — de ce nu e "CatServer + Java 17" gol =====
 straturi_rows = [
     ("1. Sincronizare 1:1 Server ↔ Client", "<b>Aliniere matematică între ce trimite serverul și ce desenează clientul</b>: serverul are <code>view-distance=4</code> (64m) și trimite entitățile la <code>32m</code> (<code>players: 48m</code>, <code>animals/monsters: 24m</code>, <code>misc: 12m</code>). Pe client am setat <code>EntityCulling tracingDistance=32</code>, <code>Out of Sight entity=32m / tileEntity=24m</code> și <code>entityDistanceScaling=0.6</code>",
-     "Ca la proști: degeaba pui laptopul să caute mașini sau mobi la 64–128 de blocuri dacă serverul oricum îi trimite doar până la 32 de blocuri! Iar la mobilierul 3D (care vine cu tot chunk-ul de 64m), desenăm doar clădirea și strada din fața ta (24m), tăind <b>86% din aria de mobilier invizibil</b> după pereți!",
+     "Pe scurt: degeaba pui laptopul să caute mașini sau mobi la 64–128 de blocuri dacă serverul oricum îi trimite doar până la 32 de blocuri! Iar la mobilierul 3D (care vine cu tot chunk-ul de 64m), desenăm doar clădirea și strada din fața ta (24m), tăind <b>86% din aria de mobilier invizibil</b> după pereți!",
      "Estimare geometrică, nu FPS măsurat", "config/out_of_sight-client.toml + entityculling.json + spigot.yml"),
     ("2. Texturi 256×256 HD RGBA + Oculus", "<b>Texturi compactate; VRAM real ne-măsurat</b>: păstrăm <b>Oculus 1.4.7</b> pe client (cu <code>shaderPack=(off)</code> implicit) și <code>dynamic_resources=false</code> pe client, iar pozele gigantice <code>1024×1024</code> / <code>2048×2048</code> din <code>Pizzaland</code> și <code>ModernXL</code> sunt aduse la <b>256×256 HD</b> în format 32-bit <code>RGBA</code> curat",
-     "Ca la proști: un bloc normal în Minecraft are 16×16 pixeli. La 256×256 pixeli e deja de 16 ori mai clar (High-Definition), dar ocupă de 16 ori mai puțină memorie pe laptopurile fără placă video dedicată (Intel HD) și nu strică nicio textură!",
+     "Pe scurt: un bloc normal în Minecraft are 16×16 pixeli. Reducerea imaginilor de 1024/2048 la 256 pixeli micșorează numărul de pixeli al acelor imagini; VRAM și FPS pe laptop slab nu au fost încă măsurate.",
      "90.7 MB pack (−41.7 MB) · 0 texturi lipsă", "scripts/build_lite.py (slim_client_jar)"),
     ("3. Configuri Client gata reglate", "<b>Rubidium + Rubidium Extra + EntityCulling + FerriteCore</b> pre-configurate în <code>overrides/config/</code>: <code>smooth_lighting: OFF</code>, <code>enable_clouds: false</code>, <code>always_defer_chunk_updates: true</code>, <code>fog_distance: 33</code>, animații lavă/foc oprite",
-     "Ca la proști: am descoperit în codul Rubidium că ignora <code>options.txt</code> și lăsa iluminarea grea și norii porniți! Acum vin oprite din fabrică, dar impactul real când conduci prin oraș cere o probă pe un laptop slab.",
+     "Pe scurt: am descoperit în codul Rubidium că ignora <code>options.txt</code> și lăsa iluminarea grea și norii porniți! Acum vin oprite din fabrică, dar impactul real când conduci prin oraș cere o probă pe un laptop slab.",
      "FPS pe Intel HD încă netestat în A/B", "overrides/config/rubidium-options.json + sodium-extra-options.json"),
     ("4. Connectivity 2.4 (Anti-Timeout)", "<b>Connectivity 2.4</b> instalat atât pe Server cât și pe Client + <code>connectivity-common.toml</code> (<code>logintimeout = 2400</code> ticks = 120s, fără limită de 1 MB pe pachete)",
-     "Ca la proști: când un laptop vechi sau un Wi-Fi slab încarcă 36 de moduri la intrarea în oraș, Minecraft-ul normal îl dădea afară după 30 de secunde cu <code>Timed out</code>. Acum serverul îl așteaptă liniștit și nu mai crapă niciun pachet mare.",
+     "Pe scurt: când un laptop vechi sau un Wi-Fi slab încarcă 36 de moduri la intrarea în oraș, Minecraft-ul normal îl dădea afară după 30 de secunde cu <code>Timed out</code>. Timeout-ul configurat este mai lung; reușita pe Wi-Fi slab și laptop ieftin rămâne de testat.",
      "Login pe PC slab încă netestat în A/B", "mods/connectivity-2.4-1.16.5.jar"),
     ("5. Motor Hibrid CUANTIC + Java 17", "<b>CatServer 1.16.5</b> cioplit în bytecode la <code>CUANTIC</code> + <b>Cuantic-Brand-1.7.7.jar</b> (cu optimizări runtime stil Gale/Pufferfish: îngheață AI-ul mobilor la >18m, curăță proiectilele, reglează anti-cheatul pentru mașini) + <b>29 flaguri JVM OpenJDK 17 + Netty</b>",
-     "Ca la proști: rulează simultan <b>36 de moduri Forge</b> (mașini, arme, mobilier, mâncare, voicechat) și <b>14 pluginuri Bukkit</b> (grade, bani, terenuri, protecții) în același server, cu pornire în <b>12.6 secunde</b>.",
+     "Pe scurt: rulează simultan <b>36 de moduri Forge</b> (mașini, arme, mobilier, mâncare, voicechat) și <b>14 pluginuri Bukkit</b> (grade, bani, terenuri, protecții) în același server, cu pornire în <b>12.6 secunde</b>.",
      "8/8 TRECE în ACCEPTANCE · 0 erori în log", "tools/cuantic-brand + deploy/jvm-flags-17.txt"),
     ("6. Cele 18 Moduri de Performanță pe Server", "<b>RoadRunner</b> (Lithium) · <b>ModernFix</b> · <b>FerriteCore</b> · <b>SmoothChunkSave</b> · <b>FastSuite</b> (rețete multithread) · <b>FastWorkbench</b> · <b>FastFurnace</b> · <b>Placebo</b> · <b>LetMeDespawn</b> · <b>SpawnerFix</b> · <b>GetItTogetherDrops</b> · <b>Clumps</b> · <b>AI-Improvements</b> · <b>InControl!</b> · <b>MemoryLeakFix</b> · <b>Ksyxis</b> · <b>Bad Wither No Cookie</b> · <b>spark</b>",
-     "Ca la proști: fiecare mod rezolvă o frână precisă a serverului — salvarea lumii nu mai blochează jocul, mesele de lucru și cuptoarele nu mai scanează 5.000 de rețete pe fiecare tick, mobii cu iteme în mână se despawnează corect, iar liliecii din peșteri sunt opriți complet (<code>ambient: 0</code>).",
+     "Pe scurt: fiecare mod rezolvă o frână precisă a serverului — salvarea lumii nu mai blochează jocul, mesele de lucru și cuptoarele nu mai scanează 5.000 de rețete pe fiecare tick, mobii cu iteme în mână se despawnează corect, iar liliecii din peșteri sunt opriți complet (<code>ambient: 0</code>).",
      "36 moduri totale pe server (18 gameplay + 18 perf)", "analysis/chk.md + pack-rules.json"),
 ]
 straturi_tabel = "\n".join(
@@ -446,8 +447,8 @@ if _noua and _istoric:
 html = f"""<!DOCTYPE html>
 <html lang="ro"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CUANTIC — serverul de Minecraft care merge și pe cartof, fără lag și fără bani</title>
-<meta name="description" content="CUANTIC: server hybrid Minecraft 1.16.5 cu 32 de moduri si 15 pluginuri, masurat pe o masina de 2 nuclee. Cifre reale, surse pe pagina, cost 0.">
+<title>CUANTIC — Roleplay modat, survival și oraș | Minecraft Forge 1.16.5</title>
+<meta name="description" content="CUANTIC: server Minecraft Forge 1.16.5 cu 36 de moduri și 14 pluginuri. Roleplay, survival și direcție pentru mafii în oraș. JAR validat, benchmark public și limite explicate, fără promisiuni de zero lag.">
 <style>{STYLE}
 </style></head><body>
 <nav><div class="in">
@@ -459,26 +460,29 @@ html = f"""<!DOCTYPE html>
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">Roleplay Lite · 1.16.5 · 36 moduri + 14 pluginuri în același server</div>
-  <h1>Roleplay modat <span>pentru laptopuri modeste</span>.</h1>
-  <p class="lede">Modpack Forge 1.16.5 cu <b>36 de moduri pe server și 14 pluginuri</b>, client de <b>{CLIENT_MB} MB</b> și adresă salvată în Multiplayer. Motorul curent a răspuns la statusul Minecraft în ultimul preflight local; testele de FPS pe laptop slab și un duel cu jucători/vehicule rămân de făcut. Vezi comparația verificabilă mai jos.</p>
+  <div class="eyebrow">Forge 1.16.5 · 36 moduri + 14 pluginuri · Palma City</div>
+  <h1>Oraș roleplay modat. <span>Supraviețuire cu miză.</span></h1>
+  <p class="lede">Intră în CUANTIC cu modpack-ul normal. Construim o experiență de <b>RP urban, survival și mafii</b>, fără să sacrificăm compatibilitatea pentru un motor „rapid” doar în reclame. Pack-ul actual are <b>36 de moduri pe server și 14 pluginuri</b>. Mafii și regulile de joc sunt direcția de dezvoltare, nu funcții pretinse ca finalizate.</p>
   <div class="cta">
-    <a class="btn" href="{DL}{CLIENT}">⬇️ Descarcă Modpack-ul Client ({PACKV} · {CLIENT_MB} MB)</a>
-    <a class="btn ghost" href="#cum-intri">🚀 Cum intri în 3 pași (ca la proști)</a>
-    <a class="btn ghost" href="#explicat">🧠 Ce am făcut și DE CE</a>
+    <a class="btn" href="{DL}{CLIENT}">⬇️ Modpack-ul client ({PACKV} · {CLIENT_MB} MB)</a>
+    <a class="btn ghost" href="#engine-test">📊 JAR-ul și benchmarkul</a>
+    <a class="btn ghost" href="#viziune">🏙️ Strategia orașului</a>
+    <a class="btn ghost" href="#cum-intri">🚀 Cum intri</a>
   </div>
   <div class="stats">
-    <div class="stat"><b>2.0 ms</b><span>p95 istoric cu 1 jucător; nu o promisiune la 25 jucători</span></div>
+    <div class="stat"><b>2,1 ms</b><span>ultima citire p95/10 s cu 1 jucător, 11 octombrie; nu promisiune la 25</span></div>
     <div class="stat"><b class="b2">{CLIENT_MB} MB</b><span>client optimizat HD RGBA · serverul încarcă 50 componente (36 moduri + 14 pluginuri)</span></div>
-    <div class="stat"><b class="b3">14 / 14</b><span>pluginuri activate în smoke-testul izolat; login real netestat pentru candidat</span></div>
+    <div class="stat"><b class="b3">14 / 14</b><span>pluginuri activate în smoke-ul motorului validat; patch-ul nou rămâne experimental</span></div>
     <div class="stat"><b class="b3" style="font-size:20px">{PACKV}</b><span>ultimul pack: {CLIENT}{SERVER_MB and " + " + SERVER or ""}</span></div>
-    <div class="stat"><b class="b4">1 Click</b><span>serverul <b>{ADRESA}</b> apare direct în Multiplayer la deschiderea jocului!</span></div>
+    <div class="stat"><b class="b4">Adresă</b><span>pack-ul include <b>{ADRESA}</b> în lista de servere; verifică accesul înainte de sesiune</span></div>
   </div>
 </header>
 
 {panel()}
 
-<h2 id="cum-intri">🚀 Cum intri pe server în 3 pași simpli (explicat „ca la proști")</h2>
+{strategy_panel()}
+
+<h2 id="cum-intri">🚀 Cum intri pe server în 3 pași simpli</h2>
 <div class="sub">Pentru Forge 1.16.5 ai nevoie de un launcher compatibil. Durata instalării și FPS-ul depind de hardware, rețea și modurile alese:</div>
 <div class="grid">
   <div class="card"><h3>Pasul 1️⃣ — Descarcă fișierul</h3><p>Apasă pe butonul verde de mai jos ca să iei fișierul <b><code>{CLIENT}</code></b> ({CLIENT_MB} MB). Nu trebuie să îl dezarhivezi!</p><p style="margin-top:10px"><a class="btn" href="{DL}{CLIENT}">⬇️ Descarcă {CLIENT}</a></p></div>
@@ -505,35 +509,35 @@ Sub 50 ms pe tick nu înseamnă FPS garantat pe laptop sau 20 TPS cu 25 jucător
 
 <h2>🤝 Ce primești și ce NU promitem</h2>
 <div class="grid">
-  <div class="card"><h3>📦 Pack-ul tău, ușurat cu −45.5%</h3><p>Modurile de conținut din Freeroam rămân în pack; ultimele probe izolate nu substituie un handshake modat real, dar sunetele și texturile uriașe sunt compactate fără pierdere de rezoluție, iar <code>Freeroam.1.0.0.mrpack</code> original rămâne intact în tagul <code>pack-original</code>.</p><span class="src">{PACKV} · {CLIENT} · {CLIENT_MB} MB (redus de la 133.1 MB = −60.6 MB pentru copii cu net slab)</span></div>
+  <div class="card"><h3>📦 Pack-ul tău, ușurat cu −45.5%</h3><p>Modurile de conținut din Freeroam rămân în pack; ultimele probe izolate nu substituie un handshake modat real, dar fișierele multimedia au fost compactate; calitatea vizuală și FPS-ul cer test pe laptop, iar <code>Freeroam.1.0.0.mrpack</code> original rămâne intact în tagul <code>pack-original</code>.</p><span class="src">{PACKV} · {CLIENT} · {CLIENT_MB} MB (redus de la 133.1 MB = −60.6 MB pentru copii cu net slab)</span></div>
   <div class="card"><h3>🚪 Intrare în pack</h3><p>Clientul modat se descarcă mai sus. Verifică identitatea operatorului înainte de a deschide un server fără autentificare: numele unui jucător nu este o dovadă de identitate.</p><span class="src">analysis/NO-LOGIN.md · analysis/op.md</span></div>
-  <div class="card"><h3>🩺 Se repară singur</h3><p>Dacă Java moare, supervisorul încearcă repornirea, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Fiecare schimbare vine cu snapshot + rollback.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
+  <div class="card"><h3>🩺 Recuperare monitorizată</h3><p>Dacă Java moare, supervisorul încearcă repornirea, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Schimbările pe serverul live cer backup verificat și rollback; nu promitem recuperare instantanee.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
   <div class="card"><h3>🧾 Probe verificabile</h3><p>A/B-ul din partea de sus citește rezultatele jobului GitHub; arhiva istorică include și valori vechi introduse manual. Le poți citi pe toate în repo, la <code>analysis/</code>.</p><span class="src">BENCH-LIVE.md · RAM-ALL.md · APPLY-LIVE.md</span></div>
 </div>
 <div class="honest">
   <h3>Ce nu știm încă (si de ce e scris aici, nu ascuns după un slogan)</h3>
   <ul>
-    <li>Nu există încă un JAR nou demonstrat mai rapid decât cel public. Testul GitHub pe un singur eșantion a avut p95 2.7 vs 2.8 ms; nu am lansat candidatul.</li>
-    <li>Nu avem măsurat cu 10-25 de jucători deodată — cifrele de mai sus sunt cu <b>un</b> jucător. Nu mai afișăm niciun „câți jucători duce" — valorile acelea erau extrapolări, nu probe, și nu le-am verificat.</li>
-    <li>„Nu se simte ca un hibrid" e verificat doar din partea serverului (0 kickuri, 0 erori de registru). Senzția ta de pe scaun nu o putem măsura de aici.</li>
+    <li>Nu există încă un JAR nou demonstrat mai bun decât cel public. Cel mai recent A/B/B/A a redus CPU în scenariul sintetic, dar p95 a crescut ușor; nu am instalat candidatul.</li>
+    <li>Nu avem măsurat cu 10-25 de jucători deodată — baza reală are trei citiri cu <b>un</b> jucător, iar A/B-ul izolat nu are jucători. Nu mai afișăm niciun „câți jucători duce" — valorile acelea erau extrapolări, nu probe, și nu le-am verificat.</li>
+    <li>Nu avem un test client complet al șofatului și al orașului pe un laptop ieftin. Metricile serverului nu demonstrează FPS bun sau lipsa erorilor la toți jucătorii.</li>
     <li>Nu avem backup zilnic programat pe cutia asta. Ce avem: snapshot <code>tar</code> înaintea fiecărei schimbări + copii <code>.bak</code>. Backup-ul zilnic vine odată cu mutarea pe VM.</li>
-    <li>Restartul programat de la 06:00 (ghilotina anti-scurgeri) e <b>plan</b>, nu stare de fapt. Ce e automat acum: repornirea la crash, tăierea logurilor și adoptarea noului release.</li>
+    <li>Restartul programat de la 06:00 (ghilotina anti-scurgeri) e <b>plan</b>, nu stare de fapt. Supervisorul încearcă repornirea la crash; nu efectuăm restarturi experimentale în timpul sesiunilor active.</li>
     <li>Trezirea la prima conectare (wake-on-join) e scrisă și documentată, dar <b>n-a fost încă verificată live</b> — pe Cloud Shell e imposibil fizic.</li>
     <li>Nu vindem „de 1000× mai bun": 1000× pe p95 ar însemna 0.005 ms, adică sub cuantumul unui singur tick. Datele istorice nu demonstrează că un JAR nou a redus p95.</li>
   </ul>
 </div>
 
 <details><summary>📖 Dicționar de termeni, ca să nu te păcălim cu jargon</summary>
-  <p><b>MSPT</b> = cât durează o „bătăre" a serverului. Ai 50 ms de buget pe cadru; sub asta nu simți nimic, peste apar săriturile.</p>
-  <p><b>p95</b> = a 95-a valoare din 100, adică cea mai proastă secundă „normală". Media arată bine mereu; p95 arată realitatea.</p>
+  <p><b>MSPT</b> = cât durează o „bătăre" a serverului. Bugetul pentru 20 TPS este 50 ms pe tick; un tick rapid nu garantează FPS client bun.</p>
+  <p><b>p95</b> = a 95-a valoare din 100, adică 95% dintre măsurători sunt cel mult acea valoare; maximele pot fi mai rele.</p>
   <p><b>GC</b> = momentul în care Java își face curat în memorie și stă puțin loc. Mai rare = mai bine, dar prea lungi = se simte.</p>
   <p><b>RSS / RAM vârf</b> = câtă memorie ocupă cu adevărat serverul, nu cât i-am dat voie să ceară.</p>
-  <p><b>Hibrid</b> = server care rulează simultan moduri (Forge) și pluginuri (Bukkit). De obicei se sărută urât; al nostru are strat de compatibilitate (CatServer) și 0 kickuri la login.</p>
+  <p><b>Hibrid</b> = server care rulează simultan moduri (Forge) și pluginuri (Bukkit). Integrarea este asigurată de CatServer; compatibilitatea în joc trebuie testată cu pack-ul normal.</p>
 </details>
 
 <h2>🥔 Merge și pe un calculator de bibliotecă?</h2>
 <div class="grid">
-  <div class="card"><h3>Clientul</h3><p>Pack-ul modat are reglaje pentru grafica redusă; OptiFine și Rubidium/Oculus trebuie încercate în instanțe separate. Nu promitem FPS pe PC-uri vechi fără test în oraș cu vehicule. Marime: <b>{CLIENT_MB} MB</b> client / <b>{SERVER_MB} MB</b> server, citite de pe release, nu estimate..</p></div>
+  <div class="card"><h3>Clientul</h3><p>Pack-ul modat are reglaje pentru grafica redusă; OptiFine și Rubidium/Oculus trebuie încercate în instanțe separate. Nu promitem FPS pe PC-uri vechi fără test în oraș cu vehicule. Marime: <b>{CLIENT_MB} MB</b> client / <b>{SERVER_MB} MB</b> server, citite de pe release, nu estimate.</p></div>
   <div class="card"><h3>Serverul</h3><p>La ultima probă fără jucători a raportat 20 TPS. Nu avem încă sarcină controlată cu mai mulți jucători, deci consumul la vârf nu este garantat.</p></div>
   <div class="card"><h3>Gazda</h3><p>Rulează acum pe un cont gratuit, 2 vCPU · 11.8 GB RAM · disc 5 GB (66% ocupat — limita reală a cutiei, nu a serverului).</p></div>
 </div>
@@ -541,22 +545,9 @@ Sub 50 ms pe tick nu înseamnă FPS garantat pe laptop sau 20 TPS cu 25 jucător
 <h2>📦 Cum intri, în 3 mișcări</h2>
 <div class="grid">
   <div class="card"><h3>1️⃣ Descarcă</h3><p>Apasă butonul de sus: <b>{CLIENT}</b>. E același Freeroam pe care-l cunoști, verificat și ușurat.</p><p style="margin-top:10px"><a class="btn" href="{DL}{CLIENT}">⬇️ Descarcă pack-ul</a></p></div>
-  <div class="card"><h3>2️⃣ Importă (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege fișierul <code>.mrpack</code> → Launch. Merge și cu TLauncher.</p></div>
+  <div class="card"><h3>2️⃣ Importă (o dată)</h3><p><a href="https://prismlauncher.org/download">Prism Launcher</a> → Add Instance → Import → alege fișierul <code>.mrpack</code> → Launch. Folosește un launcher care importă mrpack; nu am testat orice launcher.</p></div>
   <div class="card"><h3>3️⃣ Joacă-te</h3><p>Multiplayer → Add Server → <b>{ADRESA}</b>. Fără parolă, fără /register — intri direct în oraș. 🏙️</p></div>
 </div>
-
-<h2>🕰️ Cum arată o zi pe server (schema țintită)</h2>
-<div class="sub">Serverele hibrid clasice mor pentru că memoria lor crește ca un munte, zi după zi. Asta e ce țintim; <b>pe cutia asta de azi restartul de la 06:00 NU e automat</b> — automat e supervisorul care repornește la crash și taie logurile când crește discul.</div>
-<div class="card"><pre>
-06:00 GHILOTINA (restart programat) → memoria la zero
-06:01 pauză totală: ~0% CPU, nimeni online
-14:00 intră copiii → +~50 MB/jucător, lumea e deja generată lângă spawn
-18:00 vârful serii: totul plafonat, buget fix de entități
-03:00 gol → iar pauză totală
-────────────────────────────────────────────
-săptămâna noastră:  ╱╲╱╲╱╲╱╲   (plat, ca dinții de fierăstrău)
-boala hibridelor:   ╱─╱─╱──↗    (muntele care crește → crash)
-</pre></div>
 
 <footer>
   <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: {now}<br>
