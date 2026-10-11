@@ -1,6 +1,6 @@
 # Strict screen — motor CUANTIC sursă modificată vs live și oficial
 
-Run: https://github.com/iZentric/ServerRolePlayLite/actions/runs/38181841511
+Run: https://github.com/iZentric/ServerRolePlayLite/actions/runs/38183484524
 
 JAR candidat recompilabil din patch-ul [SortedArraySet](../patches/engine-ticket/SortedArraySet.java.patch) (run 38175428475), NU doar branding.
 
@@ -19,21 +19,22 @@ Niciun JAR live/release schimbat. „Mai bun decât orice motor pe orice sarcin�
   "candidate_sha256": "b081735815f53e1118608464c39659b537b10fc74fa96458a4a922b7d1215ee3",
   "branded-A1": {
     "label": "branded-A1",
-    "boot_done_s": 10.547,
-    "boot_wall_seconds": 86.02,
+    "boot_done_s": 10.305,
+    "boot_wall_seconds": 89.16,
+    "boot_wall_poll_interval_seconds": 0.25,
     "plugins_enabled": 14,
     "mods_on_disk": 36,
-    "rss_median_mb": 2239.9,
-    "rss_peak_mb": 2246.9,
-    "rss_steady_median_mb": 2246.4,
-    "rss_steady_peak_mb": 2246.9,
+    "rss_median_mb": 2402.4,
+    "rss_peak_mb": 2405.6,
+    "rss_steady_median_mb": 2402.4,
+    "rss_steady_peak_mb": 2402.9,
     "cpu_seconds_during_command_and_warmup": null,
-    "cpu_seconds_steady_after_55s": 3.58,
+    "cpu_seconds_steady_after_55s": 3.78,
     "spark_tick_min_median_p95_max_ms_1m": [
-      0.3,
-      0.6,
-      1.1,
-      11.5
+      0.7,
+      0.8,
+      1.3,
+      14.6
     ],
     "critical_errors": [],
     "exit_code": 0,
@@ -43,35 +44,36 @@ Niciun JAR live/release schimbat. „Mai bun decât orice motor pe orice sarcin�
     "hopper_data_merge_responses": null,
     "hopper_fill_256_confirmed": null,
     "command_feedback_last": [
-      "[22:49:36] [Server thread/INFO]: Summoned new Zombie",
-      "[22:49:36] [Server thread/INFO]: Summoned new Zombie",
-      "[22:49:36] [Server thread/INFO]: Summoned new Zombie",
-      "[22:49:36] [Server thread/INFO]: Summoned new Zombie",
-      "[22:49:36] [Server thread/INFO]: Summoned new Zombie",
-      "[22:49:36] [Server thread/INFO]: Summoned new Zombie",
-      "[22:49:36] [Server thread/INFO]: Summoned new Zombie",
-      "[22:49:36] [Server thread/INFO]: Summoned new Zombie"
+      "[23:15:26] [Server thread/INFO]: Summoned new Zombie",
+      "[23:15:26] [Server thread/INFO]: Summoned new Zombie",
+      "[23:15:26] [Server thread/INFO]: Summoned new Zombie",
+      "[23:15:26] [Server thread/INFO]: Summoned new Zombie",
+      "[23:15:26] [Server thread/INFO]: Summoned new Zombie",
+      "[23:15:26] [Server thread/INFO]: Summoned new Zombie",
+      "[23:15:26] [Server thread/INFO]: Summoned new Zombie",
+      "[23:15:26] [Server thread/INFO]: Summoned new Zombie"
     ],
     "valid": true,
     "jar_sha256": "96f824793ab3a685a390d82305202403ea8cbe5c011a1c79ce0ec024a4d7789c"
   },
   "official-B1": {
     "label": "official-B1",
-    "boot_done_s": 9.717,
-    "boot_wall_seconds": 86.02,
+    "boot_done_s": 10.418,
+    "boot_wall_seconds": 87.4,
+    "boot_wall_poll_interval_seconds": 0.25,
     "plugins_enabled": 14,
     "mods_on_disk": 36,
-    "rss_median_mb": 2102.5,
-    "rss_peak_mb": 2103.0,
-    "rss_steady_median_mb": 2102.6,
-    "rss_steady_peak_mb": 2103.0,
+    "rss_median_mb": 2550.4,
+    "rss_peak_mb": 2551.1,
+    "rss_steady_median_mb": 2550.4,
+    "rss_steady_peak_mb": 2551.1,
     "cpu_seconds_during_command_and_warmup": null,
-    "cpu_seconds_steady_after_55s": 3.88,
+    "cpu_seconds_steady_after_55s": 3.82,
     "spark_tick_min_median_p95_max_ms_1m": [
-      0.3,
-      0.7,
-      1.2,
-      14.0
+      0.5,
+      0.8,
+      1.4,
+      13.0
     ],
     "critical_errors": [],
     "exit_code": 0,
@@ -81,35 +83,36 @@ Niciun JAR live/release schimbat. „Mai bun decât orice motor pe orice sarcin�
     "hopper_data_merge_responses": null,
     "hopper_fill_256_confirmed": null,
     "command_feedback_last": [
-      "[22:53:30] [Server thread/INFO]: Summoned new Zombie",
-      "[22:53:30] [Server thread/INFO]: Summoned new Zombie",
-      "[22:53:30] [Server thread/INFO]: Summoned new Zombie",
-      "[22:53:30] [Server thread/INFO]: Summoned new Zombie",
-      "[22:53:30] [Server thread/INFO]: Summoned new Zombie",
-      "[22:53:30] [Server thread/INFO]: Summoned new Zombie",
-      "[22:53:30] [Server thread/INFO]: Summoned new Zombie",
-      "[22:53:30] [Server thread/INFO]: Summoned new Zombie"
+      "[23:19:22] [Server thread/INFO]: Summoned new Zombie",
+      "[23:19:22] [Server thread/INFO]: Summoned new Zombie",
+      "[23:19:22] [Server thread/INFO]: Summoned new Zombie",
+      "[23:19:22] [Server thread/INFO]: Summoned new Zombie",
+      "[23:19:22] [Server thread/INFO]: Summoned new Zombie",
+      "[23:19:22] [Server thread/INFO]: Summoned new Zombie",
+      "[23:19:22] [Server thread/INFO]: Summoned new Zombie",
+      "[23:19:22] [Server thread/INFO]: Summoned new Zombie"
     ],
     "valid": true,
     "jar_sha256": "8edea98c597e7af44a45ef9093678c38ca3749d55a71cdff10218c1c6b946fd0"
   },
   "patched-C1": {
     "label": "patched-C1",
-    "boot_done_s": 9.911,
-    "boot_wall_seconds": 86.02,
+    "boot_done_s": 10.193,
+    "boot_wall_seconds": 85.15,
+    "boot_wall_poll_interval_seconds": 0.25,
     "plugins_enabled": 14,
     "mods_on_disk": 36,
-    "rss_median_mb": 2182.9,
-    "rss_peak_mb": 2183.5,
-    "rss_steady_median_mb": 2183.0,
-    "rss_steady_peak_mb": 2183.5,
+    "rss_median_mb": 2202.1,
+    "rss_peak_mb": 2216.6,
+    "rss_steady_median_mb": 2202.1,
+    "rss_steady_peak_mb": 2202.7,
     "cpu_seconds_during_command_and_warmup": null,
-    "cpu_seconds_steady_after_55s": 2.87,
+    "cpu_seconds_steady_after_55s": 4.41,
     "spark_tick_min_median_p95_max_ms_1m": [
-      0.3,
-      0.5,
-      1.0,
-      14.7
+      0.8,
+      1.1,
+      1.6,
+      17.7
     ],
     "critical_errors": [],
     "exit_code": 0,
@@ -119,35 +122,36 @@ Niciun JAR live/release schimbat. „Mai bun decât orice motor pe orice sarcin�
     "hopper_data_merge_responses": null,
     "hopper_fill_256_confirmed": null,
     "command_feedback_last": [
-      "[22:57:25] [Server thread/INFO]: Summoned new Zombie",
-      "[22:57:25] [Server thread/INFO]: Summoned new Zombie",
-      "[22:57:25] [Server thread/INFO]: Summoned new Zombie",
-      "[22:57:25] [Server thread/INFO]: Summoned new Zombie",
-      "[22:57:25] [Server thread/INFO]: Summoned new Zombie",
-      "[22:57:25] [Server thread/INFO]: Summoned new Zombie",
-      "[22:57:25] [Server thread/INFO]: Summoned new Zombie",
-      "[22:57:25] [Server thread/INFO]: Summoned new Zombie"
+      "[23:23:15] [Server thread/INFO]: Summoned new Zombie",
+      "[23:23:15] [Server thread/INFO]: Summoned new Zombie",
+      "[23:23:15] [Server thread/INFO]: Summoned new Zombie",
+      "[23:23:15] [Server thread/INFO]: Summoned new Zombie",
+      "[23:23:15] [Server thread/INFO]: Summoned new Zombie",
+      "[23:23:15] [Server thread/INFO]: Summoned new Zombie",
+      "[23:23:15] [Server thread/INFO]: Summoned new Zombie",
+      "[23:23:15] [Server thread/INFO]: Summoned new Zombie"
     ],
     "valid": true,
     "jar_sha256": "b081735815f53e1118608464c39659b537b10fc74fa96458a4a922b7d1215ee3"
   },
   "patched-C2": {
     "label": "patched-C2",
-    "boot_done_s": 9.846,
-    "boot_wall_seconds": 86.02,
+    "boot_done_s": 10.71,
+    "boot_wall_seconds": 85.89,
+    "boot_wall_poll_interval_seconds": 0.25,
     "plugins_enabled": 14,
     "mods_on_disk": 36,
-    "rss_median_mb": 2478.9,
-    "rss_peak_mb": 2479.4,
-    "rss_steady_median_mb": 2478.9,
-    "rss_steady_peak_mb": 2479.4,
+    "rss_median_mb": 2528.9,
+    "rss_peak_mb": 2529.4,
+    "rss_steady_median_mb": 2528.9,
+    "rss_steady_peak_mb": 2529.4,
     "cpu_seconds_during_command_and_warmup": null,
-    "cpu_seconds_steady_after_55s": 3.14,
+    "cpu_seconds_steady_after_55s": 3.72,
     "spark_tick_min_median_p95_max_ms_1m": [
-      0.3,
       0.6,
-      1.0,
-      15.5
+      0.8,
+      1.3,
+      12.3
     ],
     "critical_errors": [],
     "exit_code": 0,
@@ -157,35 +161,36 @@ Niciun JAR live/release schimbat. „Mai bun decât orice motor pe orice sarcin�
     "hopper_data_merge_responses": null,
     "hopper_fill_256_confirmed": null,
     "command_feedback_last": [
-      "[23:01:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:01:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:01:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:01:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:01:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:01:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:01:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:01:19] [Server thread/INFO]: Summoned new Zombie"
+      "[23:27:09] [Server thread/INFO]: Summoned new Zombie",
+      "[23:27:09] [Server thread/INFO]: Summoned new Zombie",
+      "[23:27:09] [Server thread/INFO]: Summoned new Zombie",
+      "[23:27:09] [Server thread/INFO]: Summoned new Zombie",
+      "[23:27:09] [Server thread/INFO]: Summoned new Zombie",
+      "[23:27:09] [Server thread/INFO]: Summoned new Zombie",
+      "[23:27:09] [Server thread/INFO]: Summoned new Zombie",
+      "[23:27:09] [Server thread/INFO]: Summoned new Zombie"
     ],
     "valid": true,
     "jar_sha256": "b081735815f53e1118608464c39659b537b10fc74fa96458a4a922b7d1215ee3"
   },
   "official-B2": {
     "label": "official-B2",
-    "boot_done_s": 10.025,
-    "boot_wall_seconds": 86.02,
+    "boot_done_s": 10.705,
+    "boot_wall_seconds": 89.9,
+    "boot_wall_poll_interval_seconds": 0.25,
     "plugins_enabled": 14,
     "mods_on_disk": 36,
-    "rss_median_mb": 2201.9,
-    "rss_peak_mb": 2202.8,
-    "rss_steady_median_mb": 2201.9,
-    "rss_steady_peak_mb": 2202.8,
+    "rss_median_mb": 2487.7,
+    "rss_peak_mb": 2488.6,
+    "rss_steady_median_mb": 2487.7,
+    "rss_steady_peak_mb": 2488.6,
     "cpu_seconds_during_command_and_warmup": null,
-    "cpu_seconds_steady_after_55s": 3.21,
+    "cpu_seconds_steady_after_55s": 4.03,
     "spark_tick_min_median_p95_max_ms_1m": [
-      0.3,
-      0.6,
-      1.1,
-      15.1
+      0.7,
+      0.8,
+      1.3,
+      15.6
     ],
     "critical_errors": [],
     "exit_code": 0,
@@ -195,35 +200,36 @@ Niciun JAR live/release schimbat. „Mai bun decât orice motor pe orice sarcin�
     "hopper_data_merge_responses": null,
     "hopper_fill_256_confirmed": null,
     "command_feedback_last": [
-      "[23:05:13] [Server thread/INFO]: Summoned new Zombie",
-      "[23:05:13] [Server thread/INFO]: Summoned new Zombie",
-      "[23:05:13] [Server thread/INFO]: Summoned new Zombie",
-      "[23:05:13] [Server thread/INFO]: Summoned new Zombie",
-      "[23:05:13] [Server thread/INFO]: Summoned new Zombie",
-      "[23:05:13] [Server thread/INFO]: Summoned new Zombie",
-      "[23:05:13] [Server thread/INFO]: Summoned new Zombie",
-      "[23:05:13] [Server thread/INFO]: Summoned new Zombie"
+      "[23:31:07] [Server thread/INFO]: Summoned new Zombie",
+      "[23:31:07] [Server thread/INFO]: Summoned new Zombie",
+      "[23:31:07] [Server thread/INFO]: Summoned new Zombie",
+      "[23:31:07] [Server thread/INFO]: Summoned new Zombie",
+      "[23:31:07] [Server thread/INFO]: Summoned new Zombie",
+      "[23:31:07] [Server thread/INFO]: Summoned new Zombie",
+      "[23:31:07] [Server thread/INFO]: Summoned new Zombie",
+      "[23:31:07] [Server thread/INFO]: Summoned new Zombie"
     ],
     "valid": true,
     "jar_sha256": "8edea98c597e7af44a45ef9093678c38ca3749d55a71cdff10218c1c6b946fd0"
   },
   "branded-A2": {
     "label": "branded-A2",
-    "boot_done_s": 9.879,
-    "boot_wall_seconds": 98.02,
+    "boot_done_s": 10.644,
+    "boot_wall_seconds": 87.89,
+    "boot_wall_poll_interval_seconds": 0.25,
     "plugins_enabled": 14,
     "mods_on_disk": 36,
-    "rss_median_mb": 2367.6,
-    "rss_peak_mb": 2368.5,
-    "rss_steady_median_mb": 2367.6,
-    "rss_steady_peak_mb": 2368.5,
+    "rss_median_mb": 2042.4,
+    "rss_peak_mb": 2042.9,
+    "rss_steady_median_mb": 2042.4,
+    "rss_steady_peak_mb": 2042.9,
     "cpu_seconds_during_command_and_warmup": null,
-    "cpu_seconds_steady_after_55s": 4.27,
+    "cpu_seconds_steady_after_55s": 3.68,
     "spark_tick_min_median_p95_max_ms_1m": [
-      0.4,
       0.7,
-      1.2,
-      13.6
+      0.8,
+      1.4,
+      13.0
     ],
     "critical_errors": [],
     "exit_code": 0,
@@ -233,14 +239,14 @@ Niciun JAR live/release schimbat. „Mai bun decât orice motor pe orice sarcin�
     "hopper_data_merge_responses": null,
     "hopper_fill_256_confirmed": null,
     "command_feedback_last": [
-      "[23:09:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:09:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:09:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:09:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:09:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:09:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:09:19] [Server thread/INFO]: Summoned new Zombie",
-      "[23:09:19] [Server thread/INFO]: Summoned new Zombie"
+      "[23:35:03] [Server thread/INFO]: Summoned new Zombie",
+      "[23:35:03] [Server thread/INFO]: Summoned new Zombie",
+      "[23:35:03] [Server thread/INFO]: Summoned new Zombie",
+      "[23:35:03] [Server thread/INFO]: Summoned new Zombie",
+      "[23:35:03] [Server thread/INFO]: Summoned new Zombie",
+      "[23:35:03] [Server thread/INFO]: Summoned new Zombie",
+      "[23:35:03] [Server thread/INFO]: Summoned new Zombie",
+      "[23:35:03] [Server thread/INFO]: Summoned new Zombie"
     ],
     "valid": true,
     "jar_sha256": "96f824793ab3a685a390d82305202403ea8cbe5c011a1c79ce0ec024a4d7789c"
@@ -251,97 +257,97 @@ Niciun JAR live/release schimbat. „Mai bun decât orice motor pe orice sarcin�
       "rss_steady_median_mb": {
         "samples": {
           "branded": [
-            2246.4,
-            2367.6
+            2402.4,
+            2042.4
           ],
           "official": [
-            2102.6,
-            2201.9
+            2550.4,
+            2487.7
           ],
           "patched": [
-            2183.0,
-            2478.9
+            2202.1,
+            2528.9
           ]
         },
-        "candidate_worst": 2478.9,
-        "best_baseline": 2102.6,
+        "candidate_worst": 2528.9,
+        "best_baseline": 2042.4,
         "pass": false
       },
       "cpu_steady_s": {
         "samples": {
           "branded": [
-            3.58,
-            4.27
+            3.78,
+            3.68
           ],
           "official": [
-            3.88,
-            3.21
+            3.82,
+            4.03
           ],
           "patched": [
-            2.87,
-            3.14
+            4.41,
+            3.72
           ]
         },
-        "candidate_worst": 3.14,
-        "best_baseline": 3.21,
-        "pass": true
+        "candidate_worst": 4.41,
+        "best_baseline": 3.68,
+        "pass": false
       },
       "p95_ms": {
         "samples": {
           "branded": [
-            1.1,
-            1.2
+            1.3,
+            1.4
           ],
           "official": [
-            1.2,
-            1.1
+            1.4,
+            1.3
           ],
           "patched": [
-            1.0,
-            1.0
+            1.6,
+            1.3
           ]
         },
-        "candidate_worst": 1.0,
-        "best_baseline": 1.1,
-        "pass": true
+        "candidate_worst": 1.6,
+        "best_baseline": 1.3,
+        "pass": false
       },
       "boot_internal_done_s": {
         "samples": {
           "branded": [
-            10.547,
-            9.879
+            10.305,
+            10.644
           ],
           "official": [
-            9.717,
-            10.025
+            10.418,
+            10.705
           ],
           "patched": [
-            9.911,
-            9.846
+            10.193,
+            10.71
           ]
         },
-        "candidate_worst": 9.911,
-        "best_baseline": 9.717,
+        "candidate_worst": 10.71,
+        "best_baseline": 10.305,
         "pass": false
       },
       "boot_wall_s": {
         "samples": {
           "branded": [
-            86.02,
-            98.02
+            89.16,
+            87.89
           ],
           "official": [
-            86.02,
-            86.02
+            87.4,
+            89.9
           ],
           "patched": [
-            86.02,
-            86.02
+            85.15,
+            85.89
           ]
         },
-        "candidate_worst": 86.02,
-        "best_baseline": 86.02,
-        "pass": false
+        "candidate_worst": 85.89,
+        "best_baseline": 87.4,
+        "pass": true
       }
     },
     "reason": "REJECT: at least one metric tied or regressed against at least one baseline; do not promote"
