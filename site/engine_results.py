@@ -39,6 +39,8 @@ def latest_status():
 def panel():
     ci = result("ENGINE-AB-GITHUB.md")
     host = result("ENGINE-AB-HOST.md")
+    filled = result("ENGINE-CURRENT-RESULT.md").get("summary", {})
+    empty = result("ENGINE-EMPTY-RESULT.md").get("summary", {})
     old, new = ci.get("baseline-2023", {}), ci.get("candidate-2024", {})
     if not old.get("valid") or not new.get("valid"):
         row = '<tr><td colspan="3">Comparația CI lipsește sau nu a trecut verificările.</td></tr>'
@@ -58,17 +60,29 @@ def panel():
                  "nu există verdict de performanță pe gazdă."
                  if host.get("status", "").startswith("ABORTED")
                  else "Gazda reală: rezultat neconfirmat; citește raportul înainte de concluzii.")
+    def fork_row(title, values):
+        try:
+            a, b = values["live"], values["patched"]
+            return (f'<tr><td>{title} (2×/motor)</td>'
+                    f'<td>p95 {a["p95_ms_median_of_2"]} → {b["p95_ms_median_of_2"]} ms; '
+                    f'CPU {a["cpu_seconds_workload_median_of_2"]} → {b["cpu_seconds_workload_median_of_2"]} s</td>'
+                    '<td>Nu a câștigat; doar artifact experimental</td></tr>')
+        except (KeyError, TypeError):
+            return ''
+    fork_rows = fork_row("Fork din codul live: hoppers plini", filled) + fork_row("Fork din codul live: hoppers goale", empty)
     return f'''<section id="engine-test" aria-label="Probe comparative ale motorului">
 <h2>🔬 Motorul: ce am măsurat, ce păstrăm</h2>
-<div class="sub"><b>Decizie: JAR-ul public rămâne neschimbat.</b> Candidatul a pornit cu 36 moduri și 14 pluginuri,
-dar nu a demonstrat un avantaj de performanță. O probă sintetică, fără jucători, nu stabilește
+<div class="sub"><b>Decizie: JAR-ul public rămâne neschimbat.</b> Am compilat și testat fork-uri reale
+pe codul CatServer, nu doar un nume nou. Toate au pornit cu 36 moduri și 14 pluginuri, dar niciunul
+nu a câștigat împotriva JAR-ului actual în A/B. O probă sintetică, fără jucători, nu stabilește
 cel mai rapid JAR din 2026 și nu validează autentificarea unui client modat.</div>
-<table class="tbl"><tr><th>Motor</th><th>GitHub, același runner, fără jucători</th><th>Decizie</th></tr>{row}</table>
+<table class="tbl"><tr><th>Motor/scenariu</th><th>GitHub, același runner, fără jucători</th><th>Decizie</th></tr>{row}{fork_rows}</table>
 <div class="note">{host_note} Ultima probă a JAR-ului public a confirmat status Minecraft <b>local</b>
 (protocol 754, 0/25 jucători); nu dovedește accesul extern sau FPS pe laptopuri slabe.</div>
 <p class="sub" style="margin-top:12px">Date și limite: <a href="{REPO_DOCS}ENGINE-DECISION.md">verdict complet</a> ·
 <a href="{REPO_DOCS}ENGINE-AB-GITHUB.md">A/B GitHub</a> ·
 <a href="{REPO_DOCS}ENGINE-AB-HOST.md">gazda reală</a> ·
+<a href="{REPO_DOCS}ENGINE-FORK-STATUS.md">fork-uri sursă și probe</a> ·
 <a href="{REPO_DOCS}ENGINE-PREFLIGHT.md">preflight live</a>.
 OptiFine + modurile normale și Rubidium/Oculus se testează separat cu jucători și vehicule.</p>
 </section>'''

@@ -102,7 +102,7 @@ footer code{color:#9fb0c9}
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
-  <span class="pill"><i style="background:var(--mint);box-shadow:0 0 12px var(--mint)"></i>SUS la ultima probă publică 11.10 08:16 UTC (ping)</span>
+  <span class="pill"><i style="background:var(--mut);box-shadow:0 0 12px var(--mut)"></i>Status neconfirmat acum · ultima probă 11.10 08:16 UTC</span>
   <span class="pill">cost 0 lei</span>
   <a class="l" href="#cifre">sari la cifre ↓</a>
 </div></nav>
@@ -128,15 +128,17 @@ footer code{color:#9fb0c9}
 
 <section id="engine-test" aria-label="Probe comparative ale motorului">
 <h2>🔬 Motorul: ce am măsurat, ce păstrăm</h2>
-<div class="sub"><b>Decizie: JAR-ul public rămâne neschimbat.</b> Candidatul a pornit cu 36 moduri și 14 pluginuri,
-dar nu a demonstrat un avantaj de performanță. O probă sintetică, fără jucători, nu stabilește
+<div class="sub"><b>Decizie: JAR-ul public rămâne neschimbat.</b> Am compilat și testat fork-uri reale
+pe codul CatServer, nu doar un nume nou. Toate au pornit cu 36 moduri și 14 pluginuri, dar niciunul
+nu a câștigat împotriva JAR-ului actual în A/B. O probă sintetică, fără jucători, nu stabilește
 cel mai rapid JAR din 2026 și nu validează autentificarea unui client modat.</div>
-<table class="tbl"><tr><th>Motor</th><th>GitHub, același runner, fără jucători</th><th>Decizie</th></tr><tr><td>JAR public actual (CatServer 2023)</td><td>2.7 ms p95 · 2411.4 MiB RSS · 14 pluginuri</td><td>Referință</td></tr><tr><td>Candidat upstream (nepublicat)</td><td>2.8 ms p95 · 2337.5 MiB RSS · 14 pluginuri</td><td>Nu a redus p95 în proba unică</td></tr></table>
+<table class="tbl"><tr><th>Motor/scenariu</th><th>GitHub, același runner, fără jucători</th><th>Decizie</th></tr><tr><td>JAR public actual (CatServer 2023)</td><td>3.6 ms p95 · 2517.4 MiB RSS · 14 pluginuri</td><td>Referință</td></tr><tr><td>Candidat upstream (nepublicat)</td><td>3.2 ms p95 · 2556.9 MiB RSS · 14 pluginuri</td><td>Nu a redus p95 în proba unică</td></tr></table>
 <div class="note">Gazda reală: comparația A/B s-a oprit înainte de testul candidatului; nu există verdict de performanță pe gazdă. Ultima probă a JAR-ului public a confirmat status Minecraft <b>local</b>
 (protocol 754, 0/25 jucători); nu dovedește accesul extern sau FPS pe laptopuri slabe.</div>
 <p class="sub" style="margin-top:12px">Date și limite: <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-DECISION.md">verdict complet</a> ·
 <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-AB-GITHUB.md">A/B GitHub</a> ·
 <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-AB-HOST.md">gazda reală</a> ·
+<a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-FORK-STATUS.md">fork-uri sursă și probe</a> ·
 <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-PREFLIGHT.md">preflight live</a>.
 OptiFine + modurile normale și Rubidium/Oculus se testează separat cu jucători și vehicule.</p>
 </section>
@@ -374,7 +376,7 @@ boala hibridelor:   ╱─╱─╱──↗    (muntele care crește → crash)
 </pre></div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 11 Oct 2026, 08:16 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 11 Oct 2026, 09:37 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>docs/ENGINE-DECISION.md</code> · <code>docs/ENGINE-AB-GITHUB.md</code> · <code>docs/ENGINE-PREFLIGHT.md</code>
 </footer>
