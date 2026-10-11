@@ -58,7 +58,7 @@ def prepare(pack, dest, candidate=None):
     (dest / "eula.txt").write_text("eula=true\n")
 
 
-def run(label, dest, report_dir, hopper_workload=False):
+def run(label, dest, report_dir, hopper_workload=False, ticket_workload=False):
     logfile = report_dir / f"{label}.log"
     rss = []
     cpu_workload = None
@@ -84,7 +84,9 @@ def run(label, dest, report_dir, hopper_workload=False):
                 cpu_start = cpu_time_seconds(proc.pid)
                 # Ensure an identical, ticking chunk without human accounts.
                 block = "minecraft:hopper[facing=east]" if hopper_workload else "minecraft:hopper"
-                commands = ["gamerule doMobSpawning false", "forceload add 0 0", f"fill 0 75 0 15 75 15 {block}"]
+                commands = (["gamerule doMobSpawning false", "forceload add -64 -64 63 63"]
+                            if ticket_workload else
+                            ["gamerule doMobSpawning false", "forceload add 0 0", f"fill 0 75 0 15 75 15 {block}"])
                 if hopper_workload:
                     # Every hopper receives items, not just an empty container: this
                     # exercises the engine's actual InventoryMoveItemEvent hot path.
@@ -132,7 +134,8 @@ def run(label, dest, report_dir, hopper_workload=False):
         r"forceload|force.load|filled [0-9]+ blocks|modified block data|summoned new zombie|unable to|unknown command|error executing", line, re.I)]
     merged = len(re.findall(r"Modified block data of", text, re.I))
     filled = bool(re.search(r"Successfully filled 256 blocks", text, re.I))
-    workload_ok = filled and (not hopper_workload or merged == 256)
+    ticket_confirmed = bool(re.search(r"(?:marked|force.loaded|force loaded).*64 chunks", text, re.I))
+    workload_ok = ticket_confirmed if ticket_workload else filled and (not hopper_workload or merged == 256)
     return {
         "label": label,
         "boot_done_s": float(boot[-1]) if boot else None,
@@ -145,7 +148,10 @@ def run(label, dest, report_dir, hopper_workload=False):
         "critical_errors": critical[:10],
         "exit_code": proc.returncode if proc else None,
         "clean_stop": stopped,
-        "synthetic_workload_requested": "one forced chunk + 256 filled hoppers + 40 zombies, no players" if hopper_workload else "one forced chunk + 256 empty hoppers + 40 zombies, no players",
+        "synthetic_workload_requested": ("64 forced chunks + 40 zombies, no players" if ticket_workload else
+                                         "one forced chunk + 256 filled hoppers + 40 zombies, no players" if hopper_workload else
+                                         "one forced chunk + 256 empty hoppers + 40 zombies, no players"),
+        "ticket_64_confirmed": ticket_confirmed if ticket_workload else None,
         "hopper_data_merge_responses": merged if hopper_workload else None,
         "hopper_fill_256_confirmed": filled if hopper_workload else None,
         "command_feedback_last": feedback[-8:],
