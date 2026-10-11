@@ -1,0 +1,75 @@
+# Make the existing benchmark winner a direct-download JAR. Byte-identical to
+# the live CatServer binary; never claim this is a faster/new engine or deploy it.
+name: ENGINE WINNER — verified direct JAR download
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-winner.txt"]
+permissions:
+  contents: write
+jobs:
+  publish-verified-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      GH_TOKEN: ${{ github.token }}
+      EXPECTED_SHA256: 96f824793ab3a685a390d82305202403ea8cbe5c011a1c79ce0ec024a4d7789c
+      ASSET: CUANTIC-Engine-Validated-Live-1.16.5.jar
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract and verify exact winning JAR from existing release
+        run: |
+          set -euo pipefail
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O /tmp/cuantic-existing-pack.zip
+          python3 - <<'PY'
+          import hashlib, os, zipfile
+          with zipfile.ZipFile('/tmp/cuantic-existing-pack.zip') as z:
+              jar=z.read('CatServer-1.16.5-1d8d6313-server.jar')
+          digest=hashlib.sha256(jar).hexdigest()
+          expected=os.environ['EXPECTED_SHA256']
+          if digest != expected:
+              raise SystemExit(f'REFUSE publication: winner SHA mismatch {digest} != {expected}')
+          with open('/tmp/'+os.environ['ASSET'],'wb') as out:
+              out.write(jar)
+          print('EXACT live winner verified:',digest,'size:',len(jar))
+          PY
+          cat > /tmp/CUANTIC-Engine-Validated-Live-README.txt <<'EOF'
+          CUANTIC best VALIDATED compatible engine (Forge 1.16.5, 36 mods / 14 Bukkit plugins).
+          This binary is BYTE-IDENTICAL to CatServer-1.16.5-1d8d6313-server.jar in
+          CUANTIC-Server-CatServer-1.7.7.zip and to the last verified production SHA-256:
+          96f824793ab3a685a390d82305202403ea8cbe5c011a1c79ce0ec024a4d7789c
+          It is NOT a new faster JAR. The experimental CUANTIC ticket patch has mixed
+          results and is not recommended for live installation. This is an ENGINE only;
+          use the normal CUANTIC server pack for the 36 mods and 14 plugins.
+          Upstream CatServer source, LGPL-3.0: https://github.com/Luohuayu/CatServer
+          Pinned source revision: 1d8d63138be77a606df2a5e940b960065948f983
+          Benchmark: https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/BENCHMARK-MOTOARE-CUANTIC-2026-10-12.md
+          EOF
+      - name: Attach verified JAR and provenance as direct release assets
+        id: publish
+        run: |
+          set -euo pipefail
+          existing=$(gh release view lite --repo "$GITHUB_REPOSITORY" --json assets --jq ".assets[] | select(.name == \"$ASSET\") | .name")
+          if [ -n "$existing" ]; then
+            echo "Asset already exists; refusing to overwrite it."
+            exit 1
+          fi
+          gh release upload lite "/tmp/$ASSET" /tmp/CUANTIC-Engine-Validated-Live-README.txt --repo "$GITHUB_REPOSITORY"
+          gh release view lite --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | grep -Fx "$ASSET"
+      - name: Save exact provenance and benchmark link
+        if: steps.publish.outcome == 'success'
+        run: |
+          { echo '# JAR-ul câștigător dintre motoarele compatibile testate'; echo;
+            echo 'Descărcare directă: https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Engine-Validated-Live-1.16.5.jar'; echo;
+            echo 'SHA-256: `96f824793ab3a685a390d82305202403ea8cbe5c011a1c79ce0ec024a4d7789c`'; echo;
+            echo 'Acesta este **identic byte-cu-byte** cu JAR-ul actual, nu un JAR nou mai rapid. Nu am schimbat serverul live.'; echo;
+            echo 'Benchmark: [motoare CUANTIC, 12 octombrie](BENCHMARK-MOTOARE-CUANTIC-2026-10-12.md).'; echo;
+            echo "Publicare asset: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID";
+          } > docs/ENGINE-WINNER-JAR.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/ENGINE-WINNER-JAR.md
+          git commit -m 'engine: link verified baseline JAR and benchmark' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true
