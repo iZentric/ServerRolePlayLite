@@ -2,7 +2,7 @@ name: ENGINE PREFLIGHT — numai citire pe gazda live
 on:
   push:
     branches: ["arena/a29b4ef4-serverroleplaylite"]
-    paths: ["deploy/engine-preflight.txt", "scripts/engine_preflight.sh", ".github/workflows/engine-preflight.yml"]
+    paths: ["deploy/engine-preflight.txt", "scripts/engine_preflight.sh", "scripts/minecraft_status.py", ".github/workflows/engine-preflight.yml"]
 permissions:
   contents: write
 jobs:

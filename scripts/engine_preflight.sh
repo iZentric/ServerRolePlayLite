@@ -8,6 +8,7 @@ printf 'java: '; pgrep -af 'java @unix_args.txt' | head -2 || true
 printf 'supervisor: '; pgrep -af '^bash .*/c\.sh$' | head -2 || true
 printf 'public tunnel: '; pgrep -af '^.*/frpc -c ' | head -2 || true
 printf 'port 25565: '; ss -lnt | grep ':25565' || echo CLOSED
+printf 'Minecraft status ping (local only; not client login): '; python3 "$(dirname "$0")/minecraft_status.py" || true
 printf 'jar: '; sha256sum "$JAR" 2>/dev/null || echo ABSENT
 printf 'mods / plugins: '; echo "$(find "$D/mods" -maxdepth 1 -name '*.jar' 2>/dev/null | wc -l) / $(find "$D/plugins" -maxdepth 1 -name '*.jar' 2>/dev/null | wc -l)"
 printf 'disk home + temp:\n'; df -h "$D" /tmp | tail -2
@@ -34,6 +35,6 @@ if [ -f "$D/cmd.in" ]; then
   printf 'spark health\n' >> "$D/cmd.in"
   sleep 7
   printf 'live spark health (idle, no synthetic workload):\n'
-  tail -n +$((n+1)) "$D/live.log" | grep -aE 'TPS from last|Tick durations|CPU usage from last|Memory usage|GC from last' | tail -8 || echo 'NO SPARK RESPONSE'
+  tail -n +$((n+1)) "$D/live.log" | sed -n '/TPS from last/,+1p; /Tick durations/,+1p; /CPU usage from last/,+1p' | tail -12 || echo 'NO SPARK RESPONSE'
 fi
 printf '\nNote: inspect before any restart; never infer zero players from an empty reply.\n```\n'
