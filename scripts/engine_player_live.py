@@ -37,7 +37,10 @@ def console(command, pattern, timeout=25):
 
 
 def players():
-    return int(console("list", r"There are (\d+) out of maximum \d+ players online"))
+    # Status ping is a fresh response from THIS local JVM. Console 'list' is
+    # optional in a read-only measurement: the cmd.in bridge can lag or be down.
+    ping = status()
+    return int(ping["players"]["online"]), ping
 
 
 def main(output):
@@ -48,8 +51,8 @@ def main(output):
         deadline = time.monotonic() + 240
         while time.monotonic() < deadline:
             try:
-                ping = status()
-                if ping.get("players", {}).get("online", 0) >= 1 and players() >= 1:
+                count, ping = players()
+                if count >= 1:
                     break
             except (OSError, EOFError, RuntimeError, ValueError):
                 pass
@@ -57,12 +60,20 @@ def main(output):
         else:
             raise RuntimeError("No verified player on server after 4 min; no fake 0-player benchmark")
         r["ping_at_start"] = ping
+        try:
+            r["console_list_at_start"] = players_from_console = int(console("list", r"There are (\d+) out of maximum \d+ players online", timeout=10))
+            if players_from_console < 1:
+                raise RuntimeError("Console returned zero players; status inconsistent")
+        except RuntimeError as exc:
+            if "status inconsistent" in str(exc):
+                raise
+            r["console_list_at_start"] = "NO REPLY (status ping says player is online)"
         r["live_jar_sha256"] = subprocess.check_output(["sha256sum", str(JAR)], text=True).split()[0]
         pid_text = subprocess.check_output(["pgrep", "-f", "java @unix_args.txt"], text=True).strip().splitlines()
         pid = int(pid_text[0])
         r["samples"] = []
         for i in range(3):
-            count = players()
+            count, ping = players()
             if count < 1:
                 raise RuntimeError("Player left before 3 samples; partial data only")
             mspt = console("spark health", METRIC.pattern, timeout=35)
