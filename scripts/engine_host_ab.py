@@ -112,6 +112,12 @@ def main(candidate, report_dir):
                     vc = voice.read_text()
                     voice.write_text(re.sub(r"(?m)^port=\d+", "port=24455", vc))
                 verdict[label] = run(label, dest, report_dir)
+                if not verdict[label]["valid"]:
+                    # Report the reason, but never publish an entire live-world log.
+                    tail = (report_dir / f"{label}.log").read_text(errors="replace").splitlines()[-35:]
+                    tail = [re.sub(r"(?i)(password|token|secret|authorization)\s*[:=]\s*\S+", r"\1=<redacted>", line)
+                            for line in tail]
+                    verdict[label]["log_tail_on_failure"] = [re.sub(r"\b(?:\d{1,3}\.){3}\d{1,3}\b", "<IP>", line)[-250:] for line in tail]
                 print(json.dumps(verdict[label], indent=2), flush=True)
                 if not verdict[label]["valid"]:
                     raise RuntimeError(f"{label} failed isolated boot/spark; no other test run")
