@@ -1,10 +1,11 @@
-# ENGINE PREFLIGHT — 2026-10-11 07:48:51 UTC
+# ENGINE PREFLIGHT — 2026-10-11 07:50:05 UTC
 
 ```
 java: 122012 /home/mndvasi9/.local/jdk17/bin/java @unix_args.txt
 supervisor: 121898 bash /home/mndvasi9/c.sh
 public tunnel: 121962 /home/mndvasi9/frpc -c /home/mndvasi9/frpc.toml
 port 25565: LISTEN 0      4096               *:25565            *:*          
+Minecraft status ping (local only; not client login): {"version": {"name": "CUANTIC 1.16.5", "protocol": 754}, "players": {"online": 0, "max": 25}}
 jar: 96f824793ab3a685a390d82305202403ea8cbe5c011a1c79ce0ec024a4d7789c  /home/mndvasi9/cuantic-live/CatServer-1.16.5-1d8d6313-server.jar
 mods / plugins: 36 / 14
 disk home + temp:
@@ -12,23 +13,27 @@ disk home + temp:
 /dev/mapper/vg00-usr_tmp  4.9G  203M  4.4G   5% /tmp
 memory:
               total        used        free      shared  buff/cache   available
-Mem:          11884        5220        4574          71        2089        4879
+Mem:          11884        5267        4524          72        2092        4830
 35M	/home/mndvasi9/cuantic-live/world
 voice chat config locations and UDP ports (no secrets):
 /home/mndvasi9/cuantic-live/world/serverconfig/voicechat-server.toml
 	port = 24454
-log cursor: 4448
-players (console, current): [07:48:51] [Server thread/INFO]: There are 0 out of maximum 25 players online.
-load:  07:48:57 up 21:35,  0 users,  load average: 0.53, 0.48, 0.42
+log cursor: 4500
+players (console, current): [07:50:05] [Server thread/INFO]: There are 0 out of maximum 25 players online.
+load:  07:50:11 up 21:36,  0 users,  load average: 0.19, 0.39, 0.39
 live spark health (idle, no synthetic workload):
 > TPS from last 5s, 10s, 1m, 5m, 15m:
+    *20.0, *20.0, 20.0, 20.0, *20.0
 > Tick durations (min/med/95%ile/max ms) from last 10s, 1m:
+    0.1/0.1/0.1/3.7; 0.1/0.1/0.1/3.7
 > CPU usage from last 10s, 1m, 15m:
-> Memory usage:
+    26%, 5%, 20%  (system)
 > TPS from last 5s, 10s, 1m, 5m, 15m:
+    20.0, *20.0, 20.0, 20.0, 20.0
 > Tick durations (min/med/95%ile/max ms) from last 10s, 1m:
+    0.1/0.1/0.1/0.9; 0.1/0.1/0.1/3.7
 > CPU usage from last 10s, 1m, 15m:
-> Memory usage:
+    2%, 5%, 20%  (system)
 
 Note: inspect before any restart; never infer zero players from an empty reply.
 ```
