@@ -30,7 +30,7 @@ def latest_status():
         if age < 0 or age > 30 * 60:
             return "Status neconfirmat acum · ultima probă " + dt.strftime("%d.%m %H:%M UTC"), "var(--mut)"
         if observation.group(1).startswith("SUS public"):
-            return "Status public confirmat " + dt.strftime("%H:%M UTC") + " (doar ping)", "var(--mint)"
+            return "SUS la ultima probă publică " + dt.strftime("%d.%m %H:%M UTC") + " (ping)", "var(--mint)"
         return "Status public neconfirmat " + dt.strftime("%H:%M UTC"), "var(--amber)"
     except (OSError, ValueError):
         return "Status public neconfirmat", "var(--mut)"
