@@ -31,13 +31,13 @@ def main(pack, candidate, out):
         for key, arms in (("live", ("live-A1", "live-A2")), ("patched", ("patched-B1", "patched-B2"))):
             summary[key] = {
                 "p95_ms_median_of_2": med(arms, lambda x: x["spark_tick_min_median_p95_max_ms_1m"][2]),
-                "cpu_seconds_median_of_2": med(arms, lambda x: x["cpu_seconds_during_command_and_warmup"]),
+                "cpu_seconds_steady_median_of_2": med(arms, lambda x: x["cpu_seconds_steady_after_55s"]),
                 "rss_mb_median_of_2": med(arms, lambda x: x["rss_median_mb"]),
             }
         result["summary"] = summary
         result["verdict"] = ("better p95 AND CPU for this synthetic workload only; still not ready for live" if
             summary["patched"]["p95_ms_median_of_2"] < summary["live"]["p95_ms_median_of_2"] and
-            summary["patched"]["cpu_seconds_median_of_2"] < summary["live"]["cpu_seconds_median_of_2"] else
+            summary["patched"]["cpu_seconds_steady_median_of_2"] < summary["live"]["cpu_seconds_steady_median_of_2"] else
             "NOT PROVEN BETTER than live JAR; no promotion")
     (out / "result.json").write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
     return int(not all(result.get(x, {}).get("valid") for x in ("live-A1", "patched-B1", "patched-B2", "live-A2")))

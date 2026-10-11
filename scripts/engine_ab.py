@@ -96,12 +96,22 @@ def run(label, dest, report_dir, hopper_workload=False, ticket_workload=False):
                 for cmd in commands:
                     proc.stdin.write(cmd + "\n")
                 proc.stdin.flush()
-                until = time.monotonic() + (85 if hopper_workload else WARMUP)
+                until = time.monotonic() + (85 if hopper_workload else 55 if ticket_workload else WARMUP)
                 while time.monotonic() < until and proc.poll() is None:
                     sample = rss_mb(proc.pid)
                     if sample is not None:
                         rss.append(sample)
                     time.sleep(2)
+                if ticket_workload and proc.poll() is None:
+                    # Isolate the steady ticket-expiry scan: world generation and
+                    # force-load startup dwarf the cost of the method being patched.
+                    cpu_start = cpu_time_seconds(proc.pid)
+                    until = time.monotonic() + 75
+                    while time.monotonic() < until and proc.poll() is None:
+                        sample = rss_mb(proc.pid)
+                        if sample is not None:
+                            rss.append(sample)
+                        time.sleep(2)
                 cpu_end = cpu_time_seconds(proc.pid)
                 if cpu_start is not None and cpu_end is not None:
                     cpu_workload = round(max(0, cpu_end - cpu_start), 2)
@@ -143,7 +153,8 @@ def run(label, dest, report_dir, hopper_workload=False, ticket_workload=False):
         "mods_on_disk": len(list((dest / "mods").glob("*.jar"))),
         "rss_median_mb": round(statistics.median(rss), 1) if rss else None,
         "rss_peak_mb": round(max(rss), 1) if rss else None,
-        "cpu_seconds_during_command_and_warmup": cpu_workload,
+        "cpu_seconds_during_command_and_warmup": cpu_workload if not ticket_workload else None,
+        "cpu_seconds_steady_after_55s": cpu_workload if ticket_workload else None,
         "spark_tick_min_median_p95_max_ms_1m": mspt,
         "critical_errors": critical[:10],
         "exit_code": proc.returncode if proc else None,
