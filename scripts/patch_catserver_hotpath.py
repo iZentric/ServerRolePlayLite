@@ -34,7 +34,7 @@ def update_hunk_counts(text):
     return text
 
 
-def patch_hopper(src):
+def patch_hopper_push(src):
     old = """+                  // CraftBukkit start - Call event when pushing items into other inventories
 +                  CraftItemStack oitemstack = CraftItemStack.asCraftMirror(this.func_70298_a(i, field_145850_b.spigotConfig.hopperAmount)); // Spigot
 +                  Inventory destinationInventory;
@@ -87,7 +87,11 @@ def patch_hopper(src):
 +                     origCount = event.getRawItem().getAmount();
 +                     itemstack1 = func_174918_a(this, iinventory, CraftItemStack.asNMSCopy(event.getRawItem()), direction);
 +                  }"""
-    src = once(src, old, new)
+    return once(src, old, new)
+
+
+def patch_hopper(src):
+    src = patch_hopper_push(src)
     src = once(src, """+         InventoryHolder owner = CatInventoryUtils.getOwner(p_174915_0_);
 +         Inventory hopperOwner = (owner != null ? owner.getInventory() : new CatCustomInventory(p_174915_0_).getInventory());
 +

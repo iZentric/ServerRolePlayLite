@@ -28,6 +28,15 @@ def rss_mb(pid):
         return None
 
 
+def cpu_time_seconds(pid):
+    try:
+        # Linux /proc stat: fields 14/15 utime/stime, after the executable's ')'.
+        fields = Path(f"/proc/{pid}/stat").read_text().rsplit(") ", 1)[1].split()
+        return (int(fields[11]) + int(fields[12])) / os.sysconf("SC_CLK_TCK")
+    except (OSError, IndexError, ValueError):
+        return None
+
+
 def metrics_from_log(text):
     # spark health: "... last 10s, 1m: min/med/p95/max; min/med/p95/max"
     clean = re.sub(r"\x1b\[[0-9;]*[A-Za-z]", "", text)
@@ -52,6 +61,7 @@ def prepare(pack, dest, candidate=None):
 def run(label, dest, report_dir, hopper_workload=False):
     logfile = report_dir / f"{label}.log"
     rss = []
+    cpu_workload = None
     done_at = None
     proc = None
     commands = None
@@ -71,6 +81,7 @@ def run(label, dest, report_dir, hopper_workload=False):
                     break
                 time.sleep(2)
             if done_at is not None:
+                cpu_start = cpu_time_seconds(proc.pid)
                 # Ensure an identical, ticking chunk without human accounts.
                 block = "minecraft:hopper[facing=east]" if hopper_workload else "minecraft:hopper"
                 commands = ["gamerule doMobSpawning false", "forceload add 0 0", f"fill 0 75 0 15 75 15 {block}"]
@@ -89,6 +100,9 @@ def run(label, dest, report_dir, hopper_workload=False):
                     if sample is not None:
                         rss.append(sample)
                     time.sleep(2)
+                cpu_end = cpu_time_seconds(proc.pid)
+                if cpu_start is not None and cpu_end is not None:
+                    cpu_workload = round(max(0, cpu_end - cpu_start), 2)
                 if proc.poll() is None:
                     proc.stdin.write("spark health\nlist\n")
                     proc.stdin.flush()
@@ -126,6 +140,7 @@ def run(label, dest, report_dir, hopper_workload=False):
         "mods_on_disk": len(list((dest / "mods").glob("*.jar"))),
         "rss_median_mb": round(statistics.median(rss), 1) if rss else None,
         "rss_peak_mb": round(max(rss), 1) if rss else None,
+        "cpu_seconds_during_command_and_warmup": cpu_workload,
         "spark_tick_min_median_p95_max_ms_1m": mspt,
         "critical_errors": critical[:10],
         "exit_code": proc.returncode if proc else None,
