@@ -64,7 +64,9 @@ def readvar_from_bytes(data, return_index=False):
 
 if __name__ == "__main__":
     try:
-        print(json.dumps(status(), ensure_ascii=False))
+        host = sys.argv[1] if len(sys.argv) > 1 else "127.0.0.1"
+        port = int(sys.argv[2]) if len(sys.argv) > 2 else 25565
+        print(json.dumps(status(host, port), ensure_ascii=False))
     except Exception as exc:
         print(f"STATUS FAILED: {exc}")
         sys.exit(1)

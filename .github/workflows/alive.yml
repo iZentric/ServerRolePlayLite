@@ -1,52 +1,36 @@
-name: ALIVE — serverul n-are voie sa fie oprit
+# Monitoring is READ-ONLY. An external API timeout is not proof Java is down;
+# only the supervisor on the host may restart it. Never dispatch up.yml here.
+name: ALIVE — status Minecraft fara restart din erori de monitorizare
 on:
   schedule:
     - cron: "*/20 * * * *"
   workflow_dispatch: {}
 permissions:
   contents: write
-  actions: write
 jobs:
   a:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 4
     steps:
       - uses: actions/checkout@v4
-      - name: Suna la port de doua ori inainte sa tragi un semnal
-        id: sonaj
-        env: { GH_TOKEN: "${{ github.token }}" }
+      - name: Verifica direct protocolul Minecraft, nu numai un cache extern
         run: |
-          SUS=NU
-          for i in 1 2; do
-            R=$(curl -fsS --max-time 20 "https://api.mcsrvstat.us/3/92.5.171.150:25565" 2>/dev/null || echo "")
-            printf '%s' "$R" | grep -q '"online":true' && { SUS=DA; DET=$(printf '%s' "$R" | head -c 200); break; }
-            sleep 95
-          done
-          if [ "$SUS" = DA ]; then
-            echo "verdict=SUS" >> "$GITHUB_OUTPUT"
-            echo "SUS $DET" > /tmp/alive.txt
+          set +e
+          R=$(python3 scripts/minecraft_status.py 92.5.171.150 25565)
+          if [ $? -eq 0 ]; then
+            echo "SUS public (status handshake, nu login modat): $R" > /tmp/alive.txt
           else
-            echo "verdict=JOS" >> "$GITHUB_OUTPUT"
-            # 1) trezim ce poate fi trezit din GitHub: jobul de pe cutie (ruleaza up.sh = supervisor+runner+frpc+java)
-            gh api -X POST "repos/$GITHUB_REPOSITORY/actions/workflows/up.yml/dispatches" \
-              -f ref="$GITHUB_REF_NAME" -f "reason=ALIVE: serverul nu raspunde" 2>/dev/null \
-              && TREZIT=dispatch-depus || TREZIT=dispatch-esuat
-            echo "JOS (trezire: $TREZIT)" > /tmp/alive.txt
-            # 2) dam timp jobului sa apuce sa reporneasca java, apoi mai ascultam o data
-            sleep 200
-            R=$(curl -fsS --max-time 20 "https://api.mcsrvstat.us/3/92.5.171.150:25565" 2>/dev/null || echo "")
-            if printf '%s' "$R" | grep -q '"online":true'; then
-              echo "verdict=REPRIT" >> "$GITHUB_OUTPUT"; echo "REPRIT dupa dispatch" > /tmp/alive.txt
-            else
-              echo "verdict=JOS-MORT" >> "$GITHUB_OUTPUT"
-              { echo "JOS-MORT: runner-ul de pe Cloud Shell nu a raspuns la dispatch.";
-                echo "Omul trebuie sa lipeasca o data in Cloud Shell:";
-                echo "  bash <(curl -fsSL https://raw.githubusercontent.com/$GITHUB_REPOSITORY/arena/a29b4ef4-serverroleplaylite/scripts/wake.sh)"; } > /tmp/alive.txt
-            fi
+            echo "NECONFIRMAT extern — $R; nu repornim serverul fara test local" > /tmp/alive.txt
           fi
-      - name: Lasade badge in repo (site-ul il arata)
+          cat /tmp/alive.txt
+      - name: Salveaza verdictul datat
         run: |
           { echo "# ALIVE CUANTIC — $(date -u '+%Y-%m-%d %H:%M:%S') UTC"; echo; echo '```'; cat /tmp/alive.txt; echo '```'; } > analysis/ALIVE.md
           git config user.name bot; git config user.email bot@users.noreply.github.com
-          git add analysis/ALIVE.md; git commit -m "ALIVE: $(cat /tmp/alive.txt | head -1)" || true
-          for i in 1 2 3; do git pull --rebase origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || git rebase --abort 2>/dev/null; git push origin "HEAD:$GITHUB_REF_NAME" && break; sleep 10; done
+          git add analysis/ALIVE.md
+          git commit -m "ALIVE: $(head -c 100 /tmp/alive.txt)" || true
+          for i in 1 2 3; do
+            git pull --rebase origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || git rebase --abort 2>/dev/null
+            git push origin "HEAD:$GITHUB_REF_NAME" && break
+            sleep 5
+          done
