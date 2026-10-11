@@ -107,10 +107,15 @@ def main(candidate, report_dir):
                 text = props.read_text(encoding="latin-1")
                 text += "\nserver-ip=127.0.0.1\nserver-port=25566\n"
                 props.write_text(text, encoding="latin-1")
-                voice = dest / "config/voicechat/voicechat-server.properties"
-                if voice.exists():
-                    vc = voice.read_text()
-                    voice.write_text(re.sub(r"(?m)^port=\d+", "port=24455", vc))
+                # Forge Simple Voice Chat keeps its UDP port in the WORLD serverconfig.
+                # Its default 24454 belongs to production; private copies MUST use 24455.
+                voice = dest / world / "serverconfig/voicechat-server.toml"
+                if not voice.is_file():
+                    raise RuntimeError("Voice chat port config not found in copied world; refuse stage")
+                vc, n = re.subn(r"(?m)^(\s*port\s*=\s*)\d+", r"\g<1>24455", voice.read_text())
+                if n != 1:
+                    raise RuntimeError("Voice chat port not safely replaced; refuse stage")
+                voice.write_text(vc)
                 verdict[label] = run(label, dest, report_dir)
                 if not verdict[label]["valid"]:
                     # Report the reason, but never publish an entire live-world log.
