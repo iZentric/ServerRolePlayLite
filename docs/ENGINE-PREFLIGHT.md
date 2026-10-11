@@ -1,4 +1,4 @@
-# ENGINE PREFLIGHT — 2026-10-11 07:43:18 UTC
+# ENGINE PREFLIGHT — 2026-10-11 07:48:51 UTC
 
 ```
 java: 122012 /home/mndvasi9/.local/jdk17/bin/java @unix_args.txt
@@ -12,13 +12,23 @@ disk home + temp:
 /dev/mapper/vg00-usr_tmp  4.9G  203M  4.4G   5% /tmp
 memory:
               total        used        free      shared  buff/cache   available
-Mem:          11884        5106        4699          71        2078        4992
+Mem:          11884        5220        4574          71        2089        4879
 35M	/home/mndvasi9/cuantic-live/world
 voice chat config locations and UDP ports (no secrets):
 /home/mndvasi9/cuantic-live/world/serverconfig/voicechat-server.toml
 	port = 24454
-log cursor: 4426
-players (console, current): [07:43:19] [Server thread/INFO]: There are 0 out of maximum 25 players online.
+log cursor: 4448
+players (console, current): [07:48:51] [Server thread/INFO]: There are 0 out of maximum 25 players online.
+load:  07:48:57 up 21:35,  0 users,  load average: 0.53, 0.48, 0.42
+live spark health (idle, no synthetic workload):
+> TPS from last 5s, 10s, 1m, 5m, 15m:
+> Tick durations (min/med/95%ile/max ms) from last 10s, 1m:
+> CPU usage from last 10s, 1m, 15m:
+> Memory usage:
+> TPS from last 5s, 10s, 1m, 5m, 15m:
+> Tick durations (min/med/95%ile/max ms) from last 10s, 1m:
+> CPU usage from last 10s, 1m, 15m:
+> Memory usage:
 
 Note: inspect before any restart; never infer zero players from an empty reply.
 ```
