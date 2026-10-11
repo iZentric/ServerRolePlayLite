@@ -1,1 +1,3 @@
 chk-recover-20261011T2057Z; public server reported down; no jar change
+
+2026-10-11 22:14 UTC: preflight confirmed Java/supervisor/tunnel absent, port closed; recover existing JAR without replacing it
