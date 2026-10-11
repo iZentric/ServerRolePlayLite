@@ -1,0 +1,66 @@
+# Source-modified CatServer candidate vs both branded live and identical-version
+# official CatServer. Synthetic prequalification ONLY; never deploy or publish.
+name: ENGINE STRICT — no equal or worse metric accepted
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-strict.txt"]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PATCH_RUN: '38175428475'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: Download pinned pack, official CatServer and actual source-patched candidate
+        run: |
+          set -euo pipefail
+          mkdir -p engine-strict-results /tmp/source-patched
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O /tmp/cuantic-pack-strict.zip
+          gh run download "$PATCH_RUN" --repo "$GITHUB_REPOSITORY" -n cuantic-engine-ticket-EXPERIMENTAL -D /tmp/source-patched
+          test -s /tmp/source-patched/CUANTIC-CatServer-ticket-experimental.jar
+          expected=$(cut -d' ' -f1 /tmp/source-patched/SHA256SUMS.txt)
+          actual=$(sha256sum /tmp/source-patched/CUANTIC-CatServer-ticket-experimental.jar | cut -d' ' -f1)
+          test "$expected" = "$actual"
+          test "$actual" = 'b081735815f53e1118608464c39659b537b10fc74fa96458a4a922b7d1215ee3'
+          curl -fL --retry 3 --retry-delay 5 'https://github.com/Luohuayu/CatServer/releases/download/23.05.26-1/CatServer-1.16.5-1d8d6313-server.jar' -o /tmp/official-strict.jar
+          sha256sum /tmp/cuantic-pack-strict.zip /tmp/official-strict.jar /tmp/source-patched/CUANTIC-CatServer-ticket-experimental.jar
+      - name: A/B/C/C/B/A with separate startup and steady CPU/RSS/p95 measurements
+        run: |
+          python3 scripts/engine_strict_compare.py /tmp/cuantic-pack-strict.zip /tmp/official-strict.jar /tmp/source-patched/CUANTIC-CatServer-ticket-experimental.jar engine-strict-results
+      - name: Preserve even a failed or rejected result, never publish an unqualified JAR
+        if: always()
+        run: |
+          { echo '# Strict screen — motor CUANTIC sursă modificată vs live și oficial'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; echo;
+            echo 'JAR candidat recompilabil din patch-ul [SortedArraySet](../patches/engine-ticket/SortedArraySet.java.patch) (run 38175428475), NU doar branding.'; echo;
+            echo 'Același pack 36/14, Java 17, seed, runner. Două probe per variantă; 64 chunkuri forțate + 40 zombie, fără jucători/vehicule.'; echo;
+            echo 'Criteriu: **cea mai slabă probă a candidatului < cea mai bună probă a ambelor baseline-uri pentru fiecare din RSS stabil, CPU stabil, p95, Done intern, boot extern**. Egal sau mai slab în ORICARE metrică => respins. Un PASS sintetic NU autorizează lansarea: necesită scenarii repetate și login/client modat cu vehicule.'; echo;
+            echo 'Niciun JAR live/release schimbat. „Mai bun decât orice motor pe orice sarcină” nu poate fi dovedit prin probe finite.'; echo;
+            echo '```json'; cat engine-strict-results/result.json 2>/dev/null || echo 'INCOMPLETE — result.json missing'; echo '```';
+          } > docs/ENGINE-STRICT-RESULT.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/ENGINE-STRICT-RESULT.md
+          git commit -m 'engine: measured strict multi-metric candidate screen' || true
+          for i in 1 2 3; do
+            git pull --rebase origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || git rebase --abort 2>/dev/null || true
+            git push origin "HEAD:$GITHUB_REF_NAME" && break
+            sleep 5
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: engine-strict-evidence
+          path: |
+            engine-strict-results/result.json
+            engine-strict-results/*.log
+          retention-days: 7
