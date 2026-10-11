@@ -2,6 +2,7 @@
 """ABBA same-source JAR A/B on one runner (never deploys)."""
 import hashlib
 import json
+import os
 from pathlib import Path
 import statistics
 import sys
@@ -10,14 +11,16 @@ from engine_ab import JAR, prepare, run
 
 def main(pack, candidate, out):
     out.mkdir(parents=True, exist_ok=True)
-    result = {"method": "ABBA: live-2023, patched-2023, patched-2023, live-2023; same runner, same pack/seed and filled-hopper commands (256/256 validated), no players",
+    hopper_workload = os.environ.get("CUANTIC_WORKLOAD", "filled") != "empty"
+    scenario = "filled (256/256 NBT validated)" if hopper_workload else "empty (256 block fill validated)"
+    result = {"method": f"ABBA: live-2023, patched-2023, patched-2023, live-2023; same runner, pack/seed and {scenario} hoppers, no players",
               "limits": "two independent samples per arm, synthetic forced chunk; no modded login, real traffic, vehicles or weak laptop; NEVER deploy automatically"}
     for label, jar in (("live-A1", None), ("patched-B1", candidate),
                        ("patched-B2", candidate), ("live-A2", None)):
         dest = out / label
         dest.mkdir(parents=True, exist_ok=True)
         prepare(pack, dest, jar)
-        arm = run(label, dest, out, hopper_workload=True)
+        arm = run(label, dest, out, hopper_workload=hopper_workload)
         arm["jar_sha256"] = hashlib.sha256((dest / JAR).read_bytes()).hexdigest()
         result[label] = arm
         print(json.dumps(arm, indent=2), flush=True)

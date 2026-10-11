@@ -132,7 +132,7 @@ def run(label, dest, report_dir, hopper_workload=False):
         r"forceload|force.load|filled [0-9]+ blocks|modified block data|summoned new zombie|unable to|unknown command|error executing", line, re.I)]
     merged = len(re.findall(r"Modified block data of", text, re.I))
     filled = bool(re.search(r"Successfully filled 256 blocks", text, re.I))
-    workload_ok = not hopper_workload or (merged == 256 and filled)
+    workload_ok = filled and (not hopper_workload or merged == 256)
     return {
         "label": label,
         "boot_done_s": float(boot[-1]) if boot else None,
