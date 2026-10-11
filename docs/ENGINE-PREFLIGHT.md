@@ -1,4 +1,4 @@
-# ENGINE PREFLIGHT — 2026-10-11 07:50:05 UTC
+# ENGINE PREFLIGHT — 2026-10-11 08:15:38 UTC
 
 ```
 java: 122012 /home/mndvasi9/.local/jdk17/bin/java @unix_args.txt
@@ -13,27 +13,21 @@ disk home + temp:
 /dev/mapper/vg00-usr_tmp  4.9G  203M  4.4G   5% /tmp
 memory:
               total        used        free      shared  buff/cache   available
-Mem:          11884        5267        4524          72        2092        4830
+Mem:          11884        5596        4090          71        2197        4503
 35M	/home/mndvasi9/cuantic-live/world
 voice chat config locations and UDP ports (no secrets):
 /home/mndvasi9/cuantic-live/world/serverconfig/voicechat-server.toml
 	port = 24454
-log cursor: 4500
-players (console, current): [07:50:05] [Server thread/INFO]: There are 0 out of maximum 25 players online.
-load:  07:50:11 up 21:36,  0 users,  load average: 0.19, 0.39, 0.39
+log cursor: 4552
+players (console, current): [08:15:44] [Server thread/INFO]: There are 0 out of maximum 25 players online.
+load:  08:15:44 up 22:01,  0 users,  load average: 0.15, 0.06, 0.10
 live spark health (idle, no synthetic workload):
 > TPS from last 5s, 10s, 1m, 5m, 15m:
-    *20.0, *20.0, 20.0, 20.0, *20.0
+    *20.0, *20.0, 20.0, *20.0, *20.0
 > Tick durations (min/med/95%ile/max ms) from last 10s, 1m:
-    0.1/0.1/0.1/3.7; 0.1/0.1/0.1/3.7
+    0.1/0.1/0.1/0.7; 0.1/0.1/0.1/0.7
 > CPU usage from last 10s, 1m, 15m:
-    26%, 5%, 20%  (system)
-> TPS from last 5s, 10s, 1m, 5m, 15m:
-    20.0, *20.0, 20.0, 20.0, 20.0
-> Tick durations (min/med/95%ile/max ms) from last 10s, 1m:
-    0.1/0.1/0.1/0.9; 0.1/0.1/0.1/3.7
-> CPU usage from last 10s, 1m, 15m:
-    2%, 5%, 20%  (system)
+    25%, 5%, 1%  (system)
 
 Note: inspect before any restart; never infer zero players from an empty reply.
 ```
