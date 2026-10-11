@@ -2,9 +2,13 @@
 # Nu atinge jarul, lumea, portul 25565 sau tunelul public. Abort daca apar jucatori.
 name: ENGINE HOST AB — teste private pe gazda serverului
 on:
+  workflow_dispatch:
   push:
     branches: ["arena/a29b4ef4-serverroleplaylite"]
-    paths: ["deploy/engine-host-ab.txt", "scripts/engine_host_ab.py", ".github/workflows/engine-host-ab.yml"]
+    paths: ["deploy/engine-host-ab.txt"]
+concurrency:
+  group: cuantic-host-engine-ab
+  cancel-in-progress: false
 permissions:
   contents: write
   actions: read
