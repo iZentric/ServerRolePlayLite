@@ -1,6 +1,9 @@
 name: ENGINE PROFILE — analyze published CPU sample
 on:
   workflow_dispatch: {}
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["scripts/engine_profile_analyze.py", ".github/workflows/engine-profile-analyze.yml"]
 permissions:
   contents: read
 jobs:
