@@ -5,6 +5,16 @@ Run: https://github.com/iZentric/ServerRolePlayLite/actions/runs/38180230255
 Sursa oficială: Luohuayu/CatServer release 23.05.26-1 (1.16.5-1d8d6313), LGPL-3.0.
 A/B/B/A, Java 17, același pack, același runner; 55s încălzire + 75s măsurare stabilă, fără jucători sau vehicule. Nicio schimbare live.
 
+| Măsură (2 probe/variantă) | CUANTIC A1 / A2 | CatServer oficial B1 / B2 |
+| --- | ---: | ---: |
+| RSS stabil, MiB | 2205,1 / 2452,0 | 2185,6 / 2475,6 |
+| CPU pe fereastra stabilă, s | 3,32 / 2,86 | 3,32 / 3,43 |
+| p95 MSPT pe 1 minut, ms | 1,3 / 1,1 | 1,2 / 1,2 |
+| `Done` intern, s | 9,770 / 10,509 | 10,298 / 10,130 |
+| Timp extern pornire java → `Done`, s | 86,02 / 88,02 | 90,01 / 90,02 |
+
+Medianele RSS sunt **2328,55 și 2330,60 MiB** (diferență **2,05 MiB**), față de variații **246,9 și 290,0 MiB** în interiorul variantelor: nu există dovadă pentru „171 MB economisiți”. Medianele p95 sunt ambele **1,2 ms**. CPU CUANTIC median 3,09 vs 3,375 s, dar variabilitatea și cele doar două runde nu susțin un avantaj stabil. `Done` raportat intern nu include toată inițializarea observată extern. JAR-urile diferă prin fișierul informativ `CUANTIC-ENGINE.txt` și în `data/forge-1.16.5-36.2.39-universal.jar` (vezi scriptul de branding, **nu** patch de tick validat). Aceste probe sintetice nu măsoară orașul, vehicule, login modat, 25 jucători sau FPS client. **Verdict: niciun upgrade justificat; binarul live rămâne neschimbat.**
+
 ```json
 {
   "method": "A/B/B/A: branded live JAR vs official exact CatServer 1.16.5-1d8d6313; same 36 mods/14 plugins, Java 17, fresh same-seed world, same GH runner, 64 force-loaded chunks, 40 zombies; 55s warmup then 75s steady window",

@@ -96,6 +96,52 @@ def panel():
             return ''
     fork_rows = old_fork("Patch pe hoppers plini", filled) + old_fork("Patch pe hoppers goale", empty)
 
+    # Never render numbers from a partial run or a different release/pack. Each
+    # displayed value is a pair of individual runs, not a hand-picked minimum.
+    native = result("ENGINE-NATIVE-RESULT.md")
+    native_labels = ("branded-A1", "official-B1", "official-B2", "branded-A2")
+    native_ok = (native.get("branded_sha256") == sha and
+                 native.get("official_sha256") == "8edea98c597e7af44a45ef9093678c38ca3749d55a71cdff10218c1c6b946fd0" and
+                 native.get("pack_sha256") == "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15" and
+                 all(native.get(label, {}).get("valid") for label in native_labels))
+    if native_ok:
+        a = [native[x] for x in ("branded-A1", "branded-A2")]
+        b = [native[x] for x in ("official-B1", "official-B2")]
+        def pair(items, key, unit, places=1):
+            return " / ".join(f'{float(x[key]):.{places}f}'.replace(".", ",") for x in items) + unit
+        native_rows = (
+            ("RAM RSS în fereastra stabilă (MiB)", "rss_steady_median_mb", " MiB", 1),
+            ("CPU proces în 75 s stabile", "cpu_seconds_steady_after_55s", " s", 2),
+            ("p95 MSPT, spark 1 min", "spark_tick_min_median_p95_max_ms_1m", " ms", 1),
+            ("Boot intern până la Done", "boot_done_s", " s", 3),
+            ("Boot extern java → Done", "boot_wall_seconds", " s", 2),
+        )
+        table = ""
+        for title, key, unit, places in native_rows:
+            if key == "spark_tick_min_median_p95_max_ms_1m":
+                aval = pair([{"p95": x[key][2]} for x in a], "p95", unit, places)
+                bval = pair([{"p95": x[key][2]} for x in b], "p95", unit, places)
+            else:
+                aval, bval = pair(a, key, unit, places), pair(b, key, unit, places)
+            table += f'<tr><td>{title}</td><td>{aval}</td><td>{bval}</td></tr>'
+        native_panel = (f'<h3 style="margin-top:24px">Diferența reală: CUANTIC vs CatServer oficial</h3>'
+                        '<p class="sub">A/B/B/A pe același runner, Java 17 și același pack 36/14; '
+                        'fiecare celulă arată <b>ambele porniri</b> ale motorului, nu cel mai mic număr. '
+                        '64 chunkuri forțate + 40 zombie, 55 s încălzire și 75 s măsurare, fără jucători.</p>'
+                        '<div class="table-scroll"><table class="tbl"><tr><th>Măsură</th><th>CUANTIC A1 / A2</th>'
+                        f'<th>Oficial B1 / B2</th></tr>{table}</table></div>'
+                        '<p class="sub">Diferența medianelor RSS este ~2 MiB, în timp ce <b>variația '
+                        'în interiorul fiecărei variante este 247–290 MiB</b>; p95 median este 1,2 ms '
+                        'pentru ambele. Nu se confirmă o economie de 171 MB sau un câștig nativ stabil. '
+                        'Timpul intern „Done” nu include tot boot-ul extern. Două probe/motor, fără '
+                        'jucători sau vehicule: <b>nu demonstrează FPS ori consum în oraș</b>. '
+                        f'<a href="{REPO_DOCS}ENGINE-NATIVE-RESULT.md">Metodă, SHA și valori brute →</a> · '
+                        f'<a href="{REPO_DOCS}ENGINE-NATIVE-TECH.md">Tehnologiile analizate →</a></p>')
+    else:
+        native_panel = (f'<p class="sub" style="margin-top:16px">Comparația cu CatServer oficial '
+                        f'nu are încă un rezultat complet verificat. <a href="{REPO_DOCS}ENGINE-OLD-RECORDS.md">'
+                        'De ce am retras recordurile istorice →</a></p>')
+
     samples = player.get("samples", [])
     if len(samples) == 3 and all(s.get("players", 0) >= 1 for s in samples):
         try:
@@ -133,6 +179,7 @@ același pack nu sunt clasate fictiv ca „mai rapide”.</p>
 <div class="cta">{winner_button}<a class="btn ghost" href="{REPO_DOCS}BENCHMARK-MOTOARE-CUANTIC-2026-10-12.md">📊 Vezi benchmarkul integral</a></div>
 {winner_note}
 </div>
+{native_panel}
 <div class="table-scroll"><table class="tbl"><tr><th>Test GitHub, același runner</th><th>Motor actual → candidat</th><th>Verdict</th></tr>
 {ticket_row}{fork_rows}</table></div>
 <div class="note">{real_note} Toate cifrele sunt datate; badge-ul de sus este doar ultimul

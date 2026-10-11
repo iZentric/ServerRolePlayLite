@@ -307,6 +307,7 @@ try:
 except Exception:
     pass
 REL, RTAG = {}, ""
+RELEASE_SOURCE = "GitHub release (verificare curentă)"
 try:
     with _rq.urlopen("https://api.github.com/repos/iZentric/ServerRolePlayLite/releases/tags/lite", timeout=25) as _r:
         _d = _json.load(_r)
@@ -314,6 +315,16 @@ try:
         RTAG = _d.get("name", "")
 except Exception:
     pass
+# Actions occasionally cannot reach the public API; publishing 0 MB was false.
+# Use a dated, committed snapshot of the exact same release instead, and make
+# its provenance explicit. Never silently invent a file size.
+if not REL:
+    try:
+        _cache = _json.load(open(os.path.join(os.path.dirname(__file__), "release-assets.json"), encoding="utf-8"))
+        REL = {a["name"]: a for a in _cache["assets"]}
+        RELEASE_SOURCE = "GitHub release (snapshot verificat " + _cache["checked_utc_date"] + ")"
+    except (OSError, KeyError, ValueError):
+        pass
 def asset(tip, sufix):
     """Numele + marimea reala a asset-ului de pe release; fallback = nume derivat din pack_version."""
     n = next((k for k in REL if tip in k and k.endswith(sufix)), None)
@@ -331,8 +342,8 @@ if CLIENT not in REL and _existent("Client", ".mrpack"):
     CLIENT = _existent("Client", ".mrpack"); CLIENT_MB = round(REL[CLIENT]["size"]/1e6, 1)
 if SERVER not in REL and _existent("Server-CatServer", ".zip"):
     SERVER = _existent("Server-CatServer", ".zip"); SERVER_MB = round(REL[SERVER]["size"]/1e6, 1)
-CLIENT_MB = CLIENT_MB if CLIENT_MB is not None else 0
-SERVER_MB = SERVER_MB if SERVER_MB is not None else 0
+CLIENT_MB = CLIENT_MB if CLIENT_MB is not None else "—"
+SERVER_MB = SERVER_MB if SERVER_MB is not None else "—"
 DL = "https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/"
 print("pack %s | client %s (%s MB) | server %s (%s MB)" % (PACKV, CLIENT, CLIENT_MB, SERVER, SERVER_MB))
 
@@ -398,7 +409,7 @@ html = f"""<!DOCTYPE html>
     <div class="stat"><b>2,1 ms</b><span>ultima citire p95/10 s cu 1 jucător, 11 octombrie; nu promisiune la 25</span></div>
     <div class="stat"><b class="b2">{CLIENT_MB} MB</b><span>client optimizat HD RGBA · serverul încarcă 50 componente (36 moduri + 14 pluginuri)</span></div>
     <div class="stat"><b class="b3">14 / 14</b><span>pluginuri activate în smoke-ul motorului validat; patch-ul nou rămâne experimental</span></div>
-    <div class="stat"><b class="b3" style="font-size:20px">{PACKV}</b><span>ultimul pack: {CLIENT}{SERVER_MB and " + " + SERVER or ""}</span></div>
+    <div class="stat"><b class="b3" style="font-size:20px">{PACKV}</b><span>ultimul pack: {CLIENT}{" + " + SERVER if SERVER in REL else ""}</span></div>
     <div class="stat"><b class="b4">Adresă</b><span>pack-ul include <b>{ADRESA}</b> în lista de servere; verifică accesul înainte de sesiune</span></div>
   </div>
 </header>
@@ -458,7 +469,7 @@ Sub 50 ms pe tick nu înseamnă FPS garantat pe laptop sau 20 TPS cu 25 jucător
 
 <h2>🥔 Merge și pe un calculator de bibliotecă?</h2>
 <div class="grid">
-  <div class="card"><h3>Clientul</h3><p>Pack-ul modat are reglaje pentru grafica redusă; OptiFine și Rubidium/Oculus trebuie încercate în instanțe separate. Nu promitem FPS pe PC-uri vechi fără test în oraș cu vehicule. Marime: <b>{CLIENT_MB} MB</b> client / <b>{SERVER_MB} MB</b> server, citite de pe release, nu estimate.</p></div>
+  <div class="card"><h3>Clientul</h3><p>Pack-ul modat are reglaje pentru grafica redusă; OptiFine și Rubidium/Oculus trebuie încercate în instanțe separate. Nu promitem FPS pe PC-uri vechi fără test în oraș cu vehicule. Mărime: <b>{CLIENT_MB} MB</b> client / <b>{SERVER_MB} MB</b> server. Sursă: {RELEASE_SOURCE}; nu estimări.</p></div>
   <div class="card"><h3>Serverul</h3><p>La ultima probă fără jucători a raportat 20 TPS. Nu avem încă sarcină controlată cu mai mulți jucători, deci consumul la vârf nu este garantat.</p></div>
   <div class="card"><h3>Gazda</h3><p>Rulează acum pe un cont gratuit, 2 vCPU · 11.8 GB RAM · disc 5 GB (66% ocupat — limita reală a cutiei, nu a serverului).</p></div>
 </div>

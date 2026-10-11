@@ -19,6 +19,19 @@ class SiteClaimsTest(unittest.TestCase):
         self.assertIn("Arclight cu pack-ul complet", page)
         self.assertIn("Mist pe Java 11", page)
 
+    def test_native_result_shows_both_runs_and_not_historical_savings(self):
+        page = engine_results.panel()
+        self.assertIn("Diferența reală: CUANTIC vs CatServer oficial", page)
+        self.assertIn("2205,1 / 2452,0 MiB", page)
+        self.assertIn("2185,6 / 2475,6 MiB", page)
+        self.assertIn("nu demonstrează FPS ori consum în oraș", page)
+        self.assertIn("ENGINE-NATIVE-RESULT.md", page)
+        self.assertIn("Nu se confirmă o economie de 171 MB", page)
+        with patch.object(engine_results, "result", return_value={}):
+            incomplete = engine_results.panel()
+        self.assertNotIn("2205,1 / 2452,0 MiB", incomplete)
+        self.assertIn("nu are încă un rezultat complet verificat", incomplete)
+
     def test_missing_proof_cannot_advertise_direct_jar(self):
         with patch.object(engine_results, "result", return_value={}):
             page = engine_results.panel()
@@ -51,6 +64,9 @@ class SiteClaimsTest(unittest.TestCase):
         # These two minima had missing source logs and were never a paired A/B.
         self.assertNotIn("2643 MB · boot 11.521s", page)
         self.assertNotIn("2814 MB · boot 11.062s", page)
+        self.assertIn("90.7 MB", page)
+        self.assertIn("51.1 MB", page)
+        self.assertNotIn("(0 MB)", page)
 
 
 if __name__ == "__main__":
