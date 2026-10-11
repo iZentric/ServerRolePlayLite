@@ -29,5 +29,11 @@ if [ -f "$D/cmd.in" ]; then
   sleep 6
   printf 'players (console, current): '
   tail -n +$((n+1)) "$D/live.log" | grep -a 'There are .* players online' | tail -1 || echo 'NO RESPONSE — do not restart'
+  printf 'load: '; uptime
+  n=$(wc -l < "$D/live.log" 2>/dev/null || echo 0)
+  printf 'spark health\n' >> "$D/cmd.in"
+  sleep 7
+  printf 'live spark health (idle, no synthetic workload):\n'
+  tail -n +$((n+1)) "$D/live.log" | grep -aE 'TPS from last|Tick durations|CPU usage from last|Memory usage|GC from last' | tail -8 || echo 'NO SPARK RESPONSE'
 fi
 printf '\nNote: inspect before any restart; never infer zero players from an empty reply.\n```\n'
