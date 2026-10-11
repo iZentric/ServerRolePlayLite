@@ -1,0 +1,46 @@
+# DOUA copii private ale aceleiasi lumi reale, pe aceeasi masina cu live-ul.
+# Nu atinge jarul, lumea, portul 25565 sau tunelul public. Abort daca apar jucatori.
+name: ENGINE HOST AB — teste private pe gazda serverului
+on:
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-host-ab.txt", "scripts/engine_host_ab.py", ".github/workflows/engine-host-ab.yml"]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  host:
+    runs-on: [self-hosted]
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RUNNER_TRACKING_ID: ''
+    steps:
+      - uses: actions/checkout@v4
+      - name: Descarca doar JAR-ul candidat in directorul temporar al jobului
+        run: |
+          gh run download 38093403726 --repo "$GITHUB_REPOSITORY" -n cuantic-engine-upstream-candidate -D engine-host-candidate
+          test -s engine-host-candidate/CUANTIC-CatServer-candidate.jar
+      - name: Compara fara oprirea serverului public
+        run: python3 scripts/engine_host_ab.py engine-host-candidate/CUANTIC-CatServer-candidate.jar engine-host-results
+      - name: Salveaza raportul fara sa schimbe lumea/pack-ul live
+        if: always()
+        run: |
+          { echo '# ENGINE HOST AB — gazda reala, copii izolate pe :25566'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID";
+            echo 'NU este test cu un client real; serverul public :25565 a ramas neatins.'; echo;
+            echo '```json'; cat engine-host-results/result.json 2>/dev/null || echo 'NO RESULT'; echo '```';
+          } > docs/ENGINE-AB-HOST.md
+          git config user.name cuantic-bot
+          git config user.email bot@users.noreply.github.com
+          git add docs/ENGINE-AB-HOST.md
+          git commit -m 'engine ab: same physical host with copied world' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true
+      - name: Pastreaza doar metrice, nu copia lumii
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cuantic-engine-host-ab
+          path: engine-host-results/result.json
+          retention-days: 7
