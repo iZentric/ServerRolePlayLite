@@ -1,6 +1,6 @@
 # ENGINE AB GitHub — acelasi runner, lume sintetica, fara jucatori
 
-Run: https://github.com/iZentric/ServerRolePlayLite/actions/runs/38176646980
+Run: https://github.com/iZentric/ServerRolePlayLite/actions/runs/38180230214
 
 ATENTIE: nu dovedeste performanta cu jucatori sau handshake-ul clientului!
 
@@ -10,18 +10,21 @@ ATENTIE: nu dovedeste performanta cu jucatori sau handshake-ul clientului!
   "limits": "synthetic zero-player workload; not real client handshake/TPS with players; no live deployment",
   "baseline-2023": {
     "label": "baseline-2023",
-    "boot_done_s": 11.47,
+    "boot_done_s": 10.945,
+    "boot_wall_seconds": 96.02,
     "plugins_enabled": 14,
     "mods_on_disk": 36,
-    "rss_median_mb": 2284.8,
-    "rss_peak_mb": 2290.7,
-    "cpu_seconds_during_command_and_warmup": 13.52,
+    "rss_median_mb": 1985.7,
+    "rss_peak_mb": 2007.8,
+    "rss_steady_median_mb": null,
+    "rss_steady_peak_mb": null,
+    "cpu_seconds_during_command_and_warmup": 14.49,
     "cpu_seconds_steady_after_55s": null,
     "spark_tick_min_median_p95_max_ms_1m": [
-      0.4,
-      0.6,
-      4.3,
-      1319.6
+      0.1,
+      0.5,
+      5.5,
+      1107.8
     ],
     "critical_errors": [],
     "exit_code": 0,
@@ -31,31 +34,34 @@ ATENTIE: nu dovedeste performanta cu jucatori sau handshake-ul clientului!
     "hopper_data_merge_responses": null,
     "hopper_fill_256_confirmed": null,
     "command_feedback_last": [
-      "[21:32:09] [Server thread/INFO]: Summoned new Zombie",
-      "[21:32:09] [Server thread/INFO]: Summoned new Zombie",
-      "[21:32:09] [Server thread/INFO]: Summoned new Zombie",
-      "[21:32:09] [Server thread/INFO]: Summoned new Zombie",
-      "[21:32:09] [Server thread/INFO]: Summoned new Zombie",
-      "[21:32:09] [Server thread/INFO]: Summoned new Zombie",
-      "[21:32:09] [Server thread/INFO]: Summoned new Zombie",
-      "[21:32:09] [Server thread/INFO]: Summoned new Zombie"
+      "[22:25:11] [Server thread/INFO]: Summoned new Zombie",
+      "[22:25:11] [Server thread/INFO]: Summoned new Zombie",
+      "[22:25:11] [Server thread/INFO]: Summoned new Zombie",
+      "[22:25:11] [Server thread/INFO]: Summoned new Zombie",
+      "[22:25:11] [Server thread/INFO]: Summoned new Zombie",
+      "[22:25:11] [Server thread/INFO]: Summoned new Zombie",
+      "[22:25:11] [Server thread/INFO]: Summoned new Zombie",
+      "[22:25:11] [Server thread/INFO]: Summoned new Zombie"
     ],
     "valid": true
   },
   "candidate-2024": {
     "label": "candidate-2024",
-    "boot_done_s": 10.267,
+    "boot_done_s": 10.589,
+    "boot_wall_seconds": 94.02,
     "plugins_enabled": 14,
     "mods_on_disk": 36,
-    "rss_median_mb": 2583.9,
-    "rss_peak_mb": 2584.0,
-    "cpu_seconds_during_command_and_warmup": 13.53,
+    "rss_median_mb": 2384.0,
+    "rss_peak_mb": 2384.4,
+    "rss_steady_median_mb": null,
+    "rss_steady_peak_mb": null,
+    "cpu_seconds_during_command_and_warmup": 14.61,
     "cpu_seconds_steady_after_55s": null,
     "spark_tick_min_median_p95_max_ms_1m": [
-      0.2,
-      0.6,
-      5.3,
-      1133.2
+      0.1,
+      0.7,
+      4.9,
+      1157.8
     ],
     "critical_errors": [],
     "exit_code": 0,
@@ -65,14 +71,14 @@ ATENTIE: nu dovedeste performanta cu jucatori sau handshake-ul clientului!
     "hopper_data_merge_responses": null,
     "hopper_fill_256_confirmed": null,
     "command_feedback_last": [
-      "[21:34:45] [Server thread/INFO]: Summoned new Zombie",
-      "[21:34:45] [Server thread/INFO]: Summoned new Zombie",
-      "[21:34:45] [Server thread/INFO]: Summoned new Zombie",
-      "[21:34:45] [Server thread/INFO]: Summoned new Zombie",
-      "[21:34:45] [Server thread/INFO]: Summoned new Zombie",
-      "[21:34:45] [Server thread/INFO]: Summoned new Zombie",
-      "[21:34:45] [Server thread/INFO]: Summoned new Zombie",
-      "[21:34:45] [Server thread/INFO]: Summoned new Zombie"
+      "[22:27:51] [Server thread/INFO]: Summoned new Zombie",
+      "[22:27:51] [Server thread/INFO]: Summoned new Zombie",
+      "[22:27:51] [Server thread/INFO]: Summoned new Zombie",
+      "[22:27:51] [Server thread/INFO]: Summoned new Zombie",
+      "[22:27:51] [Server thread/INFO]: Summoned new Zombie",
+      "[22:27:51] [Server thread/INFO]: Summoned new Zombie",
+      "[22:27:51] [Server thread/INFO]: Summoned new Zombie",
+      "[22:27:51] [Server thread/INFO]: Summoned new Zombie"
     ],
     "valid": true
   }
