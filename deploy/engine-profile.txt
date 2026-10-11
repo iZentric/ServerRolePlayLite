@@ -1,1 +1,2 @@
 2026-10-11 21:04 UTC: 60 second spark CPU profile with real player driving; no restart, no jar change
+2026-10-11 21:06 UTC: use Spark 1.9 profiler flags (--timeout/--stop) with player online

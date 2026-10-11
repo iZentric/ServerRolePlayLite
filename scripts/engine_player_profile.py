@@ -36,13 +36,13 @@ def main(out):
             raise RuntimeError("No player online; profile not started")
         result["players_at_start"] = player_count
         cursor = (LIVE / "live.log").stat().st_size
-        send("spark profiler start --timeout 60")
+        send("spark profiler --timeout 60")
         started = True
         time.sleep(72)
         text = tail_since(cursor)
         # spark 1.9.1 may finish automatically or require explicit stop.
         if not re.search(r"https?://(?:spark\.lucko\.me|spark\.lucko\.me/)", text):
-            send("spark profiler stop")
+            send("spark profiler --stop")
             time.sleep(12)
             text = tail_since(cursor)
         result["players_at_end"] = status()["players"]["online"]
@@ -56,7 +56,7 @@ def main(out):
         result["status"] = "INCOMPLETE (NO JAR/WORLD CHANGED)"
         result["reason"] = str(exc)[:200]
         if started:
-            send("spark profiler stop")
+            send("spark profiler --stop")
     out.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
     print(json.dumps(result, ensure_ascii=False, indent=2), flush=True)
     return 0 if result["status"] == "PROFILE READY" else 1
