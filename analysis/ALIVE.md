@@ -1,5 +1,5 @@
-# ALIVE CUANTIC — 2026-10-11 22:19:11 UTC
+# ALIVE CUANTIC — 2026-10-11 22:23:33 UTC
 
 ```
-SUS public (status handshake, nu login modat): {"version": {"name": "CUANTIC 1.16.5", "protocol": 754}, "players": {"online": 0, "max": 25}}
+SUS public (status handshake, nu login modat): {"version": {"name": "CUANTIC 1.16.5", "protocol": 754}, "players": {"online": 1, "max": 25}}
 ```
