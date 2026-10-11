@@ -29,6 +29,10 @@ class SiteClaimsTest(unittest.TestCase):
         self.assertIn("nu demonstrează FPS ori consum în oraș", page)
         self.assertIn("ENGINE-NATIVE-RESULT.md", page)
         self.assertIn("Nu se confirmă o economie de 171 MB", page)
+        self.assertIn("Patch REAL în JAR — verdict: RESPINS", page)
+        self.assertIn("2,87 / 3,14 s", page)
+        self.assertIn("2183,0 / 2478,9 MiB", page)
+        self.assertIn("Nu am lansat JAR-ul", page)
         with patch.object(engine_results, "result", return_value={}):
             incomplete = engine_results.panel()
         self.assertNotIn("2205,1 / 2452,0 MiB", incomplete)

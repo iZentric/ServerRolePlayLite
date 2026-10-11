@@ -142,6 +142,45 @@ def panel():
                         f'nu are încă un rezultat complet verificat. <a href="{REPO_DOCS}ENGINE-OLD-RECORDS.md">'
                         'De ce am retras recordurile istorice →</a></p>')
 
+    strict = result("ENGINE-STRICT-RESULT.md")
+    checks = strict.get("screen", {}).get("checks", {})
+    strict_labels = ("branded-A1", "official-B1", "patched-C1", "patched-C2", "official-B2", "branded-A2")
+    required = ("rss_steady_median_mb", "cpu_steady_s", "p95_ms", "boot_internal_done_s", "boot_wall_s")
+    strict_ok = (strict.get("pack_sha256") == "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15" and
+                 strict.get("official_sha256") == "8edea98c597e7af44a45ef9093678c38ca3749d55a71cdff10218c1c6b946fd0" and
+                 strict.get("candidate_sha256") == "b081735815f53e1118608464c39659b537b10fc74fa96458a4a922b7d1215ee3" and
+                 all(strict.get(name, {}).get("valid") for name in strict_labels) and
+                 all(key in checks for key in required))
+    if strict_ok:
+        def tested_pair(metric, arm, decimals):
+            return " / ".join(f"{v:.{decimals}f}".replace(".", ",") for v in checks[metric]["samples"][arm])
+        rows = ""
+        for name, key, decimals, unit in (("CPU stabil", "cpu_steady_s", 2, "s"),
+                                           ("p95 MSPT", "p95_ms", 1, "ms"),
+                                           ("RAM RSS stabil", "rss_steady_median_mb", 1, "MiB"),
+                                           ("Boot intern Done", "boot_internal_done_s", 3, "s"),
+                                           ("Boot extern java → Done", "boot_wall_s", 2, "s")):
+            c = checks[key]
+            rows += (f'<tr><td>{name}</td><td>{tested_pair(key, "branded", decimals)} {unit}</td>'
+                     f'<td>{tested_pair(key, "official", decimals)} {unit}</td>'
+                     f'<td>{tested_pair(key, "patched", decimals)} {unit}</td>'
+                     f'<td>{"Da" if c["pass"] else "<b>NU</b>"}</td></tr>')
+        strict_panel = (f'<h3 style="margin-top:24px">Patch REAL în JAR — verdict: '
+                        f'{"doar pre-calificare sintetică" if strict["screen"]["synthetic_screen_pass"] else "RESPINS la pragul strict"}</h3>'
+                        '<p class="sub">JAR recompilat cu optimizare în <code>SortedArraySet.removeIf</code> '
+                        '(nu branding); 6 porniri pe aceeași mașină: live/oficial/patch/patch/oficial/live. '
+                        'Pragul tău: cea mai slabă probă patch trebuie să fie strict mai bună decât cea mai '
+                        'bună probă din ambele baseline-uri, pe FIECARE măsură.</p>'
+                        '<div class="table-scroll"><table class="tbl"><tr><th>Indicator</th><th>Live 1/2</th>'
+                        f'<th>Oficial 1/2</th><th>Patch 1/2</th><th>Trece?</th></tr>{rows}</table></div>'
+                        '<p class="sub">CPU și p95 mai bune în acest scenariu, dar RAM și pornirea '
+                        '<b>nu trec</b>; boot-ul extern este măsurat cu verificări la ~'
+                        f'{strict["patched-C1"].get("boot_wall_poll_interval_seconds", 2)} secunde, nu un cronometru perfect. '
+                        'Doar 2 probe/motor, fără jucători și vehicule. <b>Nu am lansat JAR-ul.</b> '
+                        f'<a href="{REPO_DOCS}ENGINE-STRICT-RESULT.md">Toate probele, SHA și limitele →</a></p>')
+    else:
+        strict_panel = ''
+
     samples = player.get("samples", [])
     if len(samples) == 3 and all(s.get("players", 0) >= 1 for s in samples):
         try:
@@ -180,6 +219,7 @@ același pack nu sunt clasate fictiv ca „mai rapide”.</p>
 {winner_note}
 </div>
 {native_panel}
+{strict_panel}
 <div class="table-scroll"><table class="tbl"><tr><th>Test GitHub, același runner</th><th>Motor actual → candidat</th><th>Verdict</th></tr>
 {ticket_row}{fork_rows}</table></div>
 <div class="note">{real_note} Toate cifrele sunt datate; badge-ul de sus este doar ultimul

@@ -80,7 +80,9 @@ def run(label, dest, report_dir, hopper_workload=False, ticket_workload=False):
                 if "Done (" in text:
                     done_at = time.monotonic()
                     break
-                time.sleep(2)
+                # External boot is sampled; 2s polling previously produced
+                # identical 86.02s readings and cannot screen small changes.
+                time.sleep(0.25)
             if done_at is not None:
                 cpu_start = cpu_time_seconds(proc.pid)
                 # Ensure an identical, ticking chunk without human accounts.
@@ -152,6 +154,7 @@ def run(label, dest, report_dir, hopper_workload=False, ticket_workload=False):
         "label": label,
         "boot_done_s": float(boot[-1]) if boot else None,
         "boot_wall_seconds": round(done_at - started, 2) if done_at else None,
+        "boot_wall_poll_interval_seconds": 0.25,
         "plugins_enabled": len(plugins),
         "mods_on_disk": len(list((dest / "mods").glob("*.jar"))),
         "rss_median_mb": round(statistics.median(rss), 1) if rss else None,
