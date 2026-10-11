@@ -1,4 +1,4 @@
-# ENGINE PREFLIGHT — 2026-10-11 07:28:50 UTC
+# ENGINE PREFLIGHT — 2026-10-11 07:43:18 UTC
 
 ```
 java: 122012 /home/mndvasi9/.local/jdk17/bin/java @unix_args.txt
@@ -9,13 +9,16 @@ jar: 96f824793ab3a685a390d82305202403ea8cbe5c011a1c79ce0ec024a4d7789c  /home/mnd
 mods / plugins: 36 / 14
 disk home + temp:
 /dev/sdb1                 5.0G  3.3G  1.8G  65% /home/mndvasi9
-/dev/mapper/vg00-usr_tmp  4.9G  201M  4.4G   5% /tmp
+/dev/mapper/vg00-usr_tmp  4.9G  203M  4.4G   5% /tmp
 memory:
               total        used        free      shared  buff/cache   available
-Mem:          11884        4771        3730          71        3382        5321
+Mem:          11884        5106        4699          71        2078        4992
 35M	/home/mndvasi9/cuantic-live/world
-log cursor: 4386
-players (console, current): [07:28:51] [Server thread/INFO]: There are 0 out of maximum 25 players online.
+voice chat config locations and UDP ports (no secrets):
+/home/mndvasi9/cuantic-live/world/serverconfig/voicechat-server.toml
+	port = 24454
+log cursor: 4426
+players (console, current): [07:43:19] [Server thread/INFO]: There are 0 out of maximum 25 players online.
 
 Note: inspect before any restart; never infer zero players from an empty reply.
 ```
