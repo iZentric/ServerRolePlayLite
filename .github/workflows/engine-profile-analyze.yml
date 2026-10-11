@@ -1,0 +1,15 @@
+name: ENGINE PROFILE — analyze published CPU sample
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Summarize published Spark profile (no access to live server)
+        run: |
+          python3 scripts/engine_profile_analyze.py /tmp/engine-profile-summary.md
+          cat /tmp/engine-profile-summary.md
