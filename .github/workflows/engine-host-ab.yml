@@ -17,10 +17,15 @@ jobs:
       RUNNER_TRACKING_ID: ''
     steps:
       - uses: actions/checkout@v4
-      - name: Descarca doar JAR-ul candidat in directorul temporar al jobului
-        run: |
-          gh run download 38093403726 --repo "$GITHUB_REPOSITORY" -n cuantic-engine-upstream-candidate -D engine-host-candidate
-          test -s engine-host-candidate/CUANTIC-CatServer-candidate.jar
+      - name: Descarca candidatul de pe GitHub Actions (self-hosted nu are gh CLI)
+        uses: actions/download-artifact@v4
+        with:
+          name: cuantic-engine-upstream-candidate
+          run-id: 38093403726
+          github-token: ${{ github.token }}
+          path: engine-host-candidate
+      - name: Confirma candidatul
+        run: test -s engine-host-candidate/CUANTIC-CatServer-candidate.jar
       - name: Compara fara oprirea serverului public
         run: python3 scripts/engine_host_ab.py engine-host-candidate/CUANTIC-CatServer-candidate.jar engine-host-results
       - name: Salveaza raportul fara sa schimbe lumea/pack-ul live
