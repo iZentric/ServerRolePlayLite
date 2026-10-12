@@ -1,3 +1,1 @@
-chk-recover-20261011T2057Z; public server reported down; no jar change
-
-2026-10-11 22:14 UTC: preflight confirmed Java/supervisor/tunnel absent, port closed; recover existing JAR without replacing it
+2026-10-12: conditional recovery requested by owner; public status refused and read-only preflight is queued for offline self-hosted runner. Start ONLY if local Java/supervisor/tunnel is down; do not replace JAR or pack.
