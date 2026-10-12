@@ -1,1 +1,1 @@
-2026-10-12: try three server-side fake players in a disposable GitHub runner with Forge 1.16.5 Curtain; never on live, no real client handshake claim.
+2026-10-12: diagnostic rerun after Curtain 1.16.5 crashed in isolated pack before Done; capture first actual root cause, no live changes or fake success claim.

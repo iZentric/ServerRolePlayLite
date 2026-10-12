@@ -23,6 +23,7 @@ BOTS = ("benchA01", "benchA02", "benchA03")
 # Both variants must later use the SAME verified extra test mod. 1.16.5 release:
 # https://github.com/Gu-ZT/Curtain/releases/tag/1.3.2
 CURTAIN = "curtain-mc1.16.5-1.3.2.jar"
+CURTAIN_SHA = "c9234d2c5ca43c337abac25a05022fe2f226c884855aa6941b6130c60777819d"
 
 
 def sha(path):
@@ -64,7 +65,8 @@ def main(pack, curtain, output):
     logfile = output / "server.log"
     proc = None
     try:
-        if pack.resolve() == curtain.resolve() or report["pack_sha256"] != PACK_SHA or curtain.name != CURTAIN:
+        if (pack.resolve() == curtain.resolve() or report["pack_sha256"] != PACK_SHA or
+            curtain.name != CURTAIN or report["curtain_sha256"] != CURTAIN_SHA):
             raise ValueError("wrong release pack or Curtain filename; abort")
         server = output / "isolated-server"
         server.mkdir()
@@ -147,8 +149,13 @@ def main(pack, curtain, output):
                 proc.wait()
         if logfile.exists():
             lines = logfile.read_text(errors="replace")
-            report["critical_lines"] = [line[-350:] for line in lines.splitlines() if re.search(
-                r"Mixin apply failed|FATAL|Exception in server tick loop|OutOfMemoryError|Could not enable plugin", line, re.I)][-12:]
+            report["critical_lines"] = [line[-550:] for line in lines.splitlines() if re.search(
+                r"Mixin apply failed|FATAL|Exception in server tick loop|OutOfMemoryError|Could not enable plugin", line, re.I)][:20]
+            # The tail of a Forge crash is mostly CompletableFuture frames; keep
+            # the actual first cause, mixin target and exception type for triage.
+            report["root_causes"] = [line[-600:] for line in lines.splitlines() if re.search(
+                r"Caused by:|Exception:|Error:|InjectionError|InvalidMixinException|MixinTransformerError", line, re.I)][:35]
+            report["log_tail"] = lines[-1800:]
             report["valid"] &= not report["critical_lines"]
         (output / "result.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
         print(json.dumps({k: v for k, v in report.items() if k != "steady_rss_mib"}, indent=2, ensure_ascii=False), flush=True)
