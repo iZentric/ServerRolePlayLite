@@ -5,6 +5,7 @@ from engine_results import latest_status, panel, strategy_panel
 from jar_atlas import panel as atlas_panel, STYLE as ATLAS_STYLE, SCRIPT as ATLAS_SCRIPT
 from jar_tier import panel as tier_panel, STYLE as TIER_STYLE, SCRIPT as TIER_SCRIPT
 from jar_delta import panel as delta_panel, STYLE as DELTA_STYLE
+from jar_score import panel as score_panel, STYLE as SCORE_STYLE
 from jar_tier import classify as tier_classify, TIERS as TIER_BANDS
 from jar_atlas import ATLAS as ATLAS_PATH
 
@@ -418,12 +419,13 @@ html = f"""<!DOCTYPE html>
 {ATLAS_STYLE}
 {TIER_STYLE}
 {DELTA_STYLE}
+{SCORE_STYLE}
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
   <span class="pill"><i style="background:{alive_cul};box-shadow:0 0 12px {alive_cul}"></i>{alive_txt}</span>
   <span class="pill">{PACKV} · 36 moduri + 14 pluginuri</span>
-  <a class="l" href="#diferente">diferența ↓</a>
+  <a class="l" href="#scor">bari ↓</a>
   <a class="l" href="#tier">tier list ↓</a>
   <a class="l" href="#atlas">atlas ↓</a>
   <a class="l" href="#viziune">strategie ↓</a>
@@ -438,7 +440,7 @@ html = f"""<!DOCTYPE html>
   față de fiecare alternativă testată, și <b>ce nu știm încă</b>. Cifrele vin din rapoarte commit-uite, nu din marketing.</p>
   <div class="cta">
     <a class="btn" href="{DL}{CLIENT}">⬇️ Modpack client ({CLIENT_MB} MB)</a>
-    <a class="btn ghost" href="#diferente">⚡ Diferența măsurată</a>
+    <a class="btn ghost" href="#scor">📊 Bari de dovezi</a>
     <a class="btn ghost" href="#tier">🏅 Tier list pe probe</a>
   </div>
   <div class="stats">
@@ -450,6 +452,8 @@ html = f"""<!DOCTYPE html>
 </header>
 
 {panel()}
+
+{score_panel()}
 
 {tier_panel()}
 

@@ -237,12 +237,40 @@ footer code{color:#9fb0c9}
 .jd-next code{color:#cfe0f7;background:rgba(127,176,255,.12);padding:1px 4px;border-radius:3px;font-size:11px}
 @media(max-width:740px){.jd-section{padding:24px 14px}.jd-next{flex-direction:column;align-items:flex-start}}
 
+
+.js-panel{margin:26px 0 8px}
+.js-rows{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:12px}
+.js-row{background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+  border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:14px 16px 12px;
+  display:grid;gap:9px;grid-template-columns:minmax(0,1fr)}
+.js-row--pinned{border-color:rgba(95,240,192,.45);box-shadow:0 0 0 1px rgba(95,240,192,.12),0 12px 32px rgba(0,0,0,.28)}
+.js-row--muted{opacity:.72}
+.js-name{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.js-name b{font-size:16px;letter-spacing:.2px}
+.js-score{font-variant-numeric:tabular-nums;font-weight:700;font-size:20px;color:var(--mint,#5ff0c0)}
+.js-score i{font-style:normal;font-size:12px;opacity:.55;font-weight:600}
+.js-track{height:12px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden}
+.js-track span{display:block;height:100%;border-radius:999px;
+  background:linear-gradient(90deg,#7fb0ff,#5ff0c0);transition:width .5s ease}
+.js-row--muted .js-track span{background:linear-gradient(90deg,#5b6577,#8b93a5)}
+.js-gates{display:flex;gap:6px;flex-wrap:wrap}
+.js-gate{font:600 11px/1.6 ui-sans-serif,system-ui;letter-spacing:.3px;padding:2px 8px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);background:rgba(255,255,255,.03)}
+.js-gate.on{color:#062018;background:var(--mint,#5ff0c0);border-color:transparent;font-weight:800}
+.js-perf{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.js-delta{font-size:15px;font-variant-numeric:tabular-nums}
+.js-delta.up{color:#ff9d8a}.js-delta.down{color:var(--mint,#5ff0c0)}
+.js-delta.flat{color:#cfd6e4}.js-delta.none{opacity:.5}
+.js-perf small{opacity:.65;font-size:12px}
+.js-note{margin:0;font-size:12.5px;line-height:1.55;opacity:.72}
+.js-foot{font-size:12.5px;opacity:.62;margin:12px 0 0}
+
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
   <span class="pill"><i style="background:var(--mint);box-shadow:0 0 12px var(--mint)"></i>SUS la ultima probă publică 12.10 15:52 UTC (ping)</span>
   <span class="pill">1.7.7 · 36 moduri + 14 pluginuri</span>
-  <a class="l" href="#diferente">diferența ↓</a>
+  <a class="l" href="#scor">bari ↓</a>
   <a class="l" href="#tier">tier list ↓</a>
   <a class="l" href="#atlas">atlas ↓</a>
   <a class="l" href="#viziune">strategie ↓</a>
@@ -257,7 +285,7 @@ footer code{color:#9fb0c9}
   față de fiecare alternativă testată, și <b>ce nu știm încă</b>. Cifrele vin din rapoarte commit-uite, nu din marketing.</p>
   <div class="cta">
     <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.7.7.mrpack">⬇️ Modpack client (90.7 MB)</a>
-    <a class="btn ghost" href="#diferente">⚡ Diferența măsurată</a>
+    <a class="btn ghost" href="#scor">📊 Bari de dovezi</a>
     <a class="btn ghost" href="#tier">🏅 Tier list pe probe</a>
   </div>
   <div class="stats">
@@ -341,6 +369,8 @@ alte JAR-uri neprobate nu sunt declarate învinse.</p></div>
 <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-PLAYER-RESULT.md">proba cu jucător</a>. Un laptop slab și configurațiile
 OptiFine + modurile normale respectiv Rubidium/Oculus se testează <b>separat</b> în oraș, cu vehicule.</p>
 </section>
+
+<section id="scor" class="js-panel"><h2>Bari de dovezi, nu de laudă.</h2><p class="js-lede">Fiecare bară = câte porți de verificare a trecut motorul (identitate, pornire cu pack-ul tău, A/B în același run, client real). Diferența de performanță apare sub bară, doar acolo unde a fost măsurată: <b>între CUANTIC și CatServer oficial suntem la egalitate sub zgomot</b> — restul n-au nicio cifră pentru că n-au ajuns să ruleze pack-ul tău.</p><ol class="js-rows"><li class="js-row js-bar--pinned" data-score="100" data-measured="true"><div class="js-name"><b>CUANTIC (ce rulează acum)</b><span class="js-score">100<i>/100</i></span></div><div class="js-track"><span style="width:100%"></span></div><div class="js-gates"><i class="js-gate on" title="binar fixat: sha256 verificat împotriva sursei oficiale">identitate</i><i class="js-gate on" title="a pornit pack-ul intact: 36 moduri + 14 pluginuri">pornire</i><i class="js-gate on" title="comparație în același run, ≥3 probe valide pe braț">A/B</i><i class="js-gate on" title="client Forge 1.16.5 real în lume, pe serverul care rulează">client</i></div><div class="js-perf"><b class="js-delta flat">±2,05 MiB</b><small>RAM stabilă față de CatServer oficial · zgomot ±290,0 · verdict NEDECIS · sub zgomot</small></div><p class="js-note">baza CatServer 1.16.5-1d8d6313 (LGPL-3.0) + 3 patch-uri proprii · fum 9,848 s · 1 jucător în lume la ultima probă; motorul rămâne cu 8 commituri în urma upstream-ului CatServer, neresolve-uite intenționat până la staging.</p></li><li class="js-row " data-score="75" data-measured="true"><div class="js-name"><b>CatServer oficial (binarul de referință)</b><span class="js-score">75<i>/100</i></span></div><div class="js-track"><span style="width:75%"></span></div><div class="js-gates"><i class="js-gate on" title="binar fixat: sha256 verificat împotriva sursei oficiale">identitate</i><i class="js-gate on" title="a pornit pack-ul intact: 36 moduri + 14 pluginuri">pornire</i><i class="js-gate on" title="comparație în același run, ≥3 probe valide pe braț">A/B</i><i class="js-gate off" title="client Forge 1.16.5 real în lume, pe serverul care rulează">client</i></div><div class="js-perf"><b class="js-delta flat">±2,05 MiB</b><small>RAM stabilă față de CUANTIC live · zgomot ±290,0 · verdict NEDECIS · sub zgomot</small></div><p class="js-note">același pack, același run — diferența de RAM e sub zgomot, deci egalitate, nu câștig. Fără dovadă de login cu client modat pe acest binar.</p></li><li class="js-row " data-score="75" data-measured="true"><div class="js-name"><b>CUANTIC patch (cod scris de noi)</b><span class="js-score">75<i>/100</i></span></div><div class="js-track"><span style="width:75%"></span></div><div class="js-gates"><i class="js-gate on" title="binar fixat: sha256 verificat împotriva sursei oficiale">identitate</i><i class="js-gate on" title="a pornit pack-ul intact: 36 moduri + 14 pluginuri">pornire</i><i class="js-gate on" title="comparație în același run, ≥3 probe valide pe braț">A/B</i><i class="js-gate off" title="client Forge 1.16.5 real în lume, pe serverul care rulează">client</i></div><div class="js-perf"><b class="js-delta down">−23,15 MiB</b><small>RAM stabilă față de CUANTIC live · verdict RESPINS</small></div><p class="js-note">A/B în același run: candidatele a consumat 2166,2 MiB față de 2094,9 MiB cât duce live-ul, deci POARTA a zis RESPINS. Cifra de sub bară e RAM-ul măsurat, nu un „câștig”: candidatul a pierdut, live-ul a rămas.</p></li><li class="js-row " data-score="25" data-measured="true"><div class="js-name"><b>Arclight 1.0.25</b><span class="js-score">25<i>/100</i></span></div><div class="js-track"><span style="width:25%"></span></div><div class="js-gates"><i class="js-gate on" title="binar fixat: sha256 verificat împotriva sursei oficiale">identitate</i><i class="js-gate off" title="a pornit pack-ul intact: 36 moduri + 14 pluginuri">pornire</i><i class="js-gate off" title="comparație în același run, ≥3 probe valide pe braț">A/B</i><i class="js-gate off" title="client Forge 1.16.5 real în lume, pe serverul care rulează">client</i></div><div class="js-perf"><b class="js-delta none">—</b><small>fără probă A/B în același run: fără cifre</small></div><p class="js-note">a pornit, dar cu 0/14 pluginuri: alt comportament, nu altă viteză — nu are ce să câștige la A/B pe pack-ul nostru</p></li><li class="js-row " data-score="25" data-measured="true"><div class="js-name"><b>Mist 1.16.5-33</b><span class="js-score">25<i>/100</i></span></div><div class="js-track"><span style="width:25%"></span></div><div class="js-gates"><i class="js-gate on" title="binar fixat: sha256 verificat împotriva sursei oficiale">identitate</i><i class="js-gate off" title="a pornit pack-ul intact: 36 moduri + 14 pluginuri">pornire</i><i class="js-gate off" title="comparație în același run, ≥3 probe valide pe braț">A/B</i><i class="js-gate off" title="client Forge 1.16.5 real în lume, pe serverul care rulează">client</i></div><div class="js-perf"><b class="js-delta none">—</b><small>fără probă A/B în același run: fără cifre</small></div><p class="js-note">a pornit, dar cu 0/14 pluginuri: alt comportament, nu altă viteză — nu are ce să câștige la A/B pe pack-ul nostru</p></li><li class="js-row js-bar--muted" data-score="25" data-measured="true"><div class="js-name"><b>Mohist 1.16.5-1237</b><span class="js-score">25<i>/100</i></span></div><div class="js-track"><span style="width:25%"></span></div><div class="js-gates"><i class="js-gate on" title="binar fixat: sha256 verificat împotriva sursei oficiale">identitate</i><i class="js-gate off" title="a pornit pack-ul intact: 36 moduri + 14 pluginuri">pornire</i><i class="js-gate off" title="comparație în același run, ≥3 probe valide pe braț">A/B</i><i class="js-gate off" title="client Forge 1.16.5 real în lume, pe serverul care rulează">client</i></div><div class="js-perf"><b class="js-delta none">—</b><small>fără probă A/B în același run: fără cifre</small></div><p class="js-note">nu a ajuns la `Done` cu pack-ul intact: fără scor de performanță · cauză: java.lang.NoSuchMethodError: &#x27;java.util.stream.Collector com.google.common.collect.ImmutableMap.toImmutableMap(java.util.function.Function, java.util.function.Function)&#x27;</p></li><li class="js-row js-bar--muted" data-score="0" data-measured="false"><div class="js-name"><b>LoliServer 1.16.5</b><span class="js-score">0<i>/100</i></span></div><div class="js-track"><span style="width:0%"></span></div><div class="js-gates"><i class="js-gate off" title="binar fixat: sha256 verificat împotriva sursei oficiale">identitate</i><i class="js-gate off" title="a pornit pack-ul intact: 36 moduri + 14 pluginuri">pornire</i><i class="js-gate off" title="comparație în același run, ≥3 probe valide pe braț">A/B</i><i class="js-gate off" title="client Forge 1.16.5 real în lume, pe serverul care rulează">client</i></div><div class="js-perf"><b class="js-delta none">—</b><small>fără probă A/B în același run: fără cifre</small></div><p class="js-note">ValueError: fără URL de descărcare → candidat neidentificat, nu e scor</p></li><li class="js-row js-bar--muted" data-score="0" data-measured="false"><div class="js-name"><b>Magma 1.16.5-36.2.39-c1c5a946</b><span class="js-score">0<i>/100</i></span></div><div class="js-track"><span style="width:0%"></span></div><div class="js-gates"><i class="js-gate off" title="binar fixat: sha256 verificat împotriva sursei oficiale">identitate</i><i class="js-gate off" title="a pornit pack-ul intact: 36 moduri + 14 pluginuri">pornire</i><i class="js-gate off" title="comparație în același run, ≥3 probe valide pe braț">A/B</i><i class="js-gate off" title="client Forge 1.16.5 real în lume, pe serverul care rulează">client</i></div><div class="js-perf"><b class="js-delta none">—</b><small>fără probă A/B în același run: fără cifre</small></div><p class="js-note">HTTPError: HTTP Error 522: &lt;none&gt;</p></li></ol><p class="js-foot">Lista începe cu motorul tău pentru că e singurul cu toate porțile testate; nu e un ordin de „cel mai rapid”. Mai jos rămân atlasul și tier-list-ul pe probe.</p></section>
 
 <section id="tier" class="tier-section" aria-labelledby="tier-title">
 <div class="tier-overline"><span aria-hidden="true">◈</span> CLASAMENT PE DOVEZI <span class="tier-rule"></span> 12 OCT 2026</div>
@@ -713,7 +743,7 @@ Cauza opririi este încă necunoscută; verifică badge-ul datat de sus pentru u
 </div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 12 Oct 2026, 15:52 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 12 Oct 2026, 16:05 UTC<br>
   CUANTIC · Roleplay Lite · Minecraft Java 1.16.5 Forge + Bukkit (CatServer adaptat) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>docs/ENGINE-NATIVE-RESULT.md</code> · <code>docs/CUANTIC-JAR-ATLAS-2026-10-12.md</code> · <code>docs/ENGINE-DECISION.md</code> · <code>analysis/</code>
 </footer>
