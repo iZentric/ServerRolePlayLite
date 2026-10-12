@@ -163,18 +163,23 @@ def ladder_rows():
     rows = []
     for name, cand in (data.get("candidates") or {}).items():
         ab = cand.get("ab") or {}
+        cause = (cand.get("root_cause") or "").strip()
         if isinstance(cand.get("error"), str):
             status = "ESUAT · " + cand["error"][:120]
         elif cand.get("smoke_passed"):
             status = "a pornit 36/14 · " + str(ab.get("verdict") or "A/B neîncercat")
         else:
-            status = "nu a ajuns la `Done` · fără scor"
+            status = "INCOMPATIBIL cu pack-ul · fără scor"
+        sha_actual, sha_expected = cand.get("sha256_actual"), cand.get("sha256_expected")
         rows.append({"name": name, "boot_s": cand.get("boot_done_s"),
-                     "sha": (cand.get("sha256_actual") or cand.get("sha256_expected") or "")[:12],
+                     "sha": (sha_actual or sha_expected or "")[:12],
+                     "sha_verified": bool(sha_actual and sha_actual == sha_expected),
                      "licence": cand.get("licence_declared") or "neverificată",
                      "plugins": cand.get("plugins_enabled"),
                      "status": status, "verdict": ab.get("verdict") or "NEAVĂGAT",
-                     "reason": ab.get("reason") or cand.get("error") or ""})
+                     "smoke_failed": not cand.get("smoke_passed") and "error" not in cand,
+                     "reason": (f"{ab.get('reason') or ''}{(' · cauză: ' + cause) if cause and not cand.get('smoke_passed') else ''}").strip(" ·")
+                               or cand.get("error") or ""})
     return rows
 
 
@@ -331,6 +336,9 @@ def _matrix_rows(pairs):
         if cand["status"].startswith("ESUAT"):
             # fără binar descărcat nu am atins nici pack-ul: niciun „36” de afișat
             chip, mods, plugins, boot = "none", "—", "—", "—"
+        elif cand.get("smoke_failed"):
+            # binar verificat, pack intact, motorul a refuzat să pornească: INCOMPATIBIL
+            chip, mods, plugins = "bad", "36 (neschimbat)", f"{cand['plugins'] or 0}/14"
         elif "a pornit" in cand["status"]:
             chip, mods = "ok", "36 (neschimbat)"
             plugins = f"{cand['plugins']}/14" if isinstance(cand["plugins"], int) else "—"
@@ -339,7 +347,9 @@ def _matrix_rows(pairs):
         out.append(
             f'<tr data-delta-row data-engine="{re.sub(r"[^a-z0-9-]", "-", cand["name"].lower())}">'
             f'<th scope="row"><b>{inline(cand["name"])}</b>'
-            f'<small>scara CUANTIC pe runner · SHA {cand["sha"] or "—"} · licență {inline(cand["licence"])}</small></th>'
+            f'<small>scara CUANTIC pe runner · SHA {cand["sha"] or "—"}' + \
+            (' (confirmat cu sursa)' if cand.get("sha_verified") else '') + \
+            f' · licență {inline(cand["licence"])}</small></th>'
             f'<td><span class="jd-badge {chip}">{inline(cand["status"])}</span></td>'
             f'<td>{mods}</td><td>{plugins}</td><td class="jd-num"><b>{boot}</b></td>'
             f'<td>{inline(cand["reason"] or cand["verdict"])}</td></tr>')

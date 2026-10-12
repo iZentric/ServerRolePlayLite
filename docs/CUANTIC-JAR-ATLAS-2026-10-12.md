@@ -121,8 +121,10 @@ cel mult devine `PARITATE_OBSERVATĂ` sau `RESPINS` — niciodată „câștigă
 
 | Motor | URL oficial încercat | Rezultat |
 |---|---|---|
-| Mohist 1.16.5-1237 | `repo1.maven.org/maven2/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar` (8.697.940 octeți, sha256 `17d08ed544aab50f0c9c0281507a44d765cfeb371289a10d47e2143146255bff`) | accesibil din browser; primul runner l-a căutat cu numele greșit (`mohist-1.16.5-1237.jar`, fără classifier) și a primit 404 |
-| Magma 1.16.5-36.2.39-c1c5a946 | `git.magmafoundation.org/api/v4/projects/8/packages/maven/.../Magma-1.16.5-36.2.39-c1c5a946-server.jar` | `HTTP 522` din runner, la fel și pe pagina principală a proiectului — gazda e căzută, nu candidat mai lent |
+| Mohist 1.16.5-1237 | `repo1.maven.org/maven2/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar` (8.697.940 octeți, sha256 `17d08ed544aab50f0c9c0281507a44d765cfeb371289a10d47e2143146255bff`) | **descărcat pe runner și verificat: sha256 local = sha256 din Maven Central, identic**. Fum pe pack-ul intact 36/14: nu a ajuns la `Done` (modlauncher a aruncat înainte de încărcarea pluginurilor) → INCOMPATIBIL, nu „mai lent”. Primul runner l-a căutat cu numele greșit (fără classifierul `-server`) și a primit 404 — eroarea era a noastră |
+| Magma 1.16.5-36.2.39-c1c5a946 | `git.magmafoundation.org/api/v4/projects/8/packages/maven/.../Magma-1.16.5-36.2.39-c1c5a946-server.jar` | `HTTP 522` din runner, la fel și pe pagina principală a proiectului — gazda e căzută, nu candidat mai lent. Fără binar, fără fum |
 | LoliServer 1.16.5 | `github.com/Loli-Server/LoliServer` | `404` pe API-ul releases: repository stins; nu luăm binare de pe oglinzi neoficiale |
 
-Niciunul nu are încăfum pe pack-ul 36/14 înseamnă **NEAVĂGAT**, nu „mai slab”.
+Doar Mohist a ajuns la fum pe binar verificat; Magma și LoliServer n-au ajuns la un
+binar oficial accesibil. „Fără fum pe pack-ul 36/14” înseamnă **NEAVĂGAT** sau
+**INCOMPATIBIL**, niciodată „mai slab” — și niciunul nu dă dreptul la un titlu de performanță.

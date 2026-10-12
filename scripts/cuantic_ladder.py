@@ -16,6 +16,7 @@ Verdictul public îl dă `scripts/cuantic_tenx_gate.py`: fără clienți Forge c
 """
 import argparse
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -170,6 +171,25 @@ def run_gate(payload_path):
     return out
 
 
+ROOT_CAUSE = re.compile(r"(?<![\w.$])([A-Za-z_$][\w.$]*(?:Exception|Error|Throwable)):\s*(.{4,180}?)(?:\s+at\s|$)")
+
+
+def root_cause(log_text):
+    """Prima frață utilă dintr-un eșec de pornire: fără ea „INCOMPATIBIL” e doar un cuvânt.
+
+    Căutăm liniile care nu-s cadre de stack și care numesc o excepție cu mesaj —
+    altfel runner-ul ar publica doar „at cpw.mods.modlauncher...”, care nu spune nimic.
+    """
+    for line in log_text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("at ") or "ThreadGroup:uncaughtException" in stripped:
+            continue
+        m = ROOT_CAUSE.search(stripped)
+        if m:
+            return f"{m.group(1)}: {m.group(2).strip()}"[:240]
+    return None
+
+
 # ---------------------------------------------------------------- execuție
 def boot_one(workdir, label, report_dir, ticket_workload=True):
     """Un singur pornit izolat, prin aceleași unelte ca rapoartele commit-uite."""
@@ -211,13 +231,19 @@ def ladder(spec, pack, out, trials=MIN_TRIALS, do_ab=True):
             row["sha256_actual"] = download(cand["url"], jar, cand["sha256"])
             row.update(replace_jar(stage, jar))
             log = stage / "smoke.log"
-            row["smoke_passed"] = bool(smoke_boot(stage, log))
+            # engine_lab.smoke isi printeaza propriul JSON: il furam ca raportul final
+            # sa ramana un singur obiect, altfel CI-ul extrage primul { si pierde tot
+            import contextlib
+            with contextlib.redirect_stdout(io.StringIO()):
+                row["smoke_passed"] = bool(smoke_boot(stage, log))
             text = log.read_text(encoding="utf-8", errors="replace") if log.is_file() else ""
             done = re.search(r"Done \(([0-9.]+)s\)", text)
             row["boot_done_s"] = float(done.group(1)) if done else None
             row["plugins_enabled"] = len(re.findall(r"Enabling ", text))
             row["key_lines"] = [line[:180] for line in text.splitlines()
-                               if re.search(r"ERROR|Exception|Fail to launch|Done \(", line)][:8]
+                               if re.search(r"ERROR|Exception|Fail to launch|Done \(", line)
+                               and not line.lstrip().startswith(("\tat", "Caused by"))][:8]
+            row["root_cause"] = root_cause(text)
         except (OSError, ValueError, urllib.error.URLError) as exc:  # noqa: BLE001
             row["error"] = f"{type(exc).__name__}: {exc}"[:300]
             continue

@@ -145,5 +145,22 @@ class LadderOnSiteTest(unittest.TestCase):
         self.assertIn('<td class="jd-num"><b>—</b></td>', block[0])
 
 
+class RootCauseTest(unittest.TestCase):
+    def test_stack_frames_are_not_a_root_cause(self):
+        text = ("[15:34:23] [java.lang.ThreadGroup:uncaughtException:1077]: "
+                "java.lang.RuntimeException: java.lang.reflect.InvocationTargetException\n"
+                "\tat cpw.mods.modlauncher.Launcher.run(Launcher.java:82)\n")
+        self.assertIsNone(ladder.root_cause(text))
+
+    def test_first_named_exception_line_wins(self):
+        text = ("[15:34:20 ERROR] [java.lang.ExceptionInInitializerError]: null\n"
+                "Caused by: java.lang.NullPointerException: registry is empty\n\tat foo\n")
+        self.assertIn("NullPointerException", ladder.root_cause(text))
+
+    def test_smoke_stdout_cannot_pollute_the_report_json(self):
+        src = (ROOT / "scripts" / "cuantic_ladder.py").read_text(encoding="utf-8")
+        self.assertIn("contextlib.redirect_stdout(io.StringIO())", src)
+
+
 if __name__ == "__main__":
     unittest.main()
