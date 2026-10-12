@@ -31,8 +31,11 @@ KEEP_CONFIG = re.compile(r"\.(yml|yaml|properties|conf|cfg|toml|ini|json|txt)$",
 SKIP_NAME = re.compile(r"(level\.dat|session\.lock|usercache|banned-|whitelist|ops\.json|permissions\.yml"
                        r"|vials|viabackwards|vault|luckperms|h2\.mv.db|\.mca$|\.jar$|\.zip$|\.gz$"
                        r"|secrets|password|token|api-key|private)", re.I)
+NESTED = re.compile(r"\.(tar\.gz|tgz|tar|zip|rar)$", re.I)
 LOG_TAIL_BYTES = 120_000
+TAIL_BYTES = 400_000          # orice alt fisier text care nu incape integral: doar coada
 MAX_FILE = 2_000_000
+MAX_TOTAL = 25_000_000        # plafon de text publicat per server, ca sa nu umflam repo-ul
 
 
 def _listing(archive: Path) -> list[tuple[str, int]]:
@@ -89,42 +92,61 @@ def extract(archive: Path, dest: Path) -> None:
                 print("nici 7z, nici unar nu sunt instalate: nu pot dezarhiva", file=sys.stderr)
 
 
-def _tail(src: Path, dst: Path) -> None:
+def _tail(src: Path, dst: Path, limit: int = LOG_TAIL_BYTES) -> int:
     with open(src, "rb") as f:
         f.seek(0, os.SEEK_END)
         size = f.tell()
-        f.seek(max(0, size - LOG_TAIL_BYTES))
+        f.seek(max(0, size - limit))
         data = f.read()
     dst.write_bytes(data)
+    return len(data)
+
+
+def keep_body(rel: str) -> str:
+    """Varianta de drum care trece de keep(); gol daca nu vrem fisierul."""
+    for b in _candidates(rel):
+        if keep(b):
+            return b
+    return ""
+
+
+def _candidates(rel: str) -> list[str]:
+    """Atat drumul integral cat si cel fara primul component (folderul de wrap al arhivei)."""
+    out = [rel.strip("/")]
+    stripped = re.sub(r"^[^/]+/", "", rel).strip("/")
+    if stripped and stripped != out[0]:
+        out.append(stripped)
+    return out
 
 
 def keep(rel: str) -> bool:
     """Decizia e pe drumul din arhiva, ca sa mearga si fara extragere."""
-    body = re.sub(r"^[^/]+/", "", rel)
-    if SKIP_NAME.search(body):
-        return False
-    if SKIP_DIR.search("/" + body) or SKIP_DIR_TAIL.search("/" + body):
-        return False
-    if re.search(r"\.(jar|mca|db|zip|gz|tar|dat|dat_old|png|jpg|pdf|bin)$", body, re.I):
-        return False
-    if ROOT_ONLY_CONFIG.match(body):
-        return True
-    if re.search(r"\.(log)$", body, re.I):                      # loguri: doar coada, dar le vrem
-        return True
-    if re.match(r"^(plugins|mods|config|bungee|velocity)/", body) and \
-       KEEP_CONFIG.search(body) and "/playerdata/" not in "/" + body:
-        return True                                              # configurile din plugins/ sunt aurul
+    for body in _candidates(rel):
+        if SKIP_NAME.search(body):
+            return False
+        if SKIP_DIR.search("/" + body) or SKIP_DIR_TAIL.search("/" + body):
+            return False
+        if re.search(r"\.(jar|mca|db|zip|gz|tar|dat|dat_old|png|jpg|pdf|bin)$", body, re.I):
+            return False
+        if ROOT_ONLY_CONFIG.match(body):
+            return True
+        if re.search(r"\.(log|txt|sk)$", body, re.I):           # loguri/cozi de chat/scrieri Skript
+            return True
+        if re.match(r"^(plugins|mods|config|bungee|velocity)/", body) and \
+           KEEP_CONFIG.search(body) and "/playerdata/" not in "/" + body:
+            return True                                          # configurile din plugins/ sunt aurul
     return False
 
 
-def collect(root: Path, out: Path) -> dict:
+def collect(root: Path, out: Path, budget: int = MAX_TOTAL) -> dict:
     (out / "config").mkdir(parents=True, exist_ok=True)
     kept, skipped = [], {"teren": 0, "suspect": 0, "mare": 0, "binar": 0}
+    total_bytes = 0
     for p in sorted(root.rglob("*")):
         if not p.is_file():
             continue
         rel = p.relative_to(root).as_posix()
-        body = re.sub(r"^[^/]+/", "", rel)
+        body = keep_body(rel)
         try:
             size = p.stat().st_size
         except OSError:
@@ -142,19 +164,26 @@ def collect(root: Path, out: Path) -> dict:
             else:
                 skipped["teren"] += 1
             continue
-        if size > MAX_FILE and not re.search(r"\.log$", body, re.I):
+        if size > MAX_FILE and not re.search(r"\.(log|txt|sk|yml|yaml|properties|cfg|toml|json)$", body, re.I):
+            skipped["mare"] += 1
+            continue
+        if total_bytes >= budget:
             skipped["mare"] += 1
             continue
         dst = out / "config" / body.replace("/", "__")
         try:
-            if re.search(r"\.log$", body, re.I):
-                _tail(p, dst)
+            if re.search(r"\.(log)$", body, re.I):
+                n = _tail(p, dst)
+            elif size > MAX_FILE:
+                n = _tail(p, dst, TAIL_BYTES)
             else:
                 shutil.copy2(p, dst)
+                n = size
+            total_bytes += n
             kept.append({"file": body, "bytes": size})
         except OSError:
             continue
-    return {"kept": kept, "skipped": skipped}
+    return {"kept": kept, "skipped": skipped, "written": total_bytes}
 
 
 def inventory(archive: Path, out: Path, listing: list[tuple[str, int]]) -> dict:
@@ -182,19 +211,39 @@ def main(argv=None):
     archive, root, out = Path(a.archive), Path(a.extract_dir), Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     extract(archive, root)
-    listing = _listing(archive)
-    inv = inventory(archive, out, listing)
-    picked = collect(root, out)
+    rows = list(_listing(archive))
+    skipped = {"teren": 0, "suspect": 0, "mare": 0, "binar": 0}
+    kept_all, written = [], 0
+
+    def absorb(r: Path, budget: int) -> int:
+        nonlocal rows, skipped, kept_all, written
+        picked = collect(r, out, budget)
+        kept_all.extend(picked["kept"])
+        for k in skipped:
+            skipped[k] += picked["skipped"][k]
+        written += picked["written"]
+        return picked["written"]
+
+    used = absorb(root, MAX_TOTAL)
+    # arhive in arhiva: backup-urile de server pun de regula un *.tar.gz in interior
+    nested = [q for q in sorted(root.rglob("*"))
+              if q.is_file() and NESTED.search(q.name) and q.stat().st_size <= 1_600_000_000][:6]
+    for n_i, n in enumerate(nested):
+        sub = root / ("_sub_%d" % n_i)
+        try:
+            extract(n, sub)
+            rows += _listing(n)
+            used += absorb(sub, max(0, MAX_TOTAL - used))
+        finally:
+            shutil.rmtree(sub, ignore_errors=True)
+
+    inv = inventory(archive, out, rows)
     n_cfg = len(list((out / "config").glob("*")))
-    with tarfile.open(out / "configuri.tar.gz", "w:gz") as tf:
-        for p in sorted((out / "config").glob("*")):
-            tf.add(p, arcname=p.name, recursive=False)
-    size_cfg = out.joinpath("configuri.tar.gz").stat().st_size if (out / "configuri.tar.gz").exists() else 0
     report = {"archive": archive.name, "bytes": archive.stat().st_size,
               "listing": inv["files"], "uncompressed_bytes": inv["bytes"],
-              "groups_top": dict(inv["top"]), "config_files_kept": n_cfg,
-              "config_bytes": size_cfg, "skipped": picked["skipped"],
-              "files": [k["file"] for k in picked["kept"]][:400]}
+              "groups_top": dict(inv["top"]), "nested": [n.name for n in nested],
+              "config_files_kept": n_cfg, "config_bytes": used,
+              "skipped": skipped, "files": [k["file"] for k in kept_all][:500]}
     (out / "summary.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n",
                                       encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False)[:1500])

@@ -88,10 +88,8 @@ jobs:
             esac
             F=$(ls /tmp/drop/arhiva.* | head -1)
             python3 scripts/rp_archive_inspect.py --archive "$F" --extract-dir /tmp/x --out "$D" 2>&1 | tail -40 | tee -a "$D/DIAGNOSTIC.txt" || true
-            rm -f "$D/configuri.tar.gz"
             if [ -d "$D/config" ]; then
-              cd "$D/config"; ls -1 | sort | head -300 > /tmp/keep.list
-              find . -maxdepth 1 -type f | sed 's|^\./||' | sort | comm -23 - /tmp/keep.list | xargs -r rm -f
+              cd "$D/config"; ls -1S | tail -n +401 | xargs -r rm -f
               cd "$GITHUB_WORKSPACE"
             fi
             rm -rf /tmp/x /tmp/drop
