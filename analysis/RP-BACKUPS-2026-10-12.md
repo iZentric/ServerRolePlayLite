@@ -9,12 +9,12 @@ Reîmprospătare: un commit oricare pe `deploy/rp-drop.txt`.
 
 ## Ce s-a ingerat
 
-| arhivă | marime | fișiere în arhivă | texte păstrate |
+| arhivă | marime | fișiere în arhivă | text publicat pe `rp-drop` (stare finală, 4 ingest-uri) |
 |---|---|---|---|
-| `cffc205d-…tar.gz` (hypecity, „vibe” mare) | 4,19 GB | 43 707 (5,57 GB despachetat) | 79 fișiere, 7,7 MB |
-| `c8b2d730-…tar.gz` (folder „server/backup”) | 1,16 GB | 19 631 | 46 fișiere, 2,6 MB |
-| `archive-2024-09-14…tar.gz` („vibe rp”) | 1,58 GB | 10 478 | 48 fișiere, 2,4 MB |
-| `minecity-network.rar` | 2,37 GB | 22 405 (rar → `lobby.tar` + `roleplay.tar` + `velocity.tar`) | 408 fișiere, ~15 MB (re-ingest cu filtru de zgomot) |
+| `cffc205d-…tar.gz` (hypecity, „vibe” mare) | 4,19 GB | 43 742 (5,79 GB despachetat) | 425 fișiere, 72 de configuri-rădăcină, `Chat.txt`+`Commands.txt`, 12 scripturi `.sk` |
+| `c8b2d730-…tar.gz` (folder „server/backup”) | 1,16 GB | 19 666 | 394 fișiere, coceni identici (același server, martie 2025) |
+| `archive-2024-09-14…tar.gz` („vibe rp”) | 1,58 GB | 20 620 (cu tot cu nested) | 433 fișiere, chat + `latest.log` + `debug.log` |
+| `minecity-network.rar` | 2,37 GB | 22 405 (rar → `lobby.tar` + `roleplay.tar` + `velocity.tar`) | 259 fișiere: 225 roleplay, 21 lobby (DeluxeHub/Essentials/ViaVersion), 13 proxy (`velocity.toml`) |
 
 `minecity` nu e un server, e **rețea**: proxy Velocity, lobby separat, server de roleplay
 1.16.5 și un al doilea set pe **1.19.4** (`mojang_1.19.4.jar` în inventar) — cu `paper-world-defaults.yml`,
@@ -25,6 +25,17 @@ exact ce ceream: mesaje reale, nu doar configuri.
 Primele trei sunt **același ecosistem de server** (acceleași jare, aceleași crash-uri), la trei
 date diferite: `folder-1` = 2025-03, `cffc` = 2024-12, `vibe-rp` = 2024-09. `level-name`:
 `hypecity`, `world`, `viberp`; porturi 30004 / 25568 / 25566.
+
+## Igiena secretelor (s-a întâmplat și asta)
+
+La al doilea ingest, pe ramură a ieșit `New Text Document.txt` din minecity cu un șir de tip
+parolă, plus `api-key` Minetrax, token JPremium/DiscordSRV în configuri. De la rule-ul
+următor **redactarea se face pe runner, înainte de publicare**: orice etichetă de tip
+`licență|api-key|token|secret|passw` + cheie ≥12 caractere devine `<REDACTAT>`, hash-urile
+de licență în linie de sine <REDACTAT> `<KEY-REDACTAT>`, iar fișierele junk
+(`New Text Document.txt`, `notes.txt`, `*.pem`, `id_rsa`) nu mai intră deloc. Țeapă de
+urmat: cheia Minetrax și token-ul DiscordSRV au fost pe ramura PUBLICĂ ~15 minute —
+recomandare explicită către owneri: **rotate** (Discord Developer Portal → Reset Bot Token).
 
 ## Constatări cu greutate pentru motorul nostru
 
