@@ -11,8 +11,10 @@ from __future__ import annotations
 from html import escape
 import re
 
-from jar_delta import (_ro, family_smokes, ladder_rows, same_run_pairs,
-                       unmeasured_reasons)
+from jar_delta import (DOCS, _json_block, _read, _ro, family_smokes, ladder_rows,
+                       same_run_pairs, unmeasured_reasons)
+
+MIGRATE = DOCS / "CUANTIC-MIGRATE-RESULT.md"
 
 RELEASE_SHA = "96f824793ab3"          # jar-ul brand-uit din release-ul `lite`
 GATES = (
@@ -31,6 +33,25 @@ def _pairs_by_label():
             out.setdefault(pair["labels"][0], []).append((pair, row))
             out.setdefault(pair["labels"][1], []).append((pair, row))
     return out
+
+
+def migration_note():
+    """Un rand sub bara motorului tau: ce zice poarta de migrare, daca a fost rulata."""
+    text = _read(MIGRATE)
+    if not text:
+        return ("Gazda nouă (Xeon X5860, „bossu”): măsurătoarea-umbră n-a fost încă "
+                "rulată — macarul rămâne „STAI” până trec porțile din scripts/cuantic_migrate.py.")
+    data = _json_block(text)
+    cpu = (data.get("cpu") or {}).get("model") or "model necunoscut"
+    gates = data.get("gates") or []
+    if gates:
+        st = " · ".join(f"{g['name']} {'OK' if g.get('ok') else 'COPIT'}" for g in gates)
+        return f"Gazda nouă ({cpu}): {st} — {data.get('verdict', 'fără verdict')}"
+    boot = data.get("boot_done_s")
+    boot_txt = f"{_ro(boot, 3)} s" if isinstance(boot, (int, float)) else "nepornit până la `Done`"
+    return (f"Gazda nouă ({cpu}): umbră măsurată, {boot_txt} · micro "
+            f"{data.get('micro_ops_s') or '—'} ops/s · verdictul iese din "
+            "`compare` (6 porți), nu dintr-o singură probă")
 
 
 def _row(label, gates, perf, note, *, pin=False, measured=None, muted=False):
@@ -160,7 +181,9 @@ def _bar(row):
             f'<div class="js-track"><span style="width:{fill}%"></span></div>'
             f'<div class="js-gates">{gates}</div>'
             f'<div class="js-perf">{perf_html}</div>'
-            f'<p class="js-note">{escape(row["note"])}</p></li>')
+            f'<p class="js-note">{escape(row["note"])}</p>'
+            + (f'<p class="js-migrate">{escape(migration_note())}</p>' if row["pin"] else "")
+            + "</li>")
 
 
 def panel():
@@ -204,5 +227,6 @@ STYLE = """
 .js-delta.flat{color:#cfd6e4}.js-delta.none{opacity:.5}
 .js-perf small{opacity:.65;font-size:12px}
 .js-note{margin:0;font-size:12.5px;line-height:1.55;opacity:.72}
+.js-migrate{margin:2px 0 0;font-size:12px;line-height:1.5;opacity:.62;border-left:2px solid rgba(127,176,255,.5);padding-left:9px}
 .js-foot{font-size:12.5px;opacity:.62;margin:12px 0 0}
 """

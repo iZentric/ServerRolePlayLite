@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Scorul pe bară: cite dovezi, nu cite promisiuni."""
+import json
+from pathlib import Path
 import sys
+import tempfile
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -95,6 +98,33 @@ class SiteIntegrationTest(unittest.TestCase):
         index = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
         self.assertIn('id="scor"', index)
         self.assertIn("Bari de dovezi", index)
+
+
+class MigrationLineTest(unittest.TestCase):
+    def test_missing_migration_report_says_stay(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(jar_score, "MIGRATE", Path(tmp) / "nu-exista.md"):
+                note = jar_score.migration_note()
+                html = jar_score.panel()
+        self.assertIn("măsurătoarea-umbră n-a fost încă rulată", note)
+        self.assertIn("js-migrate", html)
+        self.assertNotIn("MIGREAZĂ", html)   # fara porti trecute, site-ul nu anunta mutarea
+
+    def test_a_blocked_gate_is_shown_as_a_blocked_gate(self):
+        from unittest.mock import patch
+        payload = {"verdict": "STAI PE GAZDA ACTUALĂ",
+                   "cpu": {"model": "Intel Xeon X5860 @ 2.80GHz"},
+                   "gates": [{"name": "CPU", "ok": False, "detail": "80% din gazda actuală"},
+                             {"name": "identitate", "ok": True, "detail": "același pack"}]}
+        with tempfile.TemporaryDirectory() as tmp:
+            doc = Path(tmp) / "m.md"
+            doc.write_text("```json\n" + json.dumps(payload, ensure_ascii=False) + "\n```\n",
+                           encoding="utf-8")
+            with patch.object(jar_score, "MIGRATE", doc):
+                note = jar_score.migration_note()
+        self.assertIn("CPU COPIT", note)
+        self.assertIn("identitate OK", note)
 
 
 if __name__ == "__main__":
