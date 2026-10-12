@@ -42,6 +42,25 @@ class SiteClaimsTest(unittest.TestCase):
         self.assertNotIn("2205,1 / 2452,0 MiB", incomplete)
         self.assertIn("nu are încă un rezultat complet verificat", incomplete)
 
+    def test_plain_language_choice_compares_full_pack_without_inventing_winner(self):
+        page = engine_results.panel()
+        self.assertIn('id="alegere"', page)
+        for name in ("CUANTIC live", "CatServer oficial", "CUANTIC experimental",
+                     "Arclight", "Mist", "Paper / Forge simplu", "Mohist / Magma"):
+            self.assertIn(name, page)
+        self.assertIn("nu e demonstrat că pierde", page)
+        self.assertIn("Nu îl instala", page)
+        self.assertIn("De ce să alegi CUANTIC, atunci?", page)
+        self.assertIn("Clientul are adresa salvată", page)
+        self.assertIn("Nu este FPS-ul clientului".lower(), page.lower())
+        self.assertIn("ENGINE-FAKEPLAYERS-RESULT.md", page)
+        self.assertNotIn("CUANTIC este mai rapid decât oficialul", page)
+        with patch.object(engine_results, "result", return_value={}):
+            missing = engine_results.panel()
+        self.assertIn("Comparația cu pack identic nu este verificată complet", missing)
+        self.assertIn("Testul complet al patch-ului este incomplet", missing)
+        self.assertNotIn("<b>DA</b> · 36/14", missing)
+
     def test_missing_proof_cannot_advertise_direct_jar(self):
         with patch.object(engine_results, "result", return_value={}):
             page = engine_results.panel()

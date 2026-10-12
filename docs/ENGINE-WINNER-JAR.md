@@ -1,4 +1,4 @@
-# JAR-ul câștigător dintre motoarele compatibile testate
+# JAR-ul live validat pentru acest pack — nu o victorie de performanță
 
 Descărcare directă: https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Engine-Validated-Live-1.16.5.jar
 

@@ -391,7 +391,7 @@ html = f"""<!DOCTYPE html>
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
   <span class="pill"><i style="background:{alive_cul};box-shadow:0 0 12px {alive_cul}"></i>{alive_txt}</span>
   <span class="pill">cost 0 lei</span>
-  <a class="l" href="#cifre">sari la cifre ↓</a>
+  <a class="l" href="#alegere">compară motoarele ↓</a>
 </div></nav>
 <div class="wrap">
 
@@ -401,7 +401,7 @@ html = f"""<!DOCTYPE html>
   <p class="lede">Intră în CUANTIC cu modpack-ul normal. Construim o experiență de <b>RP urban, survival și mafii</b>, fără să sacrificăm compatibilitatea pentru un motor „rapid” doar în reclame. Pack-ul actual are <b>36 de moduri pe server și 14 pluginuri</b>. Mafii și regulile de joc sunt direcția de dezvoltare, nu funcții pretinse ca finalizate.</p>
   <div class="cta">
     <a class="btn" href="{DL}{CLIENT}">⬇️ Modpack-ul client ({PACKV} · {CLIENT_MB} MB)</a>
-    <a class="btn ghost" href="#engine-test">📊 JAR-ul și benchmarkul</a>
+    <a class="btn ghost" href="#alegere">🧭 De ce CUANTIC? Compară motoarele</a>
     <a class="btn ghost" href="#viziune">🏙️ Strategia orașului</a>
     <a class="btn ghost" href="#cum-intri">🚀 Cum intri</a>
   </div>

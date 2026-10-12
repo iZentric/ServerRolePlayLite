@@ -47,6 +47,64 @@ def _metric(data, key, unit):
         return "—"
 
 
+def chooser_panel(verified, native_ok, strict_ok, arclight_ok, mist_ok):
+    """Plain-language product choice; no speed ranking across incompatible packs."""
+    source = lambda name: f'{REPO_DOCS}{name}'
+    live = ('<b>DA</b> · 36 moduri și 14 pluginuri au pornit; există și citiri cu 1 jucător.'
+            if verified else 'Dovada pentru JAR-ul public nu este completă; nu recomandăm un binar neverificat.')
+    official = ('<b>DA</b> · 36/14 au pornit în copie; RAM/p95 nu arată un avantaj stabil pentru branding.'
+                if native_ok else 'Comparația cu pack identic nu este verificată complet.')
+    patched = ('<b>DA</b> la pornire; <b>NU</b> la pragul complet CPU + RAM + p95 + boot.'
+               if strict_ok else 'Testul complet al patch-ului este incomplet.')
+    arclight = ('<b>NU</b> cu pack-ul nostru intact: eroare Mixin la pornire.'
+                if arclight_ok else 'Nu există verdict de compatibilitate verificat aici.')
+    mist = ('<b>NU</b> cu acest binar și Java 11: eroare înainte de pornire.'
+            if mist_ok else 'Nu există verdict de compatibilitate verificat aici.')
+    return f'''<div id="alegere">
+<h2>🧭 Ce motor alegi? Pe scurt, fără reclamă</h2>
+<p class="sub">Comparăm <b>același joc</b>: Minecraft Forge 1.16.5 cu cele 36 de moduri și
+14 pluginuri ale serverului CUANTIC. „Pornește” înseamnă un test izolat, nu dovadă
+că 25 de oameni pot conduce simultan fără lag. Rândurile fără același pack <b>nu au scor comparabil</b>.</p>
+<div class="table-scroll"><table class="tbl">
+<tr><th>Motor</th><th>Ce am verificat pe pack-ul nostru</th><th>Alegerea corectă acum</th></tr>
+<tr><td><b>CUANTIC live</b><br><small>CatServer 1.16.5 configurat pentru acest pack</small></td>
+<td>{live} <a href="{source('ENGINE-FAMILY-RESULT.md')}">Proba →</a></td>
+<td><b>Da, pentru pack-ul RP actual</b>: configurația și JAR-ul folosit sunt cunoscute. Nu îl declarăm mai rapid decât oficialul.</td></tr>
+<tr><td><b>CatServer oficial</b><br><small>aceeași versiune de bază</small></td>
+<td>{official} <a href="{source('ENGINE-NATIVE-RESULT.md')}">A/B-ul →</a></td>
+<td>Alternativă care pornește în copie; <b>nu e demonstrat că pierde</b> la performanță. Nu schimbăm live-ul doar pentru etichetă.</td></tr>
+<tr><td><b>CUANTIC experimental</b><br><small>patch de cod pentru ticket/chunk</small></td>
+<td>{patched} <a href="{source('ENGINE-STRICT-RESULT.md')}">Toate cele 6 probe →</a></td>
+<td><b>Nu îl instala</b>: o pornire rapidă nu repară regresiile sau egalitățile la celelalte măsuri.</td></tr>
+<tr><td><b>Arclight</b></td><td>{arclight} <a href="{source('ENGINE-FAMILY-RESULT.md')}">Proba →</a></td>
+<td>Nu este înlocuitor pentru <b>acest</b> pack intact; cu alt pack ar putea funcționa.</td></tr>
+<tr><td><b>Mist</b></td><td>{mist} <a href="{source('ENGINE-MIST-J11-RESULT.md')}">Proba →</a></td>
+<td>Nu pentru combinația testată; nu îi inventăm TPS.</td></tr>
+<tr><td><b>Paper / Forge simplu</b></td><td>Nu au aceeași combinație de moduri Forge și pluginuri Bukkit în acest test.</td>
+<td>Alt tip de server: poate fi potrivit dacă <b>renunți</b> la o parte din joc; nu este o victorie A/B asupra pack-ului nostru.</td></tr>
+<tr><td><b>Mohist / Magma / altele</b></td><td>Nu au fost testate identic în această rundă.</td>
+<td><b>Necunoscut</b>, nu „mai lente”. Este nevoie de aceeași versiune, pack și scenariu.</td></tr>
+</table></div>
+<div class="note"><b>Cum citești cifrele de mai jos:</b> RAM RSS = memoria întregului proces server (MiB);
+CPU = cât procesor a consumat în aceeași fereastră de test; p95 MSPT = durata sub care s-au încadrat
+95% dintre tick-urile măsurate (mai mic e bine). Boot extern = din momentul lansării Java până la
+mesajul <code>Done</code>, <b>nu</b> până la loginul jucătorului. Niciuna nu este FPS-ul clientului.</div>
+<h3 style="margin-top:25px">De ce să alegi CUANTIC, atunci?</h3>
+<div class="table-scroll"><table class="tbl">
+<tr><th>Îți trebuie...</th><th>Ce primești azi</th><th>Ce NU promitem</th></tr>
+<tr><td>RP modat fără a reconstrui singur pack-ul</td><td>Client Forge 1.16.5 și serverul cu 36 moduri + 14 pluginuri, testate la pornire; <a href="{PACK_URL}">arhiva completă →</a></td><td>Compatibilitate universală cu orice alt mod sau laptop.</td></tr>
+<tr><td>Configurare simplă</td><td>Clientul are adresa salvată și reglaje grafice incluse; memoria JVM se setează manual în launcher după ghid. Serverul are configurația pack-ului. <a href="#cum-intri">Pașii de instalare →</a></td><td>Loginul cu toate modurile, vehiculele și FPS-ul pe un PC slab nu sunt încă validate într-un test comparativ.</td></tr>
+<tr><td>JAR verificabil</td><td>{'JAR-ul descărcabil are același SHA ca binarul live.' if verified else 'JAR-ul descărcabil necesită reverificarea SHA.'} <a href="{source('ENGINE-WINNER-JAR.md')}">Proveniență →</a></td><td>Brandul „CUANTIC” nu reduce de la sine RAM, CPU sau timpul de boot față de CatServer oficial.</td></tr>
+<tr><td>O alegere fără cifre umflate</td><td>Publicăm și testele eșuate, inclusiv încercarea cu boți: <a href="{source('ENGINE-FAKEPLAYERS-RESULT.md')}">0/25, nevalidată →</a></td><td>„Zero lag”, 25 jucători testați sau „mai rapid decât orice motor”.</td></tr>
+</table></div>
+<p class="sub" style="margin-top:12px">În launcher încearcă <b>2560 MB pentru client</b> pe un laptop cu 4 GB RAM
+(doar dacă rămâne suficient pentru sistemul de operare) sau <b>4096 MB</b> la 8+ GB.
+Nu sunt setate automat și nici FPS garantat; dacă sistemul rămâne fără memorie, ajustăm după probe reale.
+Ține shader-ele oprite la început și testează separat OptiFine + modurile normale față de Rubidium/Oculus.
+În oraș și cu vehicule, un test pe laptopul tău contează mai mult decât un scor de server fără jucători.</p>
+</div>'''
+
+
 def panel():
     """The winner and the numbers come from committed, reproducible reports."""
     family = result("ENGINE-FAMILY-RESULT.md")
@@ -234,7 +292,13 @@ def panel():
         '<li>Mist: verdictul de compatibilitate nu este disponibil.</li>'
     )
 
+    quick_choice = chooser_panel(
+        verified, native_ok, strict_ok,
+        bool(arclight.get("smoke") and not arclight.get("qualified_for_performance_A_B")),
+        bool(mist.get("smoke") and not mist.get("qualified_for_performance_A_B")),
+    )
     return f'''<section id="engine-test" aria-label="Benchmark al motorului CUANTIC">
+{quick_choice}
 <h2>🔬 JAR-ul validat și benchmarkul — fără „zero lag” inventat</h2>
 <div class="sub">Pentru <b>acest</b> modpack Forge 1.16.5 (36 moduri + 14 pluginuri),
 păstrăm motorul CatServer CUANTIC deja folosit pe server. Am construit un JAR cu patch propriu și am

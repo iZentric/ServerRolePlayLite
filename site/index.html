@@ -104,9 +104,9 @@ footer code{color:#9fb0c9}
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
-  <span class="pill"><i style="background:var(--amber);box-shadow:0 0 12px var(--amber)"></i>Status public neconfirmat 00:30 UTC</span>
+  <span class="pill"><i style="background:var(--mut);box-shadow:0 0 12px var(--mut)"></i>Status neconfirmat acum · ultima probă 12.10 00:30 UTC</span>
   <span class="pill">cost 0 lei</span>
-  <a class="l" href="#cifre">sari la cifre ↓</a>
+  <a class="l" href="#alegere">compară motoarele ↓</a>
 </div></nav>
 <div class="wrap">
 
@@ -116,7 +116,7 @@ footer code{color:#9fb0c9}
   <p class="lede">Intră în CUANTIC cu modpack-ul normal. Construim o experiență de <b>RP urban, survival și mafii</b>, fără să sacrificăm compatibilitatea pentru un motor „rapid” doar în reclame. Pack-ul actual are <b>36 de moduri pe server și 14 pluginuri</b>. Mafii și regulile de joc sunt direcția de dezvoltare, nu funcții pretinse ca finalizate.</p>
   <div class="cta">
     <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.7.7.mrpack">⬇️ Modpack-ul client (1.7.7 · 90.7 MB)</a>
-    <a class="btn ghost" href="#engine-test">📊 JAR-ul și benchmarkul</a>
+    <a class="btn ghost" href="#alegere">🧭 De ce CUANTIC? Compară motoarele</a>
     <a class="btn ghost" href="#viziune">🏙️ Strategia orașului</a>
     <a class="btn ghost" href="#cum-intri">🚀 Cum intri</a>
   </div>
@@ -130,6 +130,49 @@ footer code{color:#9fb0c9}
 </header>
 
 <section id="engine-test" aria-label="Benchmark al motorului CUANTIC">
+<div id="alegere">
+<h2>🧭 Ce motor alegi? Pe scurt, fără reclamă</h2>
+<p class="sub">Comparăm <b>același joc</b>: Minecraft Forge 1.16.5 cu cele 36 de moduri și
+14 pluginuri ale serverului CUANTIC. „Pornește” înseamnă un test izolat, nu dovadă
+că 25 de oameni pot conduce simultan fără lag. Rândurile fără același pack <b>nu au scor comparabil</b>.</p>
+<div class="table-scroll"><table class="tbl">
+<tr><th>Motor</th><th>Ce am verificat pe pack-ul nostru</th><th>Alegerea corectă acum</th></tr>
+<tr><td><b>CUANTIC live</b><br><small>CatServer 1.16.5 configurat pentru acest pack</small></td>
+<td><b>DA</b> · 36 moduri și 14 pluginuri au pornit; există și citiri cu 1 jucător. <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-FAMILY-RESULT.md">Proba →</a></td>
+<td><b>Da, pentru pack-ul RP actual</b>: configurația și JAR-ul folosit sunt cunoscute. Nu îl declarăm mai rapid decât oficialul.</td></tr>
+<tr><td><b>CatServer oficial</b><br><small>aceeași versiune de bază</small></td>
+<td><b>DA</b> · 36/14 au pornit în copie; RAM/p95 nu arată un avantaj stabil pentru branding. <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-NATIVE-RESULT.md">A/B-ul →</a></td>
+<td>Alternativă care pornește în copie; <b>nu e demonstrat că pierde</b> la performanță. Nu schimbăm live-ul doar pentru etichetă.</td></tr>
+<tr><td><b>CUANTIC experimental</b><br><small>patch de cod pentru ticket/chunk</small></td>
+<td><b>DA</b> la pornire; <b>NU</b> la pragul complet CPU + RAM + p95 + boot. <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-STRICT-RESULT.md">Toate cele 6 probe →</a></td>
+<td><b>Nu îl instala</b>: o pornire rapidă nu repară regresiile sau egalitățile la celelalte măsuri.</td></tr>
+<tr><td><b>Arclight</b></td><td><b>NU</b> cu pack-ul nostru intact: eroare Mixin la pornire. <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-FAMILY-RESULT.md">Proba →</a></td>
+<td>Nu este înlocuitor pentru <b>acest</b> pack intact; cu alt pack ar putea funcționa.</td></tr>
+<tr><td><b>Mist</b></td><td><b>NU</b> cu acest binar și Java 11: eroare înainte de pornire. <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-MIST-J11-RESULT.md">Proba →</a></td>
+<td>Nu pentru combinația testată; nu îi inventăm TPS.</td></tr>
+<tr><td><b>Paper / Forge simplu</b></td><td>Nu au aceeași combinație de moduri Forge și pluginuri Bukkit în acest test.</td>
+<td>Alt tip de server: poate fi potrivit dacă <b>renunți</b> la o parte din joc; nu este o victorie A/B asupra pack-ului nostru.</td></tr>
+<tr><td><b>Mohist / Magma / altele</b></td><td>Nu au fost testate identic în această rundă.</td>
+<td><b>Necunoscut</b>, nu „mai lente”. Este nevoie de aceeași versiune, pack și scenariu.</td></tr>
+</table></div>
+<div class="note"><b>Cum citești cifrele de mai jos:</b> RAM RSS = memoria întregului proces server (MiB);
+CPU = cât procesor a consumat în aceeași fereastră de test; p95 MSPT = durata sub care s-au încadrat
+95% dintre tick-urile măsurate (mai mic e bine). Boot extern = din momentul lansării Java până la
+mesajul <code>Done</code>, <b>nu</b> până la loginul jucătorului. Niciuna nu este FPS-ul clientului.</div>
+<h3 style="margin-top:25px">De ce să alegi CUANTIC, atunci?</h3>
+<div class="table-scroll"><table class="tbl">
+<tr><th>Îți trebuie...</th><th>Ce primești azi</th><th>Ce NU promitem</th></tr>
+<tr><td>RP modat fără a reconstrui singur pack-ul</td><td>Client Forge 1.16.5 și serverul cu 36 moduri + 14 pluginuri, testate la pornire; <a href="https://github.com/iZentric/ServerRolePlayLite/releases/tag/lite">arhiva completă →</a></td><td>Compatibilitate universală cu orice alt mod sau laptop.</td></tr>
+<tr><td>Configurare simplă</td><td>Clientul are adresa salvată și reglaje grafice incluse; memoria JVM se setează manual în launcher după ghid. Serverul are configurația pack-ului. <a href="#cum-intri">Pașii de instalare →</a></td><td>Loginul cu toate modurile, vehiculele și FPS-ul pe un PC slab nu sunt încă validate într-un test comparativ.</td></tr>
+<tr><td>JAR verificabil</td><td>JAR-ul descărcabil are același SHA ca binarul live. <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-WINNER-JAR.md">Proveniență →</a></td><td>Brandul „CUANTIC” nu reduce de la sine RAM, CPU sau timpul de boot față de CatServer oficial.</td></tr>
+<tr><td>O alegere fără cifre umflate</td><td>Publicăm și testele eșuate, inclusiv încercarea cu boți: <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-FAKEPLAYERS-RESULT.md">0/25, nevalidată →</a></td><td>„Zero lag”, 25 jucători testați sau „mai rapid decât orice motor”.</td></tr>
+</table></div>
+<p class="sub" style="margin-top:12px">În launcher încearcă <b>2560 MB pentru client</b> pe un laptop cu 4 GB RAM
+(doar dacă rămâne suficient pentru sistemul de operare) sau <b>4096 MB</b> la 8+ GB.
+Nu sunt setate automat și nici FPS garantat; dacă sistemul rămâne fără memorie, ajustăm după probe reale.
+Ține shader-ele oprite la început și testează separat OptiFine + modurile normale față de Rubidium/Oculus.
+În oraș și cu vehicule, un test pe laptopul tău contează mai mult decât un scor de server fără jucători.</p>
+</div>
 <h2>🔬 JAR-ul validat și benchmarkul — fără „zero lag” inventat</h2>
 <div class="sub">Pentru <b>acest</b> modpack Forge 1.16.5 (36 moduri + 14 pluginuri),
 păstrăm motorul CatServer CUANTIC deja folosit pe server. Am construit un JAR cu patch propriu și am
@@ -396,7 +439,7 @@ generator: <code>scripts/bench-live.sh</code>.</div>
 </div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 12 Oct 2026, 00:30 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 12 Oct 2026, 09:12 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>docs/ENGINE-DECISION.md</code> · <code>docs/ENGINE-AB-GITHUB.md</code> · <code>docs/ENGINE-PREFLIGHT.md</code>
 </footer>
