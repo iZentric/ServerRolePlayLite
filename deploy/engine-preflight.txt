@@ -1,6 +1,1 @@
-2026-10-11: read-only resource and player preflight for engine A/B; never restart live
-2026-10-11: live player baseline requested; read-only console, no restart
-2026-10-11 16:59 UTC: verify boot and players after real-player sample timed out
-2026-10-11 21:01 UTC: post-recovery Minecraft status and player preflight
-2026-10-11 22:14 UTC: after site publish public port refused; read-only local/process/player diagnosis before recovery
-2026-10-11 22:16 UTC: read-only local status/player/hash after CHK recovery; no restart
+2026-10-12: read-only host preflight after public Minecraft status connection refused; do not restart or run a second JVM in this step.
