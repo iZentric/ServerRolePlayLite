@@ -3,6 +3,7 @@
 import os, re, glob, datetime
 from engine_results import latest_status, panel, strategy_panel
 from jar_atlas import panel as atlas_panel, STYLE as ATLAS_STYLE, SCRIPT as ATLAS_SCRIPT
+from jar_tier import panel as tier_panel, STYLE as TIER_STYLE, SCRIPT as TIER_SCRIPT
 
 AN = os.path.join(os.path.dirname(__file__), "..", "analysis")
 
@@ -388,11 +389,13 @@ html = f"""<!DOCTYPE html>
 <meta name="description" content="CUANTIC: server Minecraft Forge 1.16.5 cu 36 de moduri și 14 pluginuri. Roleplay, survival și direcție pentru mafii în oraș. JAR validat, benchmark public și limite explicate, fără promisiuni de zero lag.">
 <style>{STYLE}
 {ATLAS_STYLE}
+{TIER_STYLE}
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
   <span class="pill"><i style="background:{alive_cul};box-shadow:0 0 12px {alive_cul}"></i>{alive_txt}</span>
   <span class="pill">cost 0 lei</span>
+  <a class="l" href="#tier">tier list ↓</a>
   <a class="l" href="#atlas">atlas JAR-uri ↓</a>
 </div></nav>
 <div class="wrap">
@@ -403,6 +406,7 @@ html = f"""<!DOCTYPE html>
   <p class="lede">Intră în CUANTIC cu modpack-ul normal. Construim o experiență de <b>RP urban, survival și mafii</b>, fără să sacrificăm compatibilitatea pentru un motor „rapid” doar în reclame. Pack-ul actual are <b>36 de moduri pe server și 14 pluginuri</b>. Mafii și regulile de joc sunt direcția de dezvoltare, nu funcții pretinse ca finalizate.</p>
   <div class="cta">
     <a class="btn" href="{DL}{CLIENT}">⬇️ Modpack-ul client ({PACKV} · {CLIENT_MB} MB)</a>
+    <a class="btn ghost" href="#tier">🏅 Tier list motoare hibride</a>
     <a class="btn ghost" href="#atlas">📊 Vezi toate JAR-urile în tabel</a>
     <a class="btn ghost" href="#viziune">🏙️ Strategia orașului</a>
     <a class="btn ghost" href="#cum-intri">🚀 Cum intri</a>
@@ -417,6 +421,8 @@ html = f"""<!DOCTYPE html>
 </header>
 
 {panel()}
+
+{tier_panel()}
 
 {atlas_panel()}
 
@@ -490,7 +496,7 @@ Sub 50 ms pe tick nu înseamnă FPS garantat pe laptop sau 20 TPS cu 25 jucător
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>docs/ENGINE-DECISION.md</code> · <code>docs/ENGINE-AB-GITHUB.md</code> · <code>docs/ENGINE-PREFLIGHT.md</code>
 </footer>
-</div>{ATLAS_SCRIPT}</body></html>"""
+</div>{ATLAS_SCRIPT}{TIER_SCRIPT}</body></html>"""
 
 if '</style' in STYLE[1:-3] or '<style>' not in html or ':root{' not in html.split('<style>',1)[1].split('</style>',1)[0]:
     raise SystemExit('CSS malformat: blocul <style> nu e inchis corect')

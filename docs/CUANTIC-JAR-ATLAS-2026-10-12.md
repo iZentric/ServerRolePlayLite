@@ -67,3 +67,28 @@
 5. **Regula verdictului:** `scripts/cuantic_tenx_gate.py` respinge probe fără amprente identice, minimum trei repetări distincte, hash-uri de loguri și număr de clienți Forge declarat; cu date valide declarate produce cel mult `10X_PRELIMINAR`, **nu dovadă automată**. Logurile trebuie inspectate independent înaintea oricărei afirmații publice; fără probe afișează `NEMASURAT`.
 
 Totul de mai sus rămâne cercetare și cod local. Niciun JAR nou, benchmark cu boți validați sau publicare live nu a fost realizat în acest tur.
+
+## Tier list — cum se citește clasamentul de pe site
+
+Site-ul nu are un al doilea adevăr: `site/jar_tier.py` citește **acest document** și repartizează fiecare rând într-un tier folosind legenda `D`/`S`/`N` de mai sus, prin categoriile deja stabilite în `site/jar_atlas.py`. Niciun tier nu este scris manual și nicio poziție nu poate fi „promovată" fără o probă nouă în acest fișier.
+
+| Tier | Regulă mecanică | Ce înseamnă | Ce NU înseamnă |
+| --- | --- | --- | --- |
+| **S** | `D` + a ajuns la `Done` cu 36/14 | A pornit cu pack-ul intact și a fost măsurat | **Nu** „cel mai rapid". Sunt doi candidați și sunt la egalitate în limita zgomotului |
+| **A** | `D` + măsurat + respins la pragul strict | A intrat în bancul de probe și a pierdut pe CPU/p95/RSS/boot simultan | Nu „aproape bun". Pragul este tot sau nimic |
+| **B** | `D` + nu a ajuns la `Done` | Incompatibil cu pack-ul nostru | **Nu** „mai lent". Un JAR care nu pornește nu are scor comparabil |
+| **C** | `S` | Există sursă/release pentru versiunea corectă | Nu este evaluat. Fără punctaj până la smoke 36/14 |
+| **D** | `N` | Alt loader, alt API de pluginuri sau altă versiune | Nu este un motor învins; ar cere portarea conținutului |
+
+Repartizarea actuală, derivată din tabelele de mai sus: **S 2 · A 1 · B 2 · C 3 · D 26 = 34 de rânduri**.
+
+### Consumul: de ce verdictul este NECONCLUDENT, nu un câștigător
+
+Tabelul de consum de pe site citește valorile **verbatim** din [ENGINE-NATIVE-RESULT.md](ENGINE-NATIVE-RESULT.md) — nu le reformatează din float, ca să nu derive niciodată față de raportul brut. Verdictul fiecărei măsuri folosește aceeași regulă ca `scripts/cuantic_tenx_gate.py`:
+
+- sub `MIN_TRIALS = 3` repetări reale pe braț → **NECONCLUDENT**;
+- cu date valide → cel mult **PRELIMINAR**, niciodată dovadă automată; logurile se inspectează independent.
+
+Astăzi avem **2 probe pe braț** pentru singurii doi candidați echivalenți, deci fiecare măsură este NECONCLUDENT. Diferența dintre medianele RSS este **2,05 MiB** față de variații interne de **246,9 și 290,0 MiB**: un raport de peste 100 de ori. A declara „cel mai mic consum" din aceste date ar fi zgomot prezentat ca rezultat.
+
+**Răspunsul la „care e cel mai performant JAR cu cel mai mic consum" este, onest: NEDECIS.** Tier list-ul arată cine poate fi comparat și cine nu, nu cine a câștigat.
