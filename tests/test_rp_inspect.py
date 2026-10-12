@@ -63,3 +63,20 @@ class CollectTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ScrubTest(unittest.TestCase):
+    def test_junk_names_are_blocked(self):
+        self.assertFalse(R.keep("New Text Document.txt"))
+
+    def test_scrub_redacts_keys_and_long_tokens(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            f = Path(tmp) / "config.yml"
+            f.write_text("minetrax:\n  api-key: WHC1NmZYq6s0L0L0a1l3sr3KYk3qp0Jz\nbot-token: 'abc.DEF.123'\n"
+                         "view-distance: 10\n# 229933NIX2GZ0EKY1YTRJ\n", encoding="utf-8")
+            R.scrub(f)
+            t = f.read_text(encoding="utf-8")
+            self.assertNotIn("WHC1NmZYq6s0L0L0a1l3sr3KYk3qp0Jz", t)
+            self.assertNotIn("229933NIX2GZ0EKY1YTRJ", t)
+            self.assertIn("view-distance: 10", t)

@@ -30,6 +30,7 @@ SKIP_DIR_TAIL = re.compile(r"/(data|world|world_nether|world_the_end)/", re.I)
 ROOT_ONLY_CONFIG = re.compile(r"^[^/]+\.(yml|yaml|properties|conf|cfg|toml|ini|txt|json)$", re.I)
 KEEP_CONFIG = re.compile(r"\.(yml|yaml|properties|conf|cfg|toml|ini|json|txt)$", re.I)
 SKIP_NAME = re.compile(r"(level\.dat|session\.lock|usercache|banned-|whitelist|ops\.json|permissions\.yml"
+                       r"|new text document|notes?\.txt|licen[cs]e[-_]?key|\.pem$|id_rsa"
                        r"|vials|viabackwards|vault|luckperms|h2\.mv.db|\.mca$|\.jar$|\.zip$|\.gz$"
                        r"|secrets|password|token|api-key|private)", re.I)
 NESTED = re.compile(r"\.(tar\.gz|tgz|tar|zip|rar)$", re.I)
@@ -101,6 +102,42 @@ def _tail(src: Path, dst: Path, limit: int = LOG_TAIL_BYTES) -> int:
         data = f.read()
     dst.write_bytes(data)
     return len(data)
+
+
+KEYISH = r"(?=[A-Z0-9]*\d)(?=[A-Z0-9]*[A-Z])[A-Z0-9]{14,}"
+SECRET_SCAN = re.compile(r"((licen[cs]e|api[_-]?key|token|secret|passw)\W{0,3}[=: #]\W{0,2}" + KEYISH +
+                         r"|(?:^|\n)\s*#?\s*(?=[A-Z0-9]*\d)(?=[A-Z0-9]*[A-Z])[A-Z0-9]{20,}\s*(?:\n|$))",
+                         re.I | re.M)
+
+
+def looks_secret(path: Path) -> bool:
+    try:
+        with open(path, "rb") as f:
+            blob = f.read(65_536)
+    except OSError:
+        return False
+    try:
+        text = blob.decode("utf-8", "ignore")
+    except Exception:
+        return False
+    return bool(SECRET_SCAN.search(text))
+
+
+SCRUB = re.compile(r"((?:licen[cs]e|api[_-]?key|auth[_-]?token|token|secret|passw)[a-z_-]*\W{0,3}[=:]\s?['\"]?)"
+                   r"([A-Za-z0-9+/_=.:-]{12,})", re.I)
+LONGKEY = re.compile(r"(?:^|\n)(\s*#?\s*)((?=[A-Z0-9]*\d)(?=[A-Z0-9]*[A-Z])[A-Z0-9]{20,})(?=\s*(?:\n|$))")
+
+
+def scrub(path: Path) -> None:
+    """Redacteaza cheile din loc, nu arunca fisierul: configul e la fel de util fara credential."""
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return
+    out = SCRUB.sub(lambda m: m.group(1) + "<REDACTAT>", text)
+    out = LONGKEY.sub(lambda m: m.group(1) + "<KEY-REDACTAT>", out)
+    if out != text:
+        path.write_text(out, encoding="utf-8")
 
 
 def keep_body(rel: str) -> str:
@@ -180,6 +217,12 @@ def collect(root: Path, out: Path, budget: int = MAX_TOTAL) -> dict:
             else:
                 shutil.copy2(p, dst)
                 n = size
+            if looks_secret(dst):
+                scrub(dst)
+                if looks_secret(dst):
+                    dst.unlink(missing_ok=True)
+                    skipped["suspect"] += 1
+                    continue
             total_bytes += n
             kept.append({"file": body, "bytes": size})
         except OSError:
