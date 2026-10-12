@@ -1,21 +1,6 @@
-command /vamaA:
-    permission: vamaa.perm
-    trigger:
-        # Deschide ușa (transformă blocurile în aer)
-        execute console command "fill -522 69 -246 -509 69 -246 air"
-        # Deschide ușa (transformă blocurile în aer)
-        execute console command "fill -522 70 -246 -508 72 -246 air"
-        # Deschide ușa (transformă blocurile în aer)
-        execute console command "fill -509 68 -246 -522 68 -246 air"
-        send "vama sa deschis" to player
-
-        # Așteaptă 10 de secunde
-        wait 10 seconds
-        
-        # Închide ușa (transformă blocurile înapoi în blocuri de fier)
-        execute console command "fill -522 69 -246 -509 69 -246 red_concrete"
-        # Închide ușa (transformă blocurile înapoi în blocuri de fier)
-        execute console command "fill -522 70 -246 -508 72 -246 minecraft:barrier"
-        # Închide ușa (transformă blocurile înapoi în blocuri de fier)
-        execute console command "fill -509 68 -246 -522 68 -246 minecraft:barrier"
-        send "vama sa inchis" to player
+[
+  {
+    "uuid": "c72895bd-139f-39d9-9f67-019f7328f036",
+    "name": "vladutz043376"
+  }
+]
