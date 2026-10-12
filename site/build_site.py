@@ -2,6 +2,7 @@
 """Generatorul site-ului CUANTIC - citeste verdictele reale din analysis/ si naste index.html"""
 import os, re, glob, datetime
 from engine_results import latest_status, panel, strategy_panel
+from jar_atlas import panel as atlas_panel, STYLE as ATLAS_STYLE, SCRIPT as ATLAS_SCRIPT
 
 AN = os.path.join(os.path.dirname(__file__), "..", "analysis")
 
@@ -386,12 +387,13 @@ html = f"""<!DOCTYPE html>
 <title>CUANTIC — Roleplay modat, survival și oraș | Minecraft Forge 1.16.5</title>
 <meta name="description" content="CUANTIC: server Minecraft Forge 1.16.5 cu 36 de moduri și 14 pluginuri. Roleplay, survival și direcție pentru mafii în oraș. JAR validat, benchmark public și limite explicate, fără promisiuni de zero lag.">
 <style>{STYLE}
+{ATLAS_STYLE}
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
   <span class="pill"><i style="background:{alive_cul};box-shadow:0 0 12px {alive_cul}"></i>{alive_txt}</span>
   <span class="pill">cost 0 lei</span>
-  <a class="l" href="#alegere">compară motoarele ↓</a>
+  <a class="l" href="#atlas">atlas JAR-uri ↓</a>
 </div></nav>
 <div class="wrap">
 
@@ -401,7 +403,7 @@ html = f"""<!DOCTYPE html>
   <p class="lede">Intră în CUANTIC cu modpack-ul normal. Construim o experiență de <b>RP urban, survival și mafii</b>, fără să sacrificăm compatibilitatea pentru un motor „rapid” doar în reclame. Pack-ul actual are <b>36 de moduri pe server și 14 pluginuri</b>. Mafii și regulile de joc sunt direcția de dezvoltare, nu funcții pretinse ca finalizate.</p>
   <div class="cta">
     <a class="btn" href="{DL}{CLIENT}">⬇️ Modpack-ul client ({PACKV} · {CLIENT_MB} MB)</a>
-    <a class="btn ghost" href="#alegere">🧭 De ce CUANTIC? Compară motoarele</a>
+    <a class="btn ghost" href="#atlas">📊 Vezi toate JAR-urile în tabel</a>
     <a class="btn ghost" href="#viziune">🏙️ Strategia orașului</a>
     <a class="btn ghost" href="#cum-intri">🚀 Cum intri</a>
   </div>
@@ -415,6 +417,8 @@ html = f"""<!DOCTYPE html>
 </header>
 
 {panel()}
+
+{atlas_panel()}
 
 {strategy_panel()}
 
@@ -442,7 +446,7 @@ Sub 50 ms pe tick nu înseamnă FPS garantat pe laptop sau 20 TPS cu 25 jucător
 <h2>🤝 Ce primești și ce NU promitem</h2>
 <div class="grid">
   <div class="card"><h3>📦 Pack-ul tău, ușurat cu −45.5%</h3><p>Modurile de conținut din Freeroam rămân în pack; ultimele probe izolate nu substituie un handshake modat real, dar fișierele multimedia au fost compactate; calitatea vizuală și FPS-ul cer test pe laptop, iar <code>Freeroam.1.0.0.mrpack</code> original rămâne intact în tagul <code>pack-original</code>.</p><span class="src">{PACKV} · {CLIENT} · {CLIENT_MB} MB (redus de la 133.1 MB = −60.6 MB pentru copii cu net slab)</span></div>
-  <div class="card"><h3>🚪 Intrare în pack</h3><p>Clientul modat se descarcă mai sus. Verifică identitatea operatorului înainte de a deschide un server fără autentificare: numele unui jucător nu este o dovadă de identitate.</p><span class="src">analysis/NO-LOGIN.md · analysis/op.md</span></div>
+  <div class="card"><h3>🚪 Intrare în pack</h3><p>Clientul modat se descarcă mai sus. Serverul CUANTIC păstrează pack-ul Forge 1.16.5; verifică statusul public datat înainte de sesiune și folosește adresa inclusă în client.</p><span class="src">CUANTIC-Client-1.7.7.mrpack · analysis/ALIVE.md</span></div>
   <div class="card"><h3>🩺 Recuperare monitorizată</h3><p>Dacă Java moare, supervisorul încearcă repornirea, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Schimbările pe serverul live cer backup verificat și rollback; nu promitem recuperare instantanee.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
   <div class="card"><h3>🧾 Probe verificabile</h3><p>A/B-ul din partea de sus citește rezultatele jobului GitHub; arhiva istorică include și valori vechi introduse manual. Le poți citi pe toate în repo, la <code>analysis/</code>.</p><span class="src">BENCH-LIVE.md · RAM-ALL.md · APPLY-LIVE.md</span></div>
 </div>
@@ -471,7 +475,7 @@ Sub 50 ms pe tick nu înseamnă FPS garantat pe laptop sau 20 TPS cu 25 jucător
 <div class="grid">
   <div class="card"><h3>Clientul</h3><p>Pack-ul modat are reglaje pentru grafica redusă; OptiFine și Rubidium/Oculus trebuie încercate în instanțe separate. Nu promitem FPS pe PC-uri vechi fără test în oraș cu vehicule. Mărime: <b>{CLIENT_MB} MB</b> client / <b>{SERVER_MB} MB</b> server. Sursă: {RELEASE_SOURCE}; nu estimări.</p></div>
   <div class="card"><h3>Serverul</h3><p>La ultima probă fără jucători a raportat 20 TPS. Nu avem încă sarcină controlată cu mai mulți jucători, deci consumul la vârf nu este garantat.</p></div>
-  <div class="card"><h3>Gazda</h3><p>Rulează acum pe un cont gratuit, 2 vCPU · 11.8 GB RAM · disc 5 GB (66% ocupat — limita reală a cutiei, nu a serverului).</p></div>
+  <div class="card"><h3>Gazda</h3><p>Ultima gazdă raportată: 2 vCPU · 11.8 GB RAM · disc 5 GB. Aceste specificații sunt istorice, nu probe că serverul este accesibil chiar acum; vezi statusul public datat din partea de sus.</p></div>
 </div>
 
 <h2>📦 Cum intri, în 3 mișcări</h2>
@@ -486,7 +490,7 @@ Sub 50 ms pe tick nu înseamnă FPS garantat pe laptop sau 20 TPS cu 25 jucător
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>docs/ENGINE-DECISION.md</code> · <code>docs/ENGINE-AB-GITHUB.md</code> · <code>docs/ENGINE-PREFLIGHT.md</code>
 </footer>
-</div></body></html>"""
+</div>{ATLAS_SCRIPT}</body></html>"""
 
 if '</style' in STYLE[1:-3] or '<style>' not in html or ':root{' not in html.split('<style>',1)[1].split('</style>',1)[0]:
     raise SystemExit('CSS malformat: blocul <style> nu e inchis corect')

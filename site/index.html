@@ -101,12 +101,25 @@ footer code{color:#9fb0c9}
 @media(max-width:700px){header{padding:44px 0 22px}.bar-row{grid-template-columns:1fr}.row{grid-template-columns:1fr}
  nav a.l{display:none}}
 
+
+/* The atlas is deliberately separate from the historic benchmark table. */
+.atlas-section{margin:72px 0 65px;padding:36px 28px 28px;background:radial-gradient(circle at 92% 3%,rgba(91,160,255,.13),transparent 36%),radial-gradient(circle at 5% 40%,rgba(95,240,192,.07),transparent 40%),#0b1321;border:1px solid rgba(130,168,211,.25);border-radius:24px;box-shadow:0 28px 90px rgba(0,0,0,.27);position:relative;overflow:hidden}
+.atlas-section:before{content:"";height:2px;position:absolute;left:0;right:0;top:0;background:linear-gradient(90deg,#5ff0c0,#7fb0ff,#b79cff)}
+.atlas-overline{display:flex;align-items:center;gap:10px;color:#a3c9e5;letter-spacing:.16em;font-weight:800;font-size:11px}.atlas-orbit{font-size:20px;color:#5ff0c0}.atlas-overline-rule{height:1px;background:rgba(163,201,229,.27);width:34px}
+.atlas-section h2{font-size:clamp(32px,5vw,54px);line-height:1.08;letter-spacing:-.04em;margin:17px 0}.atlas-section h2 span{color:#5ff0c0}.atlas-lead{max-width:840px;line-height:1.7;color:#adbed5;font-size:15px}
+.atlas-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:28px 0 26px}.atlas-stat{border:1px solid rgba(134,170,211,.19);background:rgba(255,255,255,.035);border-radius:15px;padding:18px 18px 18px 54px;position:relative;min-height:98px}.atlas-stat b{font-size:28px;display:block;line-height:1.18;color:#f5fbff;letter-spacing:-.03em}.atlas-stat>span:last-child{display:block;color:#a5b7d0;font-size:12px;line-height:1.45;margin-top:4px}.atlas-stat-icon{position:absolute;left:20px;top:21px;color:#67debe;font-size:20px}
+.atlas-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.atlas-tabs{display:flex;gap:5px;padding:4px;border:1px solid rgba(139,169,206,.18);border-radius:12px;background:#111c2d}.atlas-tabs button{background:transparent;color:#9db0c9;border:0;border-radius:8px;padding:9px 12px;cursor:pointer;font:inherit;font-size:13px;font-weight:700;white-space:nowrap}.atlas-tabs button span{opacity:.65;font-size:11px;margin-left:4px}.atlas-tabs button[aria-pressed="true"]{background:#233b50;color:#c8ffee;box-shadow:0 1px 5px rgba(0,0,0,.24)}.atlas-tabs button:focus-visible,.atlas-search input:focus-visible,.atlas-scroll:focus-visible{outline:2px solid #5ff0c0;outline-offset:2px}
+.atlas-search{display:flex;align-items:center;gap:7px;background:#101c2d;border:1px solid rgba(139,169,206,.3);border-radius:10px;padding:0 12px;color:#8fa6c3;flex:1;max-width:330px;min-width:200px}.atlas-search>span:first-child{font-size:24px}.atlas-search input{width:100%;padding:11px 0;background:transparent;border:0;outline:0;color:#f2f8ff;font:inherit;font-size:13px}.atlas-search input::placeholder{color:#8294ad}.atlas-result{font-size:12px;color:#9bb0c8;margin:15px 0 9px}.atlas-scroll{overflow-x:auto;border:1px solid rgba(140,171,210,.2);border-radius:13px;max-height:740px;overflow-y:auto}.atlas-table{width:100%;min-width:790px;border-collapse:separate;border-spacing:0;font-size:13px;line-height:1.55}.atlas-table caption{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.atlas-table th{text-align:left;position:sticky;top:0;background:#1b2d40;color:#b7cce1;z-index:2;font-size:11px;letter-spacing:.075em;text-transform:uppercase;padding:14px 15px}.atlas-table th:nth-child(1){width:22%}.atlas-table th:nth-child(2){width:16%}.atlas-table th:nth-child(3){width:29%}.atlas-table td{padding:15px;vertical-align:top;border-top:1px solid rgba(155,180,211,.12);color:#afc0d4;background:rgba(15,26,42,.8)}.atlas-table tr:nth-child(2n) td{background:rgba(21,35,53,.85)}.atlas-table tr:hover td{background:#20344c}.atlas-table td strong{color:#f0f7ff}.atlas-table td:first-child strong{font-size:14px}.atlas-table td small{display:block;margin-top:6px;color:#8ba7c2;font-size:11px}.atlas-table a{color:#81dbd0;text-underline-offset:3px}.atlas-external{font-size:10px;opacity:.8}.atlas-table code{color:#d1c5ff;background:rgba(165,145,240,.1);padding:1px 3px;border-radius:3px;font-size:11px;white-space:normal;overflow-wrap:anywhere}.atlas-badge{display:inline-block;border-radius:30px;padding:5px 9px;font-size:11px;font-weight:750;white-space:nowrap}.atlas-badge.confirmed{background:rgba(95,240,192,.13);color:#8af5ce}.atlas-badge.failed,.atlas-badge.rejected{background:rgba(255,144,147,.12);color:#ffb8b8}.atlas-badge.pending{background:rgba(246,199,106,.12);color:#f6d69e}.atlas-badge.other{background:rgba(140,166,207,.13);color:#bdcce7}
+.atlas-bottom{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-top:19px;padding:20px;border:1px solid rgba(95,240,192,.22);border-radius:14px;background:linear-gradient(100deg,rgba(95,240,192,.08),rgba(127,176,255,.06))}.atlas-bottom>div{display:flex;align-items:center;gap:16px}.atlas-bottom-mark{font-size:25px;font-weight:900;letter-spacing:-.07em;color:#5ff0c0}.atlas-bottom strong{color:#edfff8}.atlas-bottom p{color:#a7bbd0;font-size:12px;line-height:1.5;margin:4px 0 0;max-width:650px}.atlas-bottom>a{font-size:12px;color:#76dfcc;white-space:nowrap}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:740px){.atlas-section{padding:26px 14px;margin:52px 0}.atlas-stats{grid-template-columns:1fr 1fr}.atlas-stat:last-child{grid-column:1/-1}.atlas-tabs{max-width:100%;overflow-x:auto}.atlas-tabs button{padding:8px 9px}.atlas-search{max-width:none}.atlas-bottom{align-items:flex-start;flex-direction:column}.atlas-table{min-width:700px}}
+
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
-  <span class="pill"><i style="background:var(--amber);box-shadow:0 0 12px var(--amber)"></i>Status public neconfirmat 09:23 UTC</span>
+  <span class="pill"><i style="background:var(--mut);box-shadow:0 0 12px var(--mut)"></i>Status neconfirmat acum · ultima probă 12.10 09:23 UTC</span>
   <span class="pill">cost 0 lei</span>
-  <a class="l" href="#alegere">compară motoarele ↓</a>
+  <a class="l" href="#atlas">atlas JAR-uri ↓</a>
 </div></nav>
 <div class="wrap">
 
@@ -116,7 +129,7 @@ footer code{color:#9fb0c9}
   <p class="lede">Intră în CUANTIC cu modpack-ul normal. Construim o experiență de <b>RP urban, survival și mafii</b>, fără să sacrificăm compatibilitatea pentru un motor „rapid” doar în reclame. Pack-ul actual are <b>36 de moduri pe server și 14 pluginuri</b>. Mafii și regulile de joc sunt direcția de dezvoltare, nu funcții pretinse ca finalizate.</p>
   <div class="cta">
     <a class="btn" href="https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Client-1.7.7.mrpack">⬇️ Modpack-ul client (1.7.7 · 90.7 MB)</a>
-    <a class="btn ghost" href="#alegere">🧭 De ce CUANTIC? Compară motoarele</a>
+    <a class="btn ghost" href="#atlas">📊 Vezi toate JAR-urile în tabel</a>
     <a class="btn ghost" href="#viziune">🏙️ Strategia orașului</a>
     <a class="btn ghost" href="#cum-intri">🚀 Cum intri</a>
   </div>
@@ -201,6 +214,133 @@ alte JAR-uri neprobate nu sunt declarate învinse.</p></div>
 <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-FAMILY-RESULT.md">compatibilitatea motoarelor</a> ·
 <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-PLAYER-RESULT.md">proba cu jucător</a>. Un laptop slab și configurațiile
 OptiFine + modurile normale respectiv Rubidium/Oculus se testează <b>separat</b> în oraș, cu vehicule.</p>
+</section>
+
+<section id="atlas" class="atlas-section" aria-labelledby="atlas-title">
+<div class="atlas-overline"><span class="atlas-orbit" aria-hidden="true">◉</span> LABORATORUL CUANTIC <span class="atlas-overline-rule"></span> 12 OCT 2026</div>
+<h2 id="atlas-title">Toate motoarele pe masă.<br><span>Doar probele decid.</span></h2>
+<p class="atlas-lead">34 de familii și JAR-uri cercetate. Primele 8 pot fi evaluate pentru pack-ul Forge 1.16.5; restul cer alt loader, alte pluginuri sau alt joc. Caută un motor, apoi citește verdictul și sursa din fiecare rând.</p>
+<div class="atlas-stats" aria-label="Rezumatul probelor">
+<div class="atlas-stat"><span class="atlas-stat-icon">◈</span><b>34</b><span>JAR-uri &amp; familii<br>în atlasul cercetat</span></div>
+<div class="atlas-stat"><span class="atlas-stat-icon">▣</span><b>36 + 14</b><span>moduri Forge + pluginuri<br>de păstrat împreună</span></div>
+<div class="atlas-stat"><span class="atlas-stat-icon">↗</span><b>0</b><span>probe care confirmă 10×<br>până acum</span></div>
+</div>
+<div class="atlas-toolbar" aria-label="Filtre pentru tabel">
+<div class="atlas-tabs" role="group" aria-label="Tip de motor">
+<button type="button" data-atlas-filter="all" aria-pressed="true">Toate <span>34</span></button>
+<button type="button" data-atlas-filter="same" aria-pressed="false">Forge + Bukkit <span>8</span></button>
+<button type="button" data-atlas-filter="other" aria-pressed="false">Alte motoare <span>26</span></button>
+</div>
+<label class="atlas-search"><span aria-hidden="true">⌕</span><span class="sr-only">Caută în tabel</span><input id="atlas-query" type="search" autocomplete="off" placeholder="Caută JAR / verdict / sursă…"></label>
+</div>
+<p class="atlas-result" id="atlas-count" role="status" aria-live="polite">Se afișează 34 din 34 rânduri</p>
+<div class="atlas-scroll" tabindex="0" role="region" aria-label="Tabel comparativ al JAR-urilor; derulează orizontal pe ecran mic">
+<table class="atlas-table"><caption>Atlasul JAR-urilor CUANTIC, pe baza probelor disponibile la 12 octombrie 2026</caption>
+<thead><tr><th scope="col">Motor / proveniență</th><th scope="col">Stare</th><th scope="col">Ce știm</th><th scope="col">Decizia pentru Cuantic</th></tr></thead>
+<tbody><tr data-atlas-row data-kind="same" data-status="confirmed">
+<td class="atlas-name"><strong>CUANTIC live</strong>, CatServer adaptat<small>1.16.5, Java 17, SHA <code>96f82479…7789c</code>; codul JAR diferă de upstream în două intrări, inclusiv <code>data/forge-1.16.5-36.2.39-universal.jar</code> (<a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-NATIVE-RESULT.md" target="_blank" rel="noopener noreferrer">A/B brut<span class="atlas-external" aria-hidden="true"> ↗</span></a>).</small></td>
+<td><span class="atlas-badge confirmed">Confirmat la pornire</span></td>
+<td><strong>D</strong>: <code>Done</code>, 14 pluginuri; proba cu 1 jucător nu acoperă încă trafic/vehicule (<a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-FAMILY-RESULT.md" target="_blank" rel="noopener noreferrer">smoke<span class="atlas-external" aria-hidden="true"> ↗</span></a>, <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-PLAYER-RESULT.md" target="_blank" rel="noopener noreferrer">jucător<span class="atlas-external" aria-hidden="true"> ↗</span></a>).</td><td>Referință funcțională; <strong>nu 10×</strong> și nu un motor original complet.</td></tr><tr data-atlas-row data-kind="same" data-status="confirmed">
+<td class="atlas-name"><strong>CatServer oficial</strong><small>Forge+Bukkit/Spigot 1.16.5; documentația recomandă Java 8/11, spune că 17 poate avea probleme cu unele moduri/pluginuri, licență LGPL-3.0 <a href="https://github.com/Luohuayu/CatServer/blob/1.16.5/docs/README_EN.md" target="_blank" rel="noopener noreferrer">2<span class="atlas-external" aria-hidden="true"> ↗</span></a> <a href="https://github.com/Luohuayu/CatServer" target="_blank" rel="noopener noreferrer">4<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</small></td>
+<td><span class="atlas-badge confirmed">Confirmat la pornire</span></td>
+<td><strong>D</strong>: în testul nostru 1.16.5-1d8d6313 a pornit cu 36/14; A/B/B/A pe Java 17, fără jucători (<a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-NATIVE-RESULT.md" target="_blank" rel="noopener noreferrer">date<span class="atlas-external" aria-hidden="true"> ↗</span></a>).</td><td>Principalul adversar comparabil; rezultatele CUANTIC ↔ oficial sunt amestecate, fără câștig repetabil.</td></tr><tr data-atlas-row data-kind="same" data-status="rejected">
+<td class="atlas-name"><strong>CUANTIC patch SortedArraySet</strong><small>Cod compilat diferit, SHA <code>b0817358…215ee3</code> (<a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-STRICT-RESULT.md" target="_blank" rel="noopener noreferrer">metodă<span class="atlas-external" aria-hidden="true"> ↗</span></a>).</small></td>
+<td><span class="atlas-badge rejected">Testat · respins</span></td>
+<td><strong>D</strong>: 6 smoke-uri, dar fără clienți modati/vehicule.</td><td><strong>Respins:</strong> pornirea externă mai bună într-o rundă, dar CPU/p95/RSS/Done nu trec simultan pragul strict.</td></tr><tr data-atlas-row data-kind="same" data-status="failed">
+<td class="atlas-name"><strong>Arclight Forge</strong><small>Arhitectură Bukkit prin Mixin, branch vechi 1.16.x, proiectul dezvoltă și linii noi; GPL-3.0 <a href="https://github.com/IzzelAliz/Arclight/tree/1.16" target="_blank" rel="noopener noreferrer">3<span class="atlas-external" aria-hidden="true"> ↗</span></a> <a href="https://github.com/IzzelAliz/Arclight" target="_blank" rel="noopener noreferrer">4<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</small></td>
+<td><span class="atlas-badge failed">Nu pornește cu 36/14</span></td>
+<td><strong>D</strong>: <code>1.16.5-1.0.25</code> nu a ajuns la <code>Done</code> cu 36/14: mixin <code>BreakBlockGoalMixin</code> obligatoriu eșuat (<a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/BENCHMARK-MOTOARE-CUANTIC-2026-10-12.md" target="_blank" rel="noopener noreferrer">diagnostic<span class="atlas-external" aria-hidden="true"> ↗</span></a>).</td><td>Candidat numai după patch izolat și retest; nu are scor MSPT echivalent.</td></tr><tr data-atlas-row data-kind="same" data-status="failed">
+<td class="atlas-name"><strong>Mist</strong><small>Fork Mohist 1.16.5, repo arhivat în 2021, GPL-3.0 <a href="https://github.com/MinecraftMist/Mist" target="_blank" rel="noopener noreferrer">4<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</small></td>
+<td><span class="atlas-badge failed">Nu pornește cu 36/14</span></td>
+<td><strong>D</strong>: Java 17 <code>IllegalAccessError</code>; Java 11 <code>NoSuchMethodError</code>, fără <code>Done</code> (<a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/a29b4ef4-serverroleplaylite/docs/ENGINE-MIST-J11-RESULT.md" target="_blank" rel="noopener noreferrer">run<span class="atlas-external" aria-hidden="true"> ↗</span></a>).</td><td>Nu îl lansăm; fără A/B valid.</td></tr><tr data-atlas-row data-kind="same" data-status="pending">
+<td class="atlas-name"><strong>Mohist 1.16.5</strong><small>Forge+Bukkit; binare istorice 1.16.5-1237 în Maven, GPL-3.0 <a href="https://search.maven.org/artifact/com.mohistmc/mohist" target="_blank" rel="noopener noreferrer">5<span class="atlas-external" aria-hidden="true"> ↗</span></a> <a href="https://github.com/MohistMC-Archives/Mohist" target="_blank" rel="noopener noreferrer">3<span class="atlas-external" aria-hidden="true"> ↗</span></a>. Producătorul EssentialsX avertizează că nu îl suportă <a href="https://essentialsx.net/downloads" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</small></td>
+<td><span class="atlas-badge pending">De testat cu 36/14</span></td>
+<td><strong>S</strong>, nu am boot/login 36/14.</td><td>Test în sandbox numai cu fișiere oficiale și SHA; validează pluginurile/atribuirile înainte de benchmark.</td></tr><tr data-atlas-row data-kind="same" data-status="pending">
+<td class="atlas-name"><strong>LoliServer 1.16.5</strong><small>Hybrid Forge+Bukkit derivat din Mohist; fork vizibil GPL-3.0 <a href="https://github.com/Sam-Chai/LoliServer" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>, oglindă Gitee indică LGPL-3.0 <a href="https://gitee.com/kotori0629/LoliServer1.16" target="_blank" rel="noopener noreferrer">3<span class="atlas-external" aria-hidden="true"> ↗</span></a>: <strong>licența exactă a candidatului trebuie verificată înainte de reutilizare</strong>. Relația istorică cu CatServer este descrisă de CatServer <a href="https://github.com/Luohuayu/CatServer/blob/1.16.5/docs/README_EN.md" target="_blank" rel="noopener noreferrer">2<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</small></td>
+<td><span class="atlas-badge pending">De testat cu 36/14</span></td>
+<td><strong>S</strong>, niciun binar exact testat; URL-ul încercat <code>Loli-Server/LoliServer1.16</code> a răspuns 404.</td><td>Prioritate de descoperire a sursei/release-ului autentic, apoi smoke; fără punctaj până atunci.</td></tr><tr data-atlas-row data-kind="same" data-status="pending">
+<td class="atlas-name"><strong>Magma 1.16.5</strong><small>Release 1.16.5/Forge 36.2.35 indexat <a href="https://git.magmafoundation.org/magmafoundation/Magma-1-16-x/-/releases/c6d2f4f8" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>, proiectul 1.16.x marcat arhivat <a href="https://git.magmafoundation.org/magmafoundation/Magma-1-16-x" target="_blank" rel="noopener noreferrer">4<span class="atlas-external" aria-hidden="true"> ↗</span></a>; ghidul docker spune că Magma original a fost terminat <a href="https://github.com/itzg/docker-minecraft-server/blob/master/docs/types-and-platforms/server-types/hybrids.md" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>. Pagina primară GitLab a dat 522 la verificare.</small></td>
+<td><span class="atlas-badge pending">De testat cu 36/14</span></td>
+<td><strong>S</strong>, fără SHA/verificare 36/14.</td><td>Nu pretinde compatibilitate sau licență verificată; dacă reapare binarul oficial, smoke numai izolat.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Minecraft vanilla</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Serverul oficial, referință de mecanici de bază.</td><td>Nu încarcă 36 moduri Forge și 14 pluginuri Bukkit; alt produs.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Forge 1.16.5</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Loader pentru modurile clientului; bază de control pentru costul layer-ului hibrid <a href="https://github.com/minecraftforge/minecraftforge" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu încarcă nativ pluginurile Bukkit; comparație separată, cu funcțiile lipsă raportate.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>SpongeForge 1.16.5</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Forge + <strong>pluginuri Sponge</strong>, nu Bukkit; documentație oficială API 8.2.0 și Java 11 recomandat <a href="https://docs.spongepowered.org/stable/en/plugin/api-versions.html" target="_blank" rel="noopener noreferrer">3<span class="atlas-external" aria-hidden="true"> ↗</span></a> <a href="https://docs.spongepowered.org/stable/en/server/quickstart.html" target="_blank" rel="noopener noreferrer">4<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Cele 14 pluginuri Bukkit necesită alternative/portare; nu e drop-in.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>SpongeVanilla</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Sponge API peste vanilla <a href="https://docs.spongepowered.org/stable/en/server/quickstart.html" target="_blank" rel="noopener noreferrer">4<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu oferă același Forge+Bukkit.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>CraftBukkit / Spigot</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>API Bukkit, bază istorică a familiei Paper <a href="https://github.com/papermc/paper" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Fără modurile Forge în aceeași lume.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Paper</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Server Bukkit/Paper, inclusiv build-uri istorice 1.16.5; proiect activ pe versiuni noi <a href="https://github.com/papermc/paper" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu este hybrid Forge; performanța Paper cu 0 moduri nu este duel echivalent.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Purpur</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Fork Paper/Pufferfish orientat pe configurare; istoricul include 1.16.5 <a href="https://geocities.purpurmc.org/docs/" target="_blank" rel="noopener noreferrer">3<span class="atlas-external" aria-hidden="true"> ↗</span></a> <a href="https://minecraftversion.net/purpur/" target="_blank" rel="noopener noreferrer">5<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Fără 36 moduri; modificările de mecanici nu sunt bonus gratuit.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Pufferfish</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Fork Paper pentru servere mari, patch-uri GPL-3.0 <a href="https://github.com/pufferfish-gg/Pufferfish" target="_blank" rel="noopener noreferrer">2<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Fără Forge în JAR; doar idei/patch-uri analizate individual după versiune/licență.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Gale</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Fork Paper fără schimbări comportamentale revendicate de autor <a href="https://github.com/GaleMC/Gale" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Afirmația de viteză de pe README nu este benchmark pentru modpack-ul nostru.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Leaf</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Fork Paper/Purpur, versiune modernă 26.2 pe site-ul oficial <a href="https://www.leafmc.one/en" target="_blank" rel="noopener noreferrer">5<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Fără Forge; nu migrează conținutul 1.16.5.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Leaves</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Fork Paper orientat spre mecanici vanilla; index GitHub <a href="https://github.com/topics/minecraft-performance?o=desc&amp;s=stars" target="_blank" rel="noopener noreferrer">3<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu poate încărca pack-ul Forge direct.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>DivineMC</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Fork Purpur, GPL-3.0 <a href="https://github.com/BX-Team/DivineMC" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>API Bukkit fără Forge; alte versiuni nu echivalează clientul actual.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Folia</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Paper cu regiuni tick-uite paralel, necesită pluginuri adaptate; însuși README avertizează că multe pluginuri se vor rupe <a href="https://github.com/PaperMC/Folia" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nici Forge 1.16.5, nici compatibilitate gratuită cu 14 pluginuri; ideea de paralelism necesită proof-of-concept sigur, nu transplant orb.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Tuinity</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Fork Paper istoric, idei integrate ulterior în Paper (catalogul comunitar necesită revalidare) <a href="https://anythingmc.xyz/server/info/lists/server_software/" target="_blank" rel="noopener noreferrer">3<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Fără Forge; nu instala un JAR vechi pentru nostalgie.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Airplane / Purplane</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Fork-uri Paper istorice pentru servere mari; informație de catalog, nu benchmark pentru noi <a href="https://anythingmc.xyz/server/info/lists/server_software/" target="_blank" rel="noopener noreferrer">3<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Fără Forge; versiunile/buildurile de interes necesită verificare primară.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Yatopia</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Fork 1.16.5 arhivat în 2021; autorii enumeră multe optimizări preluate <a href="https://github.com/YatopiaMC/Yatopia" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Fără Forge; amestecul de patch-uri nu justifică portarea automată.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Canvas / SparklyPaper / Vine</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Fork-uri Paper/Folia orientate spre multi-threading descoperite în indexul GitHub <a href="https://github.com/topics/paper-fork" target="_blank" rel="noopener noreferrer">5<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu am citit încă sursa, licența și versiunea fiecărui patch relevant; fără pack Forge.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Fabric / Quilt</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Alte loadere de moduri, nu suport direct pentru modurile Forge 1.16.5 <a href="https://gdlauncher.com/docs/mod-loaders-compared/" target="_blank" rel="noopener noreferrer">3<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Ar cere portarea celor 36 de moduri și a clientului, nu un swap de JAR.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Cardboard / Bukkit4Fabric</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>API Bukkit peste Fabric, GPL-3.0 <a href="https://github.com/CardboardPowered/cardboard" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a> <a href="https://github.com/ThatGamerBlue/bukkit4fabric" target="_blank" rel="noopener noreferrer">4<span class="atlas-external" aria-hidden="true"> ↗</span></a>; wiki Cardboard marchează <strong>≤1.16.5 nesuportat</strong> <a href="https://github.com/CardboardPowered/cardboard/wiki/Supported-Versions" target="_blank" rel="noopener noreferrer">5<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu încarcă Forge; fără migrare completă a pack-ului.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Banner</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>API Bukkit peste Fabric, sursa arhivată indică GPL-3.0 <a href="https://github.com/AutoArchives/mohistmc-banner" target="_blank" rel="noopener noreferrer">2<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu este Forge 1.16.5; fără pack echivalent.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>NeoForge / Youer</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>NeoForge este loader distinct de Forge 1.16.5 <a href="https://gdlauncher.com/docs/mod-loaders-compared/" target="_blank" rel="noopener noreferrer">3<span class="atlas-external" aria-hidden="true"> ↗</span></a>; Youer promite integrare Bukkit pe NeoForge <a href="https://mohistmc.com/software/youer" target="_blank" rel="noopener noreferrer">4<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Viitor cu portarea tuturor modurilor/clientului; promisiunile vendor nu certifică gameplay-ul.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Ketting / Magma Maintained</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Documentația de operare indică Ketting pentru 1.20.1+ și Magma Maintained pentru alte versiuni, fără 1.16.5 în lista de acolo <a href="https://github.com/itzg/docker-minecraft-server/blob/master/docs/types-and-platforms/server-types/hybrids.md" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu corespund baseline-ului; păstrăm în radar pentru migrare planificată, nu schimbare live.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Minestom</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Framework pentru servere custom; reimplementarea oficială a survival-ului este limitată și arhivată în 2026 <a href="https://github.com/Minestom/VanillaReimplementation" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu e înlocuitor drop-in pentru survival + Forge + Bukkit; ar cere construcția jocului și a protocolului modat.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Feather (Rust)</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Implementare experimentală, multe funcții lipsesc; Apache-2.0 în forkul inspectat <a href="https://github.com/lineCode/feather-1" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu livrează conținutul și API-urile cerute; cercetare de arhitectură, nu JAR de producție.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Crucible / Thermos / Kettle vechi</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Familie istorică de hybrid-uri pentru alte versiuni, Kettle marcat depreciat din 2021 <a href="https://github.com/KettleFoundation/Kettle" target="_blank" rel="noopener noreferrer">4<span class="atlas-external" aria-hidden="true"> ↗</span></a> <a href="https://github.com/Shawiizz/minecraft-hybrids" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu sunt candidați 1.16.5 în aceleași condiții.</td></tr><tr data-atlas-row data-kind="other" data-status="other">
+<td class="atlas-name"><strong>Proxy-uri Velocity / BungeeCord / Waterfall</strong></td>
+<td><span class="atlas-badge other">Alt ecosistem / control</span></td>
+<td>Rutare între servere, nu implementări de lume Minecraft <a href="https://winternode.com/help/games/minecraft-java/setup/server-types" target="_blank" rel="noopener noreferrer">1<span class="atlas-external" aria-hidden="true"> ↗</span></a>.</td><td>Nu sunt JAR-uri de joc comparabile; nu le numărăm ca motoare învinse.</td></tr></tbody></table></div>
+<div class="atlas-bottom"><div><span class="atlas-bottom-mark">10×</span><div><strong>Ținta. Nu rezultatul.</strong><p>10× mai mulți jucători activi per resursă ar necesita clienți Forge confirmați, același pack și aceeași sarcină în repetări. Azi nu există această dovadă. Un JAR care nu pornește nu este un adversar „învins”.</p></div></div><a href="#engine-test">Vezi benchmarkul măsurat ↑</a></div>
 </section>
 
 <section id="viziune" aria-label="Strategia pentru roleplay, survival și oraș">
@@ -400,7 +540,7 @@ generator: <code>scripts/bench-live.sh</code>.</div>
 <h2>🤝 Ce primești și ce NU promitem</h2>
 <div class="grid">
   <div class="card"><h3>📦 Pack-ul tău, ușurat cu −45.5%</h3><p>Modurile de conținut din Freeroam rămân în pack; ultimele probe izolate nu substituie un handshake modat real, dar fișierele multimedia au fost compactate; calitatea vizuală și FPS-ul cer test pe laptop, iar <code>Freeroam.1.0.0.mrpack</code> original rămâne intact în tagul <code>pack-original</code>.</p><span class="src">1.7.7 · CUANTIC-Client-1.7.7.mrpack · 90.7 MB (redus de la 133.1 MB = −60.6 MB pentru copii cu net slab)</span></div>
-  <div class="card"><h3>🚪 Intrare în pack</h3><p>Clientul modat se descarcă mai sus. Verifică identitatea operatorului înainte de a deschide un server fără autentificare: numele unui jucător nu este o dovadă de identitate.</p><span class="src">analysis/NO-LOGIN.md · analysis/op.md</span></div>
+  <div class="card"><h3>🚪 Intrare în pack</h3><p>Clientul modat se descarcă mai sus. Serverul CUANTIC păstrează pack-ul Forge 1.16.5; verifică statusul public datat înainte de sesiune și folosește adresa inclusă în client.</p><span class="src">CUANTIC-Client-1.7.7.mrpack · analysis/ALIVE.md</span></div>
   <div class="card"><h3>🩺 Recuperare monitorizată</h3><p>Dacă Java moare, supervisorul încearcă repornirea, iar logul nu se mai șterge la repornire (dovada morii rămâne pe disc). Schimbările pe serverul live cer backup verificat și rollback; nu promitem recuperare instantanee.</p><span class="src">scripts/cuantic-live.sh · analysis/ACCEPTANCE.md</span></div>
   <div class="card"><h3>🧾 Probe verificabile</h3><p>A/B-ul din partea de sus citește rezultatele jobului GitHub; arhiva istorică include și valori vechi introduse manual. Le poți citi pe toate în repo, la <code>analysis/</code>.</p><span class="src">BENCH-LIVE.md · RAM-ALL.md · APPLY-LIVE.md</span></div>
 </div>
@@ -429,7 +569,7 @@ generator: <code>scripts/bench-live.sh</code>.</div>
 <div class="grid">
   <div class="card"><h3>Clientul</h3><p>Pack-ul modat are reglaje pentru grafica redusă; OptiFine și Rubidium/Oculus trebuie încercate în instanțe separate. Nu promitem FPS pe PC-uri vechi fără test în oraș cu vehicule. Mărime: <b>90.7 MB</b> client / <b>51.1 MB</b> server. Sursă: GitHub release (verificare curentă); nu estimări.</p></div>
   <div class="card"><h3>Serverul</h3><p>La ultima probă fără jucători a raportat 20 TPS. Nu avem încă sarcină controlată cu mai mulți jucători, deci consumul la vârf nu este garantat.</p></div>
-  <div class="card"><h3>Gazda</h3><p>Rulează acum pe un cont gratuit, 2 vCPU · 11.8 GB RAM · disc 5 GB (66% ocupat — limita reală a cutiei, nu a serverului).</p></div>
+  <div class="card"><h3>Gazda</h3><p>Ultima gazdă raportată: 2 vCPU · 11.8 GB RAM · disc 5 GB. Aceste specificații sunt istorice, nu probe că serverul este accesibil chiar acum; vezi statusul public datat din partea de sus.</p></div>
 </div>
 
 <h2>📦 Cum intri, în 3 mișcări</h2>
@@ -440,8 +580,34 @@ generator: <code>scripts/bench-live.sh</code>.</div>
 </div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 12 Oct 2026, 09:23 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 12 Oct 2026, 13:39 UTC<br>
   CUANTIC · Roleplay Lite · 1.16.5 Forge+Bukkit (CatServer) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>docs/ENGINE-DECISION.md</code> · <code>docs/ENGINE-AB-GITHUB.md</code> · <code>docs/ENGINE-PREFLIGHT.md</code>
 </footer>
-</div></body></html>
+</div><script>
+(() => {
+  const root = document.getElementById('atlas');
+  if (!root) return;
+  const tabs = [...root.querySelectorAll('[data-atlas-filter]')];
+  const rows = [...root.querySelectorAll('[data-atlas-row]')];
+  const input = root.querySelector('#atlas-query');
+  const count = root.querySelector('#atlas-count');
+  let selected = 'all';
+  function update() {
+    const query = input.value.trim().toLocaleLowerCase('ro');
+    let shown = 0;
+    for (const row of rows) {
+      row.hidden = (selected !== 'all' && row.dataset.kind !== selected) ||
+                   (query && !row.textContent.toLocaleLowerCase('ro').includes(query));
+      if (!row.hidden) shown++;
+    }
+    count.textContent = `Se afișează ${shown} din ${rows.length} rânduri`;
+  }
+  tabs.forEach(button => button.addEventListener('click', () => {
+    selected = button.dataset.atlasFilter;
+    tabs.forEach(tab => tab.setAttribute('aria-pressed', String(tab === button)));
+    update();
+  }));
+  input.addEventListener('input', update);
+})();
+</script></body></html>
