@@ -1,1 +1,2 @@
 2026-10-12: conditional recovery requested by owner; public status refused and read-only preflight is queued for offline self-hosted runner. Start ONLY if local Java/supervisor/tunnel is down; do not replace JAR or pack.
+2026-10-12T15:05Z: owner cerut explicit pe chat -> "dai on la server". Start conditionat doar daca java/supervisor/frpc sunt JOS; nu se inlocuieste JAR-ul, nu se atinge pack-ul, nu se publică nimic. Masuratorile grele raman pe runner GitHub, nu pe aceasta gazda.
