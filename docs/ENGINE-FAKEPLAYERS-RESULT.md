@@ -8,6 +8,13 @@ Testul adaugă un JAR Curtain derivat NUMAI în copia temporară: dezactivăm st
 
 Fake players folosesc conexiune internă, nu login FML real, FPS client sau mașini. Aceasta este probă de fezabilitate, nu A/B de performanță și nu 25 de oameni reali.
 
+## Verdict: încă NU avem boți valizi pe CatServer + pack-ul complet
+
+- [Curtain 1.16.5 original](https://github.com/iZentric/ServerRolePlayLite/actions/runs/38187642686) a oprit pornirea: `NaturalSpawnerMixin` nu a putut fi injectat în CatServer. Am dezactivat **doar acel mixin** în JAR-ul de test derivat (SHA test `affa757e4abb12cd577fed599577923be15472af332c4af00407d013f43902e9`); **nu** l-am introdus în pack-ul distribuit.
+- Copia de laborator cu 36 moduri originale + Curtain derivat a ajuns la `Done`, a activat 14 pluginuri. Comenzile `/player` au produs trei mesaje `logged in` *urmate de erori*, apoi `/list` și statusul local au răspuns **0/25**. Nu au rămas trei jucători în lume; **nicio comparație de performanță cu 3 jucători nu este validă**.
+- Logul arată un pachet ModernFix de corecție ID chiar înainte de mesajul generic de eroare, dar **nu conține un stack trace suficient ca să-i atribuim cauza**. Este o suspiciune, nu un diagnostic. Nu vom instala Curtain pe serverul live sau pretinde că aceste boturi au trecut handshake-ul Forge.
+- Pentru un test cu jucători cu adevărat relevanți, un bot extern trebuie să negocieze FML 1.16.5 și modurile obligatorii, iar apoi să se miște în lume; alternativ, un simulator intern care rămâne verificabil în `/list` și status poate testa doar tick-urile, nu autentificarea/FPS. Oricare se probează întâi pe copie izolată cu același pack, nu pe lumea publică.
+
 ```json
 {
   "method": "temporary GH runner, Java17, released 36/14 pack plus ONE isolated Curtain 1.16.5 test mod; 3 server-side fake players via /player; verify fresh list + local status, 40s ticking",

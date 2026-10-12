@@ -34,6 +34,9 @@ class SiteClaimsTest(unittest.TestCase):
         self.assertIn("2202,1 / 2528,9 MiB", page)
         self.assertIn("nu trec: RAM RSS, CPU stabil, p95 MSPT, Done intern", page)
         self.assertIn("Nu am lansat JAR-ul", page)
+        self.assertIn("Test cu jucători simulați — NU validat încă", page)
+        self.assertIn("la <b>0/25</b>", page)
+        self.assertIn("ENGINE-FAKEPLAYERS-RESULT.md", page)
         with patch.object(engine_results, "result", return_value={}):
             incomplete = engine_results.panel()
         self.assertNotIn("2205,1 / 2452,0 MiB", incomplete)

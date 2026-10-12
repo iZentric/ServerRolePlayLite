@@ -188,6 +188,28 @@ def panel():
     else:
         strict_panel = ''
 
+    fake = result("ENGINE-FAKEPLAYERS-RESULT.md")
+    fake_provenance = (fake.get("pack_sha256") == "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15" and
+                       fake.get("curtain_sha256") == "c9234d2c5ca43c337abac25a05022fe2f226c884855aa6941b6130c60777819d" and
+                       fake.get("production_changes") is False)
+    if fake_provenance:
+        reported_count = fake.get("local_status", {}).get("players", {}).get("online")
+        three_valid = (fake.get("valid") and fake.get("list_count", 0) >= 3 and
+                       reported_count is not None and reported_count >= 3)
+        fake_panel = (f'<div class="card" style="margin-top:16px"><h3>Test cu jucători simulați '
+                      f'— {"trece doar proba izolată" if three_valid else "NU validat încă"}</h3>'
+                      '<p>Într-o copie temporară a pack-ului am încercat trei jucători falși cu '
+                      'Curtain 1.16.5. Modul de test necesită dezactivarea unui mixin incompatibil '
+                      'cu CatServer; JAR-ul live și modpack-ul public rămân intacte. '
+                      + ('Au rămas trei jucători în <code>list</code> și status local.' if three_valid else
+                         f'Au apărut încercări de login în log, dar <code>list</code> și status local au rămas '
+                         f'la <b>{escape(str(reported_count) if reported_count is not None else "necunoscut")}/25</b>: nu numărăm boți inexistenți drept test reușit.') +
+                      ' Chiar și o probă reușită cu jucători falși nu testează handshake-ul clientului '
+                      'modat, vehiculele sau FPS-ul. '
+                      f'<a href="{REPO_DOCS}ENGINE-FAKEPLAYERS-RESULT.md">Loguri și limite →</a></p></div>')
+    else:
+        fake_panel = ''
+
     samples = player.get("samples", [])
     if len(samples) == 3 and all(s.get("players", 0) >= 1 for s in samples):
         try:
@@ -227,6 +249,7 @@ același pack nu sunt clasate fictiv ca „mai rapide”.</p>
 </div>
 {native_panel}
 {strict_panel}
+{fake_panel}
 <div class="table-scroll"><table class="tbl"><tr><th>Test GitHub, același runner</th><th>Motor actual → candidat</th><th>Verdict</th></tr>
 {ticket_row}{fork_rows}</table></div>
 <div class="note">{real_note} Toate cifrele sunt datate; badge-ul de sus este doar ultimul
