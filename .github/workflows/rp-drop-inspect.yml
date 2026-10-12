@@ -1,0 +1,89 @@
+name: RP-DROP — citire arhive de backup din Drive (text only, pe runner gazdă)
+on:
+  push:
+    paths:
+      - "deploy/rp-drop.txt"
+      - "scripts/rp_archive_inspect.py"
+      - ".github/workflows/rp-drop-inspect.yml"
+permissions:
+  contents: write
+concurrency:
+  group: rp-drop
+  cancel-in-progress: false
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  citeste:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: 17YDGCEJN1qpXLmeHEnQm3oqkcyiGcHVY
+            nume: cffc205d-server
+          - id: 14YtH6Bm4bXxBZAVhkSXUuZHz342R8Xg-
+            nume: minecity-network
+          - id: 1unw5JV39l4Amk1ympYjCffq1n31inOO_
+            nume: folder-1
+          - id: 16JmFxSCCIzcNgFiMko8XbH9ggRzHqdlV
+            nume: vibe-rp
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unelte (7zip pentru .rar, gdown pentru linkuri mari de Drive)
+        run: |
+          set -e
+          sudo apt-get update -qq >/dev/null
+          sudo apt-get install -y -qq p7zip-full libminizip1 >/dev/null
+          python3 -m pip install --quiet --disable-pip-version-check gdown || pip3 install --quiet gdown
+      - name: Descarcă arhiva din Drive
+        run: |
+          set -e
+          mkdir -p /tmp/drop
+          python3 -c "import gdown,os;gdown.download(id='${{ matrix.id }}', output='/tmp/drop/${{ matrix.nume }}.bin', quiet=False, fuzzy=True)"
+          ls -lh /tmp/drop
+          # recunoaste extensia reala: numele din Drive e cel corect pentru tar/7z
+          FILE=$(python3 - <<'PY'
+          import os
+          n={'cffc205d-server':'cffc205d-d386-43d2-a4d2-085561081fec.tar.gz','minecity-network':'minecity-network.rar','folder-1':'c8b2d730-5dc5-4937-ab90-8f35f48c27ec.tar.gz','vibe-rp':'archive-2024-09-14T122917Z.tar.gz'}
+          print(n['${{ matrix.nume }}'])
+          PY
+          )
+          mv "/tmp/drop/${{ matrix.nume }}.bin" "/tmp/drop/$FILE"
+          file "/tmp/drop/$FILE"
+          echo "ARCHIVE=/tmp/drop/$FILE" >> "$GITHUB_ENV"
+      - name: Desface SI păstrează doar textul (inventar complet, zero date de jucători)
+        run: |
+          set -e
+          mkdir -p out/rp-drop/${{ matrix.nume }}
+          python3 scripts/rp_archive_inspect.py --archive "$ARCHIVE" \
+            --extract-dir /tmp/x --out out/rp-drop/${{ matrix.nume }}
+      - name: Păstrează doar ce încap în repo (text, nu arhive)
+        run: |
+          set -eu
+          rm -rf /tmp/x /tmp/drop
+          D=out/rp-drop/${{ matrix.nume }}
+          # fisierele de config raman ca fisiere individuale (le vad pe GitHub, nu doar intr-un tar)
+          ls -1 "$D/config" 2>/dev/null | head -300 > /tmp/keep.list
+          if [ -d "$D/config" ]; then find "$D/config" -maxdepth 1 -type f ! -name '*' -prune; fi
+          cd "$D/config" 2>/dev/null || mkdir -p "$D/config" && cd "$D/config"
+          find . -maxdepth 1 -type f | sed 's|^\./||' | sort | comm -23 - /tmp/keep.list | xargs -r rm -f
+          cd "$GITHUB_WORKSPACE"
+          rm -f "$D/configuri.tar.gz"
+          du -sh "$D"; echo "fisiere ramase: $(find "$D" -type f | wc -l)"
+      - name: Publică pe ramura rp-drop (text + inventar, nu binare)
+        run: |
+          set -eu
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch -q origin rp-drop 2>/dev/null || true
+          git checkout -q -B rp-drop origin/rp-drop 2>/dev/null || git checkout -q -B rp-drop
+          rm -rf "rp-drop/${{ matrix.nume }}"
+          mkdir -p "rp-drop"
+          mv "out/rp-drop/${{ matrix.nume }}" "rp-drop/${{ matrix.nume }}"
+          git add -A "rp-drop/${{ matrix.nume }}"
+          git commit -qm "rp-drop: ${{ matrix.nume }} citit (text only)" || echo "nimic nou"
+          git push -f origin rp-drop
+      - name: Dacă una pică, restul tot se publică
+        if: always()
+        run: echo "gata pentru ${{ matrix.nume }} (vezi logul pasilor de mai sus)"
