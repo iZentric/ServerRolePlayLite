@@ -46,7 +46,7 @@ jobs:
         continue-on-error: true
         run: |
           sudo apt-get update -qq >/dev/null 2>&1 || echo "apt update a esuat"
-          sudo apt-get install -y -qq p7zip-full >/dev/null 2>&1 || echo "apt install a esuat"
+          sudo apt-get install -y -qq p7zip-full unar >/dev/null 2>&1 || echo "apt install a esuat"
           python3 -m pip install --quiet --disable-pip-version-check gdown 2>&1 | tail -3 || echo "pip gdown a esuat"
           python3 -c "import gdown;print('gdown', gdown.__version__)" 2>&1 | tail -1 || echo "gdown absent"
       - name: Descarcă arhiva din Drive
@@ -63,7 +63,9 @@ jobs:
           try:
               import gdown
               note("gdown " + getattr(gdown, "__version__", "?"))
-              r = gdown.download(id=fid, output=out, quiet=False, fuzzy=True)
+              r = gdown.download(id=fid, output=out, quiet=False)
+              if r is None:
+                  note("gdown a primit NULL: fisierul NU e partajat public (link 'oricine cu linkul') sau e in vantul altcuiva")
               note("rezultat gdown: " + repr(r))
           except Exception as e:
               note("EXCEPTIE gdown: %s: %s" % (type(e).__name__, e))

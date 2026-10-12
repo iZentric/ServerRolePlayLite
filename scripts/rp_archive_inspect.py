@@ -70,8 +70,23 @@ def extract(archive: Path, dest: Path) -> None:
         subprocess.run(["tar", "-xf", str(archive), "-C", str(dest)], check=False)
     elif name.endswith(".zip"):
         subprocess.run(["unzip", "-q", "-o", str(archive), "-d", str(dest)], check=False)
-    else:  # .rar si restul, prin 7zip
-        subprocess.run(["7z", "x", "-y", f"-o{dest}", str(archive)], check=False)
+    else:  # .rar si restul, intai 7zip, apoi unar (7z din p7zip-full nu stie rar5)
+        try:
+            subprocess.run(["7z", "x", "-y", f"-o{dest}", str(archive)], check=False)
+        except FileNotFoundError:
+            pass
+        if not any(dest.iterdir()):
+            if shutil.which("unar"):
+                subprocess.run(["unar", "-quiet", "-force-overwrite", "-output-directory",
+                                str(dest), str(archive)], check=False)
+                # unar creeaza un folder cu numele arhivei: urca continutul cu un nivel
+                for sub in [p for p in dest.iterdir() if p.is_dir()]:
+                    for child in sub.iterdir():
+                        child.rename(dest / child.name)
+                    if not any(sub.iterdir()):
+                        sub.rmdir()
+            else:
+                print("nici 7z, nici unar nu sunt instalate: nu pot dezarhiva", file=sys.stderr)
 
 
 def _tail(src: Path, dst: Path) -> None:
