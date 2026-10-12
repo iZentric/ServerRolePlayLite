@@ -1,341 +1,145 @@
-##################################
-#      SkinsRestorer config      #
-##################################
+# Config version. Do not change this
+config-version = "2.7"
 
-# We from SRTeam thank you for using our plugin!
+# What port should the proxy be bound to? By default, we'll bind to all addresses on port 25565.
+bind = "0.0.0.0:18876"
 
-# We recommend you read the official installation guide before asking for help:
-# https://skinsrestorer.net/docs/installation
+# What should be the MOTD? This gets displayed when the player adds your server to
+# their server list. Only MiniMessage format is accepted.
+motd = "<#09add3>A Velocity Server"
 
-# We have prepared a few resources to help you configure the plugin:
-# General help: https://skinsrestorer.net/docs/configuration
-# Commands and permissions: https://skinsrestorer.net/docs/configuration/commands-permissions
-# Translations and messages: https://skinsrestorer.net/docs/configuration/locale-translations
+# What should we display for the maximum number of players? (Velocity does not support a cap
+# on the number of players online.)
+show-max-players = 500
 
-# If you encounter issues, you can do the following:
-# Read the troubleshooting guide: https://skinsrestorer.net/docs/troubleshooting
-# For advanced help or other, go to our Discord Server: https://skinsrestorer.net/discord
+# Should we authenticate players with Mojang? By default, this is on.
+online-mode = false
 
-# (?) Step by step installation guide: https://skinsrestorer.net/docs/installation
+# Should the proxy enforce the new public key security standard? By default, this is on.
+force-key-authentication = true
 
-# (!) IF YOU ARE USING A PROXY (BungeeCord, Waterfall or Velocity), YOU NEED TO INSTALL SKINSRESTORER ON THE PROXY AND ALL SERVERS! (!)
-# (!) YOU ALSO NEED TO CONFIGURE YOUR SERVERS TO DETECT THE PROXY! (!)
-# (!) AND YOU ALSO NEED TO PUT THE SAME CONFIG FILE IN ALL PROXIES AND SERVERS! (!)
-# (!) You can find detailed proxy instructions here: https://skinsrestorer.net/docs/installation
+# If client's ISP/AS sent from this proxy is different from the one from Mojang's
+# authentication server, the player is kicked. This disallows some VPN and proxy
+# connections but is a weak form of protection.
+prevent-client-proxy-connections = false
 
-##########
-# Locale #
-##########
+# Should we forward IP addresses and other data to backend servers?
+# Available options:
+# - "none":        No forwarding will be done. All players will appear to be connecting
+#                  from the proxy and will have offline-mode UUIDs.
+# - "legacy":      Forward player IPs and UUIDs in a BungeeCord-compatible format. Use this
+#                  if you run servers using Minecraft 1.12 or lower.
+# - "bungeeguard": Forward player IPs and UUIDs in a format supported by the BungeeGuard
+#                  plugin. Use this if you run servers using Minecraft 1.12 or lower, and are
+#                  unable to implement network level firewalling (on a shared host).
+# - "modern":      Forward player IPs and UUIDs as part of the login process using
+#                  Velocity's native forwarding. Only applicable for Minecraft 1.13 or higher.
+player-info-forwarding-mode = "bungeeguard"
 
-# Translation & message options here
-# To learn more about translations and how to make custom translations, visit: https://skinsrestorer.net/docs/configuration/locale-translations
-messages:
-    # A locale code for the locale you want to use by default for messages and commands.
-    # Has to be a string separated by an underscore.
-    locale: en
-    # A locale code for the messages and commands sent to the console.
-    # This is useful if you want to use a different locale for the console than for players.
-    # We recommend keeping this at the default value because we mostly only provide support in English.
-    # Has to be a string separated by an underscore.
-    consoleLocale: en
-    # Disable the message prefix in SkinsRestorer messages.
-    disablePrefix: false
-    # Every message sent by the plugin will use the players client locale if a translation is available.
-    # If disabled, the config locale will be used instead.
-    perIssuerLocale: true
-    # How dates are formatted by the plugin in messages. Format is explained here:
-    # https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html
-    dateFormat: dd MMMM yyyy
+# If you are using modern or BungeeGuard IP forwarding, configure a file that contains a unique secret here.
+# The file is expected to be UTF-8 encoded and not empty.
+forwarding-secret-file = "forwarding.secret"
 
-############
-# Database #
-############
-
-# Settings for databases skin storage (recommended for large networks with a lot of skins)
-# [!] Make sure you have the correct permissions set for your MySQL user. [!]
-# [!] Make sure to fill in database.connectionOptions if you're using certificate / ssl authentication. [!]
-# [!] If you're not using ssl, change sslMode=trust to sslMode=disable [!]
-database:
-    enabled: false
-    host: localhost
-    port: 3306
-    database: db
-    username: root
-    password: pass
-    maxPoolSize: 10
-    tablePrefix: sr_
-    connectionOptions: sslMode=trust&serverTimezone=UTC
-
-############
-# Commands #
-############
-
-# Control behaviour of commands.
-# To learn more about commands and permissions, visit: https://skinsrestorer.net/docs/configuration/commands-permissions
-commands:
-    # For all player commands to work by default, you need to give players the permission 'skinsrestorer.player'.
-    # This option allows you to force the default permission (skinsrestorer.player) to be given to all players.
-    # A value of 'false' will disable this behaviour, and players will need to be given the permission explicitly.
-    # This is because some platforms (like BungeeCord) do not have a default permission system.
-    # If your platform supports default permissions, this option is ignored.
-    forceDefaultPermissions: true
-    # Players cooldown in seconds when changing skins (set to 0 to disable).
-    # SkinErrorCooldown is used when an error or invalid url occurs.
-    # Can be bypassed with 'skinsrestorer.bypasscooldown'.
-    skinChangeCooldown: 30
-    skinErrorCooldown: 5
-    # When enabled, only websites from the list below is allowed to be set using /skin url <url>
-    # [?] this is useful if you host your own image server.
-    restrictSkinUrls:
-        enabled: false
-        list: 
-        - https://i.imgur.com
-        - http://i.imgur.com
-        - https://storage.googleapis.com
-        - http://storage.googleapis.com
-        - https://cdn.discordapp.com
-        - http://cdn.discordapp.com
-        - https://textures.minecraft.net
-        - http://textures.minecraft.net
-    # Skins in this list will be disabled, so users can't set them.
-    # Can be bypassed with 'skinsrestorer.bypassdisabled'.
-    disabledSkins:
-        enabled: false
-        list: 
-        - steve
-        - owner
-    # To enable per skin permissions you must agree to these rules:
-    # - Do not monetize players being able to use their own skin
-    # - Do not force players to steve skins and make them pay to use their own skin
-    # - You can charge them for custom skins, but not their own skin
-    # If you agree, set this to: 'I will follow the rules'
-    perSkinPermissionsConsent: ''
-    # Allows the usage of per-skin permission.
-    # Example: skinsrestorer.skin.xknat OR skinsrestorer.skin.Pistonmaster
-    # with "skinsrestorer.ownskin" players can run /skin set <their own name>.
-    # [!] Only enable if you have set up permissions properly and know what you are doing.
-    # [!] This option only works if 'commands.perSkinPermissionsConsent' is consented to.
-    perSkinPermissions: false
-    # How many commands to store in the player's command history.
-    # This is used for the /skin undo command.
-    # Use 0 to disable storing command history.
-    maxHistoryLength: 36
-    # How many favourites a player may have.
-    # This is used for the /skin favourite command.
-    # Use 0 to disable storing favourites.
-    maxFavouriteLength: 180
-    customHelp:
-        # Override the automatically generated translated help message with a custom one.
-        # This is useful if you want to have a custom help message for your server.
-        # This only affects the base help message when running /skin with no parameters, not the error/subcommand help messages.
-        enabled: false
-        # The custom help message to send to the player when running /skin with no parameters.
-        message: 
-        - <yellow>Skin plugin Help
-        - <gray>---------------------
-        - <gray>/skin set <skin> - <yellow>Set your skin
-    # <!! Warning !!>
-    # This option will disable the /skin command from being registered on the server.
-    # Do not disable this unless you are overriding the /skin command with a different plugin or you don't want the skin command.
-    # Requires a server restart to take effect.
-    disableSkinCommand: false
-    # <!! Warning !!>
-    # This option will disable the /skins command from being registered on the server.
-    # Do not disable this unless you are overriding the /skins command with a different plugin or you don't want the GUI command.
-    # Requires a server restart to take effect.
-    disableGUICommand: false
-
-# Control what skins appear in the /skins GUI
-gui:
-    # Control what skin is displayed when a player does not have permission for a skin.
-    # This is the end part of the skin texture URL.
-    # You can obtain the texture URL from /sr info skin <skinName>
-    notUnlockedSkin: c10591e6909e6a281b371836e462d67a2c78fa0952e910f32b41a26c48c1757c
-    # Control custom skins in the /skins GUI
-    custom:
-        # Whether custom skins are enabled in the /skins GUI
-        enabled: true
-        # Order of custom skins relative to the other skin types
-        index: 0
-        # Whether only specific custom skins are allowed in the /skins GUI
-        onlyShowList: false
-        # Specific custom skins to show in the /skins GUI
-        list: 
-        - xknat
-        - pistonmaster
-    # Control player skins in the /skins GUI
-    players:
-        # Whether player skins are enabled in the /skins GUI
-        enabled: false
-        # Order of player skins relative to the other skin types
-        index: 1
-        # Whether only specific player skins are allowed in the /skins GUI
-        onlyShowList: false
-        # Specific player skins to show in the /skins GUI
-        list: 
-        - 7dcfc130-344a-4719-9fbe-3176bc2075c6
-        - b1ae0778-4817-436c-96a3-a72c67cda060
-    # Control recommended skins in the /skins GUI
-    recommendations:
-        # Whether recommended skins are enabled in the /skins GUI
-        enabled: true
-        # Order of recommended skins relative to the other skin types
-        index: 2
-        # Whether only specific recommended skins are allowed in the /skins GUI
-        onlyShowList: false
-        # Specific recommended skins to show in the /skins GUI
-        list: 
-        - vampire
-        - space-suit
-
-###########
-# Storage #
-###########
-
-# Here you can design the plugin the way you want it.
-
-# Enable or disable default skins
-# applyForPremium: false will only put a skin on skinless/steve players.
-# If there is more than one, the plugin will choose a random one.
-# [?] Supports custom & url.png skins, read SkinFile Generator below. [?]
-storage:
-    defaultSkins:
-        enabled: false
-        applyForPremium: false
-        list: 
-        - xknat
-        - pistonmaster
-    # <!! Warning !!>
-    # Enable this will require players to run "/skin update" to update their skin.
-    disallowAutoUpdateSkin: false
-    # Time that skins are stored in the database before we request again (in minutes).
-    # [?] A value of 0 will disable auto updating of skins and players will need to manual run /skin update.
-    # [!] Lowering this value will increase the amount of requests which could be a problem on large servers.
-    skinExpiresAfter: 15
-    # How long we should cache the UUIDs of players (in minutes).
-    uuidExpiresAfter: 60
-
-#########
-# Proxy #
-#########
-
-# Change proxy specific settings here.
-proxy:
-    # Disable all SkinsRestorer commands on specific backend servers.
-    # [!] This only works & is relevant if you're using proxies like BungeeCord / Velocity
-    notAllowedCommandServers:
-        # Whether to enable the backend server command blocking feature.
-        enabled: true
-        # Block players from executing SkinsRestorer commands before having joined a server.
-        ifNoServerBlockCommand: true
-        # When false means servers in the list are NOT allowed to execute SkinsRestorer commands, true means ONLY servers in the list are allowed to execute SkinsRestorer commands.
-        allowList: false
-        # List of servers where SkinsRestorer commands are allowed/disallowed depending on the 'allowList' setting.
-        list: 
-        - auth
-
-##########
-# Server #
-##########
-
-# Change server specific settings here.
-server:
-    # Disabling this will stop SkinsRestorer from changing skins when a player loads a server resource pack.
-    # When a player loads a server resource pack, their skin is reset. By default, SkinsRestorer reapplies the skin when the player reports that the resource pack has been loaded or an error has occurred.
-    resourcePackFix: true
-    # Dismounts a mounted (on a horse, or sitting) player when their skin is updated, preventing players from becoming desynced.
-    # File override = ./plugins/SkinsRestorer/disableDismountPlayer.txt
-    dismountPlayerOnSkinUpdate: true
-    # Remounts a player that was dismounted after a skin update (above option must be true).
-    # Disabling this is only recommended if you use plugins that allow you ride other players, or use sit. Otherwise you could get errors or players could be kicked for flying.
-    # File override = ./plugins/SkinsRestorer/disableRemountPlayer.txt
-    remountPlayerOnSkinUpdate: true
-    # Dismounts all passengers mounting a player (such as plugins that let you ride another player), preventing those players from becoming desynced.
-    # File override = ./plugins/SkinsRestorer/enableDismountEntities.txt
-    dismountPassengersOnSkinUpdate: false
-    sound:
-        # Play a sound when a player runs /skin to change their skin.
-        enabled: true
-        # Sound to play when a player runs /skin to change their skin.
-        # You can find the allowed format and values at
-        # https://javadoc.io/static/com.github.cryptomorin/XSeries/11.0.0/com/cryptomorin/xseries/XSound.html#parse(java.lang.String)
-        value: ENTITY_PLAYER_TELEPORT, 0.7
-login:
-    # Stops the process of setting a skin if the LoginEvent was canceled by an AntiBot plugin.
-    # [?] Unsure? leave this true for better performance.
-    noSkinIfLoginCanceled: true
-    # This will make SkinsRestorer always apply the skin even if the player joins as premium on an online mode server.
-    alwaysApplyPremium: false
-api:
-    # Here you can fill in your APIKey for lower MineSkin request times.
-    # Key can be requested from https://mineskin.org/apikey
-    # [?] A key is not required, but recommended.
-    mineskinAPIKey: key
-    # SkinsRestorer uses MineSkin to generate usable skins from links.
-    # All skins generated by MineSkin are by default shown in their public gallery on their website.
-    # Enabling this option will hide all skins generated by MineSkin from their public gallery.
-    mineskinSecretSkins: false
-    # SkinsRestorer provides curated recommended skins for players to use
-    # These skin can be used via /skin random and the /skins GUI
-    # If you would like to opt out of this feature, set this to false.
-    # It will prevent loading of recommended skins from storage and downloading new ones.
-    # Be aware that commands like /skin random will not work without this feature.
-    fetchRecommendedSkins: true
-
-###############
-# Danger Zone #
-###############
-
-# ABSOLUTELY DO NOT CHANGE SETTINGS HERE IF YOU DO NOT KNOW WHAT YOU DO!
-advanced:
-    # <!! Warning !!>
-    # Enabling this will stop SkinsRestorer to change skins on join.
-    # Handy for when you want run /skin apply to apply skin after texturepack popup
-    disableOnJoinSkins: false
-    # <!! Warning !!>
-    # This enables the PaperMC join event integration that allows instant skins on join.
-    # It is recommended over the fallback listener because it is smoother and should not lag the server.
-    # It also fixes all resource pack skin apply issues.
-    # If your players are experiencing extremely long loading screens, try disabling this.
-    enablePaperJoinListener: true
-    # <!! Warning !!>
-    # When enabled SkinsRestorer will not try to connect to any web server, which means the follow things won't work:
-    # Getting new skins from Mojang, looking up uuids of players, skin url, update checking and more.
-    # SkinsRestorer will only be able to access already downloaded skins.
-    # This is useful for servers that are not connected to the internet or have a firewall blocking connections.
-    noConnections: false
-
-# Updater Settings
-# <!! Warning !!>
-# Using outdated version void's support, compatibility & stability.
-
-# To block all types of automatic updates (which can risk keeping an exploit):
-# Create a file called 'noupdate.txt' in the plugin directory (./plugins/SkinsRestorer/ )
-
-################
-# DEV's corner #
-################
-
-# Enable these on the dev's request
-dev:
-    # Enable to start receiving debug messages about api requests & more.
-    debug: false
-
-# End #
-
-# Useful tools:
+# Announce whether or not your server supports Forge. If you run a modded server, we
+# suggest turning this on.
 # 
-# SkinFile Generator:
-# With SkinFile Generator, you can upload your own custom skin to get a unique .skin file that you can put in your skins folder, to use with SkinsRestorer.
-# Check it out here: https://generator.skinsrestorer.net
-# 
-# SkinSystem:
-# With SkinSystem, you, as a server owner, can connect AuthMe with the SkinSystem website that you can host, to give your players the ability to upload custom skins.
-# Check it out here: https://github.com/SkinsRestorer/SkinSystem
-# 
-# Useful Links #
-# Website: https://skinsrestorer.net
-# Docs: https://skinsrestorer.net/docs
-# Spigot: https://skinsrestorer.net/spigot
-# Github: https://github.com/SkinsRestorer/SkinsRestorer
-# Discord: https://skinsrestorer.net/discord
+# If your network runs one modpack consistently, consider using ping-passthrough = "mods"
+# instead for a nicer display in the server list.
+announce-forge = true
+
+# If enabled (default is false) and the proxy is in online mode, Velocity will kick
+# any existing player who is online if a duplicate connection attempt is made.
+kick-existing-players = false
+
+# Should Velocity pass server list ping requests to a backend server?
+# Available options:
+# - "disabled":    No pass-through will be done. The velocity.toml and server-icon.png
+#                  will determine the initial server list ping response.
+# - "mods":        Passes only the mod list from your backend server into the response.
+#                  The first server in your try list (or forced host) with a mod list will be
+#                  used. If no backend servers can be contacted, Velocity won't display any
+#                  mod information.
+# - "description": Uses the description and mod list from the backend server. The first
+#                  server in the try (or forced host) list that responds is used for the
+#                  description and mod list.
+# - "all":         Uses the backend server's response as the proxy response. The Velocity
+#                  configuration is used if no servers could be contacted.
+ping-passthrough = "DISABLED"
+
+enable-player-address-logging = true
+
+[servers]
+# Configure your servers here. Each key represents the server's name, and the value
+# represents the IP address of the server to connect to.
+lobby = "188.212.101.193:18877"
+Roleplay = "188.212.101.193:42276"
+BoxPvP = "188.212.101.193:18878"
+# In what order we should try servers when a player logs in or is kicked from a server.
+try = ["lobby"]
+
+[forced-hosts]
+# Configure your forced hosts here.
+[advanced]
+# How large a Minecraft packet has to be before we compress it. Setting this to zero will
+# compress all packets, and setting it to -1 will disable compression entirely.
+compression-threshold = 256
+
+# How much compression should be done (from 0-9). The default is -1, which uses the
+# default level of 6.
+compression-level = -1
+
+# How fast (in milliseconds) are clients allowed to connect after the last connection? By
+# default, this is three seconds. Disable this by setting this to 0.
+login-ratelimit = 3000
+
+# Specify a custom timeout for connection timeouts here. The default is five seconds.
+connection-timeout = 5000
+
+# Specify a read timeout for connections here. The default is 30 seconds.
+read-timeout = 30000
+
+# Enables compatibility with HAProxy's PROXY protocol. If you don't know what this is for, then
+# don't enable it.
+haproxy-protocol = false
+
+# Enables TCP fast open support on the proxy. Requires the proxy to run on Linux.
+tcp-fast-open = true
+
+# Enables BungeeCord plugin messaging channel support on Velocity.
+bungee-plugin-message-channel = true
+
+# Shows ping requests to the proxy from clients.
+show-ping-requests = false
+
+# By default, Velocity will attempt to gracefully handle situations where the user unexpectedly
+# loses connection to the server without an explicit disconnect message by attempting to fall the
+# user back, except in the case of read timeouts. BungeeCord will disconnect the user instead. You
+# can disable this setting to use the BungeeCord behavior.
+failover-on-unexpected-server-disconnect = true
+
+# Declares the proxy commands to 1.13+ clients.
+announce-proxy-commands = true
+
+# Enables the logging of commands
+log-command-executions = false
+
+# Enables logging of player connections when connecting to the proxy, switching servers
+# and disconnecting from the proxy.
+log-player-connections = false
+
+# Allows players transferred from other hosts via the
+# Transfer packet (Minecraft 1.20.5) to be received.
+accepts-transfers = false
+
+[query]
+# Whether to enable responding to GameSpy 4 query responses or not.
+enabled = false
+
+# If query is enabled, on what port should the query protocol listen on?
+port = 18876
+
+# This is the map name that is reported to the query services.
+map = "Velocity"
+
+# Whether plugins should be shown in query response by default or not
+show-plugins = false

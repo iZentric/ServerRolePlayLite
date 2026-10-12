@@ -1,11 +1,1 @@
-id: '#1'
-name: '&eLoot Table'
-description: []
-itemamount: 1
-item:
-  '0':
-    item:
-      ==: org.bukkit.inventory.ItemStack
-      v: 2586
-      type: POTATO
-    chance: 100.0
+id:-532113700
