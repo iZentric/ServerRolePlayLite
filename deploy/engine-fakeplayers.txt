@@ -1,1 +1,1 @@
-2026-10-12: diagnostic isolated Curtain fake-player test: disable ONLY its incompatible NaturalSpawnerMixin in a derived test-only JAR, never on production/release; verify /player listing and status.
+2026-10-12: triage CatServer/Curtain fake player login command exception after temporary 3 bots immediately disappear; capture stack context. Test only, no live/release modification.

@@ -184,6 +184,8 @@ def main(pack, curtain, output):
             report["root_causes"] = [line[-600:] for line in lines.splitlines() if re.search(
                 r"Caused by:|Exception:|Error:|InjectionError|InvalidMixinException|MixinTransformerError", line, re.I)][:35]
             report["log_tail"] = lines[-1800:]
+            report["command_error_context"] = [lines[max(0, m.start() - 500):m.start() + 2400]
+                                               for m in list(re.finditer(r"An unexpected error occurred trying to execute that command|benchA\d+.*(?:left the game|disconnected)", lines))[:5]]
             report["valid"] &= not report["critical_lines"]
         (output / "result.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
         print(json.dumps({k: v for k, v in report.items() if k != "steady_rss_mib"}, indent=2, ensure_ascii=False), flush=True)
