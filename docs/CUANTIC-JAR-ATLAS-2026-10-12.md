@@ -92,3 +92,27 @@ Tabelul de consum de pe site citește valorile **verbatim** din [ENGINE-NATIVE-R
 Astăzi avem **2 probe pe braț** pentru singurii doi candidați echivalenți, deci fiecare măsură este NECONCLUDENT. Diferența dintre medianele RSS este **2,05 MiB** față de variații interne de **246,9 și 290,0 MiB**: un raport de peste 100 de ori. A declara „cel mai mic consum" din aceste date ar fi zgomot prezentat ca rezultat.
 
 **Răspunsul la „care e cel mai performant JAR cu cel mai mic consum" este, onest: NEDECIS.** Tier list-ul arată cine poate fi comparat și cine nu, nu cine a câștigat.
+
+## Scara CUANTIC — cum urcă un motor din C în S (și ce nu se poate fură)
+
+Secțiunea de față este singura parte a atlasului care poate schimba tier list-ul de pe site.
+Tooling: `scripts/cuantic_ladder.py` + workflow-ul `CUANTIC LADDER` (`.github/workflows/cuantic-ladder.yml`),
+care publică [CUANTIC-LADDER-RESULT.md](CUANTIC-LADDER-RESULT.md). Site-ul citește acel fișier și
+adaută automat rândurile candidaților; dacă fișierul lipsește, rândurile rămân **NEAVĂGAT**.
+
+Treapta se parcurge într-o singură direcție și fiecare eșec se raportează, nu se ascunde:
+
+| Treaptă | Ce se întâmplă | Ce se publică | Ce NU se publică |
+|---|---|---|---|
+| 1 · Identitate | build 1.16.5 luat din sursa oficială, SHA-256 consemnat, licență notată | URL, SHA, licență | „cea mai bună variantă” fără SHA |
+| 2 · Fum 36/14 | pack identic, înlocuit **doar** motorul, căutare de `Done` | `Done` sau linia de eroare | scor MSPT pentru un motor care nu a pornit |
+| 3 · A/B | minim **3 probe valide pe braț**, aceeași mașină, același seed, 55 s încălzire + 75 s stabil | mediane + plaja din interiorul brațului | procent de câștig sub plaja de zgomot |
+| 4 · Poarta | `scripts/cuantic_tenx_gate.py` cere clienți Forge confirmați în `/list`, vehicule, survival, pluginuri | `10X_PRELIMINAR` sau `SUB_ȚINTĂ` sau `NEMĂSURAT` | orice afirmație de 10×/„cel mai bun” |
+
+De ce e nevoie de un runner: `repo1.maven.org` și `objects.githubusercontent.com` nu sunt accesibile
+din sandbox-ul agentului (căutarea Mohist/LoliServer a dat 404, pagina Magma a dat 522). Rulează
+**numai** pe `ubuntu-latest`, niciodată pe gazda live și niciodată ca pas automat al unui deploy.
+
+Când un candidat trece treapta 2, el nu „a câștigat”: a devenit comparabil. Când trece și treapta 3,
+cel mult devine `PARITATE_OBSERVATĂ` sau `RESPINS` — niciodată „câștigător”, pentru că proba e sintetică
+(fără jucători, fără vehicule, fără client Forge). Titlul live-ului se schimbă doar la treapta 4.

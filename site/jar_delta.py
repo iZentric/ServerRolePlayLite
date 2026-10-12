@@ -22,6 +22,7 @@ ANALYSIS = DOCS.parent / "analysis"
 
 FAMILY = DOCS / "ENGINE-FAMILY-RESULT.md"
 BENCH = ANALYSIS / "BENCH-LIVE.md"
+LADDER = DOCS / "CUANTIC-LADDER-RESULT.md"
 
 # (document, cheia brațului de referință, cheia brațului candidat, metrici)
 # Fiecare metrică: cheia din sumarul JSON al acelui raport.
@@ -151,6 +152,30 @@ def unmeasured_candidates():
         if any(name == k or name.startswith(k + " ") for k in UNMEASURED_PREFIXES):
             names.append(name)
     return sorted(names)
+
+
+def ladder_rows():
+    """Ultimele probe ale SCĂRII (CI pe runner). lipsa fișierului = randuri NEAVĂGATE, nu 0."""
+    md = _read(LADDER)
+    if not md:
+        return []
+    data = _json_block(md)
+    rows = []
+    for name, cand in (data.get("candidates") or {}).items():
+        ab = cand.get("ab") or {}
+        if isinstance(cand.get("error"), str):
+            status = "ESUAT · " + cand["error"][:120]
+        elif cand.get("smoke_passed"):
+            status = "a pornit 36/14 · " + str(ab.get("verdict") or "A/B neîncercat")
+        else:
+            status = "nu a ajuns la `Done` · fără scor"
+        rows.append({"name": name, "boot_s": cand.get("boot_done_s"),
+                     "sha": (cand.get("sha256_actual") or cand.get("sha256_expected") or "")[:12],
+                     "licence": cand.get("licence_declared") or "neverificată",
+                     "plugins": cand.get("plugins_enabled"),
+                     "status": status, "verdict": ab.get("verdict") or "NEAVĂGAT",
+                     "reason": ab.get("reason") or cand.get("error") or ""})
+    return rows
 
 
 def same_run_pairs():
@@ -299,8 +324,23 @@ def _matrix_rows(pairs):
             f'<td><span class="jd-badge {chip}">{inline(state)}</span></td>'
             f'<td>{mods}</td><td>{plugins}</td><td class="jd-num"><b>{boot}</b></td>'
             f'<td>{inline(_candidate_note(name, pairs, info))}</td></tr>')
+    tried = {r["name"].split(" ")[0].lower() for r in ladder_rows()}
+    for cand in ladder_rows():
+        chip = "ok" if "a pornit" in cand["status"] else ("bad" if cand["status"].startswith("ESUAT") else "none")
+        boot = f"{_ro(cand['boot_s'], 3)} s" if isinstance(cand["boot_s"], (int, float)) else "—"
+        plugins = f"{cand['plugins']}/14" if isinstance(cand["plugins"], int) else "—"
+        out.append(
+            f'<tr data-delta-row data-engine="{re.sub(r"[^a-z0-9-]", "-", cand["name"].lower())}">'
+            f'<th scope="row"><b>{inline(cand["name"])}</b>'
+            f'<small>scara CUANTIC pe runner · SHA {cand["sha"] or "—"} · licență {inline(cand["licence"])}</small></th>'
+            f'<td><span class="jd-badge {chip}">{inline(cand["status"])}</span></td>'
+            f'<td>36 (neschimbat)</td><td>{plugins}</td><td class="jd-num"><b>{boot}</b></td>'
+            f'<td>{inline(cand["reason"] or cand["verdict"])}</td></tr>')
+        tried.add(cand["name"].split(" ")[0].lower())
     for name in unmeasured_candidates():
         short = name.replace(" 1.16.5", "").strip()
+        if short.lower().split(" ")[0] in tried:
+            continue
         reason = unmeasured_reasons().get(name, "nu a fost rulat cu pack-ul nostru în această rundă")
         out.append(
             f'<tr data-delta-row data-engine="{re.sub(r"[^a-z0-9-]", "-", short.lower())}">'
@@ -321,6 +361,8 @@ def panel():
         f'<small>{("+" if a["pct"] > 0 else "−")}{_ro(abs(a["delta"]), 1)} față de 1.5.9</small></td></tr>'
         for a in archive_deltas())
     measured = sum(1 for info in family_smokes().values() if info["passed"])
+    untried = [n for n in unmeasured_candidates()
+               if n.split(" ")[0].lower() not in {r["name"].split(" ")[0].lower() for r in ladder_rows()}]
     total = len(family_smokes()) + len(unmeasured_candidates())
     return f'''<section id="diferente" class="jd-section" aria-labelledby="jd-title">
 <div class="jd-overline"><span aria-hidden="true">⇄</span> DIFERENȚA MĂSURATĂ <span class="jd-rule"></span> 12 OCT 2026</div>

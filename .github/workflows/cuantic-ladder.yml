@@ -1,0 +1,94 @@
+# Scara CUANTIC: transformă un JAR „NEAVĂGAT” în SHA + smoke + A/B, pe runner GitHub izolat.
+# Rulează la cerere sau la push pe fișierul-țintă de mai jos, nu automat după merge.
+# Un eșec de rețea se raportează ca eșec, nu ca verdict de performanță.
+name: "CUANTIC LADDER — candidati hibrid 1.16.5: SHA, smoke si A/B cu 3 probe"
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "doar un candidat (Mohist / LoliServer / Magma); gol = toți"
+        required: false
+        default: ""
+      mode:
+        description: "smoke = fără A/B; completa = smoke + 3 brațe a 3 probe"
+        type: choice
+        required: false
+        default: smoke
+        options: [smoke, completa]
+  push:
+    branches: ["arena/9bbcb24f-serverroleplaylite"]
+    paths: ["deploy/ladder.txt", ".github/workflows/cuantic-ladder.yml", "scripts/cuantic_ladder.py"]
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  ladder:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: Testele de gardă înaintea oricărei măsurători
+        run: python3 -m unittest discover -s tests -q
+      - name: Adu pack-ul de referință, neschimbat, din release-ul lite
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/cuantic-ladder
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/cuantic-ladder
+          sha256sum /tmp/cuantic-ladder/CUANTIC-Server-CatServer-1.7.7.zip
+      - name: Descoperă candidații 1.16.5 din sursele oficiale
+        id: spec
+        run: |
+          set -euo pipefail
+          ONLY="${{ inputs.only }}"
+          MOHIST_VERSION=""
+          if MOHIST_LIST=$(python3 scripts/cuantic_ladder.py --list-maven com.mohistmc:mohist 2>/dev/null); then
+            MOHIST_VERSION=$(printf '%s\n' "$MOHIST_LIST" | grep -E '^1\.16\.5' | tail -1 || true)
+          fi
+          if [ -n "$MOHIST_VERSION" ]; then
+            SPEC="Mohist ${MOHIST_VERSION}|https://repo1.maven.org/maven2/com/mohistmc/mohist/${MOHIST_VERSION}/mohist-${MOHIST_VERSION}.jar||GPL-3.0"
+          else
+            SPEC="Mohist 1.16.5 (Maven Central negasit din acest runner)"
+          fi
+          SPEC="$SPEC,LoliServer 1.16.5 (sursa GitHub a dat 404 la verificare; licenta de confirmat),Magma 1.16.5 (GitLab a dat 522; proiect 1.16.x arhivat)"
+          if [ -n "$ONLY" ]; then
+            SPEC=$(printf '%s' "$SPEC" | tr ',' '\n' | grep -i -- "$ONLY" | paste -sd, - || true)
+            if [ -z "$SPEC" ]; then echo "candidatul '$ONLY' nu e in lista cunoscuta"; exit 2; fi
+          fi
+          echo "spec=$SPEC" >> "$GITHUB_OUTPUT"
+          echo "Candidati: $SPEC"
+      - name: Scara A — descărcare cu SHA + smoke pe 36/14 (A/B doar la cerere)
+        run: |
+          set -euo pipefail
+          MODE=--no-ab
+          if [ "${{ inputs.mode }}" = "completa" ]; then MODE=""; fi
+          python3 scripts/cuantic_ladder.py --spec '${{ steps.spec.outputs.spec }}' \
+            --pack /tmp/cuantic-ladder/CUANTIC-Server-CatServer-1.7.7.zip \
+            --out /tmp/cuantic-ladder/report --trials 3 $MODE > /tmp/cuantic-ladder/raw.txt 2>&1;
+          rc=$?
+          sed -n '/^{/,/^}/p' /tmp/cuantic-ladder/raw.txt > /tmp/cuantic-ladder/report.json || true
+          if [ ! -s /tmp/cuantic-ladder/report.json ]; then
+            RC=$RC python3 -c 'import json,os;print(json.dumps({"error":"ladder nu a produs JSON","exit_code":int(os.environ.get("RC","1")),"raw_tail":open("/tmp/cuantic-ladder/raw.txt",errors="replace").read()[-1200:]}))' > /tmp/cuantic-ladder/report.json
+          fi
+          cat /tmp/cuantic-ladder/report.json
+      - name: Publică rezultatul brut, inclusiv eșecurile de rețea
+        if: always()
+        run: |
+          set -euo pipefail
+          { echo '# Scara CUANTIC — candidați hibrid 1.16.5: SHA, smoke 36/14 și A/B'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; echo;
+            echo 'Runner GitHub izolat, Java 17, pack neschimbat (36 moduri + 14 pluginuri). Serverul live nu a fost atins.';
+            echo 'Un candidat care nu ajunge la `Done` este INCOMPATIBIL, nu mai lent; fără 3 probe valide pe braț nu există verdict.'; echo;
+            echo '```json'; cat /tmp/cuantic-ladder/report.json 2>/dev/null || echo 'INCOMPLET — vezi logul runului'; echo '```';
+          } > docs/CUANTIC-LADDER-RESULT.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/CUANTIC-LADDER-RESULT.md
+          git commit -m 'ladder: SHA + smoke pentru candidatii hibrid 1.16.5' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true
