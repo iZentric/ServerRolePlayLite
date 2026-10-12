@@ -1,5 +1,5 @@
-# ALIVE CUANTIC — 2026-10-12 09:23:15 UTC
+# ALIVE CUANTIC — 2026-10-12 19:49:01 UTC
 
 ```
-NECONFIRMAT extern — STATUS FAILED: [Errno 111] Connection refused; fara restart din testul site-ului
+SUS public (status handshake, nu login modat): {"version": {"name": "CUANTIC 1.16.5", "protocol": 754}, "players": {"online": 0, "max": 25}}
 ```
