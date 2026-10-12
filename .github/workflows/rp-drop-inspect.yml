@@ -89,7 +89,7 @@ jobs:
             F=$(ls /tmp/drop/arhiva.* | head -1)
             python3 scripts/rp_archive_inspect.py --archive "$F" --extract-dir /tmp/x --out "$D" 2>&1 | tail -40 | tee -a "$D/DIAGNOSTIC.txt" || true
             if [ -d "$D/config" ]; then
-              cd "$D/config"; ls -1S | tail -n +401 | xargs -r rm -f
+              cd "$D/config"; ls -1S | tail -n +601 | xargs -r rm -f   # scriptul isi face singur selecia pe latime; aici doar plasa de siguranta
               cd "$GITHUB_WORKSPACE"
             fi
             rm -rf /tmp/x /tmp/drop

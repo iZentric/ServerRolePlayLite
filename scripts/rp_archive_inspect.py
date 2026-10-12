@@ -179,6 +179,7 @@ def collect(root: Path, out: Path, budget: int = MAX_TOTAL) -> dict:
     (out / "config").mkdir(parents=True, exist_ok=True)
     kept, skipped = [], {"teren": 0, "suspect": 0, "mare": 0, "binar": 0}
     total_bytes = 0
+    cand = []
     for p in sorted(root.rglob("*")):
         if not p.is_file():
             continue
@@ -204,12 +205,26 @@ def collect(root: Path, out: Path, budget: int = MAX_TOTAL) -> dict:
         if size > MAX_FILE and not re.search(r"\.(log|txt|sk|yml|yaml|properties|cfg|toml|json)$", body, re.I):
             skipped["mare"] += 1
             continue
+        cand.append((body, size))
+    # latime inainte de adancime: maxim 6 fisiere pe grup (dir-parinte), apoi buget pe prioritati
+    per_group: dict[str, list[tuple[str, int]]] = {}
+    for body, size in cand:
+        g = body.rsplit("/", 2)[0] if body.count("/") >= 2 else "(radacina)"
+        per_group.setdefault(g, []).append((body, size))
+    picked_list: list[tuple[int, int, str, int]] = []
+    for g, rows in per_group.items():
+        rows.sort(key=lambda r: -r[1])
+        for pr_i, (body, size) in enumerate(rows[:6]):
+            prio = 0 if "/" not in body else (1 if re.search(r"\.(log|txt|sk)$", body, re.I) else 2)
+            picked_list.append((prio, pr_i, body, size))
+    picked_list.sort(key=lambda t: (t[0], -t[3], t[2]))
+    for prio, _i, body, size in picked_list:
         if total_bytes >= budget:
             skipped["mare"] += 1
             continue
         dst = out / "config" / body.replace("/", "__")
         try:
-            if re.search(r"\.(log)$", body, re.I):
+            if re.search(r"\.(log)$", body, re.I) or size > MAX_FILE:
                 n = _tail(p, dst)
             elif size > MAX_FILE:
                 n = _tail(p, dst, TAIL_BYTES)
