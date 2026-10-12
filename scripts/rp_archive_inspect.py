@@ -140,8 +140,10 @@ def scrub(path: Path) -> None:
 
 
 def keep_body(rel: str) -> str:
-    """Varianta de drum care trece de keep(); gol daca nu vrem fisierul."""
-    for b in _candidates(rel):
+    """Varianta de drum care trece de keep(); gol daca nu vrem fisierul.
+    Preferam varianta FARA folderul de wrap (arhivele de backup au de regula ./server/...)."""
+    cands = _candidates(rel)
+    for b in reversed(cands) if len(cands) > 1 else cands:
         if keep(b):
             return b
     return ""
@@ -158,7 +160,8 @@ def _candidates(rel: str) -> list[str]:
 
 def keep(rel: str) -> bool:
     """Decizia e pe drumul din arhiva, ca sa mearga si fara extragere."""
-    for body in _candidates(rel):
+    cands = _candidates(rel)
+    for body in (reversed(cands) if len(cands) > 1 else cands):
         if SKIP_NAME.search(body):
             return False
         if SKIP_DIR.search("/" + body) or SKIP_DIR_TAIL.search("/" + body):
@@ -175,7 +178,7 @@ def keep(rel: str) -> bool:
     return False
 
 
-def collect(root: Path, out: Path, budget: int = MAX_TOTAL) -> dict:
+def collect(root: Path, out: Path, budget: int = MAX_TOTAL, prefix: str = "") -> dict:
     (out / "config").mkdir(parents=True, exist_ok=True)
     kept, skipped = [], {"teren": 0, "suspect": 0, "mare": 0, "binar": 0}
     total_bytes = 0
@@ -185,6 +188,8 @@ def collect(root: Path, out: Path, budget: int = MAX_TOTAL) -> dict:
             continue
         rel = p.relative_to(root).as_posix()
         body = keep_body(rel)
+        if body and prefix:
+            body = prefix + "/" + body
         try:
             size = p.stat().st_size
         except OSError:
@@ -209,13 +214,19 @@ def collect(root: Path, out: Path, budget: int = MAX_TOTAL) -> dict:
     # latime inainte de adancime: maxim 6 fisiere pe grup (dir-parinte), apoi buget pe prioritati
     per_group: dict[str, list[tuple[str, int]]] = {}
     for body, size in cand:
-        g = body.rsplit("/", 2)[0] if body.count("/") >= 2 else "(radacina)"
+        if "/" not in body:
+            g = "(radacina)"
+        elif body.count("/") >= 2:
+            g = body.rsplit("/", 2)[0]
+        else:
+            g = body.rsplit("/", 1)[0]
         per_group.setdefault(g, []).append((body, size))
     picked_list: list[tuple[int, int, str, int]] = []
     for g, rows in per_group.items():
         rows.sort(key=lambda r: -r[1])
-        for pr_i, (body, size) in enumerate(rows[:6]):
-            prio = 0 if "/" not in body else (1 if re.search(r"\.(log|txt|sk)$", body, re.I) else 2)
+        keep_rows = rows if g == "(radacina)" else rows[:6]
+        for pr_i, (body, size) in enumerate(keep_rows):
+            prio = 0 if g == "(radacina)" else (1 if re.search(r"\.(log|txt|sk)$", body, re.I) else 2)
             picked_list.append((prio, pr_i, body, size))
     picked_list.sort(key=lambda t: (t[0], -t[3], t[2]))
     for prio, _i, body, size in picked_list:
@@ -273,9 +284,9 @@ def main(argv=None):
     skipped = {"teren": 0, "suspect": 0, "mare": 0, "binar": 0}
     kept_all, written = [], 0
 
-    def absorb(r: Path, budget: int) -> int:
+    def absorb(r: Path, budget: int, prefix: str = "") -> int:
         nonlocal rows, skipped, kept_all, written
-        picked = collect(r, out, budget)
+        picked = collect(r, out, budget, prefix)
         kept_all.extend(picked["kept"])
         for k in skipped:
             skipped[k] += picked["skipped"][k]
@@ -291,7 +302,7 @@ def main(argv=None):
         try:
             extract(n, sub)
             rows += _listing(n)
-            used += absorb(sub, max(0, MAX_TOTAL - used))
+            used += absorb(sub, max(0, MAX_TOTAL - used), n.name.replace(".tar.gz", "").replace(".tgz", ""))
         finally:
             shutil.rmtree(sub, ignore_errors=True)
 

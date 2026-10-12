@@ -46,11 +46,11 @@ class CollectTest(unittest.TestCase):
             (root / "srv" / "server.properties").write_text("view-distance=10\n", encoding="utf-8")
             out = Path(tmp) / "out"
             res = R.collect(root, out)
-            log = out / "config" / "srv__logs__latest.log"
-            self.assertTrue(log.is_file(), "coada de log trebuie sa iasa pe numele plat")
+            log = out / "config" / "logs__latest.log"
+            self.assertTrue(log.is_file(), "coada de log trebuie sa iasa")
             self.assertLessEqual(log.stat().st_size, R.LOG_TAIL_BYTES + 1)
             self.assertEqual({k["file"] for k in res["kept"]},
-                             {"srv/server.properties", "srv/logs/latest.log"})
+                             {"server.properties", "logs/latest.log"})
 
     def test_empty_archive_does_not_crash(self):
         import tempfile
