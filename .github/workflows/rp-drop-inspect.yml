@@ -71,19 +71,21 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           rm -f "$D/configuri.tar.gz"
           du -sh "$D"; echo "fisiere ramase: $(find "$D" -type f | wc -l)"
-      - name: Publică pe ramura rp-drop (text + inventar, nu binare)
+      - name: Publică pe ramura rp-drop, fara sa parasi branch-ul de lucru
         run: |
           set -eu
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git fetch -q origin rp-drop 2>/dev/null || true
-          git checkout -q -B rp-drop origin/rp-drop 2>/dev/null || git checkout -q -B rp-drop
-          rm -rf "rp-drop/${{ matrix.nume }}"
-          mkdir -p "rp-drop"
-          mv "out/rp-drop/${{ matrix.nume }}" "rp-drop/${{ matrix.nume }}"
+          git push -q origin origin/main:refs/heads/rp-drop 2>/dev/null || true
+          git fetch -q origin rp-drop
+          rm -rf /tmp/wt && git worktree add -q -B rp-drop /tmp/wt origin/rp-drop
+          mkdir -p "/tmp/wt/rp-drop"
+          rm -rf "/tmp/wt/rp-drop/${{ matrix.nume }}"
+          cp -a "out/rp-drop/${{ matrix.nume }}" "/tmp/wt/rp-drop/${{ matrix.nume }}"
+          cd /tmp/wt
           git add -A "rp-drop/${{ matrix.nume }}"
-          git commit -qm "rp-drop: ${{ matrix.nume }} citit (text only)" || echo "nimic nou"
-          git push -f origin rp-drop
+          git -c commit.gpgsign=false commit -qm "rp-drop: ${{ matrix.nume }} citit (text only, fara date jucatori)" || echo "nimic nou"
+          git push -q origin rp-drop
       - name: Dacă una pică, restul tot se publică
         if: always()
         run: echo "gata pentru ${{ matrix.nume }} (vezi logul pasilor de mai sus)"
