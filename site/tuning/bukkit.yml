@@ -1,20 +1,18 @@
-# bukkit.yml - stratul de tuning CUANTIC (limitare mobi + chunk-gc), identic pe toate variantele
+# bukkit.yml - stratul de tuning CUANTIC; End-ul trebuie sa ramana accesibil in survival.
 settings:
-  allow-end: false
+  allow-end: true
 spawn-limits:
-  monsters: 40
-  animals: 8
-  water-animals: 3
-  water-ambient: 5
-  ambient: 5
+  monsters: 20
+  animals: 6
+  water-animals: 2
+  water-ambient: 2
+  ambient: 0
 chunk-gc:
   period-in-ticks: 400
-  # load-threshold=0 = functia e DEZACTIVATA implicit; cu 300 elibereaza chunk-urile libere (RAM).
-  # Ghid: https://builtbybit.com/threads/guide-optimizing-spigot-remove-lag-fix-tps-improve-performance.187104/
   load-threshold: 300
 ticks-per:
   animal-spawns: 400
-  monster-spawns: 4
-  water-spawns: 11
-  ambient-spawns: 11
+  monster-spawns: 10
+  water-spawns: 40
+  ambient-spawns: 400
   autosave: 6000
