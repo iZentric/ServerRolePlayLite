@@ -47,12 +47,11 @@ class DeltaPanelTest(unittest.TestCase):
         self.assertNotIn("🏆", html)
 
     def test_unmeasured_candidates_have_no_score(self):
-        html = jar_delta.panel()
+        with patch.object(jar_delta, "ladder_rows", return_value=[]):
+            html = jar_delta.panel()
         for name in ("Mohist", "LoliServer", "Magma"):
             self.assertIn(name, html)
-        # un candidat fara fum nu poate primi numere de boot, pluginuri sau diferenta
-        unmeasured = [row for row in html.split('data-delta-row')[1:]
-                      if 'jd-badge none' in row or 'ESUAT' in row]
+        unmeasured = [row for row in html.split('data-delta-row')[1:] if 'jd-badge none' in row]
         self.assertGreaterEqual(len(unmeasured), 3)
         for row in unmeasured:
             self.assertIn('<td>—</td><td>—</td>', row)

@@ -353,7 +353,7 @@ def _matrix_rows(pairs):
             f'<th scope="row"><b>{inline(short)}</b>'
             f'<small>candidat neevaluat pe 36/14</small></th>'
             '<td><span class="jd-badge none">NEAVĂGAT</span></td><td>—</td><td>—</td>'
-            f'<td class="jd-num">—</td><td>{inline(reason)}</td></tr>')
+            f'<td class="jd-num"><b>—</b></td><td>{inline(reason)}</td></tr>')
     return "".join(out)
 
 
