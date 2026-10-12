@@ -9,10 +9,10 @@ import hashlib
 import json
 from pathlib import Path
 import re
-import shutil
 import subprocess
 import sys
 import time
+import zipfile
 
 from engine_ab import BOOT_LIMIT, JAR, prepare, rss_mb, cpu_time_seconds, metrics_from_log
 from minecraft_status import status
@@ -28,6 +28,32 @@ CURTAIN_SHA = "c9234d2c5ca43c337abac25a05022fe2f226c884855aa6941b6130c60777819d"
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def make_catserver_test_mod(source, dest):
+    """Disable ONLY Curtain's incompatible, non-player spawning redirect.
+
+    Fail closed on unexpected jar/mixin JSON. This derived jar is test-only,
+    neither released nor installed on the public server.
+    """
+    with zipfile.ZipFile(source) as zin, zipfile.ZipFile(dest, "w") as zout:
+        info = zin.getinfo("curtain.mixins.json")
+        config = json.loads(zin.read(info).decode("utf-8"))
+        mixins = config["mixins"]
+        if mixins.count("NaturalSpawnerMixin") != 1 or not all(
+            name in mixins for name in ("rules.command_player.PlayerListMixin",
+                                       "rules.command_player.ServerPlayerEntityMixin")):
+            raise ValueError("Curtain mixin layout changed; refusing test patch")
+        mixins.remove("NaturalSpawnerMixin")
+        for item in zin.infolist():
+            data = zin.read(item)
+            if item.filename == info.filename:
+                data = (json.dumps(config, indent=2) + "\n").encode("utf-8")
+            # Modified JAR cannot keep original zip signatures; LGPL attribution
+            # and original source/release identity stay in the benchmark report.
+            if item.filename.startswith("META-INF/") and item.filename.lower().endswith((".sf", ".rsa", ".dsa")):
+                continue
+            zout.writestr(item, data)
 
 
 def write_command(proc, text):
@@ -59,7 +85,7 @@ def wait_for(path, pattern, start, seconds=40, proc=None):
 def main(pack, curtain, output):
     output.mkdir(parents=True, exist_ok=True)
     report = {"method": "temporary GH runner, Java17, released 36/14 pack plus ONE isolated Curtain 1.16.5 test mod; 3 server-side fake players via /player; verify fresh list + local status, 40s ticking",
-              "limits": "Fake players are not network clients: no Forge FML login, resource pack, client FPS or vehicle-driver validation. Adding Curtain changes the test pack. This is a feasibility/smoke run, not a performance A/B or production recommendation.",
+              "limits": "Fake players are not network clients: no Forge FML login, resource pack, client FPS or vehicle-driver validation. Added Curtain changes the test pack; the test-only derived jar disables one incompatible non-player NaturalSpawnerMixin. Feasibility/smoke, NOT performance A/B or production recommendation.",
               "pack_sha256": sha(pack), "curtain_sha256": sha(curtain), "curtain_release": "Gu-ZT/Curtain 1.3.2/mc1.16.5",
               "expected_names": list(BOTS), "valid": False, "production_changes": False}
     logfile = output / "server.log"
@@ -73,7 +99,9 @@ def main(pack, curtain, output):
         prepare(pack, server)
         if sha(server / JAR) != JAR_SHA:
             raise ValueError("live JAR SHA mismatch")
-        shutil.copyfile(curtain, server / "mods" / CURTAIN)
+        make_catserver_test_mod(curtain, server / "mods" / CURTAIN)
+        report["test_mod_sha256"] = sha(server / "mods" / CURTAIN)
+        report["test_only_disabled_mixin"] = "NaturalSpawnerMixin (CatServer target mismatch; NOT a player mixin)"
         # Avoid competing with any public/local Minecraft service.
         props = server / "server.properties"
         with props.open("a", encoding="latin-1") as file:

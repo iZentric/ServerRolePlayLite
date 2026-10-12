@@ -35,7 +35,7 @@ jobs:
           { echo '# Fake players: CUANTIC pack + Curtain, test izolat'; echo;
             echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; echo;
             echo 'Curtain upstream: https://github.com/Gu-ZT/Curtain/releases/tag/1.3.2 (1.16.5; cod /player în ramura 1.16.5).'; echo;
-            echo 'Instalat NUMAI în copia temporară de test; pack-ul original are 36 moduri, testul are 37. Nici serverul live, nici release-ul nu au fost modificate.'; echo;
+            echo 'Testul adaugă un JAR Curtain derivat NUMAI în copia temporară: dezactivăm strict mixin-ul NaturalSpawnerMixin incompatibil cu CatServer; funcția /player rămâne. Pack-ul original are 36 moduri, testul are 37. Nici serverul live, nici release-ul nu au fost modificate.'; echo;
             echo 'Fake players folosesc conexiune internă, nu login FML real, FPS client sau mașini. Aceasta este probă de fezabilitate, nu A/B de performanță și nu 25 de oameni reali.'; echo;
             echo '```json'; cat /tmp/cuantic-fake/results/result.json 2>/dev/null || echo 'INCOMPLETE — no result'; echo '```';
           } > docs/ENGINE-FAKEPLAYERS-RESULT.md
