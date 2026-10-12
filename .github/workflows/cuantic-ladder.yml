@@ -47,8 +47,8 @@ jobs:
           mkdir -p /tmp/cuantic-ladder
           python3 scripts/cuantic_ladder_discover.py --no-probe --out /tmp/cuantic-ladder/discovery.json \
             | tail -1 > /tmp/cuantic-ladder/spec.txt
-          cat /tmp/cuantic-ladder/spec.txt
-          cat /tmp/cuantic-ladder/discovery.json
+          echo "Spec trimis scarii:"; cat /tmp/cuantic-ladder/spec.txt
+          echo "Descoperire:"; cat /tmp/cuantic-ladder/discovery.json
       - name: Scara A — descărcare cu SHA + smoke pe 36/14 (A/B doar la cerere)
         run: |
           set -uo pipefail

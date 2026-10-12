@@ -116,3 +116,13 @@ din sandbox-ul agentului (căutarea Mohist/LoliServer a dat 404, pagina Magma a 
 Când un candidat trece treapta 2, el nu „a câștigat”: a devenit comparabil. Când trece și treapta 3,
 cel mult devine `PARITATE_OBSERVATĂ` sau `RESPINS` — niciodată „câștigător”, pentru că proba e sintetică
 (fără jucători, fără vehicule, fără client Forge). Titlul live-ului se schimbă doar la treapta 4.
+
+## Surse verificate pe scară (12 oct 2026, runner GitHub)
+
+| Motor | URL oficial încercat | Rezultat |
+|---|---|---|
+| Mohist 1.16.5-1237 | `repo1.maven.org/maven2/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar` (8.697.940 octeți, sha256 `17d08ed544aab50f0c9c0281507a44d765cfeb371289a10d47e2143146255bff`) | accesibil din browser; primul runner l-a căutat cu numele greșit (`mohist-1.16.5-1237.jar`, fără classifier) și a primit 404 |
+| Magma 1.16.5-36.2.39-c1c5a946 | `git.magmafoundation.org/api/v4/projects/8/packages/maven/.../Magma-1.16.5-36.2.39-c1c5a946-server.jar` | `HTTP 522` din runner, la fel și pe pagina principală a proiectului — gazda e căzută, nu candidat mai lent |
+| LoliServer 1.16.5 | `github.com/Loli-Server/LoliServer` | `404` pe API-ul releases: repository stins; nu luăm binare de pe oglinzi neoficiale |
+
+Niciunul nu are încăfum pe pack-ul 36/14 înseamnă **NEAVĂGAT**, nu „mai slab”.

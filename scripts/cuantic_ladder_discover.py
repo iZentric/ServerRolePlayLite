@@ -18,11 +18,14 @@ USER_AGENT = "cuantic-ladder/1.0 (verificare sursa oficiala; GitHub Actions)"
 CANDIDATES = {
     "Mohist 1.16.5-1237": {
         "licence": "GPL-3.0",
+        # Maven Central publică „-server.jar” (8.697.940 octeti), nu numele simplu;
+        # SHA-256 din directorul oficial, recuperat 12 oct 2026.
+        "sha256": "17d08ed544aab50f0c9c0281507a44d765cfeb371289a10d47e2143146255bff",
         "urls": [
-            "https://repo1.maven.org/maven2/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237.jar",
-            "https://maven.mohistmc.com/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237.jar",
+            "https://repo1.maven.org/maven2/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar",
+            "https://maven.mohistmc.com/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar",
         ],
-        "note": "Maven Central este sursa indicata de Artifice; oglinda proprie a proiectului e fallback",
+        "note": "Maven Central este sursa oficiala indexata; oglinda MohistMC e fallback",
     },
     "Magma 1.16.5-36.2.39-c1c5a946": {
         "licence": "GPL-3.0 (de reconfirmat pe tag)",
@@ -62,7 +65,8 @@ def discover(only=None, offline=False, probe_timeout=25, probe=True):
     entries, parts = [], []
     for name, cfg in selected:
         entry = {"name": name, "licence": cfg["licence"], "note": cfg["note"],
-                 "tried": cfg["urls"], "url": None, "status": "fără sursă oficială"}
+                 "sha256": cfg.get("sha256"), "tried": cfg["urls"], "url": None,
+                 "status": "fără sursă oficială"}
         for url in cfg["urls"]:
             if not probe:
                 # fara sondaj pastram URL-ul oficial ca atare; scaderea il verifica
@@ -77,8 +81,10 @@ def discover(only=None, offline=False, probe_timeout=25, probe=True):
                 break
             entry["status"] = "niciun URL oficial nu a răspuns 200"
         entries.append(entry)
-        parts.append(f"{name}|{entry['url'] or ''}||{cfg['licence']}" if entry["url"]
-                     else f"{name} ({entry['status']}; {entry['note']})")
+        if entry["url"]:
+            parts.append(f"{name}|{entry['url']}|{entry['sha256'] or ''}|{cfg['licence']}")
+        else:
+            parts.append(f"{name} ({entry['status']}; {entry['note']})")
     return ",".join(parts), entries
 
 
