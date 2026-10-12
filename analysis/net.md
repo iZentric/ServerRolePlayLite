@@ -1,4 +1,4 @@
-# NET — 2026-10-09 20:39:07 UTC
+# NET — 2026-10-12 10:19:33 UTC
 ```
 list_public_ips: list_public_ips() missing 1 required positional argument: 'scope'
 STERSE: 0
