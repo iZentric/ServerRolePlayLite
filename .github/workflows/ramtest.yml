@@ -1,0 +1,28 @@
+name: RAMTEST — cat RAM ii prinde serverului (masurat, nu ghicit)
+on:
+  push:
+    paths: [ "scripts/ram-test.sh", "deploy/ram.txt", ".github/workflows/ramtest.yml" ]
+  workflow_dispatch:
+    inputs:
+      xmx: { description: "-Xmx nou (ex 4G, 8G)", required: false, default: "8G" }
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  r:
+    runs-on: [self-hosted]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: testeaza -Xmx
+        env:
+          XMX_NOU: ${{ github.event.inputs.xmx || '8G' }}
+        run: bash scripts/ram-test.sh
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

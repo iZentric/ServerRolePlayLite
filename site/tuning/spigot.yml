@@ -1,0 +1,29 @@
+# CUANTIC ULTRA - raze de activare taiate (mobii departe de jucatori dorm)
+settings:
+  save-user-cache-on-stop-only: true
+  netty-threads: 2
+world-settings:
+  default:
+    entity-activation-range:
+      animals: 12
+      monsters: 20
+      raiders: 24
+      misc: 6
+    entity-tracking-range:
+      players: 48
+      animals: 32
+      monsters: 32
+      misc: 16
+      other: 32
+    mob-spawn-range: 3
+    nerf-spawner-mobs: false
+    merge-radius:
+      item: 3.5
+      exp: 4.0
+    ticks-per:
+      hopper-transfer: 8
+      hopper-check: 8
+      monster-spawns: 2
+    max-tick-time:
+      tile: 20
+      entity: 20

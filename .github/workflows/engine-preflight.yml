@@ -1,0 +1,25 @@
+name: ENGINE PREFLIGHT — numai citire pe gazda live
+on:
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-preflight.txt", "scripts/engine_preflight.sh", "scripts/minecraft_status.py", ".github/workflows/engine-preflight.yml"]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: [self-hosted]
+    timeout-minutes: 5
+    env: { RUNNER_TRACKING_ID: '' }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Citeste jucatori, disc, memorie si motor, fara restart
+        run: bash scripts/engine_preflight.sh > docs/ENGINE-PREFLIGHT.md
+      - name: Publica raportul
+        if: always()
+        run: |
+          git config user.name cuantic-bot
+          git config user.email bot@users.noreply.github.com
+          git add docs/ENGINE-PREFLIGHT.md || true
+          git commit -m 'engine preflight: live resources' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true

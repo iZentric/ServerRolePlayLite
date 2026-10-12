@@ -1,0 +1,43 @@
+# Exact upstream CatServer vs bytecode-branded live version, isolated GH-hosted A/B.
+name: ENGINE NATIVE — branded vs official CatServer paired benchmark
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-native.txt"]
+permissions:
+  contents: write
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: Download exact same 36/14 pack and pinned official JAR
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/cuantic-native
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O /tmp/cuantic-native/pack.zip
+          gh release download '23.05.26-1' --repo Luohuayu/CatServer -p 'CatServer-1.16.5-1d8d6313-server.jar' -O /tmp/cuantic-native/official.jar
+          sha256sum /tmp/cuantic-native/pack.zip /tmp/cuantic-native/official.jar
+      - name: A/B/B/A on one machine after same seed and warmup
+        run: python3 scripts/engine_native_compare.py /tmp/cuantic-native/pack.zip /tmp/cuantic-native/official.jar /tmp/cuantic-native/results
+      - name: Publish complete numeric result, even on failure
+        if: always()
+        run: |
+          { echo '# CatServer CUANTIC vs CatServer oficial — benchmark pereche'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; echo;
+            echo 'Sursa oficială: Luohuayu/CatServer release 23.05.26-1 (1.16.5-1d8d6313), LGPL-3.0.';
+            echo 'A/B/B/A, Java 17, același pack, același runner; 55s încălzire + 75s măsurare stabilă, fără jucători sau vehicule. Nicio schimbare live.'; echo;
+            echo '```json'; cat /tmp/cuantic-native/results/result.json 2>/dev/null || echo 'INCOMPLETE; see run'; echo '```';
+          } > docs/ENGINE-NATIVE-RESULT.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/ENGINE-NATIVE-RESULT.md
+          git commit -m 'engine native: paired official vs branded verdict' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true

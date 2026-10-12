@@ -1,0 +1,95 @@
+# REAL SOURCE FORK, isolated CI only. Never changes the live world, 'lite' release or jar.
+name: ENGINE HOTPATH — Cuantic fork vs CatServer under hopper load
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-hotpath.txt"]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  fork-and-compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CATSERVER_REV: 1c92118fcca69ffac97a48c8e1f6e1bb861b41d1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: |
+            8
+            17
+      - name: Download pinned CatServer LGPL-3.0 source and pack (no live deploy)
+        run: |
+          set -euo pipefail
+          mkdir -p engine-hotpath-results /tmp/cuantic-cat-source
+          curl -fL --retry 3 --retry-delay 5 "https://codeload.github.com/Luohuayu/CatServer/tar.gz/$CATSERVER_REV" -o /tmp/cat-source.tgz
+          tar -xzf /tmp/cat-source.tgz -C /tmp/cuantic-cat-source --strip-components=1
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O /tmp/cuantic-current.zip
+          gh run download 38093403726 --repo "$GITHUB_REPOSITORY" -n cuantic-engine-upstream-candidate -D /tmp/cuantic-upstream-artifact
+          test -s /tmp/cuantic-upstream-artifact/CUANTIC-CatServer-candidate.jar
+      - name: Apply strict Cuantic hot-path patch before Forge patch setup
+        run: |
+          set -euo pipefail
+          python3 scripts/patch_catserver_hotpath.py /tmp/cuantic-cat-source
+          cp /tmp/cuantic-cat-source/LICENSE engine-hotpath-results/CATSERVER-LICENSE.txt
+          cd /tmp/cuantic-cat-source
+          chmod +x gradlew
+          sed -i -e 's/-XX:MaxPermSize=512m//g' -e 's/-Xmx3G/-Xmx5G/g' -e 's/org.gradle.parallel=true/org.gradle.parallel=false/' -e 's/org.gradle.configureondemand=true/org.gradle.configureondemand=false/' gradle.properties
+          ./gradlew --no-daemon --no-parallel setup 2>&1 | tee "$GITHUB_WORKSPACE/engine-hotpath-results/build.log"
+          cat >> build.gradle <<'EOF'
+          project(':forge') {
+              tasks.withType(JavaCompile).configureEach {
+                  options.fork = true
+                  options.forkOptions.memoryMaximumSize = '4g'
+              }
+          }
+          EOF
+          sed -i 's/-Xmx5G/-Xmx2G/g' gradle.properties
+          ./gradlew --no-daemon --no-parallel --max-workers=1 buildCatServer 2>&1 | tee -a "$GITHUB_WORKSPACE/engine-hotpath-results/build.log"
+      - name: Smoke-test actual fork with 36 mods and 14 plugins
+        run: |
+          set -euo pipefail
+          jar=$(find /tmp/cuantic-cat-source -type f -iname 'CatServer*server.jar' -size +5M | head -1)
+          test -s "$jar"
+          python3 scripts/brand_engine.py "$jar" engine-hotpath-results/CUANTIC-CatServer-hotpath.jar > engine-hotpath-results/brand.json
+          sha256sum engine-hotpath-results/*.jar > engine-hotpath-results/SHA256SUMS.txt
+          mkdir -p /tmp/cuantic-hotpath-smoke
+          unzip -q /tmp/cuantic-current.zip -d /tmp/cuantic-hotpath-smoke
+          cp engine-hotpath-results/CUANTIC-CatServer-hotpath.jar /tmp/cuantic-hotpath-smoke/CatServer-1.16.5-1d8d6313-server.jar
+          python3 scripts/engine_lab.py /tmp/cuantic-hotpath-smoke engine-hotpath-results/smoke.log
+      - name: Measure filled-hopper A/B on one GitHub machine
+        run: python3 scripts/engine_hotpath_compare.py /tmp/cuantic-current.zip /tmp/cuantic-upstream-artifact/CUANTIC-CatServer-candidate.jar engine-hotpath-results/CUANTIC-CatServer-hotpath.jar engine-hotpath-results/ab
+      - name: Save honest verdict even on failure (not a release)
+        if: always()
+        run: |
+          { echo '# ENGINE HOTPATH — Cuantic source fork, isolated CI, NOT live'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; echo;
+            echo 'Upstream: Luohuayu/CatServer at 1c92118fcca69ffac97a48c8e1f6e1bb861b41d1 (LGPL-3.0). Patch: scripts/patch_catserver_hotpath.py.';
+            echo 'No real player handshake, no release, no production promotion.'; echo;
+            echo '## Smoke'; echo '```json'; cat engine-hotpath-results/smoke-result.json 2>/dev/null || echo 'NOT RUN'; echo '```';
+            echo '## Filled hopper A/B'; echo '```json'; cat engine-hotpath-results/ab/result.json 2>/dev/null || echo 'NOT RUN'; echo '```';
+            echo '## Build tail'; echo '```'; tail -35 engine-hotpath-results/build.log 2>/dev/null || true; echo '```';
+          } > docs/ENGINE-HOTPATH-RESULT.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/ENGINE-HOTPATH-RESULT.md
+          git commit -m 'engine hotpath: source fork CI and A/B verdict' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true
+      - name: Preserve experimental artifact for inspection only (7 days)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cuantic-engine-hotpath-experimental
+          path: |
+            engine-hotpath-results/CUANTIC-CatServer-hotpath.jar
+            engine-hotpath-results/CATSERVER-LICENSE.txt
+            engine-hotpath-results/SHA256SUMS.txt
+            engine-hotpath-results/smoke-result.json
+            engine-hotpath-results/ab/result.json
+          retention-days: 7

@@ -1,0 +1,48 @@
+name: TUNE — pune straturile CUANTIC pe serverul live (+ duel de GC la cerere)
+on:
+  push:
+    paths: [ "site/tuning/**", "scripts/tune-live.sh", "scripts/gc-duel.sh", "deploy/tune.txt" ]
+  workflow_dispatch:
+    inputs:
+      axe: { description: "axe de GC de alergat (gol = doar tune; ex: A B C D)", required: false, default: "" }
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  a:
+    runs-on: [self-hosted]
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenerare straturi din build_lite (o singura sursa de adevar)
+        run: python3 scripts/dump_tuning.py
+      - name: Straturi de tuning pe box
+        run: bash scripts/tune-live.sh
+      - name: Duel GC (doar daca s-a cerut)
+        if: ${{ github.event.inputs.axe != '' }}
+        env: { DUEL_AXE: "${{ github.event.inputs.axe }}" }
+        run: bash scripts/gc-duel.sh
+      - name: Verdicturile in repo
+        run: |
+          set -e
+          mkdir -p analysis
+          { echo "# TUNE-LIVE — $(date -u '+%Y-%m-%d %H:%M:%S') UTC"; echo; echo '```'; cat /tmp/tune.txt 2>/dev/null || echo "verdict lipsa"; echo '```'; } > analysis/TUNE-LIVE.md
+          if [ -s /tmp/gcduel.txt ]; then { echo "# GC-DUEL — $(date -u '+%Y-%m-%d %H:%M:%S') UTC"; echo; sed 's/^/  /' /tmp/gcduel.txt; } > analysis/GC-DUEL.md; fi
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add analysis/TUNE-LIVE.md analysis/GC-DUEL.md 2>/dev/null || true
+          git commit -m "$(head -c 500 /tmp/tune.txt 2>/dev/null | tr '\n' ' ')" || true
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || git rebase --abort 2>/dev/null
+            git push origin "HEAD:$GITHUB_REF_NAME" && break
+            sleep 8
+          done
+          test -f analysis/TUNE-LIVE.md && echo "verdict: $(head -c 300 analysis/TUNE-LIVE.md | tr '\n' ' ')"
+          git ls-remote origin "$GITHUB_REF_NAME" | head -1 | cut -c1-12
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh
