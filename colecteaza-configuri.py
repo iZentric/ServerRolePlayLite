@@ -9,6 +9,8 @@ import re
 import sys
 import tarfile
 import gzip
+import shutil
+import time
 from pathlib import Path
 
 MAX_FILE = 400_000          # 400 kB per fisier de config: orice e mai mare nu e config
@@ -125,6 +127,20 @@ def main(argv):
         import subprocess
         subprocess.run(["split", "-b", "20m", str(dest), str(dest) + ".part-"], check=False)
         print("Am impartit în bucati de 20 MB — trimite-le pe rand, le lipesc eu la loc.")
+    share = os.environ.get("CUANTIC_SHARE", "")
+    if share:
+        # pentru varianta "il servesti tu": copie in radacina web + link pe care mi-l dai
+        for cand in (share, "/var/www/html", "/usr/share/nginx/html", "/srv/www"):
+            d = Path(cand)
+            if d.is_dir() and os.access(d, os.W_OK):
+                name = "configuri-rp-%s.tar.gz" % hashlib.sha1(str(time.time()).encode()).hexdigest()[:10]
+                shutil.copy2(dest, d / name)
+                print("\nAm pus arhiva la: %s%s  <- acesta e linkul pe care mi-l dai mie"
+                      % (cand.rstrip("/"), "/" + name))
+                print("Dupa ce termin, sterge-l: rm -f %s" % (d / name))
+                break
+        else:
+            print("\nCUANTIC_SHARE: n-am putut scrie in niciun radacina web cunoscuta; trimite-mi linkul tau.")
     print("\nCe NU e în arhiva (deliberat): world*/level.dat (seed), usercache/ops/whitelist/bans (UUID-uri),")
     print("server.log (IP-uri), backup-uri, resourcepacks, JAR-uri în sine (doar inventarul cu hash).")
     print("Verifica-ti singur inainte sa-mi dai fisierul: tar tzf configuri-rp.tar.gz | grep -iE 'world|usercache|level.dat' && echo ATENTIE")
