@@ -16,6 +16,8 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+      - name: Diagnostic read-only pentru portul public (intra in raportul CHK)
+        run: bash scripts/netprobe.sh || true
       - run: bash scripts/chk.sh || true
 
       - name: Regula — serverul ramane pornit dupa orice comanda
