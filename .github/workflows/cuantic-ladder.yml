@@ -44,35 +44,17 @@ jobs:
       - name: Descoperă candidații 1.16.5 din sursele oficiale
         id: spec
         run: |
-          set -uo pipefail
-          probe(){ timeout 25 curl -sIL -o /dev/null -w '%{http_code}' --max-time 20 "$1" 2>/dev/null || echo 000; }
-          pick(){ for u in "$@"; do c=$(probe "$u"); echo "  incerc $u -> HTTP $c" >&2; if [ "$c" = "200" ]; then echo "$u"; return 0; fi; done; echo ""; }
-          MOHIST=$(pick \
-            "https://repo1.maven.org/maven2/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237.jar" \
-            "https://maven.mohistmc.com/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237.jar")
-          MAGMA=$(pick \
-            "https://git.magmafoundation.org/api/v4/projects/8/packages/maven/org/magmafoundation/Magma/1.16.5-36.2.39-c1c5a946/Magma-1.16.5-36.2.39-c1c5a946-server.jar" \
-            "https://repo.magmafoundation.org/releases/org/magmafoundation/Magma/1.16.5-36.2.39-c1c5a946/Magma-1.16.5-36.2.39-c1c5a946-server.jar")
-          # LoliServer: repository-ul GitHub Loli-Server/LoliServer intors 404 la 12 oct 2026 (stins).
-          # Ramane pe lista ca "sursa inexistenta" — nu cautam binare pe oglinzi neoficiale.
-          SPEC=""
-          if [ -n "$MOHIST" ]; then SPEC="Mohist 1.16.5-1237|$MOHIST||GPL-3.0"; else SPEC="Mohist 1.16.5 (sursa oficiala de neatins din runner)"; fi
-          if [ -n "$MAGMA" ]; then SPEC="$SPEC,Magma 1.16.5-36.2.39-c1c5a946|$MAGMA||GPL-3.0 (de reconfirmat)"; else SPEC="$SPEC,Magma 1.16.5 (GitLab/repo maven de neatins din runner)"; fi
-          SPEC="$SPEC,LoliServer 1.16.5 (repo stins: GitHub a dat 404; licenta nu poate fi verificata)"
-          ONLY="${{ inputs.only }}"
-          if [ -n "$ONLY" ]; then
-            FILTERED=$(printf '%s' "$SPEC" | tr ',' '\n' | grep -i -- "$ONLY" | paste -sd, - || true)
-            if [ -z "$FILTERED" ]; then echo "candidatul '$ONLY' nu e in lista cunoscuta"; exit 2; fi
-            SPEC="$FILTERED"
-          fi
-          echo "spec=$SPEC" >> "$GITHUB_OUTPUT"
-          echo "Candidati trimisi catre scara: $SPEC"
+          mkdir -p /tmp/cuantic-ladder
+          python3 scripts/cuantic_ladder_discover.py --out /tmp/cuantic-ladder/discovery.json \
+            | tail -1 > /tmp/cuantic-ladder/spec.txt
+          cat /tmp/cuantic-ladder/spec.txt
+          cat /tmp/cuantic-ladder/discovery.json
       - name: Scara A — descărcare cu SHA + smoke pe 36/14 (A/B doar la cerere)
         run: |
-          set -euo pipefail
+          set -uo pipefail
           MODE=--no-ab
           if [ "${{ inputs.mode }}" = "completa" ]; then MODE=""; fi
-          python3 scripts/cuantic_ladder.py --spec '${{ steps.spec.outputs.spec }}' \
+          python3 scripts/cuantic_ladder.py --spec-file /tmp/cuantic-ladder/spec.txt \
             --pack /tmp/cuantic-ladder/CUANTIC-Server-CatServer-1.7.7.zip \
             --out /tmp/cuantic-ladder/report --trials 3 $MODE > /tmp/cuantic-ladder/raw.txt 2>&1;
           rc=$?

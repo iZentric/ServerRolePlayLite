@@ -48,14 +48,16 @@ class DeltaPanelTest(unittest.TestCase):
 
     def test_unmeasured_candidates_have_no_score(self):
         html = jar_delta.panel()
-        self.assertGreaterEqual(html.count("NEAVĂGAT"), 3)
         for name in ("Mohist", "LoliServer", "Magma"):
             self.assertIn(name, html)
-        # randurile nevagate nu pot primi numere de boot sau de pluginuri
-        for row in html.split('data-delta-row')[1:]:
-            if 'jd-badge none' in row:
-                self.assertIn('<td>—</td><td>—</td>', row)
-                self.assertIn('<td class="jd-num">—</td>', row)
+        # un candidat fara fum nu poate primi numere de boot, pluginuri sau diferenta
+        unmeasured = [row for row in html.split('data-delta-row')[1:]
+                      if 'jd-badge none' in row or 'ESUAT' in row]
+        self.assertGreaterEqual(len(unmeasured), 3)
+        for row in unmeasured:
+            self.assertIn('<td>—</td><td>—</td>', row)
+            self.assertIn('<td class="jd-num"><b>—</b></td>', row)
+        self.assertNotIn("câștigător", html)
 
     def test_family_parse_refuses_to_invent_boot_times(self):
         smokes = jar_delta.family_smokes()

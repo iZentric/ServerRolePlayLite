@@ -326,15 +326,21 @@ def _matrix_rows(pairs):
             f'<td>{inline(_candidate_note(name, pairs, info))}</td></tr>')
     tried = {r["name"].split(" ")[0].lower() for r in ladder_rows()}
     for cand in ladder_rows():
-        chip = "ok" if "a pornit" in cand["status"] else ("bad" if cand["status"].startswith("ESUAT") else "none")
         boot = f"{_ro(cand['boot_s'], 3)} s" if isinstance(cand["boot_s"], (int, float)) else "—"
-        plugins = f"{cand['plugins']}/14" if isinstance(cand["plugins"], int) else "—"
+        if cand["status"].startswith("ESUAT"):
+            # fără binar descărcat nu am atins nici pack-ul: niciun „36” de afișat
+            chip, mods, plugins, boot = "none", "—", "—", "—"
+        elif "a pornit" in cand["status"]:
+            chip, mods = "ok", "36 (neschimbat)"
+            plugins = f"{cand['plugins']}/14" if isinstance(cand["plugins"], int) else "—"
+        else:
+            chip, mods, plugins = "bad", "—", (f"{cand['plugins']}/14" if isinstance(cand["plugins"], int) else "—")
         out.append(
             f'<tr data-delta-row data-engine="{re.sub(r"[^a-z0-9-]", "-", cand["name"].lower())}">'
             f'<th scope="row"><b>{inline(cand["name"])}</b>'
             f'<small>scara CUANTIC pe runner · SHA {cand["sha"] or "—"} · licență {inline(cand["licence"])}</small></th>'
             f'<td><span class="jd-badge {chip}">{inline(cand["status"])}</span></td>'
-            f'<td>36 (neschimbat)</td><td>{plugins}</td><td class="jd-num"><b>{boot}</b></td>'
+            f'<td>{mods}</td><td>{plugins}</td><td class="jd-num"><b>{boot}</b></td>'
             f'<td>{inline(cand["reason"] or cand["verdict"])}</td></tr>')
         tried.add(cand["name"].split(" ")[0].lower())
     for name in unmeasured_candidates():

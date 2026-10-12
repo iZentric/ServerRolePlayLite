@@ -249,12 +249,15 @@ def ladder(spec, pack, out, trials=MIN_TRIALS, do_ab=True):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--spec", default="", help="nume|url[|sha256][|licenta], separate prin virgulă")
+    ap.add_argument("--spec-file", help="cetete same string dintr-un fisier (scapam de ghilimelele din shell)")
     ap.add_argument("--pack", required=True, help="CUANTIC-Server-CatServer-1.7.7.zip neschimbat")
     ap.add_argument("--out", required=True)
     ap.add_argument("--trials", type=int, default=MIN_TRIALS)
     ap.add_argument("--no-ab", action="store_true", help="doar descărcare + smoke")
     ap.add_argument("--list-maven", help="afișează versiunile din Maven Central pentru group:artifact")
     args = ap.parse_args(argv)
+    if args.spec_file:
+        args.spec = Path(args.spec_file).read_text(encoding="utf-8").strip()
     if args.list_maven:
         print("\n".join(maven_versions(args.list_maven)))
         return 0

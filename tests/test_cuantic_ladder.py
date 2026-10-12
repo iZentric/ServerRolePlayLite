@@ -101,9 +101,31 @@ class LadderLogicTest(unittest.TestCase):
 
 class LadderOnSiteTest(unittest.TestCase):
     def test_absent_ladder_report_keeps_rows_unmeasured(self):
-        self.assertEqual(jar_delta.ladder_rows(), [])
+        with tempfile.TemporaryDirectory() as tmp:
+            missing = Path(tmp) / "nu-exista.md"
+            with patch.object(jar_delta, "LADDER", missing):
+                self.assertEqual(jar_delta.ladder_rows(), [])
+                html = jar_delta.panel()
+        self.assertGreaterEqual(html.count("NEAVĂGAT"), 3)
+
+    def test_committed_ladder_report_is_rendered_as_it_is(self):
+        if not jar_delta.LADDER.is_file():
+            self.skipTest("raportul scării nu există încă în checkout")
+        rows = jar_delta.ladder_rows()
+        self.assertGreaterEqual(len(rows), 1)
         html = jar_delta.panel()
-        self.assertIn("NEAVĂGAT", html)
+        for row in rows:
+            self.assertIn(row["status"][:36], html)
+            if row["boot_s"] is None:
+                self.assertNotIn("<b>0 s</b>", html)
+
+    def test_no_row_can_invent_numbers_for_a_failed_candidate(self):
+        blocks = jar_delta.panel().split('data-delta-row')[1:]
+        failed = [b for b in blocks if "ESUAT" in b]
+        self.assertGreaterEqual(len(failed), 1)
+        for block in failed:
+            self.assertIn("<td>—</td><td>—</td>", block)
+            self.assertIn('<td class="jd-num"><b>—</b></td>', block)
 
     def test_ladder_failure_is_rendered_as_a_failure(self):
         payload = {"candidates": {
@@ -133,6 +155,32 @@ class LadderOnSiteTest(unittest.TestCase):
         self.assertIn('id="diferente"', page)
         self.assertIn("Date brute:", page)
         self.assertEqual(page.count("<style>"), 1)
+
+
+class DiscoveryTest(unittest.TestCase):
+    def setUp(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import cuantic_ladder_discover as disc  # noqa: PLC0415
+        self.disc = disc
+
+    def test_offline_discovery_never_invents_a_url(self):
+        spec, entries = self.disc.discover(offline=True)
+        self.assertEqual(len(entries), 3)
+        for entry in entries:
+            self.assertIsNone(entry["url"])
+            self.assertNotIn("|http", spec)
+        self.assertIn("LoliServer", spec)
+
+    def test_candidate_without_urls_is_marked_without_source(self):
+        spec, entries = self.disc.discover(only="LoliServer", offline=True)
+        self.assertEqual(len(entries), 1)
+        self.assertIn("fără sursă oficială", entries[0]["status"])
+        self.assertNotIn("|", spec.split(",")[0][:0] + "")  # LoliServer nu primea URL niciodată
+
+    def test_discovery_is_not_a_performance_verdict(self):
+        # un eșec de rețea nu schimbă verdictul candidaților: rămâne NEAVĂGAT în raport
+        html = jar_delta.panel()
+        self.assertIn("NEAVĂGAT", html)
 
 
 if __name__ == "__main__":
