@@ -1,16 +1,16 @@
-# CHK — 2026-10-12 15:17:09 UTC
+# CHK — 2026-10-12 16:36:30 UTC
 
 ```
-== CHK — 2026-10-12 15:17:06 UTC ==
+== CHK — 2026-10-12 16:36:29 UTC ==
 stare la intrare in CHK: java=38256 sup=38143 port25565=1 frpc=38207
 dupa ensure-up: java=38256 (RUNNER_TRACKING_ID=0
 0) | sup=38143 (RUNNER_TRACKING_ID=0
 0) | frpc=38207
-uptime: 15:17:06 up 23:06,  0 users,  load average: 0.30, 0.30, 0.32
+uptime: 16:36:29 up 1 day, 26 min,  0 users,  load average: 0.14, 0.08, 0.08
 ss 25565:
   LISTEN 0      4096               *:25565            *:*          
-live.log: 1057 linii | Done (11.827s)
-log final: [15:12:23] [Server thread/INFO]: iZentric issued server command: /pl [15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator [15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative 
+live.log: 1088 linii | Done (11.827s)
+log final: [16:26:53] [Server thread/INFO]: iZentric issued server command: /tps [16:26:56] [Server thread/INFO]: iZentric issued server command: /tps [16:26:57] [Server thread/INFO]: iZentric issued server command: /tps 
 disc: /dev/sdb1       5.0G  3.4G  1.7G  67% /home/mndvasi9
 fisiere: ADRESA banned-ips.json banned-players.json bind.log boot.log bore.log bukkit.yml bukkit.yml.bak.1791636852 bukkit.yml.bak.1791639103 CatServer-1.16.5-1d8d6313-server.jar catserver.yml chat.log cin CIT
 pack marcat: .pack=CUANTIC-Server-CatServer-1.7.7.zip | .pack.new=1.7.7
@@ -87,37 +87,6 @@ pack marcat: .pack=CUANTIC-Server-CatServer-1.7.7.zip | .pack.new=1.7.7
 unix_args complet (39 linii): -Xms1024M -Xmx6144M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=37 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=23 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99 -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=256M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=122M -XX:NonProfiledCodeHeapSize=122M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:AllocatePrefetchStyle=3 -Dio.netty.allocator.maxOrder=9 -Dio.netty.leakDetection.level=DISABLED -jar CatServer-1.16.5-1d8d6313-server.jar nogui 
 erori-cheie: [10:16:55] [Server thread/INFO]: Done (11.827s)! For help, type "help"|[15:04:26] [Server thread/INFO]: Done (12.066s)! For help, type "help"|
 === ISTORIC PORNIRI / OPRIRI / JUCATORI (live.log) ===
-338:[10:18:01] [Server thread/INFO]: default: iZentric
-483:[10:18:56] [Server thread/INFO]: default: iZentric
-486:[10:18:56] [Server thread/INFO]: default: iZentric
-499:[10:19:02] [Server thread/INFO]: default: iZentric
-531:[10:20:22] [Server thread/INFO]: default: iZentric
-534:[10:20:22] [Server thread/INFO]: default: iZentric
-563:[10:20:33] [Server thread/INFO]: default: iZentric
-577:[10:25:03] [Server thread/INFO]: iZentric issued server command: /tps
-578:[10:27:37] [Server thread/INFO]: iZentric issued server command: /tps
-579:[10:27:38] [Server thread/INFO]: iZentric issued server command: /tps
-580:[10:32:25] [Server thread/INFO]: iZentric issued server command: /tp
-581:[10:32:26] [Server thread/INFO]: iZentric issued server command: /tps
-582:[10:32:38] [Server thread/INFO]: iZentric issued server command: /tps
-583:[10:32:40] [Server thread/INFO]: iZentric issued server command: /pl
-584:[10:33:31] [Server thread/INFO]: iZentric issued server command: /tps
-585:[10:35:44] [Server thread/INFO]: iZentric issued server command: /tps
-586:[10:36:45] [Server thread/INFO]: iZentric issued server command: /tps
-587:[10:36:46] [Server thread/INFO]: iZentric issued server command: /plw
-588:[10:38:34] [Server thread/INFO]: iZentric issued server command: /tps
-589:[10:39:11] [Server thread/INFO]: iZentric issued server command: /tps
-590:[10:39:12] [Server thread/INFO]: iZentric issued server command: /plw
-591:[10:50:43] [Server thread/INFO]: iZentric issued server command: /tps
-592:[10:55:26] [Server thread/INFO]: iZentric issued server command: /tps
-593:[11:18:16] [Server thread/INFO]: iZentric issued server command: /tps
-594:[11:19:49] [Server thread/INFO]: iZentric issued server command: /tps
-595:[11:20:40] [Server thread/INFO]: iZentric issued server command: /tps
-596:[11:25:07] [Server thread/INFO]: iZentric issued server command: /tps
-597:[11:26:27] [Server thread/INFO]: iZentric issued server command: /tps
-598:[11:27:18] [Server thread/INFO]: iZentric issued server command: /tps
-599:[11:27:32] [Server thread/INFO]: iZentric issued server command: /spawn
-600:[11:29:10] [Server thread/INFO]: iZentric issued server command: /tps
 601:==== pornire 2026-10-12 15:03:26 UTC (memorie: -Xmx6144M, java: /home/mndvasi9/.local/jdk17/bin/java) ====
 823:[15:04:18] [Server thread/INFO]: [Cuantic] Motor hibrid activ: Cuantic 1.7.7 (MC 1.16.5, API 1.16.5-R0.1-SNAPSHOT, motor CUANTIC) | based on: 1.16.5-1d8d6313 (MC: 1.16.5) | runtime-tech: keepSpawnInMemory=false, enableSkipEntityTick=true, enableSkipTileEntityTick=true, maxEntityCollision=2, worldGenMaxTickTime=8, disableFMLStatusModInfo=true, enableDynmapCompatible=false, enableMythicMobsPatcherCompatible=false, defaultInstallPluginSpark=false, versionCheck=false, forceSaveOnWatchdog=true, noHopperEvent=3w, autoUnloadDims=[-1,1], disableStatSaving=true, saveUserCacheOnStopOnly=true, logVillagerDeaths=false, movedWronglyThreshold=0.35, movedTooQuicklyMultiplier=25.0
 872:[15:04:26] [Server thread/INFO]: Done (12.066s)! For help, type "help"
@@ -132,38 +101,38 @@ erori-cheie: [10:16:55] [Server thread/INFO]: Done (11.827s)! For help, type "he
 1055:[15:12:23] [Server thread/INFO]: iZentric issued server command: /pl
 1056:[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
 1057:[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
+1058:[15:25:30] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
+1059:[15:25:36] [Server thread/WARN]: iZentric moved too quickly! -14.081310513660242,10.125000396529472,-25.733413867736886
+1060:[15:28:09] [Server thread/INFO]: iZentric issued server command: /gamemode creative
+1061:[15:36:16] [Server thread/INFO]: iZentric issued server command: /tps
+1062:[15:36:50] [Server thread/INFO]: iZentric issued server command: /tps
+1063:[15:36:52] [Server thread/INFO]: iZentric issued server command: /tps
+1064:[15:36:56] [Server thread/INFO]: iZentric issued server command: /
+1065:[15:36:58] [Server thread/INFO]: iZentric issued server command: /tps
+1066:[15:37:00] [Server thread/INFO]: iZentric issued server command: /pl
+1067:[15:38:31] [Server thread/INFO]: iZentric issued server command: /tps
+1068:[15:43:56] [Server thread/INFO]: iZentric issued server command: /tps
+1069:[15:46:55] [Server thread/INFO]: iZentric issued server command: /tps
+1070:[15:46:59] [Server thread/INFO]: iZentric issued server command: /tps
+1071:[15:47:04] [Server thread/INFO]: iZentric issued server command: //tps
+1072:[15:47:06] [Server thread/INFO]: iZentric issued server command: /tps
+1073:[15:47:22] [Server thread/INFO]: iZentric issued server command: /tps
+1074:[15:47:23] [Server thread/INFO]: iZentric issued server command: /tps
+1075:[15:47:28] [Server thread/INFO]: iZentric issued server command: /tps
+1076:[15:47:32] [Server thread/INFO]: iZentric issued server command: /tps
+1077:[15:47:35] [Server thread/INFO]: iZentric issued server command: /tps
+1078:[15:48:38] [Server thread/INFO]: iZentric issued server command: /tps
+1079:[15:57:07] [Server thread/INFO]: iZentric issued server command: /tps
+1080:[15:57:09] [Server thread/INFO]: iZentric issued server command: /tps
+1081:[16:23:50] [Server thread/INFO]: iZentric issued server command: /spark tps
+1082:[16:26:47] [Server thread/INFO]: iZentric issued server command: /tps
+1083:[16:26:48] [Server thread/INFO]: iZentric issued server command: /plw
+1084:[16:26:49] [Server thread/INFO]: iZentric issued server command: /tps
+1085:[16:26:51] [Server thread/INFO]: iZentric issued server command: /tps
+1086:[16:26:53] [Server thread/INFO]: iZentric issued server command: /tps
+1087:[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+1088:[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
 === ULTIMELE 60 LINII DIN live.log ===
-
-[15:07:14] [spark-worker-pool-1-thread-1/INFO]: [⚡] Calculating GC statistics...
-[15:07:14] [spark-worker-pool-1-thread-1/INFO]: 
-> Garbage Collector statistics
-
-    G1 Young Generation collector:
-      117.5 ms avg, 6 total collections
-      29s avg frequency
-
-    G1 Old Generation collector:
-      0 collections
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]: [⚡] spark v1.9.1
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]: > /spark profiler
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--info]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--stop]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--cancel]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--interval <interval millis>]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--thread <thread name>]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--only-ticks-over <tick length millis>]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--timeout <timeout seconds>]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--regex --thread <thread regex>]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--combine-all]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--not-combined]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--force-java-sampler]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--stop --comment <comment>]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--stop --order-by-time]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--stop --save-to-file]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]: > /spark tps
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]: > /spark ping
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--player <username>]
-[15:07:14] [spark-worker-pool-1-thread-4/INFO]: > /spark healthreport
 [15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--memory]
 [15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--network]
 [15:07:14] [spark-worker-pool-1-thread-4/INFO]: > /spark tickmonitor
@@ -193,44 +162,75 @@ erori-cheie: [10:16:55] [Server thread/INFO]: Done (11.827s)! For help, type "he
 [15:12:23] [Server thread/INFO]: iZentric issued server command: /pl
 [15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
 [15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
+[15:25:30] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
+[15:25:36] [Server thread/WARN]: iZentric moved too quickly! -14.081310513660242,10.125000396529472,-25.733413867736886
+[15:28:09] [Server thread/INFO]: iZentric issued server command: /gamemode creative
+[15:36:16] [Server thread/INFO]: iZentric issued server command: /tps
+[15:36:50] [Server thread/INFO]: iZentric issued server command: /tps
+[15:36:52] [Server thread/INFO]: iZentric issued server command: /tps
+[15:36:56] [Server thread/INFO]: iZentric issued server command: /
+[15:36:58] [Server thread/INFO]: iZentric issued server command: /tps
+[15:37:00] [Server thread/INFO]: iZentric issued server command: /pl
+[15:38:31] [Server thread/INFO]: iZentric issued server command: /tps
+[15:43:56] [Server thread/INFO]: iZentric issued server command: /tps
+[15:46:55] [Server thread/INFO]: iZentric issued server command: /tps
+[15:46:59] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:04] [Server thread/INFO]: iZentric issued server command: //tps
+[15:47:06] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:22] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:23] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:28] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:32] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:35] [Server thread/INFO]: iZentric issued server command: /tps
+[15:48:38] [Server thread/INFO]: iZentric issued server command: /tps
+[15:57:07] [Server thread/INFO]: iZentric issued server command: /tps
+[15:57:09] [Server thread/INFO]: iZentric issued server command: /tps
+[16:23:50] [Server thread/INFO]: iZentric issued server command: /spark tps
+[16:26:47] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:48] [Server thread/INFO]: iZentric issued server command: /plw
+[16:26:49] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:51] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:53] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
 === ULTIMELE 35 LINII DIN sup.log ===
-[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
-[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
-[0m 15:15:19 mc=DA port=SUS log=1057
+[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:34:29 mc=DA port=SUS log=1088
  log blocat:
-[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
-[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
-[0m 15:15:34 mc=DA port=SUS log=1057
+[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:34:44 mc=DA port=SUS log=1088
  log blocat:
-[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
-[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
-[0m 15:15:49 mc=DA port=SUS log=1057
+[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:34:59 mc=DA port=SUS log=1088
  log blocat:
-[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
-[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
-[0m 15:16:04 mc=DA port=SUS log=1057
+[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:35:15 mc=DA port=SUS log=1088
  log blocat:
-[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
-[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
-[0m 15:16:19 mc=DA port=SUS log=1057
+[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:35:30 mc=DA port=SUS log=1088
  log blocat:
-[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
-[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
-[0m 15:16:34 mc=DA port=SUS log=1057
+[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:35:45 mc=DA port=SUS log=1088
  log blocat:
-[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
-[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
-[0m 15:16:49 mc=DA port=SUS log=1057
+[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:36:00 mc=DA port=SUS log=1088
  log blocat:
-[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
-[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
-[0m 15:17:04 mc=DA port=SUS log=1057
+[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:36:15 mc=DA port=SUS log=1088
  log blocat:
-[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
-[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
+[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
 [0m=== CRASH REPORTS ===
 === DMESG OOM ===
-sup.log: [0m 15:17:04 mc=DA port=SUS log=1057| log blocat:|[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator|[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative|[0m
+sup.log: [0m 16:36:15 mc=DA port=SUS log=1088| log blocat:|[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps|[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps|[0m
 frpc.toml: 10
 adresa din fisier: 92.5.171.150:25565
   dinafara 1: "online":true | "version":"CUANTIC 1.16.5"
