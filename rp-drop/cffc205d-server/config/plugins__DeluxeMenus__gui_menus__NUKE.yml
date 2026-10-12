@@ -1,334 +1,46 @@
-menu_title: '                 &#002AFF&lɴ&#022FF3&lᴜ&#0333E8&lᴋ&#0538DC&lᴇ'
-open_command:
-size: 53
-items:
-  '1':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjNhOTcwN2RkMmUwMmUyYWQ5Y2Q0OTQ2M2MwNzVhNDc5YWIyNzRlN2U4NWI1NWExNDIwMDBmMGMwMGMxNTAyMSJ9fX0=
-    slot: 16
-    display_name: '&#002AFF&lᴄ&#0031FF&lᴛ&#0038FF&l-&#003FFF&ls&#0046FF&lᴘ&#004DFF&lᴀ&#0054FF&lᴡ&#005BFF&lɴ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -398 73 -165'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -398 73 -165'  
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-
-  '2':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjgyYzk1NjhkMWViNTM0N2ExNGZhNGQ4ZmIyYjNlYTdhOGRiN2FiYzA2M2VmZDdjMjFmNDg3ODdhOTUyYzBmOCJ9fX0=
-    slot: 25
-    display_name: '&#DDA50E&lᴛ&#DCA810&l-&#DBAA11&ls&#DAAD13&lᴘ&#DAAF14&lᴀ&#D9B216&lᴡ&#D8B417&lɴ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -418 71 -294'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -418 71 -294'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'    
-  '3':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 12
-    display_name: '&#002AFF&lᴛ&#002EFF&l-&#0033FF&lʀ&#0037FF&lᴏ&#003BFF&lᴏ&#0040FF&lғ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name%-411 77 -233'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -411 77 -233'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '4':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 13
-    display_name: '&#002AFF&lʟ&#002FFF&lᴏ&#0034FF&lʙ&#003AFF&lʙ&#003FFF&lʏ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -407 71 -230'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -407 71 -230'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '5':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWQ5NzFhZjVmZGRmZTg5MDk4NzNmOTY1YmM2ODFlZDk0ZGU0YzIwMDU5MmM3OWY0Yzc1OGVhOWEyYjBmOWM1YiJ9fX0=
-    slot: 40
-    display_name: '&#BF0808&lᴀ&#C00A0A&l-&#C10B0B&ls&#C20D0D&lɪ&#C20F0F&lᴛ&#C31010&lᴇ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -406 71 -208'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -406 71 -208'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '6':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 31
-    display_name: '&#002AFF&ls&#002EFF&lǫ&#0031FF&lᴜ&#0035FF&lᴇ&#0039FF&lᴀ&#003DFF&lᴋ&#0040FF&lʏ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -420 71 -230'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -420 71 -230'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '7':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 10
-    display_name: '&#002AFF&lʀ&#002FFF&lᴀ&#0034FF&lᴅ&#003AFF&lɪ&#003FFF&lᴏ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -396 71 -228'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -396 71 -228'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '8':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 19
-    display_name: '&#002AFF&ls&#0031FF&lɪ&#0037FF&lʟ&#003EFF&lᴏ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -424 79 -225'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -424 79 -225'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '9':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 20
-    display_name: '&#002AFF&lʀ&#0031FF&lᴀ&#0037FF&lᴍ&#003EFF&lᴘ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -378 66 -212'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -378 66 -212'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '10':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 21
-    display_name: '&#002AFF&lᴡ&#002EFF&lɪ&#0033FF&lɴ&#0037FF&lᴅ&#003BFF&lᴏ&#0040FF&lᴡ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -398 64 -197'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -398 64 -197'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '11':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 22
-    display_name: '&#002AFF&lʜ&#002DFF&lᴇ&#0031FF&lᴀ&#0034FF&lᴅ&#0037FF&ls&#003AFF&lʜ&#003EFF&lᴏ&#0041FF&lᴛ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -366 68 -215'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -366 68 -215'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '12':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 34
-    display_name: '&#002AFF&lᴏ&#002EFF&lᴜ&#0031FF&lᴛ&#0035FF&ls&#0039FF&lɪ&#003DFF&lᴅ&#0040FF&lᴇ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -445 71 -214'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -445 71 -214'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '13':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 11
-    display_name: '&#002AFF&lʜ&#0033FF&lᴜ&#003BFF&lᴛ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -409 72 -222'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -409 72 -222'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '14':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 14
-    display_name: '&#002aff&lʜ&#002eff&lᴇ&#0033ff&lᴀ&#0037ff&lᴠ&#003bff&lᴇ&#0040ff&lɴ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -397 78 -196'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -397 78 -196'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '15':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 28
-    display_name: '&#002AFF&lᴍ&#0031FF&lᴀ&#0037FF&lɪ&#003EFF&lɴ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -398 71 -194'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -398 71 -1943'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '16':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 29
-    display_name: '&#002AFF&lᴄ&#002EFF&lᴀ&#0031FF&lᴛ&#0035FF&lᴡ&#0039FF&lᴀ&#003DFF&lʟ&#0040FF&lᴋ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -416 64 -221'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -416 64 -221'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '17':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 30
-    display_name: '&#002AFF&lᴠ&#0031FF&lᴇ&#0037FF&lɴ&#003EFF&lᴛ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -421 65 -204'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -421 65 -204'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '18':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTFiZjg4MjhiN2IzMzcxMDJhM2Q4OGE4MjI4MzhkMzA5MDk3ZDBhNGFlYzc4OWEyODkxODk4MmNkNzhiOWYyZiJ9fX0=
-    slot: 41
-    display_name: '&#BF0808&lʙ&#C00A0A&l-&#C10B0B&ls&#C20D0D&lɪ&#C20F0F&lᴛ&#C31010&lᴇ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -407 60 -215'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -407 60 -215'
-    - '[close]'
-  '19':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 32
-    display_name: '&#002AFF&lᴅ&#002FFF&lᴏ&#0034FF&lᴏ&#003AFF&lʀ&#003FFF&ls'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -409 60 -201'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -409 60 -201'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '20':
-    material: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 37
-    display_name: 'tunel'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -425 64 -201'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -425 64 -201'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-  '21':
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdmNTI4YTAwMDVmZDY2ZTY4NjA5MzVkOWVjNzQzYmNlY2E4NDU5ODI1NjQwMmQ3OTc5ZTVhZDM1NGI4NDFmYSJ9fX0=
-    slot: 23
-    display_name: '&#002AFF&lɢ&#002EFF&lᴀ&#0033FF&lʀ&#0037FF&lᴀ&#003BFF&lɢ&#0040FF&lᴇ'
-    lore:
-    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
-    left_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -443 71 -173'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'
-    - '[close]'
-    right_click_commands:
-    - '[console] execute in minecraft:ffa run tp %player_name% -443 71 -173'
-    - '[console] minecraft:effect give %player_name% minecraft:glowing 5'  
-    - '[close]'
-  'GLASS-BLACK':
-        material: gray_stained_glass_pane
-        display_name: '&f'
-        slots:
-        - 0
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-        - 6
-        - 7
-        - 8
-        - 9
-        - 17
-        - 18
-        - 26
-        - 27
-        - 35
-        - 36
-        - 33
-        - 24
-        - 38
-        - 39
-        - 15
-        - 42
-        - 43
-        - 44
-        - 45
-        - 46
-        - 47
-        - 48
-        - 49
-        - 50    
-        - 51 
-        - 52
-        - 53        
+[
+  {
+    "uuid": "09aa0e7e-083d-3ba0-b430-25881ad68780",
+    "name": "St0rmY70"
+  },
+  {
+    "uuid": "67eb20a9-6a92-4924-bbcd-79fb729eb7a3",
+    "name": "infiniteq_q"
+  },
+  {
+    "uuid": "5ecab48a-0ac8-4469-8fad-24d99100bc42",
+    "name": "stat"
+  },
+  {
+    "uuid": "89174806-de2a-35c5-a884-f2acff614db3",
+    "name": "PsyCronix"
+  },
+  {
+    "uuid": "a4a067d0-ad43-4d01-8673-bd3b68ea1f7d",
+    "name": "ExMarius"
+  },
+  {
+    "uuid": "d01255a4-1dc6-4f65-b3d5-716209fe2c1f",
+    "name": "Alin6"
+  },
+  {
+    "uuid": "0d2c5e1e-3670-39b5-9ce2-cae7c672683b",
+    "name": "infiniteq_q"
+  },
+  {
+    "uuid": "765069e4-cb2a-36f6-9b65-6b61e193fe5d",
+    "name": "RobertoStyle"
+  },
+  {
+    "uuid": "a4ab0152-6663-36f2-ba79-9b7efebd96ab",
+    "name": "_Nepotu_"
+  },
+  {
+    "uuid": "f6096b27-2b46-4443-97bb-cbbd97743609",
+    "name": "St0rmY70"
+  },
+  {
+    "uuid": "da191d4c-52e0-43fa-a7da-73860595a8b7",
+    "name": "_Nepotu_"
+  }
+]
