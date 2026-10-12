@@ -187,6 +187,15 @@ def main(pack, curtain, output):
             report["command_error_context"] = [lines[max(0, m.start() - 500):m.start() + 2400]
                                                for m in list(re.finditer(r"An unexpected error occurred trying to execute that command|benchA\d+.*(?:left the game|disconnected)", lines))[:5]]
             report["valid"] &= not report["critical_lines"]
+        if "server" in locals():
+            for filename in ("logs/latest.log", "logs/debug.log"):
+                path = server / filename
+                if path.exists():
+                    text = path.read_text(errors="replace")
+                    report[filename + "_errors"] = [text[max(0, m.start() - 250):m.start() + 1600]
+                        for m in list(re.finditer(r"An unexpected error occurred trying to execute that command|benchA\d+.*logged in|Exception|Caused by:", text, re.I))[-12:]]
+            for path in sorted((server / "crash-reports").glob("*.txt")) if (server / "crash-reports").exists() else []:
+                report.setdefault("crash_reports", []).append(path.read_text(errors="replace")[:5000])
         (output / "result.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
         print(json.dumps({k: v for k, v in report.items() if k != "steady_rss_mib"}, indent=2, ensure_ascii=False), flush=True)
     return int(not report["valid"])
