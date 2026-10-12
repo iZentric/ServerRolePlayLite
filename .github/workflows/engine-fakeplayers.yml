@@ -1,0 +1,58 @@
+# Fake players are actual server-side player entities, NOT modded network clients.
+# Work only on an isolated GitHub runner; never connect bots to public/live host.
+name: ENGINE FAKE PLAYERS — isolated Forge 1.16.5 feasibility
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-fakeplayers.txt"]
+permissions:
+  contents: write
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: Fetch untouched public pack + pinned Minecraft 1.16.5 Curtain test mod
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/cuantic-fake
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O /tmp/cuantic-fake/pack.zip
+          gh release download '1.3.2' --repo Gu-ZT/Curtain -p 'curtain-mc1.16.5-1.3.2.jar' -O /tmp/cuantic-fake/curtain-mc1.16.5-1.3.2.jar
+          test "$(stat -c %s /tmp/cuantic-fake/curtain-mc1.16.5-1.3.2.jar)" -eq 620932
+          sha256sum /tmp/cuantic-fake/pack.zip /tmp/cuantic-fake/curtain-mc1.16.5-1.3.2.jar
+      - name: Boot disposable CatServer, spawn 3 fake players and verify list/status/ticks
+        run: |
+          python3 scripts/engine_fakeplayers.py /tmp/cuantic-fake/pack.zip /tmp/cuantic-fake/curtain-mc1.16.5-1.3.2.jar /tmp/cuantic-fake/results
+      - name: Record honest result even if Curtain or Forge integration fails
+        if: always()
+        run: |
+          { echo '# Fake players: CUANTIC pack + Curtain, test izolat'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; echo;
+            echo 'Curtain upstream: https://github.com/Gu-ZT/Curtain/releases/tag/1.3.2 (1.16.5; cod /player în ramura 1.16.5).'; echo;
+            echo 'Instalat NUMAI în copia temporară de test; pack-ul original are 36 moduri, testul are 37. Nici serverul live, nici release-ul nu au fost modificate.'; echo;
+            echo 'Fake players folosesc conexiune internă, nu login FML real, FPS client sau mașini. Aceasta este probă de fezabilitate, nu A/B de performanță și nu 25 de oameni reali.'; echo;
+            echo '```json'; cat /tmp/cuantic-fake/results/result.json 2>/dev/null || echo 'INCOMPLETE — no result'; echo '```';
+          } > docs/ENGINE-FAKEPLAYERS-RESULT.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/ENGINE-FAKEPLAYERS-RESULT.md
+          git commit -m 'engine: isolated fake player feasibility report' || true
+          for i in 1 2 3; do
+            git pull --rebase origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || git rebase --abort 2>/dev/null || true
+            git push origin "HEAD:$GITHUB_REF_NAME" && break
+            sleep 5
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fakeplayer-isolated-log
+          path: |
+            /tmp/cuantic-fake/results/result.json
+            /tmp/cuantic-fake/results/server.log
+          retention-days: 7
