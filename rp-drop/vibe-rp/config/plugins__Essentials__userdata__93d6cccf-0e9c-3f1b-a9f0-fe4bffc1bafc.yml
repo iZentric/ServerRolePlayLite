@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 86.122.105.60
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725450374922
+  login: 1725609028053
+money: '0'
+last-account-name: Piroboy15
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 407.48217947543833
+  y: 28.0
+  z: 955.6999999880791
+  yaw: 62.15085220336914
+  pitch: 14.374052047729492
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 247.36550533964538
+  y: 21.753199980521202
+  z: 1121.6372674557203
+  yaw: -356.38800048828125
+  pitch: 8.100055694580078

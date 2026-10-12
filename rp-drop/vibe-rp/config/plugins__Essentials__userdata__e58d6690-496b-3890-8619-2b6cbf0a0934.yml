@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 79.114.163.162
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1724875597473
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725636218429
+  login: 1725635947397
+money: '278.0'
+last-account-name: tacalie11
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 361.64958548823904
+  y: 21.0
+  z: 1317.3681331410007
+  yaw: 62.11925506591797
+  pitch: 5.849890232086182
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 0.5557156096366429
+  y: 22.0
+  z: 1406.9521450908637
+  yaw: -43.19515609741211
+  pitch: 29.1290225982666

@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+# CHK — verifica daca serverul traieste, curata RUNNER_TRACKING_ID si il porneste daca lipsea
+unset RUNNER_TRACKING_ID
+export -n RUNNER_TRACKING_ID 2>/dev/null || true
+LOG=/tmp/chk.txt; : > $LOG
+say(){ echo "$*" | tee -a $LOG; }
+DIR=$HOME/cuantic-live
+say "== CHK — $(date -u '+%F %T UTC') =="
+JPID0=$(pgrep -f 'java @unix_args' | head -1)
+SPID0=$(pgrep -f 'bash .*c\.sh' | head -1)
+say "stare la intrare in CHK: java=${JPID0:-NU} sup=${SPID0:-NU} port25565=$(ss -lnt 2>/dev/null | grep -c ':25565') frpc=$(pgrep -f 'frpc -c' | head -1)"
+# Daca supervisorul vechi avea RUNNER_TRACKING_ID in /proc/PID/environ, il repornim curat!
+if [ -n "$SPID0" ] && grep -qa "RUNNER_TRACKING_ID" "/proc/$SPID0/environ" 2>/dev/null; then
+  say "ATENTIE: supervisorul $SPID0 avea RUNNER_TRACKING_ID -> il inlocuim cu unul imun la finalul jobului"
+  kill "$SPID0" 2>/dev/null || true; sleep 1
+fi
+if [ -z "$JPID0" ] || ! pgrep -f 'bash .*c\.sh' >/dev/null 2>&1 || ! pgrep -f 'frpc -c' >/dev/null 2>&1; then
+  bash "$(dirname "$0")/ensure-up.sh" >> $LOG 2>&1 || true
+  for _w in $(seq 1 18); do
+    ss -lnt 2>/dev/null | grep -q ':25565' && break
+    sleep 5
+  done
+fi
+JPID=$(pgrep -f 'java @unix_args' | head -1)
+SPID=$(pgrep -f 'bash .*c\.sh' | head -1)
+FPID=$(pgrep -f 'frpc -c' | head -1)
+say "dupa ensure-up: java=${JPID:-NU} (RUNNER_TRACKING_ID=$(grep -ac 'RUNNER_TRACKING_ID' /proc/${JPID:-1}/environ 2>/dev/null || echo 0)) | sup=${SPID:-NU} (RUNNER_TRACKING_ID=$(grep -ac 'RUNNER_TRACKING_ID' /proc/${SPID:-1}/environ 2>/dev/null || echo 0)) | frpc=${FPID:-NU}"
+say "uptime: $(uptime | sed 's/^ *//')"
+say "ss 25565:"; ss -lnt 2>/dev/null | grep -E '25565|24454' | sed 's/^/  /' >> $LOG
+say "live.log: $(wc -l < $DIR/live.log 2>/dev/null) linii | $(grep -m1 -oE 'Done \([0-9.]+s\)' $DIR/live.log 2>/dev/null)"
+say "log final: $(tail -3 $DIR/live.log 2>/dev/null | tr '\n' ' ' | cut -c1-260)"
+say "disc: $(df -h "$HOME" 2>/dev/null | tail -1)"
+say "fisiere: $(ls "$DIR" 2>/dev/null | tr '\n' ' ' | cut -c1-200)"
+say "pack marcat: .pack=$(cat "$DIR/.pack" 2>/dev/null || echo FARA) | .pack.new=$(cat "$DIR/.pack.new" 2>/dev/null || echo FARA)"
+say "=== INVENTAR COMPLET FISIERE SERVER LIVE ($DIR) ==="
+say "--- 1. MODURI ($DIR/mods: $(ls -1 "$DIR"/mods/*.jar 2>/dev/null | wc -l) jar-uri) ---"
+ls -lh "$DIR"/mods/*.jar 2>/dev/null | awk '{printf "  %-52s %s\n", $9, $5}' | sed "s|$DIR/mods/||" >> $LOG
+say "--- 2. PLUGINURI ($DIR/plugins: $(ls -1 "$DIR"/plugins/*.jar 2>/dev/null | wc -l) jar-uri) ---"
+ls -lh "$DIR"/plugins/*.jar 2>/dev/null | awk '{printf "  %-52s %s\n", $9, $5}' | sed "s|$DIR/plugins/||" >> $LOG
+say "--- 3. CONFIG & DEFAULTCONFIGS ---"
+for cf in "$DIR/config/modernfix-mixins.properties" "$DIR/config/incontrol/spawn.json" "$DIR/config/forge-common.toml" "$DIR/config/smoothchunk-common.toml" "$DIR/defaultconfigs/forge-server.toml"; do
+  if [ -f "$cf" ]; then
+    say "  [OK] ${cf#$DIR/} ($(wc -c < "$cf") bytes): $(grep -v '^#' "$cf" | tr '\n' ' ' | cut -c1-120)"
+  else
+    say "  [LIPSA] ${cf#$DIR/}"
+  fi
+done
+say "--- 4. STRATURI TUNING & ROOT ($DIR) ---"
+for rf in CatServer-1.16.5-1d8d6313-server.jar unix_args.txt server.properties spigot.yml bukkit.yml catserver.yml commands.yml eula.txt ops.json manifest-cuantic.json; do
+  if [ -f "$DIR/$rf" ]; then
+    say "  [OK] $rf ($(wc -l < "$DIR/$rf") linii, $(wc -c < "$DIR/$rf") bytes)"
+  else
+    say "  [LIPSA] $rf"
+  fi
+done
+say "unix_args complet ($(wc -l < "$DIR/unix_args.txt" 2>/dev/null) linii): $(tr '\n' ' ' < "$DIR/unix_args.txt" 2>/dev/null)"
+say "erori-cheie: $(grep -aiE 'error|exception|Unrecognized|Address already|Done \(' "$DIR/live.log" 2>/dev/null | tail -5 | cut -c1-140 | tr '\n' '|')"
+say "=== ISTORIC PORNIRI / OPRIRI / JUCATORI (live.log) ==="
+grep -anE '==== pornire|Done \(|Stopping|Server closed|iZentric|lost connection|disconnect|CrashReport|OutOfMemory|Killed|watchdog|Watchdog' "$DIR/live.log" 2>/dev/null | tail -45 >> $LOG
+say "=== ULTIMELE 60 LINII DIN live.log ==="
+tail -60 "$DIR/live.log" 2>/dev/null | sed "s/$(printf '\033')\[[0-9;]*[a-zA-Z]//g" >> $LOG
+say "=== ULTIMELE 35 LINII DIN sup.log ==="
+tail -35 "$DIR/sup.log" 2>/dev/null >> $LOG
+say "=== CRASH REPORTS ==="
+ls -lt "$DIR/crash-reports" 2>/dev/null | head -5 >> $LOG
+LATEST_CRASH=$(ls -t "$DIR/crash-reports"/*.txt 2>/dev/null | head -1)
+[ -n "$LATEST_CRASH" ] && head -45 "$LATEST_CRASH" >> $LOG
+say "=== DMESG OOM ==="
+dmesg -T 2>/dev/null | grep -iE 'oom|killed process|java' | tail -10 >> $LOG || true
+say "sup.log: $(tail -5 "$DIR/sup.log" 2>/dev/null | tr '\n' '|' | cut -c1-260)"
+say "frpc.toml: $(grep -c . "$HOME/frpc.toml" 2>/dev/null || echo NICIFISIER)"
+A=$(cat $DIR/ADRESA 2>/dev/null)
+say "adresa din fisier: ${A:-NU}"
+for i in 1 2 3; do
+  R=$(curl -fsS --max-time 25 "https://api.mcsrvstat.us/3/${A:-bore.pub:1}" 2>/dev/null)
+  say "  dinafara $i: $(echo "$R" | grep -oE '\"online\":(true|false)') | $(echo "$R" | grep -oE '\"version\":\"[^\"]*\"') | $(echo "$R" | grep -oE '\"motd\":\[[^]]*\]') $(echo "$R" | grep -oE '\"message\":\"[^\"]+\"' | head -1)"
+  case "$R" in *'"online":true'*) break;; esac
+  sleep 8
+done
+mkdir -p "$GITHUB_WORKSPACE/analysis"; cd "$GITHUB_WORKSPACE"
+{ printf '# CHK — %s\n\n' "$(date -u '+%F %T UTC')"; echo '```'; cat $LOG; echo '```'; } > analysis/chk.md
+git config user.name "cuantic-bot"; git config user.email "bot@cuantic.local"
+git add -f analysis/chk.md; git commit -q -m "chk: inventar complet 1.7.2" || true
+for _t in 1 2 3 4; do
+  git pull --rebase -X theirs -q origin "$GITHUB_REF_NAME" || true
+  git push -q origin "$GITHUB_REF_NAME" && break
+  sleep 3
+done
+say "GATA"; exit 0
+
+# PROBĂ PLUGINS/BRAND (cerută de verdictul T5=0 linii de incarcare si T10CADE): catologul zice
+# altfel decat numaratoarea noastra - masuram direct in live.log.
+L="$D/live.log"; [ -f "$L" ] || L=$(ls -t "$D"/*.log 2>/dev/null | head -1)
+{ echo "--- plugins/brand in log:";
+  echo "fisiere in plugins: $(ls "$D"/plugins/*.jar 2>/dev/null | wc -l) (Cuantic-Brand: $(ls "$D"/plugins/ 2>/dev/null | grep -ci cuantic))"
+  echo "linii Enabling: $(tail -4000 "$L" 2>/dev/null | grep -aci 'Enabling') | 'Server booting'|'Done': $(tail -4000 "$L" 2>/dev/null | grep -aci 'Done (')"
+  echo "Cuantic in log (ultimele 4000 linii): $(tail -4000 "$L" 2>/dev/null | grep -aci cuantic)"
+  tail -4000 "$L" 2>/dev/null | grep -ai "Cuantic/version" | tail -2
+  echo "esecuri plugin: $(tail -4000 "$L" 2>/dev/null | grep -aiE 'Could not (load|enable)|error occurred while enabling' | wc -l)"
+  tail -4000 "$L" 2>/dev/null | grep -aiE 'Could not (load|enable)|error occurred while enabling' | tail -3 | cut -c1-160
+} >> "$ANALYSIS/chk.md" 2>/dev/null || true

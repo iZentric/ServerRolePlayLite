@@ -1,0 +1,986 @@
+Animation: Reveal
+#It is recommended to copy the crate file of which crate you wish to edit, as some animations have unique to them configurations
+Proximity_Distance: 8 #How close to the crate does the crate disappear for the user(not including the crate opener)
+AnimationVisibilityOption: "Proximity"
+# What should be the settings for animation see-ability?
+# "Individual" - Only the opener of the crate sees the animation.
+# "All" - Everyone sees the animation.
+# "Proximity" - if a player comes too close to the crate (distance set with Proximity_Distance configuration) the animation disappears (except for the opener of the crate),
+# Otherwise everyone can see the animation. Useful so multiple people can open crates at the same time and still see what other players are receiving
+#OnlyPlaceableAtLocations: #This makes it so users can't place down crates anywhere expect in these coordinates
+#  - "-270,78,-2"
+Material: ENDER_CHEST
+OnlyPlaceable: true
+RewardsDontRepeat: false
+Enchanted: false
+Name: §a§l*§2§l*§a§l* §a§lReveal §2§lAnimation §a§l*§2§l*§a§l*
+RewardHologram:
+- '&a&l*&2&l*&a&l* &a&l{player_name}''''s §a§lReveal §2§lAnimation showcase &a&l*&2&l*&a&l*'
+- ''
+- '&7Purchased at: &astore.example.com'
+Size: 4
+Lores:
+- ''
+KeyCrate:
+  Require: true
+  Material: TRIPWIRE_HOOK
+  MatchName: true
+  MatchLore: true
+  MatchEnchants: false
+  MatchNBT: false #on crate opening check if the players key has the proper nbt tags as the configured key
+  Name: §a§lReveal §2§lAnimation Key
+  Enchanted: true
+  Lores:
+  - ''
+  - §7Opens a Round Crate
+  - §7Open crates at /warp crate
+ClosedCrateText:
+- '&7&l&d&lReveal &f&lAnimation'
+- '&7(&dRight-click &fto open crate&7)'
+- '&7(&dLeft-click &fto preview rewards&7)'
+ParticleAnimations:
+  '0':
+    type: ENCHANTMENT_TABLE
+    range-x: 1.0
+    range-y: 1.0
+    range-z: 1.0
+    center-x: 0.0
+    center-y: 0.0
+    center-z: 0.0
+    speed: 20.0
+    amount: 16
+    animation: CIRCLE
+  '3':
+    type: FLAME
+    range-x: 1.0
+    range-y: -1.0
+    range-z: 0.0
+    speed: 0.0
+    amount: 1
+    animation: TILTED_RINGS
+    center-x: 0
+    center-y: 0
+    center-z: 0
+Prizes:
+  '10000':
+    Material: EMERALD
+    Glow: true
+    Name: '&a&l$10,000 Balance'
+    GiveConfiguratedItem: false
+    PreviewName: '&a&l$10,000 Balance (x1)'
+    PreviewLores:
+    - '&7Receive $10,000 right into your account'
+    - ''
+    - '&7Chance: 8.33%'
+    Commands:
+    - eco give {player_name} 10000
+    Chance: 8.33
+    Amount: 1
+    ItemFlags:
+    - HIDE_ENCHANTS
+    LinkedRewards: []
+    Damage: 0
+  128Tokens:
+    Material: MAGMA_CREAM
+    Glow: true
+    Name: '&b&l128x Tokens'
+    GiveConfiguratedItem: false
+    PreviewName: '&b&lTokens (x128)'
+    PreviewLores:
+    - '&7Receive 128 Tokens'
+    - '&7to Your Token Balance'
+    - ''
+    - '&7/tokenshop'
+    - ''
+    - '&7Chance: 8.33%'
+    Commands:
+    - tokens give {player_name} 128
+    Chance: 8.33
+    Amount: 1
+    ItemFlags:
+    - HIDE_ENCHANTS
+    LinkedRewards: []
+    Damage: 0
+  HarvestorHoe:
+    Material: DIAMOND_HOE
+    Glow: true
+    Name: '&c&l1x Harvestor Hoe'
+    GiveConfiguratedItem: false
+    PreviewName: '&c&lHarvestor Hoe (x1)'
+    PreviewLores:
+    - '&7Very Useful Tool for'
+    - '&7Quickly picking up groceries!'
+    - ''
+    - '&7Chance: 8.33%'
+    Commands:
+    - hoe give {player_name} 1
+    Chance: 8.33
+    Amount: 1
+    ItemFlags:
+    - HIDE_ENCHANTS
+    LinkedRewards: []
+    Damage: 0
+  SellWand:
+    Material: GOLDEN_HOE
+    Glow: true
+    Name: '&d&l1x Sell Wand &8[&71000 Uses&8]'
+    GiveConfiguratedItem: false
+    PreviewName: '&d&lSell Wand &8[&71000 Uses&8] (x1)'
+    PreviewLores:
+    - '&7Simply Right-Click on a Chest With a Sell Hoe'
+    - '&7to Automatically Sell All Possible Chests Contents'
+    - ''
+    - '&7Chance: 8.33%'
+    Commands:
+    - sw give {player_name} 1 1000
+    Chance: 8.33
+    Amount: 1
+    ItemFlags:
+    - HIDE_ENCHANTS
+    LinkedRewards: []
+    Damage: 0
+  1LegendaryKey:
+    Material: TRIPWIRE_HOOK
+    Glow: true
+    Name: '&e&l1x Legendary Key'
+    GiveConfiguratedItem: false
+    PreviewName: '&e&lLegendary Key (x1)'
+    PreviewLores:
+    - '&7Opens a Legendary Crate'
+    - '&7/warp Crates'
+    - ''
+    - '&7Chance: 8.33%'
+    Commands:
+    - crate give {player_name} legendary 1
+    Chance: 8.33
+    Amount: 1
+    ItemFlags:
+    - HIDE_ENCHANTS
+    LinkedRewards: []
+    Damage: 0
+  Heroic_Leather_Combat_Leggings:
+    Material: DIAMOND_LEGGINGS
+    Glow: true
+    Amount: 1
+    Name: '&6Heroic Leather Combat Leggings'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §6§oAbsolute mobility, complete security
+    NBTtags: '{Damage:0,Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}]}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Black_Scroll:
+    Material: INK_SAC
+    Glow: false
+    Amount: 1
+    Name: '&f&lBlack Scroll'
+    Lores:
+    - §7Removes a random enchantment
+    - §7from an item and converts
+    - §7it into a §f73% §7success book.
+    - §fPlace scroll onto item to extract.
+    NBTtags: '{success:"73",HideFlags:34,ae_scroll:"true",CustomModelData:0}'
+    ItemFlags:
+    - HIDE_ATTRIBUTES
+    - HIDE_POTION_EFFECTS
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Nightmare_Killer:
+    Material: DIAMOND_SWORD
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Nightmare Killer'
+    Enchantments:
+    - FIRE_ASPECT;2
+    - DAMAGE_ALL;5
+    - DURABILITY;3
+    Lores:
+    - §6Disarmor I
+    - §6Double Strike I
+    - §6§oAn onyx blade with dark legacy,
+    - §6§orumor has it this bald only
+    - §6§oexists for a few fleeting moments
+    - §6§obefore and after each assassination.
+    NBTtags: '{Enchantments:[{id:"minecraft:fire_aspect",lvl:2s},{id:"minecraft:sharpness",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],Damage:0,slots:2,"ae_enchantment;doublestrike":1,"ae_enchantment;disarmor":1}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Onyx_Cloack_of_the_Grandmaster:
+    Material: DIAMOND_CHESTPLATE
+    Glow: true
+    Amount: 1
+    Name: '&6Heroic Onyx Cloack of the Grandmaster'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §bShockwave II
+    - §eRagdoll III
+    - §6Overload I
+    - §6§oA well kept, leather black cloak.
+    NBTtags: '{Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],"ae_enchantment;ragdoll":3,Damage:0,slots:3,"ae_enchantment;shockwave":2,"ae_enchantment;overload":1}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Mining_Helmet:
+    Material: DIAMOND_HELMET
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Mining Helmet'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §7Aquatic I
+    - §aMolten I
+    - §eCreeper Armor I
+    - §eObsidianshield I
+    - §6§oAn enhanced version of the famous,
+    - §6§omining helmet, your vision penetrates all.
+    NBTtags: '{"ae_enchantment;molten":1,Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],"ae_enchantment;aquatic":1,Damage:0,"ae_enchantment;obsidianshield":1,"ae_enchantment;creeperarmor":1,slots:4}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  ender_pearl:
+    Material: ENDER_PEARL
+    Glow: false
+    Amount: 1
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  tnt:
+    Material: TNT
+    Glow: false
+    Amount: 1
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Ghost_Sandals:
+    Material: DIAMOND_BOOTS
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Ghost Sandals'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §bRocket Escape II
+    - §bSprings II
+    - §6Gears II
+    - §6§oA pair of sandals from the depths of the
+    - §6§ovoid, wear these and become undetecable.
+    NBTtags: '{"ae_enchantment;gears":2,"ae_enchantment;springs":2,Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],"ae_enchantment;rocketescape":2,Damage:0,slots:3}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Crystal_Bow_of_Athena:
+    Material: BOW
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Crystal Bow of Athena'
+    Enchantments:
+    - ARROW_INFINITE;1
+    - ARROW_DAMAGE;5
+    - ARROW_KNOCKBACK;2
+    - DURABILITY;3
+    Lores:
+    - §aExplosive IV
+    - §bSnare I
+    - §ePiercing II
+    - §eSniper I
+    - §6§oWhen you get your target within
+    - §6§oyour sights, their journey ends.
+    NBTtags: '{"ae_enchantment;piercing":2,Enchantments:[{id:"minecraft:infinity",lvl:1s},{id:"minecraft:power",lvl:5s},{id:"minecraft:punch",lvl:2s},{id:"minecraft:unbreaking",lvl:3s}],Damage:0,"ae_enchantment;explosive":4,"ae_enchantment;sniper":1,"ae_enchantment;snare":1,slots:4}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Ultimate_Secret_Dust_(Right_Click):
+    Material: FIRE_CHARGE
+    Glow: false
+    Amount: 1
+    Name: '&eUltimate&e Secret Dust &7(Right Click)'
+    Lores:
+    - '§7Contains: §bMagic, §fMystery §7dust.'
+    - §7An unidentified satchel of dust.
+    NBTtags: '{HideFlags:34,groupType:"ULTIMATE",CustomModelData:0}'
+    ItemFlags:
+    - HIDE_ATTRIBUTES
+    - HIDE_POTION_EFFECTS
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Convulse_VI:
+    Material: ENCHANTED_BOOK
+    Glow: false
+    Amount: 1
+    Name: '&6&l&nConvulse VI'
+    Lores:
+    - §a8% Success Rate
+    - §c92% Destroy Rate
+    - §eChance to throw your
+    - §eattackers into the air.
+    - §7Boots Enchantment
+    - §7Drag n' drop onto item to enchant
+    NBTtags: '{book:"ae_valid;convulse;6;92;8;",CustomModelData:0}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Explosive_Cake:
+    Material: CAKE
+    Glow: false
+    Amount: 1
+    Name: '&f&lExplosive Cake'
+    Lores:
+    - §7§oWhat? Have you not seen an
+    - §7§o§nEXPLODING§7§o cake before?!
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  creeper_spawn_egg1:
+    Material: CREEPER_SPAWN_EGG
+    Glow: false
+    Amount: 1
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  sponge1:
+    Material: SPONGE
+    Glow: false
+    Amount: 1
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Leather_Combat_Leggings1:
+    Material: DIAMOND_LEGGINGS
+    Glow: true
+    Amount: 1
+    Name: '&6Heroic Leather Combat Leggings'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §6§oAbsolute mobility, complete security
+    NBTtags: '{Damage:0,Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}]}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Black_Scroll1:
+    Material: INK_SAC
+    Glow: false
+    Amount: 1
+    Name: '&f&lBlack Scroll'
+    Lores:
+    - §7Removes a random enchantment
+    - §7from an item and converts
+    - §7it into a §f73% §7success book.
+    - §fPlace scroll onto item to extract.
+    NBTtags: '{success:"73",HideFlags:34,ae_scroll:"true",CustomModelData:0}'
+    ItemFlags:
+    - HIDE_ATTRIBUTES
+    - HIDE_POTION_EFFECTS
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Nightmare_Killer1:
+    Material: DIAMOND_SWORD
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Nightmare Killer'
+    Enchantments:
+    - FIRE_ASPECT;2
+    - DAMAGE_ALL;5
+    - DURABILITY;3
+    Lores:
+    - §6Disarmor I
+    - §6Double Strike I
+    - §6§oAn onyx blade with dark legacy,
+    - §6§orumor has it this bald only
+    - §6§oexists for a few fleeting moments
+    - §6§obefore and after each assassination.
+    NBTtags: '{Enchantments:[{id:"minecraft:fire_aspect",lvl:2s},{id:"minecraft:sharpness",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],Damage:0,slots:2,"ae_enchantment;doublestrike":1,"ae_enchantment;disarmor":1}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Onyx_Cloack_of_the_Grandmaster1:
+    Material: DIAMOND_CHESTPLATE
+    Glow: true
+    Amount: 1
+    Name: '&6Heroic Onyx Cloack of the Grandmaster'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §bShockwave II
+    - §eRagdoll III
+    - §6Overload I
+    - §6§oA well kept, leather black cloak.
+    NBTtags: '{Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],"ae_enchantment;ragdoll":3,Damage:0,slots:3,"ae_enchantment;shockwave":2,"ae_enchantment;overload":1}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Mining_Helmet1:
+    Material: DIAMOND_HELMET
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Mining Helmet'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §7Aquatic I
+    - §aMolten I
+    - §eCreeper Armor I
+    - §eObsidianshield I
+    - §6§oAn enhanced version of the famous,
+    - §6§omining helmet, your vision penetrates all.
+    NBTtags: '{"ae_enchantment;molten":1,Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],"ae_enchantment;aquatic":1,Damage:0,"ae_enchantment;obsidianshield":1,"ae_enchantment;creeperarmor":1,slots:4}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  ender_pearl1:
+    Material: ENDER_PEARL
+    Glow: false
+    Amount: 1
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  tnt1:
+    Material: TNT
+    Glow: false
+    Amount: 1
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Ghost_Sandals1:
+    Material: DIAMOND_BOOTS
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Ghost Sandals'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §bRocket Escape II
+    - §bSprings II
+    - §6Gears II
+    - §6§oA pair of sandals from the depths of the
+    - §6§ovoid, wear these and become undetecable.
+    NBTtags: '{"ae_enchantment;gears":2,"ae_enchantment;springs":2,Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],"ae_enchantment;rocketescape":2,Damage:0,slots:3}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Crystal_Bow_of_Athena1:
+    Material: BOW
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Crystal Bow of Athena'
+    Enchantments:
+    - ARROW_INFINITE;1
+    - ARROW_DAMAGE;5
+    - ARROW_KNOCKBACK;2
+    - DURABILITY;3
+    Lores:
+    - §aExplosive IV
+    - §bSnare I
+    - §ePiercing II
+    - §eSniper I
+    - §6§oWhen you get your target within
+    - §6§oyour sights, their journey ends.
+    NBTtags: '{"ae_enchantment;piercing":2,Enchantments:[{id:"minecraft:infinity",lvl:1s},{id:"minecraft:power",lvl:5s},{id:"minecraft:punch",lvl:2s},{id:"minecraft:unbreaking",lvl:3s}],Damage:0,"ae_enchantment;explosive":4,"ae_enchantment;sniper":1,"ae_enchantment;snare":1,slots:4}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Ultimate_Secret_Dust_(Right_Click)1:
+    Material: FIRE_CHARGE
+    Glow: false
+    Amount: 1
+    Name: '&eUltimate&e Secret Dust &7(Right Click)'
+    Lores:
+    - '§7Contains: §bMagic, §fMystery §7dust.'
+    - §7An unidentified satchel of dust.
+    NBTtags: '{HideFlags:34,groupType:"ULTIMATE",CustomModelData:0}'
+    ItemFlags:
+    - HIDE_ATTRIBUTES
+    - HIDE_POTION_EFFECTS
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Convulse_VI1:
+    Material: ENCHANTED_BOOK
+    Glow: false
+    Amount: 1
+    Name: '&6&l&nConvulse VI'
+    Lores:
+    - §a8% Success Rate
+    - §c92% Destroy Rate
+    - §eChance to throw your
+    - §eattackers into the air.
+    - §7Boots Enchantment
+    - §7Drag n' drop onto item to enchant
+    NBTtags: '{book:"ae_valid;convulse;6;92;8;",CustomModelData:0}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Explosive_Cake1:
+    Material: CAKE
+    Glow: false
+    Amount: 1
+    Name: '&f&lExplosive Cake'
+    Lores:
+    - §7§oWhat? Have you not seen an
+    - §7§o§nEXPLODING§7§o cake before?!
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  creeper_spawn_egg2:
+    Material: CREEPER_SPAWN_EGG
+    Glow: false
+    Amount: 1
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  sponge2:
+    Material: SPONGE
+    Glow: false
+    Amount: 1
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Leather_Combat_Leggings2:
+    Material: DIAMOND_LEGGINGS
+    Glow: true
+    Amount: 1
+    Name: '&6Heroic Leather Combat Leggings'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §6§oAbsolute mobility, complete security
+    NBTtags: '{Damage:0,Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}]}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Black_Scroll2:
+    Material: INK_SAC
+    Glow: false
+    Amount: 1
+    Name: '&f&lBlack Scroll'
+    Lores:
+    - §7Removes a random enchantment
+    - §7from an item and converts
+    - §7it into a §f73% §7success book.
+    - §fPlace scroll onto item to extract.
+    NBTtags: '{success:"73",HideFlags:34,ae_scroll:"true",CustomModelData:0}'
+    ItemFlags:
+    - HIDE_ATTRIBUTES
+    - HIDE_POTION_EFFECTS
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Nightmare_Killer2:
+    Material: DIAMOND_SWORD
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Nightmare Killer'
+    Enchantments:
+    - FIRE_ASPECT;2
+    - DAMAGE_ALL;5
+    - DURABILITY;3
+    Lores:
+    - §6Disarmor I
+    - §6Double Strike I
+    - §6§oAn onyx blade with dark legacy,
+    - §6§orumor has it this bald only
+    - §6§oexists for a few fleeting moments
+    - §6§obefore and after each assassination.
+    NBTtags: '{Enchantments:[{id:"minecraft:fire_aspect",lvl:2s},{id:"minecraft:sharpness",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],Damage:0,slots:2,"ae_enchantment;doublestrike":1,"ae_enchantment;disarmor":1}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Onyx_Cloack_of_the_Grandmaster2:
+    Material: DIAMOND_CHESTPLATE
+    Glow: true
+    Amount: 1
+    Name: '&6Heroic Onyx Cloack of the Grandmaster'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §bShockwave II
+    - §eRagdoll III
+    - §6Overload I
+    - §6§oA well kept, leather black cloak.
+    NBTtags: '{Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],"ae_enchantment;ragdoll":3,Damage:0,slots:3,"ae_enchantment;shockwave":2,"ae_enchantment;overload":1}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Mining_Helmet2:
+    Material: DIAMOND_HELMET
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Mining Helmet'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §7Aquatic I
+    - §aMolten I
+    - §eCreeper Armor I
+    - §eObsidianshield I
+    - §6§oAn enhanced version of the famous,
+    - §6§omining helmet, your vision penetrates all.
+    NBTtags: '{"ae_enchantment;molten":1,Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],"ae_enchantment;aquatic":1,Damage:0,"ae_enchantment;obsidianshield":1,"ae_enchantment;creeperarmor":1,slots:4}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  ender_pearl2:
+    Material: ENDER_PEARL
+    Glow: false
+    Amount: 1
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  tnt2:
+    Material: TNT
+    Glow: false
+    Amount: 1
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Ghost_Sandals2:
+    Material: DIAMOND_BOOTS
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Ghost Sandals'
+    Enchantments:
+    - PROTECTION_PROJECTILE;4
+    - PROTECTION_ENVIRONMENTAL;5
+    - DURABILITY;3
+    Lores:
+    - §bRocket Escape II
+    - §bSprings II
+    - §6Gears II
+    - §6§oA pair of sandals from the depths of the
+    - §6§ovoid, wear these and become undetecable.
+    NBTtags: '{"ae_enchantment;gears":2,"ae_enchantment;springs":2,Enchantments:[{id:"minecraft:projectile_protection",lvl:4s},{id:"minecraft:protection",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],"ae_enchantment;rocketescape":2,Damage:0,slots:3}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Crystal_Bow_of_Athena2:
+    Material: BOW
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Crystal Bow of Athena'
+    Enchantments:
+    - ARROW_INFINITE;1
+    - ARROW_DAMAGE;5
+    - ARROW_KNOCKBACK;2
+    - DURABILITY;3
+    Lores:
+    - §aExplosive IV
+    - §bSnare I
+    - §ePiercing II
+    - §eSniper I
+    - §6§oWhen you get your target within
+    - §6§oyour sights, their journey ends.
+    NBTtags: '{"ae_enchantment;piercing":2,Enchantments:[{id:"minecraft:infinity",lvl:1s},{id:"minecraft:power",lvl:5s},{id:"minecraft:punch",lvl:2s},{id:"minecraft:unbreaking",lvl:3s}],Damage:0,"ae_enchantment;explosive":4,"ae_enchantment;sniper":1,"ae_enchantment;snare":1,slots:4}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Ultimate_Secret_Dust_(Right_Click)2:
+    Material: FIRE_CHARGE
+    Glow: false
+    Amount: 1
+    Name: '&eUltimate&e Secret Dust &7(Right Click)'
+    Lores:
+    - '§7Contains: §bMagic, §fMystery §7dust.'
+    - §7An unidentified satchel of dust.
+    NBTtags: '{HideFlags:34,groupType:"ULTIMATE",CustomModelData:0}'
+    ItemFlags:
+    - HIDE_ATTRIBUTES
+    - HIDE_POTION_EFFECTS
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Convulse_VI2:
+    Material: ENCHANTED_BOOK
+    Glow: false
+    Amount: 1
+    Name: '&6&l&nConvulse VI'
+    Lores:
+    - §a8% Success Rate
+    - §c92% Destroy Rate
+    - §eChance to throw your
+    - §eattackers into the air.
+    - §7Boots Enchantment
+    - §7Drag n' drop onto item to enchant
+    NBTtags: '{book:"ae_valid;convulse;6;92;8;",CustomModelData:0}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Explosive_Cake2:
+    Material: CAKE
+    Glow: false
+    Amount: 1
+    Name: '&f&lExplosive Cake'
+    Lores:
+    - §7§oWhat? Have you not seen an
+    - §7§o§nEXPLODING§7§o cake before?!
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Epic_Love_Letter:
+    Material: PAPER
+    Glow: false
+    Amount: 1
+    Name: '&fEpic Love Letter'
+    Lores:
+    - §7Written in an alien language...
+    - §7but someone loves you!
+    NBTtags: '{}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Axe_of_the_Dwarvish_Gods:
+    Material: DIAMOND_AXE
+    Glow: true
+    Amount: 1
+    Name: '&6&lAxe of the Dwarvish Gods'
+    Enchantments:
+    - FIRE_ASPECT;2
+    - DAMAGE_ALL;5
+    - DAMAGE_UNDEAD;5
+    - DURABILITY;3
+    Lores:
+    - §aBerserk II
+    - §bReforged II
+    - §eBleed IV
+    - §6Barbarian II
+    - §6§oAn ancient axe forged by dwarven gods.
+    NBTtags: '{Enchantments:[{id:"minecraft:fire_aspect",lvl:2s},{id:"minecraft:sharpness",lvl:5s},{id:"minecraft:smite",lvl:5s},{id:"minecraft:unbreaking",lvl:3s}],Damage:0,"ae_enchantment;berserk":2,"ae_enchantment;reforged":2,"ae_enchantment;bleed":4,slots:4,"ae_enchantment;barbarian":2}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Shiva''s_Excavator:
+    Material: DIAMOND_SHOVEL
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Shiva''''s Excavator'
+    Enchantments:
+    - DIG_SPEED;5
+    - LOOT_BONUS_BLOCKS;3
+    - DURABILITY;3
+    Lores:
+    - §aTelepathy II
+    - §dHaste II
+    - §6§oAn ancient spade used by
+    - §6§othe realm god of excavation.
+    NBTtags: '{"ae_enchantment;haste":2,Enchantments:[{id:"minecraft:efficiency",lvl:5s},{id:"minecraft:fortune",lvl:3s},{id:"minecraft:unbreaking",lvl:3s}],Damage:0,slots:2,"ae_enchantment;telepathy":2}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  Heroic_Pickaxe_of_Hephaestus:
+    Material: DIAMOND_PICKAXE
+    Glow: true
+    Amount: 1
+    Name: '&6&lHeroic Pickaxe of Hephaestus'
+    Enchantments:
+    - DIG_SPEED;5
+    - LOOT_BONUS_BLOCKS;3
+    - DURABILITY;3
+    Lores:
+    - §7Experience IV
+    - §dHaste II
+    - §6§oA legendary tool forged by
+    - §6§othe god of builders.
+    NBTtags: '{"ae_enchantment;haste":2,Enchantments:[{id:"minecraft:efficiency",lvl:5s},{id:"minecraft:fortune",lvl:3s},{id:"minecraft:unbreaking",lvl:3s}],Damage:0,slots:2,"ae_enchantment;experience":4}'
+    GiveConfiguratedItem: true
+    LinkedRewards: []
+    Commands: []
+    Chance: 10.0
+    Damage: 0
+  '100000':
+    Material: PLAYER_HEAD
+    Base64Texture: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTQ2N2E3YjlkNzZiYTZkMGZlZDc0MzYwMjUzM2ZjOThjODdhZjBjNjBmODBmMzhkYTc3NGY3YTAxYTIwOTNmYSJ9fX0=
+    Glow: false
+    Name: '&e&l$100,000'
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    PreviewName: '&c&l$100,000'
+    PreviewLores:
+    - '&7$100,000 to your balance'
+    Commands:
+    - eco give {player_name} 100000
+    Chance: 20.0
+    Amount: 1
+    LinkedRewards: []
+    Damage: 0
+  MVP:
+    Material: NETHER_STAR
+    Glow: true
+    Name: '&a&l1x MVP Rank Voucher'
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    Permission: Donator.Novice
+    Commands:
+    - voucher give {player_name} mvp_rank 1
+    BlacklistedPerms:
+    - Rank.MVP
+    MessagesToPlayer:
+    - '&fCongradulations on Winning The Rarest Item in The Crate!'
+    PreviewName: '&a&l1x MVP Rank Voucher (x1)'
+    PreviewLores:
+    - '&7MVP Rank Voucher'
+    - '&7For a lifetime!'
+    - ''
+    - '&7Warning: Rarest Item'
+    BroadcastMessagesToPlayers:
+    - '&e&l{player_name} &f&lWas Lucky Enough to Win The &a&lMVP Rank Voucher'
+    Chance: 5.0
+    Amount: 1
+    ItemFlags:
+    - HIDE_ENCHANTS
+    LinkedRewards: []
+    Damage: 0
+  BeaconGenerator:
+    Material: BEACON
+    Glow: true
+    Name: '&c&l1x Beacon Generator'
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    PreviewName: '&c&lBeacon Generator (1x)'
+    PreviewLores:
+    - '&7Special Generator'
+    - ''
+    - '&7I wonder, what does it generate?'
+    Commands:
+    - generator give {player_name} beacon 1
+    Chance: 20.0
+    Amount: 1
+    ItemFlags:
+    - HIDE_ENCHANTS
+    LinkedRewards: []
+    Damage: 0
+Glow: false
+Amount: 1
+MessagesToPlayer: []
+Final_Message: []
+FinalMessageToOpener: []
+PrizeSize: 0
+CommandOnCratePlace: []
+Damage: 0
+NBTtags: ''

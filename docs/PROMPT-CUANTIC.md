@@ -1,0 +1,57 @@
+# PROMPT-CUANTIC — profilul permanent al proiectului
+
+> Versiunea scurtă, păstrată ca lege de proiect. Textul integral primit de la proprietar este spec-ul de mai jos,
+> cu aceleași obligații; acest fișier e versiunea pe care o aplică agenții.
+
+## Scop
+Server hybrid **Roleplay Lite** + survival cât de cât vanilla, pe orice PC, cu modpack-ul și pluginurile lui VII
+sacre (cerință de compatibilitate). Baza tehnică, planul, uneltele și pații îi alege agentul.
+
+## Reguli de neclintit
+1. Maximezi performanța reală și funcționalitatea; iau baza upstream matură și o îmbunătățesc, nu reinventez.
+2. Optimizez consumul total (CPU, RAM, GC, I/O, rețea, MSPT) și sub sarcină, nu doar la pornire goală.
+3. Zero cost: numai software liber, fără billing, fără licențe plătite.
+4. Fără „cel mai bun/10x" fără baseline + benchmark măsurat, cu variație raportată.
+5. Fiecare componentă trebuie să bată echivalentul public cu dovezi, altfel se taie (LEGEA-RUST art.5).
+6. Nu șterg și nu înlocuiesc conținut din modpack fără să declar efectul.
+7. Numele oricărui produs/config/raport nou este **Cuantic**.
+8. Nu pretind că am verificat o pagină/agent/build pe care nu l-am rulat. Declari limitările.
+
+## Echipa (când ai suport real; altfel declară că simulezi rolurile)
+Coordonator · Cercetători · Compatibilitate · Performanță/profilare · Build · Critic adversarial,
+cu task board comun (responsabil, stare, surse, fișiere, blocaje).
+
+## Livrabile obligatorii
+jar Cuantic + surse/patch-uri · pași de build și instalare · lista de compatibilități confirmate ·
+inventar tehnologii și licențe · config-urile optimizate + lista schimbărilor · raport baseline vs candidat
+(loguri + valori brute) · uneltele gratuite instalate cu versiuni și comenzi · puntea live (chat/loguri +
+start/stop/restart) cu pași de salvare și rollback · limitări, regresiuni, teste nereușite, următorul experiment.
+
+## stare_project_vs_profil (2026-10-09)
+| Cerință | Stare | Unde |
+|---|---|---|
+| jar Cuantic (CatServer + Arclight) | livrat, build reproducible, **1.5.9** | `scripts/build_lite.py`, release `lite` |
+| client `.mrpack` (ca să poată intra cineva) | **1.5.9**: 24 moduri originale + 7 de FPS + cele **7 moduri de registru** luate byte-cu-byte de pe server (`Clumps`, `Placebo`, `FastFurnace`, `FastWorkbench`, `AI-Improvements`, `InControl`, `bwncr`) | `analysis/build.log` (`+ mirror in client` ×7, zero `!!`) |
+| login de client real | handshake **dovedit** din logurile tale: `Connecting to 92.5.171.150, 25565` + `Successfully synchronized gun properties from server`; blocada era registru (rândul de mai sus) | `latest.log` client 22:51 |
+| pași build/instalare | livrat | `docs/PRIMA-PORNIRE.md`, `deploy/INSTALEAZA-PACK.bat` |
+| compatibilități confirmate | 32 moduri + 15 plugini, audit `missing 0` | `analysis/viteza/`, `docs/ANATOMIA-SERVERULUI.md` |
+| config optimizat + schimbări | livrat | `docs/VITEZA-CUANTIC.md`, `docs/CONSUM-DETALIAT.md` |
+| baseline vs candidat | parțial: idle + load sintetic, `Done 14-83s`, vârf RAM 4185 MB | `analysis/viteza*` |
+| benchmark **cu jucători reali** | **PARȚIAL LIVRAT**: 1 jucător real, MSPT mediu **2.4 ms**, p95 7.8 ms, 0 `Can't keep up`, G1 Old 0 GC, heap 743 MB/2 GB, 13% CPU pe 2 vCPU, 4 ms latență prin tunel. Lipsesc 3-10 jucători și baseline-ul original | [docs/BENCH-CUANTIC.md](BENCH-CUANTIC.md), `analysis/BENCH-LIVE.md` |
+| punte live (chat/loguri + start/stop/restart) | **LIVRAT și probat**: `list` → `There are 1 out of maximum 25 players online: iZentric`, `say` → mesaj în chat; `spark health/gc` rulează din consola; RCON rămâne inutilizabil pe 1.16.5 (MC-12864) | `scripts/cuantic-live.sh`, `analysis/BENCH-LIVE.md` |
+| 24/7 pe Cloud Shell | **IMPOSIBIL fizic**: containerul unui job moare la final; persistă numai home-ul | `analysis/up.md`, `analysis/chk.md` |
+| expunere publică | frps pe VPS-ul proprietarului + frpc în Cloud Shell, adresă fixă `92.5.171.150:25565` | `scripts/frps-install.sh`, `scripts/cuantic-live.sh` |
+| cost | 0 lei (free tier OCI/Evovv, GitHub Actions, binare open-source) | — |
+
+## Următorul experiment cu cel mai mare potențial
+Trei clienți reali cu `CUANTIC-Client-1.5.9.mrpack` intrați deodată, măsurați 10 min: MSPT p50/p95/p99, TPS,
+RAM steady vs peak, pauze GC — pe CatServer vs Arclight, aceeasi lume/seed. Baseline-ul e packul nemodificat
+din release-ul `lite`.
+
+## Lecția registrelor (obligatorie la orice modificare de moduri)
+`Failed to synchronize registry data` **nu** e „rețeaua lentă", nu e lag, nu se repară cu RAM.
+E tabelul de id-uri de registre (blocks / items / `minecraft:entity_type`) diferit între client și server.
+Regula de build: **dublăm în client orice mod de pe server care înregistrează ceva**
+(`pack-rules.json → mirror_on_client`, jarul copiat byte-cu-byte din `mods/` de pe server), iar clientul și
+serverul se iau mereu din **același tag de release** (`lite`). Verificare: în `latest.log` al clientului nu
+trebuie să apară linia `Server has additional mods that may be needed on the client:`.

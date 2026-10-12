@@ -1,0 +1,328 @@
+# -------------------- GUI --------------------
+
+descriptionGuiItemGUIGUI: |
+  &7Bu eşya ile bağlantı kurulacak menü
+
+descriptionGuiItemGUIRankingGames: |
+  &7Bu sıralama için dikkate alınması gereken oyunlar
+
+descriptionGuiItemGameGame: |
+  &7Bu eşya ile bağlantı kurulacak oyun
+
+descriptionGuiItemToggleSettingSetting: |
+  &7Geçiş yapmak için ayarlama
+
+descriptionGuiItemToggleSettingIconOn: |
+  &7Ayar etkinleştirildiğinde görüntülenecek simge
+
+descriptionGuiItemToggleSettingIconOff: |
+  &7Ayar kapatıldığında görüntülenecek simge
+
+editorMainTitle: BahisOyunları
+
+editorGamesTitle: Oyunlar
+editorGamesIconName: |
+  &aOyunlar
+
+editorGUIsTitle: Menü
+editorGUIsIconName: |
+  &aMenü
+
+editorGlobalGUIItemsTitle: Toplam Menü eşyaları
+editorGlobalGUIItemsIconName: |
+  &aToplam Menü eşyaları
+
+# -------------------- Game --------------------
+
+descriptionGameType: |
+  &7Oyun tipi
+
+descriptionGameName: |
+  &7Oyun adı
+
+descriptionGameParticipationPermission: |
+  &7Bu oyuna katılmak için izin gerekiyor
+
+descriptionGameParticipationCooldown: |
+  &7Bir oyun sona erdikten sonra tekrar bu oyuna katılmadan önce beklemeniz gerekiyor
+
+descriptionGameAllowBetCurrencies: |
+  &7Bu oyunda para birimlerine bahis yapılmasına izin verin
+  &7Tümüne izin vermek için boş bırakın
+
+descriptionGameAllowBetItems: |
+  &7Bu oyundaki eşyaların bahsine izin verin
+
+descriptionGameMinBetCurrencies: |
+  &7Bu oyunun bahislerinde belirli bir para biriminin minimum miktarını isteyin
+
+descriptionGameMaxBetCurrencies: |
+  &7Bu oyunun bahislerinde belirli bir para biriminin miktarını sınırlayın
+
+descriptionGameMinBetItems: |
+  &7Bu oyunun bahislerinde minimum miktarda eşya isteyin
+
+descriptionGameMaxBetItems: |
+  &7Bu oyunun bahislerindeki öğelerin miktarını kısıtlayın
+
+descriptionGameOnWinBehavior: |
+  &7Bir oyuncu kazandığında yapılacak
+
+descriptionGameOnLoseBehavior: |
+  &7Bir oyuncu kaybettiğinde yapılacak
+
+descriptionGameOnDrawBehavior: |
+  &7Oyuncular berabere kaldığında yapılacak
+
+descriptionGameHubGUICommands: |
+  &7Bu oyunun ana menüsünü açmak için komutlar
+
+descriptionGameHubGUI: |
+  &7Bu oyunun ana menüsü
+
+descriptionGameActiveGUI: |
+  &7Bu oyunun açık menüsü
+
+descriptionGameActiveGUIStopCloseDelay: |
+  &7Oyun bittiğinde oyun menüsünü kapatmadan önce beklenecek süre
+
+descriptionGameAnimationDuration: |
+  &7animasyon süresi
+
+descriptionGameAnimationTicksStart: |
+  &7Animasyon için başladğında gecikme süresi
+
+descriptionGameAnimationTicksMin: |
+  &7Animasyon için en az gecikme süresi
+  &7Bu miktarı geçtikten sonra formül artık uygulanmayacak ve süre duracaktır.
+
+descriptionGameAnimationTicksMax: |
+  &7Animasyon için en az gecikme süresi
+  &7Bu miktarı geçtikten sonra formül artık uygulanmayacak ve süre duracaktır.
+
+descriptionGameAnimationTicksFormulaStep: |
+  &7Mevcut saniyeler dolduğunda yeni animasyon saniyelerini hesaplama
+
+descriptionGameAnimationSound: |
+  &7Saniyeler dolduğunda çalınacak ses
+
+descriptionGameDrawPlayers: |
+  &7Oyuna başlamak için gerekli oyuncu sayısı
+
+descriptionGameDrawDelay: |
+  &7Gerekli oyuncular mevcut olduğunda oyuna başlamadan önce bekleme süresi
+
+descriptionGameDrawMaxConcurrentGames: |
+  &7Maksimum eşzamanlı aktif oyun miktarı
+
+descriptionGameDrawHubGUIItemBet: |
+  &7Bahis yapmak için tıklanacak eşya
+
+descriptionGameDrawHubGUIItemDraw: |
+  &7Mevcut çekiliş durumunu temsil eden eşya, bekleniyor
+
+descriptionGameDrawHubGUIItemDrawAwaitingGames: |
+  &7Mevcut çekiliş durumunu temsil eden eşya, oyunun bitmesi bekleniyorken
+
+descriptionGameDrawHubGUIItemDrawAwaitingPlayers: |
+  &7Mevcut çekiliş durumunu temsil eden eşya, oyuncular bekleniyorken
+
+descriptionGameDrawHubGUIItemDrawCountdown: |
+  &7Mevcut çekiliş durumunu temsil eden eşya, geri sayım başladığında
+
+descriptionGameDrawHubGUIItemPlayer: |
+  &7Kimin bahis yaptığını gösteren eşya
+
+descriptionGameCrashChances: |
+  &7Değerin ne zaman çökeceğini hesaplama şansı
+
+descriptionGameCrashChanceChance: |
+  &7Değerin arasında olması için &6en az &7ve &6en fazla şans yüzdesi 
+
+descriptionGameCrashChanceMin: |
+  &7En az değer
+
+descriptionGameCrashChanceMax: |
+  &7En fazla değer
+
+descriptionGameCrashValueStart: |
+  &7Başlama değeri
+
+descriptionGameCrashValueFormulaStep: |
+  &7Her saniye değere uygulanacak formül
+
+descriptionGameCrashActiveGUIItemValue: |
+  &7Geçerli değeri temsil eden eşya
+
+descriptionGameCrashActiveGUIItemPlayerActive: |
+  &7Aktif bir oyuncuyu temsil eden eşya
+
+descriptionGameCrashActiveGUIItemPlayerStopped: |
+  &7Duran bir oyuncuyu temsil eden eşya
+
+descriptionGameJackpotActiveGUIPlayerSlots: |
+  &7Oyuncu eşyası slotları
+
+descriptionGameJackpotActiveGUIActivePlayerSlot: |
+  &7Şu anda kazanan oyuncunun eşya slotu
+
+descriptionGameJackpotActiveGUIItemPlayer: |
+  &7Aktif bir oyuncuyu temsil eden eşya
+
+descriptionGameRouletteChoices: |
+  &7Mevcut renk seçenekleri
+
+descriptionGameRouletteChoiceName: |
+  &7Bu seçimin adı
+
+descriptionGameRouletteChoiceChance: |
+  &7Bu seçimin kazanma şansı yüzdesi
+
+descriptionGameRouletteChoiceMultiplier: |
+  &7Bu seçim kazanıyorsa, oyuncu bahsine uygulanacak çarpan
+
+descriptionGameRouletteChoiceIcon: |
+  &7Bu seçimi temsil eden eşya
+
+descriptionGameRouletteChoiceIconBetInactive: |
+  &7Henüz hiçbir şey bahiste olmadığında, bahis seçim menüsünde bu seçimi temsil eden eşya
+
+descriptionGameRouletteChoiceIconBetActive: |
+  &7Bir şeye önceden bahis yapıldığında, bahis seçim menüsünde bu seçimi temsil eden eşya
+
+descriptionGameRouletteActiveGUIChoiceSlots: |
+  &7Seçim eşyası slotları
+
+descriptionGameRouletteActiveGUIActiveChoiceSlot: |
+  &7Şu anda kazanan seçim için slot
+
+descriptionGameRouletteBetChoiceGUI: |
+  &7Bahis seçimi menüsü
+
+descriptionGameVersusHubGUIItemBet: |
+  &7Bahis yapmak için tıklanacak eşya
+
+descriptionGameVersusHubGUIItemPlayer: |
+  &7Bahis yapan bir oyuncuyu temsil eden eşya
+
+descriptionGameCoinFlipActiveGUIPlayerSlots: |
+  &7Oyuncu eşya slotları
+
+descriptionGameCoinFlipActiveGUIActivePlayerSlot: |
+  &7Şu anda kazanan oyuncunun slotu
+
+descriptionGameCoinFlipActiveGUIItemPlayer: |
+  &7Aktif bir oyuncuyu temsil eden eşya
+
+descriptionGameRockPaperScissorsRounds: |
+  &7Bir oyundaki tur sayısı
+
+descriptionGameRockPaperScissorsRoundsMax: |
+  &7Bir oyunda ard arda beraberlik olması durumunda maksimum tur sayısı
+
+descriptionGameRockPaperScissorsChoiceDelay: |
+  &7Bir seçim yapmak için izin verilen maksimum süre
+
+descriptionGameRockPaperScissorsItemRock: |
+  &7Taş seçimini temsil eden öge
+
+descriptionGameRockPaperScissorsItemPaper: |
+  &7Kağıt seçimini temsil eden öğe
+
+descriptionGameRockPaperScissorsItemScissors: |
+  &7Makas seçimini temsil eden öğe
+
+descriptionGameRockPaperScissorsNotifyChoice: |
+  &7Bir seçim yapıldığında gönderilecek bildirim
+
+descriptionGameRockPaperScissorsNotifyRoundWon: |
+  &7Bir tur kazanıldığında gönderilecek bildirim
+
+descriptionGameRockPaperScissorsNotifyRoundDraw: |
+  &7Bir tur berabere kalındığında gönderilecek bildirim
+
+descriptionGameRockPaperScissorsNotifyRoundLost: |
+  &7Bir tur kaybedildiğinde gönderilecek bildirim
+
+descriptionGameRockPaperScissorsActiveGUIRoundOpenDelay: |
+  &7Bir tur bittikten sonra bir sonraki seçim menüsünü açmadan önceki gecikme
+
+descriptionGameRockPaperScissorsActiveGUISlotRock: |
+  &7Taş seçiminin belirleneceği slot
+
+descriptionGameRockPaperScissorsActiveGUISlotPaper: |
+  &7Kağıt seçiminin belirleneceği slot
+
+descriptionGameRockPaperScissorsActiveGUISlotScissors: |
+  &7Makas seçiminin belirleneceği slot
+
+descriptionGameBarGambleNotifyBuy: |
+  &7Bir oyuncu bir eşya satın aldığında gönderilecek bildirim
+
+descriptionGameBarGambleItems: |
+  &7Bu oyunda satın alınabilecek eşyalar
+
+descriptionGameBarGambleItemName: |
+  &7Bu eşyanın adı
+
+descriptionGameBarGambleItemCostCurrencies: |
+  &7Bir eşya satın almanın maliyeti
+
+descriptionGameBarGambleItemCostItems: |
+  &7Bir öğe satın almak için eşyalardaki maliyet
+
+descriptionGameBarGambleItemItem: |
+  &7Satın alma sırasında alınan eşya
+
+descriptionGameBarGambleItemChances: |
+  &7Bu eşyanın çıkma şansı
+
+descriptionGameBarGambleItemChanceChance: |
+  &7Çarpanın arasında olması için &6en az &7ve &6en fazla şans yüzdesi 
+
+descriptionGameBarGambleItemChanceMin: |
+  &7En az çarpan
+
+descriptionGameBarGambleItemChanceMax: |
+  &7En fazla çarpan
+
+descriptionGameBarGambleItemChanceEffects: |
+  &7Şans biterken verilecek etki
+
+descriptionGameUpgradeUpgrades: |
+  &7Bu oyunda denenebilecek yükseltmeler
+
+descriptionGameUpgradeUpgradeName: |
+  &7Bu yükseltmenin adı
+
+descriptionGameUpgradeUpgradeCostCurrencies: |
+  &7Bu yükseltmeyi denemenin maliyeti
+
+descriptionGameUpgradeUpgradeCostItems: |
+  &7Bu yükseltmeyi denemek için eşyalardaki maliyet
+
+descriptionGameUpgradeUpgradeIcon: |
+  &7Oyun menüsündeki bu yükseltmenin simgesi
+
+descriptionGameUpgradeUpgradeResultItems: |
+  &7Bu yükseltme için olası sonuçlar
+
+descriptionGameUpgradeUpgradeResultItemIsWin: |
+  &7Bu sonuç bir kazanç olarak kabul edilirse (maliyet dikkate alınarak)
+
+descriptionGameUpgradeUpgradeResultItemChance: |
+  &7Bu eşyanın yükseltilecek değişiklik yüzdesi
+
+descriptionGameUpgradeUpgradeResultItemItem: |
+  &7Ortaya çıkan eşya
+
+# -------------------- Misc --------------------
+
+descriptionWinLoseBehaviorCommands: |
+  &7Uygulanacak komutlar
+
+descriptionWinLoseBehaviorNotifyPlayer: |
+  &7Oyuncuya gönderilecek bildirim
+
+descriptionWinLoseBehaviorNotifyBroadcast: |
+  &7Sunucunun geri kalanına gönderilecek bildirim

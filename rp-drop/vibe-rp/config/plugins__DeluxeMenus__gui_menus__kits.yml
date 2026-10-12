@@ -1,0 +1,130 @@
+menu_title: '&b&l             SERVER KITS'
+open_command: 
+- kit
+- kits
+size: 27
+open_requirement:
+  requirements:
+    permission:
+      type: has permission
+      permission: menu.kit
+      deny_commands:
+      - '[close]'
+items:
+  'glass':
+    material: 160
+    data: 3
+    enchantments:
+    - 'DURABILITY;1'
+    hide_enchantments: true
+    slots:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 12
+    - 14
+    - 16
+    - 17
+    - 18
+    - 19
+    - 20
+    - 21
+    - 22
+    - 23
+    - 24
+    - 25
+    - 26
+    - 27
+    display_name: '&f '
+  'DefaultAvailable':
+    update: true
+    priority: 2
+    material: head;XxDanxX
+    slot: 11
+    hide_attributes: true
+    view_requirement:
+      requirements:
+        permission:
+          type: has permission
+          permission: essentials.kits.Starter
+        available:
+          type: string equals ignorecase
+          input: '%essentials_kit_is_available_Starter%'
+          output: 'yes'
+    display_name: '&b&l&nDefault Kit'
+    lore:
+    - ''
+    - '&b&l∙ STATUS &fAvailable'
+    - '&b&l∙ COOLDOWN&f 3 Days'
+    - ''
+    - '&b&oLeft-Click to claim your kit'
+    left_click_commands:
+    - '[player] ekit Starter'
+    - '[refresh]'
+  'DefaultCooldown':
+    update: true
+    priority: 1
+    material: head;XxDanxX
+    slot: 11
+    hide_attributes: true
+    view_requirement:
+      requirements:
+        permission:
+          type: has permission
+          permission: essentials.kits.Starter
+        available:
+          type: string equals ignorecase
+          input: '%essentials_kit_is_available_Starter%'
+          output: 'no'
+    display_name: '&b&l&nStarter Kit'
+    lore:
+    - ''
+    - '&b&l∙ STATUS&f: &cUnavailable'
+    - '&b&l∙ REMAINING&f: %essentials_kit_time_until_available_Starter%'
+    - '&b&l∙ COOLDOWN&f: 3 Days'
+    - ''
+    - '&b&oLeft-Click to claim your kit.'
+    left_click_commands:
+    - '[player] ekit Starter'
+    - '[refresh]'
+  '2':
+    update: true
+    material: head;StackedGold
+    slot: 13
+    display_name: '&b&l&nDonator Kits'
+    lore:
+    - ''
+    - '&fThese kits are &b&lAmenities&f of our'
+    - '&b&lDonator Ranks&f. Each donator kit'
+    - '&fcan be used every &b&l3 Days&f.'
+    - ''
+    - '&b&oClick to view the donator kits'
+    left_click_commands:
+    - '[player] dm open donatorkits'
+    right_click_commands:
+    - '[player] dm open donatorkits'
+  '3':
+    update: true
+    material: head;Bedrock
+    slot: 15
+    display_name: '&b&l&nSpecial Kits'
+    lore:
+    - ''
+    - '&fThese are the &b&lMost Exclusive&f kits'
+    - '&foffered on this server. Access to these'
+    - '&fkits can be &b&LEarned&f through competitions'
+    - '&for &b&lPurchased&f from our store.'
+    - ''
+    - '&b&oClick to view the special kits'
+    left_click_commands:
+    - '[player] dm open specialkits'
+    right_click_commands:
+    - '[player] dm open specialkits'

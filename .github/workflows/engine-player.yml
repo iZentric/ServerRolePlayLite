@@ -1,0 +1,32 @@
+# Baseline with a human player: read-only; no restart, no config or JAR change.
+name: ENGINE PLAYER — read-only real-world baseline
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-player.txt"]
+permissions:
+  contents: write
+jobs:
+  observe:
+    runs-on: [self-hosted]
+    timeout-minutes: 8
+    env: { RUNNER_TRACKING_ID: '' }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Asteapta jucator real si masoara fara sa schimbe lumea
+        run: python3 scripts/engine_player_live.py /tmp/engine-player-${{ github.run_id }}.json
+      - name: Salveaza datele chiar daca playerul iese
+        if: always()
+        run: |
+          { echo '# ENGINE PLAYER — read-only pe JAR-ul live'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; echo;
+            echo 'Nu este comparatie A/B si nu atinge JAR-ul/lumea serverului.'; echo;
+            echo '```json'; cat /tmp/engine-player-${{ github.run_id }}.json 2>/dev/null || echo 'NO DATA'; echo '```';
+          } > docs/ENGINE-PLAYER-RESULT.md
+          git config user.name cuantic-bot
+          git config user.email bot@users.noreply.github.com
+          git add docs/ENGINE-PLAYER-RESULT.md
+          git commit -m 'engine: baseline cu jucator real, fara restart' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true

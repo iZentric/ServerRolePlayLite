@@ -1,0 +1,79 @@
+
+
+
+# ***IMPORTANT PLEASE READ***
+# this is a message from swoochy
+# "please becareful when editing the Messages: as these are set so it fits perfect, only edit the colour and Links,
+# "i dont want to have to fix multiple configs to those who dont listen"
+
+# thanks, swoochy.
+
+
+
+Auto_Broadcast:
+  Global_Messages:
+    Enable: true
+    Header_And_Footer: true
+    Interval: 300
+    Prefix: "&8"
+    Header: "&7&8&m-----&7&m-----&f&m----&e&m----&6&m----------------&e&m----&f&m-----&7&m-----&8&m-----&7"
+    Footer: "&7&8&m-----&7&m-----&f&m----&e&m----&6&m----------------&e&m----&f&m-----&7&m-----&8&m-----&7"
+    Sound: ''
+    Messages:
+      - "&6&lRecompense &8| &f&lVotare&r                                                                                                                                 &7Daca votezi serverul nostru, nu vei primi doar &7recompense &6gratis,ne vei ajuta &6cu feedback-ul tau. &7Poti vota de &65 ori &7zilnic.&7                                                                                &6» &7Ajuta-ne cu un vote folosind comanda &6/vote"
+      - "&6&lAsistenta &8| &f&lInformatii si suport&r                                                                                                              &7Poti scrie &6/k &7pentru &6asistenta unui admin&r                                                                                                       &6» &7Intra si pe serverul de discord &6&ndiscord.gg/soon"
+      - "&6&lDiscord &8| &f&lAnunturi si tombola&r                                                                                                                    &7Doresti sa participi in &6premii saptamanale, &7si s-a fii la curent&r    &7cu totul? Poti face acest lucru pe discord!                                                                                                           &6» &7Poti intra pe serverul nostru &6&ndiscord.gg/soon"
+      - "&6&lMagazin &8| &f&lIteme si altele&r                                                                                                                           &7Cauti sa &6investesti &7in comunitatea noastra? Poti cumpara&r          &6iteme, chei, cosmetice &7si altele, si vei devenii &6suportul nostru&r    &7tinand serverul deschis, si la viitoare update-uri!                                                                                                  &6» &7Intra pe acest link &6&nshop.soon.ro"
+  Per_World_Messages:
+    Enable: false
+    Header_And_Footer: true
+    Interval: 60
+    Prefix: "&7[&cMesaj Automat&7]"
+    Header: "&7*&7&m--------------------------------&7*"
+    Footer: "&7*&7&m--------------------------------&7*"
+    Sound: ''
+    Messages:
+      world:
+        - "{Prefix} &aWelcome to the server!"
+        - "{Prefix} &aHope you enjoy our server!"
+        - "{Prefix} &aJoin our discord <Link>"
+        - "{Prefix} &aThis server is running the plugin ChatManager by H1DD3NxN1NJA"
+        - "{Prefix} &cYou can edit these in the ChatManager > AutoBroadcast.yml"
+      world_nether:
+        - "{Prefix} &7The nether is a scary place"
+        - "{Prefix} &aWelcome to the server!"
+        - "{Prefix} &aHope you enjoy our server!"
+        - "{Prefix} &aJoin our discord <Link>"
+        - "{Prefix} &aThis server is running the plugin ChatManager by H1DD3NxN1NJA"
+        - "{Prefix} &cYou can edit these in the ChatManager > AutoBroadcast.yml"
+      world_the_end:
+        - "{Prefix} &aThe end is a scary place"
+        - "{Prefix} &aWatch out for the ender dragon!"
+        - "{Prefix} &cDon't make eye contact with the enderman!"
+  Actionbar_Messages:
+    Enable: false
+    Interval: 60
+    Prefix: "&7[&cAutoBroadcast&7]"
+    Sound: ''
+    Messages:
+      - "{Prefix} &7Auto-Broadcast action bar message."
+      - "{Prefix} &7Plugin created by H1DD3NxN1NJA."
+      - "{Prefix} &7Hello &c{player} &7there are &c{online} &7players online."
+  Title_Messages:
+    Enable: false
+    Interval: 60
+    Sound: ''
+    Title: "&cTitle"
+    Messages:
+      - "&7Auto-Broadcast title message."
+      - "&7Plugin created by H1DD3NxN1NJA."
+      - "&7Hello &c{player} &7there are &c{online} &7players online."
+  Bossbar_Messages: #1.9+
+    Enable: false
+    Interval: 60
+    Sound: ''
+    Bar_Time: 10 #How long the boss bar stays on for.
+    Messages:
+      - "&7Auto-Broadcast bossbar message."
+      - "&7Plugin created by H1DD3NxN1NJA."
+      - "&7Hello &c{player} &7there are &c{online} &7players online."

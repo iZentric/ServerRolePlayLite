@@ -1,0 +1,75 @@
+[00:30:11] [WebSocketConnectReadThread-6190/ERROR] [serverantivpn]: [ServerAntiVPN] Disconnected from the AntiVPN Server. (Code: 1006, Reason: Unknown)
+[00:30:18] [ServerAntiVPN vUnknown - Socket Timeout Checker/INFO] [serverantivpn]: [ServerAntiVPN] Closing the AntiVPN Server connection...
+[00:30:18] [ServerAntiVPN vUnknown - Socket Timeout Checker/ERROR] [serverantivpn]: [ServerAntiVPN] Reconnecting to the AntiVPN Server...
+[00:30:18] [WebSocketConnectReadThread-6777/INFO] [serverantivpn]: [ServerAntiVPN] Connected to the AntiVPN Server.
+[02:02:54] [WebSocketConnectReadThread-6777/ERROR] [serverantivpn]: [ServerAntiVPN] Disconnected from the AntiVPN Server. (Code: 1006, Reason: Unknown)
+[02:02:58] [ServerAntiVPN vUnknown - Socket Timeout Checker/INFO] [serverantivpn]: [ServerAntiVPN] Closing the AntiVPN Server connection...
+[02:02:58] [ServerAntiVPN vUnknown - Socket Timeout Checker/ERROR] [serverantivpn]: [ServerAntiVPN] Reconnecting to the AntiVPN Server...
+[02:02:58] [WebSocketConnectReadThread-7055/INFO] [serverantivpn]: [ServerAntiVPN] Connected to the AntiVPN Server.
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]: ----------------------------------------------
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]:     +==================+
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]:     |   SkinsRestorer  |
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]:     +==================+
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]: ----------------------------------------------
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]:     Version: 15.4.3
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]:     Commit: 4aa9140
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]:     A new version (15.4.4) is available!
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]:     https://github.com/SkinsRestorer/SkinsRestorer/releases/download/15.4.4/SkinsRestorer.jar
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]: ----------------------------------------------
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]: Do you have issues? Read our troubleshooting guide: https://skinsrestorer.net/docs/troubleshooting
+[02:59:22] [SkinsRestorer - Task Executor #127/INFO] [skinsrestorer]: Want to support SkinsRestorer? Consider donating: https://skinsrestorer.net/donate
+[03:04:49] [WebSocketConnectReadThread-7055/ERROR] [serverantivpn]: [ServerAntiVPN] Disconnected from the AntiVPN Server. (Code: 1006, Reason: Unknown)
+[03:04:50] [ServerAntiVPN vUnknown - Socket Timeout Checker/INFO] [serverantivpn]: [ServerAntiVPN] Closing the AntiVPN Server connection...
+[03:04:50] [ServerAntiVPN vUnknown - Socket Timeout Checker/ERROR] [serverantivpn]: [ServerAntiVPN] Reconnecting to the AntiVPN Server...
+[03:04:50] [WebSocketConnectReadThread-7248/INFO] [serverantivpn]: [ServerAntiVPN] Connected to the AntiVPN Server.
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]: ----------------------------------------------
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]:     +==================+
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]:     |   SkinsRestorer  |
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]:     +==================+
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]: ----------------------------------------------
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]:     Version: 15.4.3
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]:     Commit: 4aa9140
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]:     A new version (15.4.4) is available!
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]:     https://github.com/SkinsRestorer/SkinsRestorer/releases/download/15.4.4/SkinsRestorer.jar
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]: ----------------------------------------------
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]: Do you have issues? Read our troubleshooting guide: https://skinsrestorer.net/docs/troubleshooting
+[06:59:22] [SkinsRestorer - Task Executor #128/INFO] [skinsrestorer]: Want to support SkinsRestorer? Consider donating: https://skinsrestorer.net/donate
+[07:35:19] [Netty epoll Worker #7/INFO] [com.velocitypowered.proxy.connection.client.AuthSessionHandler]: [connected player] grand12345 (/5.12.175.44:49892) has connected
+[07:35:28] [Netty epoll Worker #7/ERROR] [com.velocitypowered.proxy.connection.client.ConnectedPlayer]: [connected player] grand12345 (/5.12.175.44:49892): unable to connect to server BoxPvP
+io.netty.channel.AbstractChannel$AnnotatedConnectException: finishConnect(..) failed: Connection refused: /188.212.101.193:18878
+Caused by: java.net.ConnectException: finishConnect(..) failed: Connection refused
+	at io.netty.channel.unix.Errors.newConnectException0(Errors.java:166) ~[server.jar:3.3.0-SNAPSHOT (git-2016d148-b436)]
+	at io.netty.channel.unix.Errors.handleConnectErrno(Errors.java:131) ~[server.jar:3.3.0-SNAPSHOT (git-2016d148-b436)]
+	at io.netty.channel.unix.Socket.finishConnect(Socket.java:359) ~[server.jar:3.3.0-SNAPSHOT (git-2016d148-b436)]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe.doFinishConnect(AbstractEpollChannel.java:711) ~[server.jar:3.3.0-SNAPSHOT (git-2016d148-b436)]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe.finishConnect(AbstractEpollChannel.java:688) ~[server.jar:3.3.0-SNAPSHOT (git-2016d148-b436)]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe.epollOutReady(AbstractEpollChannel.java:567) ~[server.jar:3.3.0-SNAPSHOT (git-2016d148-b436)]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:499) ~[server.jar:3.3.0-SNAPSHOT (git-2016d148-b436)]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:407) ~[server.jar:3.3.0-SNAPSHOT (git-2016d148-b436)]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[server.jar:3.3.0-SNAPSHOT (git-2016d148-b436)]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[server.jar:3.3.0-SNAPSHOT (git-2016d148-b436)]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[server.jar:3.3.0-SNAPSHOT (git-2016d148-b436)]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+[08:19:24] [Netty epoll Worker #3/INFO] [com.velocitypowered.proxy.connection.client.AuthSessionHandler]: [connected player] INFERNO1v4 (/5.12.175.44:49860) has connected
+[08:52:47] [Netty epoll Worker #7/INFO] [com.velocitypowered.proxy.connection.client.ConnectedPlayer]: [connected player] grand12345 (/5.12.175.44:49892): kicked from server BoxPvP: Server closed
+[08:52:47] [Netty epoll Worker #3/INFO] [com.velocitypowered.proxy.connection.client.ConnectedPlayer]: [connected player] INFERNO1v4 (/5.12.175.44:49860): kicked from server BoxPvP: Server closed
+[08:52:55] [Netty epoll Worker #3/ERROR] [com.velocitypowered.proxy.connection.MinecraftConnection]: [server connection] INFERNO1v4 -> BoxPvP: exception encountered in com.velocitypowered.proxy.connection.backend.LoginSessionHandler@1d6a8bed
+io.netty.channel.unix.Errors$NativeIoException: recvAddress(..) failed: Connection reset by peer
+[08:52:55] [Netty epoll Worker #3/ERROR] [com.velocitypowered.proxy.connection.client.ConnectedPlayer]: [connected player] INFERNO1v4 (/5.12.175.44:49860): unable to connect to server BoxPvP
+io.netty.channel.unix.Errors$NativeIoException: recvAddress(..) failed: Connection reset by peer
+[10:45:12] [WebSocketConnectReadThread-7248/ERROR] [serverantivpn]: [ServerAntiVPN] Disconnected from the AntiVPN Server. (Code: 1006, Reason: Unknown)
+[10:45:14] [ServerAntiVPN vUnknown - Socket Timeout Checker/INFO] [serverantivpn]: [ServerAntiVPN] Closing the AntiVPN Server connection...
+[10:45:14] [ServerAntiVPN vUnknown - Socket Timeout Checker/ERROR] [serverantivpn]: [ServerAntiVPN] Reconnecting to the AntiVPN Server...
+[10:45:14] [WebSocketConnectReadThread-8665/INFO] [serverantivpn]: [ServerAntiVPN] Connected to the AntiVPN Server.
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]: ----------------------------------------------
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]:     +==================+
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]:     |   SkinsRestorer  |
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]:     +==================+
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]: ----------------------------------------------
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]:     Version: 15.4.3
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]:     Commit: 4aa9140
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]:     A new version (15.4.4) is available!
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]:     https://github.com/SkinsRestorer/SkinsRestorer/releases/download/15.4.4/SkinsRestorer.jar
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]: ----------------------------------------------
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]: Do you have issues? Read our troubleshooting guide: https://skinsrestorer.net/docs/troubleshooting
+[10:59:22] [SkinsRestorer - Task Executor #135/INFO] [skinsrestorer]: Want to support SkinsRestorer? Consider donating: https://skinsrestorer.net/donate

@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 82.76.245.153
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1723137368020
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1723440392180
+  login: 1723468068383
+money: '5000'
+last-account-name: titi_Sportivul
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -248.30000001192093
+  y: 66.5
+  z: 153.54306951479774
+  yaw: -274.545166015625
+  pitch: 58.82396697998047
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -288.4005326613732
+  y: 67.0
+  z: -807.3000000119209
+  yaw: -9.9371337890625
+  pitch: 7.950037956237793

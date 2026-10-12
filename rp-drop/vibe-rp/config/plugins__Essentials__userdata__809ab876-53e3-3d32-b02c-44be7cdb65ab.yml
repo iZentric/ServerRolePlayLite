@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 86.127.162.252
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1723405780126
+  login: 1723405055997
+money: '5000'
+last-account-name: ZPAOIE
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 366.053560618251
+  y: 65.0
+  z: 229.98974156900687
+  yaw: 47.734703063964844
+  pitch: 33.17882537841797
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 131.4038701711957
+  y: 65.0
+  z: 116.45335166846374
+  yaw: 89.23509216308594
+  pitch: 14.677753448486328

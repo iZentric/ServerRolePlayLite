@@ -1,0 +1,2730 @@
+{
+   "regions": {
+      "coca1": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4989,
+            "y": 110,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "coca1",
+         "regennableBlocks": {"d6cb03fe-4fd8-49fa-bf96-490af8677e67": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "d6cb03fe-4fd8-49fa-bf96-490af8677e67"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5003,
+            "y": 105,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "naruta3": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4943,
+            "y": 65,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "naruta3",
+         "regennableBlocks": {"077b8c62-0a32-4d03-ba92-51082bd47da5": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "077b8c62-0a32-4d03-ba92-51082bd47da5"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4929,
+            "y": 60,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "naruta4": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4943,
+            "y": 65,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "naruta4",
+         "regennableBlocks": {"ae30a2ae-f47b-40d8-b0e3-3a7dc46c6022": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "ae30a2ae-f47b-40d8-b0e3-3a7dc46c6022"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4929,
+            "y": 60,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "naruta5": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4923,
+            "y": 65,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "naruta5",
+         "regennableBlocks": {"783d9ee5-ce9d-495b-8597-fb513b0073fc": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "783d9ee5-ce9d-495b-8597-fb513b0073fc"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4909,
+            "y": 60,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "naruta6": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4923,
+            "y": 65,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "naruta6",
+         "regennableBlocks": {"751dca26-dd64-4a9a-81f7-36507422a9d1": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "751dca26-dd64-4a9a-81f7-36507422a9d1"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4909,
+            "y": 60,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "coca9": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4923,
+            "y": 110,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "coca9",
+         "regennableBlocks": {"dbaac132-2dcf-4239-8346-844059fbf7a0": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "dbaac132-2dcf-4239-8346-844059fbf7a0"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4909,
+            "y": 105,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "coca8": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4943,
+            "y": 105,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "coca8",
+         "regennableBlocks": {"d9e5fd3a-5da4-467b-80f1-98a7679db30a": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "d9e5fd3a-5da4-467b-80f1-98a7679db30a"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4929,
+            "y": 110,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "coca7": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4943,
+            "y": 110,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "coca7",
+         "regennableBlocks": {"ee2dc556-273b-47e1-872b-01bcc8cef79d": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "ee2dc556-273b-47e1-872b-01bcc8cef79d"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4929,
+            "y": 105,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "coca6": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4963,
+            "y": 110,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "coca6",
+         "regennableBlocks": {"576c8d89-0eed-4493-b974-3dcd3248c3de": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "576c8d89-0eed-4493-b974-3dcd3248c3de"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4949,
+            "y": 105,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "coca5": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4963,
+            "y": 110,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "coca5",
+         "regennableBlocks": {"915619a2-8981-4700-85cb-699c374152da": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "915619a2-8981-4700-85cb-699c374152da"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4949,
+            "y": 105,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "miere": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4182,
+            "y": 0,
+            "z": -701,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "miere",
+         "regennableBlocks": {"cfe474d0-ae07-4b02-be03-84fdb83c0c2d": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "BEEHIVE"},
+               "type": "material"
+            },
+            "minRegenTime": 60,
+            "type": "standard",
+            "maxRegenTime": 60,
+            "uuid": "cfe474d0-ae07-4b02-be03-84fdb83c0c2d"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4254,
+            "y": 134,
+            "z": -294,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "coca4": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4969,
+            "y": 110,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "coca4",
+         "regennableBlocks": {"0c19eb95-b17c-45a8-9198-b569b3e9488b": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "0c19eb95-b17c-45a8-9198-b569b3e9488b"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4983,
+            "y": 105,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "coca3": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4983,
+            "y": 105,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "coca3",
+         "regennableBlocks": {"c460c578-9e32-463d-a6aa-05c9f88ef523": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "c460c578-9e32-463d-a6aa-05c9f88ef523"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4969,
+            "y": 110,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "coca2": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5003,
+            "y": 105,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "coca2",
+         "regennableBlocks": {"6ced82cb-b083-4231-ace5-f4b1876a6fdf": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "6ced82cb-b083-4231-ace5-f4b1876a6fdf"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4989,
+            "y": 110,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "cocamrsekee": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5342,
+            "y": 17,
+            "z": 1517,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "cocamrsekee",
+         "regennableBlocks": {"6e74b81f-59d8-4f54-b9ec-fabad9893e6d": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "6e74b81f-59d8-4f54-b9ec-fabad9893e6d"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5363,
+            "y": 23,
+            "z": 1530,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "naruta1": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4963,
+            "y": 65,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "naruta1",
+         "regennableBlocks": {"0c3c03eb-1f38-4f9b-b90c-0f9206dc7511": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "0c3c03eb-1f38-4f9b-b90c-0f9206dc7511"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4949,
+            "y": 60,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "naruta2": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4963,
+            "y": 65,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "naruta2",
+         "regennableBlocks": {"ee9a3607-fa7a-481d-8457-e751947382fe": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "ee9a3607-fa7a-481d-8457-e751947382fe"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4949,
+            "y": 60,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "marar": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 3880,
+            "y": 0,
+            "z": 97,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "marar",
+         "regennableBlocks": {"4a42f178-93de-44d0-9e67-5c7eee1c7849": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "RED_WOOL"},
+               "type": "material"
+            },
+            "minRegenTime": 60,
+            "type": "standard",
+            "maxRegenTime": 60,
+            "uuid": "4a42f178-93de-44d0-9e67-5c7eee1c7849"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 3791,
+            "y": 139,
+            "z": 23,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "scafandru": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": true,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4325,
+            "y": 0,
+            "z": -35,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "scafandru",
+         "regennableBlocks": {
+            "ba875e32-cde9-4c13-bf3f-19e29eb396ad": {
+               "replacePlaceable": {
+                  "data": {"material": "WATER"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "FIRE_CORAL_BLOCK"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "ba875e32-cde9-4c13-bf3f-19e29eb396ad"
+            },
+            "6f27ceb7-d0a2-4961-b79f-6f97cb9a7740": {
+               "replacePlaceable": {
+                  "data": {"material": "WATER"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "BUBBLE_CORAL_BLOCK"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "6f27ceb7-d0a2-4961-b79f-6f97cb9a7740"
+            },
+            "b1b04bdd-8c9e-4e6c-9c71-7beb0359a83c": {
+               "replacePlaceable": {
+                  "data": {"material": "WATER"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "SEAGRASS"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "b1b04bdd-8c9e-4e6c-9c71-7beb0359a83c"
+            },
+            "d8585773-2c2c-4e07-8720-77bf0fa1d0b8": {
+               "replacePlaceable": {
+                  "data": {"material": "WATER"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "HORN_CORAL_BLOCK"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "d8585773-2c2c-4e07-8720-77bf0fa1d0b8"
+            },
+            "b408f679-5b6b-4d6a-bdd1-85c06d67c2f5": {
+               "replacePlaceable": {
+                  "data": {"material": "WATER"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "TUBE_CORAL_BLOCK"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "b408f679-5b6b-4d6a-bdd1-85c06d67c2f5"
+            }
+         },
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4387,
+            "y": 135,
+            "z": -98,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "razvancacaciosu3": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5374,
+            "y": 37,
+            "z": 1523,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "razvancacaciosu3",
+         "regennableBlocks": {"c4dc8d85-7a4b-4115-bee1-e73f8a71d37d": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "c4dc8d85-7a4b-4115-bee1-e73f8a71d37d"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5395,
+            "y": 43,
+            "z": 1536,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "razvancacaciosu4": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5374,
+            "y": 37,
+            "z": 1543,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "razvancacaciosu4",
+         "regennableBlocks": {"51660af8-e1e6-443c-a79f-f581e2d4d1d2": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "51660af8-e1e6-443c-a79f-f581e2d4d1d2"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5395,
+            "y": 43,
+            "z": 1556,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "opium10": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4909,
+            "y": 80,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "opium10",
+         "regennableBlocks": {"daa4e7bf-db56-4dba-be28-18304ab831bf": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_OPIUM_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "daa4e7bf-db56-4dba-be28-18304ab831bf"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4923,
+            "y": 75,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "razvancacaciosu2": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": false
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5342,
+            "y": 37,
+            "z": 1523,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "razvancacaciosu2",
+         "regennableBlocks": {"f05062d9-ccb8-4cad-82df-1c05f997a25d": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "f05062d9-ccb8-4cad-82df-1c05f997a25d"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5363,
+            "y": 43,
+            "z": 1536,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "opium5": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4963,
+            "y": 75,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "opium5",
+         "regennableBlocks": {"dc444601-5ecf-424e-9374-e4476e97c2d5": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_OPIUM_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "dc444601-5ecf-424e-9374-e4476e97c2d5"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4949,
+            "y": 80,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "hemp9": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5003,
+            "y": 95,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "hemp9",
+         "regennableBlocks": {"6b9efb51-7d95-42f0-97e4-969474e10dd2": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "6b9efb51-7d95-42f0-97e4-969474e10dd2"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4989,
+            "y": 90,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "JHON_BAG2": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5373,
+            "y": 18,
+            "z": 1517,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "JHON_BAG2",
+         "regennableBlocks": {"5d325225-4445-46a7-93c5-b946d95b01c8": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "5d325225-4445-46a7-93c5-b946d95b01c8"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5394,
+            "y": 23,
+            "z": 1530,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "opium4": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4983,
+            "y": 75,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "opium4",
+         "regennableBlocks": {"bb7aad8f-bf8c-4fb6-8bcf-a0417a9c530d": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_OPIUM_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "bb7aad8f-bf8c-4fb6-8bcf-a0417a9c530d"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4969,
+            "y": 80,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "hemp8": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4983,
+            "y": 95,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "hemp8",
+         "regennableBlocks": {"ed73f422-7347-4e75-900f-60ec6fcc9850": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "ed73f422-7347-4e75-900f-60ec6fcc9850"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4969,
+            "y": 90,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "opium7": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4943,
+            "y": 75,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "opium7",
+         "regennableBlocks": {"860d97d1-8558-4a82-904d-99abeb41c96b": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_OPIUM_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "860d97d1-8558-4a82-904d-99abeb41c96b"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4929,
+            "y": 80,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "opium6": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4963,
+            "y": 75,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "opium6",
+         "regennableBlocks": {"b30f4701-2f77-4f9d-8eb1-17ab1504e64c": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_OPIUM_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "b30f4701-2f77-4f9d-8eb1-17ab1504e64c"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4949,
+            "y": 80,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "opium1": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4989,
+            "y": 80,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "opium1",
+         "regennableBlocks": {"908d2ff1-0918-49d1-b548-4430135119e1": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_OPIUM_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "908d2ff1-0918-49d1-b548-4430135119e1"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5003,
+            "y": 75,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "opium3": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4969,
+            "y": 80,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "opium3",
+         "regennableBlocks": {"1bae6bdd-b966-4575-92d9-6808faa99507": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_OPIUM_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "1bae6bdd-b966-4575-92d9-6808faa99507"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4983,
+            "y": 75,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "opium2": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4989,
+            "y": 80,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "opium2",
+         "regennableBlocks": {"bbe2e7cf-80e4-4cf9-b30b-5a362baa52a7": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_OPIUM_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "bbe2e7cf-80e4-4cf9-b30b-5a362baa52a7"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5003,
+            "y": 75,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "hemp1": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4923,
+            "y": 95,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "hemp1",
+         "regennableBlocks": {"8ffb73a3-525c-4076-828f-61883d83c164": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "8ffb73a3-525c-4076-828f-61883d83c164"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4909,
+            "y": 90,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "Fanx11": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5374,
+            "y": 37,
+            "z": 1501,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "Fanx11",
+         "regennableBlocks": {"76303fc2-e669-4dc2-94f8-23bdf63650ec": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "76303fc2-e669-4dc2-94f8-23bdf63650ec"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5395,
+            "y": 43,
+            "z": 1514,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "hemp3": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4943,
+            "y": 95,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "hemp3",
+         "regennableBlocks": {"40495dd6-e5be-403c-8b40-265ab747d569": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "40495dd6-e5be-403c-8b40-265ab747d569"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4929,
+            "y": 90,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "hemp2": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4923,
+            "y": 95,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "hemp2",
+         "regennableBlocks": {"359699e2-5c25-4cb5-8fde-e6ee2e3d9711": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "359699e2-5c25-4cb5-8fde-e6ee2e3d9711"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4909,
+            "y": 90,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "opium9": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4909,
+            "y": 80,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "opium9",
+         "regennableBlocks": {"382dbf55-271f-4e1d-a069-f352cfc8048a": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_OPIUM_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "382dbf55-271f-4e1d-a069-f352cfc8048a"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4923,
+            "y": 75,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "hemp5": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4963,
+            "y": 95,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "hemp5",
+         "regennableBlocks": {"7bc4d54a-29b1-49b5-8b24-10beffeee50a": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "7bc4d54a-29b1-49b5-8b24-10beffeee50a"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4949,
+            "y": 90,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "opium8": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4943,
+            "y": 75,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "opium8",
+         "regennableBlocks": {"fa8b06e4-1e45-4b48-bea6-753ae621f710": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_OPIUM_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "fa8b06e4-1e45-4b48-bea6-753ae621f710"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4929,
+            "y": 80,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "hemp4": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4943,
+            "y": 95,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "hemp4",
+         "regennableBlocks": {"a94807b0-45f3-47e7-8769-f9f9ec42ed68": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "a94807b0-45f3-47e7-8769-f9f9ec42ed68"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4929,
+            "y": 90,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "hemp7": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4983,
+            "y": 95,
+            "z": 1066,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "hemp7",
+         "regennableBlocks": {"64becc8e-4d1d-4a01-9fb5-9882e8408e5c": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "64becc8e-4d1d-4a01-9fb5-9882e8408e5c"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4969,
+            "y": 90,
+            "z": 1077,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "hemp6": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4963,
+            "y": 95,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "hemp6",
+         "regennableBlocks": {"e453f059-c58d-42f3-9e26-2df5aa9fdd75": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "e453f059-c58d-42f3-9e26-2df5aa9fdd75"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4949,
+            "y": 90,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "hemp10": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5003,
+            "y": 95,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "hemp10",
+         "regennableBlocks": {"a40cb5a7-a42f-4038-b39a-eb72a0a673f6": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_HEMP_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "a40cb5a7-a42f-4038-b39a-eb72a0a673f6"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4989,
+            "y": 90,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "JHON_BRG": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5373,
+            "y": 17,
+            "z": 1497,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "JHON_BRG",
+         "regennableBlocks": {"1071a5e0-177b-45a4-a986-957f4e122f15": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "1071a5e0-177b-45a4-a986-957f4e122f15"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5394,
+            "y": 23,
+            "z": 1510,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "miner": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": true,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4018,
+            "y": 0,
+            "z": 180,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "miner",
+         "regennableBlocks": {
+            "b8b4ddcf-4d22-45c3-acea-7f57ce8e38be": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "DIAMOND_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 50,
+               "type": "standard",
+               "maxRegenTime": 50,
+               "uuid": "b8b4ddcf-4d22-45c3-acea-7f57ce8e38be"
+            },
+            "a4ca79e3-d22f-4373-a2e8-ddfc0464349d": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "REDSTONE_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 45,
+               "type": "standard",
+               "maxRegenTime": 45,
+               "uuid": "a4ca79e3-d22f-4373-a2e8-ddfc0464349d"
+            },
+            "e53a220f-8b3e-4166-8745-c75b6190d4c3": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "COAL_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 30,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "e53a220f-8b3e-4166-8745-c75b6190d4c3"
+            },
+            "f9c6f4e0-d587-443a-86b0-f2fee96f415f": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "IRON_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "f9c6f4e0-d587-443a-86b0-f2fee96f415f"
+            },
+            "d1b6c371-3309-4e7c-b198-c127259fab21": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "LAPIS_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 45,
+               "type": "standard",
+               "maxRegenTime": 45,
+               "uuid": "d1b6c371-3309-4e7c-b198-c127259fab21"
+            },
+            "703845eb-a8ac-404a-a3a0-cc65a507366e": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "GOLD_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "703845eb-a8ac-404a-a3a0-cc65a507366e"
+            },
+            "35831eaf-cbf3-4fed-93b6-e4c9ef94781e": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "EMERALD_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 50,
+               "type": "standard",
+               "maxRegenTime": 50,
+               "uuid": "35831eaf-cbf3-4fed-93b6-e4c9ef94781e"
+            }
+         },
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4083,
+            "y": 119,
+            "z": 117,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "fermier": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": true,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": false
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4010,
+            "y": 0,
+            "z": 219,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "fermier",
+         "regennableBlocks": {
+            "b2ff37ee-7b0c-466c-bb05-8f61c19bda19": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "BEETROOTS"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "b2ff37ee-7b0c-466c-bb05-8f61c19bda19"
+            },
+            "4c5d4a68-9c30-43cd-8c1d-80cb0937c407": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "CARROTS"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "4c5d4a68-9c30-43cd-8c1d-80cb0937c407"
+            },
+            "098d0e37-7da6-4aa4-92c3-515d1cf9623c": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "POTATOES"},
+                  "type": "material"
+               },
+               "minRegenTime": 30,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "098d0e37-7da6-4aa4-92c3-515d1cf9623c"
+            },
+            "523b0b0f-aebf-4e17-95fc-d8ecb34be276": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "BEETROOT"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "523b0b0f-aebf-4e17-95fc-d8ecb34be276"
+            },
+            "501944fe-d205-4b6c-b229-9b8e358f837f": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "WHEAT"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "501944fe-d205-4b6c-b229-9b8e358f837f"
+            },
+            "45a4f870-71b1-4210-af06-b08471400ff2": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "BEETROOTS"},
+                  "type": "material"
+               },
+               "minRegenTime": 410,
+               "type": "standard",
+               "maxRegenTime": 410,
+               "uuid": "45a4f870-71b1-4210-af06-b08471400ff2"
+            },
+            "f92c9d1a-a846-4135-ae0c-b8825c6e9005": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "CARROTS"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "f92c9d1a-a846-4135-ae0c-b8825c6e9005"
+            },
+            "48ff1f7c-3e3d-414b-be87-74c6e770d84d": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "BEETROOTS"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "48ff1f7c-3e3d-414b-be87-74c6e770d84d"
+            },
+            "1b419029-f9ab-4bf9-af59-fa862d378bed": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "POTATO"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "1b419029-f9ab-4bf9-af59-fa862d378bed"
+            },
+            "36bc9fd8-d318-4501-9541-b77671efe625": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "CARROT"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "36bc9fd8-d318-4501-9541-b77671efe625"
+            }
+         },
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 3872,
+            "y": 224,
+            "z": 344,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "coca10": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 4923,
+            "y": 105,
+            "z": 1096,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "coca10",
+         "regennableBlocks": {"478b5a24-c3e8-41fb-b689-f8e6aebd1eef": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "478b5a24-c3e8-41fb-b689-f8e6aebd1eef"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 4909,
+            "y": 110,
+            "z": 1085,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "razvancacaciosu": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": false
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5342,
+            "y": 37,
+            "z": 1501,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "razvancacaciosu",
+         "regennableBlocks": {"ca74af3c-119f-4f97-9541-489b1ce05f04": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "ca74af3c-119f-4f97-9541-489b1ce05f04"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5363,
+            "y": 43,
+            "z": 1514,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "padurar": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": true,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 3601,
+            "y": 0,
+            "z": -123,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "padurar",
+         "regennableBlocks": {
+            "82eaf4a1-b738-47cd-9e08-53ac9dfbd7e7": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "STRIPPED_ACACIA_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "82eaf4a1-b738-47cd-9e08-53ac9dfbd7e7"
+            },
+            "7a143094-cf48-48dd-a795-60f382e97794": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "STRIPPED_OAK_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "7a143094-cf48-48dd-a795-60f382e97794"
+            },
+            "45560007-b649-449d-91a9-7ab6fbb18e96": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "STRIPPED_BIRCH_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "45560007-b649-449d-91a9-7ab6fbb18e96"
+            },
+            "c29f0589-136e-4b44-bf23-715d3ae5eb29": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "STRIPPED_JUNGLE_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "c29f0589-136e-4b44-bf23-715d3ae5eb29"
+            },
+            "558e9d8e-4286-4735-ab02-33e55ce12f56": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "STRIPPED_SPRUCE_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "558e9d8e-4286-4735-ab02-33e55ce12f56"
+            },
+            "01c29bc2-31d9-4524-bc5e-4cbd40cf8dd0": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "STRIPPED_CRIMSON_STEM"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "01c29bc2-31d9-4524-bc5e-4cbd40cf8dd0"
+            },
+            "9206898e-3e51-4f34-af51-75786473a502": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "STRIPPED_WARPED_STEM"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "9206898e-3e51-4f34-af51-75786473a502"
+            },
+            "e6ee5805-4022-465b-baff-1f883e9149e1": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "STRIPPED_DARK_OAK_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 40,
+               "type": "standard",
+               "maxRegenTime": 40,
+               "uuid": "e6ee5805-4022-465b-baff-1f883e9149e1"
+            }
+         },
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 3704,
+            "y": 252,
+            "z": -230,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "DariusCoca": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5363,
+            "y": 33,
+            "z": 1512,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "DariusCoca",
+         "regennableBlocks": {"fd1764e7-ea46-4c80-8326-1576662e8804": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "fd1764e7-ea46-4c80-8326-1576662e8804"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5342,
+            "y": 27,
+            "z": 1499,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "cocasny": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5342,
+            "y": 17,
+            "z": 1497,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "cocasny",
+         "regennableBlocks": {"c49ceb72-e357-4c4c-835a-1a3b6e056359": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 2,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "c49ceb72-e357-4c4c-835a-1a3b6e056359"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5363,
+            "y": 23,
+            "z": 1510,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "cocalab2": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5373,
+            "y": 27,
+            "z": 1499,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "cocalab2",
+         "regennableBlocks": {"5bbc8304-5536-4c27-a33b-cddf72cef0f5": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "5bbc8304-5536-4c27-a33b-cddf72cef0f5"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5363,
+            "y": 33,
+            "z": 1512,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "cocalab1": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5373,
+            "y": 27,
+            "z": 1499,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "cocalab1",
+         "regennableBlocks": {"447c5b21-b4bf-4135-9ce9-f7f716b49f2b": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "447c5b21-b4bf-4135-9ce9-f7f716b49f2b"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5394,
+            "y": 33,
+            "z": 1512,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "cocalab4": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5342,
+            "y": 27,
+            "z": 1520,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "cocalab4",
+         "regennableBlocks": {"42bd3c99-0f53-4938-b108-10c3504c0ee3": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "42bd3c99-0f53-4938-b108-10c3504c0ee3"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5363,
+            "y": 33,
+            "z": 1533,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "cocalab3": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 5373,
+            "y": 27,
+            "z": 1521,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "cocalab3",
+         "regennableBlocks": {"7ffb8ea9-9298-49a3-b68f-fe10ec17e636": {
+            "replacePlaceable": {
+               "data": {"material": "AIR"},
+               "type": "material"
+            },
+            "originalPlaceable": {
+               "data": {"material": "THEDIRTYSTUFF_COCAINE_CROP_7"},
+               "type": "material"
+            },
+            "minRegenTime": 120,
+            "type": "standard",
+            "maxRegenTime": 120,
+            "uuid": "7ffb8ea9-9298-49a3-b68f-fe10ec17e636"
+         }},
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 5394,
+            "y": 33,
+            "z": 1534,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "gradina": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "hypecity",
+         "cornerOne": {
+            "world": "hypecity",
+            "x": 3971,
+            "y": 0,
+            "z": 550,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "gradina",
+         "regennableBlocks": {
+            "cfe63078-6fc5-48ae-9116-f750b7399425": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "GRASS"},
+                  "type": "material"
+               },
+               "minRegenTime": 30,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "cfe63078-6fc5-48ae-9116-f750b7399425"
+            },
+            "f6b10722-226c-4a46-babb-fb3ab050c835": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "TALL_GRASS"},
+                  "type": "material"
+               },
+               "minRegenTime": 30,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "f6b10722-226c-4a46-babb-fb3ab050c835"
+            }
+         },
+         "cornerTwo": {
+            "world": "hypecity",
+            "x": 3865,
+            "y": 127,
+            "z": 596,
+            "pitch": 0,
+            "yaw": 0
+         }
+      }
+   },
+   "version": 2
+}

@@ -1,0 +1,173 @@
+info:
+  namespace: xmasspark
+items:
+  xmasspark_axe:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ  Axe'
+    permission: xmasspark.axe
+    resource:
+      generate: false
+      material: IRON_AXE
+      model_path: axe
+  xmasspark_bow:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Bow'
+    permission: xmasspark.bow
+    resource:
+      generate: false
+      material: BOW
+      model_path: bow
+  xmasspark_chest:
+    behaviours:
+      furniture:
+        fixed_rotation: true
+        hitbox:
+          height: 1
+          height_offset: 0
+          length: 1
+          length_offset: 0
+          width: 1
+          width_offset: 0
+        placeable_on:
+          ceiling: false
+          floor: true
+          walls: false
+        solid: true
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Chest'
+    permission: xmasspark.chest
+    resource:
+      generate: false
+      material: SEA_LANTERN
+      model_path: chest
+  xmasspark_chest_open:
+    behaviours:
+      furniture:
+        fixed_rotation: true
+        hitbox:
+          height: 1
+          height_offset: 0
+          length: 1
+          length_offset: 0
+          width: 1
+          width_offset: 0
+        placeable_on:
+          ceiling: false
+          floor: true
+          walls: false
+        solid: true
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Chest'
+    permission: xmasspark.chest
+    resource:
+      generate: false
+      material: SEA_LANTERN
+      model_path: chest_opening   
+  xmasspark_fishing_rod:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Fishing Rod'
+    permission: xmasspark.fishing_rod
+    resource:
+      generate: false
+      material: FISHING_ROD
+      model_path: fishing_rod
+  xmasspark_hammer:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Hammer'
+    permission: xmasspark.hammer
+    resource:
+      generate: false
+      material: IRON_SWORD
+      model_path: hammer
+  xmasspark_hoe:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Hoe'
+    permission: xmasspark.hoe
+    resource:
+      generate: false
+      material: IRON_HOE
+      model_path: hoe
+  xmasspark_key:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Key'
+    permission: xmasspark.key
+    resource:
+      generate: false
+      material: PAPER
+      model_path: key
+  xmasspark_pickaxe:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Pickaxe'
+    permission: xmasspark.pickaxe
+    resource:
+      generate: false
+      material: IRON_PICKAXE
+      model_path: pickaxe
+  xmasspark_shovel:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Shovel'
+    permission: xmasspark.shovel
+    resource:
+      generate: false
+      material: IRON_SHOVEL
+      model_path: shovel
+  xmasspark_spear:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Spear'
+    permission: xmasspark.spear
+    resource:
+      generate: false
+      material: IRON_SWORD
+      model_path: spear
+  xmasspark_staff:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Staff'
+    permission: xmasspark.staff
+    resource:
+      generate: false
+      material: IRON_SWORD
+      model_path: staff
+  xmasspark_sword:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Sword'
+    permission: xmasspark.sword
+    resource:
+      generate: false
+      material: IRON_SWORD
+      model_path: sword
+  xmasspark_trident:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Trident'
+    permission: xmasspark.trident
+    resource:
+      generate: false
+      material: IRON_SWORD
+      model_path: trident
+  xmasspark_scythe:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Scythe'
+    permission: xmasspark.scythe
+    resource:
+      generate: false
+      material: PAPER
+      model_path: scythe
+  xmasspark_head:
+    behaviours:
+      hat: true
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Head'
+    permission: xmasspark.head
+    resource:
+      generate: false
+      material: PAPER
+      model_path: head   
+  xmasspark_backpack:
+    behaviours:
+      hat: true
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Backpack'
+    permission: xmasspark.backpack
+    resource:
+      generate: false
+      material: PAPER
+      model_path: backpack
+  xmasspark_skateboard:
+    behaviours:
+      hat: true
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Skateboard'
+    permission: xmasspark.skateboard
+    resource:
+      generate: false
+      material: PAPER
+      model_path: skateboard  
+  xmasspark_crossbow:
+    display_name: '%#FF5858%&lx%#F19082%&lᴍ%#E4C7AC%&lᴀ%#D6FFD6%&ls%#C6EFC1%&l-%#B6DFAD%&ls%#A6CF98%&lᴘ%#BFDFB3%&lᴀ%#D9EFCE%&lʀ%#F2FFE9%&lᴋ Crossbow'
+    permission: xmasspark.crossbow
+    resource:
+      generate: false
+      material: CROSSBOW
+      model_path: crossbow      
+      

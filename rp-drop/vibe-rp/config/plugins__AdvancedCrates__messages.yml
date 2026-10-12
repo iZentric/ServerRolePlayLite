@@ -1,0 +1,152 @@
+# ** Messages **
+
+# What message should be written if an account on the same ip has already been given an item from a give all?
+alt_message: "&d&l [AC] &cAn account on your IP address has already gotten an item from the give all."
+
+# What message should the player get if there are already a maximum amount of crates being opened on the server?
+MonthlyCrate_Global_Limit_Message: "&d&l [AC] &cSorry, there is already a maximum amount of crates being opened at the same time on the server, please try again in a bit!"
+
+# What message should the player get if there are already a maximum amount of crates being opened on the server?
+MonthlyCrate_Global_Pouch_Limit_Message: "&d&l [AC] &cSorry, there is already a maximum amount of pouches being opened at the same time on the server, please try again in a bit!"
+
+# What message should the player get if he tries to open more crates than is given as a max per player?
+MonthlyCrate_Player_Limit_Message: "&d&l [AC] &cYou already have {opening_crates_now} crates placed, please wait for at least one of them to finish to open an another one!"
+
+Max_Inventory_Reached_Message: "&d&l [AC] &cYour inventory is too full to open the crate. Make sure you have enough space and try again"
+
+# What message should the player receive if he is trying to open a crate too close to another crate?
+Crate_Radius_Message: "&d&l [AC] &cYou are too close to another crate that is being opened, please move away to open Yours."
+
+# What should be the message that the player receives once he is given a crate with a command give / giveall? (%crate_name% ; %amount_given%)
+Player_Gets_MCrate_Message: "&d&l [AC] &5You have been given x%amount_given% %crate_name%"
+
+# What should be the message that the player receives once he executes the "ac give/giveall" command? (%crate_name% ; %amount_given% ; %player%)
+Player_Executes_Crate_Command_Message: "&e&l [AC] &eGiven %amount_given% %crate_name% crates to %player%!"
+
+# What should be the message that the player receives once he is given a pouch? (%pouch_name% ; %amount_given%)
+Player_Gets_Pouch_Message: "&d&l [AC] &5You have been given x%amount_given% %pouch_name%"
+
+# What should the message be when a player receives a key via '/ac key give' command?
+Player_Gets_Key_Message: "&aYou received (x%amount_given%) %key_name%"
+
+# What should be the message that the player receives if he places down a crate in a wrong location? (only works if added OnlyPlaceableAt: "x,y,z" inside a crates configurations)
+Crate_Placed_At_Wrong_Location: "&d&l [AC] &cYou can not place this Monthly Crate here. Go to &f/warp crates &cto open this crate!"
+
+# What should be the message that the player receives if he places down a pouch in a wrong location? (only works if added OnlyPlaceableAt: "x,y,z" inside a pouches configurations)
+Pouch_Placed_At_Wrong_Location: "&d&l [AC] &cYou can not place this Pouch here. Go to &f/warp crates &cto open this pouch!"
+
+# What should be the message that the player receives if he executes a command that is blocked while opening a monthly crate?
+BlockedCommandMessage: "&d&l [AC] &cYou can not use this command while opening a Monthly Crate!"
+
+# What should be the messages if a player right clicks a monthly crate in the air? Leave empty for nothing
+Player_RightClick_Air:
+  - "&d&l [AC] &fPlease place the Monthly Crate on the ground to open it."
+  
+# What message should the player receive if he is trying to open a pouch too close to another pouch?
+Pouch_Radius_Message: "&d&l [AC] &cYou are too close to another pouch that is being opened, please move away to open Yours."
+
+# What message should the command executor of /reload receive after a successful reload
+Reload_Message: "&d&l [AC] &5Configurations have been reloaded successfully."
+
+# What message should the sender of any command get if he doesn't have the permission to send this command?
+No_Permission: "&d&l [AC] &cSorry, you don't have the proper permissions to run this command."
+
+# What message should the player, who is trying to open a crate but doesn't have a key to open it, get when right-clicking on the crate? (%crate%)
+No_Key_To_Open_Crate: "&cYou don't have the proper key to open this crate."
+
+# What message should the player, who is trying to open a crate but doesn't have enough keys to open it, get when right-clicking on the crate? (%crate% ; %has_keys% ; %needed_keys%)
+Not_Enough_Keys: "&cYou don't have enough keys to open this crate. This crate requires %needed_keys% keys to open it."
+
+# What message should the player, who is trying to open a crate but is already opening one, get when right-clicking on the crate?
+Already_Opening_A_Crate: "&cPlease wait till you finish opening your other crate before opening a new one!"
+
+# What should be the message that the player receives once he is given a virtual key for a crate with the command virtualkey give? (%key_name% ; %amount_given%)
+Player_Gets_Virtualkey_Message: "&e&l [AC] &6You have been given x%amount_given% virtual %key_name%"
+
+# What message should the sender get when he successfully does the "/ac key gift" command? (%gifted_amount% ; %gifted_crate_name% ; %gifted_player_name%)
+Gifted_Keys: "&e&l [AC] &6You have successfully gifted x%gifted_amount% %gifted_crate_name% keys to %gifted_player_name%!"
+
+# What message should the sender get when he successfully does the "/ac key gift" command? (%gifted_amount% ; %gifted_crate_name% ; %gifted_player_name%)
+Gift_Keys_Only_Players: "&e&l [AC] &cYou can only gift keys to other players!"
+
+# What message should the person receive whom has received gifted keys? (%gifted_amount% ; %gifted_crate_name% ; %gifter_player_name%)
+Gifted_Keys_Received: "&e&l [AC] &6You have been gifted x%gifted_amount% %gifted_crate_name% keys from %gifter_player_name%!"
+
+# What message should the person get after successfully withdrawing keys from virtualkeys? (%amount_withdrawn% ; %crate_name% ; %player_name%)
+Virtualkey_Withdraw: "&e&l [AC] &6You have successfully withdrawn %amount_withdrawn% %crate_name% keys!"
+
+# What message should the person get if a crate is already being opened by someone and the crate's seeability option is set to All
+Crate_Is_Already_Being_Opened: "&e&l [AC] &cThis crate is already being opened by someone, please wait until they finish opening their crate to open yours!"
+
+# What message should the person get if he takes too long to choose between whether to reroll the crate or to accept the rewards (time given - 90sec)
+Took_Too_Long_To_Reroll: "&e&l [AC] &cYou took too long to accept the rewards, they were automatically accepted for you."
+
+No_Perm_Open_Crate: "&e&l [AC] &cSorry, you have no permission to open the %crate%"
+
+Blacklisted_Permissions: "&e&l [AC] &cSorry, you can't open the %crate% crate."
+
+Virtual_Key_Balance: "&f&lVirtual Key Balance: "
+
+Toggle_Messages_Message: "&eMessages %status%" #status - enabled / disabled
+
+Incorrect_Arguments: "[AC] Command arguments are not used correctly, please do /%main_command% for more information!"
+
+Virtualkey_Gift_Failed: "&e&l [AC] &cFailed to gift the key, you can only gift keys to online players."
+
+Not_Enough_Keys_Gift: "&e&l [AC] &cYou don't have enough keys to gift."
+
+Given_Virtualkeys: "&e&l [AC] &eGiven %amount% virtual key(s) to %player%!"
+
+Virtualkeys_Set: "&e&l [AC] &eSuccessfully set the %player% user's %crate%'s virtual key balance to %amount%!"
+
+No_VKeys_Found: " &7No Virtual Keys Found."
+
+Look_Away_Wall: " &cPlease look away from the wall to open the %container%." #%container% is replaced with crate / pouch
+
+Help_Command:
+  - ""
+  - "&5&l&m-----------&5&l< &d&lAdvanced Crates &5&l>&5&l&m----------"
+  - ""
+  - " &d/%main_command% list &7- &fLists all Available Crate Names."
+  - " &d/%main_command% config &7- &fOpens an in-game editor for the plugin."
+  - " &d/%main_command% give &a<player> &a<crate> &3<amount> &7- &fGives a Player the Specified Crate."
+  - " &d/%main_command% key give &a<player> &a<crate> &3<amount> &7- &fGives a Player the Specified Crate's Key."
+  - " &d/%main_command% virtualkey give &a<player> &a<crate> &3<amount> &7- &fGives a Player the Specified Crate's Virtualkey Key."
+  - " &d/%main_command% virtualkeys - &fLists all virtual keys that the player has."
+  - " &d/%main_command% pouch list &7- &fLists all Available Pouches."
+  - " &d/%main_command% pouch give &a<player> &a<pouch> &3<amount> &7- &fGives a Player the Specified Pouch."
+  - " &d/%main_command% set &a<crate> &7- &fSets the crate you are looking at to be a Crate."
+  - " &d/%main_command% remove &7- &fRemoves the Block you are Looking at From Being a Crate."
+  - " &d/%main_command% togglemessages &7- &fEnables/Disables messages from being sent out to the player."
+  - ""
+  - " &a<> &f- Required Arguments ; &3<> &f- Optional Arguments"
+  - " &fPage {&d1 &f/ 2} ; Do &d/%main_command% help 2 &ffor more commands!"
+  - ""
+  - "&5&l&m-----------&5&l< &d&lAdvanced Crates &5&l>&5&l&m----------"
+  - ""
+  
+Help_Command2:
+  - ""
+  - "&5&l&m-----------&5&l< &d&lAdvanced Crates &5&l>&5&l&m----------"
+  - ""
+  - " &d/%main_command% giveall &a<crate> &3<amount> &7- &fGives Everybody on the Server a Specified Crate."
+  - " &d/%main_command% key giveall &a<crate> &3<amount> &7- &fGives Everybody on the Server a Specified Crate Key."
+  - " &d/%main_command% sgive &a<player> &a<crate> &3<amount> &7- &fSilent Give (Doesn't send a message of receiving a crate)"
+  - " &d/%main_command% virtualkey gift &a<player> &a<crate> &3<amount> &7- &fGifts Player a key from your virtual key balance."
+  - " &d/%main_command% virtualkey set &a<player> &a<crate> &3<amount> &7- &fSets the Players virtual key balance to the given amount."
+  - " &d/%main_command% virtualkey giveall &a<crate> &3<amount> &7- &fGives Everybody on the Server a Specified Virtual Crate Key."
+  - " &d/%main_command% virtualkey withdraw &a<crate> &3<amount> &7- &fWithdraw a key from your virtual key balance."
+  - " &d/%main_command% pouch sgive &a<player> &a<pouch> &3<amount> &7- &fSilent Pouch Give (Doesn't send a message of receiving a pouch)"
+  - " &d/%main_command% pouch giveall &a<pouch> &3<amount> &7- &fGives Everybody on the Server a Specified Pouch."
+  - " &d/%main_command% reload &7- &fReloads all Plugins Configurations."
+  - " &d/%main_command% errors &7- &fSends out why and where crates are not configured properly."
+  - " &d/%main_command% rewards &6<CrateName> &7- &fPreview the possible crate rewards."
+  - " &d/%main_command% rewards &6<PlayerName> <CrateName> &7- &fOpen the crate's possible rewards preview for a player."
+  - " &d/%main_command% open &6<PlayerName> <CrateName> &7- &fForcefully open the crate for a player."
+  - ""
+  - " &a<> &f- Required Arguments ; &3<> &f- Optional Arguments"
+  - " &fPage {&d2 &f/ 2} ; Do &d/%main_command% help 2 &ffor more commands!"
+  - ""
+  - "&5&l&m-----------&5&l< &d&lAdvanced Crates &5&l>&5&l&m----------"
+  - ""
+

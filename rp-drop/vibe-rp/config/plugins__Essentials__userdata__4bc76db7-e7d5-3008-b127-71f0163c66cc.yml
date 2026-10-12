@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 79.114.163.162
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725624883592
+  login: 1725624849847
+money: '48545.0'
+last-account-name: Edutzuu41
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 99632.98193977823
+  y: 16.0
+  z: 99670.71860667173
+  yaw: -29.545812606811523
+  pitch: 6.816897392272949
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 732.6968424460067
+  y: 20.0
+  z: 1191.0812419674573
+  yaw: -173.48716735839844
+  pitch: -3.9000301361083984

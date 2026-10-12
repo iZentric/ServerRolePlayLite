@@ -1,0 +1,193 @@
+{
+  "id": 23,
+  "addons": {
+    "ncs_cooldowns": {
+      "player_usages": [
+        {
+          "player_uuid": "8c7cacde-1726-3ef5-addb-d51031799c43",
+          "time": 1701393738967
+        },
+        {
+          "player_uuid": "046a0994-d97d-3660-a561-1cf0975561a6",
+          "time": 1701359558527
+        },
+        {
+          "player_uuid": "8cdfb279-2c17-3712-aa58-e80b8d706ac2",
+          "time": 1701628142719
+        },
+        {
+          "player_uuid": "b598d2c9-e236-3081-89a2-c493f4a98c7c",
+          "time": 1701458026499
+        },
+        {
+          "player_uuid": "018b5121-508b-35a2-9ea5-f9ceccaa0fc1",
+          "time": 1701456514700
+        },
+        {
+          "player_uuid": "4ce4a9cf-10f4-31b2-b4cc-7e5fbc288e92",
+          "time": 1701626875269
+        },
+        {
+          "player_uuid": "cb9e9ff8-f1b7-3f7a-ae98-be4bcf7b5ac5",
+          "time": 1701480356597
+        },
+        {
+          "player_uuid": "f1565704-231e-3f89-adc7-a5985fbfcc22",
+          "time": 1701628155870
+        },
+        {
+          "player_uuid": "60592a46-1215-3faa-9623-bd5e2c49a4de",
+          "time": 1701347337090
+        },
+        {
+          "player_uuid": "874ccfef-b5fd-3904-bed2-500cc75b9ad2",
+          "time": 1701377927278
+        },
+        {
+          "player_uuid": "e1929685-8df1-3f89-9bf4-7d34172dcd0f",
+          "time": 1701452081003
+        },
+        {
+          "player_uuid": "39fef1f7-a93b-3495-a3a0-22c3e675bebf",
+          "time": 1701451575447
+        },
+        {
+          "player_uuid": "819aa235-d547-3002-b46b-4a32441a047b",
+          "time": 1701380062877
+        },
+        {
+          "player_uuid": "80e1427f-a12b-3e95-ae2c-1aee3e64ae94",
+          "time": 1701453556061
+        },
+        {
+          "player_uuid": "dcbd97d6-7f0e-37fe-824d-d4743e1cbf6d",
+          "time": 1701445886846
+        },
+        {
+          "player_uuid": "39b5feb8-80b3-36d1-b2f1-48121ed0808a",
+          "time": 1701364274327
+        },
+        {
+          "player_uuid": "ac6776d7-264c-3c8d-b887-1bc8ad04c562",
+          "time": 1701608889059
+        },
+        {
+          "player_uuid": "05a049bf-852a-3e89-ba84-316dfd8df3c0",
+          "time": 1701542271259
+        },
+        {
+          "player_uuid": "75a12c6c-a231-3d60-af5c-b4caa0ea157b",
+          "time": 1701465540689
+        },
+        {
+          "player_uuid": "895b9a1d-92a5-3298-8b95-5e248428aebe",
+          "time": 1701361681227
+        },
+        {
+          "player_uuid": "e76d1a33-da8c-3b4c-8c11-6525b8247292",
+          "time": 1701389994417
+        },
+        {
+          "player_uuid": "cedd7c3e-cbcf-31b2-a8bc-4bc28fccc930",
+          "time": 1701723619342
+        },
+        {
+          "player_uuid": "031e7c88-4529-32bf-bcf7-b6b24e57164f",
+          "time": 1701352960677
+        },
+        {
+          "player_uuid": "3cde177a-ffd1-3feb-8030-0ea30be1b332",
+          "time": 1701283528290
+        },
+        {
+          "player_uuid": "3365cbc2-ae93-3ab3-99be-7c5aecce0d33",
+          "time": 1701284298690
+        },
+        {
+          "player_uuid": "09dcecf7-24e6-3f8c-904a-01276443d9f0",
+          "time": 1701567009609
+        },
+        {
+          "player_uuid": "2c229ea5-6096-3845-be65-111dffffa5cc",
+          "time": 1701606884959
+        },
+        {
+          "player_uuid": "a88fce71-c456-3e01-8ce6-d6c0bceef180",
+          "time": 1701534227609
+        },
+        {
+          "player_uuid": "765069e4-cb2a-36f6-9b65-6b61e193fe5d",
+          "time": 1701006706762
+        },
+        {
+          "player_uuid": "134663e0-cb9d-3f96-822c-f09a47fe26c0",
+          "time": 1701031779243
+        },
+        {
+          "player_uuid": "dcf552e3-27cf-3f57-adac-e2eafbb53b9b",
+          "time": 1701447920974
+        },
+        {
+          "player_uuid": "ed2b77b4-59f9-321a-9f70-b18c57ac4fcb",
+          "time": 1701547874986
+        },
+        {
+          "player_uuid": "15668fe0-e0af-3074-a59f-9414a911a0ec",
+          "time": 1701075683192
+        },
+        {
+          "player_uuid": "beb6f2c0-0fd7-3e63-a2f3-66a40a945fec",
+          "time": 1701367050303
+        },
+        {
+          "player_uuid": "a92195c4-6ae1-3dc9-a134-a8365f8b40a9",
+          "time": 1701428236517
+        },
+        {
+          "player_uuid": "07bf0583-9c5b-30d5-b898-f5fd036ad512",
+          "time": 1701372678901
+        },
+        {
+          "player_uuid": "3dc02fa3-38fb-39bf-8bba-e8fcad85ea54",
+          "time": 1701733360091
+        },
+        {
+          "player_uuid": "98fcab47-20fa-3c1c-bbe4-c7156dd6eb88",
+          "time": 1701361356595
+        },
+        {
+          "player_uuid": "3c2130de-0cd0-3269-b4ae-5a890f0ccdde",
+          "time": 1701198326861
+        },
+        {
+          "player_uuid": "e674f810-59b2-36e1-8935-41ec8a3fa2e5",
+          "time": 1701615082259
+        },
+        {
+          "player_uuid": "12caf773-50fd-3699-b5b4-be95cac0bc08",
+          "time": 1701523068496
+        },
+        {
+          "player_uuid": "dd591984-86e0-3b14-862a-ffbfc0192653",
+          "time": 1701453427296
+        },
+        {
+          "player_uuid": "19ade7b9-3d0c-3849-bff9-79c531db27cc",
+          "time": 1701450960046
+        },
+        {
+          "player_uuid": "0185a747-224a-3566-8969-107d7eebe9ed",
+          "time": 1701380567911
+        },
+        {
+          "player_uuid": "2cb0202c-0feb-3139-9b7c-fc7a896581d1",
+          "time": 1701551988621
+        },
+        {
+          "player_uuid": "3ca53bd4-18f8-389c-9b04-633d4bbaa228",
+          "time": 1701304853840
+        }
+      ]
+    }
+  }
+}

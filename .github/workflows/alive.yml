@@ -1,0 +1,36 @@
+# Monitoring is READ-ONLY. An external API timeout is not proof Java is down;
+# only the supervisor on the host may restart it. Never dispatch up.yml here.
+name: ALIVE — status Minecraft fara restart din erori de monitorizare
+on:
+  schedule:
+    - cron: "*/20 * * * *"
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verifica direct protocolul Minecraft, nu numai un cache extern
+        run: |
+          STATUS=0
+          R=$(python3 scripts/minecraft_status.py 92.5.171.150 25565) || STATUS=$?
+          if [ "$STATUS" -eq 0 ]; then
+            echo "SUS public (status handshake, nu login modat): $R" > /tmp/alive.txt
+          else
+            echo "NECONFIRMAT extern — $R; nu repornim serverul fara test local" > /tmp/alive.txt
+          fi
+          cat /tmp/alive.txt
+      - name: Salveaza verdictul datat
+        run: |
+          { echo "# ALIVE CUANTIC — $(date -u '+%Y-%m-%d %H:%M:%S') UTC"; echo; echo '```'; cat /tmp/alive.txt; echo '```'; } > analysis/ALIVE.md
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add analysis/ALIVE.md
+          git commit -m "ALIVE: $(head -c 100 /tmp/alive.txt)" || true
+          for i in 1 2 3; do
+            git pull --rebase origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || git rebase --abort 2>/dev/null
+            git push origin "HEAD:$GITHUB_REF_NAME" && break
+            sleep 5
+          done

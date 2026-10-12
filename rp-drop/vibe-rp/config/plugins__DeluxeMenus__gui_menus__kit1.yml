@@ -1,0 +1,116 @@
+    menu_title: '         &8⋘ &#18ac8f&lM&#18ac8f&la&#18ac8f&lr&#18ac8f&ls&#18ac8f&lu&#18ac8f&lp&#18ac8f&li&#18ac8f&la &#18ac8f&lK&#18ac8f&li&#18ac8f&lt &8⋙ '
+    open_command: kit1
+    register_command: true
+    size: 35
+    items:
+#############################################################################################
+      'close':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTJkN2E3NTFlYjA3MWUwOGRiYmM5NWJjNWQ5ZDY2ZTVmNTFkYzY3MTI2NDBhZDJkZmEwM2RlZmJiNjhhN2YzYSJ9fX0=
+        slot: 31
+        display_name: '&#790303&lɪ&#840303&lɴ&#8f0303&lᴄ&#9b0202&lʜ&#a60202&lɪ&#b10202&lᴅ&#bc0202&lᴇ &#c70101&lᴍ&#d20101&lᴇ&#de0101&lɴ&#e90101&lɪ&#f40000&lᴜ&#ff0000&lʟ'
+        lore:
+        - ''
+        - '&fClick aici pentru'
+        - '&finchide acest meniu!'
+        left_click_commands:
+        - '[close]'
+        right_click_commands:
+        - '[close]'
+###############################################################
+      '1':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2NmZWVhMjcwNWFhMmRlMjFhODE5ZWJjYjg5YzM5OGJhMDJmMDM0YjFkNmNkMTYzZTExODAyZTVlMDBhMDcwMiJ9fX0=
+        slot: 11
+        display_name: '&#16a084&lM&#17a588&la&#17a98c&lr&#18ae90&ls&#19b394&lu&#19b898&lp&#1abc9c&li&#1bc1a0&la &#1bc6a3&l| &#1ccaa7&lA&#1ccfab&lr&#1dd4af&lm&#1ed9b3&lu&#1eddb7&lr&#1fe2bb&la'
+        lore:
+        - '&8Only Marsupia'
+        - ''
+        - '&c⊳ &#dcdfd1&lc&#dcdfd1&ll&#dcdfd1&li&#dcdfd1&lc&#dcdfd1&lk &#dcdfd1&lp&#dcdfd1&le&#dcdfd1&ln&#dcdfd1&lt&#dcdfd1&lr&#dcdfd1&lu &#dcdfd1&la &#dcdfd1&lp&#dcdfd1&lr&#dcdfd1&li&#dcdfd1&lm&#dcdfd1&li &#dcdfd1&lk&#dcdfd1&li&#dcdfd1&lt&#dcdfd1&lu&#dcdfd1&ll'
+        - ''
+        left_click_commands:
+        - '[message] Ai primit kitul cu succes.'
+        - '[console] kit give Marsupia-Armura %player_name%'
+###############################################################
+ #     '2':
+ #      material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGFhNmMyZDFiZDgwZmRkNmE2MzJjYzdjYWZkMjVmMDllZjIwM2VlYzJhNjkzYjdjYmEwM2QxNzZiMmNjMDcxYiJ9fX0=
+ #      slot: 11
+ #      display_name: '&#3CA55C&lᴇ&#48A65A&lx&#54A658&lᴘ&#60A756&lʟ&#6CA854&lᴏ&#79A953&lʀ&#85A951&lᴇ&#91AA4F&lʀ &#9DAB4D&lᴊ&#A9AB4B&lᴏ&#B5AC49&lʙ'
+ #      lore:
+ #      - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+ #      - ''
+ #      - '&fᴊᴏɪɴ ᴛᴏ ᴛʜᴇ ᴇxᴘʟᴏʀᴇʀ ᴊᴏʙ'
+ #     - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+ #     - ''
+ #     - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+ #     - '  &8► &#3CA55Cᴇ&#45A65Bx&#4FA659ᴘ&#58A758ʟ&#61A756ᴏ&#6BA855ʀ&#74A853ᴇ &#7DA952ᴄ&#86A950ʜ&#90AA4Fᴜ&#99AA4Dɴ&#A2AB4Cᴄ&#ACAB4Aᴋ&#B5AC49ꜱ'
+ #    - ''
+ #    - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+ #    - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+ #    left_click_commands:
+ #    - '[player] job join explorer'
+ #    - '[close]'
+ #    right_click_commands:
+ #    - '[player] job leave explorer'
+ #    - '[close]'
+###############################################################
+      '3':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODU2MTc1NzBjZDVlZmY3ZTliODM0YjJlNTk3YTM4NmIxZTNjN2M0OGJlM2MwZTJkYzMzMDQ0ODRmMGEwZTQ2MyJ9fX0=
+        slot: 13
+        display_name: '&#117a65&lM&#117a65&la&#117a65&lr&#117a65&ls&#117a65&lu&#117a65&lp&#117a65&li&#117a65&la &#117a65&l| &#117a65&lA&#117a65&lr&#117a65&lm&#117a65&le'
+        lore:
+        - '&8Only Marsupia'
+        - ''
+        - '&c⊳ &#dcdfd1&lc&#dcdfd1&ll&#dcdfd1&li&#dcdfd1&lc&#dcdfd1&lk &#dcdfd1&lp&#dcdfd1&le&#dcdfd1&ln&#dcdfd1&lt&#dcdfd1&lr&#dcdfd1&lu &#dcdfd1&la &#dcdfd1&lp&#dcdfd1&lr&#dcdfd1&li&#dcdfd1&lm&#dcdfd1&li &#dcdfd1&lk&#dcdfd1&li&#dcdfd1&lt&#dcdfd1&lu&#dcdfd1&ll'
+        - ''
+        left_click_commands:
+        - '[message] Ai primit kitul cu succes.'
+        - '[console] kit give Marsupia-Arme %player_name%'
+###############################################################
+      '4':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2JkOWRlNjNhZjBhOWZjN2YxNDI1YWZhYjcwYWI3ZWQ1YzlkYzA4ZjZiYTUzZWE2MmQxNzYyNWZjY2NiYWNjOCJ9fX0=
+        slot: 15
+        display_name: '&#117a65&lM&#117a65&la&#117a65&lr&#117a65&ls&#117a65&lu&#117a65&lp&#117a65&li&#117a65&la &#117a65&l| &#117a65&lG&#117a65&ll&#117a65&lo&#117a65&la&#117a65&ln&#117a65&lt&#117a65&le'
+        lore:
+        - '&8Only Marsupia'
+        - ''
+        - '&c⊳ &#dcdfd1&lc&#dcdfd1&ll&#dcdfd1&li&#dcdfd1&lc&#dcdfd1&lk &#dcdfd1&lp&#dcdfd1&le&#dcdfd1&ln&#dcdfd1&lt&#dcdfd1&lr&#dcdfd1&lu &#dcdfd1&la &#dcdfd1&lp&#dcdfd1&lr&#dcdfd1&li&#dcdfd1&lm&#dcdfd1&li &#dcdfd1&lk&#dcdfd1&li&#dcdfd1&lt&#dcdfd1&lu&#dcdfd1&ll'
+        - ''
+        left_click_commands:
+        - '[message] Ai primit kitul cu succes.'
+        - '[console] kit give Marsupia-gloante %player_name%'
+###############################################################
+      GLASS-BLACK:
+        material: green_stained_glass_pane
+        display_name: '&f'
+        slots:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 12
+        - 16
+        - 19
+        - 20
+        - 14
+        - 17
+        - 18
+        - 21
+        - 22
+        - 24
+        - 25
+        - 23
+        - 26
+        - 27
+        - 28
+        - 29
+        - 30
+        - 32
+        - 33
+        - 34
+        - 35

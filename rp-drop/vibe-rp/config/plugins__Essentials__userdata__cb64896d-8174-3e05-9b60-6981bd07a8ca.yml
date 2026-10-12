@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 188.25.227.198
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1723203908491
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725116701480
+  login: 1725114894816
+money: '5000'
+last-account-name: faraonulro90
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 346.03948989438277
+  y: 21.0
+  z: 1097.8938949790554
+  yaw: -93.63440704345703
+  pitch: 13.161136627197266
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -225.69999998807907
+  y: 67.0625
+  z: 144.00534415206988
+  yaw: -233.82501220703125
+  pitch: 22.301618576049805

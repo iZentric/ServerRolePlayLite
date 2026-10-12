@@ -1,0 +1,58 @@
+# Refoloseste binarul COMPILAT in ENGINE LAB (run 38093403726); nu recompila,
+# nu publica release-ul si nu atinge serverul sau lumea live.
+name: ENGINE SMOKE — candidat izolat 1.16.5
+on:
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["scripts/engine_lab.py", ".github/workflows/engine-smoke.yml"]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ENGINE_BUILD_RUN: 38093403726
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: Refoloseste motorul upstream din buildul izolat si pack-ul 1.7.7
+        run: |
+          set -euo pipefail
+          mkdir -p engine-lab stage
+          gh run download "$ENGINE_BUILD_RUN" --repo "$GITHUB_REPOSITORY" -n cuantic-engine-upstream-candidate -D engine-lab
+          test -f engine-lab/CUANTIC-CatServer-candidate.jar
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O /tmp/live-pack.zip
+          unzip -q /tmp/live-pack.zip -d stage
+          test -f stage/CatServer-1.16.5-1d8d6313-server.jar
+          cp engine-lab/CUANTIC-CatServer-candidate.jar stage/CatServer-1.16.5-1d8d6313-server.jar
+      - name: Boot cu 36 moduri + 14 pluginuri, apoi STOP curat
+        run: python3 scripts/engine_lab.py stage engine-lab/boot.log
+      - name: Salveaza verdictul (fara deploy)
+        if: always()
+        run: |
+          { echo '# ENGINE SMOKE — candidat izolat'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID";
+            echo "Binary from: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$ENGINE_BUILD_RUN";
+            echo 'NU este un benchmark cu jucatori si nu a fost aplicat live.'; echo;
+            echo '```json'; cat engine-lab/smoke-result.json 2>/dev/null || echo 'smoke nepornit'; echo '```';
+            echo; echo 'Ultimele 50 linii boot:'; echo '```';
+            tail -50 engine-lab/boot.log 2>/dev/null || echo 'boot nepornit'; echo '```';
+          } > docs/ENGINE-SMOKE-RESULT.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/ENGINE-SMOKE-RESULT.md
+          git commit -m 'engine smoke: verdict candidat izolat' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cuantic-engine-smoke-result
+          path: |
+            engine-lab/boot.log
+            engine-lab/smoke-result.json
+          retention-days: 7

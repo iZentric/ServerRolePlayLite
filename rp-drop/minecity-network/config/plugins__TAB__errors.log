@@ -1,0 +1,1245 @@
+l.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:39 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:39 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:39 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:39 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:39 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:39 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:39 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:39 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:39 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:39 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:39 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:40 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:40 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:40 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:40 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:40 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:40 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:40 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:40 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:40 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:40 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:40 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:40 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:40 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:40 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:40 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:40 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:40 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:40 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:40 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:40 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:41 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:41 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:41 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:41 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:41 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:41 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:41 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:41 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:41 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:41 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:41 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:41 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:41 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:41 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:41 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:41 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:41 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:41 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:41 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:41 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:42 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:42 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:42 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:42 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:42 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:42 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:42 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:42 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:42 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:42 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:42 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:42 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:42 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:42 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:42 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:42 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:42 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:42 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:42 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:42 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:43 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:43 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:43 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:43 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:43 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:43 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:43 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:43 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:43 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:43 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:43 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:43 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:43 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:43 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:43 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:43 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:43 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:43 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:43 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:43 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:44 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:44 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:44 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:44 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:44 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:44 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:44 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:44 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:44 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:44 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:44 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:44 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:44 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:44 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:44 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:44 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:44 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:44 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:44 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:44 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:45 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:45 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:45 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:45 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:45 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:45 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:45 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:45 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:45 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:45 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:45 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:45 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:45 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:45 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:45 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:45 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:45 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:45 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:45 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:45 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:46 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:46 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:46 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:46 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:46 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:46 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:46 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:46 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:46 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:46 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:46 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:46 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:46 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:46 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:46 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:46 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:46 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:46 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:46 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:46 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:47 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:47 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:47 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:47 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:47 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:47 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:47 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:47 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:47 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:47 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:47 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:47 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:47 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:47 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:47 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:47 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:47 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:47 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:47 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:47 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:48 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:48 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:48 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:48 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:48 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:48 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:48 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:48 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:48 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:48 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:48 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:48 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:48 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:48 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:48 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:48 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:48 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:48 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:48 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:48 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:49 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:49 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:49 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:49 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:49 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:49 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:49 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:49 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:49 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:49 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:49 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:49 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:49 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:49 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:49 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:49 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:49 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:49 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:49 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:49 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:50 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:50 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:50 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:50 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:50 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:50 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:50 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:50 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:50 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:50 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:50 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:50 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:50 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:50 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:50 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:50 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:50 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:50 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:50 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:50 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:51 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:51 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:51 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:51 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:51 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:51 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:51 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:51 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:51 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:51 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:51 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:51 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:51 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:51 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:51 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:51 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:51 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:51 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:51 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:51 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:52 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:52 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:52 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:52 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:52 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:52 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:52 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:52 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:52 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:52 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:52 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:52 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:52 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:52 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:52 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:52 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:52 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:52 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:52 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:52 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:53 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:53 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:53 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:53 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:53 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:53 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:53 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:53 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:53 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:53 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:53 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:53 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:53 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:53 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:53 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:53 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:53 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:53 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:53 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:53 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:54 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:54 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:54 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:54 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:54 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:54 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:54 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:54 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:54 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:54 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:54 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:54 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:54 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:54 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:54 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:54 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:54 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:54 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:54 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:54 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:55 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:55 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:55 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:55 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:55 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:55 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:55 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:55 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:55 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:55 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:55 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:55 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:55 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:55 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:55 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:55 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:55 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:55 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:55 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:55 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 21:59:56 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 21:59:56 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 21:59:56 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 21:59:56 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 21:59:56 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 21:59:56 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 21:59:56 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 21:59:56 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 21:59:56 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 21:59:56 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 21:59:56 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 21:59:56 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 21:59:56 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 21:59:56 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 21:59:56 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 21:59:56 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 21:59:56 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 21:59:56 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 21:59:56 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 21:59:56 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:25 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:25 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:25 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.platform.TabPlayer.<init>(TabPlayer.java:92)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.backend.BackendTabPlayer.<init>(BackendTabPlayer.java:22)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.platforms.bukkit.BukkitTabPlayer.<init>(BukkitTabPlayer.java:61)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.platforms.bukkit.BukkitEventListener.createPlayer(BukkitEventListener.java:41)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.platforms.bukkit.BukkitEventListener.createPlayer(BukkitEventListener.java:17)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.platform.EventListener.join(EventListener.java:23)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.platforms.bukkit.BukkitEventListener.onJoin(BukkitEventListener.java:26)
+29.10.2024 - 22:00:25 - 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+29.10.2024 - 22:00:25 - 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+29.10.2024 - 22:00:25 - 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+29.10.2024 - 22:00:25 - 	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+29.10.2024 - 22:00:25 - 	at org.bukkit.plugin.java.JavaPluginLoader$1.execute(JavaPluginLoader.java:301)
+29.10.2024 - 22:00:25 - 	at org.bukkit.plugin.RegisteredListener.callEvent(RegisteredListener.java:70)
+29.10.2024 - 22:00:25 - 	at org.bukkit.plugin.SimplePluginManager.callEvent(SimplePluginManager.java:593)
+29.10.2024 - 22:00:25 - 	at net.minecraft.server.management.PlayerList.func_72355_a(PlayerList.java:205)
+29.10.2024 - 22:00:25 - 	at net.minecraft.network.login.ServerLoginNetHandler.func_147326_c(ServerLoginNetHandler.java:165)
+29.10.2024 - 22:00:25 - 	at net.minecraft.network.login.ServerLoginNetHandler.func_73660_a(ServerLoginNetHandler.java:75)
+29.10.2024 - 22:00:25 - 	at net.minecraft.network.NetworkManager.func_74428_b(NetworkManager.java:239)
+29.10.2024 - 22:00:25 - 	at net.minecraft.network.NetworkSystem.func_151269_c(NetworkSystem.java:142)
+29.10.2024 - 22:00:25 - 	at net.minecraft.server.MinecraftServer.func_71190_q(MinecraftServer.java:1092)
+29.10.2024 - 22:00:25 - 	at net.minecraft.server.dedicated.DedicatedServer.func_71190_q(DedicatedServer.java:345)
+29.10.2024 - 22:00:25 - 	at net.minecraft.server.MinecraftServer.func_71217_p(MinecraftServer.java:998)
+29.10.2024 - 22:00:25 - 	at net.minecraft.server.MinecraftServer.func_240802_v_(MinecraftServer.java:815)
+29.10.2024 - 22:00:25 - 	at net.minecraft.server.MinecraftServer.func_240783_a_(MinecraftServer.java:267)
+29.10.2024 - 22:00:25 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:25 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:25 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:25 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.onJoin(PlaceholderManagerImpl.java:223)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.FeatureManager.onJoin(FeatureManager.java:135)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.platform.EventListener.lambda$join$0(EventListener.java:25)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:25 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:25 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:25 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:25 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:25 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:25 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:25 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:25 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:25 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:25 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:25 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:25 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:25 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:25 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:25 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:25 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:26 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:26 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:26 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:26 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:26 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:26 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:26 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:26 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:26 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:26 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:26 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:26 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:26 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:26 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:26 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:26 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:26 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:26 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:26 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:26 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:27 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:27 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:27 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:27 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:27 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:27 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:27 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:27 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:27 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:27 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:27 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:27 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:27 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:27 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:27 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:27 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:27 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:27 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:27 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:27 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:28 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:28 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:28 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:28 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:28 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:28 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:28 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:28 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:28 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:28 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:28 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:28 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:28 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:28 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:28 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:28 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:28 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:28 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:28 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:28 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:29 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:29 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:29 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:29 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:29 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:29 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:29 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:29 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:29 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:29 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:29 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:29 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:29 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:29 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:29 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:29 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:29 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:29 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:29 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:29 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:30 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:30 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:30 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:30 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:30 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:30 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:30 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:30 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:30 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:30 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:30 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:30 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:30 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:30 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:30 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:30 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:30 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:30 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:30 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:30 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:31 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:31 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:31 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:31 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:31 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:31 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:31 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:31 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:31 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:31 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:31 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:31 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:31 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:31 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:31 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:31 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:31 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:31 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:31 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:31 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:32 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:32 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:32 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:32 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:32 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:32 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:32 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:32 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:32 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:32 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:32 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:32 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:32 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:32 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:32 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:32 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:32 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:32 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:32 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:32 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:33 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:33 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:33 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:33 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:33 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:33 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:33 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:33 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:33 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:33 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:33 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:33 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:33 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:33 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:33 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:33 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:33 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:33 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:33 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:33 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:34 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:34 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:34 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:34 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:34 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:34 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:34 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:34 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:34 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:34 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:34 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:34 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:34 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:34 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:34 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:34 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:34 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:34 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:34 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:34 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:35 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:35 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:35 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:35 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:35 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:35 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:35 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:35 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:35 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:35 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:35 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:35 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:35 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:35 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:35 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:35 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:35 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:35 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:35 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:35 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:36 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:36 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:36 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:36 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:36 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:36 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:36 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:36 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:36 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:36 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:36 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:36 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:36 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:36 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:36 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:36 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:36 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:36 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:36 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:36 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:37 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:37 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:37 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:37 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:37 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:37 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:37 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:37 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:37 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:37 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:37 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:37 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:37 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:37 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:37 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:37 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:37 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:37 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:37 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:37 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:38 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:38 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:38 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:38 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:38 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:38 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:38 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:38 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:38 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:38 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:38 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:38 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:38 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:38 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:38 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:38 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:38 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:38 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:38 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:38 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:39 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:39 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:39 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:39 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:39 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:39 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:39 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:39 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:39 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:39 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:39 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:39 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:39 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:39 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:39 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:39 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:39 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:39 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:39 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:39 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:40 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:40 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:40 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:40 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:40 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:40 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:40 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:40 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:40 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:40 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:40 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:40 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:40 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:40 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:40 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:40 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:40 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:40 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:40 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:40 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:41 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:41 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:41 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:41 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:41 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:41 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:41 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:41 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:41 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:41 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:41 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:41 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:41 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:41 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:41 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:41 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:41 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:41 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:41 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:41 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:42 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:42 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:42 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:42 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:42 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:42 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:42 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:42 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:42 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:42 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:42 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:42 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:42 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:42 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:42 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:42 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:42 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:42 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:42 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:42 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:43 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:43 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:43 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:43 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:43 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:43 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:43 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:43 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:43 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:43 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:43 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:43 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:43 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:43 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:43 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:43 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:43 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:43 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:43 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:43 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:44 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:44 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:44 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:44 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:44 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:44 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:44 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:44 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:44 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:44 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:44 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:44 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:44 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:44 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:44 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:44 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:44 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:44 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:44 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:44 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:45 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:45 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:45 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:45 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:45 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:45 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:45 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:45 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:45 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:45 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:45 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:45 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:45 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:45 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:45 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:45 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:45 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:45 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:45 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:45 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:46 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:46 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:46 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:46 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:46 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:46 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:46 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:46 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:46 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:46 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:46 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:46 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:46 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:46 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:46 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:46 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:46 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:46 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:46 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:46 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:47 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:47 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:47 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:47 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:47 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:47 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:47 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:47 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:47 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:47 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:47 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:47 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:47 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:47 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:47 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:47 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:47 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:47 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:47 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:47 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:48 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:48 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:48 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:48 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:48 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:48 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:48 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:48 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:48 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:48 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:48 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:48 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:48 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:48 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:48 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:48 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:48 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:48 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:48 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:48 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:49 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:49 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:49 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:49 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:49 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:49 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:49 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:49 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:49 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:49 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:49 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:49 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:49 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:49 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:49 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:49 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:49 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:49 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:49 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:49 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:50 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:50 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:50 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:50 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:50 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:50 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:50 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:50 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:50 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:50 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:50 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:50 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:50 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:50 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:50 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:50 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:50 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:50 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:50 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:50 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:51 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:51 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:51 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:51 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:51 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:51 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:51 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:51 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:51 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:51 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:51 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:51 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:51 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:51 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:51 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:51 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:51 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:51 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:51 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:51 - 	at java.base/java.lang.Thread.run(Thread.java:840)
+29.10.2024 - 22:00:52 - [TAB v4.0.3] Failed to get permission group of vladutz1lol using LuckPerms
+29.10.2024 - 22:00:52 - net.luckperms.api.LuckPermsProvider$NotLoadedException: The LuckPerms API isn't loaded yet!
+This could be because:
+  a) the LuckPerms plugin is not installed or it failed to enable
+  b) the plugin in the stacktrace does not declare a dependency on LuckPerms
+  c) the plugin in the stacktrace is retrieving the API before the plugin 'enable' phase
+     (call the #get method in onEnable, not the constructor!)
+
+29.10.2024 - 22:00:52 - 	at net.luckperms.api.LuckPermsProvider.get(LuckPermsProvider.java:53)
+29.10.2024 - 22:00:52 - 	at me.neznamy.tab.shared.hook.LuckPermsHook.lambda$new$0(LuckPermsHook.java:29)
+29.10.2024 - 22:00:52 - 	at me.neznamy.tab.shared.GroupManager.getByPrimary(GroupManager.java:71)
+29.10.2024 - 22:00:52 - 	at me.neznamy.tab.shared.GroupManager.detectPermissionGroup(GroupManager.java:59)
+29.10.2024 - 22:00:52 - 	at me.neznamy.tab.shared.GroupManager.lambda$new$0(GroupManager.java:47)
+29.10.2024 - 22:00:52 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.request(PlayerPlaceholderImpl.java:138)
+29.10.2024 - 22:00:52 - 	at me.neznamy.tab.shared.placeholders.PlayerPlaceholderImpl.update(PlayerPlaceholderImpl.java:57)
+29.10.2024 - 22:00:52 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.updatePlayerPlaceholder(PlaceholderManagerImpl.java:118)
+29.10.2024 - 22:00:52 - 	at me.neznamy.tab.shared.features.PlaceholderManagerImpl.refresh(PlaceholderManagerImpl.java:69)
+29.10.2024 - 22:00:52 - 	at me.neznamy.tab.shared.CpuManager.lambda$runMeasuredTask$11(CpuManager.java:226)
+29.10.2024 - 22:00:52 - 	at me.neznamy.tab.shared.CpuManager.run(CpuManager.java:252)
+29.10.2024 - 22:00:52 - 	at me.neznamy.tab.shared.CpuManager.lambda$submit$1(CpuManager.java:105)
+29.10.2024 - 22:00:52 - 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+29.10.2024 - 22:00:52 - 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+29.10.2024 - 22:00:52 - 	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+29.10.2024 - 22:00:52 - 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+29.10.2024 - 22:00:52 - 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+29.10.2024 - 22:00:52 - 	at java.base/java.lang.Thread.run(Thread.java:840)

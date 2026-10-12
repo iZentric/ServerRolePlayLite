@@ -1,0 +1,54 @@
+#Messages Config - Translate
+#Advices:
+#1. Dont remove the " ' ' "
+#2. Translate the text which its between the " ' ' "
+#3. When you have cant its the message for people which cant use that command.
+#4. For now, you cant change the color of the message when you translate.
+#5. When it is something for console, dont add colors. Just translate the message without adding " & ".
+
+#NoPermission Message
+nopermission-message: '&cNo tienes permiso de ejecutar este comando.'
+
+#Update Message
+newupdate-message: '&a[EasyClearChat] Nueva actualizacion encontrada. Version &2%new_version% &ay vos estas en la version %current_version%! Descargala en:'
+failedtocheckupdate-message: '&c[EasyClearChat] Hubo un fallo al encontrar una actualizacion en spigot!'
+didntfoundanupdate-message: '&b[EasyClearChat] No se encontro ninguna nueva actualizacion en spigot. Estas al dia!'
+
+#InstanceOfPlayer Message
+instanceofplayer-message: '&4Debes ser un jugador para utilizar este comando.'
+
+#CantFindPlayer Message
+cantfindplayer-message: '&cNo se pudo encontrar al jugador: &4%target%&c.'
+
+#Commands Messages
+chatclearedby-message: '&cEl chat fue limpiado por &4%sender%&c!'
+chatclearedbypass-message: '&cEl chat fue limpiado por &4%sender% &cpero tenias permisos para evitarlo!'
+clearownchat-message: '&cHas limpiado tu propio chat.'
+clearchathelp-message: '&cNo hay argumentos suficientes! Escribe: /playerclearchat [jugador]'
+chatmutedby-message: '&cEl chat fue silenciado por: &4%sender%&c.'
+chatenabledby-message: '&cEl chat fue habilitado por &4%sender%&c.'
+clearsomeoneschat-message: '&aHas limpiado el chat de &2%target%&a!'
+clearedyourchat-message: '&4%sender% &cha limpiado tu chat!'
+chatcurrentlymuted-message: '&cNo puedes hablar ahora mismo. El chat ha sido silenciado!'
+cantsendcommandscm-message: '&cNo puedes enviar comandos cuando el chat fue silenciado!'
+chatalreadymuted-message: '&cNo puedes silenciar el chat porque ya fue silenciado. Puedes habiltiarlo con /chatenable'
+chatalreadyenabled-message: '&cNo puedes habilitar el chat porque ya fue habilitado. Puedes silenciarlo con /chatmute'
+joinservermutedchat: '&cBienvenido al servidor. No podras hablar porque el chat fue silenciado.'
+joinservermutedchatstaff: '&cBienvenido al servidor. El chat fue silenciado pero tienes permiso de hablar.'
+
+#EasyClearChat Help Messages
+clearchatplugin-helpmessage: 'Muestra esta paginad de ayuda!'
+clearchatpluginreload-helpmessage: 'Reinicia el plugin!'
+clearchatplugininfo-helpmessage: 'Obten algo de informacion!'
+clearchat-helpmessage: 'Limpia el chat!'
+playerclearchat-helpmessage: 'Limpia el chat de alguien!'
+clearmychat-helpmessage: 'Limpia tu propio chat!'
+chatenable-helpmessage: 'Habilita el chat!'
+chatmute-helpmessage: 'Silencia el chat!'
+
+#BarAPI Messages
+clearchat-barapimessage: '&cEl chat fue limpiado por:'
+clearownchat-barapimessage: '&cHas limpiado tu propio chat!'
+chatenabled-barapimessage: '&cEl chat fue habilitado por:'
+chatmuted-barapimessage: '&cEl chat fue silenciado por:'
+clearsomeoneschat-barapimessage: '&cHas limpiado su chat'

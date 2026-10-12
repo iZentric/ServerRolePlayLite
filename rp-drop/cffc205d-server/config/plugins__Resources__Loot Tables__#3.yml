@@ -1,0 +1,36 @@
+id: '#3'
+name: '&eLoot Table'
+description: []
+itemamount: 2
+item:
+  '0':
+    item:
+      ==: org.bukkit.inventory.ItemStack
+      v: 2586
+      type: APPLE
+      meta:
+        ==: ItemMeta
+        meta-type: UNSPECIFIC
+        display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"red","text":"Măr"}],"text":""}'
+        lore:
+        - '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"white","text":"-
+          Acest măr se vinde la magazin"}],"text":""}'
+        enchants:
+          DURABILITY: 10
+    chance: 90.0
+  '1':
+    item:
+      ==: org.bukkit.inventory.ItemStack
+      v: 2586
+      type: APPLE
+      meta:
+        ==: ItemMeta
+        meta-type: UNSPECIFIC
+        display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"#7A5015","text":"M"},{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"#795016","text":"ă"},{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"#775016","text":"r"},{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"#765017","text":"
+          "},{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"#745017","text":"s"},{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"#735018","text":"t"},{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"#715118","text":"r"},{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"#705119","text":"i"},{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"#6E5119","text":"c"},{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"#6D511A","text":"a"},{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"#6B511A","text":"t"}],"text":""}'
+        lore:
+        - '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"white","text":"-
+          Acest măr se vinde la magazin la un pret mai mic"}],"text":""}'
+        enchants:
+          DURABILITY: 10
+    chance: 10.0

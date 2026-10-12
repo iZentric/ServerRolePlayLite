@@ -1,0 +1,307 @@
+options:
+    bomb-world: "hypecity"
+    bomb-radius: 2
+
+variables:
+    {ct.permitted::*} = "" 
+    {t.permitted::*} = ""  
+    {bombs.planted::*} = ""  # Variabilă pentru a ține evidența tuturor bombelor plantate
+
+# Definirea locațiilor în cod
+on load:
+    set {bomb-locations::location1} to location at 6383, 179, -754 in world {@bomb-world}
+    set {bomb-locations::location2} to location at 6453, 179, -797 in world {@bomb-world}
+    set {bomb-locations::location3} to location at 6332, 170, -788 in world {@bomb-world}
+    set {bomb-locations::location4} to location at 6345, 148, -753 in world {@bomb-world}
+    set {bomb-locations::location5} to location at 6262, 178, -857 in world {@bomb-world}
+    set {bomb-locations::location6} to location at 6250, 181, -774 in world {@bomb-world}
+    set {bomb-locations::location7} to location at 6136, 195, -649 in world {@bomb-world}
+    set {bomb-locations::location8} to location at 6202, 195, -568 in world {@bomb-world}
+    set {bomb-locations::location9} to location at 6327, 185, -543 in world {@bomb-world}
+    set {bomb-locations::location10} to location at 6366, 184, -602 in world {@bomb-world}
+
+command /tadd <player>:
+    permission: op
+    trigger:
+        if arg-1 is set:
+            if {t.permitted::*} does not contain arg-1:
+                add arg-1 to {t.permitted::*}
+                send "&a%arg-1% are acum permisiunea de a planta bomba." to player
+            else:
+                send "&c%arg-1% are deja permisiunea de a planta bomba." to player
+        else:
+            send "&cSpecificați un jucător." to player
+
+command /tremove <player>:
+    permission: op
+    trigger:
+        if arg-1 is set:
+            if {t.permitted::*} contains arg-1:
+                remove arg-1 from {t.permitted::*}
+                send "&a%arg-1% nu mai are permisiunea de a planta bomba." to player
+            else:
+                send "&c%arg-1% nu are permisiunea de a planta bomba." to player
+        else:
+            send "&cSpecificați un jucător." to player
+
+command /tremoveall:
+    permission: op
+    trigger:
+        if size of {t.permitted::*} > 0:
+            delete {t.permitted::*}
+            send "&aToți jucătorii au fost eliminați din lista de permisiuni pentru plantarea bombelor." to player
+        else:
+            send "&cNu există jucători în lista de permisiuni pentru plantarea bombelor." to player
+
+command /ctadd <player>:
+    permission: op
+    trigger:
+        if arg-1 is set:
+            if {ct.permitted::*} does not contain arg-1:
+                add arg-1 to {ct.permitted::*}
+                execute console command "lp user %arg-1% permission set ct.bomb.disarm true"
+                send "&a%arg-1% are acum permisiunea de a dezamorsa bomba." to player
+            else:
+                send "&c%arg-1% are deja permisiunea de a dezamorsa bomba." to player
+        else:
+            send "&cSpecificați un jucător." to player
+
+command /ctremove <player>:
+    permission: op
+    trigger:
+        if arg-1 is set:
+            if {ct.permitted::*} contains arg-1:
+                remove arg-1 from {ct.permitted::*}
+                execute console command "lp user %arg-1% permission unset ct.bomb.disarm"
+                send "&a%arg-1% nu mai are permisiunea de a dezamorsa bomba." to player
+            else:
+                send "&c%arg-1% nu are permisiunea de a dezamorsa bomba." to player
+        else:
+            send "&cSpecificați un jucător." to player
+
+command /ctremoveall:
+    permission: op
+    trigger:
+        if size of {ct.permitted::*} > 0:
+            delete {ct.permitted::*}
+            send "&aToți jucătorii au fost eliminați din lista de permisiuni pentru dezamorsarea bombelor." to player
+        else:
+            send "&cNu există jucători în lista de permisiuni pentru dezamorsarea bombelor." to player
+
+command /tlist:
+    trigger:
+        if size of {t.permitted::*} > 0:
+            send "&aJucători cu permisiunea de a planta bomba: &e%{t.permitted::*}%" to player
+        else:
+            send "&cNu există jucători cu permisiunea de a planta bomba." to player
+
+command /ctlist:
+    trigger:
+        if size of {ct.permitted::*} > 0:
+            send "&aJucători cu permisiunea de a dezamorsa bomba: &e%{ct.permitted::*}%" to player
+        else:
+            send "&cNu există jucători cu permisiunea de a dezamorsa bomba." to player
+
+command /dezamorsare:
+    permission: op
+    trigger:
+        if size of {bombs.planted::*} > 0:
+            set {_isPermitted} to false
+            loop {ct.permitted::*}:
+                if loop-value is "%player%":
+                    set {_isPermitted} to true
+                    stop loop
+
+            if {_isPermitted} is true:
+                broadcast "&a%player% a dezamorsat instant toate bombele plantate!"
+                loop {bombs.planted::*}:
+                    set {_bombLocation} to loop-value
+                    delete {bombs.planted::%{_bombLocation}%}
+                    delete {bomb.timeleft::%{_bombLocation}%}
+                    delete {bomb.defuse-progress::%{_bombLocation}%}
+                    set block at {_bombLocation} to air
+                delete {bombs.planted::*}
+            else:
+                send "&cNu ai permisiunea de a dezamorsa bombele!" to player
+        else:
+            send "&cNu există bombe plantate pentru a fi dezamorsate." to player
+
+on place of red mushroom block:
+    if world of event-location is {@bomb-world}:
+        set {_isPermitted} to false
+        loop {t.permitted::*}:
+            if loop-value is "%player%":
+                set {_isPermitted} to true
+                stop loop
+
+        if {_isPermitted} is true:
+            set {_bombLocation} to ""
+            set {_distance} to 0
+            
+            loop {bomb-locations::*}:
+                set {_distance} to distance between event-location and loop-value
+                if {_distance} <= {@bomb-radius}:
+                    set {_bombLocation} to loop-value
+                    stop loop
+            
+            if {_bombLocation} is not "":
+                # Check if the player is within the bomb radius
+                if distance between player and {_bombLocation} > {@bomb-radius}:
+                    send "&cNu ești în zona de plantare!" to player
+                    cancel event
+                    stop
+
+                # Check if the bomb is already defused
+                if {bomb.defused::%{_bombLocation}%} is true:
+                    send "&cBomba a fost deja dezamorsată!" to player
+                    cancel event
+                    stop
+
+                broadcast "&ePlantare..."  # Message when starting planting
+                set {bomb.planting::%{_bombLocation}%} to true
+                
+                # Initialize variables for player check
+                loop all players in world {@bomb-world}:
+                    if distance between loop-player and {_bombLocation} <= {@bomb-radius}:
+                        set {bomb.checks::%{_bombLocation}%::%loop-player%} to now
+                    else:
+                        delete {bomb.checks::%{_bombLocation}%::%loop-player%}
+                
+                # Check periodically if players stay in the bomb area
+                while {bomb.planting::%{_bombLocation}%} is true:
+                    wait 1 second
+
+                    loop all players in world {@bomb-world}:
+                        if distance between loop-player and {_bombLocation} <= {@bomb-radius}:
+                            if {bomb.checks::%{_bombLocation}%::%loop-player%} is set:
+                                # Calculate the time difference correctly
+                                if difference between now and {bomb.checks::%{_bombLocation}%::%loop-player%} >= 5 seconds:
+                                    broadcast "&6&lBomba a fost plantată de %player%!"  # Bomb planted message
+                                    set {bomb.active::%{_bombLocation}%} to true
+                                    set {bomb.planting::%{_bombLocation}%} to false
+                                    
+                                    # Set bomb status and initialize other variables
+                                    set {bombs.planted::%{_bombLocation}%} to true
+                                    set {bomb.timeleft::%{_bombLocation}%} to 60
+                                    set {bomb.defused::%{_bombLocation}%} to false
+                                    set {bomb.defuse-progress::%{_bombLocation}%} to 0
+                                    set {bomb.plant-time::%{_bombLocation}%} to now
+                                    
+                                    # Start countdown loop for bomb explosion
+                                    while {bomb.timeleft::%{_bombLocation}%} > 0:
+                                        wait 1 second
+                                        if {bomb.defused::%{_bombLocation}%} is true:
+                                            # If bomb is defused, break the countdown loop
+                                            set {bomb.active::%{_bombLocation}%} to false
+                                            stop loop
+                                        remove 1 from {bomb.timeleft::%{_bombLocation}%}
+                                        
+                                        # Announce time left at specific intervals
+                                        if {bomb.timeleft::%{_bombLocation}%} is 30:
+                                            broadcast "&e&lMai sunt 30 de secunde până la explozia bombei!"
+                                        if {bomb.timeleft::%{_bombLocation}%} is 10:
+                                            broadcast "&e&lMai sunt 10 secunde până la explozia bombei!"
+                                        if {bomb.timeleft::%{_bombLocation}%} is 5:
+                                            broadcast "&e&lMai sunt 5 secunde până la explozia bombei!"
+                                        if {bomb.timeleft::%{_bombLocation}%} is 4:
+                                            broadcast "&e&lMai sunt 4 secunde până la explozia bombei!"
+                                        if {bomb.timeleft::%{_bombLocation}%} is 3:
+                                            broadcast "&e&lMai sunt 3 secunde până la explozia bombei!"
+                                        if {bomb.timeleft::%{_bombLocation}%} is 2:
+                                            broadcast "&e&lMai sunt 2 secunde până la explozia bombei!"
+                                        if {bomb.timeleft::%{_bombLocation}%} is 1:
+                                            broadcast "&e&lMai este 1 secundă până la explozia bombei!"
+                                    
+                                    # If time reaches 0, the bomb explodes
+                                    if {bomb.timeleft::%{_bombLocation}%} is 0:
+                                        broadcast "&c&lBomba a EXPLODAT!"
+                                        set {bomb.active::%{_bombLocation}%} to false
+                                        # Break the bomb block at its exact location
+                                        break block at {_bombLocation}
+                                    stop loop
+                            else:
+                                set {bomb.checks::%{_bombLocation}%::%loop-player%} to now
+                        else:
+                            # If the player leaves the bomb area, break the bomb and reset
+                            if {bomb.checks::%{_bombLocation}%::%loop-player%} is set:
+                                delete {bomb.checks::%{_bombLocation}%::%loop-player%}
+                                send "&cAi ieșit din zona de plantaj! Bomba a fost spartă." to loop-player
+                                set {bomb.planting::%{_bombLocation}%} to false
+                                break block at event-location
+                                give 1 red mushroom block to player  # Give the bomb back to the player who initiated the planting
+                                stop loop
+        else:
+            send "&cNu ai permisiunea de a planta bomba!" to player
+            cancel event
+    else:
+        send "&cNu poți planta bomba în această lume!" to player
+        cancel event
+
+on break of red mushroom block:
+    set {_location} to location of event-block
+    set {_player} to player
+
+    # Verificăm dacă blocul este o bombă plantată
+    if block at {_location} is red mushroom block:
+        set {_isPermitted} to false
+
+        # Verificăm dacă jucătorul are permisiunea de a dezamorsa
+        loop {ct.permitted::*}:
+            if loop-value is {_player}:
+                set {_isPermitted} to true
+                stop loop
+
+        if {_isPermitted} is true:
+            cancel event  # Blochează spargerea blocului
+            add 1 to {bomb.defuse-progress::%{_location}%}
+            
+            # Extragem progresul dezamorsării într-o variabilă pentru a-l folosi în mesaj
+            set {_progress} to {bomb.defuse-progress::%{_location}%}
+            broadcast "&eProgres dezamorsare: %{_progress}%"
+
+            if {_progress} >= 10:
+                broadcast "&a%{_player}% a dezamorsat bomba!"
+                delete {bombs.planted::%{_location}%}
+                delete {bomb.timeleft::%{_location}%}
+                delete {bomb.defuse-progress::%{_location}%}
+                set {bomb.defused::%{_location}%} to true
+                set block at {_location} to air
+                # Opriți timerul bombei
+                delete {bomb.active::%{_location}%}
+                # Optional: Broadcast a message confirming the defuse
+                broadcast "&aBomba a fost complet dezamorsată și nu va exploda."
+            else:
+                set {_remaining} to 10 - {_progress}
+                send "&eTrebuie să spargi bomba de încă &a%{_remaining}% &eori pentru a o dezamorsa!" to {_player}
+                set block at {_location} to air
+                wait 1 second
+                if {bomb.defuse-progress::%{_location}%} < 10:
+                    set block at {_location} to red mushroom block
+        else:
+            cancel event
+            send "&cNu ai permisiunea de a dezamorsa bomba!" to {_player}
+            # Respawn the block after 1 second if the player does not have permission
+            set block at {_location} to air
+            wait 1 second
+            set block at {_location} to red mushroom block
+    else:
+        # Permitem spargerea blocului dacă nu este o bombă plantată
+        set block at {_location} to air
+
+on death of player:
+    # Eliminăm jucătorul din listele {t.permitted::*} și {ct.permitted::*}
+    remove victim from {t.permitted::*}
+    remove victim from {ct.permitted::*}
+
+    # Verificăm dacă jucătorul are permisiunea ct.bomb.disarm
+    if victim has permission "ct.bomb.disarm":
+        # Eliminăm permisiunea ct.bomb.disarm
+        execute console command "lp user %victim% permission unset ct.bomb.disarm"
+        broadcast "&b%victim% a murit și a pierdut permisiunea de a dezamorsa bomba."
+        
+    # Ștergem blocul specific (de exemplu, red mushroom block) din inventar
+    loop all items in victim's inventory:
+        if loop-item is red mushroom block:
+            remove loop-item from victim's inventory
+            broadcast "&cBomba a fost ștearsă din inventar deoarece jucătorul %victim% a murit."
+            stop loop

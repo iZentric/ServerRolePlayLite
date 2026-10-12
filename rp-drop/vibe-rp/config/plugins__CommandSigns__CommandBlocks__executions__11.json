@@ -1,0 +1,77 @@
+{
+  "id": 11,
+  "addons": {
+    "ncs_cooldowns": {
+      "player_usages": [
+        {
+          "player_uuid": "a4f2c447-4d14-356d-b430-01c3c830d76f",
+          "time": 1701525105647
+        },
+        {
+          "player_uuid": "2b03f10e-841e-3c52-8e4f-ddd76d86b53e",
+          "time": 1700762835188
+        },
+        {
+          "player_uuid": "d6932d1f-caf0-30de-b6b4-28498a6aa3b1",
+          "time": 1700770298339
+        },
+        {
+          "player_uuid": "cf1a9e2a-0a8f-3706-b7e6-b4f3e860538a",
+          "time": 1698595459338
+        },
+        {
+          "player_uuid": "cb9e9ff8-f1b7-3f7a-ae98-be4bcf7b5ac5",
+          "time": 1701353076577
+        },
+        {
+          "player_uuid": "99b2688a-e37d-3095-9d05-e153a5f1f2f1",
+          "time": 1701546407917
+        },
+        {
+          "player_uuid": "09aa0e7e-083d-3ba0-b430-25881ad68780",
+          "time": 1698054725333
+        },
+        {
+          "player_uuid": "158b7f16-47c6-344d-99b6-27ccd0862fad",
+          "time": 1701719160791
+        },
+        {
+          "player_uuid": "f6309d19-6364-34cb-ae2f-6032d2056735",
+          "time": 1700760239418
+        },
+        {
+          "player_uuid": "8dfcee80-b1fd-3ca5-99c2-9c1e2cdad34e",
+          "time": 1700905273369
+        },
+        {
+          "player_uuid": "3d348ae4-0e04-34e0-b5bc-0ffac591c46d",
+          "time": 1698060431463
+        },
+        {
+          "player_uuid": "301d3c17-1b77-339d-8698-2fc2fef98031",
+          "time": 1698678737035
+        },
+        {
+          "player_uuid": "4272b32b-e235-3443-b795-8047c06137e5",
+          "time": 1700845949338
+        },
+        {
+          "player_uuid": "9587d4a0-21c6-3467-9fe2-2596372c03a7",
+          "time": 1701353015027
+        },
+        {
+          "player_uuid": "c67455c0-4a0b-3c3c-bc9b-56261c9437b6",
+          "time": 1701015094032
+        },
+        {
+          "player_uuid": "3365cbc2-ae93-3ab3-99be-7c5aecce0d33",
+          "time": 1700937890950
+        },
+        {
+          "player_uuid": "010b4a71-1717-30b0-b3a2-4c0624d5ec93",
+          "time": 1701195935861
+        }
+      ]
+    }
+  }
+}

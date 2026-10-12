@@ -1,0 +1,83 @@
+    menu_title: '           &8⋘ &#082762&lS&#082762&lI&#082762&lA&#082762&lS &#082762&lJ&#082762&lA&#082762&lI&#082762&lL &8⋙ '
+    open_command:
+    - siasjail
+    register_command: true
+    size: 35
+    items:
+#############################################################################################
+      'close':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTJkN2E3NTFlYjA3MWUwOGRiYmM5NWJjNWQ5ZDY2ZTVmNTFkYzY3MTI2NDBhZDJkZmEwM2RlZmJiNjhhN2YzYSJ9fX0=
+        slot: 31
+        display_name: '&#790303&lɪ&#840303&lɴ&#8f0303&lᴄ&#9b0202&lʜ&#a60202&lɪ&#b10202&lᴅ&#bc0202&lᴇ &#c70101&lᴍ&#d20101&lᴇ&#de0101&lɴ&#e90101&lɪ&#f40000&lᴜ&#ff0000&lʟ'
+        lore:
+        - ''
+        - '&fClick aici pentru'
+        - '&finchide acest meniu!'
+        left_click_commands:
+        - '[close]'
+        right_click_commands:
+        - '[close]'
+###############################################################
+      '1':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzUxZjAwOWE4OThmYmNmMGM1NDZjMDMzNWQ5MzJkN2ZlNDM0NmQxYjRhZWQzOWFlOTA0MjVmZDRiZGU0MzE0NCJ9fX0=
+        slot: 11
+        display_name: '&#099d13&lD&#099d13&le&#099d13&ls&#099d13&lc&#099d13&lh&#099d13&li&#099d13&ld&#099d13&le'
+        lore:
+        - ''
+        - '&c⊳ &#ded4cd&lc&#e0d6cf&ll&#e1d7d0&li&#e3d9d2&lc&#e5dbd3&lk &#e7dcd5&lp&#e8ded6&le&#eae0d8&ln&#ece1da&lt&#eee3db&lr&#efe5dd&lu &#f1e7de&la &#f3e8e0&ld&#f5eae2&le&#f6ece3&ls&#f8ede5&lc&#faefe6&lh&#fcf1e8&li&#fdf2e9&ld&#fff4eb&le'
+        - ''                      
+        left_click_commands:
+        - '[message] &2&lAi deschis cu succes'
+        - '[console] fill 815 21 2213 815 26 2205 air'
+        - '[console] fill 808 21 2205 808 26 2213 air'
+###############################################################
+      '2':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzUxZjAwOWE4OThmYmNmMGM1NDZjMDMzNWQ5MzJkN2ZlNDM0NmQxYjRhZWQzOWFlOTA0MjVmZDRiZGU0MzE0NCJ9fX0=
+        slot: 15
+        display_name: '&#de3163&lI&#d62f5f&ln&#cd2d5c&lc&#c52c58&lh&#bd2a54&li&#b42851&ld&#ac264d&le'
+        lore:
+        - ''
+        - '&c⊳ &#ded4cd&lc&#e0d6cf&ll&#e2d8d0&li&#e4d9d2&lc&#e5dbd4&lk &#e7ddd5&lp&#e9dfd7&le&#ebe0d9&ln&#ede2da&lt&#efe4dc&lr&#f0e6de&lu &#f2e8df&la &#f4e9e1&li&#f6ebe3&ln&#f8ede4&lc&#faefe6&lh&#fbf0e8&li&#fdf2e9&ld&#fff4eb&le'
+        - ''                      
+        left_click_commands:
+        - '[message] &4&lAi inchis cu succes'
+        - '[console] fill 815 21 2213 815 26 2205 iron_bars'
+        - '[console] fill 808 21 2205 808 26 2213 oak_fence'
+###############################################################
+      GLASS-BLACK:
+        material: black_stained_glass_pane
+        display_name: '&f'
+        slots:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 13
+        - 10
+        - 12
+        - 16
+        - 19
+        - 20
+        - 14
+        - 17
+        - 18
+        - 21
+        - 22
+        - 24
+        - 25
+        - 23
+        - 26
+        - 27
+        - 28
+        - 29
+        - 30
+        - 32
+        - 33
+        - 34
+        - 35

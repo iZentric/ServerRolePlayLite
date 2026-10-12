@@ -1,0 +1,76 @@
+#OP-protection: Player can only be op'ed if they are in the "allowed-operators" list
+op-protection: false
+allowed-operators:
+#If you try to Op someone who isn't in the list
+op-message: "&cThe Player isn't a listed operator!"
+#Players who are operators and are not in the list can't connect and will be deop'ed.
+unauthorized-operator-kick-message: '&cYou are not allowed to be an operator'
+
+#Message if you type a blocked command | Enter none to disable
+blocked-command-message: "Comanda necunoscuta. Scrie \"/help\" pentru ajutor."
+#Message shown if you type /pl | Enter none to disable | Players with the permission plhide.bypass will see the real plugins
+/pl-message: 'Plugins (0):'
+
+#Stay on the newest version to get better features!
+#Enable or disable automatic ingame update notification on join
+update-notify: true
+
+groups:
+  #if no group is set via plhide.group.<group> this will be applied
+  #do not rename the default group!
+  #blocked commands will be automatically removed from the tabcompletion
+  default:
+    commands:
+      - ver
+      - version
+      - about
+      - bukkit
+      - icanhasbukkit
+      - help
+      - '?'
+      - bukkit:?
+      - bukkit:help
+      - plugins
+      - pl
+      - vamaa
+      - vama1
+      - bukkit:pl
+      - bukkit:plugins
+      - bukkit:ver
+      - bukkit:version
+      - bukkit:about
+      - br
+      #The plugin commands
+      - pl-hide:plhide
+      - plhide
+    #If the value is blacklist, the commands are blocked and invisible
+    #If the value is whitelist, the commands only executable and visible
+    group-mode: blacklist
+    #If a player is in two groups, the group with the higher priority number is used
+    #The minimum value is 0
+    priority: 0
+    #here you can add other groups
+    #The group mode is taken from the main group, in this case the main group is "default"
+    included-groups:
+      - Test
+      - staff
+
+  #This group for example will remove and block all commands
+  #add permission plhide.group.test to apply this group
+  default:
+    commands: [login,l,register,reg,ticket,redkitmute,msg,reply,kick,ban,deltamenu,redsias,warn,tp,fly,delhome,home,pinvsee,say,sethome,staffchat,invsee,playtime,tphere,tickets,vanish,jail,unjail,vmute,vunmute,skin,gd:callback,trust,redsias,untrust,pay,eglow,jobs,job,ds,car,bumber,bike,dunebuggy,gokart,golf,minibike,minibus,moped,roader,casino,siasmenu,deltakit,deltaveh,taxi,vama1,vamaa,vamag1,vamag2,me,kit,sisa,k,warnings,back,casino,shop,unwarn,me,tempmute,tempban,unmute,minecraft:,summon]
+    group-mode: whitelist
+    priority: 1
+    included-groups: []
+  staff:
+    commands: [login,l,register,reg,ticket,redkitmute,msg,reply,kick,ban,deltamenu,redsias,warn,tp,fly,delhome,home,pinvsee,say,sethome,staffchat,invsee,playtime,tphere,tickets,vanish,jail,unjail,vmute,vunmute,skin,gd:callback,trust,redsias,untrust,pay,eglow,jobs,ds,car,bumber,bike,dunebuggy,gokart,golf,minibike,minibus,moped,roader,casino,siasmenu,deltakit,deltaveh,taxi,vama1,online,vamaa,vamag1,vamag2,me,kit,sisa,warnings,back,k,stafff,casino,shop,unwarn,me,tempmute,tempban,unmute,minecraft:,summon]
+    group-mode: whitelist
+    priority: 1
+    included-groups: []
+  admin:
+    commands: [login,l,register,reg,ticket,redkitmute,msg,reply,kick,ban,deltamenu,redsias,warn,tp,fly,delhome,home,pinvsee,say,sethome,staffchat,invsee,playtime,tphere,tickets,vanish,jail,unjail,vmute,vunmute,skin,gd:callback,trust,redsias,untrust,pay,eglow,jobs,ds,car,bumber,bike,dunebuggy,gokart,golf,minibike,minibus,moped,roader,casino,siasmenu,deltakit,deltaveh,taxi,vama1,vamaa,vamag1,vamag2,me,kit,sisa,warnings,back,k,stafff,casino,shop,unwarn,me,tempmute,tempban,unmute,minecraft:,summon]
+    group-mode: whitelist
+    priority: 1
+    included-groups: []
+#Don't change
+version: "1.3"

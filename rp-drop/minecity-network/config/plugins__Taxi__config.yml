@@ -1,0 +1,91 @@
+version: v2.3
+settings:
+  enablePlugin: true
+  enableAutoTabComplete: true
+  prefix: '&e&lTaxi »'
+  bankingPriority: none
+  showInfoAboutPlugin: true
+  enableSound: true
+  arrivedSound: ENTITY_PLAYER_LEVELUP
+  uiSound: UI_BUTTON_CLICK
+  currentFare: 1.0
+  counting:
+    enableCounting: true
+    countingTime: 10
+    countingTimeNotification:
+    - '5'
+    - '4'
+    - '3'
+    - '2'
+    - '1'
+    enableCountingSound: true
+    countingSoundEverySec: true
+    countingSound: UI_BUTTON_CLICK
+    dontMove: true
+  gui:
+    taxiTitle: '&e&lTAXI'
+    taxiSlots: 54
+    taxiMaterial: head-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzYxNjlmMzMwZTRhOGZlYTViNGJkNDkxZjg3YzUyNTY2NDNjN2Q1ZTNiNWMyYzM5MmRmY2VjNGZmZGIwMWQzYyJ9fX0=
+    taxiMaterialID: 0
+    borderGUI: true
+    upsideDown: true
+    fillMaterial: YELLOW_STAINED_GLASS_PANE
+    fillMaterialID: 0
+    innerBorderMaterial: WHITE_STAINED_GLASS_PANE
+    innerBorderMaterialID: 0
+    outerBorderMaterial: GRAY_STAINED_GLASS_PANE
+    outerBorderMaterialID: 0
+    bottomMaterial: GRAY_STAINED_GLASS_PANE
+    bottomMaterialID: 0
+    backTitle: '&c&lBack'
+    backMaterial: Iron_Door
+    backMaterialID: 0
+    backSlot: 51
+    backCommand: '[console] phone open %player% contacts'
+    backCloseGUI: false
+    previousTitle: '&c&lPrevious'
+    previousMaterial: Arrow
+    previousMaterialID: 0
+    previousSlot: 48
+    currentTitle: '&7&l{points}'
+    currentMaterial: Sunflower
+    currentMaterialID: 0
+    currentSlot: 49
+    nextTitle: '&a&lNext'
+    nextMaterial: Arrow
+    nextMaterialID: 0
+    nextSlot: 50
+    fareTitle: '&eTaxi''s Fare'
+    fareLore: '&f&lx{fare}'
+    fareMaterial: Paper
+    fareMaterialID: 0
+    fareSlot: 47
+messages:
+  toggledMessage: '{status}'
+  formatStatusOn: '&a&lENABLED'
+  formatStatusOff: '&c&lDISABLED'
+  priceFormat: '&fPrice: &a&l${price}'
+  setFareMessage: '&a&lSUCCESS!&f You set the taxi''s fare rate to &e&l{fare}'
+  resetFareMessage: '&6&lSUCCESS!&f You reset the taxi''s fare rate.'
+  currentFareMessage: '&7&lCurrent taxi''s fare rate is: &e&l{fare}'
+  minimumPriceMessage: '&c&lSORRY!&c The minimum price required is $0.99.'
+  noPointsAvailable: '&c&lSORRY!&c No waypoints available.'
+  unknownCommand: '&cUnknown command, use &7/Taxi help'
+  notAvailable: '&c&lSORRY!&c This option aren''t available currently.'
+  isOffline: '&c&lSORRY!&c This player isn''t online currently.'
+  noPermission: '&c&lSORRY!&c You do not have permission to do that.'
+  reloadMessage: '&a&lSUCCESS! &aAll data have been reloaded!'
+  saveMessage: '&a&lSUCCESS! &aConfiguration files have been saved successfully!'
+  openedMessage: '&6&lSUCCESS! &fYou opened taxi gui to &7&l{player}'
+  pointCreatedMessage: '&a&lSUCCESS! &fYou created a new point &7&l{point} &7(&a&l${price}&7)'
+  pointUpdatedMessage: '&6&lSUCCESS! &fYou updated the point &7&l{point} &f!'
+  pointSetMessage: '&6&lSUCCESS! &fYou set the location of point &7&l{point}'
+  pointRemoveMessage: '&c&lSUCCESS! &fYou removed the point &7&l{point}'
+  pointAlreadyExists: '&c&lSORRY!&c This point already exists.'
+  pointIsntExists: '&c&lSORRY!&c This point isn''t exists.'
+  noMoneyMessage: '&c&lSORRY!&c You need to hold &a&l${price} &cfor taking a ride
+    to &7&l{point}'
+  aboutToMessage: '&f&lYOU WILL BE ARRIVING TO &7&l{point} &f&lIN &e&l{seconds}s'
+  arrivedMessage: '&a&lSUCCESS! &f&lYou arrived at &7&l{point} &f&lsuccessfully! &8(&a&l-${price}&8)'
+  dontMoveMessage: '&c&lSORRY!&c Your ride canceled because you moved.'
+  alreadyWaitingMessage: '&c&lSORRY!&c You already waiting for other ride!'

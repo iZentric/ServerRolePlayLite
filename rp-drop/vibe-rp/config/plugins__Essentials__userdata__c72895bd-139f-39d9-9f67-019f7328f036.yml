@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 82.78.61.91
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1726132078079
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1726137528028
+  login: 1726130304172
+money: '310.999999999999998'
+last-account-name: vladutz043376
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -54.092163806162546
+  y: 64.0
+  z: -1027.1639642707207
+  yaw: 263.24951171875
+  pitch: 1.8141695261001587
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 454.30000001192093
+  y: 75.0
+  z: -245.2506450636886
+  yaw: 84.76123046875
+  pitch: 89.04145812988281

@@ -1,0 +1,27 @@
+Material: DIAMOND_BLOCK
+Enchanted: true
+OnlyPlaceable: true
+AnimationVisibilityOption: "Proximity"
+#CustomModelData: 0
+PouchStand: DIAMOND_BLOCK
+PouchStandEnchanted: true
+Name: "&b&lTier I Diamond Pouch &r&7(Right Click)"
+EndHologram:
+  - "&e&lDIAMOND POUCH"
+  - "&7You have found {random_number} Diamond Blocks from this pouch!"
+Lores:
+  - ''
+  - '&7Place the Diamond Pouch to receive a'
+  - '&7Mystery reward of Diamond Blocks!'
+  - ''
+  - '&6&l* &bTier &f1'
+  - ''
+  - '&6&l* &bReward'
+  - '&8- &f1 - 128 Diamond Blocks'
+  - ''
+  - '&7&o(( Place down to open! ))'
+ConvertBigNumbers: true #makes it so prizes from thousands to quintillions are changed to letters such as K, Mil, Bil, etc.
+RandomNumberMin: 1
+RandomNumberMax: 128
+Rewards:
+  - "give {player_name} DIAMOND_BLOCK {random_number}"

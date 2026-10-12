@@ -1,0 +1,39 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: true
+ip-address: 82.76.124.77
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 1723191663296
+  onlinejail: 0
+  logout: 1723190079632
+  login: 1723188277317
+money: '5000'
+last-account-name: Paradoxulll
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 370.34674506413745
+  y: 224.0
+  z: -523.5920235795959
+  yaw: 181.3038330078125
+  pitch: 7.838437080383301
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 370.37480355404085
+  y: 224.0
+  z: -519.8901312350388
+  yaw: 176.8228759765625
+  pitch: 24.599851608276367
+jail: admin-jail

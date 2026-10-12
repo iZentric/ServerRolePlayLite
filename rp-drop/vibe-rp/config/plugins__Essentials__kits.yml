@@ -1,0 +1,21 @@
+kits:
+  start:
+    delay: -1
+    items:
+    - writable_book 1 name:&f&lBULETIN_PERSONAL lore:&f|&f&lBULETIN_PROCURAT_DE|&f&lPRIMARIA_VIBERP|&c&lKIT_DE_INCEPATOR
+      page1:_________BULETIN|1)_Numele_+_prenumele_tau_:|2)_Varsta_ta_:_|3)_Data_nasterii_:_|4)_Sexul_:|5)_Locul_nasterii_:_|6)_Adresa_completa_:_|||!_ATENTIE_!|-_DATELE_SE_COMPLETEAZA_DE_FIECARE_CETATEAN
+      page2:-_DATELE_PE_CARE_TREBUIE_SA_LE_SCRII_NECESITA_SA_FIE_CAT_SE_POATE_DE_ROLEPLAY|-_PERSOANELE_CARE_NU_DISPUN_DE_DATE_ROLEPLAY_VOR_FI_SANCTIONATE_DE_POLITIE_(_1.19._Falsificarea_actelor_/_expirarea_acestora:_Amenda_$65_-_10_luni_inchisoare_)
+    - cooked_porkchop 16 name:&f&lCEAFA_DE_PORC lore:&f|&c&lKIT_DE_INCEPATOR
+    - leather_helmet 1 name:&f&lBAZMA lore:&f|&c&lKIT_DE_INCEPATOR color:10511680
+    - leather_chestplate 1 name:&f&lBLUZA lore:&f|&c&lKIT_DE_INCEPATOR color:10511680
+    - leather_leggings 1 name:&f&lPANTALONI lore:&f|&c&lKIT_DE_INCEPATOR color:10511680
+    - leather_boots 1 name:&f&lPAPUCI lore:&f|&c&lKIT_DE_INCEPATOR color:10511680
+  test:
+    delay: 1000000000000000
+    items:
+    - null 1 name:&7&lTorbă_Sd
+    - quartz_stairs 1
+  test1:
+    delay: 100
+    items:
+    - null 1 name:&2&lKit_Marsupia

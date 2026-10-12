@@ -1,0 +1,13 @@
+UseDisplayNames: false
+prefix: '&7[&eYourServer.com&7]&r'
+noPermission: '%prefix% &cYou don''t have permission to perform this command.'
+usage: '%prefix% &cUsage: /msg <player> <message>'
+haveNotReceivedAMessageYet: '%prefix% &cYou have not received a message yet.'
+playerIsOffline: '%prefix% &cplayer isn''t online.'
+targetCanNotBeTheSender: '%prefix% &cYou can''t send a message to yourself.'
+playerMessage: '%prefix% &cYou &8>> &c%receiverName% &8>> &7%message%'
+targetMessage: '%prefix% &c%senderName% &8>> &cYou &8>> &7%message%'
+notAllowed: '%prefix% &cThe messaged player has deactivated privat messages.'
+activated: '%prefix% &aYou activated private messages.'
+deactivated: '%prefix% &cYou deactivated private messages.'
+Reloaded: '%prefix% &aThe plugin has been reloaded.'

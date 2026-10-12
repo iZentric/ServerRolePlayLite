@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 82.77.127.100
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1723022862662
+  login: 1723022440785
+money: '5000'
+last-account-name: Corrupted9696
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 324.012993843515
+  y: 64.0
+  z: 217.38299221019088
+  yaw: 171.01898193359375
+  pitch: 25.949995040893555
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 278.69999998807907
+  y: 65.0625
+  z: 18.07499998807907
+  yaw: 357.9432373046875
+  pitch: -0.494479238986969

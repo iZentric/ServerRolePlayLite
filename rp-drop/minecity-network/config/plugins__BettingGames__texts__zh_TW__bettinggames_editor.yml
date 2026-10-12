@@ -1,0 +1,354 @@
+# ===================
+# BettingGames 語言文件 (zh_TW)
+# 本翻譯使用 BettingGames 版本: 2.4.1
+# 作者: GuillaumeVDN
+# 語言: 中文繁體
+# 翻譯: Kevin
+# Discord: Krick#9685
+# 如在翻譯上有任何疑慮歡迎私訊 Krick#9685
+# 在插件上有任何疑慮請至 https://discord.com/invite/wSm9A8Y 尋求幫助
+# ===================
+# BettingGames language files (zh_TW)
+# This translation uses BettingGames version: 2.4.1
+# Author: GuillaumeVDN
+# Language: Chinese Traditional
+# Translation: Kevin
+# Discord: Krick#9685
+# If you have any doubts about translation, please send a private message Krick#9685
+# If you have any concerns about the plugin, please go to https://discord.com/invite/wSm9A8Y for help
+# ===================
+
+# -------------------- GUI --------------------
+
+descriptionGuiItemGUIGUI: |
+  &7與此項目鏈接的GUI
+
+descriptionGuiItemGUIRankingGames: |
+  &7此排名要考慮的遊戲
+
+descriptionGuiItemGameGame: |
+  &7與此項目鏈接的遊戲
+
+descriptionGuiItemToggleSettingSetting: |
+  &7要切換的設置
+
+descriptionGuiItemToggleSettingIconOn: |
+  &7啟用設置時顯示的圖標
+
+descriptionGuiItemToggleSettingIconOff: |
+  &7禁用設置時顯示的圖標
+
+editorMainTitle: BettingGames
+
+editorGamesTitle: 遊戲
+editorGamesIconName: |
+  &a遊戲
+
+editorGUIsTitle: GUI
+editorGUIsIconName: |
+  &aGUI
+
+editorGlobalGUIItemsTitle: 全局GUI項
+editorGlobalGUIItemsIconName: |
+  &a全局GUI項
+
+# -------------------- 遊戲 --------------------
+
+descriptionGameType: |
+  &7遊戲類型
+
+descriptionGameName: |
+  &7遊戲名稱
+
+descriptionGameParticipationPermission: |
+  &7參加此遊戲所需的權限
+
+descriptionGameParticipationCooldown: |
+  &7一場比賽結束後再次參加本場比賽的冷卻時間
+
+descriptionGameAllowBetCurrencies: |
+  &7允許在此遊戲中下注的貨幣類型
+  &7留空以允許所有
+
+descriptionGameAllowBetItems: |
+  &7允許在此遊戲中下注此物品
+
+descriptionGameMinBetCurrencies: |
+  &7在此遊戲的下注中詢問某種貨幣的最低金額
+
+descriptionGameMaxBetCurrencies: |
+  &7限制該遊戲下注中某種貨幣的數量
+
+descriptionGameMinBetItems: |
+  &7在此遊戲的下注中詢問最少數量的物品
+
+descriptionGameMaxBetItems: |
+  &7限制本遊戲下注中的物品數量
+
+descriptionGameOnWinBehavior: |
+  &7玩家獲勝時採取的行為
+
+descriptionGameOnLoseBehavior: |
+  &7玩家慘輸時採取的行為
+
+descriptionGameOnDrawBehavior: |
+  &7當比賽雙方平局時採取的行為
+
+descriptionGameHubGUICommands: |
+  &7打開此遊戲GUI的自定義指令
+
+descriptionGameHubGUI: |
+  &7這個遊戲的GUI
+
+descriptionGameActiveGUI: |
+  &7此遊戲的GUI
+
+descriptionGameActiveGUIStopCloseDelay: |
+  &7遊戲結束後關閉遊戲GUI之前的等待時間
+
+descriptionGameAnimationDuration: |
+  &7動畫時長
+
+descriptionGameAnimationTicksStart: |
+  &7動畫的開始延遲(tick計算)
+
+descriptionGameAnimationTicksMin: |
+  &7動畫的最小延遲(tick計算)
+  &7超過此金額，公式將不再適用，刻度將保持不變
+
+descriptionGameAnimationTicksMax: |
+  &7動畫的最大延遲(tick計算)
+  &7超過此金額，公式將不再適用，刻度將保持不變
+
+descriptionGameAnimationTicksFormulaStep: |
+  &7當前刻度流逝時計算新動畫刻度的公式
+
+descriptionGameAnimationSound: |
+  &7當前ticks聲結束時播放的聲音(tick計算)
+
+descriptionGameDrawPlayers: |
+  &7開始遊戲所需的玩家數量
+
+descriptionGameDrawDelay: |
+  &7當玩家到達所需數量時，開始遊戲前的等待時間
+
+descriptionGameDrawMaxConcurrentGames: |
+  &7最大同時開啟遊戲數
+
+descriptionGameDrawHubGUIItemBet: |
+  &7點擊下注的項目
+
+descriptionGameDrawHubGUIItemDraw: |
+  &7表示當前繪製狀態的項目，等待時
+
+descriptionGameDrawHubGUIItemDrawAwaitingGames: |
+  &7等待遊戲結束時表示當前抽獎狀態的項目
+
+descriptionGameDrawHubGUIItemDrawAwaitingPlayers: |
+  &7代表當前抽獎狀態的項目，等待玩家時
+
+descriptionGameDrawHubGUIItemDrawCountdown: |
+  &7表示當前繪製狀態的項目，當開始倒計時
+
+descriptionGameDrawHubGUIItemPlayer: |
+  &7代表下注玩家的項目
+
+descriptionGameCrashChances: |
+  &7計算價值何時崩潰的機會
+
+descriptionGameCrashChanceChance: |
+  &7值介於&6最小限度&7和&6最大限度&7之間的機會百分比
+
+descriptionGameCrashChanceMin: |
+  &7最小值
+
+descriptionGameCrashChanceMax: |
+  &7最大值
+
+descriptionGameCrashValueStart: |
+  &7起始值
+
+descriptionGameCrashValueFormulaStep: |
+  &7應用於值的公式，每個刻度(tick計算)
+
+descriptionGameCrashActiveGUIItemValue: |
+  &7表示當前值的項目
+
+descriptionGameCrashActiveGUIItemPlayerActive: |
+  &7代表活躍玩家的物品
+
+descriptionGameCrashActiveGUIItemPlayerStopped: |
+  &7代表停止的玩家的項目
+
+descriptionGameJackpotActiveGUIPlayerSlots: |
+  &7玩家物品槽
+
+descriptionGameJackpotActiveGUIActivePlayerSlot: |
+  &7當前獲勝玩家的位置
+
+descriptionGameJackpotActiveGUIItemPlayer: |
+  &7代表活躍玩家的物品
+
+descriptionGameRouletteChoices: |
+  &7可用的顏色選擇
+
+descriptionGameRouletteChoiceName: |
+  &7此選擇的名稱
+
+descriptionGameRouletteChoiceChance: |
+  &7此選擇獲勝的機會百分比
+
+descriptionGameRouletteChoiceMultiplier: |
+  &7如果此選擇獲勝，則適用於玩家下注的乘數
+
+descriptionGameRouletteChoiceIcon: |
+  &7代表此選擇的項目
+
+descriptionGameRouletteChoiceIconBetInactive: |
+  &7下注選擇選單中代表此選項的項目，當尚未下注時
+
+descriptionGameRouletteChoiceIconBetActive: |
+  &7下注選擇選單中表示此選擇的項目，當某事已下注時
+
+descriptionGameRouletteActiveGUIChoiceSlots: |
+  &7選擇項插槽
+
+descriptionGameRouletteActiveGUIActiveChoiceSlot: |
+  &7當前獲勝選擇的位置
+
+descriptionGameRouletteBetChoiceGUI: |
+  &7選擇下注的GUI
+
+descriptionGameVersusHubGUIItemBet: |
+  &7點擊下注的項目
+
+descriptionGameVersusHubGUIItemPlayer: |
+  &7代表下注玩家的項目
+
+descriptionGameCoinFlipActiveGUIPlayerSlots: |
+  &7玩家物品槽
+
+descriptionGameCoinFlipActiveGUIActivePlayerSlot: |
+  &7當前獲勝玩家的位置
+
+descriptionGameCoinFlipActiveGUIItemPlayer: |
+  &7代表活躍玩家的物品
+
+descriptionGameRockPaperScissorsRounds: |
+  &7遊戲中的回合數
+
+descriptionGameRockPaperScissorsRoundsMax: |
+  &7在連續平局的情況下，遊戲中的最大回合數
+
+descriptionGameRockPaperScissorsChoiceDelay: |
+  &7允許做出選擇的最長時間
+
+descriptionGameRockPaperScissorsItemRock: |
+  &7代表石頭選擇的項目
+
+descriptionGameRockPaperScissorsItemPaper: |
+  &7代表布選擇的項目
+
+descriptionGameRockPaperScissorsItemScissors: |
+  &7代表剪刀選擇的項目
+
+descriptionGameRockPaperScissorsNotifyChoice: |
+  &7做出選擇時發送的通知
+
+descriptionGameRockPaperScissorsNotifyRoundWon: |
+  &7贏得回合時發送的通知
+
+descriptionGameRockPaperScissorsNotifyRoundDraw: |
+  &7回合平局時發送的通知
+
+descriptionGameRockPaperScissorsNotifyRoundLost: |
+  &7回合失敗時發送的通知
+
+descriptionGameRockPaperScissorsActiveGUIRoundOpenDelay: |
+  &7一輪結束後打開下一個選擇GUI之前的延遲
+
+descriptionGameRockPaperScissorsActiveGUISlotRock: |
+  &7將設置石頭選擇的插槽
+
+descriptionGameRockPaperScissorsActiveGUISlotPaper: |
+  &7將設置布選擇的插槽
+
+descriptionGameRockPaperScissorsActiveGUISlotScissors: |
+  &7將設置剪刀選擇的插槽
+
+descriptionGameBarGambleNotifyBuy: |
+  &7玩家購買物品時發送的通知
+
+descriptionGameBarGambleItems: |
+  &7在這個遊戲中可以購買的物品
+
+descriptionGameBarGambleItemName: |
+  &7此項目的名稱
+
+descriptionGameBarGambleItemCostCurrencies: |
+  &7購買一件商品的貨幣成本
+
+descriptionGameBarGambleItemCostItems: |
+  &7購買一件商品的商品成本
+
+descriptionGameBarGambleItemItem: |
+  &7購買時收到的物品
+
+descriptionGameBarGambleItemItemLocations: |
+  &7此項目在GUI中的位置
+  &7每個元素必須格式化為&epage,slot&7或只是&eslot&7(將採用第一個可用頁面)
+  &7如果此設置為空，將採用第一個可用頁面和插槽
+  &7如果此項目是持久的，則不需要頁碼並將被忽略
+
+descriptionGameBarGambleItemChances: |
+  &7此項目的結果機會
+
+descriptionGameBarGambleItemChanceChance: |
+  &7乘數介於&6最小限度&7和&6最大限度&7之間的機會百分比
+
+descriptionGameBarGambleItemChanceMin: |
+  &7最小乘數
+
+descriptionGameBarGambleItemChanceMax: |
+  &7最大乘數
+
+descriptionGameBarGambleItemChanceEffects: |
+  &7此機會的消耗效果列表
+
+descriptionGameUpgradeUpgrades: |
+  &7在這個遊戲中可以嘗試的升級
+
+descriptionGameUpgradeUpgradeName: |
+  &7本次升級的名稱
+
+descriptionGameUpgradeUpgradeCostCurrencies: |
+  &7嘗試此升級的貨幣成本
+
+descriptionGameUpgradeUpgradeCostItems: |
+  &7嘗試此升級的項目成本
+
+descriptionGameUpgradeUpgradeIcon: |
+  &7遊戲GUI中此升級的圖標
+
+descriptionGameUpgradeUpgradeResultItems: |
+  &7此升級的不同可能結果
+
+descriptionGameUpgradeUpgradeResultItemIsWin: |
+  &7如果這個結果被認為是勝利(考慮成本)
+
+descriptionGameUpgradeUpgradeResultItemChance: |
+  &7此項目要升級的變化百分比
+
+descriptionGameUpgradeUpgradeResultItemItem: |
+  &7結果項目
+
+# -------------------- 雜項 --------------------
+
+descriptionWinLoseBehaviorCommands: |
+  &7要執行的指令
+
+descriptionWinLoseBehaviorNotifyPlayer: |
+  &7發送給玩家的通知
+
+descriptionWinLoseBehaviorNotifyBroadcast: |
+  &7通知發送到伺服器的其餘部分

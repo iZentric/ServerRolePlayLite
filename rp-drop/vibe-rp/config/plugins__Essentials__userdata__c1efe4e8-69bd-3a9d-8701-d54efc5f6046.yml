@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 188.214.31.197
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725396336413
+  login: 1725393078356
+money: '9708.0'
+last-account-name: Alberto_MBM
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 334.28501667871944
+  y: 21.24918707874468
+  z: 1117.6569358846498
+  yaw: -79.9515151977539
+  pitch: 7.949910640716553
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 360.4655248230712
+  y: 28.0
+  z: 954.460779515293
+  yaw: -88.56903076171875
+  pitch: 19.349721908569336

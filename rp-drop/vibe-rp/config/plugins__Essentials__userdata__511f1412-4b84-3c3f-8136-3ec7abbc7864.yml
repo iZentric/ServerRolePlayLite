@@ -1,0 +1,52 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 82.79.122.135
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: true
+timestamps:
+  lastteleport: 1725645607023
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725645654747
+  login: 1725645538008
+  kits:
+    start: 1725389392219
+    marsupia: 1723314639437
+    ballas: 1723471981574
+    sindicat: 1724872638206
+money: '300000.0'
+last-account-name: Anouny4Master
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 162.61702673988955
+  y: 20.9375
+  z: 917.8564512205327
+  yaw: -87.0432357788086
+  pitch: 25.649511337280273
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 751.7976586062783
+  y: 21.0
+  z: 1005.027822489609
+  yaw: -2.248779296875
+  pitch: 32.94022750854492
+homes:
+  mafie:
+    world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+    world-name: GTAV2
+    x: -291.3364534181937
+    y: 79.0
+    z: -787.7893449318201
+    yaw: 19.556121826171875
+    pitch: 28.200443267822266

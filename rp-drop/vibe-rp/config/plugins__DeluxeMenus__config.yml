@@ -1,0 +1,70 @@
+# DeluxeMenus 1.14.0-Release main configuration file
+# 
+# A full wiki on how to use this plugin can be found at:
+# https://wiki.helpch.at/clips-plugins/deluxemenus
+
+debug: HIGHEST
+check_updates: true
+gui_menus:
+  Marsupia:
+    file: kit1.yml
+  red:
+    file: red.yml
+  Yakuza:
+    file: kit2.yml
+  Social:
+    file: Social.yml
+  Ballas:
+    file: kit3.yml
+  Vibeds:
+    file: vibeds.yml
+  Jobs:
+    file: Jobs.yml
+  Car:
+    file: atv.yml
+  MiniBike:
+    file: minibike.yml
+  Cars:
+    file: Cars.yml
+  Bus:
+    file: minibus.yml
+  Offroader:
+    file: offroader.yml
+  Moped:
+    file: moped.yml
+  Bumber:
+    file: bumber.yml
+  DuneBuggy:
+    file: dunebuggy.yml
+  GoKart:
+    file: gokart.yml
+  Bike:
+    file: bike.yml
+  Golf:
+    file: golf.yml
+  Estevama:
+    file: estevama.yml
+  Vama2:
+    file: vama.yml
+  Vama23:
+    file: vamad1.yml
+  SiasMenu:
+    file: siasmenu.yml
+  SiasKit:
+    file: siaskit.yml
+  Siasdmv:
+    file: siasdmv.yml
+  Siasdmvfinis:
+    file: siasfms.yml
+  Siasdmvjail:
+    file: siasjail.yml
+  Siasdmvjail2:
+    file: siasjail2.yml
+  Siassisa:
+    file: sisa.yml
+  Warps:
+    file: warps.yml
+  Zonepublica:
+    file: zonapublica.yml
+  ZoneMafie:
+    file: zonamafie.yml

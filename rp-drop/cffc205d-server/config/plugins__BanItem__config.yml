@@ -1,0 +1,1050 @@
+# +———————————————————————————————————————————————————+ #
+# |——————————     BANITEM CONFIGURATION     ——————————| #
+# |——————————————————      v3.5      —————————————————| #
+# +———————————————————————————————————————————————————+ #
+# |                   Documentation:                  | #
+# |             https://banitem.andross.fr/           | #
+# +———————————————————————————————————————————————————+ #
+# For any bugs/suggestions: Andross96
+# +——————————————————————————————————————————————————————————————————————————————————————————————+
+# General Informations:
+#  - The blacklist will block the items.
+#  - The whitelist will allow only the items set.
+#    -> The 'message' key represents the message sent to players if they try to use an item which is not in whitelist
+#    -> The 'ignored' key represents all ignored actions (they will not being by default banned)
+debug:
+  errors: true
+  reload: false
+  colors-console: false
+no-permission: '&cYou do not have permission.'
+prefix: '&c&l[&e&lBanItem&c&l] '
+api:
+  playerbanitemevent: false
+  deletebanneditemevent: false
+check-update: true
+priority: use,consume,click
+actions:
+  enchant:
+    material: BARRIER
+    displayname: '&cBANNED'
+    lore:
+    - '&cYou can not add this'
+    - '&cenchantement.'
+  rename:
+  - /rename
+  transfer:
+    hoppers-block: false
+  wear:
+    region-check: false
+    scanner: true
+  delete:
+    ignored-inventories-titles:
+    - My Cool Gui
+    - Shop
+hooks:
+  worldguard: false
+  advancedenchantments: false
+sound:
+  enabled: true
+  type: ENCHANT_THORNS_HIT
+  volume: 1
+  pitch: 1
+  worldSound: false
+particle:
+  enabled: false
+  type: BARRIER
+  amount: 1
+illegal-stacks:
+  enabled: false
+  vanilla-max-stack-size: true
+  block-type: split
+blacklist:
+  hypecity:
+    bubusteinmoneymod_five_euros:
+      craft: {}
+    bubusteinmoneymod_ten_euros:
+      craft: {}
+    bubusteinmoneymod_twenty_euros:
+      craft: {}
+    bubusteinmoneymod_fifty_euros:
+      craft: {}
+    bubusteinmoneymod_hundred_euros:
+      craft: {}
+    bubusteinmoneymod_two_hundred_euros:
+      craft: {}
+    bubusteinmoneymod_five_hundred_euros:
+      craft: {}
+    bubusteinmoneymod_five_pounds:
+      craft: {}
+    bubusteinmoneymod_ten_pounds:
+      craft: {}
+    bubusteinmoneymod_twenty_pounds:
+      craft: {}
+    bubusteinmoneymod_fifty_pounds:
+      craft: {}
+    bubusteinmoneymod_one_dollar:
+      craft: {}
+    bubusteinmoneymod_five_dollars:
+      craft: {}
+    bubusteinmoneymod_ten_dollars:
+      craft: {}
+    bubusteinmoneymod_twenty_dollars:
+      craft: {}
+    bubusteinmoneymod_fifty_dollars:
+      craft: {}
+    bubusteinmoneymod_hundred_dollars:
+      craft: {}
+    bubusteinmoneymod_five_cdollars:
+      craft: {}
+    bubusteinmoneymod_ten_cdollars:
+      craft: {}
+    bubusteinmoneymod_twenty_cdollars:
+      craft: {}
+    bubusteinmoneymod_fifty_cdollars:
+      craft: {}
+    bubusteinmoneymod_hundred_cdollars:
+      craft: {}
+    bubusteinmoneymod_un_leu:
+      craft: {}
+    bubusteinmoneymod_cinci_lei:
+      craft: {}
+    bubusteinmoneymod_zece_lei:
+      craft: {}
+    bubusteinmoneymod_douazeci_lei:
+      craft: {}
+    bubusteinmoneymod_cincizeci_lei:
+      craft: {}
+    bubusteinmoneymod_suta_lei:
+      craft: {}
+    bubusteinmoneymod_doua_sute_lei:
+      craft: {}
+    bubusteinmoneymod_cinci_sute_lei:
+      craft: {}
+    bubusteinmoneymod_douazeci_lei_md:
+      craft: {}
+    bubusteinmoneymod_cincizeci_lei_md:
+      craft: {}
+    bubusteinmoneymod_suta_lei_md:
+      craft: {}
+    bubusteinmoneymod_doua_sute_lei_md:
+      craft: {}
+    bubusteinmoneymod_cinci_sute_lei_md:
+      craft: {}
+    bubusteinmoneymod_mie_lei_md:
+      craft: {}
+    bubusteinmoneymod_ten_francs:
+      craft: {}
+    bubusteinmoneymod_twenty_francs:
+      craft: {}
+    bubusteinmoneymod_fifty_francs:
+      craft: {}
+    bubusteinmoneymod_hundred_francs:
+      craft: {}
+    bubusteinmoneymod_two_hundred_francs:
+      craft: {}
+    bubusteinmoneymod_thousand_francs:
+      craft: {}
+    bubusteinmoneymod_five_adollars:
+      craft: {}
+    bubusteinmoneymod_ten_adollars:
+      craft: {}
+    bubusteinmoneymod_twenty_adollars:
+      craft: {}
+    bubusteinmoneymod_fifty_adollars:
+      craft: {}
+    bubusteinmoneymod_hundred_adollars:
+      craft: {}
+    bubusteinmoneymod_thousand_yen:
+      craft: {}
+    bubusteinmoneymod_five_thousand_yen:
+      craft: {}
+    bubusteinmoneymod_ten_thousand_yen:
+      craft: {}
+    bubusteinmoneymod_five_leva:
+      craft: {}
+    bubusteinmoneymod_ten_leva:
+      craft: {}
+    bubusteinmoneymod_twenty_leva:
+      craft: {}
+    bubusteinmoneymod_fifty_leva:
+      craft: {}
+    bubusteinmoneymod_hundred_leva:
+      craft: {}
+    bubusteinmoneymod_hundred_cz_krone:
+      craft: {}
+    bubusteinmoneymod_two_hundred_cz_krone:
+      craft: {}
+    bubusteinmoneymod_five_hundred_cz_krone:
+      craft: {}
+    bubusteinmoneymod_thousand_cz_krone:
+      craft: {}
+    bubusteinmoneymod_two_thousand_cz_krone:
+      craft: {}
+    bubusteinmoneymod_five_thousand_cz_krone:
+      craft: {}
+    bubusteinmoneymod_fifty_dk_krone:
+      craft: {}
+    bubusteinmoneymod_hundred_dk_krone:
+      craft: {}
+    air:
+      craft: {}
+    bubusteinmoneymod_twenty_thousand_ft:
+      craft: {}
+    bubusteinmoneymod_ten_thousand_ft:
+      craft: {}
+    bubusteinmoneymod_five_thousand_ft:
+      craft: {}
+    bubusteinmoneymod_two_thousand_ft:
+      craft: {}
+    bubusteinmoneymod_thousand_ft:
+      craft: {}
+    bubusteinmoneymod_five_hundred_ft:
+      craft: {}
+    bubusteinmoneymod_thousand_dk_krone:
+      craft: {}
+    bubusteinmoneymod_five_hundred_dk_krone:
+      craft: {}
+    bubusteinmoneymod_two_hundred_dk_krone:
+      craft: {}
+    bubusteinmoneymod_fifty_no_krone:
+      craft: {}
+    bubusteinmoneymod_hundred_no_krone:
+      craft: {}
+    bubusteinmoneymod_two_hundred_no_krone:
+      craft: {}
+    bubusteinmoneymod_five_hundred_no_krone:
+      craft: {}
+    bubusteinmoneymod_thousand_no_krone:
+      craft: {}
+    bubusteinmoneymod_ten_zloty:
+      craft: {}
+    bubusteinmoneymod_twenty_zloty:
+      craft: {}
+    bubusteinmoneymod_fifty_zloty:
+      craft: {}
+    bubusteinmoneymod_hundred_zloty:
+      craft: {}
+    bubusteinmoneymod_two_hundred_zloty:
+      craft: {}
+    bubusteinmoneymod_five_hundred_zloty:
+      craft: {}
+    bubusteinmoneymod_ten_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_twenty_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_fifty_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_hundred_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_two_hundred_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_five_hundred_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_thousand_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_two_thousand_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_five_thousand_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_twenty_se_krone:
+      craft: {}
+    bubusteinmoneymod_fifty_se_krone:
+      craft: {}
+    bubusteinmoneymod_hundred_se_krone:
+      craft: {}
+    bubusteinmoneymod_two_hundred_se_krone:
+      craft: {}
+    bubusteinmoneymod_five_hundred_se_krone:
+      craft: {}
+    bubusteinmoneymod_thousand_se_krone:
+      craft: {}
+    bubusteinmoneymod_five_hundred_is_krone:
+      craft: {}
+    bubusteinmoneymod_thousand_is_krone:
+      craft: {}
+    bubusteinmoneymod_two_thousand_is_krone:
+      craft: {}
+    bubusteinmoneymod_five_thousand_is_krone:
+      craft: {}
+    bubusteinmoneymod_ten_thousand_is_krone:
+      craft: {}
+    bubusteinmoneymod_fifty_in_rupees:
+      craft: {}
+    bubusteinmoneymod_hundred_in_rupees:
+      craft: {}
+    bubusteinmoneymod_two_hundred_in_rupees:
+      craft: {}
+    bubusteinmoneymod_five_hundred_in_rupees:
+      craft: {}
+    bubusteinmoneymod_thousand_kr_won:
+      craft: {}
+    bubusteinmoneymod_five_thousand_kr_won:
+      craft: {}
+    bubusteinmoneymod_ten_thousand_kr_won:
+      craft: {}
+    bubusteinmoneymod_fifty_thousand_kr_won:
+      craft: {}
+    bubusteinmoneymod_one_cn_yuan:
+      craft: {}
+    bubusteinmoneymod_five_cn_yuan:
+      craft: {}
+    bubusteinmoneymod_ten_cn_yuan:
+      craft: {}
+    bubusteinmoneymod_twenty_cn_yuan:
+      craft: {}
+    bubusteinmoneymod_fifty_cn_yuan:
+      craft: {}
+    bubusteinmoneymod_hundred_cn_yuan:
+      craft: {}
+    bubusteinmoneymod_two_br_reais:
+      craft: {}
+    bubusteinmoneymod_five_br_reais:
+      craft: {}
+    bubusteinmoneymod_ten_br_reais:
+      craft: {}
+    bubusteinmoneymod_twenty_br_reais:
+      craft: {}
+    bubusteinmoneymod_fifty_br_reais:
+      craft: {}
+    bubusteinmoneymod_hundred_br_reais:
+      craft: {}
+    bubusteinmoneymod_two_hundred_br_reais:
+      craft: {}
+    bubusteinmoneymod_twenty_mx_pesos:
+      craft: {}
+    bubusteinmoneymod_fifty_mx_pesos:
+      craft: {}
+    bubusteinmoneymod_hundred_mx_pesos:
+      craft: {}
+    bubusteinmoneymod_two_hundred_mx_pesos:
+      craft: {}
+    bubusteinmoneymod_five_hundred_mx_pesos:
+      craft: {}
+    bubusteinmoneymod_thousand_mx_pesos:
+      craft: {}
+    bubusteinmoneymod_ten_za_rand:
+      craft: {}
+    bubusteinmoneymod_twenty_za_rand:
+      craft: {}
+    bubusteinmoneymod_fifty_za_rand:
+      craft: {}
+    bubusteinmoneymod_hundred_za_rand:
+      craft: {}
+    bubusteinmoneymod_two_hundred_za_rand:
+      craft: {}
+    bubusteinmoneymod_one_ecent:
+      craft: {}
+    bubusteinmoneymod_two_ecents:
+      craft: {}
+    bubusteinmoneymod_five_ecents:
+      craft: {}
+    bubusteinmoneymod_ten_ecents:
+      craft: {}
+    bubusteinmoneymod_twenty_ecents:
+      craft: {}
+    bubusteinmoneymod_fifty_ecents:
+      craft: {}
+    bubusteinmoneymod_one_euro:
+      craft: {}
+    bubusteinmoneymod_two_euros:
+      craft: {}
+    bubusteinmoneymod_one_pence:
+      craft: {}
+    bubusteinmoneymod_two_pence:
+      craft: {}
+    bubusteinmoneymod_five_pence:
+      craft: {}
+    bubusteinmoneymod_ten_pence:
+      craft: {}
+    bubusteinmoneymod_twenty_pence:
+      craft: {}
+    bubusteinmoneymod_fifty_pence:
+      craft: {}
+    bubusteinmoneymod_one_pound:
+      craft: {}
+    bubusteinmoneymod_two_pounds:
+      craft: {}
+    bubusteinmoneymod_one_cent:
+      craft: {}
+    bubusteinmoneymod_five_cents:
+      craft: {}
+    bubusteinmoneymod_ten_cents:
+      craft: {}
+    bubusteinmoneymod_twentyfive_cents:
+      craft: {}
+    bubusteinmoneymod_fifty_cents:
+      craft: {}
+    bubusteinmoneymod_five_ccents:
+      craft: {}
+    bubusteinmoneymod_ten_ccents:
+      craft: {}
+    bubusteinmoneymod_twentyfive_ccents:
+      craft: {}
+    bubusteinmoneymod_loonie:
+      craft: {}
+    bubusteinmoneymod_toonie:
+      craft: {}
+    bubusteinmoneymod_un_ban:
+      craft: {}
+    bubusteinmoneymod_cinci_bani:
+      craft: {}
+    bubusteinmoneymod_zece_bani:
+      craft: {}
+    bubusteinmoneymod_cincizeci_bani:
+      craft: {}
+    bubusteinmoneymod_cinci_bani_md:
+      craft: {}
+    bubusteinmoneymod_zece_bani_md:
+      craft: {}
+    bubusteinmoneymod_douazecicinci_bani_md:
+      craft: {}
+    bubusteinmoneymod_cincizeci_bani_md:
+      craft: {}
+    bubusteinmoneymod_un_leu_md:
+      craft: {}
+    bubusteinmoneymod_doi_lei_md:
+      craft: {}
+    bubusteinmoneymod_cinci_lei_md:
+      craft: {}
+    bubusteinmoneymod_zece_lei_md:
+      craft: {}
+    bubusteinmoneymod_five_centimes:
+      craft: {}
+    bubusteinmoneymod_ten_centimes:
+      craft: {}
+    bubusteinmoneymod_twenty_centimes:
+      craft: {}
+    bubusteinmoneymod_half_franc:
+      craft: {}
+    bubusteinmoneymod_one_franc:
+      craft: {}
+    bubusteinmoneymod_two_francs:
+      craft: {}
+    bubusteinmoneymod_five_francs:
+      craft: {}
+    bubusteinmoneymod_five_acents:
+      craft: {}
+    bubusteinmoneymod_ten_acents:
+      craft: {}
+    bubusteinmoneymod_twenty_acents:
+      craft: {}
+    bubusteinmoneymod_fifty_acents:
+      craft: {}
+    bubusteinmoneymod_one_adollar:
+      craft: {}
+    bubusteinmoneymod_two_adollars:
+      craft: {}
+    bubusteinmoneymod_one_yen:
+      craft: {}
+    bubusteinmoneymod_five_yen:
+      craft: {}
+    bubusteinmoneymod_ten_yen:
+      craft: {}
+    bubusteinmoneymod_fifty_yen:
+      craft: {}
+    bubusteinmoneymod_hundred_yen:
+      craft: {}
+    bubusteinmoneymod_five_hundred_yen:
+      craft: {}
+    bubusteinmoneymod_one_stotinka:
+      craft: {}
+    bubusteinmoneymod_two_stotinki:
+      craft: {}
+    bubusteinmoneymod_five_stotinki:
+      craft: {}
+    bubusteinmoneymod_ten_stotinki:
+      craft: {}
+    bubusteinmoneymod_twenty_stotinki:
+      craft: {}
+    bubusteinmoneymod_fifty_stotinki:
+      craft: {}
+    bubusteinmoneymod_fifty_aere_dk:
+      craft: {}
+    bubusteinmoneymod_fifty_cz_krone:
+      craft: {}
+    bubusteinmoneymod_twenty_cz_krone:
+      craft: {}
+    bubusteinmoneymod_ten_cz_krone:
+      craft: {}
+    bubusteinmoneymod_five_cz_krone:
+      craft: {}
+    bubusteinmoneymod_two_cz_krone:
+      craft: {}
+    bubusteinmoneymod_one_cz_krone:
+      craft: {}
+    bubusteinmoneymod_two_leva:
+      craft: {}
+    bubusteinmoneymod_one_lev:
+      craft: {}
+    bubusteinmoneymod_one_dk_krone:
+      craft: {}
+    bubusteinmoneymod_two_dk_krone:
+      craft: {}
+    bubusteinmoneymod_five_dk_krone:
+      craft: {}
+    bubusteinmoneymod_ten_dk_krone:
+      craft: {}
+    bubusteinmoneymod_twenty_dk_krone:
+      craft: {}
+    bubusteinmoneymod_five_ft:
+      craft: {}
+    bubusteinmoneymod_ten_ft:
+      craft: {}
+    bubusteinmoneymod_twenty_ft:
+      craft: {}
+    bubusteinmoneymod_fifty_ft:
+      craft: {}
+    bubusteinmoneymod_hundred_ft:
+      craft: {}
+    bubusteinmoneymod_two_hundred_ft:
+      craft: {}
+    bubusteinmoneymod_one_no_krone:
+      craft: {}
+    bubusteinmoneymod_five_no_krone:
+      craft: {}
+    bubusteinmoneymod_ten_no_krone:
+      craft: {}
+    bubusteinmoneymod_twenty_no_krone:
+      craft: {}
+    bubusteinmoneymod_one_grosz:
+      craft: {}
+    bubusteinmoneymod_two_grosze:
+      craft: {}
+    bubusteinmoneymod_five_groszy:
+      craft: {}
+    bubusteinmoneymod_ten_groszy:
+      craft: {}
+    bubusteinmoneymod_twenty_groszy:
+      craft: {}
+    bubusteinmoneymod_fifty_groszy:
+      craft: {}
+    bubusteinmoneymod_one_zloty:
+      craft: {}
+    bubusteinmoneymod_two_zloty:
+      craft: {}
+    bubusteinmoneymod_five_zloty:
+      craft: {}
+    bubusteinmoneymod_one_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_two_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_five_rs_dinar:
+      craft: {}
+    bubusteinmoneymod_one_se_krone:
+      craft: {}
+    bubusteinmoneymod_two_se_krone:
+      craft: {}
+    bubusteinmoneymod_five_se_krone:
+      craft: {}
+    bubusteinmoneymod_ten_se_krone:
+      craft: {}
+    bubusteinmoneymod_one_is_krone:
+      craft: {}
+    bubusteinmoneymod_five_is_krone:
+      craft: {}
+    bubusteinmoneymod_ten_is_krone:
+      craft: {}
+    bubusteinmoneymod_fifty_is_krone:
+      craft: {}
+    bubusteinmoneymod_hundred_is_krone:
+      craft: {}
+    bubusteinmoneymod_one_in_rupee:
+      craft: {}
+    bubusteinmoneymod_two_in_rupees:
+      craft: {}
+    bubusteinmoneymod_five_in_rupees:
+      craft: {}
+    bubusteinmoneymod_ten_in_rupees:
+      craft: {}
+    bubusteinmoneymod_twenty_in_rupees:
+      craft: {}
+    bubusteinmoneymod_ten_kr_won:
+      craft: {}
+    bubusteinmoneymod_fifty_kr_won:
+      craft: {}
+    bubusteinmoneymod_hundred_kr_won:
+      craft: {}
+    bubusteinmoneymod_five_hundred_kr_won:
+      craft: {}
+    bubusteinmoneymod_one_cn_jiao:
+      craft: {}
+    bubusteinmoneymod_five_cn_jiao:
+      craft: {}
+    bubusteinmoneymod_five_br_centavos:
+      craft: {}
+    bubusteinmoneymod_ten_br_centavos:
+      craft: {}
+    bubusteinmoneymod_twentyfive_br_centavos:
+      craft: {}
+    bubusteinmoneymod_fifty_br_centavos:
+      craft: {}
+    bubusteinmoneymod_one_br_real:
+      craft: {}
+    bubusteinmoneymod_five_mx_centavos:
+      craft: {}
+    bubusteinmoneymod_ten_mx_centavos:
+      craft: {}
+    bubusteinmoneymod_twenty_mx_centavos:
+      craft: {}
+    bubusteinmoneymod_fifty_mx_centavos:
+      craft: {}
+    bubusteinmoneymod_one_mx_peso:
+      craft: {}
+    bubusteinmoneymod_two_mx_pesos:
+      craft: {}
+    bubusteinmoneymod_five_mx_pesos:
+      craft: {}
+    bubusteinmoneymod_ten_mx_pesos:
+      craft: {}
+    bubusteinmoneymod_ten_za_cents:
+      craft: {}
+    bubusteinmoneymod_twenty_za_cents:
+      craft: {}
+    bubusteinmoneymod_fifty_za_cents:
+      craft: {}
+    bubusteinmoneymod_one_za_rand:
+      craft: {}
+    bubusteinmoneymod_two_za_rand:
+      craft: {}
+    bubusteinmoneymod_five_za_rand:
+      craft: {}
+    bubusteinmoneymod_un_ban_1900:
+      craft: {}
+    bubusteinmoneymod_doi_bani_1900:
+      craft: {}
+    bubusteinmoneymod_cinci_bani_1900:
+      craft: {}
+    bubusteinmoneymod_zece_bani_1900:
+      craft: {}
+    bubusteinmoneymod_douazeci_bani_1900:
+      craft: {}
+    bubusteinmoneymod_cincizeci_bani_1900:
+      craft: {}
+    bubusteinmoneymod_un_leu_1900:
+      craft: {}
+    bubusteinmoneymod_doi_lei_1900:
+      craft: {}
+    bubusteinmoneymod_cinci_lei_1900:
+      craft: {}
+    bubusteinmoneymod_douasprezece_lei_1900:
+      craft: {}
+    bubusteinmoneymod_douazeci_lei_1900:
+      craft: {}
+    bubusteinmoneymod_douazeci_cinci_lei_1900:
+      craft: {}
+    bubusteinmoneymod_cincizeci_lei_1900:
+      craft: {}
+    bubusteinmoneymod_suta_lei_1900:
+      craft: {}
+    bubusteinmoneymod_card_gold:
+      craft: {}
+    bubusteinmoneymod_card_steel:
+      craft: {}
+    bubusteinmoneymod_card_classic:
+      craft: {}
+    bubusteinmoneymod_atm:
+      craft: {}
+    bubusteinmoneymod_bank_machine:
+      craft: {}
+    aquaculture_neptunes_bounty:
+      place: {}
+      pickup: {}
+    hopper:
+      use: {}
+      click: {}
+      pickup: {}
+      craft: {}
+      interact: {}
+      place: {}
+      wear: {}
+      hold: {}
+    redstone:
+      place: {}
+      pickup: {}
+    securitycraft_trophy_system:
+      craft: {}
+    securitycraft_retinal_scanner:
+      craft: {}
+    securitycraft_keypad_barrel:
+      craft: {}
+    securitycraft_keypad_furnace:
+      craft: {}
+    securitycraft_protecto:
+      craft: {}
+    securitycraft_keypad_chest:
+      craft: {}
+      place: {}
+      pickup: {}
+      use: {}
+      interact: {}
+      break: {}
+    securitycraft_cage_trap:
+      craft: {}
+    aquaculture_neptunium_fishing_rod:
+      craft: {}
+    aquaculture_iron_hook:
+      craft: {}
+    aquaculture_tackle_box:
+      craft: {}
+    vehicle_vehicle_crate:
+      place: {}
+    tnt:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    piston:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    sticky_piston:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    dispenser:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    redstone_torch:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    repeater:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    comparator:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    redstone_block:
+      use: {}
+      hold: {}
+      place: {}
+      craft: {}
+    tnt_minecart:
+      craft: {}
+    activator_rail:
+      craft: {}
+    rail:
+      craft: {}
+    detector_rail:
+      craft: {}
+    powered_rail:
+      craft: {}
+    elytra:
+      use: {}
+      wear: {}
+    beacon:
+      craft: {}
+      click: {}
+    enchanted_golden_apple:
+      hold: {}
+      consume: {}
+    securitycraft_codebreaker:
+      wear: {}
+      craft: {}
+    securitycraft_keypad_item:
+      craft: {}
+      hold: {}
+    securitycraft_sonic_security_system:
+      craft: {}
+      hold: {}
+    securitycraft_sentry:
+      craft: {}
+      hold: {}
+    securitycraft_motion_activated_light:
+      craft: {}
+      hold: {}
+    securitycraft_portable_radar:
+      craft: {}
+      hold: {}
+    securitycraft_panic_button:
+      craft: {}
+      hold: {}
+    securitycraft_projector:
+      craft: {}
+      hold: {}
+    securitycraft_laser_block:
+      craft: {}
+      hold: {}
+      use: {}
+      click: {}
+    securitycraft_mine:
+      craft: {}
+      hold: {}
+    securitycraft_bouncing_betty:
+      hold: {}
+      craft: {}
+    securitycraft_ims:
+      hold: {}
+      craft: {}
+    securitycraft_claymore:
+      hold: {}
+      craft: {}
+    securitycraft_scanner_door_item:
+      craft: {}
+      place: {}
+      click: {}
+      delete: {}
+    securitycraft_reinforced_hopper:
+      craft: {}
+    securitycraft_universal_block_reinforcer_lvl1:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      consume: {}
+      interact: {}
+      place: {}
+      inventoryclick: {}
+    securitycraft_universal_block_reinforcer_lvl2:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    securitycraft_universal_block_reinforcer_lvl3:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    securitycraft_universal_block_remover:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    securitycraft_universal_key_changer:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    securitycraft_universal_owner_changer:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    securitycraft_wire_cutters:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    vehicle_jack:
+      craft: {}
+      click: {}
+      use: {}
+      entityinteract: {}
+    vehicle_workstation:
+      craft: {}
+      click: {}
+      '*': {}
+      place: {}
+      hold: {}
+    vehicle_key:
+      craft: {}
+    vehicle_wrench:
+      craft: {}
+      pickup: {}
+      drop: {}
+      use: {}
+      interact: {}
+      click: {}
+      inventoryclick: {}
+      hold: {}
+    vehicle_hammer:
+      craft: {}
+      hold: {}
+    roleplayplus_dorime:
+      hold: {}
+    thedirtystuff_dried_cocaine:
+      place: {}
+    thedirtystuff_dried_opium:
+      place: {}
+    saros_road_signs_mod_ampel_erste_seite:
+      craft: {}
+    usefulbackpacks_filter_configurator:
+      craft: {}
+    usefulbackpacks_filter_tag:
+      craft: {}
+    usefulbackpacks_filter_item:
+      craft: {}
+    usefulbackpacks_backpack_enderchest:
+      craft: {}
+    xlfoodmod_super_energy_drink:
+      hold: {}
+      consume: {}
+    xlfoodmod_deadly_energy_drink:
+      hold: {}
+      consume: {}
+    xlfoodmod_stealthy_energy_drink:
+      hold: {}
+      consume: {}
+    securitycraft_taser:
+      craft: {}
+    securitycraft_keypad_door_item:
+      place: {}
+      craft: {}
+      click: {}
+      delete: {}
+    securitycraft_door_indestructible_iron_item:
+      craft: {}
+      inventoryclick: {}
+      delete: {}
+    heavy_weighted_pressure_plate:
+      craft: {}
+    pfm_furniture_book:
+      craft: {}
+      click: {}
+      hold: {}
+    shield:
+      craft: {}
+      hold: {}
+      swap: {}
+    saros_road_signs_mod_paint_brush:
+      hold: {}
+      craft: {}
+    enchanting_table:
+      craft: {}
+      use: {}
+      hold: {}
+      place: {}
+      interact: {}
+      click: {}
+    securitycraft_universal_block_modifier:
+      use: {}
+      craft: {}
+      pickup: {}
+    securitycraft_inventory_scanner:
+      pickup: {}
+      craft: {}
+    vehicle_gas_pump:
+      pickup: {}
+      craft: {}
+      place: {}
+      '*': {}
+    tac_workbench:
+      craft: {}
+      use: {}
+      place: {}
+      '*': {}
+      hold: {}
+    roleplayplus_syringe:
+      '*': {}
+    thedirtystuff_opium_seed:
+      pickup: {}
+      place: {}
+    thedirtystuff_hemp_seed:
+      pickup: {}
+      place: {}
+    cauldron:
+      craft: {}
+      place: {}
+      hold: {}
+      click: {}
+      wear: {}
+      pickup: {}
+    thedirtystuff_cocaine_seed:
+      pickup: {}
+    securitycraft_security_camera:
+      craft: {}
+    securitycraft_camera_monitor:
+      craft: {}
+    thedirtystuff_drying_table:
+      craft: {}
+    jungle_leaves:
+      place: {}
+      break: {}
+    poppy:
+      place: {}
+    fern:
+      place: {}
+    large_fern:
+      place: {}
+    vehicle_spray_can:
+      craft: {}
+    pfm_working_table:
+      craft: {}
+    writable_book:
+      swap: {}
+    thedirtystuff_dried_hemp_package:
+      craft: {}
+    thedirtystuff_hemp_leaf_package:
+      craft: {}
+    thedirtystuff_dried_opium_package:
+      craft: {}
+    thedirtystuff_cocaine_leaf_package:
+      craft: {}
+    mtr_driver_key:
+      craft: {}
+    tac_762x39:
+      craft: {}
+    bone_meal:
+      craft: {}
+      pickup: {}
+      drops: {}
+      drop: {}
+      entitydrop: {}
+      click: {}
+      use: {}
+    redstone_ore:
+      break: {}
+    mtr_dashboard:
+      craft: {}
+    mtr_dashboard_2:
+      craft: {}
+    mtr_dashboard_3:
+      craft: {}
+    mtr_dashboard_4:
+      craft: {}
+    carrot:
+      click: {}
+    shears:
+      use: {}
+    magma_block:
+      craft: {}
+    player_head:
+      place: {}
+    chorus_flower:
+      place: {}
+    clay:
+      craft: {}
+    conduit:
+      place: {}
+    securitycraft_briefcase:
+      '*': {}
+    totem_of_undying:
+      '*': {}
+    netherite_chestplate:
+      wear: {}
+    netherite_boots:
+      wear: {}
+    netherite_helmet:
+      wear: {}
+      use: {}
+    netherite_leggings:
+      wear: {}

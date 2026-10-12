@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 213.233.110.50
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1723471512670
+  login: 1723467685888
+money: '5000'
+last-account-name: MemesBoy52
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -548.0657356712532
+  y: 65.0
+  z: -149.94920536747483
+  yaw: -164.0733642578125
+  pitch: 10.622800827026367
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -288.06225890211016
+  y: 67.0
+  z: -807.7198763262535
+  yaw: -43.148555755615234
+  pitch: 33.13102340698242

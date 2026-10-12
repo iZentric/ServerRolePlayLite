@@ -1,0 +1,164 @@
+[28/10 13:59:34] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 13:59:51] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 14:00:12] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 14:00:37] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 14:00:56] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 14:01:12] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 14:01:29] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 14:01:43] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 14:01:52] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 14:02:35] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 14:04:21] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 15:24:33] [ERROR] Invalid value 'default_crash' in file §4guis/main.yml§r§c at path §4contents.b.games§r§c
+[28/10 15:24:33] [ERROR] Invalid value 'default_crash' in file §4guis/main.yml§r§c at path §4contents.c.game§r§c
+[28/10 15:24:33] [ERROR] Invalid value 'default_jackpot' in file §4guis/main.yml§r§c at path §4contents.d.game§r§c
+[28/10 15:24:33] [ERROR] Invalid value 'default_roulette' in file §4guis/main.yml§r§c at path §4contents.e.game§r§c
+[28/10 15:24:33] [ERROR] Invalid value 'default_coinflip' in file §4guis/main.yml§r§c at path §4contents.f.game§r§c
+[28/10 15:24:33] [ERROR] Invalid value 'default_rockpaperscissors' in file §4guis/main.yml§r§c at path §4contents.g.game§r§c
+[28/10 15:24:33] [ERROR] Invalid value 'default_bargamble' in file §4guis/main.yml§r§c at path §4contents.h.game§r§c
+[28/10 15:24:33] [ERROR] Invalid value 'default_upgrade' in file §4guis/main.yml§r§c at path §4contents.i.game§r§c
+[28/10 15:24:36] [ERROR] Couldn't perform click effects of item b in GUI instance_main_ak6bz at slot 4 of page 0
+java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:266)
+	at java.base/java.util.Objects.checkIndex(Objects.java:361)
+	at java.base/java.util.ArrayList.remove(ArrayList.java:504)
+	at com.guillaumevdn.bettinggames.lib.gui.RankingGUI.fetchDataThenOpen(RankingGUI.java:172)
+	at com.guillaumevdn.bettinggames.lib.gui.RankingGUI.open(RankingGUI.java:167)
+	at com.guillaumevdn.bettinggames.lib.gui.element.item.type.TypeGUIGamesRanking$1.lambda$0(TypeGUIGamesRanking.java:54)
+	at com.guillaumevdn.gcore.lib.gui.internal.Handler.onClick(Handler.java:98)
+	at com.guillaumevdn.gcore.lib.gui.internal.protocol.ProtocolEvents.lambda$click$1(ProtocolEvents.java:260)
+	at com.guillaumevdn.gcore.lib.bukkit.BukkitThread$1.run(BukkitThread.java:89)
+	at org.bukkit.craftbukkit.v1_16_R3.scheduler.CraftTask.run(CraftTask.java:90)
+	at org.bukkit.craftbukkit.v1_16_R3.scheduler.CraftScheduler.mainThreadHeartbeat(CraftScheduler.java:461)
+	at net.minecraft.server.MinecraftServer.func_71190_q(MinecraftServer.java:1046)
+	at net.minecraft.server.dedicated.DedicatedServer.func_71190_q(DedicatedServer.java:345)
+	at net.minecraft.server.MinecraftServer.func_71217_p(MinecraftServer.java:998)
+	at net.minecraft.server.MinecraftServer.func_240802_v_(MinecraftServer.java:815)
+	at net.minecraft.server.MinecraftServer.func_240783_a_(MinecraftServer.java:267)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+
+[28/10 18:27:49] [ERROR] Invalid value 'default_crash' in file §4guis/main.yml§r§c at path §4contents.b.games§r§c
+[28/10 18:27:49] [ERROR] Invalid value 'default_crash' in file §4guis/main.yml§r§c at path §4contents.c.game§r§c
+[28/10 18:27:49] [ERROR] Invalid value 'default_jackpot' in file §4guis/main.yml§r§c at path §4contents.d.game§r§c
+[28/10 18:27:49] [ERROR] Invalid value 'default_roulette' in file §4guis/main.yml§r§c at path §4contents.e.game§r§c
+[28/10 18:27:49] [ERROR] Invalid value 'default_coinflip' in file §4guis/main.yml§r§c at path §4contents.f.game§r§c
+[28/10 18:27:49] [ERROR] Invalid value 'default_rockpaperscissors' in file §4guis/main.yml§r§c at path §4contents.g.game§r§c
+[28/10 18:27:49] [ERROR] Invalid value 'default_bargamble' in file §4guis/main.yml§r§c at path §4contents.h.game§r§c
+[28/10 18:27:49] [ERROR] Invalid value 'default_upgrade' in file §4guis/main.yml§r§c at path §4contents.i.game§r§c
+[28/10 18:27:52] [ERROR] Couldn't perform click effects of item b in GUI instance_main_qzvyq at slot 22 of page 0
+java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:266)
+	at java.base/java.util.Objects.checkIndex(Objects.java:361)
+	at java.base/java.util.ArrayList.remove(ArrayList.java:504)
+	at com.guillaumevdn.bettinggames.lib.gui.RankingGUI.fetchDataThenOpen(RankingGUI.java:172)
+	at com.guillaumevdn.bettinggames.lib.gui.RankingGUI.open(RankingGUI.java:167)
+	at com.guillaumevdn.bettinggames.lib.gui.element.item.type.TypeGUIGamesRanking$1.lambda$0(TypeGUIGamesRanking.java:54)
+	at com.guillaumevdn.gcore.lib.gui.internal.Handler.onClick(Handler.java:98)
+	at com.guillaumevdn.gcore.lib.gui.internal.protocol.ProtocolEvents.lambda$click$1(ProtocolEvents.java:260)
+	at com.guillaumevdn.gcore.lib.bukkit.BukkitThread$1.run(BukkitThread.java:89)
+	at org.bukkit.craftbukkit.v1_16_R3.scheduler.CraftTask.run(CraftTask.java:90)
+	at org.bukkit.craftbukkit.v1_16_R3.scheduler.CraftScheduler.mainThreadHeartbeat(CraftScheduler.java:461)
+	at net.minecraft.server.MinecraftServer.func_71190_q(MinecraftServer.java:1046)
+	at net.minecraft.server.dedicated.DedicatedServer.func_71190_q(DedicatedServer.java:345)
+	at net.minecraft.server.MinecraftServer.func_71217_p(MinecraftServer.java:998)
+	at net.minecraft.server.MinecraftServer.func_240802_v_(MinecraftServer.java:815)
+	at net.minecraft.server.MinecraftServer.func_240783_a_(MinecraftServer.java:267)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+
+[28/10 18:27:53] [ERROR] Couldn't perform click effects of item b in GUI instance_main_qzvyq at slot 4 of page 0
+java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:266)
+	at java.base/java.util.Objects.checkIndex(Objects.java:361)
+	at java.base/java.util.ArrayList.remove(ArrayList.java:504)
+	at com.guillaumevdn.bettinggames.lib.gui.RankingGUI.fetchDataThenOpen(RankingGUI.java:172)
+	at com.guillaumevdn.bettinggames.lib.gui.RankingGUI.open(RankingGUI.java:167)
+	at com.guillaumevdn.bettinggames.lib.gui.element.item.type.TypeGUIGamesRanking$1.lambda$0(TypeGUIGamesRanking.java:54)
+	at com.guillaumevdn.gcore.lib.gui.internal.Handler.onClick(Handler.java:98)
+	at com.guillaumevdn.gcore.lib.gui.internal.protocol.ProtocolEvents.lambda$click$1(ProtocolEvents.java:260)
+	at com.guillaumevdn.gcore.lib.bukkit.BukkitThread$1.run(BukkitThread.java:89)
+	at org.bukkit.craftbukkit.v1_16_R3.scheduler.CraftTask.run(CraftTask.java:90)
+	at org.bukkit.craftbukkit.v1_16_R3.scheduler.CraftScheduler.mainThreadHeartbeat(CraftScheduler.java:461)
+	at net.minecraft.server.MinecraftServer.func_71190_q(MinecraftServer.java:1046)
+	at net.minecraft.server.dedicated.DedicatedServer.func_71190_q(DedicatedServer.java:345)
+	at net.minecraft.server.MinecraftServer.func_71217_p(MinecraftServer.java:998)
+	at net.minecraft.server.MinecraftServer.func_240802_v_(MinecraftServer.java:815)
+	at net.minecraft.server.MinecraftServer.func_240783_a_(MinecraftServer.java:267)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+
+[28/10 19:31:37] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:34:05] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:35:22] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:36:18] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:38:10] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:38:36] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:38:51] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:39:33] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:40:16] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:40:27] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:41:31] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:42:18] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:42:50] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:43:35] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:43:58] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:44:30] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:44:46] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:45:03] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:54:43] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:56:06] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:57:19] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:58:01] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:58:10] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:58:35] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 19:59:32] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[28/10 20:00:03] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 09:05:18] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 09:06:24] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 09:07:41] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:08:54] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:09:19] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:23:42] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:32:11] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:34:01] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:35:08] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:35:54] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:36:43] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:37:41] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:38:44] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:39:56] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[29/10 10:42:56] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 06:50:03] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 10:05:26] [ERROR] Invalid value 'default_crash' in file §4guis/main.yml§r§c at path §4contents.b.games§r§c
+[30/10 10:05:26] [ERROR] Invalid value 'default_crash' in file §4guis/main.yml§r§c at path §4contents.c.game§r§c
+[30/10 10:05:26] [ERROR] Invalid value 'default_jackpot' in file §4guis/main.yml§r§c at path §4contents.d.game§r§c
+[30/10 10:05:26] [ERROR] Invalid value 'default_roulette' in file §4guis/main.yml§r§c at path §4contents.e.game§r§c
+[30/10 10:05:26] [ERROR] Invalid value 'default_coinflip' in file §4guis/main.yml§r§c at path §4contents.f.game§r§c
+[30/10 10:05:26] [ERROR] Invalid value 'default_rockpaperscissors' in file §4guis/main.yml§r§c at path §4contents.g.game§r§c
+[30/10 10:05:26] [ERROR] Invalid value 'default_bargamble' in file §4guis/main.yml§r§c at path §4contents.h.game§r§c
+[30/10 10:05:26] [ERROR] Invalid value 'default_upgrade' in file §4guis/main.yml§r§c at path §4contents.i.game§r§c
+[30/10 11:43:32] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 12:12:36] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 13:42:24] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 13:42:43] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 13:43:01] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 13:43:18] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 13:43:52] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 13:44:29] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 13:45:54] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 13:52:53] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 13:53:49] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 13:55:57] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[30/10 17:16:19] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[31/10 17:36:25] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[31/10 17:37:18] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[31/10 17:38:17] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[31/10 17:38:57] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[31/10 17:39:06] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[31/10 17:39:17] [ERROR] Number should be at least 1 in file §4games/minecity_coinflip.yml§r§c at path §4animation_ticks_min§r§c
+[31/10 17:40:25] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c
+[31/10 17:41:37] [ERROR] Number should be at least 1 in file §4games/minecity_jackpot.yml§r§c at path §4animation_ticks_min§r§c

@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 79.114.163.140
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1725385965463
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725637980282
+  login: 1725636471751
+money: '150998.0'
+last-account-name: Predator8009
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 182.58829919423638
+  y: 37.0
+  z: 1029.4562291395691
+  yaw: 0.73931884765625
+  pitch: 44.648067474365234
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 738.2873328403406
+  y: 21.0
+  z: 1074.5761662798272
+  yaw: 325.21923828125
+  pitch: 17.11365509033203

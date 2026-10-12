@@ -1,0 +1,25 @@
+name: NOLOGIN — scoate/Bagă login-ul cu parolă (momentan)
+on:
+  push:
+    paths: [ "scripts/no-login.sh", "deploy/nologin.txt", ".github/workflows/nologin.yml" ]
+  workflow_dispatch:
+    inputs:
+      actiune: { description: "scoage | baga", required: false, default: "scoage" }
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  n:
+    runs-on: [self-hosted]
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/no-login.sh
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

@@ -1,0 +1,1850 @@
+# [][][][][][][][][][][][][][][][][][][][][]
+#  CratesPlus V4.5.3 Config
+# [][][][][][][][][][][][][][][][][][][][][]
+# ------------------------------------------
+# There are many placeholders that can now be used withing the config and messages file, placeholders are as followed:
+# - %name% - Replaces with the players name, Example: "Notch".
+# - %displayname% - Replaces with the players display name, Example: "[Owner] Notch".
+# - %uuid% - Replaces with the players UUID.
+# - %crate% - The crate types name.
+# - %prize% - The name of the winning.
+# - %percentage% - Percentage of the winning, useful for "Chance Message".
+# - %rand;100;500% - Generates a random number between two numbers, example is between 100 and 500.
+# ------------------------------------------
+# Don't change the config version!
+
+Config Version: 6
+Update Checks: true
+Update Branch: spigot
+Metrics: true
+Default Opener: BasicGUI
+Default Cooldown: 5
+Crate Protection: false
+Disable Key Swapping: false
+Default Hologram Text:
+- '%crate%'
+- Click dreapta pentru a deschide!
+- Click stanga pentru a vedea continutul!
+Crates:
+  Arme:
+    Key:
+      Item: TRIPWIRE_HOOK
+      Name: '%type% key'
+      Enchanted: true
+    Knockback: 0.0
+    Broadcast: false
+    Firework: false
+    Preview: true
+    Hide Percentages: true
+    Block: RED_STAINED_GLASS
+    Color: RED
+    Winnings:
+      '1':
+        Type: ITEM
+        Item Type: TAC_GLOCK_17
+        Item Data: 0
+        Percentage: 47
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          internal: H4sIAAAAAAAA/+NiYGBm4HTMzc13zi/NK2FgYBBhAAD/FuPqFAAAAA==
+      '2':
+        Type: ITEM
+        Item Type: TAC_STI2011
+        Item Data: 0
+        Percentage: 15
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          internal: H4sIAAAAAAAA/+NiYGBm4HTMzc13zi/NK2FgYOBlAADnv+NxFAAAAA==
+      '3':
+        Type: ITEM
+        Item Type: TAC_MK23
+        Item Data: 0
+        Percentage: 12
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          internal: H4sIAAAAAAAA/+NiYGBm4HTMzc13zi/NK2FgYOBhAACmjvhoFAAAAA==
+      '4':
+        Type: ITEM
+        Item Type: TAC_MICRO_UZI
+        Item Data: 0
+        Percentage: 10
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          internal: H4sIAAAAAAAA/+NiYGBm4HTMzc13zi/NK2FgYBBhZuB3Li0qSs0rccssSvXNT0kFijIxM7DmpJal5gDZjNwMQsWlBQX5RSWpKTA1xSAJkEJuBiZPFyCDRXn/8pbV+7zmt02e8mVt9Dk+VgYOsAkuuekMYMWcYK5PfnI2AwcDL5gTkJNYmVoE1M8R75dakF9SGs/NwI0kAzJ3yWrGoLRks0+7KmfX/ds7bTUDAEZWyM7EAAAA
+      '5':
+        Type: ITEM
+        Item Type: TAC_MP7
+        Item Data: 0
+        Percentage: 7
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          internal: H4sIAAAAAAAA/+NiYGBm4HTMzc13zi/NK2FgYNBgZuB3Li0qSs0rccssSvXNT0kFijIxM7DmpJal5gDZjNwMQsWlBQX5RSWpKTA1xSBFUAxUwOTpAmSwyHNmRmyscj8037/B6MKNK76sDBxgU1xy0xlAChk4wVyf/ORsBg4GXjAnICexMrUIqJ8j3i+1IL+kNJ6bgRtJBmTuktWMQWnJZp92Vc6u+7d32moGACMk9kzIAAAA
+      '6':
+        Type: ITEM
+        Item Type: TAC_HK_MP5A5
+        Item Data: 0
+        Percentage: 5
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          internal: H4sIAAAAAAAA/+NiYGBm4HTMzc13zi/NK2FgYJBjAAB1/gwQFAAAAA==
+      '7':
+        Type: ITEM
+        Item Type: TAC_QBZ_95
+        Item Data: 0
+        Percentage: 3
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          internal: H4sIAAAAAAAA/+NiYGBm4HTMzc13zi/NK2FgYJBjZuB3Li0qSs0rccssSvXNT0kFijIxM7DmpJal5gDZjNwMQsWlBQX5RSWpKTA1xQwgk4AKoTRQEZOnC5DB8srRrW7HO69104wrrr/fJ76PlYEDbJJLbjoDSCEDJ5jrk5+czcDBwAvmBOQkVqYWAfVzxPulFuSXlMZzM3AjyYDMXbKaMSgt2ezTrsrZdf/2TlvNAAA9GRt7zAAAAA==
+      '8':
+        Type: ITEM
+        Item Type: LESRAISINSADD_AUG
+        Item Data: 0
+        Percentage: 1
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          internal: H4sIAAAAAAAA/+NiYGBm4HTMzc13zi/NK2FgYJBjZuB3Li0qSs0rccssSvXNT0kFijIxM7DmpJal5gDZjNwMQsWlBQX5RSWpKTA1xSBFUAxUwOTpAmSwfEx+sffkak+9/W3MaY+lS9azMnCATXHJTWcAKWTgBHN98pOzGTgYeMGcgJzEytQioH6OeL/UgvyS0nhuBm4kGZC5S1YzBqUlm33aVTm77t/eaasZAFBmXzrIAAAA
+  Skins:
+    Key:
+      Item: TRIPWIRE_HOOK
+      Name: '%type% Key'
+      Enchanted: true
+    Knockback: 0.0
+    Broadcast: false
+    Firework: false
+    Preview: true
+    Block: BLUE_STAINED_GLASS
+    Color: BLUE
+    Winnings:
+      '1':
+        Type: ITEM
+        Item Type: TAC_SKIN_BLACK
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '2':
+        Type: ITEM
+        Item Type: TAC_SKIN_BLUE
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '3':
+        Type: ITEM
+        Item Type: TAC_SKIN_BROWN
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '4':
+        Type: ITEM
+        Item Type: TAC_SKIN_GRAY
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '5':
+        Type: ITEM
+        Item Type: TAC_SKIN_DARK_GREEN
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '6':
+        Type: ITEM
+        Item Type: TAC_SKIN_GREEN
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '7':
+        Type: ITEM
+        Item Type: TAC_SKIN_JADE
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '8':
+        Type: ITEM
+        Item Type: TAC_SKIN_LIGHT_GRAY
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '9':
+        Type: ITEM
+        Item Type: TAC_SKIN_MAGENTA
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '10':
+        Type: ITEM
+        Item Type: TAC_SKIN_ORANGE
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '11':
+        Type: ITEM
+        Item Type: TAC_SKIN_PINK
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '12':
+        Type: ITEM
+        Item Type: TAC_SKIN_PURPLE
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '13':
+        Type: ITEM
+        Item Type: TAC_SKIN_RED
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '14':
+        Type: ITEM
+        Item Type: TAC_SKIN_SAND
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '15':
+        Type: ITEM
+        Item Type: TAC_SKIN_WHITE
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+  Armuri:
+    Key:
+      Item: TRIPWIRE_HOOK
+      Name: '%type% Key'
+      Enchanted: true
+    Knockback: 0.0
+    Broadcast: false
+    Firework: false
+    Preview: true
+    Hide Percentages: true
+    Block: LIGHT_BLUE_STAINED_GLASS
+    Color: AQUA
+    Winnings:
+      '1':
+        Type: ITEM
+        Item Type: DIAMOND_HELMET
+        Item Data: 0
+        Percentage: 10
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-2
+        - DURABILITY-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 2
+            DURABILITY: 2
+      '2':
+        Type: ITEM
+        Item Type: DIAMOND_CHESTPLATE
+        Item Data: 0
+        Percentage: 10
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-2
+        - DURABILITY-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 2
+            DURABILITY: 2
+      '3':
+        Type: ITEM
+        Item Type: DIAMOND_LEGGINGS
+        Item Data: 0
+        Percentage: 10
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-2
+        - DURABILITY-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 2
+            DURABILITY: 2
+      '4':
+        Type: ITEM
+        Item Type: DIAMOND_BOOTS
+        Item Data: 0
+        Percentage: 10
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-2
+        - DURABILITY-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 2
+            DURABILITY: 2
+      '5':
+        Type: ITEM
+        Item Type: DIAMOND_HELMET
+        Item Data: 0
+        Percentage: 5
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-3
+        - DURABILITY-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 3
+            DURABILITY: 3
+      '6':
+        Type: ITEM
+        Item Type: DIAMOND_CHESTPLATE
+        Item Data: 0
+        Percentage: 5
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-3
+        - DURABILITY-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 3
+            DURABILITY: 3
+      '7':
+        Type: ITEM
+        Item Type: DIAMOND_LEGGINGS
+        Item Data: 0
+        Percentage: 5
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-3
+        - DURABILITY-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 3
+            DURABILITY: 3
+      '8':
+        Type: ITEM
+        Item Type: DIAMOND_BOOTS
+        Item Data: 0
+        Percentage: 5
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-3
+        - DURABILITY-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 3
+            DURABILITY: 3
+      '9':
+        Type: ITEM
+        Item Type: DIAMOND_HELMET
+        Item Data: 0
+        Percentage: 4
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-4
+        - DURABILITY-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 4
+            DURABILITY: 4
+      '10':
+        Type: ITEM
+        Item Type: DIAMOND_CHESTPLATE
+        Item Data: 0
+        Percentage: 4
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-4
+        - DURABILITY-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 4
+            DURABILITY: 4
+      '11':
+        Type: ITEM
+        Item Type: DIAMOND_LEGGINGS
+        Item Data: 0
+        Percentage: 4
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-4
+        - DURABILITY-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 4
+            DURABILITY: 4
+      '12':
+        Type: ITEM
+        Item Type: DIAMOND_BOOTS
+        Item Data: 0
+        Percentage: 4
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-4
+        - DURABILITY-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 4
+            DURABILITY: 4
+      '13':
+        Type: ITEM
+        Item Type: DIAMOND_HELMET
+        Item Data: 0
+        Percentage: 3
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-5
+        - DURABILITY-5
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 5
+            DURABILITY: 5
+      '14':
+        Type: ITEM
+        Item Type: DIAMOND_CHESTPLATE
+        Item Data: 0
+        Percentage: 3
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-5
+        - DURABILITY-5
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 5
+            DURABILITY: 5
+      '15':
+        Type: ITEM
+        Item Type: DIAMOND_LEGGINGS
+        Item Data: 0
+        Percentage: 3
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-5
+        - DURABILITY-5
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 5
+            DURABILITY: 5
+      '16':
+        Type: ITEM
+        Item Type: DIAMOND_BOOTS
+        Item Data: 0
+        Percentage: 3
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-5
+        - DURABILITY-5
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 5
+            DURABILITY: 5
+      '17':
+        Type: ITEM
+        Item Type: DIAMOND_HELMET
+        Item Data: 0
+        Percentage: 2
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-6
+        - DURABILITY-6
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 6
+            DURABILITY: 6
+      '18':
+        Type: ITEM
+        Item Type: DIAMOND_CHESTPLATE
+        Item Data: 0
+        Percentage: 2
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-6
+        - DURABILITY-6
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 6
+            DURABILITY: 6
+      '19':
+        Type: ITEM
+        Item Type: DIAMOND_LEGGINGS
+        Item Data: 0
+        Percentage: 2
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-6
+        - DURABILITY-6
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 6
+            DURABILITY: 6
+      '20':
+        Type: ITEM
+        Item Type: DIAMOND_BOOTS
+        Item Data: 0
+        Percentage: 2
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - PROTECTION_ENVIRONMENTAL-6
+        - DURABILITY-6
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            PROTECTION_ENVIRONMENTAL: 6
+            DURABILITY: 6
+      '21':
+        Type: ITEM
+        Item Type: DIAMOND_HELMET
+        Item Data: 0
+        Percentage: 1
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-7
+        - PROTECTION_ENVIRONMENTAL-7
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 7
+            PROTECTION_ENVIRONMENTAL: 7
+      '22':
+        Type: ITEM
+        Item Type: DIAMOND_CHESTPLATE
+        Item Data: 0
+        Percentage: 1
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-7
+        - PROTECTION_ENVIRONMENTAL-7
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 7
+            PROTECTION_ENVIRONMENTAL: 7
+      '23':
+        Type: ITEM
+        Item Type: DIAMOND_LEGGINGS
+        Item Data: 0
+        Percentage: 1
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-7
+        - PROTECTION_ENVIRONMENTAL-7
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 7
+            PROTECTION_ENVIRONMENTAL: 7
+      '24':
+        Type: ITEM
+        Item Type: DIAMOND_BOOTS
+        Item Data: 0
+        Percentage: 1
+        Name: '&b&lᴀʀᴍᴜʀᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-7
+        - PROTECTION_ENVIRONMENTAL-7
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 7
+            PROTECTION_ENVIRONMENTAL: 7
+  Atasamente:
+    Key:
+      Item: TRIPWIRE_HOOK
+      Name: '%type% Crate Key'
+      Enchanted: true
+    Knockback: 0.0
+    Broadcast: false
+    Firework: false
+    Preview: true
+    Block: ORANGE_STAINED_GLASS
+    Color: GOLD
+    Winnings:
+      '1':
+        Type: ITEM
+        Item Type: TAC_AIMPOINT_T1
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '2':
+        Type: ITEM
+        Item Type: TAC_EOTECH_N
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '3':
+        Type: ITEM
+        Item Type: TAC_VORTEX_UH_1
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '4':
+        Type: ITEM
+        Item Type: TAC_EOTECH_SHORT
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '5':
+        Type: ITEM
+        Item Type: TAC_SRS_RED_DOT
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '6':
+        Type: ITEM
+        Item Type: TAC_ACOG_4X_SCOPE
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '7':
+        Type: ITEM
+        Item Type: TAC_QMK152
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '8':
+        Type: ITEM
+        Item Type: TAC_ELCAN_14X
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '9':
+        Type: ITEM
+        Item Type: TAC_LPVO_1_6
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '10':
+        Type: ITEM
+        Item Type: TAC_8X_SCOPE
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '11':
+        Type: ITEM
+        Item Type: TAC_OLD_8X_SCOPE
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '12':
+        Type: ITEM
+        Item Type: TAC_OLD_4X_SCOPE
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '13':
+        Type: ITEM
+        Item Type: TAC_MINI_DOT
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '14':
+        Type: ITEM
+        Item Type: TAC_SRO_DOT
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '15':
+        Type: ITEM
+        Item Type: TAC_SILENCER
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '16':
+        Type: ITEM
+        Item Type: TAC_MUZZLE_BRAKE
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '17':
+        Type: ITEM
+        Item Type: TAC_MUZZLE_COMPENSATOR
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '18':
+        Type: ITEM
+        Item Type: TAC_PISTOL_SILENCER
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '19':
+        Type: ITEM
+        Item Type: TAC_LIGHT_STOCK
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '20':
+        Type: ITEM
+        Item Type: TAC_TACTICAL_STOCK
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '21':
+        Type: ITEM
+        Item Type: TAC_WEIGHTED_STOCK
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '22':
+        Type: ITEM
+        Item Type: TAC_LIGHT_GRIP
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '23':
+        Type: ITEM
+        Item Type: TAC_SPECIALISED_GRIP
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '24':
+        Type: ITEM
+        Item Type: TAC_BASIC_LASER
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '25':
+        Type: ITEM
+        Item Type: TAC_IR_LASER
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '26':
+        Type: ITEM
+        Item Type: TAC_SMALL_EXTENDED_MAG
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '27':
+        Type: ITEM
+        Item Type: TAC_MEDIUM_EXTENDED_MAG
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '28':
+        Type: ITEM
+        Item Type: TAC_LARGE_EXTENDED_MAG
+        Item Data: 0
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+  Unelte:
+    Key:
+      Item: TRIPWIRE_HOOK
+      Name: '%type% Crate Key'
+      Enchanted: true
+    Knockback: 0.0
+    Broadcast: false
+    Firework: false
+    Preview: true
+    Hide Percentages: true
+    Block: YELLOW_STAINED_GLASS
+    Color: YELLOW
+    Winnings:
+      '1':
+        Type: ITEM
+        Item Type: DIAMOND_PICKAXE
+        Item Data: 0
+        Percentage: 10
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DIG_SPEED-2
+        - DURABILITY-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DIG_SPEED: 2
+            DURABILITY: 2
+      '2':
+        Type: ITEM
+        Item Type: DIAMOND_AXE
+        Item Data: 0
+        Percentage: 10
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DIG_SPEED-2
+        - DURABILITY-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DIG_SPEED: 2
+            DURABILITY: 2
+      '3':
+        Type: ITEM
+        Item Type: DIAMOND_SHOVEL
+        Item Data: 0
+        Percentage: 10
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DIG_SPEED-2
+        - DURABILITY-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DIG_SPEED: 2
+            DURABILITY: 2
+      '4':
+        Type: ITEM
+        Item Type: SHEARS
+        Item Data: 0
+        Percentage: 10
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DIG_SPEED-2
+        - DURABILITY-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DIG_SPEED: 2
+            DURABILITY: 2
+      '5':
+        Type: ITEM
+        Item Type: DIAMOND_PICKAXE
+        Item Data: 0
+        Percentage: 5
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DIG_SPEED-2
+        - DURABILITY-2
+        - LOOT_BONUS_BLOCKS-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DIG_SPEED: 2
+            DURABILITY: 2
+            LOOT_BONUS_BLOCKS: 2
+      '6':
+        Type: ITEM
+        Item Type: DIAMOND_AXE
+        Item Data: 0
+        Percentage: 5
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - LOOT_BONUS_BLOCKS-2
+        - DURABILITY-2
+        - DIG_SPEED-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            LOOT_BONUS_BLOCKS: 2
+            DURABILITY: 2
+            DIG_SPEED: 2
+      '7':
+        Type: ITEM
+        Item Type: DIAMOND_SHOVEL
+        Item Data: 0
+        Percentage: 5
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - LOOT_BONUS_BLOCKS-2
+        - DURABILITY-2
+        - DIG_SPEED-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            LOOT_BONUS_BLOCKS: 2
+            DURABILITY: 2
+            DIG_SPEED: 2
+      '8':
+        Type: ITEM
+        Item Type: SHEARS
+        Item Data: 0
+        Percentage: 5
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - LOOT_BONUS_BLOCKS-2
+        - DURABILITY-2
+        - DIG_SPEED-2
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            LOOT_BONUS_BLOCKS: 2
+            DURABILITY: 2
+            DIG_SPEED: 2
+      '9':
+        Type: ITEM
+        Item Type: DIAMOND_PICKAXE
+        Item Data: 0
+        Percentage: 4
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DIG_SPEED-3
+        - DURABILITY-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DIG_SPEED: 3
+            DURABILITY: 3
+      '10':
+        Type: ITEM
+        Item Type: DIAMOND_AXE
+        Item Data: 0
+        Percentage: 4
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DIG_SPEED-3
+        - DURABILITY-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DIG_SPEED: 3
+            DURABILITY: 3
+      '11':
+        Type: ITEM
+        Item Type: DIAMOND_SHOVEL
+        Item Data: 0
+        Percentage: 4
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DIG_SPEED-3
+        - DURABILITY-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DIG_SPEED: 3
+            DURABILITY: 3
+      '12':
+        Type: ITEM
+        Item Type: SHEARS
+        Item Data: 0
+        Percentage: 4
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-3
+        - DIG_SPEED-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 3
+            DIG_SPEED: 3
+      '13':
+        Type: ITEM
+        Item Type: DIAMOND_PICKAXE
+        Item Data: 0
+        Percentage: 3
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DIG_SPEED-3
+        - DURABILITY-3
+        - LOOT_BONUS_BLOCKS-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DIG_SPEED: 3
+            DURABILITY: 3
+            LOOT_BONUS_BLOCKS: 3
+      '14':
+        Type: ITEM
+        Item Type: DIAMOND_AXE
+        Item Data: 0
+        Percentage: 3
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DIG_SPEED-3
+        - DURABILITY-3
+        - LOOT_BONUS_BLOCKS-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DIG_SPEED: 3
+            DURABILITY: 3
+            LOOT_BONUS_BLOCKS: 3
+      '15':
+        Type: ITEM
+        Item Type: DIAMOND_SHOVEL
+        Item Data: 0
+        Percentage: 3
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DIG_SPEED-3
+        - DURABILITY-3
+        - LOOT_BONUS_BLOCKS-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DIG_SPEED: 3
+            DURABILITY: 3
+            LOOT_BONUS_BLOCKS: 3
+      '16':
+        Type: ITEM
+        Item Type: SHEARS
+        Item Data: 0
+        Percentage: 3
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-3
+        - DIG_SPEED-3
+        - LOOT_BONUS_BLOCKS-3
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 3
+            DIG_SPEED: 3
+            LOOT_BONUS_BLOCKS: 3
+      '17':
+        Type: ITEM
+        Item Type: DIAMOND_PICKAXE
+        Item Data: 0
+        Percentage: 2
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-4
+        - DIG_SPEED-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 4
+            DIG_SPEED: 4
+      '18':
+        Type: ITEM
+        Item Type: DIAMOND_SHOVEL
+        Item Data: 0
+        Percentage: 2
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-4
+        - DIG_SPEED-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 4
+            DIG_SPEED: 4
+      '19':
+        Type: ITEM
+        Item Type: DIAMOND_AXE
+        Item Data: 0
+        Percentage: 2
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-4
+        - DIG_SPEED-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 4
+            DIG_SPEED: 4
+      '20':
+        Type: ITEM
+        Item Type: SHEARS
+        Item Data: 0
+        Percentage: 2
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-4
+        - DIG_SPEED-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 4
+            DIG_SPEED: 4
+      '21':
+        Type: ITEM
+        Item Type: DIAMOND_PICKAXE
+        Item Data: 0
+        Percentage: 1
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-4
+        - DIG_SPEED-4
+        - LOOT_BONUS_BLOCKS-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 4
+            DIG_SPEED: 4
+            LOOT_BONUS_BLOCKS: 4
+      '22':
+        Type: ITEM
+        Item Type: DIAMOND_AXE
+        Item Data: 0
+        Percentage: 1
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-4
+        - DIG_SPEED-4
+        - LOOT_BONUS_BLOCKS-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 4
+            DIG_SPEED: 4
+            LOOT_BONUS_BLOCKS: 4
+      '23':
+        Type: ITEM
+        Item Type: DIAMOND_SHOVEL
+        Item Data: 0
+        Percentage: 1
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-4
+        - DIG_SPEED-4
+        - LOOT_BONUS_BLOCKS-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 4
+            DIG_SPEED: 4
+            LOOT_BONUS_BLOCKS: 4
+      '24':
+        Type: ITEM
+        Item Type: SHEARS
+        Item Data: 0
+        Percentage: 1
+        Name: '&b&lᴜɴᴇᴀʟᴛᴀ ᴘʀᴇᴍɪᴜᴍ'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-4
+        - DIG_SPEED-4
+        - LOOT_BONUS_BLOCKS-4
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴜɴᴇᴀʟᴛᴀ
+            ᴘʀᴇᴍɪᴜᴍ"}],"text":""}'
+          enchants:
+            DURABILITY: 4
+            DIG_SPEED: 4
+            LOOT_BONUS_BLOCKS: 4
+  Fragmente:
+    Key:
+      Item: TRIPWIRE_HOOK
+      Name: '%type% Crate Key'
+      Enchanted: true
+    Knockback: 0.0
+    Broadcast: false
+    Firework: false
+    Preview: true
+    Hide Percentages: true
+    Block: YELLOW_STAINED_GLASS
+    Color: YELLOW
+    Winnings:
+      '1':
+        Type: ITEM
+        Item Type: STICK
+        Item Data: 0
+        Percentage: 70
+        Name: '&6&lBat'
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"gold","text":"Bat"}],"text":""}'
+      '2':
+        Type: ITEM
+        Item Type: COAL
+        Item Data: 0
+        Percentage: 15
+        Name: '&8&lCarbune'
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"dark_gray","text":"Carbune"}],"text":""}'
+      '3':
+        Type: ITEM
+        Item Type: VEHICLE_PANEL
+        Item Data: 0
+        Percentage: 5
+        Name: '&6&lʙᴜᴄᴀᴛᴀ ᴅᴇ ᴄʜᴇɪᴇ'
+        Amount: 1
+        Enchantments: []
+        Lore:
+        - '§7§l-ᴛɪᴘ ᴄʜᴇɪᴇ: §b§lᴀʀᴍᴜʀɪ'
+        - '§7§l-ɴᴜᴍᴀʀ ʙᴜᴄᴀᴛᴀ: §c§l2'
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"gold","text":"ʙᴜᴄᴀᴛᴀ
+            ᴅᴇ ᴄʜᴇɪᴇ"}],"text":""}'
+          lore:
+          - '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"gray","text":"-ᴛɪᴘ
+            ᴄʜᴇɪᴇ: "},{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"aqua","text":"ᴀʀᴍᴜʀɪ"}],"text":""}'
+          - '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"gray","text":"-ɴᴜᴍᴀʀ
+            ʙᴜᴄᴀᴛᴀ: "},{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"red","text":"2"}],"text":""}'
+  Back_to_School:
+    Key:
+      Item: TRIPWIRE_HOOK
+      Name: '%type% Crate Key'
+      Enchanted: true
+    Knockback: 0.0
+    Broadcast: false
+    Firework: false
+    Preview: true
+    Hide Percentages: false
+    Block: PINK_STAINED_GLASS
+    Color: LIGHT_PURPLE
+    Winnings:
+      '1':
+        Type: ITEM
+        Item Type: POPPY
+        Item Data: 0
+        Percentage: 12
+        Name: NONE
+        Amount: 2
+        Enchantments: []
+        Lore: []
+      '2':
+        Type: ITEM
+        Item Type: APPLE
+        Item Data: 0
+        Percentage: 12
+        Name: NONE
+        Amount: 8
+        Enchantments: []
+        Lore: []
+      '3':
+        Type: ITEM
+        Item Type: CROPTOPIA_MILK_BOTTLE
+        Item Data: 0
+        Percentage: 10
+        Name: NONE
+        Amount: 4
+        Enchantments: []
+        Lore: []
+      '4':
+        Type: ITEM
+        Item Type: XLFOODMOD_BAGUETTE
+        Item Data: 0
+        Percentage: 10
+        Name: NONE
+        Amount: 3
+        Enchantments: []
+        Lore: []
+      '5':
+        Type: ITEM
+        Item Type: CAKE
+        Item Data: 0
+        Percentage: 7
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '6':
+        Type: ITEM
+        Item Type: TOUGHASNAILS_PURIFIED_WATER_CANTEEN
+        Item Data: 0
+        Percentage: 5
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '7':
+        Type: ITEM
+        Item Type: FLINT_AND_STEEL
+        Item Data: 0
+        Percentage: 4
+        Name: '&fBricheta'
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"white","text":"Bricheta"}],"text":""}'
+      '8':
+        Type: ITEM
+        Item Type: ROLEPLAYPLUS_GAFASDESOL_HELMET
+        Item Data: 0
+        Percentage: 5
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          Unbreakable: true
+      '9':
+        Type: ITEM
+        Item Type: XLFOODMOD_BOURBON_BISCUIT
+        Item Data: 0
+        Percentage: 6
+        Name: NONE
+        Amount: 8
+        Enchantments: []
+        Lore: []
+      '10':
+        Type: ITEM
+        Item Type: NFM_TOILET_LIGHT
+        Item Data: 0
+        Percentage: 1.2
+        Name: '&f&lSkibidi Toaleta'
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"white","text":"Skibidi
+            Toaleta"}],"text":""}'
+          attribute-modifiers:
+            GENERIC_MAX_HEALTH:
+            - ==: org.bukkit.attribute.AttributeModifier
+              amount: 4.0
+              name: GENERIC_MAX_HEALTH
+              slot: HAND
+              uuid: beb523b9-cb1f-4a5e-982c-796bdaa30320
+              operation: 0
+      '11':
+        Type: ITEM
+        Item Type: NFM_TOILET_DARK
+        Item Data: 0
+        Percentage: 1
+        Name: '&8&lSkibidi Toaleta Neagra'
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"dark_gray","text":"Skibidi
+            Toaleta Neagra"}],"text":""}'
+          attribute-modifiers:
+            GENERIC_MAX_HEALTH:
+            - ==: org.bukkit.attribute.AttributeModifier
+              amount: 8.0
+              name: GENERIC_MAX_HEALTH
+              slot: HAND
+              uuid: 5b92341d-3a3b-4a07-acd7-80abf0977af2
+              operation: 0
+      '12':
+        Type: ITEM
+        Item Type: LESRAISINSADD_ALEX
+        Item Data: 0
+        Percentage: 1.2
+        Name: '&7&lMatusa lu'' Valentinos'
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"gray","text":"Matusa
+            lu'' Valentinos"}],"text":""}'
+          internal: H4sIAAAAAAAA/+NiYGBm4HTMzc13zi/NK2FgYJBjZuB3Li0qSs0rccssSvXNT0kFijIxM7DmpJal5gDZjNwMQsWlBQX5RSWpKTA1xSBFUAxUwOTpAmSw8D/Xke0J8G5qdj7FoTV7Xx8rAwfYFJfcdIcFQIUMnGCuT35yNgMHAy+YE5CTWJlaBNTPEe+XWpBfUhrPzcCNJAMyd8lqxqC0ZLNPuypn1/3bO201AwAXzpvqyAAAAA==
+      '13':
+        Type: ITEM
+        Item Type: VEHICLE_JERRY_CAN
+        Item Data: 0
+        Percentage: 5
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          internal: H4sIAAAAAAAA/+NiYGBmYHErTc1hYBDuYAAAC0oTzA8AAAA=
+      '14':
+        Type: ITEM
+        Item Type: THEDIRTYSTUFF_JOINT
+        Item Data: 0
+        Percentage: 4
+        Name: '&fPalmol Albastru'
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"white","text":"Palmol
+            Albastru"}],"text":""}'
+      '15':
+        Type: ITEM
+        Item Type: THEDIRTYSTUFF_JOINT
+        Item Data: 0
+        Percentage: 4
+        Name: '&f8 cent scurt'
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"white","text":"8
+            cent scurt"}],"text":""}'
+      '16':
+        Type: ITEM
+        Item Type: THEDIRTYSTUFF_JOINT
+        Item Data: 0
+        Percentage: 3.8
+        Name: '&fMalbolo rosu'
+        Amount: 1
+        Enchantments: []
+        Lore: []
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"white","text":"Malbolo
+            rosu"}],"text":""}'
+      '17':
+        Type: ITEM
+        Item Type: MINECRAFTMODERNXL_CREEPLUSH_BLUE
+        Item Data: 0
+        Percentage: 2
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '18':
+        Type: ITEM
+        Item Type: USEFULBACKPACKS_BACKPACK_SMALL
+        Item Data: 0
+        Percentage: 2
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '19':
+        Type: ITEM
+        Item Type: USEFULBACKPACKS_BACKPACK_MEDIUM
+        Item Data: 0
+        Percentage: 2
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '20':
+        Type: ITEM
+        Item Type: USEFULBACKPACKS_BACKPACK_LARGE
+        Item Data: 0
+        Percentage: 2
+        Name: NONE
+        Amount: 1
+        Enchantments: []
+        Lore: []
+      '21':
+        Type: ITEM
+        Item Type: PAPER
+        Item Data: 0
+        Percentage: 0.5
+        Name: '&f&l25 LEI'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-10
+        Lore:
+        - §7{{Contacteaza pe RobertoStyle pentru a primii premiul}}
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"white","text":"25
+            LEI"}],"text":""}'
+          lore:
+          - '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"gray","text":"{{Contacteaza
+            pe RobertoStyle pentru a primii premiul}}"}],"text":""}'
+          enchants:
+            DURABILITY: 10
+      '22':
+        Type: ITEM
+        Item Type: PAPER
+        Item Data: 0
+        Percentage: 0.2
+        Name: '&f&l50 LEI'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-10
+        Lore:
+        - §7{{Contacteaza pe RobertoStyle pentru a primii premiul}}
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"white","text":"50
+            LEI"}],"text":""}'
+          lore:
+          - '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"gray","text":"{{Contacteaza
+            pe RobertoStyle pentru a primii premiul}}"}],"text":""}'
+          enchants:
+            DURABILITY: 10
+      '23':
+        Type: ITEM
+        Item Type: PAPER
+        Item Data: 0
+        Percentage: 0.1
+        Name: '&f&l100 LEI'
+        Amount: 1
+        Enchantments:
+        - DURABILITY-10
+        Lore:
+        - §7{{Contacteaza pe RobertoStyle pentru a primii premiul}}
+        Metadata:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '{"extra":[{"bold":true,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"white","text":"100
+            LEI"}],"text":""}'
+          lore:
+          - '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"color":"gray","text":"{{Contacteaza
+            pe RobertoStyle pentru a primii premiul}}"}],"text":""}'
+          enchants:
+            DURABILITY: 10

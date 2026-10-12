@@ -1,0 +1,72 @@
+# ** Mystery Items Customisations **
+
+#What should be the Pyramid Crates Mystery Item random name list
+#Can be added multiple times for it to be more likely to appear
+Pyramid_Mystery_Item_Names:
+  - "&c&lMystery Item"
+  - "&d&lMystery Item"
+  - "&5&lMystery Item"
+  - "&0&lMystery Item"
+  - "&0&lMystery Item"
+  - "&5&lMystery Item"
+  - "&4&lMystery Item"
+  - "&4&lMystery Item"
+  - "&7&lMystery Item"
+  - "&8&lMystery Item"
+  - "&6&lMystery Item"
+  - "&e&lMystery Item"
+  
+#What should be the Pyramid Animations mystery items?
+Pyramid_Mystery_Items:
+  - "WOOL,0"
+  - "WOOL,2"
+  - "WOOL,4"
+  - "WOOL,7"
+  - "WOOL,8"
+  - "WOOL,9"
+  - "WOOL,10"
+  - "WOOL,12"
+  - "WOOL,13"
+  - "WOOL,14"
+  - "WOOL,15"
+  - "WOOL,15"
+  - "WOOL,7"
+  - "WOOL,8"
+  - "WOOL,15"
+  - "WOOL,7"
+  
+  
+#What should be the Round2 Animation Mystery Item random name list
+#Can be added multiple times for it to be more likely to appear
+Round2_Mystery_Item_Names:
+  - "&c&lMystery Item"
+  - "&d&lMystery Item"
+  - "&5&lMystery Item"
+  - "&0&lMystery Item"
+  - "&0&lMystery Item"
+  - "&5&lMystery Item"
+  - "&4&lMystery Item"
+  - "&4&lMystery Item"
+  - "&7&lMystery Item"
+  - "&8&lMystery Item"
+  - "&6&lMystery Item"
+  - "&e&lMystery Item"
+  
+#What should be the Round2 Animations mystery items?
+Round2_Mystery_Items:
+  - "WOOL,0"
+  - "WOOL,2"
+  - "WOOL,4"
+  - "WOOL,7"
+  - "WOOL,8"
+  - "WOOL,9"
+  - "WOOL,10"
+  - "WOOL,12"
+  - "WOOL,13"
+  - "WOOL,14"
+  - "WOOL,15"
+  - "WOOL,15"
+  - "WOOL,7"
+  - "WOOL,8"
+  - "WOOL,15"
+  - "WOOL,7"

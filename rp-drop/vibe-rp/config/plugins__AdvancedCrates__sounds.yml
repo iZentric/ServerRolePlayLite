@@ -1,0 +1,180 @@
+# Sounds
+
+# How far from the middle of the crate can crate sounds be heard to nearby players (blocks)
+Sound_Hearing_Distance: 8
+
+Round_Animation_Sounds:
+  On_Crate_Place:
+    - "ANVIL_LAND"
+  On_Crate_Place_Volume: 1
+  On_Crate_Place_Pitch: 1
+  On_Lightning_Strike:
+    - "NOTE_PLING"
+  On_Lightning_Strike_Volume: 1
+  On_Lightning_Strike_Pitch: 1
+  While_Spinning:
+    - "CLICK"
+  While_Spinning_Volume: 1
+  While_Spinning_Pitch: 1
+  On_Item_Change:
+    - "BAT_TAKEOFF"
+  On_Item_Change_Volume: 1
+  On_Item_Change_Pitch: 1
+  On_Spinning_Stop:
+    - "EXPLODE"
+  On_Spinning_Stop_Volume: 1
+  On_Spinning_Stop_Pitch: 1
+  On_Crate_Disappear:
+    - "LEVEL_UP"
+  On_Crate_Disappear_Volume: 1
+  On_Crate_Disappear_Pitch: 1
+    
+    
+Display_Animation_Sounds:
+  On_Crate_Place:
+    - "ANVIL_LAND"
+  On_Crate_Place_Volume: 1
+  On_Crate_Place_Pitch: 1
+  On_Item_Change:
+    - "BAT_TAKEOFF"
+  On_Item_Change_Volume: 1
+  On_Item_Change_Pitch: 1
+  On_Spinning_Stop:
+    - "EXPLODE"
+  On_Spinning_Stop_Volume: 1
+  On_Spinning_Stop_Pitch: 1
+  On_Crate_Disappear:
+    - "LEVEL_UP"
+  On_Crate_Disappear_Volume: 1
+  On_Crate_Disappear_Pitch: 1
+    
+    
+Pyramid_Animation_Sounds:
+  On_Crate_Place:
+    - "ANVIL_LAND"
+  On_Crate_Place_Volume: 1
+  On_Crate_Place_Pitch: 1
+  On_Lightning_Strike:
+    - "NOTE_PLING"
+  On_Lightning_Strike_Volume: 1
+  On_Lightning_Strike_Pitch: 1
+  On_Flying_Stop:
+    - "EXPLODE"
+  On_Flying_Stop_Volume: 1
+  On_Flying_Stop_Pitch: 1
+  On_Crate_Disappear:
+  - "LEVEL_UP"
+  On_Crate_Disappear_Volume: 1
+  On_Crate_Disappear_Pitch: 1
+  
+Round2_Animation_Sounds:
+  On_Crate_Place:
+    - "ANVIL_LAND"
+  On_Crate_Place_Volume: 1
+  On_Crate_Place_Pitch: 1
+  While_Spinning:
+    - "CLICK"
+  While_Spinning_Volume: 1
+  While_Spinning_Pitch: 1
+  On_Lightning_Strike:
+    - "NOTE_PLING"
+  On_Lightning_Strike_Volume: 1
+  On_Lightning_Strike_Pitch: 1
+  On_Spinning_Stop:
+    - "EXPLODE"
+  On_Spinning_Stop_Volume: 1
+  On_Spinning_Stop_Pitch: 1
+  On_Crate_Disappear:
+    - "LEVEL_UP"
+  On_Crate_Disappear_Volume: 1
+  On_Crate_Disappear_Pitch: 1
+
+
+Cosmic_Animation_Sounds:
+  While_Breaking:   #This refers to when the small enderchest is going from side to side
+    - ""
+  While_Breaking_Volume: 1
+  While_Breaking_Pitch: 1
+  Giant_Chest_Appears:
+    - ""
+  Giant_Chest_Appears_Volume: 1
+  Giant_Chest_Appears_Pitch: 1
+  While_Giant_Chest_Spinning:
+    - ""
+  While_Giant_Chest_Spinning_Volume: 1
+  While_Giant_Chest_Spinning_Pitch: 1
+  While_Individual_Rewards_Fly:
+    - ""
+  While_Individual_Rewards_Fly_Volume: 1
+  While_Individual_Rewards_Fly_Pitch: 1
+  On_Crate_Disappear:
+    - "LEVEL_UP"
+  On_Crate_Disappear_Volume: 1
+  On_Crate_Disappear_Pitch: 1
+
+No_Animation_Sounds:
+  On_Crate_Open:
+    - "LEVEL_UP"
+  On_Crate_Open_Volume: 1
+  On_Crate_Open_Pitch: 1
+
+
+Pouch_Sounds:
+  On_Pouch_Place:
+    - "ANVIL_LAND"
+  On_Pouch_Place_Volume: 1
+  On_Pouch_Place_Pitch: 1
+  On_Lightning_Strike:
+    - "NOTE_PLING"
+  On_Lightning_Strike_Volume: 1
+  On_Lightning_Strike_Pitch: 1
+  On_Pouch_Disappear:
+    - "LEVEL_UP"
+  On_Pouch_Disappear_Volume: 1
+  On_Pouch_Disappear_Pitch: 1
+
+
+Contraband_Animation_Sounds:
+  On_Crate_Place:
+    - "ANVIL_LAND"
+  On_Crate_Place_Volume: 1
+  On_Crate_Place_Pitch: 1
+  On_Item_Reveal:
+    - "NOTE_PLING"
+  On_Item_Reveal_Volume: 1
+  On_Item_Reveal_Pitch: 1
+  On_Item_Disappear:
+    - "CLICK"
+  On_Item_Disappear_Volume: 1
+  On_Item_Disappear_Pitch: 1
+  On_Final_Items_Reveal:
+    - "BAT_TAKEOFF"
+  On_Final_Items_Reveal_Volume: 1
+  On_Final_Items_Reveal_Pitch: 1
+  While_Final_Items_Spinning:
+    - ""
+  While_Final_Items_Spinning_Volume: 1
+  While_Final_Items_Spinning_Pitch: 1
+  On_Crate_Disappear:
+    - "LEVEL_UP"
+  On_Crate_Disappear_Volume: 1
+  On_Crate_Disappear_Pitch: 1
+
+
+Breakout_Animation_Sounds:
+  While_Breaking:
+  - ""
+  While_Breaking_Volume: 1
+  While_Breaking_Pitch: 1
+  On_Crate_Disappear:
+    - ""
+  On_Crate_Disappear_Volume: 1
+  On_Crate_Disappear_Pitch: 1
+  
+  
+  
+  
+  
+  
+
+  

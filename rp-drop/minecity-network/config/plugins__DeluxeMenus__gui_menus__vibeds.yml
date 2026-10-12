@@ -1,0 +1,290 @@
+    menu_title: '      &8⋘ &#FF8D00&lM&#FF8900&lI&#FF8401&lN&#FF8001&lE&#FF7B01&lC&#FF7701&lI&#FF7202&lT&#FF6E02&lY &#FF6502&lM&#FF6003&lA&#FF5C03&lS&#FF5703&lI&#FF5303&lN&#FF4E04&lI  &8⋙ '
+    open_command:
+    - ds
+    register_command: true
+    permission: deluxemenus.open.ds
+    size: 45
+    items:
+#############################################################################################
+      'close':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTJkN2E3NTFlYjA3MWUwOGRiYmM5NWJjNWQ5ZDY2ZTVmNTFkYzY3MTI2NDBhZDJkZmEwM2RlZmJiNjhhN2YzYSJ9fX0=
+        slot: 40
+        display_name: '&#790303&lɪ&#840303&lɴ&#8f0303&lᴄ&#9b0202&lʜ&#a60202&lɪ&#b10202&lᴅ&#bc0202&lᴇ &#c70101&lᴍ&#d20101&lᴇ&#de0101&lɴ&#e90101&lɪ&#f40000&lᴜ&#ff0000&lʟ'
+        lore:
+        - ''
+        - '&fClick aici pentru'
+        - '&finchide acest meniu!'
+        left_click_commands:
+        - '[close]'
+        right_click_commands:
+        - '[close]'
+###############################################################
+      '1':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzhlMjJmMTk2ZWE5NmVmYzMzZDQ1NWQ5YzIyYTBjZDIwNTUxZjZkM2U3ZmI0ZTc2NmMzY2M0NjhkZjNjOTY4In19fQ==
+        slot: 11
+        display_name: '&#6CC9FF&lᴀ&#92D9F7&lᴛ&#B7E8EE&lᴠ'
+        lore:
+        - '&#474848ᴄ&#434545ᴏ&#3F4142ᴍ&#3B3E3Eᴘ&#373B3Bᴏ&#333838ɴ&#2F3435ᴇ&#2B3132ɴ&#272E2Eᴛ&#232A2Bᴇ&#1F2728:'
+        - ' &#4B5858&l⊳&#4B5858&lᴍ&#4C5A5A&lᴏ&#4C5C5C&lᴛ&#4D5D5E&lᴏ&#4E5F60&lʀ&#4F6163&l: &f&lʟᴇᴍɴ'
+        - ' &#4B5858&l⊳&#4B5858&lʀ&#4D5D5D&lᴏ&#4F6163&lᴛ&#506668&lɪ&#526A6D&l: &F&Lꜱᴛᴏᴄᴋ'
+        - ''
+        - '&#4B5858&lᴘ&#4D5E5F&lʀ&#506466&lᴇ&#526A6D&lᴛ: &a5000$'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴄᴜᴍᴘᴀʀᴀ'
+        left_click_commands:
+        - '[player] car'
+        - '[sound] entity_experience_orb_pickup'
+        right_click_commands:
+        - '[console] '
+###############################################################
+ #     '2':
+ #      material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGFhNmMyZDFiZDgwZmRkNmE2MzJjYzdjYWZkMjVmMDllZjIwM2VlYzJhNjkzYjdjYmEwM2QxNzZiMmNjMDcxYiJ9fX0=
+ #      slot: 11
+ #      display_name: '&#3CA55C&lᴇ&#48A65A&lx&#54A658&lᴘ&#60A756&lʟ&#6CA854&lᴏ&#79A953&lʀ&#85A951&lᴇ&#91AA4F&lʀ &#9DAB4D&lᴊ&#A9AB4B&lᴏ&#B5AC49&lʙ'
+ #      lore:
+ #      - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+ #      - ''
+ #      - '&fᴊᴏɪɴ ᴛᴏ ᴛʜᴇ ᴇxᴘʟᴏʀᴇʀ ᴊᴏʙ'
+ #     - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+ #     - ''
+ #     - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+ #     - '  &8► &#3CA55Cᴇ&#45A65Bx&#4FA659ᴘ&#58A758ʟ&#61A756ᴏ&#6BA855ʀ&#74A853ᴇ &#7DA952ᴄ&#86A950ʜ&#90AA4Fᴜ&#99AA4Dɴ&#A2AB4Cᴄ&#ACAB4Aᴋ&#B5AC49ꜱ'
+ #    - ''
+ #    - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+ #    - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+ #    left_click_commands:
+ #    - '[player] job join explorer'
+ #    - '[close]'
+ #    right_click_commands:
+ #    - '[player] job leave explorer'
+ #    - '[close]'
+###############################################################
+      '3':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzhlMjJmMTk2ZWE5NmVmYzMzZDQ1NWQ5YzIyYTBjZDIwNTUxZjZkM2U3ZmI0ZTc2NmMzY2M0NjhkZjNjOTY4In19fQ==
+        slot: 12
+        display_name: '&#6CC9FF&lʙ&#74CCFD&lᴜ&#7DD0FB&lᴍ&#85D3F9&lʙ&#8DD7F7&lᴇ&#96DAF6&lʀ &#A6E1F2&lᴄ&#AFE5F0&lᴀ&#B7E8EE&lʀ'
+        lore:
+        - '&#474848ᴄ&#434545ᴏ&#3F4142ᴍ&#3B3E3Eᴘ&#373B3Bᴏ&#333838ɴ&#2F3435ᴇ&#2B3132ɴ&#272E2Eᴛ&#232A2Bᴇ&#1F2728:'
+        - ' &#4B5858&l⊳&#4B5858&lᴍ&#4C5A5A&lᴏ&#4C5C5C&lᴛ&#4D5D5E&lᴏ&#4E5F60&lʀ&#4F6163&l: &f&lʟᴇᴍɴ'
+        - ' &#4B5858&l⊳&#4B5858&lʀ&#4D5D5D&lᴏ&#4F6163&lᴛ&#506668&lɪ&#526A6D&l: &F&Lꜱᴛᴏᴄᴋ'
+        - ''
+        - '&#4B5858&lᴘ&#4D5E5F&lʀ&#506466&lᴇ&#526A6D&lᴛ: &a6500$'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴄᴜᴍᴘᴀʀᴀ'
+        left_click_commands:
+        - '[player] bumber'
+        - '[sound] entity_experience_orb_pickup'
+        right_click_commands:
+        - '[console] '
+###############################################################
+      '4':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzhlMjJmMTk2ZWE5NmVmYzMzZDQ1NWQ5YzIyYTBjZDIwNTUxZjZkM2U3ZmI0ZTc2NmMzY2M0NjhkZjNjOTY4In19fQ==
+        slot: 13
+        display_name: '&#6CC9FF&lᴅ&#75CDFD&lɪ&#7FD1FB&lʀ&#88D5F9&lᴛ &#9BDCF4&lʙ&#A4E0F2&lɪ&#AEE4F0&lᴋ&#B7E8EE&lᴇ'
+        lore:
+        - '&#474848ᴄ&#434545ᴏ&#3F4142ᴍ&#3B3E3Eᴘ&#373B3Bᴏ&#333838ɴ&#2F3435ᴇ&#2B3132ɴ&#272E2Eᴛ&#232A2Bᴇ&#1F2728:'
+        - ' &#4B5858&l⊳&#4B5858&lᴍ&#4C5A5A&lᴏ&#4C5C5C&lᴛ&#4D5D5E&lᴏ&#4E5F60&lʀ&#4F6163&l: &f&lʟᴇᴍɴ'
+        - ' &#4B5858&l⊳&#4B5858&lʀ&#4D5D5D&lᴏ&#4F6163&lᴛ&#506668&lɪ&#526A6D&l: &F&Lꜱᴛᴏᴄᴋ'
+        - ''
+        - '&#4B5858&lᴘ&#4D5E5F&lʀ&#506466&lᴇ&#526A6D&lᴛ: &a8000$'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴄᴜᴍᴘᴀʀᴀ'
+        left_click_commands:
+        - '[player] bike'
+        - '[sound] entity_experience_orb_pickup'
+        right_click_commands:
+        - '[console]'
+###############################################################
+ #     '5':
+ #      material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjI2NzJjODdlZWY2ODE4ODI4OTE4ZGQzY2EwMzg1NmNjYjQzNjZlN2M5YWMyNjI0YTk0MmYwZGI3ZTk2YSJ9fX0=
+ #     slot: 14
+ #      display_name: '&#6E48AA&lᴇ&#7249AC&lɴ&#7749AD&lᴄ&#7B4AAF&lʜ&#7F4BB0&lᴀ&#834CB2&lɴ&#884CB3&lᴛ&#8C4DB5&lᴇ&#904EB6&lʀ &#944FB8&lᴊ&#994FB9&lᴏ&#9D50BB&lʙ'
+ #        lore:
+ #        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+ #       - ''
+ #        - '&fᴊᴏɪɴ ᴛᴏ ᴛʜᴇ ᴇɴᴄʜᴀɴᴛᴇʀ ᴊᴏʙ'
+ #        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+ #        - ''
+ #        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+ #        - '  &8► &#6E48AAᴇ&#7249ACɴ&#7749ADᴄ&#7B4AAFʜ&#7F4BB0ᴀ&#834CB2ɴ&#884CB3ᴛ &#8C4DB5ʙ&#904EB6ᴏ&#944FB8ᴏ&#994FB9ᴋ&#9D50BBꜱ'
+ #       - ''
+ #        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+ #        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+ #        left_click_commands:
+ #        - '[player] job join enchanter'
+ #        - '[close]'
+ #        right_click_commands:
+ #        - '[player] job leave enchanter'
+ #        - '[close]'
+###############################################################
+      '6':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzhlMjJmMTk2ZWE5NmVmYzMzZDQ1NWQ5YzIyYTBjZDIwNTUxZjZkM2U3ZmI0ZTc2NmMzY2M0NjhkZjNjOTY4In19fQ==
+        slot: 14
+        display_name: '&#6CC9FF&lᴅ&#74CCFD&lᴜ&#7DD0FB&lɴ&#85D3F9&lᴇ&#8DD7F7&l &#96DAF6&lʙ&#9EDEF4&lᴜ&#A6E1F2&lɢ&#AFE5F0&lɢ&#B7E8EE&lʏ'
+        lore:
+        - '&#474848ᴄ&#434545ᴏ&#3F4142ᴍ&#3B3E3Eᴘ&#373B3Bᴏ&#333838ɴ&#2F3435ᴇ&#2B3132ɴ&#272E2Eᴛ&#232A2Bᴇ&#1F2728:'
+        - ' &#4B5858&l⊳&#4B5858&lᴍ&#4C5A5A&lᴏ&#4C5C5C&lᴛ&#4D5D5E&lᴏ&#4E5F60&lʀ&#4F6163&l: &f&lʟᴇᴍɴ'
+        - ' &#4B5858&l⊳&#4B5858&lʀ&#4D5D5D&lᴏ&#4F6163&lᴛ&#506668&lɪ&#526A6D&l: &F&Lꜱᴛᴏᴄᴋ'
+        - ''
+        - '&#4B5858&lᴘ&#4D5E5F&lʀ&#506466&lᴇ&#526A6D&lᴛ: &a3000$'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴄᴜᴍᴘᴀʀᴀ'
+        left_click_commands:
+        - '[player] dunebuggy'
+        - '[sound] entity_experience_orb_pickup'
+        right_click_commands:
+        - '[console]'
+###############################################################
+      '7':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzhlMjJmMTk2ZWE5NmVmYzMzZDQ1NWQ5YzIyYTBjZDIwNTUxZjZkM2U3ZmI0ZTc2NmMzY2M0NjhkZjNjOTY4In19fQ==
+        slot: 15
+        display_name: '&#6CC9FF&lɢ&#79CEFC&lᴏ &#92D9F7&lᴋ&#9EDEF4&lᴀ&#ABE3F1&lʀ&#B7E8EE&lᴛ'
+        lore:
+        - '&#474848ᴄ&#434545ᴏ&#3F4142ᴍ&#3B3E3Eᴘ&#373B3Bᴏ&#333838ɴ&#2F3435ᴇ&#2B3132ɴ&#272E2Eᴛ&#232A2Bᴇ&#1F2728:'
+        - ' &#4B5858&l⊳&#4B5858&lᴍ&#4C5A5A&lᴏ&#4C5C5C&lᴛ&#4D5D5E&lᴏ&#4E5F60&lʀ&#4F6163&l: &f&lʟᴇᴍɴ'
+        - ' &#4B5858&l⊳&#4B5858&lʀ&#4D5D5D&lᴏ&#4F6163&lᴛ&#506668&lɪ&#526A6D&l: &F&Lꜱᴛᴏᴄᴋ'
+        - ''
+        - '&#4B5858&lᴘ&#4D5E5F&lʀ&#506466&lᴇ&#526A6D&lᴛ: &a6000$'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴄᴜᴍᴘᴀʀᴀ'
+        left_click_commands:
+        - '[player] gokart'
+        - '[sound] entity_experience_orb_pickup'
+        right_click_commands:
+        - '[console]'
+###############################################################
+      '8':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzhlMjJmMTk2ZWE5NmVmYzMzZDQ1NWQ5YzIyYTBjZDIwNTUxZjZkM2U3ZmI0ZTc2NmMzY2M0NjhkZjNjOTY4In19fQ==
+        slot: 20
+        display_name: '&#6CC9FF&lɢ&#75CDFD&lᴏ&#7FD1FB&lʟ&#88D5F9&lꜰ &#9BDCF4&lᴋ&#A4E0F2&lᴀ&#AEE4F0&lʀ&#B7E8EE&lᴛ'
+        lore:
+        - '&#474848ᴄ&#434545ᴏ&#3F4142ᴍ&#3B3E3Eᴘ&#373B3Bᴏ&#333838ɴ&#2F3435ᴇ&#2B3132ɴ&#272E2Eᴛ&#232A2Bᴇ&#1F2728:'
+        - ' &#4B5858&l⊳&#4B5858&lᴍ&#4C5A5A&lᴏ&#4C5C5C&lᴛ&#4D5D5E&lᴏ&#4E5F60&lʀ&#4F6163&l: &f&lʟᴇᴍɴ'
+        - ' &#4B5858&l⊳&#4B5858&lʀ&#4D5D5D&lᴏ&#4F6163&lᴛ&#506668&lɪ&#526A6D&l: &F&Lꜱᴛᴏᴄᴋ'
+        - ''
+        - '&#4B5858&lᴘ&#4D5E5F&lʀ&#506466&lᴇ&#526A6D&lᴛ: &a8000$'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴄᴜᴍᴘᴀʀᴀ'
+        left_click_commands:
+        - '[player] golf'
+        - '[sound] entity_experience_orb_pickup'
+        right_click_commands:
+        - '[console] '
+###############################################################
+      '9':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzhlMjJmMTk2ZWE5NmVmYzMzZDQ1NWQ5YzIyYTBjZDIwNTUxZjZkM2U3ZmI0ZTc2NmMzY2M0NjhkZjNjOTY4In19fQ==
+        slot: 21
+        display_name: '&#6CC9FF&lᴍ&#75CDFD&lɪ&#7FD1FB&lɴ&#88D5F9&lɪ &#9BDCF4&lʙ&#A4E0F2&lɪ&#AEE4F0&lᴋ&#B7E8EE&lᴇ'
+        lore:
+        - '&#474848ᴄ&#434545ᴏ&#3F4142ᴍ&#3B3E3Eᴘ&#373B3Bᴏ&#333838ɴ&#2F3435ᴇ&#2B3132ɴ&#272E2Eᴛ&#232A2Bᴇ&#1F2728:'
+        - ' &#4B5858&l⊳&#4B5858&lᴍ&#4C5A5A&lᴏ&#4C5C5C&lᴛ&#4D5D5E&lᴏ&#4E5F60&lʀ&#4F6163&l: &f&lʟᴇᴍɴ'
+        - ' &#4B5858&l⊳&#4B5858&lʀ&#4D5D5D&lᴏ&#4F6163&lᴛ&#506668&lɪ&#526A6D&l: &F&Lꜱᴛᴏᴄᴋ'
+        - ''
+        - '&#4B5858&lᴘ&#4D5E5F&lʀ&#506466&lᴇ&#526A6D&lᴛ: &a10000$'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴄᴜᴍᴘᴀʀᴀ'
+        left_click_commands:
+        - '[player] minibike'
+        - '[sound] entity_experience_orb_pickup'
+        right_click_commands:
+        - '[console] '
+###############################################################
+      '10':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzhlMjJmMTk2ZWE5NmVmYzMzZDQ1NWQ5YzIyYTBjZDIwNTUxZjZkM2U3ZmI0ZTc2NmMzY2M0NjhkZjNjOTY4In19fQ==
+        slot: 22
+        display_name: '&#6CC9FF&lᴍ&#77CDFD&lɪ&#81D2FA&lɴ&#8CD6F8&lɪ &#A2DFF3&lʙ&#ACE4F0&lᴜ&#B7E8EE&lꜱ'
+        lore:
+        - '&#474848ᴄ&#434545ᴏ&#3F4142ᴍ&#3B3E3Eᴘ&#373B3Bᴏ&#333838ɴ&#2F3435ᴇ&#2B3132ɴ&#272E2Eᴛ&#232A2Bᴇ&#1F2728:'
+        - ' &#4B5858&l⊳&#4B5858&lᴍ&#4C5A5A&lᴏ&#4C5C5C&lᴛ&#4D5D5E&lᴏ&#4E5F60&lʀ&#4F6163&l: &f&lʟᴇᴍɴ'
+        - ' &#4B5858&l⊳&#4B5858&lʀ&#4D5D5D&lᴏ&#4F6163&lᴛ&#506668&lɪ&#526A6D&l: &F&Lꜱᴛᴏᴄᴋ'
+        - ''
+        - '&#4B5858&lᴘ&#4D5E5F&lʀ&#506466&lᴇ&#526A6D&lᴛ: &a12000$'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴄᴜᴍᴘᴀʀᴀ'
+        left_click_commands:
+        - '[player] minibus'
+        - '[sound] entity_experience_orb_pickup'
+        right_click_commands:
+        - '[console] '
+###############################################################
+      '11':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzhlMjJmMTk2ZWE5NmVmYzMzZDQ1NWQ5YzIyYTBjZDIwNTUxZjZkM2U3ZmI0ZTc2NmMzY2M0NjhkZjNjOTY4In19fQ==
+        slot: 23
+        display_name: '&#6CC9FF&lᴍ&#7FD1FB&lᴏ&#92D9F7&lᴘ&#A4E0F2&lᴇ&#B7E8EE&lᴅ'
+        lore:
+        - '&#474848ᴄ&#434545ᴏ&#3F4142ᴍ&#3B3E3Eᴘ&#373B3Bᴏ&#333838ɴ&#2F3435ᴇ&#2B3132ɴ&#272E2Eᴛ&#232A2Bᴇ&#1F2728:'
+        - ' &#4B5858&l⊳&#4B5858&lᴍ&#4C5A5A&lᴏ&#4C5C5C&lᴛ&#4D5D5E&lᴏ&#4E5F60&lʀ&#4F6163&l: &f&lʟᴇᴍɴ'
+        - ' &#4B5858&l⊳&#4B5858&lʀ&#4D5D5D&lᴏ&#4F6163&lᴛ&#506668&lɪ&#526A6D&l: &F&Lꜱᴛᴏᴄᴋ'
+        - ''
+        - '&#4B5858&lᴘ&#4D5E5F&lʀ&#506466&lᴇ&#526A6D&lᴛ: &a14000$'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴄᴜᴍᴘᴀʀᴀ'
+        left_click_commands:
+        - '[player] moped'
+        - '[sound] entity_experience_orb_pickup'
+        right_click_commands:
+        - '[console] '
+###############################################################
+      '12':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzhlMjJmMTk2ZWE5NmVmYzMzZDQ1NWQ5YzIyYTBjZDIwNTUxZjZkM2U3ZmI0ZTc2NmMzY2M0NjhkZjNjOTY4In19fQ==
+        slot: 24
+        display_name: '&#6CC9FF&lᴏ&#74CCFD&lꜰ&#7DD0FB&lꜰ &#8DD7F7&lʀ&#96DAF6&lᴏ&#9EDEF4&lᴀ&#A6E1F2&lᴅ&#AFE5F0&lᴇ&#B7E8EE&lʀ'
+        lore:
+        - '&#474848ᴄ&#434545ᴏ&#3F4142ᴍ&#3B3E3Eᴘ&#373B3Bᴏ&#333838ɴ&#2F3435ᴇ&#2B3132ɴ&#272E2Eᴛ&#232A2Bᴇ&#1F2728:'
+        - ' &#4B5858&l⊳&#4B5858&lᴍ&#4C5A5A&lᴏ&#4C5C5C&lᴛ&#4D5D5E&lᴏ&#4E5F60&lʀ&#4F6163&l: &f&lʟᴇᴍɴ'
+        - ' &#4B5858&l⊳&#4B5858&lʀ&#4D5D5D&lᴏ&#4F6163&lᴛ&#506668&lɪ&#526A6D&l: &F&Lꜱᴛᴏᴄᴋ'
+        - ''
+        - '&#4B5858&lᴘ&#4D5E5F&lʀ&#506466&lᴇ&#526A6D&lᴛ: &a26000$'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴄᴜᴍᴘᴀʀᴀ'
+        left_click_commands:
+        - '[player] roader'
+        - '[sound] entity_experience_orb_pickup'
+        right_click_commands:
+        - '[console] '
+ ###############################################################     
+      GLASS-BLACK:
+        material: orange_stained_glass_pane
+        display_name: '&f'
+        slots:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 16
+        - 17
+        - 18
+        - 19
+        - 25
+        - 26
+        - 27
+        - 28
+        - 29
+        - 30
+        - 31
+        - 32
+        - 33
+        - 34
+        - 35
+        - 36
+        - 37
+        - 38
+        - 39
+        - 41
+        - 42
+        - 43
+        - 44 
+      GLASS-BLACK1:
+        material: orange_stained_glass_pane
+        display_name: '&f'
+        slots:
+        - 19
+        - 25
+        - 35

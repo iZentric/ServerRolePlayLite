@@ -1,0 +1,27 @@
+name: BENCH — masuratori reale pe serverul live (jucator in lume)
+on:
+  push:
+    paths: [ "scripts/bench-live.sh", "deploy/bench.txt", ".github/workflows/bench.yml" ]
+  workflow_dispatch: {}
+
+  workflow_run:
+    workflows: ["APPLY — aduce serverul live la ultimul release si il porneste"]
+    types: [completed]
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  b:
+    runs-on: [self-hosted]
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/bench-live.sh
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

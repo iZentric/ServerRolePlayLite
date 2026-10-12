@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 5.14.150.133
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1723317182938
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1723441759198
+  login: 1723440178500
+money: '5000'
+last-account-name: vasilina
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -35.92500001192093
+  y: 65.0
+  z: 708.7961501083763
+  yaw: -182.6476287841797
+  pitch: 54.297203063964844
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 370.85840678202175
+  y: 224.0
+  z: -537.4490359637128
+  yaw: 267.42926025390625
+  pitch: 4.305832862854004

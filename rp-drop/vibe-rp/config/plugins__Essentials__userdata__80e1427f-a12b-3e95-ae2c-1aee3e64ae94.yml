@@ -1,0 +1,42 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 82.78.173.151
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1724269195259
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1724623251748
+  login: 1724614997474
+  kits:
+    start: 1723180594489
+    marsupia: 1723205484324
+    ballas: 1723448191841
+money: '152000.0'
+last-account-name: ZapZer0
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 329.23022987875345
+  y: 20.0
+  z: 1134.4919374783972
+  yaw: -74.6690673828125
+  pitch: 33.16057586669922
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 259.1031655726122
+  y: 20.0
+  z: 1197.3397201238745
+  yaw: 68.45655822753906
+  pitch: -32.098365783691406

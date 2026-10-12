@@ -1,0 +1,26 @@
+no-permission: '&4&l[!] &cYou do not have permission to do this!'
+only-players: '&4&l[!] &cOnly players can do that!'
+invalid-integer: '&4&l[!] &cYou have entered an invalid integer!'
+invalid-type: '&4&l[!] &cYou have entered an invalid type! &7(''Craft'' or ''Smelt'')'
+invalid-world: '&4&l[!] &cYou have entered an invalid world!'
+crafting:
+  cannot-craft: '&4&l[!] &cYou cannot craft that item.'
+smelting:
+  cannot-smelt: '&4&l[!] &cYou cannot smelt that item.'
+commands:
+  error: '&4&l[!] &cUnknown command; type "&4/disablerecipe help&c" for more information!'
+  help:
+  - '&6&l[!] &eDisableRecipe Help Page:'
+  - '  &e/disablerecipe help &8- &7Shows this help message'
+  - '  &e/disablerecipe reload &8- &7Reload the plugin''s files'
+  - '  &e/disablerecipe additem <craft|smelt> <world> &8- &7Adds the item you''re
+    holding into the config file'
+  reload:
+    success: '&6&l[!] &eYou have successfully reloaded DisableRecipe.'
+  add-item:
+    success: '&6&l[!] &eYou have successfully added &6{item} &eto the &6{type} &esection
+      in the &6{world} &eworld(s)!'
+    already-added: '&4&l[!] &cThat item has already been added to the config.yml,
+      open the config.yml to edit!'
+    holding-air: '&4&l[!] &cYou must be holding the item in your main hand that you
+      would like to add to the config!'

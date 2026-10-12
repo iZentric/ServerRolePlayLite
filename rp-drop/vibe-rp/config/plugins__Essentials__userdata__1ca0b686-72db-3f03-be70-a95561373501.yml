@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 89.39.81.100
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1723036064023
+  login: 1723036011391
+money: '5000'
+last-account-name: Tomaslol10
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 486.6566989961154
+  y: 76.0
+  z: -556.6165561727023
+  yaw: 318.7744140625
+  pitch: 39.897396087646484
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 315.3660778258264
+  y: 64.0
+  z: 34.162979207708226
+  yaw: 267.59686279296875
+  pitch: 23.249969482421875

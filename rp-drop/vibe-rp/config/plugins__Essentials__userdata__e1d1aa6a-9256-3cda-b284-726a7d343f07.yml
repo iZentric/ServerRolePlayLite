@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 91.242.85.61
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1724958347195
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725656559696
+  login: 1725644180096
+money: '158916.0'
+last-account-name: Bogdanian96
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 99637.52145696996
+  y: 16.419999986886978
+  z: 99667.38006710065
+  yaw: -66.818359375
+  pitch: 7.4729108810424805
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 249.49645112178575
+  y: 20.753199980521202
+  z: 1135.3441720323692
+  yaw: -355.87384033203125
+  pitch: -0.8948619365692139

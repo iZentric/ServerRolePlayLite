@@ -1,0 +1,109 @@
+# ===================
+# BettingGames 语言文件 (zh_CN)
+# 本翻译使用 BettingGames 版本: 2.4.1
+# 作者: GuillaumeVDN
+# 语言: 中文简体
+# 翻译: Kevin
+# Discord: Krick#9685
+# 如在翻译上有任何疑虑欢迎私讯 Krick#9685
+# 在插件上有任何疑虑请至 https://discord.com/invite/wSm9A8Y 寻求帮助
+# ===================
+# BettingGames language files (zh_CN)
+# This translation uses BettingGames version: 2.4.1
+# Author: GuillaumeVDN
+# Language: Chinese
+# Translation: Kevin
+# Discord: Krick#9685
+# If you have any doubts about translation, please send a private message Krick#9685
+# If you have any concerns about the plugin, please go to https://discord.com/invite/wSm9A8Y for help
+# ===================
+
+# -------------------- 指令 --------------------
+
+commandDescriptionBettinggames: BettingGames 主要的指令
+commandDescriptionBettingGamesReload: 重新载入 BettingGames
+commandDescriptionBettinggamesMenu: 打开特定选单
+commandDescriptionBettinggamesGameMenu: 打开特定游戏的选单
+commandDescriptionBettinggamesTop: 打开玩家排名选单
+commandDescriptionBettinggamesEdit: 在游戏中编辑配置
+
+commandParameterUsageGUI: gui
+commandParameterUsageGame: game
+commandParameterUsageGames: games
+
+# -------------------- Bet --------------------
+
+messageBetEditNotEnoughCurrency: |
+  &7你的下注金额不能少于: {min}。
+
+messageBetEditTooMuchCurrency: |
+  &7你已经达到下注金额上限: {max}。
+
+messageBetEditCurrencyAdd: |
+  &7你在 &a{game}&7 的下注金额中添加了 &a{amount}&7。
+
+messageBetEditCurrencyWithdraw: |
+  &7你从 &e{game}&7 的下注金额中撤回 &e{amount} &7。
+
+messageBetEditCurrencyEnterChat: |
+  &7请在聊天中输入新的下注金额值。
+
+messageBetEditCurrencyEnterChatInvalidValue: |
+  &c{value} &7是无效值，它必须是整数或零。
+
+messageBetEditNotEnoughItems: |
+  &7你不能下注少于 {min} 项 {plural}。
+
+messageBetEditTooMuchItems: |
+  &7你已达到 {max} 项 {plural} 的下注限额。
+
+messageBetEditDisallowedItem: |
+  &7你不能编辑这个项目。
+
+messageBetEditItemAdd: |
+  &7你在 &a{game}&7 的下注物品中添加了 &a{item} &7。
+
+messageBetEditItemWithdraw: |
+  &7你从 &e{game}&7 的下注物品中撤回了 &e{item} &7。
+
+messageBetEditNothingToWithdraw: |
+  &7没有什么可以撤回的。
+
+# -------------------- 游戏 --------------------
+
+messageGameMaxConcurrentReached: |
+  &7你不能同时游玩 &c{count} &7游戏{plural}。
+
+messageGameAlreadyPlaying: |
+  &7你已经在玩这个游戏了。请等待当前游戏结束。
+
+messageGameCooldownMustWait: |
+  &7请等待 &c{time} &7后再次开始。
+
+messageGameLockBetsOnDrawDelayCantBet: |
+  &7游戏即将开始，你现在无法修改下注金额。
+
+messageGameCrashStopped: |
+  &e你停在 {value}...
+
+descriptionGameCrashBetMultiply: >
+  x{multiplier} : {description}
+
+messageGameVersusChallengeSelf: |
+  &7你无法挑战自己!
+
+messageGameVersusChallengeAccepted: |
+  &a{player} &7接受了你的 &a{game} &7挑战...
+
+nameGameRockPaperScissorsChoiceRock: >
+  石头
+
+nameGameRockPaperScissorsChoicePaper: >
+  布
+
+nameGameRockPaperScissorsChoiceScissors: >
+  剪刀
+
+descriptionGameBarGambleBetMultiply: >
+  x{multiplier} : {description}
+  

@@ -1,0 +1,265 @@
+reload: "&aReincarcare reusita."
+prefix:
+  ticket: "&8[&7&lTICHETE&8] &7» "
+  report: "&8[&7Raporturi&8] &7» "
+  suggestion: "&8[&7Sugestii&8] &7» "
+status:
+  ticket:
+    canceled:
+      name: "Anulat"
+      color: "&8"
+    unavailable:
+      name: "Neevaluat"
+      color: "&7"
+    terrible:
+      name: "Groaznic"
+      color: "&4"
+    bad:
+      name: "Rau"
+      color: "&c"
+    regular:
+      name: "Obisnuit"
+      color: "&e"
+    good:
+      name: "Bun"
+      color: "&a"
+    great:
+      name: "Excelent"
+      color: "&2"
+  report:
+    waiting:
+      name: "In asteptare"
+      color: "&e"
+    accepted:
+      name: "Acceptat"
+      color: "&a"
+    reject:
+      name: "Respins"
+      color: "&c"
+    review:
+      name: "Analiza detaliata"
+      color: "&6"
+permission:
+  no_permission: "&cFara permisiune"
+warnings:
+  only_players: "Doar jucatorii pot utiliza aceasta comanda"
+  invalid_id: "&cFurnizati un ID valid."
+error: "&cCeva neasteptat s-a intamplat, contactati personalul."
+player:
+  not_found: "&cJucatorul este offline sau nu a fost gasit"
+  offline: "&cJucatorul este offline"
+pagination:
+  header: "\n&f&l» &bPagina: &f<self> &bdin &f<total> &f&l«"
+  footer: "<button-back> <button-next>"
+  error:
+    invalid: "&cFurnizati o pagina valida"
+    not_found: "&cPagina nu a fost gasita"
+  buttons:
+    back:
+      label: "&f[&bInapoi&f]"
+      hover: "&fInapoi"
+    next:
+      label: "&f[&bUrmatorul&f]"
+      hover: "&fUrmatorul"
+ticket:
+  use_correct: "&cUtilizare corecta: /ticket <indoiala>"
+  not_found: "&cTichetul nu a fost gasit sau a fost deja raspuns"
+  empty: "&aNiciun tichet gasit"
+  shot: "&cVa rugam sa explicati mai bine indoiala dvs."
+  success: "&aTichetul a fost trimis cu succes"
+  pending: "&bAvem in prezent &f<total> &btichete in asteptare"
+  rating_canceled: "&aEvaluarea a fost anulata cu succes"
+  is_canceled: "&cEvaluarea a fost deja anulata."
+  new_ticket: "&bTichet nou primit <button-list>"
+  cancel_all:
+    empty: "&aNiciun tichet gasit"
+    success: "&cToate tichetele lui <player> au fost anulate."
+  view:
+    - "\n&b&m--------------------------------------------------"
+    - "&eID: &f#<id>"
+    - "&eJucator: &f<player>"
+    - "&eMotiv: &f<ticket>"
+    - "<button-response> <button-teleport>"
+    - "&b&m--------------------------------------------------"
+  view-response:
+    - "\n&b&m--------------------------------------------------"
+    - "&eID: &f#<id>"
+    - "&eJucator: &f<player>"
+    - "&eMotiv: &f<ticket>"
+    - "&eRaspuns: &f<response>"
+    - "&eRaspuns de: &f<respondedBy>"
+    - "&eEvaluare: &f<rating> <button-invalid_rating>"
+    - "&b&m--------------------------------------------------"
+  response:
+    use_correct: "&cUtilizare corecta: /ticket response <id> <raspuns>"
+    success: "&aTichet raspuns cu succes"
+    message:
+      header: "\n&b&m--------------------------------------------------\n"
+      footer: "&b&m--------------------------------------------------\n"
+      content:
+        - "&eMotiv: &f<ticket>"
+        - "&eRaspuns: &f<response>"
+        - "&eRaspuns de: &f<respondedBy>"
+        - "&eEvalueaza raspunsul: <ratings>"
+  rating:
+    use_correct: "&cUtilizare corecta: /ticket rate <id> <evaluare>"
+    invalid: "&cEvaluare invalida."
+    success: "&aTichet evaluat cu succes, multumim :D"
+    not_author: "&cNu puteti evalua acest tichet"
+    rated: "&cAti evaluat deja acest tichet"
+    announcement: "&a<player> a primit evaluarea <rating>"
+  teleport:
+    success: "&aTeleportare reusita"
+  help:
+    - "\n&b&m--------------------------------------------------"
+    - "&e/ticket &7- &fTrimite o indoiala"
+    - "&e/ticket list &7- &fListeaza tichetele in asteptare"
+    - "&e/ticket response &7- &fRaspunde unui tichet"
+    - "&e/ticket view &7- &fAfiseaza detalii despre un tichet"
+    - "&e/ticket teleport &7- &fTeleporteaza-te la solicitantul tichetului"
+    - "&e/ticket rate &7- &fEvalueaza un tichet"
+    - "&b&m--------------------------------------------------"
+  list: "&eJucator: &f<player> &7| &eMotiv: &f<ticket-shot> <button-view> <button-teleport>"
+  stats:
+    list: "&ePersonal: &f<player> &7| &eMedie: &f<medie> <button-stats>"
+    detail:
+      - "&fStatistici pentru: &e<player>"
+      - " &eMedie: &f<medie>"
+      - " &eTotal: &f<total>"
+      - " &eTotal evaluari: &f<total-rate>"
+      - " &eTotal neevaluate: &f<total-pending>"
+      - "&fDetalii:"
+      - " <ratings>"
+  buttons:
+    list:
+      label: "[Apasa pentru lista]"
+      hover: "&aLista"
+    view:
+      label: "&a[Vizualizare]"
+      hover: "&aVizualizare"
+    teleport:
+      label: "&a[Teleport]"
+      hover: "&aTeleport"
+    response:
+      label: "&a[Raspuns]"
+      hover: "&aRaspuns"
+    stats:
+      label: "&a[Detalii]"
+      hover: "&aDetalii despre &f<player>"
+    invalid_rating:
+      label: "&c[Evaluare invalida]"
+      hover: "&cAnulare evaluare"
+report:
+  use_correct: "&cUtilizare corecta: /report <jucator> [dovada] [motiv]"
+  not_found: "&cRaportul nu a fost gasit sau a fost deja verificat"
+  empty: "&aNiciun raport gasit :C"
+  not_yourself: "&cNu va puteti raporta pe voi insiva"
+  success: "&aJucator raportat cu succes, multumim"
+  pending: "&bAvem in prezent &f<total> &brapoarte in asteptare"
+  new_report: "&bRaport nou primit <button-list>"
+  no_reason: "&fNespecificat"
+  status:
+    invalid: "&cStatus invalid."
+    change: "&aStatusul raportului a fost schimbat in: <status>"
+    change_to: "&fSchimba statusul in: "
+  view:
+    - "\n&b&m--------------------------------------------------"
+    - "&eID: &f#<id>"
+    - "&eJucator: &f<player>"
+    - "&eRaportat: &f<reported>"
+    - "&eMotiv: &f<motiv>"
+    - "&eDovada: &f<dovada>"
+    - "&eStatus: <status>"
+    - "<button-teleport>"
+    - "&b&m--------------------------------------------------"
+  view-response:
+    - "\n&b&m--------------------------------------------------"
+    - "&eID: &f#<id>"
+    - "&eJucator: &f<player>"
+    - "&eRaportat: &f<reported>"
+    - "&eMotiv: &f<motiv>"
+    - "&eDovada: &f<dovada>"
+    - "&eStatus: <status>"
+    - "&b&m--------------------------------------------------"
+  help:
+    - "\n&b&m--------------------------------------------------"
+    - "&e/report &7- &fRaporteaza un jucator"
+    - "&e/report list &7- &fLista rapoartelor in asteptare"
+    - "&e/report tp &7- &fTeleporteaza-te la un jucator raportat"
+    - "&e/report view &7- &fAfiseaza detalii despre un raport"
+    - "&e/report verify &7- &fMarcheaza un raport ca verificat"
+    - "&b&m--------------------------------------------------"
+  list: "&eRaportat: &f<reported> &7| &eMotiv: &f<motiv-shot> <button-view> <button-teleport>"
+  buttons:
+    list:
+      label: "[Apasa pentru lista]"
+      hover: "&aLista"
+    view:
+      label: "&a[Vizualizare]"
+      hover: "&aVizualizare"
+    teleport:
+      label: "&a[Teleport]"
+      hover: "&aTeleport"
+suggestion:
+  use_correct: "&cUtilizare corecta: /suggestion <sugestie>"
+  not_found: "&cSugestia nu a fost gasita sau a fost deja raspunsa"
+  empty: "&aNicio sugestie gasita :C"
+  shot: "&cVa rugam sa explicati mai bine sugestia dvs."
+  success: "&aSugestia a fost trimisa cu succes"
+  pending: "&bAvem in prezent &f<total> &bsugestii in asteptare pentru raspuns."
+  new_suggestion: "&bSugestie noua primita <button-list>"
+  view:
+    - "\n&b&m--------------------------------------------------"
+    - "&eID: &f#<id>"
+    - "&eJucator: &f<player>"
+    - "&eSugestie: &f<sugestie>"
+    - "<button-response>"
+    - "&b&m--------------------------------------------------\n"
+  view-response:
+    - "\n&b&m--------------------------------------------------"
+    - "&eID: &f#<id>"
+    - "&eJucator: &f<player>"
+    - "&eSugestie: &f<sugestie>"
+    - "&eRaspuns: &f<response>"
+    - "&eRaspuns de: &f<respondedBy>"
+    - "&b&m--------------------------------------------------\n"
+  response:
+    use_correct: "&cUtilizare corecta: /suggestion response <id> <response>"
+    success: "&aSugestie raspunsa cu succes"
+    message:
+      header: "\n&b&m--------------------------------------------------\n"
+      footer: "&b&m--------------------------------------------------\n"
+      content:
+        - "&eJucator: &f<player>"
+        - "&eSugestie: &f<sugestie>"
+        - "&eRaspuns: &f<response>"
+        - "&eRaspuns de: &f<respondedBy>"
+  help:
+    - "\n&b&m--------------------------------------------------"
+    - "&e/suggestion &7- &fTrimite o sugestie"
+    - "&e/suggestion list &7- &fLista sugestiilor in asteptare"
+    - "&e/suggestion response &7- &fRaspunde la sugestii"
+    - "&e/suggestion view &7- &fAfiseaza detalii despre o sugestie"
+    - "&b&m--------------------------------------------------"
+  list: "\n&eJucator: &f<player> &7| &eSugestie: &f<sugestie-shot> <button-view>"
+  buttons:
+    list:
+      label: "[Apasa pentru lista]"
+      hover: "&aLista"
+    view:
+      label: "&a[Vizualizare]"
+      hover: "&aVizualizare"
+    response:
+      label: "&a[Raspuns]"
+      hover: "&aRaspuns"
+support-announcement:
+  cooldown:
+    message: "&cAsteptati pentru perioada de asteptare pentru a solicita din nou ajutor."
+  message:
+    - "\n\n&c&m=================================================="
+    - "&fStafferul <player> este disponibil pentru ajutor."
+    - "<button-help>"
+    - "&c&m==================================================\n"
+  button-help:
+    label: "&e[Cere ajutor]"
+    hover: "&eCereti ajutorul lui &f<player>"

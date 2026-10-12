@@ -1,0 +1,23 @@
+
+["Config for the EyeMod"]
+	#Max explosion size
+	max_explode_size = 16
+	#The range of the router, use 0 for unlimited range
+	router_range = 512
+	#If a player is allowed to set a home location, used for AppSpawn
+	allow_home = false
+	#Currency item used to transfer to money
+	currency = "minecraft:emerald"
+	#A list of location in the server, used for AppSpawn, use: ["X|Y|Z|dimension|name",etc], for example: ["0|62|0|minecraft:overworld|Spawn","0|50|0|minecraft:nether|Nether spawn"]
+	spawn_list = []
+	#Battery drain of the EyePhone
+	battery_minutes = 120
+	#Price of the apps, example: ["eyemod:store=0",etc]
+	app_price = ["modid:appname=10"]
+	#Access level of the apps (0 = everyone, 1 = OP only, 2 = Noone), example: ["eyemod:tnt=0",etc]
+	app_access = ["modid:appname=1"]
+	#Allow the use of OP apps
+	allow_op_apps = true
+	#Should be considered OP, but aren't OP ingame, use: ["NAME","NAME2",etc]
+	eye_ops = []
+

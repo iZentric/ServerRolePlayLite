@@ -1,0 +1,49 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 128.127.116.64
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1725346183002
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725366239909
+  login: 1725361293718
+  kits:
+    start: 1723440729486
+money: '4961.0'
+last-account-name: Ale_Kiss01
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 399.5565482981965
+  y: 21.0
+  z: 1232.8405072335458
+  yaw: -302.0345458984375
+  pitch: 80.21163940429688
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 99635.14887090995
+  y: 16.0
+  z: 99669.68495211417
+  yaw: 51.670654296875
+  pitch: -4.200003147125244
+homes:
+  home:
+    world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+    world-name: GTAV2
+    x: -665.3487386415798
+    y: 65.0
+    z: 95.74992666857628
+    yaw: 358.37786865234375
+    pitch: 62.54999542236328

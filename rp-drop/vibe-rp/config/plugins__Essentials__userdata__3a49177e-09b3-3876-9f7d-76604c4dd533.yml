@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 79.114.163.162
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725624704867
+  login: 1725624642031
+money: '139961.0'
+last-account-name: Tomi
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 751.5963807087114
+  y: 21.0
+  z: 920.4694373642037
+  yaw: 1.241058349609375
+  pitch: 16.90785026550293
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 99634.49421043589
+  y: 16.0
+  z: 99671.68680325315
+  yaw: 128.1895294189453
+  pitch: 2.99999737739563

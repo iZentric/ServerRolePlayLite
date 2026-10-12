@@ -1,0 +1,80 @@
+################################################
+#                                              #	
+#               Plugin ChatClear               #
+#              Configuration File              #
+#          Plugin created by xtomyserrax       #
+#                                              #
+################################################
+
+# NOTE BEFORE YOU EDIT: Try to edit the config.yml when the server is closed. Always make a BACKUP of the config.yml preventing you lose your configuration!
+
+#Here you can set what the language of the plugin is. For default it will be english. Right now, there is available english and spanish, if you want to help with another language, please contact me!
+#Put english for English language or spanish for Spanish language!
+Language: english
+
+Enable:
+# This will enable/disable with a true or false some systems.
+  ChatMuteTalkNotification: true
+#Enable or Disable the notification of why you cant talk (Chat muted). To be able to bypass this you need this permission: clearchat.talk
+  ChatMuteDisableCommands: false
+#Enable or Disable the possibility of sending commands while the chat is muted (If you have clearchat.talk you can send them).
+  ChatMuteJoinNotification: true
+#Enable or Disable the notification telling players that join that the chat is muted.
+  ClearchatNotification: true
+#Enable or Disable the notification of who has cleared the server's chat.
+  PlayerLeaveClearMessages: false
+#Enable or Disable this system which will clear the player's chat when he/she leaves the server (so when the player joins again doesnt have those old messages). You can add this bypass permission if you dont want to have it: - clearchat.leaveclearbypass .
+  Metrics: true
+#Enable or Disable the metrics system. It collects data for me to see how much servers uses the plugin and things like the minecraft version!
+  Updater: true
+#Enable or Disable the detection of new updates.
+
+
+ClearChatMessagesNumber: 100
+#Set the number of blank messages that will be sent for clearing chat. This is useful if people have mods that extends the size of chat. 100 is for regular Minecraft clients.
+
+
+#ChatmuteManagement
+#This commands will be allowed to use while the chat is muted, commands which arent in this list, wont be allowed to use!
+#Remember to allow in the Enable section the ChatMuteDisableCommands in order to disable commands while chat is muted!
+ChatmuteAllowedCommands:
+- helpop
+- report
+- rules
+- staff
+- login
+- l
+- register
+- home
+- sethome
+- warp
+- spawn
+- hub
+- lobby
+- msg
+- r
+- fly
+- god
+- feed
+- heal
+- kit
+- kits
+- jump
+- seen
+- list
+
+BarAPIEnable:
+# This will enable/disable with a true or false the BarAPI system in commands!
+# NOTE: For making this feature work you have to download BarAPI plugin made by confuser ('http://dev.bukkit.org/bukkit-plugins/bar-api/'). If you dont have it, it just wont work.
+# If you dont have the plugin, it doesnt matter if you set them to true or false.
+  ChatClear: false
+#Enable or Disable BarAPI system for clearing chat.
+  ChatClearOwn: false
+#Enable or Disable BarAPI system for clearing your own chat.
+  ChatEnable: false
+#Enable or Disable BarAPI system for chat enable.
+  ChatMute: false
+#Enable or Disable BarAPI system for chat mute.
+
+#Do not touch this.
+FileVersion: '3.7.0'

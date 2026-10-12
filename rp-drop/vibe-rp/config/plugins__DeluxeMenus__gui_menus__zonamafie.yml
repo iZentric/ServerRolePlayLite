@@ -1,0 +1,86 @@
+    menu_title: '           &#b77d0e&lV&#b97e0e&li&#bb800e&lb&#bd810f&le &#bf830f&lM&#c1840f&la&#c4860f&lf&#c6870f&li&#c8880f&li &#ca8a10&lZ&#cc8b10&lo&#ce8d10&ln&#d08e10&le '
+    open_command:
+    - zonamafii
+    - zonamafii1
+    register_command: true
+    size: 35
+    items:
+#############################################################################################
+      'close':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTJkN2E3NTFlYjA3MWUwOGRiYmM5NWJjNWQ5ZDY2ZTVmNTFkYzY3MTI2NDBhZDJkZmEwM2RlZmJiNjhhN2YzYSJ9fX0=
+        slot: 31
+        display_name: '&#790303&lɪ&#840303&lɴ&#8f0303&lᴄ&#9b0202&lʜ&#a60202&lɪ&#b10202&lᴅ&#bc0202&lᴇ &#c70101&lᴍ&#d20101&lᴇ&#de0101&lɴ&#e90101&lɪ&#f40000&lᴜ&#ff0000&lʟ'
+        lore:
+        - ''
+        - '&fClick aici pentru'
+        - '&finchide acest meniu!'
+        left_click_commands:
+        - '[close]'
+        right_click_commands:
+        - '[close]'
+###############################################################
+      '1':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTQ2MGJkYmM2MDcyNzU0ZDUzN2UwM2E4ZjA1NGNhOWMxYzNlOTAzY2UxNWViMDAzNTMyNzMyMjE5ZmNiOGFkZCJ9fX0=
+        slot: 11
+        display_name: '&#8f3bd0&lZ&#8f3bd0&lo&#8f3bd0&ln&#8f3bd0&la &#8f3bd0&lM&#8f3bd0&la&#8f3bd0&lf&#8f3bd0&li&#8f3bd0&li'
+        lore:
+        - ''
+        - '&8Click pentru a te duce la casele mafiilor.'
+        - ''
+        left_click_commands:
+        - '[player] warp casamafiilor'
+        - '[close] '
+###############################################################
+ #     '2':
+ #      material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGFhNmMyZDFiZDgwZmRkNmE2MzJjYzdjYWZkMjVmMDllZjIwM2VlYzJhNjkzYjdjYmEwM2QxNzZiMmNjMDcxYiJ9fX0=
+ #      slot: 11
+ #      display_name: '&#3CA55C&lᴇ&#48A65A&lx&#54A658&lᴘ&#60A756&lʟ&#6CA854&lᴏ&#79A953&lʀ&#85A951&lᴇ&#91AA4F&lʀ &#9DAB4D&lᴊ&#A9AB4B&lᴏ&#B5AC49&lʙ'
+ #      lore:
+ #      - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+ #      - ''
+ #      - '&fᴊᴏɪɴ ᴛᴏ ᴛʜᴇ ᴇxᴘʟᴏʀᴇʀ ᴊᴏʙ'
+ #     - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+ #     - ''
+ #     - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+ #     - '  &8► &#3CA55Cᴇ&#45A65Bx&#4FA659ᴘ&#58A758ʟ&#61A756ᴏ&#6BA855ʀ&#74A853ᴇ &#7DA952ᴄ&#86A950ʜ&#90AA4Fᴜ&#99AA4Dɴ&#A2AB4Cᴄ&#ACAB4Aᴋ&#B5AC49ꜱ'
+ #    - ''
+ #    - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+ #    - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+ #    left_click_commands:
+ #    - '[player] job join explorer'
+ #    - '[close]'
+ #    right_click_commands:
+ #    - '[player] job leave explorer'
+ #    - '[close]'
+###############################################################
+      '3':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzI5YWJmMWI5N2FmOGFlNmY4Yjc3YWVjN2QyNjU1N2Q4MWJhNGVlMjUzZmM2MmViNDdhYTVlOTk3ZWE0In19fQ==
+        slot: 13
+        display_name: '&#8f3bd0&lC&#8f3bd0&lA&#8f3bd0&lY&#8f3bd0&lO'
+        lore:
+        - ''
+        - '&8Click pentru a te duce la cayo.'
+        - ''
+        left_click_commands:
+        - '[player] warp zonamafie'
+        - '[close] '
+###############################################################
+      '4':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODJmMTkxYTIyNjM5MzI1MjI2MmMyMmExNTQxY2FlNzkzNDlkMDExMmQzOTlkNmVjZjczOTU5MWQzZmM5NDdmIn19fQ==
+        slot: 15
+        display_name: '&#8f3bd0&lF&#8f3bd0&lA&#8f3bd0&lB&#8f3bd0&lR&#8f3bd0&lI&#8f3bd0&lC&#8f3bd0&lA &#8f3bd0&lV&#8f3bd0&lE&#8f3bd0&lC&#8f3bd0&lH&#8f3bd0&lE'
+        lore:
+        - ''
+        - '&8Click pentru a te duce la fabrica vibe.'
+        - ''
+        left_click_commands:
+        - '[player] warp fabricaveche'
+        - '[close] '
+
+      "vibe filler":
+       material: yellow_stained_glass_pane
+       data: 15
+       slots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,12,14,16-29,30,32-35]
+       display_name: " "
+###############################################################
+###############################################################

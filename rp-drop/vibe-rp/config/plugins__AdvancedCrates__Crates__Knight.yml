@@ -1,0 +1,91 @@
+Animation: Knight
+#It is recommended to copy the crate file of which crate you wish to edit, as some animations have unique to them configurations
+Proximity_Distance: 8 #How close to the crate does the crate disappear for the user(not including the crate opener)
+AnimationVisibilityOption: "Proximity"
+# What should be the settings for animation see-ability?
+# "Individual" - Only the opener of the crate sees the animation.
+# "All" - Everyone sees the animation.
+# "Proximity" - if a player comes too close to the crate (distance set with Proximity_Distance configuration) the animation disappears (except for the opener of the crate),
+# Otherwise everyone can see the animation. Useful so multiple people can open crates at the same time and still see what other players are receiving
+#OnlyPlaceableAtLocations: #This makes it so users can't place down crates anywhere expect in these coordinates
+#  - "-270,78,-2"
+Material: ENDER_CHEST
+OnlyPlaceable: true
+RewardsDontRepeat: false
+Enchanted: false
+Name: §a§l*§2§l*§a§l* §a§lKnight §2§lAnimation §a§l*§2§l*§a§l*
+RewardHologram:
+- '&a&l*&2&l*&a&l* &a&l{player_name}''''s §a§lKnight §2§lAnimation showcase &a&l*&2&l*&a&l*'
+- ''
+- '&7Purchased at: &astore.example.com'
+Size: 1
+HideKnightSwords: false
+Lores:
+- ''
+KeyCrate:
+  Require: true
+  Material: TRIPWIRE_HOOK
+  MatchName: true
+  MatchLore: true
+  MatchEnchants: false
+  MatchNBT: false #on crate opening check if the players key has the proper nbt tags as the configured key
+  Name: §a§lKnight §2§lAnimation Key
+  Enchanted: true
+  Lores:
+  - ''
+  - §7Opens a Round Crate
+  - §7Open crates at /warp crate
+ClosedCrateText:
+- '&7&l&d&lKnight &f&lAnimation'
+- '&7(&dRight-click &fto open crate&7)'
+- '&7(&dLeft-click &fto preview rewards&7)'
+ParticleAnimations:
+  '0':
+    type: ENCHANTMENT_TABLE
+    range-x: 1.0
+    range-y: 1.0
+    range-z: 1.0
+    center-x: 0.0
+    center-y: 0.0
+    center-z: 0.0
+    speed: 20.0
+    amount: 16
+    animation: CIRCLE
+  '3':
+    type: FLAME
+    range-x: 1.0
+    range-y: -1.0
+    range-z: 0.0
+    speed: 0.0
+    amount: 1
+    animation: TILTED_RINGS
+    center-x: 0
+    center-y: 0
+    center-z: 0
+Prizes:
+  '10000':
+    Material: DIAMOND
+    Glow: true
+    Name: '&a* &f1x &b&lGrinder GKIT &7Voucher'
+    GiveConfiguratedItem: true
+    PreviewName: '&a&l$10,000 Balance (x1)'
+    PreviewLores:
+    - '&7Receive $10,000 right into your account'
+    - ''
+    - '&7Chance: 8.33%'
+    Chance: 8.33
+    Amount: 1
+    ItemFlags:
+    - HIDE_ENCHANTS
+    LinkedRewards: []
+    Commands: []
+    Damage: 0
+Glow: false
+Amount: 1
+MessagesToPlayer: []
+Final_Message: []
+FinalMessageToOpener: []
+PrizeSize: 0
+CommandOnCratePlace: []
+Damage: 0
+NBTtags: ''

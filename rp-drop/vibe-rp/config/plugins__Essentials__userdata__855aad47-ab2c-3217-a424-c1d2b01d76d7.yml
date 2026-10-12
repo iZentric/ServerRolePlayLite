@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 82.77.127.82
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1723107666184
+  login: 1723106407414
+money: '5000'
+last-account-name: Alessio9696
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 465.4471549537731
+  y: 69.0
+  z: -243.55957233601254
+  yaw: 115.41947174072266
+  pitch: 13.799997329711914
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -554.6560928331347
+  y: 79.0
+  z: -666.1899999284744
+  yaw: -165.1137237548828
+  pitch: -41.10771179199219

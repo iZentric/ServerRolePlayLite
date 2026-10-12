@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 79.112.101.244
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1723128402729
+  login: 1723127959108
+money: '5000'
+last-account-name: Andre_Gaming
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -437.30000001192093
+  y: 65.5
+  z: 51.69999998807907
+  yaw: -266.2280578613281
+  pitch: 14.849796295166016
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -229.4818616230225
+  y: 82.0
+  z: -750.7670596701374
+  yaw: 329.7776184082031
+  pitch: 3.749708652496338

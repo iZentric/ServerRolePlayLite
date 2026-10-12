@@ -1,0 +1,55 @@
+#Messages Config - Translate
+#Advices:
+#1. Dont remove the " ' ' "
+#2. Translate the text which its between the " ' ' "
+#3. When you have cant its the message for people which cant use that command.
+#4. For now, you cant change the color of the message when you translate.
+#5. When it is something for console, dont add colors. Just translate the message without adding " & ".
+
+#Update Message
+newupdate-message: '&a[EasyClearChat] New update found. Version &2%new_version% &aand you are in version %current_version%! Download it in:'
+failedtocheckupdate-message: '&c[EasyClearChat] Failed to check for an update on spigot!'
+didntfoundanupdate-message: '&b[EasyClearChat] Didnt find a new update on spigot. You are up to date!'
+
+#NoPermission Message
+nopermission-message: '&cYou dont have permission to perform this command.'
+
+#InstanceOfPlayer Message
+instanceofplayer-message: '&4You must be a player to perform this command.'
+
+#CantFindPlayer Message
+cantfindplayer-message: '&cCould not find player: &4%target%&c.'
+
+#EasyClearChat Help Messages
+clearchatplugin-helpmessage: 'Shows this help page!'
+clearchatpluginreload-helpmessage: 'Reload the plugin!'
+clearchatplugininfo-helpmessage: 'Get some plugin information!'
+clearchat-helpmessage: 'Clear the chat!'
+playerclearchat-helpmessage: 'Clear someones chat!'
+clearmychat-helpmessage: 'Clear your own chat!'
+chatenable-helpmessage: 'Enable the chat!'
+chatmute-helpmessage: 'Mute the chat!'
+
+#Commands Messages
+chatclearedby-message: '&cChat has been cleared by &4%sender%&c!'
+chatclearedbypass-message: '&cChat has been cleared by &4%sender% &cbut you had permission to bypass the clear!'
+clearownchat-message: '&cYou have cleared your own chat.'
+clearchathelp-message: '&cNot enough arguments! Type: /playerclearchat [player]'
+chatmutedby-message: '&cChat has been muted by: &4%sender%&c.'
+chatenabledby-message: '&cChat has been enabled by &4%sender%&c.'
+clearsomeoneschat-message: '&aYou have cleared &2%target% &achat!'
+clearedyourchat-message: '&4%sender% &chas cleared your chat!'
+chatcurrentlymuted-message: '&cYou cant speak right now. Chat is currently muted!'
+cantsendcommandscm-message: '&cYou cant send any commands while the chat is muted!'
+chatalreadymuted-message: '&cYou cant mute the chat because it has been already muted. You can enable it with /chatenable'
+chatalreadyenabled-message: '&cYou cant enable the chat because it has been already enabled. You can mute it with /chatmute'
+joinservermutedchat: '&cWelcome to the server. You wont be able to talk because the chat has been muted.'
+joinservermutedchatstaff: '&cWelcome to the server. The chat has been muted but you have permission to talk.'
+
+#BarAPI Messages
+clearchat-barapimessage: '&cChat has been cleared by:'
+clearownchat-barapimessage: '&cYou have cleared your own chat!'
+chatenabled-barapimessage: '&cChat has been enabled by:'
+chatmuted-barapimessage: '&cChat has been muted by:'
+clearsomeoneschat-barapimessage: '&cYou have clared his chat'
+

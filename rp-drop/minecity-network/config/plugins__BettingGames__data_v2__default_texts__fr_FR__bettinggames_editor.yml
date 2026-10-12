@@ -1,0 +1,328 @@
+# -------------------- GUI --------------------
+
+descriptionGuiItemGUIGUI: |
+  &7Le GUI à lier avec cet item
+
+descriptionGuiItemGUIRankingGames: |
+  &7Les jeux à prendre en considération pour ce classement
+
+descriptionGuiItemGameGame: |
+  &7Le jeu à lier avec cet item
+
+descriptionGuiItemToggleSettingSetting: |
+  &7Le paramètre à modifier
+
+descriptionGuiItemToggleSettingIconOn: |
+  &7L'icône à afficher lorsque ce paramètre est activé
+
+descriptionGuiItemToggleSettingIconOff: |
+  &7L'icône à afficher lorsque ce paramètre est désactivé
+
+editorMainTitle: BettingGames
+
+editorGamesTitle: Jeux
+editorGamesIconName: |
+  &aJeux
+
+editorGUIsTitle: Menus
+editorGUIsIconName: |
+  &aMenus
+
+editorGlobalGUIItemsTitle: Items de menus globaux
+editorGlobalGUIItemsIconName: |
+  &aItems de menus globaux
+
+# -------------------- Game --------------------
+
+descriptionGameType: |
+  &7Le type de jeu
+
+descriptionGameName: |
+  &7Le nom du jeu
+
+descriptionGameParticipationPermission: |
+  &7La permission requise pour jouer
+
+descriptionGameParticipationCooldown: |
+  &7Le temps à attendre avant de participer à une nouvelle partie après que la précédente se soit terminée
+
+descriptionGameAllowBetCurrencies: |
+  &7Pour autoriser à miser des devises
+  &7Laisser vide pour tout
+
+descriptionGameAllowBetItems: |
+  &7Pour autoriser à miser des items
+
+descriptionGameMinBetCurrencies: |
+  &7Pour demander un montant minimum d'une certaine devise
+
+descriptionGameMaxBetCurrencies: |
+  &7Pour restreindre le montant d'une certaine devise
+
+descriptionGameMinBetItems: |
+  &7Pour demander un montant minimum d'items
+
+descriptionGameMaxBetItems: |
+  &7Pour restreindre le montant d'items
+
+descriptionGameOnWinBehavior: |
+  &7Le comportement à adopter pour un joueur lorsqu'il gagne
+
+descriptionGameOnLoseBehavior: |
+  &7Le comportement à adopter pour un joueur lorsqu'il perd
+
+descriptionGameOnDrawBehavior: |
+  &7Le comportement à adopter pour un joueur lorsque la partie est une égalité
+
+descriptionGameHubGUICommands: |
+  &7Les commandes personnalisées pour ouvrir le menu de hub de ce jeu
+
+descriptionGameHubGUI: |
+  &7Le menu de hub de ce jeu
+
+descriptionGameActiveGUI: |
+  &7Le menu actif d'une partie de ce jeu
+
+descriptionGameActiveGUIStopCloseDelay: |
+  &7Le temps avant la fermeture automatique du GUI d'une partie terminée
+
+descriptionGameAnimationDuration: |
+  &7La durée de l'animation
+
+descriptionGameAnimationTicksStart: |
+  &7Les ticks de délai initiaux pour l'animation
+
+descriptionGameAnimationTicksMin: |
+  &7Le nombre minimum de ticks pour cette animation
+  &7Au-delà de ce délai, la formule ne sera plus appliquée et les ticks resteront les mêmes
+
+descriptionGameAnimationTicksMax: |
+  &7Le nombre maximum de ticks pour cette animation
+  &7Au-delà de ce délai, la formule ne sera plus appliquée et les ticks resteront les mêmes
+
+descriptionGameAnimationTicksFormulaStep: |
+  &7La formule pour calculer les nouveaux ticks d'animation lorsque les ticks actuels sont passés
+
+descriptionGameAnimationSound: |
+  &7Le son à jouer lorsque les ticks actuels sont passés
+
+descriptionGameDrawPlayers: |
+  &7Le nombre de joueurs requis pour commencer une partie
+
+descriptionGameDrawDelay: |
+  &7Le temps à attendre avant de commencer une partie lorsque les joueurs requis sont présents
+
+descriptionGameDrawMaxConcurrentGames: |
+  &7Le nombre maximum de parties actives pour ce jeu
+
+descriptionGameDrawHubGUIItemBet: |
+  &7L'item à cliquer pour miser
+
+descriptionGameDrawHubGUIItemDraw: |
+  &7L'item représentant le statut actuel, en attente
+
+descriptionGameDrawHubGUIItemDrawAwaitingGames: |
+  &7L'item représentant le statut actuel, en attente que des jeux se terminent
+
+descriptionGameDrawHubGUIItemDrawAwaitingPlayers: |
+  &7L'item représentant le statut actuel, en attente de joueurs
+
+descriptionGameDrawHubGUIItemDrawCountdown: |
+  &7L'item représentant le statut actuel, lorsque le compte à rebours est démarré
+
+descriptionGameDrawHubGUIItemPlayer: |
+  &7L'item représentant un joueur qui a misé
+
+descriptionGameCrashChances: |
+  &7Les chances pour calculer lorsque la value crashera
+
+descriptionGameCrashChanceChance: |
+  &7Le pourcentage de chance pour que la valuer soit entre &6min &7et &6max
+
+descriptionGameCrashChanceMin: |
+  &7La valeur minimum
+
+descriptionGameCrashChanceMax: |
+  &7La valeur maximum
+
+descriptionGameCrashValueStart: |
+  &7La valeur de départ
+
+descriptionGameCrashValueFormulaStep: |
+  &7La formule à appliquer sur la valeur, chaque tick
+
+descriptionGameCrashActiveGUIItemValue: |
+  &7L'item représentant la valeur actuelle
+
+descriptionGameCrashActiveGUIItemPlayerActive: |
+  &7L'item représentant un joueur actif
+
+descriptionGameCrashActiveGUIItemPlayerStopped: |
+  &7L'item représentant un joueur qui s'est arrêté
+
+descriptionGameJackpotActiveGUIPlayerSlots: |
+  &7Les slots dans lesquels afficher les joueurs
+
+descriptionGameJackpotActiveGUIActivePlayerSlot: |
+  &7Le slot représentant le joueur actuellement gagnant
+
+descriptionGameJackpotActiveGUIItemPlayer: |
+  &7L'item représentant un joueur actif
+
+descriptionGameRouletteChoices: |
+  &7Les choix de couleurs disponibles
+
+descriptionGameRouletteChoiceName: |
+  &7Le nom de ce choix
+
+descriptionGameRouletteChoiceChance: |
+  &7Le pourcentage de chance pour que ce choix soit gagnant
+
+descriptionGameRouletteChoiceMultiplier: |
+  &7Le multiplicateur à appliquer sur la mise du joueur si ce choix est gagnant
+
+descriptionGameRouletteChoiceIcon: |
+  &7L'item représentant ce choix
+
+descriptionGameRouletteChoiceIconBetInactive: |
+  &7L'item représentant ce choix dans le menu de sélection de mise, lorsqu'il n'y a pas encore de mise
+
+descriptionGameRouletteChoiceIconBetActive: |
+  &7L'item représentant ce choix dans le menu de sélection de mise, lorsqu'il y a déjà une mise
+
+descriptionGameRouletteActiveGUIChoiceSlots: |
+  &7Les slots dans lesquels afficher les choix
+
+descriptionGameRouletteActiveGUIActiveChoiceSlot: |
+  &7Le slot représentant le choix actuellement gagnant
+
+descriptionGameRouletteBetChoiceGUI: |
+  &7Le menu de mise pour les choix
+
+descriptionGameVersusHubGUIItemBet: |
+  &7L'item à cliquer pour miser
+
+descriptionGameVersusHubGUIItemPlayer: |
+  &7L'item représentant un joueur qui a misé
+
+descriptionGameCoinFlipActiveGUIPlayerSlots: |
+  &7Les slots dans lesquels afficher les joueurs
+
+descriptionGameCoinFlipActiveGUIActivePlayerSlot: |
+  &7Le slot représentant le joueur actuellement gagnant
+
+descriptionGameCoinFlipActiveGUIItemPlayer: |
+  &7L'item représentant un joueur actif
+
+descriptionGameRockPaperScissorsRounds: |
+  &7Le nombre de manches dans une partie
+
+descriptionGameRockPaperScissorsRoundsMax: |
+  &7Le nombre maximum de manches dans une partie, dans le cas d'égalités consécutives
+
+descriptionGameRockPaperScissorsChoiceDelay: |
+  &7Le temps maximum autorisé pour faire un choix
+
+descriptionGameRockPaperScissorsItemRock: |
+  &7L'item représentant le choix "pierre"
+
+descriptionGameRockPaperScissorsItemPaper: |
+  &7L'item représentant le choix "papier"
+
+descriptionGameRockPaperScissorsItemScissors: |
+  &7L'item représentant le choix "ciseaux"
+
+descriptionGameRockPaperScissorsNotifyChoice: |
+  &7La notification à envoyer lorsqu'un choix est fait
+
+descriptionGameRockPaperScissorsNotifyRoundWon: |
+  &7La notification à envoyer lorsqu'une manche est gagnée
+
+descriptionGameRockPaperScissorsNotifyRoundDraw: |
+  &7La notification à envoyer lorsqu'une manche est une égalité
+
+descriptionGameRockPaperScissorsNotifyRoundLost: |
+  &7La notification à envoyer lorsqu'une manche est perdue
+
+descriptionGameRockPaperScissorsActiveGUIRoundOpenDelay: |
+  &7Le temps d'attente avant l'ouverture automatique du prochain GUI de choix après qu'une manche soit terminée
+
+descriptionGameRockPaperScissorsActiveGUISlotRock: |
+  &7Le slot dans lequel le choix "pierre" sera présent
+
+descriptionGameRockPaperScissorsActiveGUISlotPaper: |
+  &7Le slot dans lequel le choix "papier" sera présent
+
+descriptionGameRockPaperScissorsActiveGUISlotScissors: |
+  &7Le slot dans lequel le choix "ciseaux" sera présent
+
+descriptionGameBarGambleNotifyBuy: |
+  &7La notification à envoyer lorsqu'un joueur achète un item
+
+descriptionGameBarGambleItems: |
+  &7Les items qui peuvent être achetés dans ce jeu
+
+descriptionGameBarGambleItemName: |
+  &7Le nom de l'item
+
+descriptionGameBarGambleItemCostCurrencies: |
+  &7Le coût en devises pour acheter un item
+
+descriptionGameBarGambleItemCostItems: |
+  &7Le coût en items pour acheter un item
+
+descriptionGameBarGambleItemItem: |
+  &7L'item reçu à l'achat
+
+descriptionGameBarGambleItemChances: |
+  &7Les chances de résultat pour la consommation de cet item
+
+descriptionGameBarGambleItemChanceChance: |
+  &7Le pourcentage de chance pour que le multiplicateur soit entre &6min &7et &6max
+
+descriptionGameBarGambleItemChanceMin: |
+  &7Le multiplicateur minimum
+
+descriptionGameBarGambleItemChanceMax: |
+  &7Le multiplicateur maximum
+
+descriptionGameBarGambleItemChanceEffects: |
+  &7Une liste d'effets donnés à la consommation pour cette chance
+
+descriptionGameUpgradeUpgrades: |
+  &7Les améliorations qui peuvent être tentées dans ce jeu
+
+descriptionGameUpgradeUpgradeName: |
+  &7Le nom de l'amélioration
+
+descriptionGameUpgradeUpgradeCostCurrencies: |
+  &7Le coût en devises pour essayer cette amélioration
+
+descriptionGameUpgradeUpgradeCostItems: |
+  &7Le coût en items pour essayer cette amélioration
+
+descriptionGameUpgradeUpgradeIcon: |
+  &7L'icône de cette amélioration dans le menu de jeu
+
+descriptionGameUpgradeUpgradeResultItems: |
+  &7Les résultats possibles pour cette amélioration
+
+descriptionGameUpgradeUpgradeResultItemIsWin: |
+  &7Si ce résultat est considéré comme une victoire (par rapport au prix)
+
+descriptionGameUpgradeUpgradeResultItemChance: |
+  &7Le pourcentage de chance pour que cet item soit amélioré
+
+descriptionGameUpgradeUpgradeResultItemItem: |
+  &7L'item de résultat
+
+# -------------------- Misc --------------------
+
+descriptionWinLoseBehaviorCommands: |
+  &7Les commandes à exécuter
+
+descriptionWinLoseBehaviorNotifyPlayer: |
+  &7La notification à envoyer au joueur
+
+descriptionWinLoseBehaviorNotifyBroadcast: |
+  &7La notification à envoyer au reste du serveur

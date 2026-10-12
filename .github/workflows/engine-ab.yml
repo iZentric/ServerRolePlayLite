@@ -1,0 +1,56 @@
+# GitHub-hosted, zero players, fixed seed/workload, baseline vs candidate on SAME VM.
+# No public release, no live world, no automatic promotion.
+name: ENGINE AB — actual vs candidat pe aceeasi masina
+on:
+  push:
+    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    paths: ["deploy/engine-ab.txt", "scripts/engine_ab.py", ".github/workflows/engine-ab.yml"]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ENGINE_BUILD_RUN: 38093403726
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: Descarca pack-ul neschimbat si candidatul compilat din upstream
+        run: |
+          set -euo pipefail
+          mkdir -p engine-ab-candidate engine-ab-results
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O /tmp/cuantic-pack.zip
+          gh run download "$ENGINE_BUILD_RUN" --repo "$GITHUB_REPOSITORY" -n cuantic-engine-upstream-candidate -D engine-ab-candidate
+          test -s engine-ab-candidate/CUANTIC-CatServer-candidate.jar
+      - name: Masoara ambele motoare cu aceleasi moduri, pluginuri si seed
+        run: python3 scripts/engine_ab.py /tmp/cuantic-pack.zip engine-ab-candidate/CUANTIC-CatServer-candidate.jar engine-ab-results
+      - name: Scrie rezultatul chiar si daca o varianta pica
+        if: always()
+        run: |
+          { echo '# ENGINE AB GitHub — acelasi runner, lume sintetica, fara jucatori'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID";
+            echo; echo 'ATENTIE: nu dovedeste performanta cu jucatori sau handshake-ul clientului!'; echo;
+            echo '```json'; cat engine-ab-results/result.json 2>/dev/null || echo 'NU RULAT'; echo '```';
+            echo; echo 'Erori la finalul fiecarei probe:';
+            for f in engine-ab-results/{baseline-2023,candidate-2024}.log; do
+              echo "## $f"; grep -aEi 'Mixin apply failed|Could not (load|enable) plugin|Exception in server tick loop|OutOfMemoryError|Tick durations' "$f" | tail -8 || true;
+            done
+          } > docs/ENGINE-AB-GITHUB.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/ENGINE-AB-GITHUB.md
+          git commit -m 'engine ab: masuratori izolate GitHub' || true
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cuantic-engine-ab-raw
+          path: |
+            engine-ab-results/result.json
+            engine-ab-results/*.log
+          retention-days: 7

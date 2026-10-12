@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 128.127.116.64
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1723103717580
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1723103878489
+  login: 1723103836498
+money: '5000'
+last-account-name: Ale_Kiss
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -56.13339194478424
+  y: 79.0
+  z: -103.50258117648659
+  yaw: 98.29518127441406
+  pitch: 4.949975967407227
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: 267.30000001192093
+  y: 67.0625
+  z: 75.2296943622408
+  yaw: -12.817304611206055
+  pitch: 20.09998321533203

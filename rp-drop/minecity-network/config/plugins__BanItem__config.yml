@@ -1,0 +1,369 @@
+# +———————————————————————————————————————————————————+ #
+# |——————————     BANITEM CONFIGURATION     ——————————| #
+# |——————————————————      v3.5      —————————————————| #
+# +———————————————————————————————————————————————————+ #
+# |                   Documentation:                  | #
+# |             https://banitem.andross.fr/           | #
+# +———————————————————————————————————————————————————+ #
+# For any bugs/suggestions: Andross96
+# +——————————————————————————————————————————————————————————————————————————————————————————————+
+# General Informations:
+#  - The blacklist will block the items.
+#  - The whitelist will allow only the items set.
+#    -> The 'message' key represents the message sent to players if they try to use an item which is not in whitelist
+#    -> The 'ignored' key represents all ignored actions (they will not being by default banned)
+debug:
+  errors: true
+  reload: false
+  colors-console: false
+no-permission: '&cYou do not have permission.'
+prefix: '&c&l[&e&lztp&c&l] '
+api:
+  playerbanitemevent: false
+  deletebanneditemevent: false
+check-update: true
+priority: use,consume,click
+actions:
+  enchant:
+    material: BARRIER
+    displayname: '&cBANNED'
+    lore:
+    - '&cYou can not add this'
+    - '&cenchantement.'
+  rename:
+  - /rename
+  transfer:
+    hoppers-block: false
+  wear:
+    region-check: false
+    scanner: true
+  delete:
+    ignored-inventories-titles:
+    - My Cool Gui
+    - Shop
+hooks:
+  worldguard: false
+  advancedenchantments: false
+sound:
+  enabled: true
+  type: ENCHANT_THORNS_HIT
+  volume: 1
+  pitch: 1
+  worldSound: false
+particle:
+  enabled: false
+  type: BARRIER
+  amount: 1
+illegal-stacks:
+  enabled: false
+  vanilla-max-stack-size: true
+  block-type: split
+blacklist:
+  world:
+    tnt:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    piston:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    sticky_piston:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    dispenser:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    redstone_torch:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    repeater:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    comparator:
+      use: {}
+      craft: {}
+      place: {}
+      hold: {}
+    redstone_block:
+      use: {}
+      hold: {}
+      place: {}
+      craft: {}
+    tnt_minecart:
+      craft: {}
+    activator_rail:
+      craft: {}
+    rail:
+      craft: {}
+    detector_rail:
+      craft: {}
+    powered_rail:
+      craft: {}
+    elytra:
+      use: {}
+      wear: {}
+    beacon:
+      craft: {}
+      click: {}
+    enchanted_golden_apple:
+      hold: {}
+      consume: {}
+    economyinc_block_vault:
+      craft: {}
+      hold: {}
+    economyinc_block_changer:
+      craft: {}
+      hold: {}
+    economyinc_block_atm:
+      craft: {}
+      hold: {}
+    economyinc_item_gearmechanism:
+      craft: {}
+      hold: {}
+    economyinc_item_gear:
+      craft: {}
+      hold: {}
+    economyinc_item_remover:
+      craft: {}
+      hold: {}
+    economyinc_block_seller:
+      hold: {}
+    cgm_workbench:
+      craft: {}
+      use: {}
+      wear: {}
+      '*': {}
+    cgm_grenade:
+      craft: {}
+      wear: {}
+    cgm_stun_grenade:
+      craft: {}
+      wear: {}
+    securitycraft_codebreaker:
+      wear: {}
+      craft: {}
+    securitycraft_keypad_item:
+      craft: {}
+      hold: {}
+    securitycraft_sonic_security_system:
+      craft: {}
+      hold: {}
+    securitycraft_sentry:
+      craft: {}
+      hold: {}
+    securitycraft_security_camera:
+      craft: {}
+    securitycraft_motion_activated_light:
+      craft: {}
+      hold: {}
+    securitycraft_portable_radar:
+      craft: {}
+      hold: {}
+    securitycraft_panic_button:
+      craft: {}
+      hold: {}
+    securitycraft_projector:
+      craft: {}
+      hold: {}
+    securitycraft_laser_block:
+      craft: {}
+      hold: {}
+      use: {}
+      click: {}
+    securitycraft_mine:
+      craft: {}
+      hold: {}
+    securitycraft_bouncing_betty:
+      hold: {}
+      craft: {}
+    securitycraft_ims:
+      hold: {}
+      craft: {}
+    securitycraft_claymore:
+      hold: {}
+      craft: {}
+    securitycraft_scanner_door_item:
+      craft: {}
+      place: {}
+      click: {}
+      delete: {}
+    securitycraft_reinforced_hopper:
+      craft: {}
+    securitycraft_universal_block_reinforcer_lvl1:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      consume: {}
+      interact: {}
+      place: {}
+      inventoryclick: {}
+    securitycraft_universal_block_reinforcer_lvl2:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    securitycraft_universal_block_reinforcer_lvl3:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    securitycraft_universal_block_remover:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    securitycraft_universal_key_changer:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    securitycraft_universal_owner_changer:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    securitycraft_wire_cutters:
+      craft: {}
+      hold: {}
+      use: {}
+      entityinteract: {}
+      pickup: {}
+      drop: {}
+      inventoryclick: {}
+    vehicle_jack:
+      craft: {}
+      click: {}
+      use: {}
+      entityinteract: {}
+    vehicle_workstation:
+      craft: {}
+      click: {}
+      '*': {}
+    vehicle_key:
+      craft: {}
+    vehicle_wrench:
+      craft: {}
+      pickup: {}
+      drop: {}
+      use: {}
+      interact: {}
+      click: {}
+      inventoryclick: {}
+      hold: {}
+    vehicle_hammer:
+      craft: {}
+      hold: {}
+    roleplayplus_dorime:
+      hold: {}
+    thedirtystuff_drying_table:
+      craft: {}
+      hold: {}
+    thedirtystuff_dried_cocaine:
+      place: {}
+    thedirtystuff_dried_opium:
+      place: {}
+    saros_road_signs_mod_ampel_erste_seite:
+      craft: {}
+    usefulbackpacks_filter_configurator:
+      craft: {}
+    usefulbackpacks_filter_tag:
+      craft: {}
+    usefulbackpacks_filter_item:
+      craft: {}
+    usefulbackpacks_backpack_enderchest:
+      craft: {}
+    xlfoodmod_super_energy_drink:
+      hold: {}
+      consume: {}
+    xlfoodmod_deadly_energy_drink:
+      hold: {}
+      consume: {}
+    xlfoodmod_stealthy_energy_drink:
+      hold: {}
+      consume: {}
+    item_frame:
+      craft: {}
+      place: {}
+    hopper:
+      craft: {}
+      click: {}
+      place: {}
+    securitycraft_taser:
+      craft: {}
+    securitycraft_keypad_door_item:
+      place: {}
+      craft: {}
+      click: {}
+      delete: {}
+    pfm_working_table:
+      use: {}
+      interact: {}
+      click: {}
+      craft: {}
+      hold: {}
+      entityinteract: {}
+      inventoryclick: {}
+      pickup: {}
+      '*': {}
+    securitycraft_door_indestructible_iron_item:
+      craft: {}
+      inventoryclick: {}
+      delete: {}
+    heavy_weighted_pressure_plate:
+      craft: {}
+    pfm_furniture_book:
+      craft: {}
+      click: {}
+      hold: {}
+    shield:
+      craft: {}
+      hold: {}
+      swap: {}
+    saros_road_signs_mod_paint_brush:
+      hold: {}
+      craft: {}
+    enchanting_table:
+      craft: {}
+      use: {}
+      hold: {}
+    securitycraft_universal_block_modifier:
+      use: {}
+      craft: {}
+      pickup: {}
+    securitycraft_inventory_scanner:
+      pickup: {}
+      craft: {}
+    vehicle_gas_pump:
+      pickup: {}
+      craft: {}
+      place: {}
+      '*': {}

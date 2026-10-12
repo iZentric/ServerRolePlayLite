@@ -1,0 +1,123 @@
+#  __  __                                     
+# |  \/  | ___  ___ ___  __ _  __ _  ___  ___ 
+# | |\/| |/ _ \/ __/ __|/ _` |/ _` |/ _ \/ __|
+# | |  | |  __/\__ \__ \ (_| | (_| |  __/\__ \
+# |_|  |_|\___||___/___/\__,_|\__, |\___||___/
+#                             |___/           
+
+
+#---------------------( Variabile Interne )---------------------#
+
+
+# {ICON} va fi înlocuit cu pictograma
+# {PREFIX} va fi înlocuit cu prefixul
+# {C1} va fi înlocuit cu prima culoare
+# {C2} va fi înlocuit cu a doua culoare
+# {CR} va fi înlocuit cu culoarea pentru EROARE
+
+
+#---------------------( General )---------------------#
+
+
+#Prefixul pluginului
+#Variabilă Internă > {PREFIX}
+prefix: "{C2}{C1}&lVIBERP&8 »&7"
+
+
+#Prima culoare
+#Variabilă Internă > {C1}
+first-color: "&e"
+
+#A doua culoare
+#Variabilă Internă > {C2}
+second-color: "&7"
+
+#Culoarea pentru eroare
+#Variabilă Internă > {CR}
+error-color: "&c"
+
+
+
+#---------------------( Alte Comenzi )---------------------#
+
+
+command-syntaxe-error: "{CR}Trebuie să completezi comanda în felul următor: {C2}%s"
+
+command-no-permission: "{CR}Nu ai permisiunea să rulezi această comandă!"
+
+command-no-console: "{CR}Doar un jucător poate executa această comandă!"
+
+command-no-arg: "{CR}Nu pot găsi comanda cu argumentele sale!"
+
+command-syntaxe-help: "{C1}%s {C2}Â» %s"
+
+command-main-description: "{PREFIX} {C2}Descrierea principală a comenzii."
+
+command-reload-description: "{PREFIX} {C2}Comanda de reîncărcare."
+
+command-reload-inprogress: "{PREFIX} &aReîncărcare..."
+
+command-reload-sucess: "{PREFIX} &2Reîncărcare reușită."
+
+command-reload-failure: "{PREFIX} {CR}Eroare în timpul reîncărcării!"
+
+#---------------------( Secțiunea Cadavru )---------------------#
+
+
+corpse-name: "{CORPSE}"
+
+corpse-inventory-title: "Obiecte {CORPSE}-ului"
+
+corpse-finish-loot-message: "&7Ai terminat să jefuiești cadavrul lui {CORPSE}."
+
+#---------------------( Secțiunea Comenzii pentru Cadavre )---------------------#
+
+
+corpse-command-toggle: "{PREFIX} {C2}Cadavrele au fost comutate {ONOFF}!"
+
+corpse-command-spawn-yourself: "{PREFIX} {C2}Ai generat cadavrul tău!"
+
+corpse-command-spawn-player: "{PREFIX} {C2}S-a generat cadavrul lui {PLAYER}!"
+
+corpse-command-spawn-offline-player: "{PREFIX} {C2}Jucătorul {PLAYER} nu este online!"
+
+corpse-command-resend: "{PREFIX} {C2}Re-trimitere cadavru: "
+
+corpse-command-remove: "{PREFIX} {C2}Am eliminat cu succes {SIZE} cadavru(uri)! "
+
+corpse-command-remove-all: "{PREFIX} {C2}Am eliminat cu succes toate cadavrele din lume. ({SIZE} dintre ele!)"
+
+#---------------------( Secțiunea Revigorare )---------------------#
+
+
+#Lasă NECOMPLETAT pentru a dezactiva
+revive-broadcast: "{PREFIX} &c{PLAYER} a fost revigorat de către {REVIVER}!"
+
+#---------------------( Secțiunea Urmărire a Morții )---------------------#
+
+
+#Lasă NECOMPLETAT pentru a dezactiva
+death-spectating-broadcast: "{PREFIX} &c{PLAYER} a căzut!"
+
+death-spectating-title: "&cAi murit!"
+
+death-spectating-subtitle: "&7Reapariție în &c{SECONDS} &7secunde!"
+
+death-spectating-actionbar: " "
+
+death-spectating-hologram: "&cApasă &7pentru &6Revigorare! &7(&c {SECONDS}&7)"
+
+death-spectating-denied-command: "{PREFIX} {CR}Nu ai voie să folosești acea comandă în timp ce urmărești moartea."
+
+#---------------------( Secțiunea RPGSpawn )---------------------#
+
+
+rpg-spawn-add: "{PREFIX} &2Locația de generare adăugată!"
+
+rpg-spawn-remove: "{PREFIX} {CR}Locația de generare a fost ștearsă!"
+
+rpg-spawn-editor-on: "{PREFIX} &2Modul editor activat! Generare: {SPAWNS}"
+
+rpg-spawn-editor-off: "{PREFIX} {CR}Modul editor dezactivat! Generare: {SPAWNS}"
+
+rpg-spawn-not-editor: "{PREFIX} {CR}Nu ești în modul editor!"

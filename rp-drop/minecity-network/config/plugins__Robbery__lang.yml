@@ -1,0 +1,129 @@
+joined-crew: '&a&l>> &r&7Te-ai alăturat echipajului lui &e%target_player%'
+player-joined-crew: '&a&l>> &r&e%player% &r&7s-a alăturat echipajului tău.'
+crew-full: '&c&l>> &r&7Acest echipaj este deja plin.'
+own-crew-full: '&c&l>> &r&7Nu poți invita mai mulți membri, deoarece echipajul tău
+  este plin.'
+not-crew-invited: '&c&l>> &r&7Nu pare să ai o invitație pentru acest echipaj.'
+player-has-no-crew: '&c&l>> &r&7Acel jucător nu pare să aibă un echipaj.'
+cannot-join-own-crew: '&c&l>> &r&7De ce ai încerca să te alături propriului tău echipaj?'
+player-not-found: '&c&l>> &r&7Acel jucător nu poate fi găsit.'
+already-in-crew: '&c&l>> &r&7Ești deja într-un echipaj.'
+player-already-in-crew: '&c&l>> &r&7Acest jucător este deja într-un echipaj.'
+crew-created: '&a&l>> &r&7Ai creat cu succes un echipaj.'
+crew-disbanded: '&c&l>> &r&7Echipajul tău a fost desființat.'
+left-crew: '&c&l>> &r&7Ai părăsit echipajul tău curent.'
+player-left-crew: '&c&l>> &r&e%player% &7a părăsit echipajul tău.'
+kicked-out-of-crew: '&c&l>> &r&7Ai fost dat afară din echipajul tău.'
+player-kicked-out-of-crew: '&c&l>> &r&e%target_player% &r&7a fost dat afară din echipajul
+  tău.'
+invite-player-chat-input: '&e&l>> &7&oTe rog să introduci numele jucătorului pe care
+  vrei să-l inviți în echipaj în chat, ai &n12&r &7&osecunde să o faci înainte ca
+  timpul de introducere să expire.'
+cannot-invite-yourself: '&c&l>> &r&7Nu te poți invita pe tine însuți. &oDu-te să găsești
+  niște prieteni'
+invite-received: '&9&l>> &r&e%player% &7te-a invitat în echipajul său, folosește &e/robbery
+  join %player% &7pentru a te alătura, ai &n60&r &7secunde să o faci înainte ca invitația
+  să expire.'
+invite-send: '&a&l>> &r&7Ai trimis cu succes o invitație pentru echipaj către &e%target_player%'
+invite-expired: '&c&l>> &7Invitația pentru echipaj a expirat.'
+player-already-invited: '&c&l>> &r&7Acest jucător are deja o invitație în așteptare
+  pentru echipajul tău.'
+invalid-help-page: '&c&l>> &r&7Ai introdus un număr de pagină invalid.'
+invalid-number: '&c&l>> &r&7Ai introdus un număr invalid.'
+no-permission: '&7&l>> &r&cNu ai permisiunea de a folosi această comandă.'
+command-not-found: '&7&l>> &r&cAceastă comandă pare să nu existe.'
+invalid-usage: '&7&l>> &r&cParametrii introdusi sunt invalizi.'
+invalid-input: '&7&l>> &r&cValorile introduse sunt invalide.'
+configuration-reloaded: '&7&l>> &r&7Configurația a fost reîncărcată.'
+place-added: '&7&l>> &r&7Locul a fost adăugat în stocare.'
+place-removed: '&7&l>> &r&7Locul a fost înlăturat din stocare.'
+robbing-not-possible: '&7&l>> &r&cAcest loc nu poate fi jefuit în acest moment.'
+robbery-failed-death: '&cJefuirea a eșuat pentru că ai murit.'
+robbery-failed-left-area: '&cJefuirea a eșuat pentru că ai părăsit zona.'
+robbery-completed: '&aJefuirea a fost finalizată!'
+crew-size-too-small: '&c&l>> &r&7Ai nevoie de cel puțin &e&n%required_crew_size%&r
+  &7membri în echipajul tău pentru a jefui acest loc.'
+only-leader-can-start: '&c&l>> &r&7Doar liderul echipajului poate începe o jefuire.'
+need-crew-to-start: '&c&l>> &r&7Trebuie să fii într-un echipaj pentru a începe o jefuire.'
+received-stick-of-destruction: '&a&l>> &r&7Ai primit un băț de distrugere.'
+inventory-full: '&c&l>> &r&7Inventarul tău este plin.'
+structure-spawn-egg-received: '&a&l>> &r&7Ai primit un ou de invocare pentru o structură
+  de tip &e%structure_type%.'
+robbery-total-loot: '&7&oAi primit un total de &a&l%total_money_loot%$ &r&7&odin prada
+  jefuirii.'
+crew-auto-kick: '&c&l>> &r&e%member% &r&7a fost dat automat afară din echipajul tău.'
+robbery-ongoing: '&e&l!&r &eJefuire în curs pentru încă &n%d&r &esecunde &l!'
+bank-robbery-failed-leader-died: '&c&l! &r&cJefuirea a eșuat pentru că liderul echipajului
+  a murit &l!'
+bank-robbery-failed-leader-fled: '&c&l! &r&cJefuirea a eșuat pentru că liderul echipajului
+  a fugit &l!'
+bank-robbery-failed-out-of-time: '&c&l! &r&cJefuirea a eșuat pentru că ai rămas fără
+  timp &l!'
+bank-robbery-failed-leader-quit: '&c&l! &r&cJefuirea a eșuat pentru că liderul echipajului
+  a părăsit serverul &l!'
+general-robbery-failed-death: '&c&l! &r&cJefuirea a eșuat pentru că ai murit &l!'
+general-robbery-failed-fled: '&c&l! &r&cJefuirea a eșuat pentru că ai fugit din zona
+  respectivă &l!'
+flee-action-bar: '&c&l! &r&cJefuirea bancară s-a încheiat - ai &n%remaining_flee_time%&r
+  &csecunde pentru a scăpa &l!'
+ongoing-robbery-action-bar: '&e&l! &r&eJefuire bancară în curs - &n%remaining_rob_time%&r
+  &esecunde rămase pentru a jefui &l!'
+lock-picking-safe-action-bar: '&e&l! &r&eÎncuietoarea se deschide ( &n%time_remaining%&r&e
+  ) &e&l!'
+wrong-structure-place-type: '&c&l>> &r&7Nu poți plasa acea structură în acest loc.'
+no-place-location: '&c&l>> &r&7Nu poți plasa structuri în afara locurilor stabilite.'
+input-timer-expired: '&c&l>> &7&oTimpul de introducere a expirat.'
+safe-money-looted: '&e&l>> &r&7&oAi jefuit &a&l%looted_money%$ &r&7&odintr-un seif!'
+vault-door-hologram:
+- '&7&lS Ă N Ă T A T E'
+- '%health_bar%'
+safe-hologram:
+- '&a&l%min_money_amount%'
+- '&7&lPÂNĂ LA'
+- '&a&l%max_money_amount%'
+looted-safe-hologram:
+- '&a&l%looted_money%$'
+crew-create-gui-create-display-name: '&c&lEchipaj Nou'
+crew-create-gui-create-lore:
+- '&7&o&nApasă&r &7&opentru a crea un'
+- '&7&onou echipaj.'
+crew-manage-leader-lore: '&c&lLIDER'
+crew-manage-member-lore: '&7&lMEMBRU'
+crew-manage-empty-display-name: '&c&lGol'
+crew-manage-gui-disband-display-name: '&c&lDesființare Echipaj'
+crew-manage-gui-disband-lore:
+- '&7&o&nApasă&r &7&opentru a desființa echipajul.'
+crew-manage-gui-kick-display-name: '&c&lExcludere Jucător'
+crew-manage-gui-kick-lore:
+- '&7&o&nApasă&r &7&opentru a da afară jucătorul'
+- '&7&o din echipaj.'
+crew-manage-gui-invite-display-name: '&9&lInvită Jucător'
+crew-manage-gui-invite-lore:
+- '&7&o&nApasă&r &7&opentru a invita un jucător'
+- '&7&oin echipajul tău.'
+crew-manage-gui-leave-display-name: '&c&lPărăsire Echipaj'
+crew-manage-gui-leave-lore:
+- '&7&o&nApasă&r &7&opentru a părăsi echipajul.'
+structures-gui-get-lore:
+- '&7&o&nApasă&r &7&opentru a primi un ou de invocare'
+- '&7&opentru o structură de tip &e%structure_type%&r.'
+structures-gui-destruction-display-name: '&c&lBăț de Distrugere'
+structures-gui-destruction-lore:
+- '&7&o&nApasă&r &7&opentru a primi un băț folosit'
+- '&7&opentru a elimina structuri'
+place-rob-gui-start-display-name: '&c&lÎncepe Jefuirea'
+place-rob-gui-start-lore:
+- '&7&oApasă pentru a începe o jefuire'
+- '&7&ola acest loc.'
+stick-of-destruction-display-name: '&c&lBăț de Distrugere'
+stick-of-destruction-lore:
+- '&7&oSe spune că acest băț a fost folosit odată'
+- '&7&o pentru a șterge toate structurile defecte'
+- '&7&o din generatorul lumii Minecraft'
+- '&0'
+- '&7Nivel de Putere: &c&l9000+'
+safe-loot-inventory-title: '            &8&lJEFUIRE SEIF'
+crew-create-gui-title: '           &8&lCREARE ECHIPAJ'
+crew-manage-gui-title: '&8&lMANAGEMENT ECHIPAJ'
+place-rob-gui-title: '&8&lÎNCEPE JEFUIREA'
+structures-gui-title: '&8&lSTRUCTURI'

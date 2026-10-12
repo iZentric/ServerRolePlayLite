@@ -1,0 +1,104 @@
+# ----------------------------------------------------------------------------------------------------
+# Configuration file for BettingGames
+# More information can be found in the documentation
+# ----------------------------------------------------------------------------------------------------
+
+# --------------------------------------------------
+# Data
+# --------------------------------------------------
+
+# Data back-end (NONE, JSON, SQLITE or MYSQL ; default is JSON if not specified)
+# The MySQL identifiers are located in GCore's config
+data_backend:
+  bettinggames_users_v2: JSON
+
+# Log settings (errors will be shown in console no matter what)
+log:
+  # Main logger
+  main:
+    console: true
+    file: true
+  # Data loggers
+  data:
+    bettinggames_users_v2:
+      console: false
+      file: false
+
+# Log files for players
+individual_player_logger: true
+
+# --------------------------------------------------
+# Commands
+# --------------------------------------------------
+
+# Aliases
+commands_aliases:
+  menu: [menu,gui]
+  gamemenu: [gamemenu,gamegui]
+  top: [top,ranking,rank]
+  edit: [edit,e]
+
+# --------------------------------------------------
+# Miscalleneous
+# --------------------------------------------------
+
+# Update notification
+# If you turn this off, please make sure to visit the plugin page on spigot every once in a while ; some updates can be really important.
+update_notification: true
+
+# Main GUI (opened with the base command)
+main_gui: 'main'
+
+# Maximum concurrent games per player
+# You can add permissions on each line : {count},{permission}, or no permission
+max_concurrent_games_per_player: |
+  1
+  2,bettinggames.concurrent.2
+  3,bettinggames.concurrent.3
+
+# --------------------------------------------------
+# Delays
+# --------------------------------------------------
+
+# How often should the cached ranking GUIs be refreshed (in minutes)
+ranking_gui_refresh_task_minutes: 30
+
+# --------------------------------------------------
+# Bet options
+# --------------------------------------------------
+
+# Allow currency edition GUI ?
+# If enabled, a GUI with amount controls (+, -) will be opened
+# There will still be an option to enter the exact amount in chat
+allow_bet_edit_currency_gui: true
+
+# Enable item enchants split if the plugin has to multiply a bet by a decimal number ?
+# For instance : if a diamond sword with SHARPNESS 2 must be multiplied by 1.5 and this option is enabled, then it'll result in one SHARPNESS 2 diamond sword and one SHARPESS 1 diamond sword
+# If disabled, non-integer multipliers will result in no gain
+split_items_enchants: true
+
+# Disable items split enchants for some enchants only
+disallowed_enchants_split: []
+
+# Allowed/disallowed materials
+# If items_whitelist is not empty, only items in that list will be accepted
+# If items_blacklist is not empty, items in that list will not be accepted
+materials_whitelist: []
+materials_blacklist: []
+
+# Allowed and disallowed items
+# Use this to allow/prevent more specific items
+items_whitelist: []
+items_blacklist:
+  - item:
+      name: '&cThis name is not allowed'
+    check: SameBase
+  - item:
+      name: '&cNor is this one'
+    check: SameBase
+  - item:
+      name: 'Weapon'  # any item containing the word 'Weapon' will not be allowed
+    check: SameBase_NameContains
+  - item:
+      type: BEDROCK  # can't bet bedrock
+    check: SameBase

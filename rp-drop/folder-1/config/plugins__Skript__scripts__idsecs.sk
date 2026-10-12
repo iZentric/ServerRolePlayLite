@@ -1,0 +1,218 @@
+# Variabilă globală pentru următorul ID disponibil
+on load:
+    if {nextID} is not set:
+        set {nextID} to 4  # Începe de la 4 implicit
+
+# Eveniment declanșat când un jucător intră pe server
+on join:
+    if {randomID::%player%} is not set:
+        set {_id} to {nextID}
+        while {_id} <= 9999:
+            set {_idInUse} to false
+            loop all offline players:
+                if {randomID::%loop-value%} is {_id}:
+                    set {_idInUse} to true
+                    stop loop
+            if {_idInUse} is false:
+                set {randomID::%player%} to {_id}
+                send "&2&lID-ul tău unic este: &e%{_id}%"
+                add 1 to {nextID}
+                updateNametags(player)
+                stop
+            add 1 to {_id}
+        send "&cNu mai sunt ID-uri disponibile (4-9999)!" to player
+        kick player due to "Server plin - nu mai sunt ID-uri disponibile!"
+
+# Curățăm la ieșire
+on quit:
+    updateNametags(player)
+
+# Funcție pentru actualizarea nametag-urilor cu scoreboard teams
+function updateNametags(p: player):
+    send "&7[Debug] Actualizez nametag pentru %{_p}%..." to all players where {id.show.%input%} is true
+    loop all players where {id.show.%input%} is true:
+        if {randomID::%{_p}%} is set:
+            create team "id_%{randomID::%{_p}%}%" if it doesn't exist
+            set prefix of team "id_%{randomID::%{_p}%}%" to "&eID: %{randomID::%{_p}%}% " for loop-player
+            add {_p} to team "id_%{randomID::%{_p}%}%" for loop-player
+        else:
+            create team "id_na" if it doesn't exist
+            set prefix of team "id_na" to "&cN/A " for loop-player
+            add {_p} to team "id_na" for loop-player
+    loop all players where {id.show.%input%} is not true:
+        remove {_p} from their team for loop-player
+
+# Comandă pentru a activa/dezactiva afișarea ID-urilor
+command /idenable:
+    trigger:
+        send "&7[Debug] Comanda /idenable a fost executată de %player%." to player
+        if {id.show.%player%} is not set or false:
+            set {id.show.%player%} to true
+            send "&aAfișarea ID-urilor deasupra capului a fost activată!"
+            send "&7[Debug] Stare: activată pentru %player%." to player
+            loop all players:
+                updateNametags(loop-player)
+        else:
+            set {id.show.%player%} to false
+            send "&cAfișarea ID-urilor deasupra capului a fost dezactivată!"
+            send "&7[Debug] Stare: dezactivată pentru %player%." to player
+            loop all players:
+                updateNametags(loop-player)
+
+# Comandă pentru a verifica ID-ul propriu
+command /myid:
+    trigger:
+        if {randomID::%player%} is set:
+            send "&2&lID-ul tău unic este: &e%{randomID::%player%}%"
+        else:
+            send "&cNu ai un ID asignat!"
+
+# Comandă pentru resetarea ID-ului unui jucător
+command /resetid [<offline player>]:
+    permission: op
+    trigger:
+        if argument 1 is set:
+            if {randomID::%argument 1%} is set:
+                delete {randomID::%argument 1%}
+                updateNametags(argument 1)
+                send "&cAi resetat ID-ul lui %argument 1%!"
+            else:
+                send "&cAcest jucător nu are un ID asignat!"
+        else:
+            send "&cUtilizare: /resetid <jucător>"
+
+# Comandă pentru resetarea tuturor ID-urilor
+command /resetidall:
+    permission: op
+    trigger:
+        loop all offline players:
+            delete {randomID::%loop-value%}
+            updateNametags(loop-value)
+        set {nextID} to 4  # Resetează să înceapă de la 4
+        send "&cToate ID-urile au fost resetate! Următorul ID va fi 4."
+
+# Comandă pentru setarea manuală a unui ID
+command /setid <offline player> <number>:
+    permission: op
+    trigger:
+        if argument 1 is not set:
+            send "&cUtilizare corectă: /setid <jucător> <id>"
+            stop
+        if argument 2 is not set:
+            send "&cUtilizare corectă: /setid <jucător> <id>"
+            stop
+        if argument 2 is not a number:
+            send "&cID invalid! Te rog introdu un număr."
+            stop
+        set {_id} to argument 2
+        if {_id} < 1 or {_id} > 9999:
+            send "&cID-ul trebuie să fie între 1 și 9999!"
+            stop
+        loop all offline players:
+            if {randomID::%loop-value%} is {_id}:
+                send "&cID-ul &e%{_id}% &ceste deja folosit de &e%loop-value%!"
+                stop
+        set {randomID::%argument 1%} to {_id}
+        updateNametags(argument 1)
+        send "&aAi setat ID-ul lui %argument 1% la: &e%{_id}%"
+        if argument 1 is online:
+            send "&aID-ul tău a fost setat manual la: &e%{_id}%" to argument 1
+
+# Comandă pentru a afișa lista cu ID-uri și jucători
+command /idlist:
+    permission: op
+    trigger:
+        send "&e&lLista ID-urilor asignate:" to player
+        set {_count} to 0
+        loop all offline players:
+            if {randomID::%loop-value%} is set:
+                add 1 to {_count}
+                send "&7- &eID: %{randomID::%loop-value%}% &7- &a%loop-value%" to player
+        if {_count} is 0:
+            send "&cNu există ID-uri asignate momentan!" to player
+        else:
+            send "&eTotal jucători cu ID: &a%{_count}%" to player
+
+# Comandă pentru teleportare la un ID specific
+command /tpto <number>:
+    permission: id.tpto
+    permission message: "&cNu ai permisiunea să folosești această comandă!"
+    trigger:
+        if argument 1 is not set:
+            send "&cUtilizare: /tpto <id>"
+            stop
+        if argument 1 is not a number:
+            send "&cTe rog introdu un ID valid (număr)!"
+            stop
+        set {_id} to argument 1
+        if {_id} < 1 or {_id} > 9999:
+            send "&cID-ul trebuie să fie între 1 și 9999!"
+            stop
+        loop all players:
+            if {randomID::%loop-player%} is set:
+                if {randomID::%loop-player%} is {_id}:
+                    teleport player to loop-player
+                    send "&aTe-ai teleportat la &e%loop-player% &a(ID: %{_id}%)!"
+                    stop
+        send "&cNu există niciun jucător online cu ID-ul &e%{_id}%!"
+
+# Comandă pentru a teleporta un jucător cu ID la tine
+command /tptome <number>:
+    permission: id.tptome
+    permission message: "&cNu ai permisiunea să folosești această comandă!"
+    trigger:
+        if argument 1 is not set:
+            send "&cUtilizare: /tptome <id>"
+            stop
+        if argument 1 is not a number:
+            send "&cTe rog introdu un ID valid (număr)!"
+            stop
+        set {_id} to argument 1
+        if {_id} < 1 or {_id} > 9999:
+            send "&cID-ul trebuie să fie între 1 și 9999!"
+            stop
+        loop all players:
+            if {randomID::%loop-player%} is set:
+                if {randomID::%loop-player%} is {_id}:
+                    teleport loop-player to player
+                    send "&aL-ai teleportat pe &e%loop-player% &a(ID: %{_id}%) la tine!"
+                    send "&aAi fost teleportat la &e%player%!" to loop-player
+                    stop
+        send "&cNu există niciun jucător online cu ID-ul &e%{_id}%!"
+command /plateste [<number>] [<number>]:
+    trigger:
+        if argument 1 is not set:
+            send "&cUsage: /plătește <ID> <amount>"
+            stop
+        if argument 2 is not set:
+            send "&cUsage: /plătește <ID> <amount>"
+            stop
+        if "%argument 2%" parsed as number is not set:
+            send "&cThe amount must be a number!"
+            stop
+        set {_id} to argument 1
+        set {_amount} to argument 2
+        if {_amount} <= 0:
+            send "&cYou must send a positive amount!"
+            stop
+        if {randomID::%player's uuid%} is not set:
+            send "&cYou do not have an ID assigned!"
+            stop
+        set {_receiver} to ""
+        loop all players:
+            if {randomID::%loop-player's uuid%} is {_id}:
+                set {_receiver} to loop-player
+                stop loop
+        if {_receiver} is "":
+            send "&cNo player found with ID %{_id}%!"
+            stop
+        if {_receiver} is player:
+            send "&cYou cannot send money to yourself!"
+            stop
+        if balance of player < {_amount}:
+            send "&cYou don't have enough money!"
+            stop
+        remove {_amount} from player's balance
+        add {_amount} to {_receiver}'s balance
+        send "&aYou sent &e%{_amount}%$ &ato ID &e%{_id}%!"
+        send "&aYou received &e%{_amount}%$ &afrom &e%player%!" to {_receiver}

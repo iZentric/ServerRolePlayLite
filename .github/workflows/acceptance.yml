@@ -1,0 +1,27 @@
+name: ACCEPTANCE — testele de invizibilitate ale hibridului (T1-T10)
+on:
+  push:
+    paths: [ "scripts/acceptance.sh", "deploy/accept.txt", ".github/workflows/acceptance.yml", "pack-rules.json" ]
+  workflow_dispatch: {}
+
+  workflow_run:
+    workflows: ["APPLY — aduce serverul live la ultimul release si il porneste"]
+    types: [completed]
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  a:
+    runs-on: [self-hosted]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/acceptance.sh
+
+      - name: Regula — serverul ramane pornit dupa orice comanda
+        if: always()
+        run: bash scripts/ensure-up.sh

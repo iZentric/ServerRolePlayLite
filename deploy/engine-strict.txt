@@ -1,0 +1,1 @@
+2026-10-12: repeat strict six-arm same-run screen with finer 0.25-second external Done polling; reject on ANY tied/slower boot, RSS, CPU, or p95; no live/release deployment.

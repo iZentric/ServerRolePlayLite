@@ -1,0 +1,318 @@
+menu_title: '        &8⋘ &#0a41bb&lᴍ&#215cc3&lᴇ&#3877cc&lɴ&#4e93d4&lɪ&#65aedd&lᴜ &#7cc9e5&lᴊ&#8ac7dd&lᴏ&#97c5d6&lʙ&#a5c3ce&lᴜ&#b2c1c7&lʀ&#c0bfbf&lɪ &8⋙ '
+open_command:
+register_command: true
+size: 44
+items:
+#############################################################################################
+      'close':
+        material: BARRIER
+        slot: 44
+        display_name: '&#790303&lɪ&#840303&lɴ&#8f0303&lᴄ&#9b0202&lʜ&#a60202&lɪ&#b10202&lᴅ&#bc0202&lᴇ &#c70101&lᴍ&#d20101&lᴇ&#de0101&lɴ&#e90101&lɪ&#f40000&lᴜ&#ff0000&lʟ'
+        lore:
+        - ''
+        - '&fClick aici pentru'
+        - '&finchide acest meniu!'
+        left_click_commands:
+        - '[close]'
+        right_click_commands:
+        - '[close]'
+###############################################################
+      '1':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjUzOTBlM2NjMWYwNzQ0MWU5ZGUxMzk4NDBkMDgyMTdmODYxODU3ZmY5OGY0MjExYzc5ZjNjMGI0ODYwZDgwZSJ9fX0=
+        slot: 11
+        display_name: '&#a45050&lᴊ&#ac5955&lᴏ&#b5625a&lʙ &#bd6c5e&lᴅ&#c57563&lᴇ &#cd7e68&lʟ&#d6876d&lᴏ&#de9072&lᴘ&#e69977&lᴀ&#eea37b&lᴛ&#f7ac80&lᴀ&#ffb585&lʀ'
+        lore:
+        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+        - ''
+        - '&fɪɴᴛʀᴀ ɪɴ ᴊᴏʙᴜʟ ᴅᴇ ʟᴏᴘᴀᴛᴀʀ'
+        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+        - ''
+        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+        - '  &8► &#a45050&lꜱ&#ad5a55&lᴘ&#b6645b&lᴀ&#bf6e60&lʀ&#c87865&lɢ&#d2836b&lᴇ &#db8d70&lɴ&#e49775&lɪ&#eda17a&lꜱ&#f6ab80&lɪ&#ffb585&lᴘ'
+        - '  &8► &#a45050&lꜱ&#ac5955&lᴘ&#b5625a&lᴀ&#bd6c5e&lʀ&#c57563&lɢ&#cd7e68&lᴇ &#d6876d&lᴘ&#de9072&lᴀ&#e69977&lᴍ&#eea37b&lᴀ&#f7ac80&lɴ&#ffb585&lᴛ'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+        left_click_commands:
+        - '[console] lp user %player_name% parent add lopatar'
+        - '[close]'
+        right_click_commands:
+        - '[console] lp user %player_name% parent remove lopatar'
+        - '[close]'
+###############################################################
+ #     '2':
+ #      material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGFhNmMyZDFiZDgwZmRkNmE2MzJjYzdjYWZkMjVmMDllZjIwM2VlYzJhNjkzYjdjYmEwM2QxNzZiMmNjMDcxYiJ9fX0=
+ #      slot: 20
+ #      display_name: '&#3CA55C&lᴇ&#48A65A&lx&#54A658&lᴘ&#60A756&lʟ&#6CA854&lᴏ&#79A953&lʀ&#85A951&lᴇ&#91AA4F&lʀ &#9DAB4D&lᴊ&#A9AB4B&lᴏ&#B5AC49&lʙ'
+ #      lore:
+ #      - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+ #      - ''
+ #      - '&fᴊᴏɪɴ ᴛᴏ ᴛʜᴇ ᴇxᴘʟᴏʀᴇʀ ᴊᴏʙ'
+ #     - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+ #     - ''
+ #     - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+ #     - '  &8► &#3CA55Cᴇ&#45A65Bx&#4FA659ᴘ&#58A758ʟ&#61A756ᴏ&#6BA855ʀ&#74A853ᴇ &#7DA952ᴄ&#86A950ʜ&#90AA4Fᴜ&#99AA4Dɴ&#A2AB4Cᴄ&#ACAB4Aᴋ&#B5AC49ꜱ'
+ #    - ''
+ #    - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+ #    - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+ #    left_click_commands:
+ #    - '[player] job join explorer'
+ #    - '[close]'
+ #    right_click_commands:
+ #    - '[player] job leave explorer'
+ #    - '[close]'
+###############################################################
+      '3':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2I0M2IyMzE4OWRjZjEzMjZkYTQyNTNkMWQ3NTgyZWY1YWQyOWY2YzI3YjE3MWZlYjE3ZTMxZDA4NGUzYTdkIn19fQ==
+        slot: 20
+        display_name: '&#50a406&lᴊ&#4f9f0b&lᴏ&#4f9b11&lʙ&#4e9616&lᴜ&#4d921c&lʟ &#4d8d21&lᴅ&#4c8827&lᴇ &#4b842c&lꜰ&#4a7f32&lᴇ&#4a7a37&lʀ&#49763d&lᴍ&#487142&lɪ&#486d48&lᴇ&#47684d&lʀ'
+        lore:
+        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+        - ''
+        - '&fɪɴᴛʀᴀ ɪɴ ᴊᴏʙᴜʟ ᴅᴇ ꜰᴇʀᴍɪᴇʀ'
+        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+        - ''
+        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+        - '  &8► &#50a406&lᴄ&#4f9d0e&lᴜ&#4e9716&lʟ&#4d901e&lᴇ&#4c8926&lɢ&#4b832d&lᴇ &#4a7c35&lɢ&#49753d&lʀ&#486f45&lᴀ&#47684d&lᴜ'
+        - '  &8► &#50a406&lᴄ&#4f9f0c&lᴜ&#4f9a12&lʟ&#4e9518&lᴇ&#4d901e&lɢ&#4c8b24&lᴇ &#4c862a&lᴍ&#4b812f&lᴏ&#4a7c35&lʀ&#49773b&lᴄ&#497241&lᴏ&#486d47&lᴠ&#47684d&lɪ'
+        - '  &8► &#50a406&lᴄ&#4f9f0c&lᴜ&#4f9a12&lʟ&#4e9518&lᴇ&#4d901e&lɢ&#4c8b24&lᴇ &#4c862a&lᴄ&#4b812f&lᴀ&#4a7c35&lʀ&#49773b&lᴛ&#497241&lᴏ&#486d47&lꜰ&#47684d&lɪ'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+        left_click_commands:
+        - '[console] lp user %player_name% parent add fermier'
+        - '[close]'
+        right_click_commands:
+        - '[console] lp user %player_name% parent remove fermier'
+        - '[close]'
+###############################################################
+      '4':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWM5YTViNDAzZWU5NzBiMTgwYTA5MzhkMmVmNDBhMDdjNmRiY2Q2ZGEyODdiZmNiZWUyY2ZlM2QzN2NjYTc1MSJ9fX0=
+        slot: 13
+        display_name: '&#4c4525&lᴊ&#564e2a&lᴏ&#5f572f&lʙ &#695f33&lᴅ&#736838&lᴇ &#7d713d&lᴘ&#867a42&lᴀ&#908347&lᴅ&#9a8c4c&lᴜ&#a49450&lʀ&#ad9d55&lᴀ&#b7a65a&lʀ'
+        lore:
+        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+        - ''
+        - '&fɪɴᴛʀᴀ ɪɴ ᴊᴏʙᴜʟ ᴅᴇ ᴘᴀᴅᴜʀᴀʀ'
+        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+        - ''
+        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+        - '  &8► &#4c4525&lꜱ&#574f2a&lᴘ&#615830&lᴀ&#6c6235&lʀ&#776c3a&lɢ&#827640&lᴇ &#8c7f45&lʟ&#97894a&lᴇ&#a2934f&lᴍ&#ac9c55&lɴ&#b7a65a&lᴇ'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+        left_click_commands:
+        - '[console] lp user %player_name% parent add padurar'
+        - '[close]'
+        right_click_commands:
+        - '[console] lp user %player_name% parent remove padurar'
+        - '[close]'
+###############################################################
+ #     '5':
+ #      material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjI2NzJjODdlZWY2ODE4ODI4OTE4ZGQzY2EwMzg1NmNjYjQzNjZlN2M5YWMyNjI0YTk0MmYwZGI3ZTk2YSJ9fX0=
+ #     slot: 1
+ #      display_name: '&#6E48AA&lᴇ&#7249AC&lɴ&#7749AD&lᴄ&#7B4AAF&lʜ&#7F4BB0&lᴀ&#834CB2&lɴ&#884CB3&lᴛ&#8C4DB5&lᴇ&#904EB6&lʀ &#944FB8&lᴊ&#994FB9&lᴏ&#9D50BB&lʙ'
+ #        lore:
+ #        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+ #       - ''
+ #        - '&fᴊᴏɪɴ ᴛᴏ ᴛʜᴇ ᴇɴᴄʜᴀɴᴛᴇʀ ᴊᴏʙ'
+ #        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+ #        - ''
+ #        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+ #        - '  &8► &#6E48AAᴇ&#7249ACɴ&#7749ADᴄ&#7B4AAFʜ&#7F4BB0ᴀ&#834CB2ɴ&#884CB3ᴛ &#8C4DB5ʙ&#904EB6ᴏ&#944FB8ᴏ&#994FB9ᴋ&#9D50BBꜱ'
+ #       - ''
+ #        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+ #        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+ #        left_click_commands:
+ #        - '[player] job join enchanter'
+ #        - '[close]'
+ #        right_click_commands:
+ #        - '[player] job leave enchanter'
+ #        - '[close]'
+###############################################################
+      '6':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDVkY2YxYzI4ZjU0Nzk1NmFkMWM4Mzg3N2RkOTNkZDllMjcxZmE1YzJlODczNzA4OTVjN2U2NWM3NWVjZTYzMSJ9fX0=
+        slot: 22
+        display_name: '&#463606&lᴊ&#4b3d11&lᴏ&#51441d&lʙ&#564b28&lᴜ&#5c5233&lʟ &#61593e&lᴅ&#675f4a&lᴇ &#6c6655&lᴍ&#726d60&lɪ&#77746b&lɴ&#7d7b77&lᴇ&#828282&lʀ'
+        lore:
+        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+        - ''
+        - '&fɪɴᴛʀᴀ ɪɴ ᴊᴏʙᴜʟ ᴅᴇ ᴍɪɴᴇʀ'
+        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+        - ''
+        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+        - '  &8► &#463606&lꜱ&#4a3b0f&lᴘ&#4f4118&lᴀ&#534621&lʀ&#574c29&lɢ&#5b5132&lᴇ &#60573b&lᴍ&#645c44&lɪ&#68614d&lɴ&#6d6756&lᴇ&#716c5f&lʀ&#757267&lᴇ&#797770&lᴜ&#7e7d79&lʀ&#828282&lɪ'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+        left_click_commands:
+        - '[console] lp user %player_name% parent add miner'
+        - '[close]'
+        right_click_commands:
+        - '[console] lp user %player_name% parent remove miner'
+        - '[close]'
+###############################################################
+      '7':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDgwNGU0MmVjOWIwN2ZjZTFjZTAwNThiNzhkZjU3NjNmNmU0MTBkOWNlODJlZjFlYmI5NTk3YTE1MmI2ZDRjOCJ9fX0=
+        slot: 15
+        display_name: '&#01027c&lᴊ&#080b83&lᴏ&#10138b&lʙ&#171c92&lᴜ&#1e2499&lʟ &#262da0&lᴅ&#2d36a8&lᴇ &#343eaf&lᴘ&#3c47b6&lᴇ&#434fbd&lꜱ&#4a58c5&lᴄ&#5260cc&lᴀ&#5969d3&lʀ'
+        lore:
+        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+        - ''
+        - '&fɪɴᴛʀᴀ ɪɴ ᴊᴏʙᴜʟ ᴅᴇ ᴘᴇꜱᴄᴀʀ'
+        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+        - ''
+        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+        - '  &8► &#01027c&lᴘ&#0a0c85&lʀ&#13178d&lɪ&#1b2196&lɴ&#242b9f&lᴅ&#2d36a8&lᴇ &#3640b0&lᴘ&#3f4ab9&lᴇ&#4754c2&lꜱ&#505fca&lᴛ&#5969d3&lɪ'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+        left_click_commands:
+        - '[console] lp user %player_name% parent add pescar'
+        - '[close]'
+        right_click_commands:
+        - '[console] lp user %player_name% parent remove pescar'
+        - '[close]'
+      '8':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTE3MWI1M2I1YzY0ZWFkZDY4NjI5YjM0MThjMjkwNWFlMDhkM2VkNjFiOGYyZmY5ZDRhMDEyNDZlYmFjZTAxOCJ9fX0=
+        slot: 24
+        display_name: '&#36AD34&lᴊ&#36B131&lᴏ&#36B62E&lʙ&#36BA2B&l &#37BF27&lᴅ&#37C324&lᴇ&#37C821&l &#37CC1E&lɢ&#37D11B&lʀ&#37D518&lᴀ&#37DA15&lᴅ&#37DE12&lɪ&#38E30E&lɴ&#38E70B&lᴀ&#38EC08&lʀ'
+        lore:
+        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+        - ''
+        - '&fɪɴᴛʀᴀ ɪɴ ᴊᴏʙᴜʟ ᴅᴇ ɢʀᴀᴅɪɴᴀʀ'
+        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+        - ''
+        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+        - '  &8► &#36AD34&lᴛ&#36B032&lᴜ&#36B330&lɴ&#36B72D&lᴅ&#36BA2B&lᴇ&#36BD29&l &#37C027&lɢ&#37C324&lᴀ&#37C722&lᴢ&#37CA20&lᴏ&#37CD1E&lɴ&#37D01B&lᴜ&#37D319&lʟ&#37D617&l &#37DA15&l[&#37DD12&lɪ&#38E010&lᴀ&#38E30E&lʀ&#38E60C&lʙ&#38EA09&lᴀ&#38ED07&l]'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+        left_click_commands:
+        - '[console] lp user %player_name% parent add gradinar'
+        - '[close]'
+        right_click_commands:
+        - '[console] lp user %player_name% parent remove gradinar'
+        - '[close]'
+      '9':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2JkNzNlZjI1YzIzODA0ODM2NDE3M2JkOTVlNmJmNjcxNzU1NzZiMDhiMmFhYWM5ZmE1ZjU3YmNmY2ZlNDAifX19
+        slot: 31
+        display_name: '&#E01A1A&lᴊ&#DF1C1A&lᴏ&#DD1E19&lʙ&#DC2019&l &#DB2219&lᴅ&#D92418&lᴇ&#D82618&l &#D72818&lᴄ&#D62A18&lᴜ&#D42C17&lʟ&#D32E17&lᴇ&#D23017&lɢ&#D03216&lᴀ&#CE3616&lᴛ&#CF3416&lᴏ&#CC3815&lʀ'
+        lore:
+        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+        - ''
+        - '&fɪɴᴛʀᴀ ɪɴ ᴊᴏʙᴜʟ ᴅᴇ ᴄᴜʟᴇɢᴀᴛᴏʀ'
+        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+        - ''
+        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+        - '  &8► &#E01A1A&lᴄ&#DE1C1A&lᴜ&#DD1F19&lʟ&#DB2119&lᴇ&#DA2418&lɢ&#D82618&lᴇ&#D62918&l &#D52B17&lᴍ&#D32E17&lᴇ&#D13017&lʀ&#D03316&lᴇ&#CE3516&lʟ&#CD3815&lᴇ'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+        left_click_commands:
+        - '[console] lp user %player_name% parent add culegator'
+        - '[close]'
+        right_click_commands:
+        - '[console] lp user %player_name% parent remove culegator'
+        - '[close]'
+      '40':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWJjY2JkZTU5NzViOWE0ZTRiMTJmZDAyMzY5OTUxODViM2I3NWNmMGRlMWY5YjdlZTE4MTQ4MzMzYmZjN2NjIn19fQ==
+        slot: 40
+        display_name: '&#0BE072&lᴊ&#0BE177&lᴏ&#0BE37C&lʙ&#0BE480&lᴜ&#0BE685&lʟ&#0BE78A&l &#0BE88F&lᴅ&#0BEA94&lᴇ&#0AEB98&l &#0AED9D&lᴄ&#0AEEA2&lᴜ&#0AEFA7&lʀ&#0AF1AC&lɪ&#0AF2B0&lᴇ&#0AF4B5&lʀ'
+        lore:
+        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+        - ''
+        - '&fɪɴᴛʀᴀ ɪɴ ᴊᴏʙᴜʟ ᴅᴇ ᴄᴜʀɪᴇʀ'
+        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+        - ''
+        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+        - '  &8► &#0BE072&lʟ&#0BE176&lɪ&#0BE27A&lᴠ&#0BE47E&lʀ&#0BE582&lᴇ&#0BE686&lᴀ&#0BE78A&lᴢ&#0BE88E&lᴀ&#0BE992&l &#0BEB96&lᴘ&#0AEC9A&lᴀ&#0AED9E&lᴄ&#0AEEA2&lʜ&#0AEFA6&lᴇ&#0AF0AA&lᴛ&#0AF2AE&lᴇ&#0AF3B2&lʟ&#0AF4B6&lᴇ'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+        left_click_commands:
+        - '[console] lp user %player_name% parent add curier'
+        - '[close]'
+        right_click_commands:
+        - '[console] lp user %player_name% parent remove curier'
+        - '[close]'
+      '12':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDcxMzU1MDM0Y2EzNjUwNDJmNGQ4ZTZhN2ZlYWIyNGY3NjYxMzJhMDQ5OThkN2QwYzRjODAxNTdkZTEyOGRjMiJ9fX0=
+        slot: 29
+        display_name: '&#11DFC7&lᴊ&#12E1C9&lᴏ&#13E3CA&lʙ&#13E4CC&lᴜ&#14E6CE&lʟ&#15E8CF&l &#16EAD1&lᴅ&#16EBD3&lᴇ&#17EDD4&l &#18EFD6&ls&#19F1D8&lᴄ&#1AF3D9&lᴀ&#1AF4DB&lғ&#1BF6DD&lᴀ&#1CF8DE&lɴ&#1DFAE0&lᴅ&#1DFBE2&lʀ&#1EFDE3&lᴜ'
+        lore:
+        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+        - ''
+        - '&fɪɴᴛʀᴀ ɪɴ ᴊᴏʙᴜʟ ᴅᴇ sᴄᴀғᴀɴᴅʀᴜ'
+        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+        - ''
+        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+        - '  &8► &#11DFC7&ls&#11E0C8&lᴘ&#12E1C9&lᴀ&#12E2CA&lʀ&#13E3CB&lɢ&#13E4CC&lᴇ&#14E5CD&l &#14E6CE&lᴄ&#15E7CF&lᴏ&#15E8D0&lʀ&#16E9D1&lᴀ&#16EAD2&lʟ&#16EBD3&lɪ&#17ECD4&lɪ&#17EDD5&l &#18EED6&ls&#18F0D6&lɪ&#19F1D7&l &#19F2D8&lɪ&#1AF3D9&lᴀ&#1AF4DA&lʀ&#1AF5DB&lʙ&#1BF6DC&lᴀ&#1BF7DD&l &#1CF8DE&lᴅ&#1CF9DF&lɪ&#1DFAE0&lɴ&#1DFBE1&l &#1EFCE2&lᴀ&#1EFDE3&lᴘ&#1FFEE4&lᴀ'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+        left_click_commands:
+        - '[console] lp user %player_name% parent add scafandru'
+        - '[close]'
+        right_click_commands:
+        - '[console] lp user %player_name% parent remove scafandru'
+        - '[close]'
+      '11':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjE3MDI5OWFhZTBmOGE5YjU0NTgwYjYxMmZmNzhiNzgwYTk0ZDJkMDZiOWI2MDllNjc0M2Y2MmVjZGY4ZDdhYSJ9fX0=
+        slot: 33
+        display_name: '&#FFF700&lᴊ&#FDF400&lᴏ&#FCF100&lʙ&#FAEE00&lᴜ&#F8EB00&lʟ&#F6E800&l &#F5E500&lᴅ&#F3E200&lᴇ&#F1DF00&l &#F0DD00&lᴀ&#EEDA00&lᴘ&#ECD700&lɪ&#EAD400&lᴄ&#E9D100&lᴜ&#E7CE00&lʟ&#E5CB00&lᴛ&#E3C800&lᴏ&#E2C500&lʀ'
+        lore:
+        - '&8&nɪɴᴛʀᴀ ʟᴀ ᴍᴜɴᴄᴀ'
+        - ''
+        - '&fɪɴᴛʀᴀ ɪɴ ᴊᴏʙᴜʟ ᴅᴇ ᴀᴘɪᴄᴜʟᴛᴏʀ'
+        - '&fꜱɪ ɪɴᴄᴇᴘᴇ ꜱᴀ ꜰᴀᴄɪ ʙᴀɴɪɪ'
+        - ''
+        - '&8︱ &fꜱᴀʀᴄɪɴɪ:'
+        - '  &8► &#FFF700&lᴄ&#FDF300&lᴜ&#FAEF00&lʟ&#F8EB00&lᴇ&#F5E700&lɢ&#F3E300&lᴇ&#F1DF00&l &#EEDA00&lᴍ&#ECD600&lɪ&#EAD200&lᴇ&#E7CE00&lʀ&#E5CA00&lᴇ&#E2C600&lᴀ'
+        - ''
+        - '&a⊳ ᴄʟɪᴄᴋ-ꜱᴛᴀɴɢᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴀɴɢᴀᴊᴀ'
+        - '&c⊳ ᴄʟɪᴄᴋ-ᴅʀᴇᴀᴘᴛᴀ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴅᴇᴍɪꜱɪᴏɴᴀ'
+        left_click_commands:
+        - '[console] lp user %player_name% parent add apicultor'
+        - '[close]'
+        right_click_commands:
+        - '[console] lp user %player_name% parent remove apicultor'
+        - '[close]'
+      GLASS-BLACK:
+        material: gray_stained_glass_pane
+        display_name: '&f'
+        slots:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 16
+        - 17
+        - 18
+        - 19
+        - 25
+        - 26
+        - 27
+        - 28
+        - 34
+        - 35
+        - 37
+        - 38
+        - 39
+        - 41
+        - 42
+        - 43
+      '10':
+        material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjdkYTYzNTNjMjc2MGIwYzUzMDFmNDhhNWU3Nzk2NmU2NjkzYzhjYmI4MTZiNWI4MzViYjNiNjYzYzdhYzYxZiJ9fX0=
+        display_name: '&f%player_name%'
+        lore:
+        - '&8&nɪɴғᴏʀᴍᴀᴛɪɪ'
+        - '&8⊳ &7ᴊᴏʙ ᴄᴜʀᴇɴᴛ: %vault_prefix%'
+        slot: 36

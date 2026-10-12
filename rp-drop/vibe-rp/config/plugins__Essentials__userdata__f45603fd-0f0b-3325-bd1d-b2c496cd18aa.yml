@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 83.103.233.201
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 0
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725646865778
+  login: 1725645995204
+money: '3000'
+last-account-name: DenisaBcWhyNot2
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 157.46476911923384
+  y: 21.0
+  z: 1262.6193082755785
+  yaw: 303.5784912109375
+  pitch: 48.08913040161133
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 753.9746880768105
+  y: 21.0
+  z: 998.2549585336826
+  yaw: 12.42364501953125
+  pitch: 84.75010681152344

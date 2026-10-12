@@ -1,0 +1,770 @@
+{
+   "regions": {
+      "fermier": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "GTAV2",
+         "cornerOne": {
+            "world": "GTAV2",
+            "x": 490,
+            "y": 68,
+            "z": -168,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "fermier",
+         "regennableBlocks": {
+            "3363b52c-faa7-474f-a5c6-3d4cbdbc1f99": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "PUMPKIN"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "3363b52c-faa7-474f-a5c6-3d4cbdbc1f99"
+            },
+            "bfdaabc5-9515-4beb-ad83-5c7ebff8e4a8": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "MELON"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "bfdaabc5-9515-4beb-ad83-5c7ebff8e4a8"
+            },
+            "9b2cbc33-9cc0-4560-9f29-e9bba4c24b44": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {
+                     "material": "WHEAT_SEEDS",
+                     "age": -1
+                  },
+                  "type": "crop"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "9b2cbc33-9cc0-4560-9f29-e9bba4c24b44"
+            },
+            "cfe1219d-4602-4b9d-beff-5788312aae3b": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {
+                     "material": "BEETROOT_SEEDS",
+                     "age": -1
+                  },
+                  "type": "crop"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "cfe1219d-4602-4b9d-beff-5788312aae3b"
+            },
+            "cfdd6255-417f-484e-a5c9-947808d0970e": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {
+                     "material": "CARROT",
+                     "age": -1
+                  },
+                  "type": "crop"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "cfdd6255-417f-484e-a5c9-947808d0970e"
+            },
+            "21ceadf9-e986-4a56-a4fb-752a36cbf43b": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {
+                     "material": "POTATO",
+                     "age": -1
+                  },
+                  "type": "crop"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "21ceadf9-e986-4a56-a4fb-752a36cbf43b"
+            }
+         },
+         "cornerTwo": {
+            "world": "GTAV2",
+            "x": 592,
+            "y": 67,
+            "z": -74,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "lopatar": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "GTAV2",
+         "cornerOne": {
+            "world": "GTAV2",
+            "x": 315,
+            "y": 64,
+            "z": -701,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "lopatar",
+         "regennableBlocks": {},
+         "cornerTwo": {
+            "world": "GTAV2",
+            "x": 354,
+            "y": 64,
+            "z": -739,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "padurar#1": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "GTAV2",
+         "cornerOne": {
+            "world": "GTAV2",
+            "x": 508,
+            "y": 66,
+            "z": 265,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "padurar#1",
+         "regennableBlocks": {
+            "c47742b0-b8d7-48e0-bff4-6e3fb6092d1b": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "BIRCH_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "c47742b0-b8d7-48e0-bff4-6e3fb6092d1b"
+            },
+            "c9e8681d-7946-4a6b-8ad2-b3d40a7e61c7": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "ACACIA_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "c9e8681d-7946-4a6b-8ad2-b3d40a7e61c7"
+            },
+            "7913951c-3436-46c3-9c6c-2d34a04a6909": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "OAK_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "7913951c-3436-46c3-9c6c-2d34a04a6909"
+            },
+            "83e42290-00f6-4b2d-bfaa-233ebe523c06": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "CRIMSON_STEM"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "83e42290-00f6-4b2d-bfaa-233ebe523c06"
+            },
+            "efc123f0-c1f8-4587-9a48-7372694a583c": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "DARK_OAK_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "efc123f0-c1f8-4587-9a48-7372694a583c"
+            },
+            "c1152d4d-5cfe-4824-a82c-6b4ca81c4da4": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "WARPED_STEM"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "c1152d4d-5cfe-4824-a82c-6b4ca81c4da4"
+            },
+            "f4fed251-77c7-450c-a34c-7b48e8549a4c": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "JUNGLE_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "f4fed251-77c7-450c-a34c-7b48e8549a4c"
+            },
+            "f0fde221-5f21-41f4-9844-842cb625e09d": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "SPRUCE_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "f0fde221-5f21-41f4-9844-842cb625e09d"
+            }
+         },
+         "cornerTwo": {
+            "world": "GTAV2",
+            "x": 441,
+            "y": 70,
+            "z": 192,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "DIM1": {
+         "settings": {
+            "allow-block-break": true,
+            "auto-inventory": false,
+            "allow-block-place": true,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "DIM1",
+         "id": "DIM1",
+         "regennableBlocks": {}
+      },
+      "ARAT": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "GTAV2",
+         "cornerOne": {
+            "world": "GTAV2",
+            "x": 580,
+            "y": 67,
+            "z": -168,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "ARAT",
+         "regennableBlocks": {},
+         "cornerTwo": {
+            "world": "GTAV2",
+            "x": 612,
+            "y": 67,
+            "z": -103,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "padurar#2": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "GTAV2",
+         "cornerOne": {
+            "world": "GTAV2",
+            "x": 514,
+            "y": 65,
+            "z": 306,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "padurar#2",
+         "regennableBlocks": {
+            "7e0a21d7-8d94-45b3-b969-0936375e8a8f": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "DARK_OAK_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "7e0a21d7-8d94-45b3-b969-0936375e8a8f"
+            },
+            "55b61517-8c8a-4c12-8aa2-8115c0adb493": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "SPRUCE_LEAVES"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "55b61517-8c8a-4c12-8aa2-8115c0adb493"
+            },
+            "a3aab309-1c91-4bb8-bb4d-55e7171a44bb": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "BIRCH_LEAVES"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "a3aab309-1c91-4bb8-bb4d-55e7171a44bb"
+            },
+            "b8585cdd-c421-4f5b-b1d3-8f7ec322d290": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "CRIMSON_STEM"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "b8585cdd-c421-4f5b-b1d3-8f7ec322d290"
+            },
+            "12211627-1ccf-4420-b6b0-3a71b1fad4cb": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "DARK_OAK_LEAVES"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "12211627-1ccf-4420-b6b0-3a71b1fad4cb"
+            },
+            "fe0cb233-f97f-4163-afbf-8bcbb86071c7": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "WARPED_WART_BLOCK"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "fe0cb233-f97f-4163-afbf-8bcbb86071c7"
+            },
+            "18b5b39e-38cf-42bc-b59c-ba36fe862dd1": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "BIRCH_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "18b5b39e-38cf-42bc-b59c-ba36fe862dd1"
+            },
+            "ac16696f-38bf-4fcb-941d-203fd645f4f7": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "ACACIA_LEAVES"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "ac16696f-38bf-4fcb-941d-203fd645f4f7"
+            },
+            "660e8b78-1562-44ae-98da-4ae2a9235f17": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "JUNGLE_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "660e8b78-1562-44ae-98da-4ae2a9235f17"
+            },
+            "38213531-5467-40a8-a1b2-054256f49ddb": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "ACACIA_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "38213531-5467-40a8-a1b2-054256f49ddb"
+            },
+            "2ea8fbc4-5e9e-4cde-a0f0-9d53a508cdc6": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "JUNGLE_LEAVES"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "2ea8fbc4-5e9e-4cde-a0f0-9d53a508cdc6"
+            },
+            "76022786-1b63-461a-ac3e-64cba73d29a8": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "OAK_LEAVES"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "76022786-1b63-461a-ac3e-64cba73d29a8"
+            },
+            "1860f256-7d7c-44fd-8016-52e48f9d6e6e": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "OAK_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "1860f256-7d7c-44fd-8016-52e48f9d6e6e"
+            },
+            "bba49f15-f14d-4a51-a8fc-24ec072c4352": {
+               "replacePlaceable": {
+                  "data": {"material": "AIR"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "NETHER_WART_BLOCK"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "bba49f15-f14d-4a51-a8fc-24ec072c4352"
+            },
+            "dd2138b9-64fd-4c2c-aa4e-372ee13c66ca": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "WARPED_STEM"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 30,
+               "uuid": "dd2138b9-64fd-4c2c-aa4e-372ee13c66ca"
+            },
+            "f3094c4c-9b2b-4c42-963b-83eae36dc6bd": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "SPRUCE_LOG"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "f3094c4c-9b2b-4c42-963b-83eae36dc6bd"
+            }
+         },
+         "cornerTwo": {
+            "world": "GTAV2",
+            "x": 442,
+            "y": 83,
+            "z": 403,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "miner": {
+         "settings": {
+            "allow-block-break": false,
+            "auto-inventory": false,
+            "allow-block-place": false,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "GTAV2",
+         "cornerOne": {
+            "world": "GTAV2",
+            "x": 455,
+            "y": 75,
+            "z": -567,
+            "pitch": 0,
+            "yaw": 0
+         },
+         "id": "miner",
+         "regennableBlocks": {
+            "cf8a9a66-694b-4735-ae30-049389cd9bb4": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "LAPIS_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "cf8a9a66-694b-4735-ae30-049389cd9bb4"
+            },
+            "6ba566b9-b37a-49df-8a84-f68e64217d22": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "COAL_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "6ba566b9-b37a-49df-8a84-f68e64217d22"
+            },
+            "a58729c7-7f5d-48e1-a7c9-52771451dbb0": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "ANCIENT_DEBRIS"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 3600,
+               "uuid": "a58729c7-7f5d-48e1-a7c9-52771451dbb0"
+            },
+            "af04cbbf-c1db-4b47-be60-c6ff9d59a2a7": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "EMERALD_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "af04cbbf-c1db-4b47-be60-c6ff9d59a2a7"
+            },
+            "dc7bec2f-fda4-4761-a379-45360160f236": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "GOLD_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "dc7bec2f-fda4-4761-a379-45360160f236"
+            },
+            "1869250e-9793-42b7-b39a-3c5321a40d6c": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "IRON_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "1869250e-9793-42b7-b39a-3c5321a40d6c"
+            },
+            "1481c22f-98e7-47ae-8b12-f2897d01bf76": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "REDSTONE_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "1481c22f-98e7-47ae-8b12-f2897d01bf76"
+            },
+            "dc308b2f-c6f0-4de3-b172-391765e7a978": {
+               "replacePlaceable": {
+                  "data": {"material": "BEDROCK"},
+                  "type": "material"
+               },
+               "originalPlaceable": {
+                  "data": {"material": "DIAMOND_ORE"},
+                  "type": "material"
+               },
+               "minRegenTime": 5,
+               "type": "standard",
+               "maxRegenTime": 15,
+               "uuid": "dc308b2f-c6f0-4de3-b172-391765e7a978"
+            }
+         },
+         "cornerTwo": {
+            "world": "GTAV2",
+            "x": 502,
+            "y": 103,
+            "z": -535,
+            "pitch": 0,
+            "yaw": 0
+         }
+      },
+      "GTAV2": {
+         "settings": {
+            "allow-block-break": true,
+            "auto-inventory": false,
+            "allow-block-place": true,
+            "region-display-icon": "GRASS_BLOCK",
+            "allow-block-tramping": true
+         },
+         "worldName": "GTAV2",
+         "id": "GTAV2",
+         "regennableBlocks": {}
+      }
+   },
+   "test": {
+      "settings": {
+         "allow-block-break": false,
+         "allow-block-place": false,
+         "region-display-icon": "GRASS_BLOCK"
+      },
+      "cornerOne": {
+         "world": "GTAV2",
+         "x": 515,
+         "y": 68,
+         "z": -116,
+         "pitch": 0,
+         "yaw": 0
+      },
+      "id": "test",
+      "regennableBlocks": {},
+      "cornerTwo": {
+         "world": "GTAV2",
+         "x": 508,
+         "y": 68,
+         "z": -110,
+         "pitch": 0,
+         "yaw": 0
+      }
+   },
+   "version": 2
+}

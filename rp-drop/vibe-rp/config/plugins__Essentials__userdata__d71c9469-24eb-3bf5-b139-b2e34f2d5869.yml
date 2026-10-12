@@ -1,0 +1,39 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 82.79.100.48
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1725659042582
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725653562591
+  login: 1725653598474
+money: '3140.0'
+last-account-name: emilian1a1
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 215.37636994222015
+  y: 27.368195277153333
+  z: 1372.5195603136694
+  yaw: -172.26336669921875
+  pitch: 19.65019989013672
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 333.377
+  y: 21.0
+  z: 981.5
+  yaw: -274.5179748535156
+  pitch: -55.95039749145508
+nickname: vilafemei

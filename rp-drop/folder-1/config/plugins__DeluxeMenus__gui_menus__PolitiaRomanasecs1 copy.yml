@@ -1,0 +1,102 @@
+menu_title: '         &#0643E7&lᴘ&#0A46E9&lᴏ&#0E4AEB&lʟ&#124DED&lɪ&#1651EE&lᴛ&#1A54F0&lɪ&#1E57F2&lᴀ &#255EF6&lʀ&#2961F8&lᴏ&#2D65F9&lᴍ&#3168FB&lᴀ&#356CFD&lɴ&#396FFF&lᴀ'
+open_command:
+- duba
+size: 44
+open_requirement:
+  requirements:
+    permission:
+      type: has permission
+      permission: dubita1
+      deny_commands:
+        - ''
+items:
+  '1':
+    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjRkNzhmMTE4ODhjOTNhN2JiOGZiMzIzMTRhMzUzYzQ1YjczZjc2MjY2NjkyZThkZjE5MzI5MTlhMjViMWFhIn19fQ==
+    slot: 19
+    display_name: '&#1203DD&lᴘ&#1104DF&lᴏ&#1005E1&lʟ&#0F06E3&lɪ&#0E07E6&lᴛ&#0C07E8&lɪ&#0B08EA&lᴇ&#0A09EC&l &#090AEE&ls&#080BF0&lᴇ&#070CF2&lᴄ&#060DF4&lᴛ&#050EF7&lᴏ&#030EF9&lʀ&#020FFB&l &#0110FD&l1'
+    lore:
+    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
+    left_click_commands:
+    - '[console] minecraft:tp %player_name% -577 64 575'
+    - '[close]'
+    right_click_commands:
+    - '[console] minecraft:tp %player_name% -577 64 575'  
+    - '[close]'
+
+  '2':
+    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjRkNzhmMTE4ODhjOTNhN2JiOGZiMzIzMTRhMzUzYzQ1YjczZjc2MjY2NjkyZThkZjE5MzI5MTlhMjViMWFhIn19fQ==
+    slot: 21
+    display_name: '&#1203DD&lᴘ&#1104DF&lᴏ&#1005E1&lʟ&#0F06E3&lɪ&#0E07E6&lᴛ&#0C07E8&lɪ&#0B08EA&lᴇ&#0A09EC&l &#090AEE&ls&#080BF0&lᴇ&#070CF2&lᴄ&#060DF4&lᴛ&#050EF7&lᴏ&#030EF9&lʀ&#020FFB&l &#0110FD&l2'
+    lore:
+    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
+    left_click_commands:
+    - '[console] minecraft:tp %player_name% -814 61 20'
+    - '[close]'
+    right_click_commands:
+    - '[console] minecraft:tp %player_name% -814 61 20'
+    - '[close]'    
+  '3':
+    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjRkNzhmMTE4ODhjOTNhN2JiOGZiMzIzMTRhMzUzYzQ1YjczZjc2MjY2NjkyZThkZjE5MzI5MTlhMjViMWFhIn19fQ==
+    slot: 23
+    display_name: '&#1203DD&lᴘ&#1104DF&lᴏ&#1005E1&lʟ&#0F06E3&lɪ&#0E07E6&lᴛ&#0C07E8&lɪ&#0B08EA&lᴇ&#0A09EC&l &#090AEE&ls&#080BF0&lᴇ&#070CF2&lᴄ&#060DF4&lᴛ&#050EF7&lᴏ&#030EF9&lʀ&#020FFB&l &#0110FD&l3'
+    lore:
+    - '&7ᴄʟɪᴄᴋ ᴘᴇɴᴛʀᴜ ᴀ ᴛᴇ ᴛᴇʟᴇᴘᴏʀᴛᴀ'
+    left_click_commands:
+    - '[console] minecraft:tp %player_name% -988 63 414'
+    - '[close]'
+    right_click_commands:
+    - '[console] minecraft:tp %player_name% -988 63 414'
+    - '[close]'
+  '5':
+    material: barrier
+    slot: 44
+    display_name: '&#FF0000&lᴇ&#FF0D0D&lx&#FF1A1A&lɪ&#FF2626&lᴛ'
+    left_click_commands:
+    - '[close]'
+    right_click_commands:
+    - '[close]'    
+  'GLASS-BLACK':
+        material: gray_stained_glass_pane
+        display_name: '&f'
+        slots:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 25
+        - 26
+        - 27
+        - 28
+        - 29
+        - 30
+        - 31
+        - 32
+        - 33
+        - 34
+        - 35    
+        - 36 
+        - 37
+        - 38
+        - 39
+        - 40
+        - 41
+        - 42
+        - 43  
+        - 20 
+        - 24
+        - 21

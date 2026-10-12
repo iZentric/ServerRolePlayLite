@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 89.136.41.193
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1725636274069
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1725649282501
+  login: 1725640671204
+money: '51834.0'
+last-account-name: NXS_Killer_200
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 352.2575256104336
+  y: 21.0
+  z: 937.195090157044
+  yaw: 70.57813262939453
+  pitch: 4.060075759887695
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 182.3663560007271
+  y: 36.5
+  z: 981.9050104106127
+  yaw: -101.75308227539062
+  pitch: 31.234081268310547

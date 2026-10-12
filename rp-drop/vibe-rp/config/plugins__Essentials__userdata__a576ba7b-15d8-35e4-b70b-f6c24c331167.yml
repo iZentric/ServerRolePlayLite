@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 109.98.2.196
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1723475423831
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1723476802034
+  login: 1723466124365
+money: '5000'
+last-account-name: CristinaLoVeYoU
+logoutlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -243.72769491036388
+  y: 67.0
+  z: 157.7579469791908
+  yaw: -255.29254150390625
+  pitch: 23.24991798400879
+lastlocation:
+  world: 9cada2ae-1782-4468-b283-fc2ccecc6b17
+  world-name: GTAV2
+  x: -240.31415891031062
+  y: 67.0
+  z: 153.58129049042682
+  yaw: -109.86388397216797
+  pitch: 10.599218368530273

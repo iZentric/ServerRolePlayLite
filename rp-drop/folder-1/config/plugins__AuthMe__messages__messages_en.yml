@@ -1,0 +1,150 @@
+registration:
+  register_request: '&3Te rugam sa te inregistrezi pe server cu comanda: /register <parola> <ConfirmareParola>'
+  command_usage: '&cUtilizare: /register <parola> <ConfirmareParola>'
+  reg_only: '&4Doar utilizatorii inregistrati pot intra pe server! Te rugam sa vizitezi http://example.com pentru a te inregistra!'
+  kicked_admin_registered: 'Un administrator tocmai te-a inregistrat; te rugam sa te loghezi din nou.'
+  success: '&2Inregistrare reusita!'
+  disabled: '&cInregistrarea in joc este dezactivata!'
+  name_taken: '&cAi deja acest nume de utilizator inregistrat!'
+
+# Password errors on registration
+password:
+  match_error: '&cParolele nu se potrivesc, verifica-le din nou!'
+  name_in_password: '&cNu poti folosi numele tau ca parola, te rugam sa alegi alta...'
+  unsafe_password: '&cParola aleasa nu este sigura, te rugam sa alegi alta...'
+  forbidden_characters: '&4Parola ta contine caractere nepermise. Caractere permise: %valid_chars'
+  wrong_length: '&cParola ta este prea scurta sau prea lunga! Te rugam sa incerci alta!'
+
+# Login
+login:
+  command_usage: '&cUtilizare: /login <parola>'
+  wrong_password: '&cParola gresita!'
+  success: '&2Autentificare reusita!'
+  login_request: '&cTe rugam sa te loghezi cu comanda: /login <parola>'
+  timeout_error: '&4Timpul pentru autentificare a expirat, ai fost deconectat de pe server, te rugam sa incerci din nou!'
+
+# Errors
+error:
+  unregistered_user: '&cAcest utilizator nu este inregistrat!'
+  denied_command: '&cPentru a folosi aceasta comanda trebuie sa fii autentificat!'
+  denied_chat: '&cPentru a conversa trebuie sa fii autentificat!'
+  not_logged_in: '&cNu esti autentificat!'
+  tempban_max_logins: '&cAi fost temporar interzis pentru ca ai esuat de prea multe ori sa te autentifici.'
+  max_registration: '&cAi depasit numarul maxim de inregistrari (%reg_count/%max_acc %reg_names) pentru conexiunea ta!'
+  no_permission: '&4Nu ai permisiunea de a efectua aceasta actiune!'
+  unexpected_error: '&4A aparut o eroare neasteptata, te rugam sa contactezi un administrator!'
+  kick_for_vip: '&3Un jucator VIP a intrat pe server cand acesta era plin!'
+  logged_in: '&cEsti deja autentificat!'
+  kick_unresolved_hostname: '&cA aparut o eroare: numele de gazda al jucatorului nu a fost rezolvat!'
+
+# AntiBot
+antibot:
+  kick_antibot: 'Modul de protectie AntiBot este activat! Trebuie sa astepti cateva minute inainte de a te alatura serverului.'
+  auto_enabled: '&4[AntiBotService] AntiBot activat din cauza numarului mare de conexiuni!'
+  auto_disabled: '&2[AntiBotService] AntiBot dezactivat dupa %m minute!'
+
+unregister:
+  success: '&cInregistrare anulata cu succes!'
+  command_usage: '&cUtilizare: /unregister <parola>'
+
+# Other messages
+misc:
+  accounts_owned_self: 'Detii %count conturi:'
+  accounts_owned_other: 'Jucatorul %name are %count conturi:'
+  account_not_activated: '&cContul tau nu este activat inca, te rugam sa iti verifici emailul!'
+  password_changed: '&2Parola schimbata cu succes!'
+  logout: '&2Deconectare reusita!'
+  reload: '&2Configuratia si baza de date au fost reincarcate corect!'
+  usage_change_password: '&cUtilizare: /changepassword <parolaVeche> <parolaNoua>'
+
+# Session messages
+session:
+  invalid_session: '&cIP-ul tau a fost schimbat si datele sesiunii tale au expirat!'
+  valid_session: '&2Autentificat datorita reconectarii sesiunii.'
+
+# Error messages when joining
+on_join_validation:
+  name_length: '&4Numele tau de utilizator este prea scurt sau prea lung!'
+  characters_in_name: '&4Numele tau de utilizator contine caractere nepermise. Caractere permise: %valid_chars'
+  country_banned: '&4Tara ta este interzisa pe acest server!'
+  not_owner_error: 'Nu esti proprietarul acestui cont. Te rugam sa alegi alt nume!'
+  kick_full_server: '&4Serverul este plin, incearca mai tarziu!'
+  same_nick_online: '&4Acelasi nume de utilizator este deja conectat pe server!'
+  invalid_name_case: 'Trebuie sa te loghezi folosind numele de utilizator %valid, nu %invalid.'
+  same_ip_online: 'Un jucator cu acelasi IP este deja in joc!'
+  quick_command: 'Ai folosit o comanda prea repede! Te rugam sa te alaturi din nou serverului si sa astepti mai mult inainte de a folosi orice comanda.'
+
+# Email
+email:
+  usage_email_add: '&cUtilizare: /email add <email> <confirmEmail>'
+  usage_email_change: '&cUtilizare: /email change <oldEmail> <newEmail>'
+  new_email_invalid: '&cEmail nou invalid, incearca din nou!'
+  old_email_invalid: '&cEmail vechi invalid, incearca din nou!'
+  invalid: '&cAdresa de email invalida, incearca din nou!'
+  added: '&2Adresa de email adaugata cu succes la contul tau!'
+  request_confirmation: '&cTe rugam sa confirmi adresa de email!'
+  changed: '&2Adresa de email a fost schimbata corect!'
+  email_show: '&2Adresa ta actuala de email este: &f%email'
+  incomplete_settings: 'Eroare: nu toate setarile necesare sunt setate pentru a trimite emailuri. Te rugam sa contactezi un administrator.'
+  already_used: '&4Adresa de email este deja folosita'
+  send_failure: 'Emailul nu a putut fi trimis. Te rugam sa contactezi un administrator.'
+  no_email_for_account: '&2In prezent nu ai asociata o adresa de email cu acest cont.'
+  add_email_request: '&3Te rugam sa adaugi adresa ta de email la cont cu comanda: /email add <yourEmail> <confirmEmail>'
+  change_password_expired: 'Nu mai poti schimba parola folosind aceasta comanda.'
+  email_cooldown_error: '&cUn email a fost deja trimis recent. Trebuie sa astepti %time inainte de a putea trimite unul nou.'
+  add_not_allowed: '&cAdaugarea emailului nu a fost permisa.'
+  change_not_allowed: '&cSchimbarea emailului nu a fost permisa.'
+
+# Password recovery by email
+recovery:
+  forgot_password_hint: 'Ti-ai uitat parola? Te rugam sa folosesti comanda: /email recovery <yourEmail>'
+  command_usage: '&cUtilizare: /email recovery <Email>'
+  email_sent: '&2Emailul de recuperare a fost trimis cu succes! Te rugam sa iti verifici inbox-ul de email!'
+  code:
+    code_sent: 'Un cod de recuperare pentru a reseta parola a fost trimis pe emailul tau.'
+    incorrect: 'Codul de recuperare nu este corect! Mai ai %count incercari ramase.'
+    tries_exceeded: 'Ai depasit numarul maxim de incercari pentru a introduce codul de recuperare. Foloseste "/email recovery [email]" pentru a genera unul nou.'
+    correct: 'Cod de recuperare introdus corect!'
+    change_password: 'Te rugam sa folosesti comanda /email setpassword <parola noua> pentru a schimba parola imediat.'
+
+# Captcha
+captcha:
+  usage_captcha: 'Pentru a te loga trebuie sa rezolvi un cod captcha, te rugam sa folosesti comanda: /captcha %captcha_code'
+  wrong_captcha: '&cCod captcha gresit, te rugam sa tastezi "/captcha %captcha_code" in chat!'
+  valid_captcha: '&2Cod captcha rezolvat corect!'
+  captcha_for_registration: 'Pentru a te inregistra trebuie sa rezolvi mai intai un cod captcha, te rugam sa folosesti comanda: /captcha %captcha_code'
+  register_captcha_valid: '&2Captcha valid! Acum te poti inregistra cu /register'
+
+# Verification code
+verification:
+  code_required: 'Aceasta comanda este sensibila si necesita verificare prin email! Verifica inbox-ul si urmeaza instructiunile din email.'
+  command_usage: '&cUtilizare: /verification <cod>'
+  incorrect_code: '&cCod incorect, te rugam sa tastezi "/verification <cod>" in chat, folosind codul primit pe email'
+  success: '&2Identitatea ta a fost verificata! Acum poti executa toate comenzile in aceasta sesiune!'
+  already_verified: '&2Poti deja executa toate comenzile sensibile in aceasta sesiune!'
+  code_expired: '&3Codul tau a expirat! Executa o alta comanda sensibila pentru a primi unul nou!'
+  email_needed: 'Pentru a-ti verifica identitatea trebuie sa asociezi o adresa de email contului tau!!'
+
+# Two-factor authentication
+two_factor:
+  code_created: '&2Codul tau secret este %code. Poti sa-l scanezi de aici %url'
+  confirmation_required: 'Te rugam sa confirmi codul cu /2fa confirm <cod>'
+  code_required: 'Te rugam sa trimiti codul de autentificare in doi pasi cu /2fa code <cod>'
+  already_enabled: 'Autentificarea in doi pasi este deja activata pentru contul tau!'
+  enable_error_no_code: 'Nu ti-a fost generat un cod 2fa sau a expirat. Te rugam sa rulezi /2fa add'
+  enable_success: 'Autentificarea in doi pasi activata cu succes pentru contul tau'
+  enable_error_wrong_code: 'Cod gresit sau codul a expirat. Te rugam sa rulezi /2fa add'
+  not_enabled_error: 'Autentificarea in doi pasi nu este activata pentru contul tau. Ruleaza /2fa add'
+  removed_success: 'Autentificarea in doi pasi a fost eliminata cu succes de la contul tau'
+  invalid_code: 'Cod invalid!'
+
+# Time units
+time:
+  second: 'secunda'
+  seconds: 'secunde'
+  minute: 'minut'
+  minutes: 'minute'
+  hour: 'ora'
+  hours: 'ore'
+  day: 'zi'
+  days: 'zile'

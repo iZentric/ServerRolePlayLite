@@ -1,0 +1,85 @@
+{
+  "id": 13,
+  "addons": {
+    "ncs_cooldowns": {
+      "player_usages": [
+        {
+          "player_uuid": "94a4f91c-75e3-3f66-9cf9-939a4253368f",
+          "time": 1699300550360
+        },
+        {
+          "player_uuid": "8405565f-770a-354d-9a23-d06ec3b19042",
+          "time": 1698754044812
+        },
+        {
+          "player_uuid": "45193980-25a1-36ab-8e48-88b1ace5736a",
+          "time": 1698763365412
+        },
+        {
+          "player_uuid": "09aa0e7e-083d-3ba0-b430-25881ad68780",
+          "time": 1701271930519
+        },
+        {
+          "player_uuid": "c58dac5f-a8e0-3287-bf6e-35355a3d0578",
+          "time": 1700159105462
+        },
+        {
+          "player_uuid": "3d348ae4-0e04-34e0-b5bc-0ffac591c46d",
+          "time": 1698060422755
+        },
+        {
+          "player_uuid": "215bc920-5219-3908-bb0c-2067929a13f5",
+          "time": 1701607484009
+        },
+        {
+          "player_uuid": "83d3242a-5619-321e-afeb-f1d9b8d81bbb",
+          "time": 1698943885676
+        },
+        {
+          "player_uuid": "08a5087e-fc5c-3969-8312-0dd325f8c3e6",
+          "time": 1700218396111
+        },
+        {
+          "player_uuid": "3e350385-02ea-37da-8879-58469ad1eaba",
+          "time": 1698573814538
+        },
+        {
+          "player_uuid": "12caf773-50fd-3699-b5b4-be95cac0bc08",
+          "time": 1700922126553
+        },
+        {
+          "player_uuid": "b7c620d3-63f4-3440-a282-49b79b76607a",
+          "time": 1699702317441
+        },
+        {
+          "player_uuid": "aa6dcac1-4971-37cf-8df7-1a461dd1550a",
+          "time": 1701004738270
+        },
+        {
+          "player_uuid": "647789f6-bd5b-3d3e-822c-696eac3fdcc0",
+          "time": 1698154554741
+        },
+        {
+          "player_uuid": "dceac256-a30a-3308-8e82-24b6e90e3e7d",
+          "time": 1700064301563
+        },
+        {
+          "player_uuid": "db9ccc69-d0b7-352f-a7d1-36eec754b71c",
+          "time": 1699363691160
+        },
+        {
+          "player_uuid": "f46bdf8c-f889-3123-8f6b-7f18b61135d2",
+          "time": 1700415472048
+        },
+        {
+          "player_uuid": "3cde177a-ffd1-3feb-8030-0ea30be1b332",
+          "time": 1699454467660
+        },
+        {
+          "player_uuid": "d2b20e97-211b-32a3-98a2-442e69a0156f",
+          "time": 1700075378213
+        }
+      ]
+    }
+  }
+}

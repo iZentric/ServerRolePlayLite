@@ -1,0 +1,191 @@
+# ----------------------------------------------------------------------------------------------------
+# Configuration file for BettingGames
+# More information can be found in the documentation
+# ----------------------------------------------------------------------------------------------------
+
+# --------------------------------------------------
+# Game configuration
+# --------------------------------------------------
+
+# Game type and settings
+type: JACKPOT
+name: Jackpot
+
+draw_players: 2
+draw_delay: 30 SECOND
+
+animation_duration: 150 TICK
+animation_ticks_start: 1
+animation_ticks_min: 0
+animation_ticks_max: 20
+animation_ticks_formula_step: '{previous_ticks} * 1.1'
+animation_sound: BLOCK_WOODEN_BUTTON_CLICK_ON
+
+# Restrictions
+participation_permission: bettinggames.game.default_jackpot
+#participation_cooldown: 5 SECOND
+#max_concurrent_games: 1
+
+# Bet settings
+allow_bet_currencies: [VAULT]  # XP, PLAYER_POINTS, TOKEN_ENCHANT, XP_LEVEL
+allow_bet_items: false
+
+min_bet_currencies: {}
+max_bet_currencies: {}
+min_bet_items: 0
+max_bet_items: -1
+
+lock_bets_on_draw_delay: 5 SECOND
+
+# Win behavior
+on_win:
+#  commands: |
+#    msg {player} GG!
+  notify_player:
+    sound: ENTITY_PLAYER_LEVELUP
+    message: '&6You &7won &a{what} &7in the jackpot game !'
+    bossbar: '&6You &7won &a{what} &7in the jackpot game !'
+    bossbar_duration: 10 SECOND
+  notify_broadcast:
+    bossbar: '&e{player} &7won &a{what} &7in the jackpot game !'
+    bossbar_duration: 3 SECOND
+
+# Lose behavior
+on_lose:
+#  commands: |
+#    msg {player} oof
+  notify_player:
+    sound: BLOCK_ANVIL_BREAK
+    message: '&6You &7lost &c{what} &7in the jackpot game.'
+    bossbar: '&6You &7lost &c{what} &7in the jackpot game.'
+    bossbar_duration: 10 SECOND
+  #notify_broadcast:
+  #  bossbar: '&e{player} &7lost &c{lost} &7in the jackpot game.'
+  #  bossbar_duration: 3 SECOND
+
+# --------------------------------------------------
+# Hub GUI configuration
+# --------------------------------------------------
+
+hub_gui_commands: ['/jackpot']
+
+hub_gui:
+
+  name: '&dJackpot'
+  type: CHEST_6_ROW
+
+  item_bet:
+    locations: 50
+    persistent: true
+    icon:
+      type: PAPER
+      name: '&dBet'
+      lore: |
+        &7Select your bet for
+        &7the next game.
+  item_draw:  # use this to define the location and persistence of the draw items ; icons for different states can be configured below
+    locations: 48
+    persistent: true
+    icon:
+      type: MAGMA_CREAM
+      name: '&eWaiting...'
+      lore: |
+        &7No status
+  item_draw_awaiting_games:
+    icon:
+      type: MAGMA_CREAM
+      name: '&eWaiting for previous game to end...'
+      lore: |
+        &7For next game :
+        &7Players : &e{players_waiting}
+        &7Total bet value : &e{bet}
+        &r
+        &dRight-click to view bet items
+  item_draw_awaiting_players:
+    icon:
+      type: MAGMA_CREAM
+      name: '&eWaiting for players...'
+      lore: |
+        &7Players : &e{players_waiting}
+        &7Total bet value : &e{bet}
+        &r
+        &dRight-click to view bet items
+  item_draw_countdown:
+    icon:
+      type: MAGMA_CREAM
+      name: '&6Next game in {time}'
+      lore: |
+        &7Players : &e{players_waiting}
+        &7Total bet value : &e{bet}
+        &r
+        &dRight-click to view bet items
+  item_player:
+    icon:
+      type: PLAYER_HEAD
+      owner_name: '{player}'
+      name: '&6{player}'
+      lore: |
+        &7Bet value :
+        &e{bet}
+        &r
+        &dRight-click to view bet items
+
+  contents:
+
+    - global@dynamic_border_6_blink
+
+    - locations: 45
+      persistent: true
+      type: BACK
+      icon:
+        type: GRAY_STAINED_GLASS_PANE
+        name: '&8Go back'
+
+# --------------------------------------------------
+# Active GUI configuration
+# --------------------------------------------------
+
+active_gui_stop_close_delay: 50 TICK
+
+active_gui:
+
+  name: '&dJackpot'
+  type: CHEST_3_ROW
+
+  player_slots: [10,11,12,13,14,15,16]
+  active_player_slot: 13
+
+  item_player:
+    icon:
+      type: PLAYER_HEAD
+      owner_name: '{player}'
+      name: '&6{player}'
+      lore: |
+        &7Winning chances : &e{chance}%
+        &7Bet : &e{bet}
+
+  contents:
+
+    - type: DYNAMIC_BORDER_LINEAR
+      persistent: true
+      locations: [0,1,2,3,5,6,7,8,17,26,25,24,23,21,20,19,18,9]
+      on_count: 10
+      icon_on:
+        type: RED_STAINED_GLASS_PANE
+        name: '&r'
+      icon_off:
+        type: ORANGE_STAINED_GLASS_PANE
+        name: '&r'
+
+    - type: DYNAMIC_BORDER_LINEAR
+      persistent: true
+      locations: [4, 22]
+      on_count: 1
+      refresh_ticks: 2
+      icon_on:
+        type: YELLOW_STAINED_GLASS_PANE
+        name: '&f'
+      icon_off:
+        type: GRAY_STAINED_GLASS_PANE
+        name: '&f'
+  

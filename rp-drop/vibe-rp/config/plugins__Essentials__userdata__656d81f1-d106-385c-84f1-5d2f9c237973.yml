@@ -1,0 +1,38 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 89.43.130.6
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1723801472630
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1723802733703
+  login: 1723799099715
+money: '5000'
+last-account-name: _Uncle_Roger_
+lastlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 141.6128575722561
+  y: 46.0
+  z: 1079.6767286619718
+  yaw: 28.451997756958008
+  pitch: 25.22491455078125
+logoutlocation:
+  world: 729e9708-c289-4051-adef-b1f853eecb30
+  world-name: Island
+  x: 294.542809125053
+  y: 35.37429331309656
+  z: 1041.699999988079
+  yaw: 241.1412353515625
+  pitch: 24.842308044433594

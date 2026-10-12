@@ -1,0 +1,35 @@
+pages:
+  page1:
+    items:
+      '2':
+        material: BUBUSTEINMONEYMOD_ONE_EURO
+        buy: 1.0
+        sell: 1.0
+      '3':
+        material: BUBUSTEINMONEYMOD_FIVE_EUROS
+        buy: 5.0
+        sell: 5.0
+      '4':
+        material: BUBUSTEINMONEYMOD_TEN_EUROS
+        buy: 10.0
+        sell: 10.0
+      '5':
+        material: BUBUSTEINMONEYMOD_TWENTY_EUROS
+        buy: 20.0
+        sell: 20.0
+      '6':
+        material: BUBUSTEINMONEYMOD_FIFTY_EUROS
+        buy: 50.0
+        sell: 50.0
+      '7':
+        material: BUBUSTEINMONEYMOD_HUNDRED_EUROS
+        buy: 100.0
+        sell: 100.0
+      '8':
+        material: BUBUSTEINMONEYMOD_TWO_HUNDRED_EUROS
+        buy: 200.0
+        sell: 200.0
+      '9':
+        material: BUBUSTEINMONEYMOD_FIVE_HUNDRED_EUROS
+        buy: 500.0
+        sell: 500.0

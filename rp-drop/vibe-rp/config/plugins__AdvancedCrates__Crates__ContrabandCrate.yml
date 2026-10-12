@@ -1,0 +1,404 @@
+Animation: Contraband
+Proximity_Distance: 5 #How close to the crate does the crate disappear for the user(not including the crate opener)
+AnimationVisibilityOption: "Proximity"
+# What should be the settings for animation see-ability?
+# "Individual" - Only the opener of the crate sees the animation.
+# "All" - Everyone sees the animation.
+# "Proximity" - if a player comes too close to the crate (distance set with Proximity_Distance configuration) the animation disappears (except for the opener of the crate),
+# Otherwise everyone can see the animation. Useful so multiple people can open crates at the same time and still see what other players are receiving
+#Currently there are 6 types of animations: Round ; Pyramid ; Display ; Round2 ; Cosmic ; Contraband
+#It is recommended to copy the crate file of which crate you wish to edit, as some animations have unique to them configurations
+#OnlyPlaceableAtLocations: #This makes it so users can't place down crates anywhere expect in these coordinates
+#  - "-270,78,-2"
+ContrabandRewardsFollowing: true
+# Should the floating won rewards in the end be following the opener?
+#ContrabandWidth: 3
+#Use the configuration above to set the width of the round circle of rewards showcase in the end of the animation
+Material: ENDER_CHEST
+OnlyPlaceable: true #Option is useful if you wish the crate be not a block, example: Item: "NETHER_STAR" (Player can open Nether Star crate by right clicking in the air)
+RewardsDontRepeat: false   #Can the user win a reward only once per opening? (If there aren't enough prizes to fill the whole crate size there will be repeating items)
+#CustomModelData: 0
+Enchanted: false #Not all items can be enchanted. This is mainly used to add a glowing effect to the item, use "Enchantments:" to configure crate enchantments
+Name: '&b&l*&3&l*&b&l* &b&lMay &b&lCrate &b&l*&3&l*&b&l*'
+RewardHologram:
+- '&b&l*&3&l*&b&l* &b&l{player_name}''s &3&lMay &3&lCrate &b&l*&3&l*&b&l*'
+- ''
+- '&7Purchased at: &bstore.example.com'
+#Customisable hologram above the main prize
+Final_Message: #these can be used on all crates
+- '&b&lAMC &7&l� &b{player_name} &7has opened a &b&lMay &b&lCrate&7:'
+- '&3&lNormal Rewards:' #{ColoredReward:rewardNumber} is used for items original colouring 
+- '&b1) &f{ColoredReward:1}' #{Reward:rewardNumber} is used for items name without any colors
+- '&b2) &f{ColoredReward:2}'
+- '&b3) &f{ColoredReward:3}'
+- '&7'
+- '&3Get yourself a crate also at: &cstore.example.com'
+Size: 3
+#MinPrizeSize: 1
+#MaxPrizeSize: 5 #Use these configurations for a random amount of rewards given in the crate, otherwise use the Size param for a set prize amount
+Lores:
+- '&7Purchased at store.example.com by {player_name}'
+- '&7'
+- '&b&lNormal Rewards'
+- '&b* &f$5,000'
+- '&b* &f$10,000'
+- '&b* &f$25,000'
+- '&b* &fLuck Test: $1,000 - $50,000'
+- '&b* &f32x Tokens'
+- '&b* &f64x Tokens'
+- '&b* &f128x Tokens'
+- '&b* &f1x Harvestor Hoe'
+- '&b* &f1x Creeper Egg'
+- '&b* &f1x Sell Wand &8[&71000 Uses&8]'
+- '&b* &f1x Legendary Crate Key'
+- '&b* &f1x Mythical Crate Key'
+KeyCrate:
+  Require: true
+  Material: TRIPWIRE_HOOK
+  MatchName: true
+  MatchLore: true
+  MatchEnchants: false
+  MatchNBT: false #on crate opening check if the players key has the proper nbt tags as the configured key
+  Name: "&4&lContraband Key"
+  Enchanted: true
+  Lores:
+  - ""
+  - "&7Opens a Contraband Crate"
+  - "&7Open crates at /warp crate"
+ShiftInstantlyOpen: false # If set to true, players while crouching will instantly open the crate (skip the animation)
+PreviewSize: 54
+RewardPreviewEnabled: true
+RewardsPreviewGUITitle: "&e&lRewards Preview"
+Prizes:
+  '5000':
+    Material: EMERALD
+    #CustomModelData: 0
+    Glow: true
+    Name: '&a&l$5000 Balance'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    PreviewName: "&a&l$5000 Balance (x1)"
+    PreviewLores:
+    - "&7Receive $5,000 right into your account"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - eco give {player_name} 5000
+    Chance: 8.33
+  '10000':
+    Material: EMERALD
+    Glow: true
+    Name: '&a&l$10,000 Balance'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    GuaranteedReward: true
+    PreviewName: "&a&l$10,000 Balance (x1)"
+    PreviewLores:
+    - "&7Receive $10,000 right into your account"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - eco give {player_name} 10000
+    Chance: 8.33
+  '15000':
+    Material: EMERALD
+    Glow: true
+    Name: '&a&l$15,000 Balance'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    PreviewName: "&a&l$15,000 Balance (x1)"
+    PreviewLores:
+    - "&7Receive $15,000 right into your account"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - eco give {player_name} 15000
+    Chance: 8.33
+  RandomMoney:
+    Material: EMERALD
+    Glow: true
+    Name: '&a&l$1,000 - 50,000 Balance'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    RandomNumberMin: 1000
+    RandomNumberMax: 50000
+    RandomNumberDecimals: true #This configuration makes it so the random number can be with a decimal, example: 12560,55
+    PreviewName: "&a&l$1,000 - 50,000 Balance (x1)"
+    PreviewLores:
+    - "&7Receive a Random Amount"
+    - "&7Between $1,000 and $50,000 in balance"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - eco give {player_name} {random_number}
+    Chance: 5
+  32Tokens:
+    Material: MAGMA_CREAM
+    Glow: true
+    Name: '&b&l32x Tokens'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    PreviewName: "&b&lTokens (x32)"
+    PreviewLores:
+    - "&7Receive 32 Tokens"
+    - "&7to Your Token Balance"
+    - ""
+    - "&7/tokenshop"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - tokens give {player_name} 32
+    Chance: 8.33
+  64Tokens:
+    Material: MAGMA_CREAM
+    Glow: true
+    Name: '&b&l64x Tokens'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    PreviewName: "&b&lTokens (x64)"
+    PreviewLores:
+    - "&7Receive 64 Tokens"
+    - "&7to Your Token Balance"
+    - ""
+    - "&7/tokenshop"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - tokens give {player_name} 64
+    Chance: 8.33
+  128Tokens:
+    Material: MAGMA_CREAM
+    Glow: true
+    Name: '&b&l128x Tokens'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    PreviewName: "&b&lTokens (x128)"
+    PreviewLores:
+    - "&7Receive 128 Tokens"
+    - "&7to Your Token Balance"
+    - ""
+    - "&7/tokenshop"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - tokens give {player_name} 128
+    Chance: 8.33
+  HarvestorHoe:
+    Material: DIAMOND_HOE
+    Glow: true
+    Name: '&c&l1x Harvestor Hoe'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    PreviewName: "&c&lHarvestor Hoe (x1)"
+    PreviewLores:
+    - "&7Very Useful Tool for"
+    - "&7Quickly picking up groceries!"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - hoe give {player_name} 1
+    Chance: 8.33
+  SellWand:
+    Material: GOLDEN_HOE
+    Glow: true
+    Name: '&d&l1x Sell Wand &8[&71000 Uses&8]'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    PreviewName: "&d&lSell Wand &8[&71000 Uses&8] (x1)"
+    PreviewLores:
+    - "&7Simply Right-Click on a Chest With a Sell Hoe"
+    - "&7to Automatically Sell All Possible Chests Contents"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - sw give {player_name} 1 1000
+    Chance: 8.33
+  1LegendaryKey:
+    Material: TRIPWIRE_HOOK
+    Glow: true
+    Name: '&e&l1x Legendary Key'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    PreviewName: "&e&lLegendary Key (x1)"
+    PreviewLores:
+    - "&7Opens a Legendary Crate"
+    - "&7/warp Crates"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - crate give {player_name} legendary 1
+    Chance: 8.33
+  1MythicalKey:
+    Material: TRIPWIRE_HOOK
+    Glow: true
+    Name: '&d&l1x Mythical Key'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    PreviewName: "&e&lMythical Key (x1)"
+    PreviewLores:
+    - "&7Opens a Mythical Crate"
+    - "&7/warp Crates"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - crate give {player_name} mythical 1
+    Chance: 8.33
+  CreeperEgg:
+    Material: MONSTER_EGG
+    Glow: false
+    Name: '&e&lOP Creeper Egg (x1)'
+    Enchantments: []
+    Lores: []
+    NBTtags: '{}'
+    GiveConfiguratedItem: false
+    Damage: 50
+    PreviewName: "&e&lOP Creeper Egg (x1)"
+    PreviewLores:
+    - "&7Spawns a Special Creeper"
+    - "&7Which has a x10 explosion radius"
+    - ""
+    - "&7Chance: 8.33%"
+    Commands:
+    - give {player_name} creeperegg 1
+    Chance: 8.33
+  Heroic_Pickaxe_of_Hephaestus:
+    Material: DIAMOND_PICKAXE
+    Glow: true
+    Amount: 1
+    Damage: 0
+    Name: '&6&lHeroic Pickaxe of Hephaestus'
+    Enchantments:
+    - DIG_SPEED;5
+    - DURABILITY;3
+    - LOOT_BONUS_BLOCKS;3
+    Lores:
+    - '&7Auto Smelt III'
+    - '&eDetonate I'
+    - '&7Experience II'
+    - '&7Haste II'
+    - '&aObsidian Destroyer V'
+    - '&6&oA legendary tool forged by'
+    - '&6&othe god of builders.'
+    NBTtags:
+    - ae_enchantment;haste 2
+    - slots 5
+    - ae_enchantment;obsidiandestroyer 5
+    - ae_enchantment;experience 2
+    - ae_enchantment;detonate 1
+    - Damage 0
+    - ae_enchantment;autosmelt 3
+    GiveConfiguratedItem: true
+    PreviewName: '&6&lHeroic Pickaxe of Hephaestus (x1)'
+    PreviewLores:
+    - '&7Auto Smelt III'
+    - '&eDetonate I'
+    - '&7Experience II'
+    - '&7Haste II'
+    - '&aObsidian Destroyer V'
+    - '&6&oA legendary tool forged by'
+    - '&6&othe god of builders.'
+    - ''
+    - '&7Chance: 10%'
+    Commands: []
+    Chance: 10.0
+  Yixary:
+    Material: DIAMOND_AXE
+    Glow: true
+    Amount: 1
+    Damage: 0
+    Name: '&d&lYixary'
+    Enchantments:
+    - DAMAGE_ALL;5
+    - DURABILITY;4
+    Lores:
+    - '&eBlessed II'
+    - '&eCorrupt III'
+    - '&6Silence IV'
+    - '&6Insanity I'
+    - '&6Lifesteal V'
+    - '&dDeep Bleed V'
+    - '&5&oA metaphysical shadow axe, considered'
+    - '&5&oby many to be a myth. It exists briefly'
+    - '&5&oonly in the moments it kills.'
+    NBTtags:
+    - ae_enchantment;corrupt 3
+    - slots 6
+    - ae_enchantment;lifesteal 5
+    - ae_enchantment;deepbleed 5
+    - ae_enchantment;insanity 1
+    - ae_enchantment;silence 4
+    - Damage 0
+    - ae_enchantment;blessed 2
+    GiveConfiguratedItem: true
+    PreviewName: '&d&lYixary (x1)'
+    PreviewLores:
+    - '&eBlessed II'
+    - '&eCorrupt III'
+    - '&6Silence IV'
+    - '&6Insanity I'
+    - '&6Lifesteal V'
+    - '&dDeep Bleed V'
+    - '&5&oA metaphysical shadow axe, considered'
+    - '&5&oby many to be a myth. It exists briefly'
+    - '&5&oonly in the moments it kills.'
+    - ''
+    - '&7Chance: 10%'
+    Commands: []
+    Chance: 10.0
+  Heroic_Ares_Greatsword_of_Conquering:
+    Material: DIAMOND_SWORD
+    Glow: true
+    Amount: 1
+    Damage: 0
+    Name: '&6&lHeroic Ares Greatsword of Conquering'
+    Enchantments:
+    - DAMAGE_ALL;5
+    - FIRE_ASPECT;1
+    - DURABILITY;2
+    Lores:
+    - '&bGreatsword IV'
+    - '&6Lifesteal I'
+    - '&6Silence I'
+    - '&6Rage II'
+    - '&6&oA weapon unrivaled in conquest.'
+    NBTtags:
+    - ae_enchantment;greatsword 4
+    - slots 4
+    - ae_enchantment;lifesteal 1
+    - ae_enchantment;rage 2
+    - ae_enchantment;silence 1
+    - Damage 0
+    GiveConfiguratedItem: true
+    PreviewName: '&6&lHeroic Ares Greatsword of Conquering (x1)'
+    PreviewLores:
+    - '&bGreatsword IV'
+    - '&6Lifesteal I'
+    - '&6Silence I'
+    - '&6Rage II'
+    - '&6&oA weapon unrivaled in conquest.'
+    - ''
+    - '&7Chance: 10%'
+    Commands: []
+    Chance: 10.0
