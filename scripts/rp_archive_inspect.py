@@ -24,7 +24,8 @@ import tarfile
 # Un drum e "teren" (nu ne intereseaza, oricat de multi .yml ar contine): world*, regiuni,
 # inventare de jucatori, plugin-data. Restul e solutia in sine si il citim.
 SKIP_DIR = re.compile(r"(^|/)(world|world_[a-z0-9]+|DIM-?\d+|region|entities|poi|advancements|"
-                      r"playerdata|stats|resourcepacks|patchy|libraries|versions|backups)/", re.I)
+                      r"playerdata|stats|resourcepacks|patchy|libraries|versions|backups|"
+                      r"\.archive-unpack)/", re.I)
 SKIP_DIR_TAIL = re.compile(r"/(data|world|world_nether|world_the_end)/", re.I)
 ROOT_ONLY_CONFIG = re.compile(r"^[^/]+\.(yml|yaml|properties|conf|cfg|toml|ini|txt|json)$", re.I)
 KEEP_CONFIG = re.compile(r"\.(yml|yaml|properties|conf|cfg|toml|ini|json|txt)$", re.I)
