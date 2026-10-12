@@ -2,7 +2,7 @@
 gdown 6.4.2
 rezultat gdown: '/tmp/drop/minecity-network.rar'
 fisier minecity-network.rar 2372633828 B
-fisier gdown.log 13175 B
+fisier gdown.log 9935 B
 
 7-Zip 23.01 (x64) : Copyright (c) 1999-2023 Igor Pavlov : 2023-06-20
  64-bit locale=C.UTF-8 Threads:4 OPEN_MAX:65536
@@ -27,6 +27,6 @@ Folders: 1
 Files: 4
 Size:       3412942848
 Compressed: 2372633828
-{"archive": "arhiva.rar", "bytes": 2372633828, "listing": 22405, "uncompressed_bytes": 1595433061, "groups_top": {"region": {"count": 135, "bytes": 371788173}, "archive-2024-11-02T083126Z.tar.gz": {"count": 1, "bytes": 78237789}, "camera_images": {"count": 538, "bytes": 76485221}, "debug.log": {"count": 1, "bytes": 73391935}, "latest.log": {"count": 3, "bytes": 71320504}, "server.jar": {"count": 3, "bytes": 68022092}, "GriefDefender": {"count": 513, "bytes": 65531714}, "net": {"count": 35, "bytes": 53553831}, "mojang_1.19.4.jar": {"count": 1, "bytes": 47515675}, "LuckPerms": {"count": 127, "bytes": 40385089}, "advancements": {"count": 1144, "bytes": 39102453}, "Modernxl+1.16.5.jar": {"count": 1, "bytes": 37979285}, "minecraft_server.1.16.5.jar": {"count": 1, "bytes": 37962360}, "org": {"count": 63, "bytes": 34720508}, "com": {"count": 33, "bytes": 30572778}, "it": {"count": 1, "bytes": 23376043}, "Citizens": {"count": 104, "bytes": 20960698}, "1.19.4": {"count": 1, "bytes": 20803749}, "luckperms": {"count": 60, "bytes": 17228259}, "spark": {"count": 84, "bytes": 16433920}, "AntiVPN-1.5.1-BETA-b1.jar": {"count": 2, "bytes": 16226416}, "FastAsyncWorldEdit-Bukkit-2.6.5-SNAPSHOT-518.jar": {"count": 1, "bytes": 15768910}, "enhancedglist-velocity-2.0.0-BETA6-SNAPSHOT.jar": {"count": 1, "bytes": 13785329}, "data": {"count": 8357, "bytes": 13673769}, "ajLeaderboards": {"count": 28, "bytes": 11323231}}, "nested": ["lobby.tar", "roleplay.tar", "velocity.tar"], "config_files_kept": 276,
-/dev/root       145G   60G   85G  42% /
+{"archive": "arhiva.rar", "bytes": 2372633828, "listing": 22405, "uncompressed_bytes": 1595433061, "groups_top": {"region": {"count": 135, "bytes": 371788173}, "archive-2024-11-02T083126Z.tar.gz": {"count": 1, "bytes": 78237789}, "camera_images": {"count": 538, "bytes": 76485221}, "debug.log": {"count": 1, "bytes": 73391935}, "latest.log": {"count": 3, "bytes": 71320504}, "server.jar": {"count": 3, "bytes": 68022092}, "GriefDefender": {"count": 513, "bytes": 65531714}, "net": {"count": 35, "bytes": 53553831}, "mojang_1.19.4.jar": {"count": 1, "bytes": 47515675}, "LuckPerms": {"count": 127, "bytes": 40385089}, "advancements": {"count": 1144, "bytes": 39102453}, "Modernxl+1.16.5.jar": {"count": 1, "bytes": 37979285}, "minecraft_server.1.16.5.jar": {"count": 1, "bytes": 37962360}, "org": {"count": 63, "bytes": 34720508}, "com": {"count": 33, "bytes": 30572778}, "it": {"count": 1, "bytes": 23376043}, "Citizens": {"count": 104, "bytes": 20960698}, "1.19.4": {"count": 1, "bytes": 20803749}, "luckperms": {"count": 60, "bytes": 17228259}, "spark": {"count": 84, "bytes": 16433920}, "AntiVPN-1.5.1-BETA-b1.jar": {"count": 2, "bytes": 16226416}, "FastAsyncWorldEdit-Bukkit-2.6.5-SNAPSHOT-518.jar": {"count": 1, "bytes": 15768910}, "enhancedglist-velocity-2.0.0-BETA6-SNAPSHOT.jar": {"count": 1, "bytes": 13785329}, "data": {"count": 8357, "bytes": 13673769}, "ajLeaderboards": {"count": 28, "bytes": 11323231}}, "nested": ["lobby.tar", "roleplay.tar", "velocity.tar"], "config_files_kept": 259,
+/dev/root       145G   59G   86G  41% /
 ls: cannot access '/tmp/drop': No such file or directory
