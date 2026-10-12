@@ -3,7 +3,7 @@
 Arhivă: [release public `lite`](https://github.com/iZentric/ServerRolePlayLite/releases/tag/lite), SHA-256 `fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15`.
 Inventar exact: **36 moduri / 14 pluginuri**. Citit din ZIP, nu dedus din `pack-rules.json`.
 **Prezența unui mod NU dovedește un câștig de FPS/RAM**, iar eliminarea lui fără test poate strica loginul/vehiculele.
-Nicio modificare la live, JAR, lume sau pack. Nu am citit/pus în raport chei de acces sau setări sensibile.
+Nicio modificare la live, JAR, lume sau pack. Nu am pus în raport chei de acces sau setări sensibile; parserul citește `server.properties` dar afișează exclusiv chei permise.
 
 ## Ce optimizări/funcții apar deja în arhivă
 

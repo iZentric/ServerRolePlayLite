@@ -51,7 +51,7 @@ def main(pack, report):
 Arhivă: [release public `lite`](https://github.com/iZentric/ServerRolePlayLite/releases/tag/lite), SHA-256 `{digest}`.
 Inventar exact: **{len(mods)} moduri / {len(plugins)} pluginuri**. Citit din ZIP, nu dedus din `pack-rules.json`.
 **Prezența unui mod NU dovedește un câștig de FPS/RAM**, iar eliminarea lui fără test poate strica loginul/vehiculele.
-Nicio modificare la live, JAR, lume sau pack. Nu am citit/pus în raport chei de acces sau setări sensibile.
+Nicio modificare la live, JAR, lume sau pack. Nu am pus în raport chei de acces sau setări sensibile; parserul citește `server.properties` dar afișează exclusiv chei permise.
 
 ## Ce optimizări/funcții apar deja în arhivă
 

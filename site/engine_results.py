@@ -299,6 +299,7 @@ def panel():
     )
     return f'''<section id="engine-test" aria-label="Benchmark al motorului CUANTIC">
 {quick_choice}
+<div class="note"><b>12 octombrie · audit de performanță:</b> release-ul public verificat prin SHA conține deja 36 moduri, 14 pluginuri și optimizări precum ModernFix, FerriteCore și RoadRunner. Nu adăugăm duplicat și nu instalăm un JAR nou fără câștig strict, test de login modat și vehicule. Recuperarea gazdei live se verifică separat; un job în coadă nu înseamnă server pornit. <a href="{REPO_DOCS}ENGINE-PERFORMANCE-2026-10-12.md">Lista probelor, eșecurilor și pașilor următori →</a> · <a href="{REPO_DOCS}ENGINE-PACK-AUDIT.md">Inventarul release-ului →</a></div>
 <h2>🔬 JAR-ul validat și benchmarkul — fără „zero lag” inventat</h2>
 <div class="sub">Pentru <b>acest</b> modpack Forge 1.16.5 (36 moduri + 14 pluginuri),
 păstrăm motorul CatServer CUANTIC deja folosit pe server. Am construit un JAR cu patch propriu și am

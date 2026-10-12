@@ -54,6 +54,8 @@ class SiteClaimsTest(unittest.TestCase):
         self.assertIn("Clientul are adresa salvată", page)
         self.assertIn("Nu este FPS-ul clientului".lower(), page.lower())
         self.assertIn("ENGINE-FAKEPLAYERS-RESULT.md", page)
+        self.assertIn("ENGINE-PERFORMANCE-2026-10-12.md", page)
+        self.assertIn("ENGINE-PACK-AUDIT.md", page)
         self.assertNotIn("CUANTIC este mai rapid decât oficialul", page)
         with patch.object(engine_results, "result", return_value={}):
             missing = engine_results.panel()
