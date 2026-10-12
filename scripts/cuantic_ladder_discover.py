@@ -28,14 +28,14 @@ CANDIDATES = {
         "note": "Maven Central este sursa oficiala indexata; oglinda MohistMC e fallback",
     },
     "Magma 1.16.5-36.2.39-c1c5a946": {
-        "licence": "GPL-3.0 (de reconfirmat pe tag)",
+        "licence": "GPL-3.0 (nerconfirmată: sursa oficială lipsește)",
         "urls": [
             "https://git.magmafoundation.org/api/v4/projects/8/packages/maven/org/magmafoundation/"
             "Magma/1.16.5-36.2.39-c1c5a946/Magma-1.16.5-36.2.39-c1c5a946-server.jar",
             "https://repo.magmafoundation.org/releases/org/magmafoundation/Magma/"
             "1.16.5-36.2.39-c1c5a946/Magma-1.16.5-36.2.39-c1c5a946-server.jar",
         ],
-        "note": "proiectul 1.16.x e marcat arhivat; pagina principala a dat 522 la 12 oct 2026",
+        "note": "sursa 1.16.5 a disparut: git.magmafoundation.org da 522, iar repo.magmafoundation.org intoarce 404 pe aceleasi coordinate (Reposilite); proiectul 1.16.x e marcat arhivat",
     },
     "LoliServer 1.16.5": {
         "licence": "GPL-3.0 / LGPL-3.0 în dezacord între oglinzi",
