@@ -104,8 +104,7 @@ def _tail(src: Path, dst: Path, limit: int = LOG_TAIL_BYTES) -> int:
     return len(data)
 
 
-KEYISH = r"(?=[A-Z0-9]*\d)(?=[A-Z0-9]*[A-Z])[A-Z0-9]{14,}"
-SECRET_SCAN = re.compile(r"((licen[cs]e|api[_-]?key|token|secret|passw)\W{0,3}[=: #]\W{0,2}" + KEYISH +
+SECRET_SCAN = re.compile(r"((licen[cs]e|api[_-]?key|token|secret|passw)[a-z_]*\W{0,3}[=:]\W{0,2}[A-Za-z0-9+/_=.-]{12,}"
                          r"|(?:^|\n)\s*#?\s*(?=[A-Z0-9]*\d)(?=[A-Z0-9]*[A-Z])[A-Z0-9]{20,}\s*(?:\n|$))",
                          re.I | re.M)
 
