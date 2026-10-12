@@ -31,13 +31,17 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           set -eu
+          NUME=""; ARH=""
           case "${{ matrix.id }}" in
-            17YDG*) echo "NUME=cffc205d-server" >> "$GITHUB_ENV"; echo "ARH=cffc205d-d386-43d2-a4d2-085561081fec.tar.gz" >> "$GITHUB_ENV";;
-            14YtH*) echo "NUME=minecity-network" >> "$GITHUB_ENV"; echo "ARH=minecity-network.rar" >> "$GITHUB_ENV";;
-            1unw5*) echo "NUME=folder-1" >> "$GITHUB_ENV"; echo "ARH=c8b2d730-5dc5-4937-ab90-8f35f48c27ec.tar.gz" >> "$GITHUB_ENV";;
-            16JmF*) echo "NUME=vibe-rp" >> "$GITHUB_ENV"; echo "ARH=archive-2024-09-14T122917Z.tar.gz" >> "$GITHUB_ENV";;
+            17YDG*) NUME=cffc205d-server; ARH=cffc205d-d386-43d2-a4d2-085561081fec.tar.gz;;
+            14YtH*) NUME=minecity-network; ARH=minecity-network.rar;;
+            1unw5*) NUME=folder-1; ARH=c8b2d730-5dc5-4937-ab90-8f35f48c27ec.tar.gz;;
+            16JmF*) NUME=vibe-rp; ARH=archive-2024-09-14T122917Z.tar.gz;;
           esac
+          [ -n "$NUME" ] || { echo "id necunoscut"; exit 1; }
+          printf 'NUME=%s\nARH=%s\n' "$NUME" "$ARH" >> "$GITHUB_ENV"
           mkdir -p /tmp/drop "out/rp-drop/$NUME"
+          : > "out/rp-drop/$NUME/DIAGNOSTIC.txt"
       - name: Unelte (7zip pentru .rar, gdown pentru Drive)
         continue-on-error: true
         run: |
