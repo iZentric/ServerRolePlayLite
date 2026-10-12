@@ -110,16 +110,15 @@
     "roleplay.tar",
     "velocity.tar"
   ],
-  "config_files_kept": 6038,
-  "config_bytes": 15388873,
+  "config_files_kept": 6037,
+  "config_bytes": 15388823,
   "skipped": {
-    "teren": 16141,
+    "teren": 16142,
     "suspect": 0,
     "mare": 172,
     "binar": 0
   },
   "files": [
-    "New Text Document.txt",
     "bukkit.yml",
     "commands.yml",
     "config/paper-global.yml",
@@ -618,6 +617,7 @@
     "plugins/Essentials/userdata/0c7d7c11-4368-3dee-910f-cecbc2f66fda.yml",
     "plugins/Essentials/userdata/0c822e27-9a48-3eb2-abdf-43226d733bc7.yml",
     "plugins/Essentials/userdata/0c8f9927-a6d9-36d6-87e4-f8d98940c0dc.yml",
-    "plugins/Essentials/userdata/0cf72634-1ced-3c23-84d2-c80711826f45.yml"
+    "plugins/Essentials/userdata/0cf72634-1ced-3c23-84d2-c80711826f45.yml",
+    "plugins/Essentials/userdata/0d047b95-cce5-3235-b7f1-c72b021bb456.yml"
   ]
 }
