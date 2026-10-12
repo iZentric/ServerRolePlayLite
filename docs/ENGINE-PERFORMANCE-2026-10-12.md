@@ -1,12 +1,12 @@
 # CUANTIC — lista de verificări și performanță (12 octombrie 2026)
 
-**Stare la 09:22 UTC (ultima verificare a joburilor):** ultimul status public măsurat, 09:12:38 UTC, a returnat `Connection refused`; starea de ACUM nu poate fi declarată „pornit”. [Preflight numai citire](https://github.com/iZentric/ServerRolePlayLite/actions/runs/38228758329) și [CHK — recuperare condițională](https://github.com/iZentric/ServerRolePlayLite/actions/runs/38229164231) sunt în coadă până revine runnerul self-hosted. CHK verifică procesul înainte de pornire; **un job queued nu pornește serverul**. Nu repornim peste jucători. Mai poate exista un proces Java fără conexiune publică (ex. tunel/port): nu confundăm cele două situații.
+**Stare la 09:23 UTC (instantaneu, nu monitorizare continuă):** o probă publică nouă de la 09:22:35 UTC a returnat `Connection refused`; starea de ACUM nu poate fi declarată „pornit”. [Preflight numai citire](https://github.com/iZentric/ServerRolePlayLite/actions/runs/38228758329) și [CHK — recuperare condițională](https://github.com/iZentric/ServerRolePlayLite/actions/runs/38229164231) sunt în coadă până revine runnerul self-hosted. CHK verifică procesul înainte de pornire; **un job queued nu pornește serverul**. Nu repornim peste jucători. Mai poate exista un proces Java fără conexiune publică (ex. tunel/port): nu confundăm cele două situații.
 
 ## Ce s-a testat și ce a ieșit
 
 | # | Probă | Rezultat | Ce demonstrează / ce NU demonstrează |
 | --- | --- | --- | --- |
-| 1 | Test public al adresei Minecraft | **Eșec la 09:12:38 UTC**: conexiune refuzată ([status](../analysis/ALIVE.md)) | Nu dovedește că procesul Java este oprit; preflightul de pe gazdă încă nu a rulat. |
+| 1 | Test public al adresei Minecraft | **Eșec la 09:22:35 UTC**: conexiune refuzată ([status](../analysis/ALIVE.md)) | Nu dovedește că procesul Java este oprit; preflightul de pe gazdă încă nu a rulat. |
 | 2 | Recuperare sigură a gazdei | **În așteptare**: [preflight](https://github.com/iZentric/ServerRolePlayLite/actions/runs/38228758329) și [CHK](https://github.com/iZentric/ServerRolePlayLite/actions/runs/38229164231) | Nu putem confirma startul sau modificarea tunelului înaintea logurilor de la runner. |
 | 3 | CUANTIC live vs CatServer oficial, Java 17, același pack A/B/B/A | CPU stabil 3,32/2,86 s vs 3,32/3,43 s; p95 1,3/1,1 ms vs 1,2/1,2 ms; RSS 2205/2452 MiB vs 2186/2476 MiB, pe perechi ([date](ENGINE-NATIVE-RESULT.md)) | Variația între repetări e mai mare decât câștigul pretins. Fără jucători/vehicule; niciun câștig overall demonstrat. |
 | 4 | Patch nativ `SortedArraySet.removeIf` în JAR, același pack 36/14 | **Respins** după repetare: startup/CPU/p95/RSS nu au trecut simultan pragul strict ([date](ENGINE-STRICT-RESULT.md)) | Nu publicăm patch-ul și nu schimbăm live pentru un benchmark care nu câștigă clar. |
