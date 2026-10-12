@@ -1,23 +1,11 @@
 # Scara CUANTIC — candidați hibrid 1.16.5: SHA, smoke 36/14 și A/B
 
-Run: https://github.com/iZentric/ServerRolePlayLite/actions/runs/38271150206
+Run: https://github.com/iZentric/ServerRolePlayLite/actions/runs/38272459943
 
 Runner GitHub izolat, Java 17, pack neschimbat (36 moduri + 14 pluginuri). Serverul live nu a fost atins.
 Un candidat care nu ajunge la `Done` este INCOMPATIBIL, nu mai lent; fără 3 probe valide pe braț nu există verdict.
 
 ```json
-{
-  "jar": "CatServer-1.16.5-1d8d6313-server.jar",
-  "done_seconds": null,
-  "enabled_plugins": 0,
-  "plugin_names": [],
-  "critical_lines": [],
-  "timed_out": false,
-  "exit_code_after_stop": 1,
-  "handshake_with_real_client": "NOT TESTED",
-  "performance_under_players": "NOT TESTED",
-  "passed_smoke": false
-}
 {
   "method": "scară CUANTIC: descărcare cu SHA, smoke pe pack identic 36/14, A/B sintetic cu N probe pe braț, pe un runner GitHub izolat",
   "limits": "nu ating serverul live; nu declară compatibilitate cu clientul modat; un motor care nu pornește e INCOMPATIBIL, nu mai lent",
@@ -38,15 +26,16 @@ Un candidat care nu ajunge la `Done` este INCOMPATIBIL, nu mai lent; fără 3 pr
       "boot_done_s": null,
       "plugins_enabled": 0,
       "key_lines": [
-        "Exception in thread \"main\" [15:34:23 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: java.lang.RuntimeException: java.lang.reflect.InvocationTargetException",
-        "[15:34:23 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:39)",
-        "[15:34:23 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54)",
-        "[15:34:23 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72)",
-        "[15:34:23 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat cpw.mods.modlauncher.Launcher.run(Launcher.java:82)",
-        "[15:34:23 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat cpw.mods.modlauncher.Launcher.main(Launcher.java:66)",
-        "[15:34:23 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:105)",
-        "[15:34:23 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat net.minecraftforge.server.ServerMain.main(ServerMain.java:86)"
+        "Exception in thread \"main\" [15:45:19 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: java.lang.RuntimeException: java.lang.reflect.InvocationTargetException",
+        "[15:45:19 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:39)",
+        "[15:45:19 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54)",
+        "[15:45:19 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72)",
+        "[15:45:19 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat cpw.mods.modlauncher.Launcher.run(Launcher.java:82)",
+        "[15:45:19 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat cpw.mods.modlauncher.Launcher.main(Launcher.java:66)",
+        "[15:45:19 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:105)",
+        "[15:45:19 INFO]: [java.lang.ThreadGroup:uncaughtException:1077]: \tat net.minecraftforge.server.ServerMain.main(ServerMain.java:86)"
       ],
+      "root_cause": "java.lang.NoSuchMethodError: 'java.util.stream.Collector com.google.common.collect.ImmutableMap.toImmutableMap(java.util.function.Function, java.util.function.Function)'",
       "ab": {
         "verdict": "NEAVĂGAT",
         "reason": "nu a ajuns la `Done` cu pack-ul intact: fără scor de performanță"
