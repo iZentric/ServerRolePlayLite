@@ -5,6 +5,9 @@ on:
       - "deploy/rp-drop.txt"
       - "scripts/rp_archive_inspect.py"
       - ".github/workflows/rp-drop-inspect.yml"
+  workflow_dispatch:
+    inputs:
+      only: { description: "doar un id din Drive (gol = toate 4)", required: false, default: "" }
 permissions:
   contents: write
 concurrency:
@@ -13,79 +16,120 @@ concurrency:
 env:
   RUNNER_TRACKING_ID: ""
 jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - id: m
+        run: |
+          set -eu
+          ALL='[{"id":"17YDGCEJN1qpXLmeHEnQm3oqkcyiGcHVY","nume":"cffc205d-server"},{"id":"14YtH6Bm4bXxBZAVhkSXUuZHz342R8Xg-","nume":"minecity-network"},{"id":"1unw5JV39l4Amk1ympYjCffq1n31inOO_","nume":"folder-1"},{"id":"16JmFxSCCIzcNgFiMko8XbH9ggRzHqdlV","nume":"vibe-rp"}]'
+          ONLY="${{ inputs.only }}"
+          if [ -n "$ONLY" ]; then
+            echo "matrix=$(printf '%s' "$ALL" | python3 -c "import json,sys;d=json.load(sys.stdin);print(json.dumps([x for x in d if x['id']==sys.argv[1]]))" "$ONLY")" >> "$GITHUB_OUTPUT"
+          else
+            echo "matrix=$ALL" >> "$GITHUB_OUTPUT"
+          fi
   citeste:
+    needs: plan
+    if: needs.plan.outputs.matrix != '[]'
     runs-on: ubuntu-latest
     timeout-minutes: 55
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - id: 17YDGCEJN1qpXLmeHEnQm3oqkcyiGcHVY
-            nume: cffc205d-server
-          - id: 14YtH6Bm4bXxBZAVhkSXUuZHz342R8Xg-
-            nume: minecity-network
-          - id: 1unw5JV39l4Amk1ympYjCffq1n31inOO_
-            nume: folder-1
-          - id: 16JmFxSCCIzcNgFiMko8XbH9ggRzHqdlV
-            nume: vibe-rp
+        include: ${{ fromJSON(needs.plan.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
-      - name: Unelte (7zip pentru .rar, gdown pentru linkuri mari de Drive)
+      - name: Unelte + diagnostic (7zip pentru .rar, gdown pentru Drive)
+        id: diag
+        continue-on-error: true
         run: |
-          set -e
-          sudo apt-get update -qq >/dev/null
-          sudo apt-get install -y -qq p7zip-full libminizip1 >/dev/null
-          python3 -m pip install --quiet --disable-pip-version-check gdown || pip3 install --quiet gdown
+          set -x
+          sudo apt-get update -qq >/dev/null 2>&1 || echo "apt update a esuat"
+          sudo apt-get install -y -qq p7zip-full libminizip1 >/dev/null 2>&1 || echo "apt install a esuat"
+          python3 -m pip install --quiet --disable-pip-version-check gdown 2>&1 | tail -5 || echo "pip gdown a esuat"
+          python3 -c "import gdown;print('gdown', gdown.__version__)" || echo "gdown NU e importabil"
+          7z i >/dev/null 2>&1 && echo "7z: OK" || echo "7z: absent"
       - name: Descarcă arhiva din Drive
+        continue-on-error: true
         run: |
-          set -e
+          set -x
           mkdir -p /tmp/drop
-          python3 -c "import gdown,os;gdown.download(id='${{ matrix.id }}', output='/tmp/drop/${{ matrix.nume }}.bin', quiet=False, fuzzy=True)"
-          ls -lh /tmp/drop
-          # recunoaste extensia reala: numele din Drive e cel corect pentru tar/7z
-          FILE=$(python3 - <<'PY'
-          import os
-          n={'cffc205d-server':'cffc205d-d386-43d2-a4d2-085561081fec.tar.gz','minecity-network':'minecity-network.rar','folder-1':'c8b2d730-5dc5-4937-ab90-8f35f48c27ec.tar.gz','vibe-rp':'archive-2024-09-14T122917Z.tar.gz'}
-          print(n['${{ matrix.nume }}'])
-          PY
-          )
-          mv "/tmp/drop/${{ matrix.nume }}.bin" "/tmp/drop/$FILE"
-          file "/tmp/drop/$FILE"
-          echo "ARCHIVE=/tmp/drop/$FILE" >> "$GITHUB_ENV"
-      - name: Desface SI păstrează doar textul (inventar complet, zero date de jucători)
+          case "${{ matrix.nume }}" in
+            cffc205d-server) NAME=cffc205d-d386-43d2-a4d2-085561081fec.tar.gz;;
+            minecity-network) NAME=minecity-network.rar;;
+            folder-1) NAME=c8b2d730-5dc5-4937-ab90-8f35f48c27ec.tar.gz;;
+            vibe-rp) NAME=archive-2024-09-14T122917Z.tar.gz;;
+          esac
+          python3 -c "
+          import gdown,sys
+          try:
+              gdown.download(id='${{ matrix.id }}', output='/tmp/drop/$NAME', quiet=False, fuzzy=True)
+          except Exception as e:
+              print('gdown esuat:', type(e).__name__, e, file=sys.stderr)
+          " || echo "gdown a dat eroare"
+          ls -l /tmp/drop || true
+      - name: Descărcare de rezervă, prin linkul public + confirmare
+        continue-on-error: true
         run: |
-          set -e
+          set -x
+          U="https://drive.usercontent.google.com/download?id=${{ matrix.id }}&export=download"
+          curl -sL -c /tmp/ck -o /tmp/probe.bin "$U" || true
+          T=$(sed -n 's/.*confirm=\([A-Za-z0-9_-]\+\).*/\1/p' /tmp/probe.bin | head -1)
+          echo "confirm token: ${T:-niciunul}"
+          [ -n "$T" ] && curl -sL -b /tmp/ck -o /tmp/drop/fisier.bin "$U&confirm=$T" || true
+          ls -l /tmp/drop || true
+          head -c 200 /tmp/probe.bin | tr -d '\0' | head -5 || true
+      - name: Alege fișierul descărcat și dezarhivează
+        continue-on-error: true
+        run: |
+          set -x
           mkdir -p out/rp-drop/${{ matrix.nume }}
-          python3 scripts/rp_archive_inspect.py --archive "$ARCHIVE" \
-            --extract-dir /tmp/x --out out/rp-drop/${{ matrix.nume }}
-      - name: Păstrează doar ce încap în repo (text, nu arhive)
+          A=$(find /tmp/drop -type f -size +1M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+          echo "ales: ${A:-NICIUN FIȘIER}"
+          if [ -n "$A" ]; then
+            case "$(basename "$A")" in
+              *.rar) cp "$A" "/tmp/drop/$A" 2>/dev/null || true;;
+            esac
+            cp "$A" /tmp/drop/arhiva.bin
+            case "$A" in
+              *.rar) cp "$A" /tmp/drop/arhiva.rar;;
+              *.tar.gz|*.tgz) cp "$A" /tmp/drop/arhiva.tar.gz;;
+              *) cp "$A" /tmp/drop/arhiva.bin;;
+            esac
+            F=$(ls /tmp/drop/arhiva.* | head -1)
+            python3 scripts/rp_archive_inspect.py --archive "$F" --extract-dir /tmp/x --out "out/rp-drop/${{ matrix.nume }}"
+            rm -rf /tmp/x /tmp/drop
+          else
+            echo "nici o sursă nu a mers" > "out/rp-drop/${{ matrix.nume }}/ESUAT.txt"
+          fi
+      - name: Păstrează doar textul care încap în repo
         run: |
           set -eu
-          rm -rf /tmp/x /tmp/drop
-          D=out/rp-drop/${{ matrix.nume }}
-          # fisierele de config raman ca fisiere individuale (le vad pe GitHub, nu doar intr-un tar)
-          ls -1 "$D/config" 2>/dev/null | head -300 > /tmp/keep.list
-          if [ -d "$D/config" ]; then find "$D/config" -maxdepth 1 -type f ! -name '*' -prune; fi
-          cd "$D/config" 2>/dev/null || mkdir -p "$D/config" && cd "$D/config"
-          find . -maxdepth 1 -type f | sed 's|^\./||' | sort | comm -23 - /tmp/keep.list | xargs -r rm -f
-          cd "$GITHUB_WORKSPACE"
+          D="out/rp-drop/${{ matrix.nume }}"
           rm -f "$D/configuri.tar.gz"
-          du -sh "$D"; echo "fisiere ramase: $(find "$D" -type f | wc -l)"
-      - name: Publică pe ramura rp-drop, fara sa parasi branch-ul de lucru
+          if [ -d "$D/config" ]; then
+            cd "$D/config"
+            ls -1 | sort | head -300 > /tmp/keep.list
+            find . -maxdepth 1 -type f | sed 's|^\./||' | sort | comm -23 - /tmp/keep.list | xargs -r rm -f
+            cd "$GITHUB_WORKSPACE"
+          fi
+          du -sh "$D" || true
+          find "$D" -type f | wc -l
+      - name: Publică pe ramura rp-drop
         run: |
           set -eu
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git push -q origin origin/main:refs/heads/rp-drop 2>/dev/null || true
           git fetch -q origin rp-drop
           rm -rf /tmp/wt && git worktree add -q -B rp-drop /tmp/wt origin/rp-drop
-          mkdir -p "/tmp/wt/rp-drop"
+          mkdir -p /tmp/wt/rp-drop
           rm -rf "/tmp/wt/rp-drop/${{ matrix.nume }}"
           cp -a "out/rp-drop/${{ matrix.nume }}" "/tmp/wt/rp-drop/${{ matrix.nume }}"
           cd /tmp/wt
           git add -A "rp-drop/${{ matrix.nume }}"
-          git -c commit.gpgsign=false commit -qm "rp-drop: ${{ matrix.nume }} citit (text only, fara date jucatori)" || echo "nimic nou"
+          git -c commit.gpgsign=false commit -qm "rp-drop: ${{ matrix.nume }} (text only, fără date de jucători)" || echo "nimic nou"
           git push -q origin rp-drop
-      - name: Dacă una pică, restul tot se publică
-        if: always()
-        run: echo "gata pentru ${{ matrix.nume }} (vezi logul pasilor de mai sus)"
