@@ -1,1 +1,1 @@
-ladder run 3: descoperarea mutata intr-un script testabil (HEAD pe URL-uri oficiale in runner), esecul de retea ramane ESUAT, nu verdict
+ladder run 4: URL-uri oficiale pastrate fara sondaj (Maven Central respinge HEAD); scaderea verifica la descarcare cu SHA

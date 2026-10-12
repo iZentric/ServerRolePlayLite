@@ -45,7 +45,7 @@ jobs:
         id: spec
         run: |
           mkdir -p /tmp/cuantic-ladder
-          python3 scripts/cuantic_ladder_discover.py --out /tmp/cuantic-ladder/discovery.json \
+          python3 scripts/cuantic_ladder_discover.py --no-probe --out /tmp/cuantic-ladder/discovery.json \
             | tail -1 > /tmp/cuantic-ladder/spec.txt
           cat /tmp/cuantic-ladder/spec.txt
           cat /tmp/cuantic-ladder/discovery.json

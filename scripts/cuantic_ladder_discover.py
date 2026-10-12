@@ -44,15 +44,18 @@ CANDIDATES = {
 
 
 def reachable(url, timeout=25):
-    request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": USER_AGENT})
+    """GET cu Range pe primul octet: multe repo-uri Maven raspund gresit la HEAD."""
+    request = urllib.request.Request(url, method="GET",
+                                     headers={"User-Agent": USER_AGENT, "Range": "bytes=0-0"})
     try:
         with urllib.request.urlopen(request, timeout=timeout) as resp:
-            return resp.status == 200
+            resp.read(2)
+            return resp.status in (200, 206)
     except (urllib.error.URLError, OSError, ValueError):
         return False
 
 
-def discover(only=None, offline=False, probe_timeout=25):
+def discover(only=None, offline=False, probe_timeout=25, probe=True):
     """-> (spec pentru scripts/cuantic_ladder.py, listă de detaliuri pentru raport)."""
     selected = [(name, cfg) for name, cfg in CANDIDATES.items()
                 if not only or only.lower() in name.lower()]
@@ -61,6 +64,11 @@ def discover(only=None, offline=False, probe_timeout=25):
         entry = {"name": name, "licence": cfg["licence"], "note": cfg["note"],
                  "tried": cfg["urls"], "url": None, "status": "fără sursă oficială"}
         for url in cfg["urls"]:
+            if not probe:
+                # fara sondaj pastram URL-ul oficial ca atare; scaderea il verifica
+                # cu SHA real si un esec de retea apare ca ESUAT, nu ca verdict.
+                entry.update(url=url, status="nesondat (verificare in descărcare)")
+                break
             if offline:
                 entry["status"] = "rețea dezactivată (mod offline)"
                 break
@@ -79,8 +87,9 @@ def main(argv=None):
     ap.add_argument("--out", help="cale unde se scrie JSON-ul cu detaliile descoperirii")
     ap.add_argument("--only", default=None)
     ap.add_argument("--offline", action="store_true", help="nu atinge rețeaua (pentru teste)")
+    ap.add_argument("--no-probe", action="store_true", help="păstrează URL-urile fără sondaj; scara le verifică la descărcare")
     args = ap.parse_args(argv)
-    spec, entries = discover(only=args.only, offline=args.offline)
+    spec, entries = discover(only=args.only, offline=args.offline, probe=not args.no_probe)
     print(spec)          # prima linie = spec-ul, citit de workflow
     if args.out:
         Path(args.out).write_text(json.dumps({"candidates": entries, "spec": spec},

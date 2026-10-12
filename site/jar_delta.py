@@ -326,6 +326,7 @@ def _matrix_rows(pairs):
             f'<td>{inline(_candidate_note(name, pairs, info))}</td></tr>')
     tried = {r["name"].split(" ")[0].lower() for r in ladder_rows()}
     for cand in ladder_rows():
+        cand["name"] = cand["name"].replace(" 1.16.5", " ").split(" (")[0].strip()
         boot = f"{_ro(cand['boot_s'], 3)} s" if isinstance(cand["boot_s"], (int, float)) else "—"
         if cand["status"].startswith("ESUAT"):
             # fără binar descărcat nu am atins nici pack-ul: niciun „36” de afișat
