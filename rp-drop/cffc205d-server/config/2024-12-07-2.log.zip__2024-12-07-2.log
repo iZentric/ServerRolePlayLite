@@ -1,0 +1,967 @@
+ad(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:57:02] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:57:03] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:57:04] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:57:05] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:57:06] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:57:24] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[15:57:25] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:57:54] [luckperms-command-executor/INFO] [/]: [LP] Preparing a new editor session, please wait...
+[15:57:55] [luckperms-command-executor/INFO] [/]: [LP] Click the link below to open the editor:
+[15:57:55] [luckperms-command-executor/INFO] [/]: https://luckperms.net/editor/QlH6jCIUvV
+[15:58:12] [luckperms-worker-3/INFO] [/]: [LP] An editor window has connected, but it is not yet trusted.
+[15:58:12] [luckperms-worker-3/INFO] [/]: [LP] (session id = 1929-e525, browser = Opera on Windows)
+[15:58:12] [luckperms-worker-3/INFO] [/]: [LP] If it was you, run /lp trusteditor 1929-e525 to trust the session!
+[15:58:23] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[15:58:24] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:58:27] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[15:58:28] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:58:31] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[15:58:33] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[15:58:57] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[15:58:58] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:59:03] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[15:59:24] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[15:59:54] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[15:59:55] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:59:56] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[15:59:57] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[16:00:00] [Server thread/INFO] [/]: =========Payday=========
+[16:00:00] [Server thread/INFO] [/]: Payday has been successfully given
+[16:00:00] [Server thread/INFO] [/]: Next payday will be given at 17:00:00
+[16:00:00] [Server thread/INFO] [/]: No players online
+[16:00:00] [Server thread/INFO] [/]: Players were AFK at payday time: 0
+[16:00:00] [Server thread/INFO] [/]: ========================
+[16:00:33] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[16:00:34] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[16:00:39] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[16:00:41] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[16:01:02] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[16:01:04] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[16:01:05] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[16:01:32] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[16:01:54] [Craft Scheduler Thread - 44/INFO] [/]: Resources saved to files successfully
+[16:02:48] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[16:02:49] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[16:02:56] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[16:02:59] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[16:03:18] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:408) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:308) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 17 more
+[16:03:19] [Netty Epoll Server IO #0/WARN] [io.netty.channel.DefaultChannelPipeline/]: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NoClassDefFoundError: it/ytnoos/lpx/i7
+	at it.ytnoos.lpx.KQ.channelRead(KQ.java) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at com.comphenix.protocol.injector.netty.manager.InjectionChannelInitializer.channelRead(InjectionChannelInitializer.java:26) ~[?:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollServerChannel$EpollServerSocketUnsafe.epollInReady(AbstractEpollServerChannel.java:120) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe$1.run(AbstractEpollChannel.java:387) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:313) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884) ~[server-1.16.5-20210115.111550-extra.jar:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: it.ytnoos.lpx.i7
+	... 19 more
+[16:03:33] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Stopping the server
+[16:03:33] [Server thread/INFO] [mtr.libraries.org.eclipse.jetty.server.AbstractConnector/]: Stopped ServerConnector@314ecfa1{HTTP/1.1, (http/1.1)}{0.0.0.0:8888}
+[16:03:33] [Server thread/INFO] [mtr.libraries.org.eclipse.jetty.server.handler.ContextHandler/]: Stopped m.l.o.e.j.s.ServletContextHandler@28a50dec{/,modjar://mtr/assets/mtr/website/,STOPPED}
+[16:03:33] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
+[16:03:33] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
+[16:03:33] [Server thread/INFO] [com.rylinaux.plugman.PlugMan/]: [PlugManX] Disabling PlugManX v2.4.1
+[16:03:33] [Server thread/INFO] [me.dexuby.Robbery.Main/]: [Robbery] Disabling Robbery v1.1.5
+[16:03:33] [Server thread/INFO] [me.mrgraycat.eglow.EGlow/]: [eGlow] Disabling eGlow v3.3.2
+[16:03:33] [Server thread/INFO] [me.clip.placeholderapi.PlaceholderAPIPlugin/]: [PlaceholderAPI] Unregistered placeholder expansion eglow
+[16:03:33] [Server thread/INFO] [me.clip.placeholderapi.PlaceholderAPIPlugin/]: [PlaceholderAPI] Reason: required plugin eGlow was disabled.
+[16:03:33] [Server thread/INFO] [io.github.apickledwalrus.skriptgui.SkriptGUI/]: [skript-gui] Disabling skript-gui v1.3
+[16:03:34] [Server thread/INFO] [fr.xephi.authme.AuthMe/]: [AuthMe] Disabling AuthMe v5.6.0-beta2-b2453
+[16:03:34] [Server thread/INFO] [fr.xephi.authme.AuthMe/]: [AuthMe] Waiting for 0 tasks to finish
+[16:03:34] [Server thread/INFO] [fr.xephi.authme.AuthMe/]: [AuthMe] AuthMe 5.6.0-beta2-b2453 disabled!
+[16:03:34] [Server thread/INFO] [fr.klemms.slotmachine.SlotPlugin/]: [SlotMachine] Disabling SlotMachine v6.8.2
+[16:03:34] [Server thread/INFO] [fr.klemms.slotmachine.SlotPlugin/]: [SlotMachine] Removing old backup
+[16:03:34] [Server thread/INFO] [fr.klemms.slotmachine.SlotPlugin/]: [SlotMachine] Creating a backup of /machines to /machinesLastBackup
+[16:03:34] [Server thread/INFO] [com.alonsoaliaga.betterrevive.BetterRevive/]: [BetterRevive] Disabling BetterRevive v0.9.1-BETA
+[16:03:34] [Server thread/INFO] [/]:  
+[16:03:34] [Server thread/INFO] [/]: [BetterRevive] Plugin has been disabled!
+[16:03:34] [Server thread/INFO] [/]: [BetterRevive] Thank you for using my plugin!
+[16:03:34] [Server thread/INFO] [/]:  
+[16:03:34] [Server thread/INFO] [net.citizensnpcs.Citizens/]: [Citizens] Disabling Citizens v2.0.33-SNAPSHOT (build 3277)
+[16:03:34] [Server thread/INFO] [findPlayer.FindPlayer/]: [FindPlayer] Disabling FindPlayer v1.2
+[16:03:34] [Server thread/INFO] [be.nokorbis.spigot.commandsigns.CommandSignsPlugin/]: [CommandSigns] Disabling CommandSigns v2.2.0
+[16:03:34] [Server thread/INFO] [me.gypopo.economyshopgui.EconomyShopGUI/]: [EconomyShopGUI-Premium] Disabling EconomyShopGUI-Premium v5.14.1
+[16:03:34] [Server thread/INFO] [/]: [EconomyShopGUI-Premium] [DEBUG]: Completed disable tasks, shutting down...
+[16:03:34] [Server thread/INFO] [eu.decentsoftware.holograms.plugin.DecentHologramsPlugin/]: [DecentHolograms] Disabling DecentHolograms v2.8.9
+[16:03:34] [Server thread/INFO] [ch.njol.skript.Skript/]: [Skript] Disabling Skript v2.8.7
+[16:03:34] [Server thread/INFO] [EssentialsSpawn/]: Disabling EssentialsSpawn v2.20.1
+[16:03:34] [Server thread/INFO] [me.h1dd3nxn1nja.chatmanager.Main/]: [ChatManager] Disabling ChatManager v3.7.7
+[16:03:34] [Server thread/INFO] [me.clip.placeholderapi.PlaceholderAPIPlugin/]: [PlaceholderAPI] Unregistered placeholder expansion chatmanager
+[16:03:34] [Server thread/INFO] [me.clip.placeholderapi.PlaceholderAPIPlugin/]: [PlaceholderAPI] Reason: required plugin ChatManager was disabled.
+[16:03:34] [Server thread/INFO] [fr.andross.banitem.BanItem/]: [BanItem] Disabling BanItem v3.5
+[16:03:34] [Server thread/INFO] [com.onarandombox.multiverseinventories.MultiverseInventories/]: [Multiverse-Inventories] Disabling Multiverse-Inventories v4.2.6
+[16:03:34] [Server thread/INFO] [com.sk89q.worldguard.bukkit.WorldGuardPlugin/]: [WorldGuard] Disabling WorldGuard v7.0.5+3827266
+[16:03:34] [Server thread/INFO] [com.sk89q.worldguard.WorldGuard/]: [WorldGuard] Shutting down executor and cancelling any pending tasks...
+[16:03:34] [Server thread/INFO] [me.neznamy.tab.platforms.bukkit.BukkitTAB/]: [TAB] Disabling TAB v4.1.5
+[16:03:34] [Server thread/INFO] [/]: [TAB] Disabled in 0ms
+[16:03:34] [Server thread/INFO] [io.minimum.minecraft.superbvote.SuperbVote/]: [SuperbVote] Disabling SuperbVote v0.5.5
+[16:03:34] [Server thread/INFO] [EssentialsChat/]: Disabling EssentialsChat v2.20.1
+[16:03:34] [Server thread/INFO] [com.extendedclip.deluxemenus.DeluxeMenus/]: [DeluxeMenus] Disabling DeluxeMenus v1.14.0-Release
+[16:03:34] [Server thread/INFO] [us.ajg0702.leaderboards.LeaderboardPlugin/]: [ajLeaderboards] Disabling ajLeaderboards v2.9.0
+[16:03:34] [pool-58-thread-1/INFO] [us.ajg0702.leaderboards.LeaderboardPlugin/]: [ajLeaderboards] Shutting down cache method..
+[16:03:34] [pool-58-thread-1/INFO] [us.ajg0702.leaderboards.LeaderboardPlugin/]: [ajLeaderboards] Cache method shut down
+[16:03:34] [Server thread/INFO] [us.ajg0702.leaderboards.LeaderboardPlugin/]: [ajLeaderboards] Killing remaining workers
+[16:03:34] [Server thread/INFO] [us.ajg0702.leaderboards.LeaderboardPlugin/]: [ajLeaderboards] Remaining workers killed
+[16:03:34] [Server thread/INFO] [us.ajg0702.leaderboards.LeaderboardPlugin/]: [ajLeaderboards] ajLeaderboards v2.9.0 disabled.
+[16:03:34] [Server thread/INFO] [emanondev.itemedit.ItemEdit/]: [ItemEdit] Disabling ItemEdit v3.4.2
+[16:03:34] [Server thread/INFO] [me.clip.placeholderapi.PlaceholderAPIPlugin/]: [PlaceholderAPI] Unregistered placeholder expansion itemedit
+[16:03:34] [Server thread/INFO] [me.clip.placeholderapi.PlaceholderAPIPlugin/]: [PlaceholderAPI] Reason: required plugin ItemEdit was disabled.
+[16:03:34] [Server thread/INFO] [com.onarandombox.MultiverseCore.MultiverseCore/]: [Multiverse-Core] Disabling Multiverse-Core v4.3.1-b861
+[16:03:34] [Server thread/INFO] [fun.lewisdev.deluxecoinflip.DeluxeCoinflipPlugin/]: [DeluxeCoinflip] Disabling DeluxeCoinflip v2.6.0
+[16:03:34] [Server thread/INFO] [fun.lewisdev.deluxecoinflip.DeluxeCoinflipPlugin/]: [DeluxeCoinflip] Saving player data to database..
+[16:03:34] [Server thread/INFO] [me.arcaniax.hdb.Main/]: [HeadDatabase] Disabling HeadDatabase v4.19.8
+[16:03:34] [Server thread/INFO] [Essentials/]: Disabling Essentials v2.20.1
+[16:03:34] [Server thread/INFO] [net.milkbowl.vault.Vault/]: [Vault] [Economy] Essentials Economy unhooked.
+[16:03:34] [Server thread/INFO] [com.sk89q.worldedit.bukkit.WorldEditPlugin/]: [WorldEdit] Disabling WorldEdit v7.2.16+6534-2066eb4
+[16:03:34] [Server thread/INFO] [com.sk89q.worldedit.extension.platform.PlatformManager/]: Unregistering com.sk89q.worldedit.bukkit.BukkitServerInterface from WorldEdit
+[16:03:34] [Server thread/INFO] [it.emmerrei.mycommand.Main/]: [MyCommand] Disabling MyCommand v5.7.4
+[16:03:34] [Server thread/INFO] [Minecraft/]: *-=-=-=-=-=-=-=-=-* MyCommand v.5.7.4*-=-=-=-=-=-=-=-=-=-*
+[16:03:34] [Server thread/INFO] [Minecraft/]: | Tasks : Stopped all tasks.
+[16:03:34] [Server thread/INFO] [Minecraft/]: *-=-=-=-=-=-=-=-=-=-*    Bye!   *-=-=-=-=-=-=-=-=-=-=-*
+[16:03:34] [Server thread/INFO] [net.craftingstore.bukkit.CraftingStoreBukkit/]: [CraftingStore] Disabling CraftingStore v2.9.3
+[16:03:34] [Server thread/INFO] [net.skinsrestorer.bukkit.SRBukkitBootstrap/]: [SkinsRestorer] Disabling SkinsRestorer v15.4.2
+[16:03:34] [Server thread/INFO] [me.reflexlabs.taxi.Taxi/]: [Taxi] Disabling Taxi v2.3
+[16:03:34] [Server thread/INFO] [Minecraft/]: [Taxi] plugin has been disabled.
+[16:03:34] [Server thread/INFO] [org.nobledeer.puzzlepayday.PuzzlePayday/]: [PuzzlePayday] Disabling PuzzlePayday v1.2
+[16:03:34] [Server thread/INFO] [/]: -------------------------------------
+[16:03:34] [Server thread/INFO] [/]: [PuzzlePayday]-[INFO] Disabling...
+[16:03:34] [Server thread/INFO] [/]: [PuzzlePayday]-[INFO] Disabled.
+[16:03:34] [Server thread/INFO] [/]: -------------------------------------
+[16:03:34] [Server thread/INFO] [net.milkbowl.vault.Vault/]: [Vault] Disabling Vault v1.7.3-b131
+[16:03:34] [Server thread/INFO] [me.clip.placeholderapi.PlaceholderAPIPlugin/]: [PlaceholderAPI] Unregistered placeholder expansion vault
+[16:03:34] [Server thread/INFO] [me.clip.placeholderapi.PlaceholderAPIPlugin/]: [PlaceholderAPI] Reason: required plugin Vault was disabled.
+[16:03:34] [Server thread/INFO] [me.yamakaja.commanditems.CommandItems/]: [CommandItems] Disabling CommandItems v2.4.0
+[16:03:34] [Server thread/INFO] [org.spigotparty.dev.examsplus.ExamsPlus/]: [ExamsPlus] Disabling ExamsPlus v1.0-SNAPSHOT
+[16:03:34] [Server thread/INFO] [dev.mrshawn.oreregenerator.OreRegenerator/]: [OreRegenerator] Disabling OreRegenerator v2.3.0
+[16:03:34] [Server thread/INFO] [fr.maxlego08.zitemstacker.ZItemPlugin/]: [zItemStacker] Disabling zItemStacker v1.0.4.2
+[16:03:34] [Server thread/INFO] [/]: [zItemStacker v1.0.4.2] === DISABLE START ===
+[16:03:34] [Server thread/INFO] [/]: [zItemStacker v1.0.4.2] /home/container/plugins/zItemStacker/items.json successfully saved !
+[16:03:34] [Server thread/INFO] [/]: [zItemStacker v1.0.4.2] /home/container/plugins/zItemStacker/config.json successfully saved !
+[16:03:34] [Server thread/INFO] [/]: [zItemStacker v1.0.4.2] === DISABLE DONE (3ms) ===
+[16:03:34] [Server thread/INFO] [net.craftcitizen.imagemaps.ImageMaps/]: [ImageMaps] Disabling ImageMaps v1.0.10
+[16:03:34] [Server thread/INFO] [me.blueslime.pixelmotd.initialization.bukkit.BukkitMOTD/]: [PixelMOTD] Disabling PixelMOTD v9.4.1-SNAPSHOT
+[16:03:34] [Server thread/INFO] [com.comphenix.protocol.ProtocolLib/]: [ProtocolLib] Disabling ProtocolLib v5.2.0-SNAPSHOT-679
+[16:03:34] [Server thread/INFO] [me.codedred.playtimes.PlayTimes/]: [Playtimes] Disabling Playtimes v1.6.2b
+[16:03:34] [Server thread/INFO] [me.codedred.playtimes.PlayTimes/]: [Playtimes] PlayTimes shutting down
+[16:03:34] [Server thread/INFO] [com.vexsoftware.votifier.NuVotifierBukkit/]: [Votifier] Disabling Votifier v2.7.2
+[16:03:34] [Server thread/INFO] [com.vexsoftware.votifier.NuVotifierBukkit/]: [Votifier] Votifier disabled.
+[16:03:34] [Server thread/INFO] [litebans.BukkitPlugin/]: [LiteBans] Disabling LiteBans v2.15.1
+[16:03:34] [Server thread/INFO] [litebans.BukkitPlugin/]: [LiteBans] litebans-pool - Shutdown initiated...
+[16:03:34] [Server thread/INFO] [litebans.BukkitPlugin/]: [LiteBans] litebans-pool - Shutdown completed.
+[16:03:34] [Votifier epoll worker/WARN] [com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop/]: Unexpected exception in the selector loop.
+java.lang.NoClassDefFoundError: com/vexsoftware/votifier/io/netty/util/collection/IntObjectHashMap$2$1
+	at com.vexsoftware.votifier.io.netty.util.collection.IntObjectHashMap$2.iterator(IntObjectHashMap.java:224) ~[?:?]
+	at java.util.AbstractCollection.toArray(AbstractCollection.java:186) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop.closeAll(EpollEventLoop.java:428) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:399) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:989) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[?:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: com.vexsoftware.votifier.io.netty.util.collection.IntObjectHashMap$2$1
+	at org.bukkit.plugin.java.PluginClassLoader.loadClass0(PluginClassLoader.java:178) ~[forge:?]
+	at org.bukkit.plugin.java.PluginClassLoader.loadClass(PluginClassLoader.java:133) ~[forge:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	... 8 more
+[16:03:34] [Votifier epoll boss/WARN] [com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop/]: Unexpected exception in the selector loop.
+java.lang.NoClassDefFoundError: com/vexsoftware/votifier/io/netty/util/collection/IntObjectHashMap$2$1
+	at com.vexsoftware.votifier.io.netty.util.collection.IntObjectHashMap$2.iterator(IntObjectHashMap.java:224) ~[?:?]
+	at java.util.AbstractCollection.toArray(AbstractCollection.java:186) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop.closeAll(EpollEventLoop.java:428) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:399) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:989) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[?:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: com.vexsoftware.votifier.io.netty.util.collection.IntObjectHashMap$2$1
+	... 8 more
+[16:03:34] [Votifier epoll worker/WARN] [com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop/]: Unexpected exception in the selector loop.
+java.lang.NoClassDefFoundError: com/vexsoftware/votifier/io/netty/util/collection/IntObjectHashMap$2$1
+	at com.vexsoftware.votifier.io.netty.util.collection.IntObjectHashMap$2.iterator(IntObjectHashMap.java:224) ~[?:?]
+	at java.util.AbstractCollection.toArray(AbstractCollection.java:186) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop.closeAll(EpollEventLoop.java:428) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:399) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:989) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[?:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: com.vexsoftware.votifier.io.netty.util.collection.IntObjectHashMap$2$1
+	... 8 more
+[16:03:34] [Votifier epoll worker/WARN] [com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop/]: Unexpected exception in the selector loop.
+java.lang.NoClassDefFoundError: com/vexsoftware/votifier/io/netty/util/collection/IntObjectHashMap$2$1
+	at com.vexsoftware.votifier.io.netty.util.collection.IntObjectHashMap$2.iterator(IntObjectHashMap.java:224) ~[?:?]
+	at java.util.AbstractCollection.toArray(AbstractCollection.java:186) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop.closeAll(EpollEventLoop.java:428) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:399) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:989) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[?:?]
+	at com.vexsoftware.votifier.io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[?:?]
+	at java.lang.Thread.run(Thread.java:840) ~[?:?]
+Caused by: java.lang.ClassNotFoundException: com.vexsoftware.votifier.io.netty.util.collection.IntObjectHashMap$2$1
+	... 8 more
+[16:03:35] [Server thread/INFO] [litebans.BukkitPlugin/]: [LiteBans] v2.15.1 disabled.
+[16:03:35] [Server thread/INFO] [me.lucko.spark.bukkit.BukkitSparkPlugin/]: [spark] Disabling spark v1.10.92
+[16:03:35] [Server thread/INFO] [me.minebuilders.clearlag.Clearlag/]: [ClearLag] Disabling ClearLag v3.2.2
+[16:03:35] [Server thread/INFO] [Minecraft/]: [ClearLag] Clearlag is now disabled!
+[16:03:35] [Server thread/INFO] [me.lucko.luckperms.bukkit.loader.BukkitLoaderPlugin/]: [LuckPerms] Disabling LuckPerms v5.4.131
+[16:03:35] [Server thread/INFO] [me.lucko.luckperms.bukkit.loader.BukkitLoaderPlugin/]: [LuckPerms] Starting shutdown process...
+[16:03:35] [Server thread/INFO] [me.lucko.luckperms.bukkit.loader.BukkitLoaderPlugin/]: [LuckPerms] Closing storage...
+[16:03:35] [Server thread/INFO] [me.lucko.luckperms.bukkit.loader.BukkitLoaderPlugin/]: [LuckPerms] Goodbye!
+[16:03:35] [Server thread/INFO] [plus.crates.CratesPlus/]: [CratesPlus] Disabling CratesPlus v4.5.3
+[16:03:35] [Server thread/INFO] [org.denizen.resources.Resources/]: [Resources] Disabling Resources v2.7.0
+[16:03:35] [Server thread/INFO] [/]: Resources saved to files successfully
+[16:03:35] [Server thread/INFO] [de.tr7zw.nbtapi.plugin.NBTAPI/]: [NBTAPI] Disabling NBTAPI v2.13.1
+[16:03:35] [Server thread/INFO] [com.ranull.irondoors.IronDoors/]: [IronDoors] Disabling IronDoors v1.8
+[16:03:35] [Server thread/INFO] [com.github.henriquemb.ticketsystem.TicketSystem/]: [TicketSystem] Disabling TicketSystem v1.2.1
+[16:03:35] [Server thread/INFO] [it.ivirus.handcuff.MainHandcuff/]: [Handcuff] Disabling Handcuff v1.3
+[16:03:35] [Server thread/INFO] [me.frep.vulcan.spigot.VulcanPlugin/]: [Vulcan] Disabling Vulcan v2.9.0
+[16:03:35] [Server thread/INFO] [net.craftersland.consolefix.CSF/]: [ConsoleSpamFix] Disabling ConsoleSpamFix v1.10.0
+[16:03:35] [Server thread/INFO] [net.craftersland.consolefix.CSF/]: [ConsoleSpamFix] Messages hidden since the server started: 136
+[16:03:35] [Server thread/INFO] [net.craftersland.consolefix.CSF/]: [ConsoleSpamFix] ConsoleSpamFix is disabled!
+[16:03:35] [Server thread/INFO] [me.filoghost.holographicdisplays.plugin.HolographicDisplays/]: [HolographicDisplays] Disabling HolographicDisplays v3.0.4
+[16:03:35] [Server thread/INFO] [me.clip.placeholderapi.PlaceholderAPIPlugin/]: [PlaceholderAPI] Disabling PlaceholderAPI v2.11.6
+[16:03:35] [Server thread/INFO] [org.popcraft.chunky.ChunkyBukkit/]: [Chunky] Disabling Chunky v1.2.164
+[16:03:35] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
+[16:03:35] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[hypecity]'/minecraft:overworld
+[16:03:35] [Server thread/INFO] [/]: Minecraft Transit Railway save complete for minecraft:overworld in 0 second(s)
+[16:03:35] [Server thread/INFO] [/]: - Changed: 2
+[16:03:36] [Server thread/INFO] [net.minecraft.world.server.ChunkManager/]: ThreadedAnvilChunkStorage (hypecity): All chunks are saved
+[16:03:36] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[FFA]'/minecraft:ffa
+[16:03:37] [Server thread/INFO] [net.minecraft.world.server.ChunkManager/]: ThreadedAnvilChunkStorage (ffa): All chunks are saved
+[16:03:37] [Server thread/INFO] [net.minecraft.world.server.ChunkManager/]: ThreadedAnvilChunkStorage (hypecity): All chunks are saved
+[16:03:37] [Server thread/INFO] [net.minecraft.world.server.ChunkManager/]: ThreadedAnvilChunkStorage (ffa): All chunks are saved
+[16:03:37] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving usercache.json
