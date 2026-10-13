@@ -24,10 +24,11 @@ jobs:
       - name: Adu sursa la commit fixat
         run: |
           set -euo pipefail
-          git clone -q --branch 1.16.5 https://github.com/MohistMC/Mohist src
+          git clone -q https://github.com/MohistMC/Mohist -b 1.16.5 src
           git -C src fetch -q --tags origin || true
-          git -C src checkout -q "$MOHIST_PIN"
+          git -C src checkout -q "$MOHIST_PIN" -B 1.16.5
           git -C src log -1 --format='pin: %H %ci %s' | head -1
+          git -C src describe --tags --abbrev=7 || echo "describe ESUAT (semnal ca clone-ul e stramb)"
           shopt -s nullglob
           PATCHES=(functity/patches/*.patch)
           if grep -q NOPATCH deploy/functity-build.txt 2>/dev/null; then
@@ -53,7 +54,7 @@ jobs:
           set -uo pipefail
           cd src
           chmod +x gradlew
-          /usr/bin/time -v ./gradlew build -x test --no-daemon --stacktrace --max-workers=4 > ../build-out.log 2>&1
+          /usr/bin/time -v ./gradlew setup mohistJar --no-daemon --stacktrace --max-workers=4 > ../build-out.log 2>&1
           GE=$?
           echo "gradle exit: $GE" | tee -a ../build-out.log
           printf '::warning::gradle exit=%s tail=%s\n' "$GE" "$(tail -c 1400 ../build-out.log | tr '\n' '~')"
@@ -62,7 +63,8 @@ jobs:
         run: |
           set -uo pipefail
           mkdir -p /tmp/fc
-          JAR=$(find src/build src/run -name '*.jar' -size +5M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
+          JAR=$(find src/projects src/build src/run -name '*server*.jar' -size +5M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
+          [ -n "$JAR" ] || JAR=$(find src/projects src/build src/run -name '*.jar' -size +5M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
           if [ -n "${JAR:-}" ]; then
             cp "$JAR" "/tmp/fc/FunCity-1.16.5-${BUILD_ID:-b0}.jar"
             ( cd /tmp/fc && sha256sum "FunCity-1.16.5-${BUILD_ID:-b0}.jar" > SHA256SUMS.txt )
