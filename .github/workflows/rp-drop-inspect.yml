@@ -77,9 +77,9 @@ jobs:
           MATRIX_ID: ${{ matrix.id }}
       - name: Antete — citesc fizic FIECARE fisier din arhiva (tur cu marker HEADERS)
         continue-on-error: true
-        if: contains(github.event.head_commit.message, 'HEADERS')
         run: |
           set -x
+          grep -q HEADERS deploy/rp-drop.txt || { echo "antete: doar la tururile marcate cu HEADERS in deploy/rp-drop.txt"; exit 0; }
           D="out/rp-drop/$NUME"
           A=$(find /tmp/drop -type f -size +1M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
           [ -n "${A:-}" ] || { echo "nicio arhiva descarcata, sar peste antete" >> "$D/DIAGNOSTIC.txt"; exit 0; }
