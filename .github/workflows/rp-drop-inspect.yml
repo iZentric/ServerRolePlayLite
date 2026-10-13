@@ -117,10 +117,12 @@ jobs:
             rm -rf /tmp/x /tmp/drop
           else
             echo "niciun fisier descarcat" >> "$D/DIAGNOSTIC.txt"
+            echo "SKIP_PUBLISH=yes" >> "$GITHUB_ENV"
           fi
           df -h /tmp | tail -1 >> "$D/DIAGNOSTIC.txt"
           ls -l /tmp/drop >> "$D/DIAGNOSTIC.txt" 2>&1 || true
       - name: Publica pe ramura rp-drop
+        if: env.SKIP_PUBLISH != 'yes'
         run: |
           set -x
           git config user.name 'github-actions[bot]'
