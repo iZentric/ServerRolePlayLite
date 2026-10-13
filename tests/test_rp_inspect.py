@@ -28,11 +28,22 @@ DROP = [
 class KeepTest(unittest.TestCase):
     def test_config_text_is_kept(self):
         for rel in KEEP:
-            self.assertTrue(R.keep(rel), f"trebuia pastrat: {rel}")
+            got = R.keep_body(rel, "srv")
+            self.assertTrue(got, f"trebuia pastrat: {rel}")
+            if rel.startswith("srv/"):
+                self.assertEqual(got, rel[len("srv/"):], "wrapperul trebuie taiat cand e numele arhivei")
 
     def test_no_player_data_no_binaries_no_secrets(self):
         for rel in DROP:
-            self.assertFalse(R.keep(rel), f"NU trebuia sa iasa din arhiva: {rel}")
+            self.assertFalse(R.keep_body(rel, "srv"), f"NU trebuia sa iasa din arhiva: {rel}")
+
+    def test_wrapper_nu_taia_cand_e_dir_real(self):
+        # "plugins" NU e chihlimbara arhivei: forma integrala ramane, ca sa nu se ciocneasca
+        # de fisiere omonime din arhive cuibate (bug-ul care a scurmat Chat.txt de 41 MB)
+        self.assertEqual(R.keep_body("plugins/ChatManager/Logs/Chat.txt", "server-2024"),
+                         "plugins/ChatManager/Logs/Chat.txt")
+        self.assertEqual(R.keep_body("server-2024/plugins/ChatManager/Logs/Chat.txt", "server-2024"),
+                         "plugins/ChatManager/Logs/Chat.txt")
 
 
 class CollectTest(unittest.TestCase):
@@ -45,7 +56,7 @@ class CollectTest(unittest.TestCase):
             big.write_text("A" * 900_000, encoding="utf-8")
             (root / "srv" / "server.properties").write_text("view-distance=10\n", encoding="utf-8")
             out = Path(tmp) / "out"
-            res = R.collect(root, out)
+            res = R.collect(root, out, wrapper="srv")
             log = out / "config" / "logs__latest.log"
             self.assertTrue(log.is_file(), "coada de log trebuie sa iasa")
             self.assertLessEqual(log.stat().st_size, R.LOG_TAIL_BYTES + 1)
