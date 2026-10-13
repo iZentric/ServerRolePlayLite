@@ -34,6 +34,13 @@ SKIP_NAME = re.compile(r"(level\.dat|session\.lock|usercache|banned-|whitelist|o
                        r"|vials|viabackwards|vault|luckperms|h2\.mv.db|\.mca$|\.jar$|\.zip$|\.gz$"
                        r"|secrets|password|token|api-key|private)", re.I)
 NESTED = re.compile(r"\.(tar\.gz|tgz|tar|zip|rar)$", re.I)
+# Arhive cuibate care NU ne privesc, la cererea expresa a proprietarului (2026-10-13):
+# clusterul de lobby/proxy apartine altcuiva; intra doar ce tine de roleplay.
+NESTED_SKIP = re.compile(r"(lobby|velocity|bungee|waterfall)", re.I)
+
+
+def nested_allowed(name: str) -> bool:
+    return not NESTED_SKIP.search(name)
 LOG_TAIL_BYTES = 120_000
 TAIL_BYTES = 400_000          # orice alt fisier text care nu incape integral: doar coada
 MAX_FILE = 2_000_000
@@ -349,8 +356,9 @@ def main(argv=None):
     tails: list = []
     used = absorb(root, MAX_TOTAL, "", wrapper)
     # arhive in arhiva: backup-urile de server pun de regula un *.tar.gz in interior
-    nested = [q for q in sorted(root.rglob("*"))
-              if q.is_file() and NESTED.search(q.name) and q.stat().st_size <= 1_600_000_000][:6]
+    all_nested = [q for q in sorted(root.rglob("*"))
+                  if q.is_file() and NESTED.search(q.name) and q.stat().st_size <= 1_600_000_000]
+    nested = [q for q in all_nested if nested_allowed(q.name)][:6]
     for n_i, n in enumerate(nested):
         sub = root / ("_sub_%d" % n_i)
         try:
@@ -366,6 +374,7 @@ def main(argv=None):
     report = {"archive": archive.name, "bytes": archive.stat().st_size,
               "listing": inv["files"], "uncompressed_bytes": inv["bytes"],
               "groups_top": dict(inv["top"]), "nested": [n.name for n in nested],
+              "nested_sariti": [q.name for q in all_nested if not nested_allowed(q.name)],
               "config_files_kept": n_cfg, "config_bytes": used,
               "skipped": skipped, "files": [k["file"] for k in kept_all][:500],
               "tails": (tails or [])[:40]}

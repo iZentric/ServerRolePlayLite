@@ -26,6 +26,14 @@ Primele trei sunt **același ecosistem de server** (acceleași jare, aceleași c
 date diferite: `folder-1` = 2025-03, `cffc` = 2024-12, `vibe-rp` = 2024-09. `level-name`:
 `hypecity`, `world`, `viberp`; porturi 30004 / 25568 / 25566.
 
+## Perimetru decis de proprietar (13 oct)
+
+`minecity-network.rar` conține trei arhive cuibărite. **`lobby.tar` și `velocity.tar` au fost
+scoase din ingest la cererea explicită a lui marius** — «nu ai treabă în ele». Motorul aplică
+acum `NESTED_SKIP = lobby|velocity|bungee|waterfall` și în extragere și în bucla de antete;
+ramura `rp-drop` a fost curățată (44 fișiere + regenerare la următorul tur). În `minecity`
+rămâne doar ceea ce conține `roleplay.tar`.
+
 ## Igiena secretelor (s-a întâmplat și asta)
 
 La al doilea ingest, pe ramură a ieșit `New Text Document.txt` din minecity cu un șir de tip

@@ -91,3 +91,12 @@ class ScrubTest(unittest.TestCase):
             self.assertNotIn("WHC1NmZYq6s0L0L0a1l3sr3KYk3qp0Jz", t)
             self.assertNotIn("229933NIX2GZ0EKY1YTRJ", t)
             self.assertIn("view-distance: 10", t)
+
+
+class NestedFilterTest(unittest.TestCase):
+    def test_lobby_and_velocity_are_excluded(self):
+        self.assertFalse(R.nested_allowed("lobby.tar"))
+        self.assertFalse(R.nested_allowed("velocity.tar"))
+        self.assertFalse(R.nested_allowed("Lobby-SNAPSHOT.tar.gz"))
+        self.assertTrue(R.nested_allowed("roleplay.tar"))
+        self.assertTrue(R.nested_allowed("archive-2024-09-11T124205Z.tar.gz"))

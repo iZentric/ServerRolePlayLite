@@ -88,7 +88,7 @@ jobs:
               rm -rf /tmp/h /tmp/hd; mkdir -p /tmp/h
               7z x -y -o/tmp/h "$A" >/dev/null 2>&1 || unar -quiet -force-overwrite -output-directory /tmp/h "$A" >/dev/null 2>&1 || true
               > "$D/antete.txt"
-              for f in $(find /tmp/h -type f \( -name '*.tar' -o -name '*.tar.gz' -o -name '*.tgz' -o -name '*.zip' \)); do
+              for f in $(find /tmp/h -type f \( -name '*.tar' -o -name '*.tar.gz' -o -name '*.tgz' -o -name '*.zip' \) | grep -vEi "lobby|velocity|bungee|waterfall"); do
                 python3 scripts/rp_archive_inspect.py --archive "$f" --extract-dir /tmp/hx --out /tmp/hd --headers || true
                 cat /tmp/hd/antete.txt >> "$D/antete.txt" 2>/dev/null || true
                 rm -rf /tmp/hd /tmp/hx
