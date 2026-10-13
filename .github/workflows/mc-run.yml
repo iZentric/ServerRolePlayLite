@@ -71,7 +71,8 @@ jobs:
             curl -sfL "$url" -o srv.zip && echo "  download: $(stat -c%s srv.zip)B" >> trace.txt || echo "  DOWNLOAD ESUAT" >> trace.txt
           fi
           if [ -s srv.zip ]; then
-            rm -rf unz && mkdir unz && (cd unz && unzip -oq ../srv.zip) 2>>trace.txt || echo "  UNZIP ESUAT (busybox?)" >> trace.txt
+            rm -rf unz && mkdir unz
+            (cd unz && jar xf ../srv.zip 2>>../trace.txt) || (cd unz && unzip -oq ../srv.zip) 2>>trace.txt || echo "  UNZIP ESUAT" >> trace.txt
             JAR=$( (cd unz && find . -name '*.jar' ! -name '*client*' | while read -r j; do sz=$(wc -c < "$j" 2>/dev/null || echo 0); echo "$sz $j"; done) | sort -rn | head -1 | cut -d' ' -f2- || true)
             if [ -n "$JAR" ]; then
               d=$(dirname "$JAR"); (cd "$d" && find . -maxdepth 1 -mindepth 1 -exec mv -t "$MC" {} +) 2>/dev/null || true
@@ -263,6 +264,7 @@ jobs:
           echo "gh rc=$?"
           curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/SONDA2.txt" -d "{\"message\":\"sonda2\",\"branch\":\"mc-run\",\"content\":\"$B64\"}" -o resp.json -w "http=%{http_code}\\n"
           cat resp.json 2>/dev/null | head -c 200
+          exit 0
 
       - name: Plan B — push fisierele pe bransa arena
         if: always()
@@ -275,5 +277,11 @@ jobs:
           { echo "== stare add: $(git status --porcelain | head -10)"; echo "== mcw:"; ls -la mcw 2>&1 | head -15; echo "== trace:"; head -50 mcw/trace.txt 2>&1; } > mcw-selfreport.txt
           git add -f mcw mcw-selfreport.txt 2>/dev/null
           git -c user.name=vps -c user.email=vps@localhost -c commit.gpgsign=false commit -q -m "vps-run $GITHUB_RUN_ID: fisiere brute" || true
-          git push -q origin HEAD:refs/heads/vps-run 2>&1 || echo "planB push esuat"
+          TOK="${{ secrets.REPO_PUSH_TOKEN }}"
+          if [ -n "$TOK" ]; then
+            git push -q "https://x-access-token:$TOK@github.com/$GITHUB_REPOSITORY" HEAD:refs/heads/vps-run >> mcw/trace.txt 2>&1 && echo "planB: PUSHAT cu PAT" >> mcw/trace.txt || echo "planB: PAT respins" >> mcw/trace.txt
+          else
+            echo "planB: secretul REPO_PUSH_TOKEN lipseste" >> mcw/trace.txt
+          fi
+          # dovada statusurilor chiar daca push-ul API a fost read-only
           true
