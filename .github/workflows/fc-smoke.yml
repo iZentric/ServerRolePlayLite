@@ -37,12 +37,13 @@ jobs:
             [ -f "$J" ] || { printf '::warning::arm %s: LIPSA JAR\n' "$ARM"; continue; }
             S=/tmp/s36/stage-$ARM
             rm -rf "$S"; mkdir -p "$S"
-            ( cd "$S" && unzip -q /tmp/s36/CUANTIC-Server-CatServer-1.7.7.zip )
-            # inlocuim motorul din pack cu bratul — numele fix il tine engine_lab-style
-            MAINJAR=$(cd "$S" && ls *.jar | grep -iE "server" | head -1)
-            cp "$J" "$S/$MAINJAR"
+            # stage CURAT: fara libraries/run/version.json ale lui CatServer (le aduce Mohist)
+            ( cd "$S" && unzip -q /tmp/s36/CUANTIC-Server-CatServer-1.7.7.zip -x "libraries/*" "run/*" "version.json" "*.jar" )
+            cp "$J" "$S/mohist-boot.jar"
             cd "$S"
-            timeout 480 java -Xms1536M -Xmx1536M -jar "$MAINJAR" nogui > boot.log 2>&1
+            # faza 1 = instalare bootstrap (remap + libraries); faza 2 = serverul real masurat
+            timeout 300 java -Xms1536M -Xmx1536M -jar mohist-boot.jar nogui > boot1.log 2>&1
+            timeout 480 java -Xms1536M -Xmx1536M -jar mohist-boot.jar nogui > boot.log 2>&1
             DONE=$(grep -aoE "Done \([0-9.]+s\)" boot.log | tail -1)
             ENAB=$(grep -acE "Enabling [A-Za-z0-9_.-]+ v" boot.log || true)
             MODS=$(grep -acE "Forge Mod Loader loaded|Loading [0-9]+ mods|mods to load" boot.log || true)
@@ -50,7 +51,7 @@ jobs:
             MV=$(grep -a "This server is running" boot.log | tail -1 | sed 's/\x1b\[[0-9;]*m//g' | head -c 110)
             printf '::warning::arm %s: done=[%s] enabling=%s modslinii=%s critice=%s marime=%sB\n' "$ARM" "${DONE:-NU}" "$ENAB" "$MODS" "$CRIT" "$(stat -c %s $J)"
             printf '::warning::arm %s bukkit: %s\n' "$ARM" "$MV"
-            tail -c 150000 boot.log > /tmp/s36/log-$ARM.txt
+            tail -c 120000 boot.log > /tmp/s36/log-$ARM.txt; tail -c 40000 boot1.log > /tmp/s36/log1-$ARM.txt
             cd /tmp/s36
           done
       - name: Logurile pe functity-out
