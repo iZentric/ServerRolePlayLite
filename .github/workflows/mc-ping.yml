@@ -60,21 +60,27 @@ jobs:
           print(json.dumps(rez, ensure_ascii=False))
           PY
 
-      - name: Publica pe mc-run
+      - name: Publica pe rp-drop/ping (canalul dovedit)
         run: |
-          set -u
-          pune() {
-            f="$1"; dest="$2"
-            [ -s "$f" ] || return 0
-            sha=$(curl -sf -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/$dest?ref=mc-run" | grep -o '"sha": *"[a-f0-9]*"' | head -1 | cut -d'"' -f4)
-            [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
-            curl -sf -o /dev/null -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/$dest" \
-              -d "{\"message\":\"mc-ping $dest\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 -w0 < "$f")\"}" \
-              && echo "$dest: OK" || echo "$dest: PUT esuat"
-          }
-          echo "run $GITHUB_RUN_ID | sonda 92.5.171.150:25565 | $(date -u '+%F %T UTC')" > PROVENIENTA.txt
-          pune ping.json PING-slp.json
-          pune mcsrvstat.json PING-mcsrvstat.json
-          pune PROVENIENTA.txt PROVENIENTA.txt
+          set -x
+          mkdir -p /tmp/pingout
+          exec > >(tee /tmp/pingout/DEBUG.txt) 2>&1
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git worktree prune || true
+          rm -rf /tmp/wt
+          for i in 1 2 3; do
+            git fetch -q origin rp-drop || break
+            git worktree add /tmp/wt -B rp-drop origin/rp-drop || { git worktree prune; rm -rf /tmp/wt; continue; }
+            mkdir -p /tmp/wt/rp-drop/ping
+            cp ping.json /tmp/wt/rp-drop/ping/PING-slp.json 2>/dev/null || echo "ping.json lipsa" >> /tmp/pingout/DEBUG2.txt
+            cp mcsrvstat.json /tmp/wt/rp-drop/ping/PING-mcsrvstat.json 2>/dev/null || true
+            echo "run $GITHUB_RUN_ID | sonda 92.5.171.150:25565 | $(date -u '+%F %T UTC')" > /tmp/wt/rp-drop/ping/PROVENIENTA.txt
+            cp /tmp/pingout/DEBUG2.txt /tmp/wt/rp-drop/ping/ 2>/dev/null || true
+            git -C /tmp/wt add -A rp-drop/ping
+            git -C /tmp/wt -c commit.gpgsign=false commit -qm "mc-ping: sonda 92.5.171.150" || echo "nimic nou"
+            git -C /tmp/wt push -v origin "HEAD:refs/heads/rp-drop" && break
+            git -C /tmp/wt pull -q --rebase origin rp-drop || true
+            git -C /tmp/wt push -v origin "HEAD:refs/heads/rp-drop" || echo "push esuat la incr $i"
+          done
           true
