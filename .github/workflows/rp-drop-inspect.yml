@@ -125,19 +125,21 @@ jobs:
         if: env.SKIP_PUBLISH != 'yes'
         run: |
           set -x
+          exec > >(tee -a "out/rp-drop/$NUME/DIAGNOSTIC.txt") 2>&1
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git worktree prune || true
           rm -rf /tmp/wt
+          echo "surse: $(find out/rp-drop/$NUME -type f | wc -l) fisiere, $(du -sh out/rp-drop/$NUME | cut -f1)"
           for i in 1 2 3; do
             git fetch -q origin rp-drop || break
-            git worktree add -q /tmp/wt -B rp-drop FETCH_HEAD || { git worktree prune; rm -rf /tmp/wt; continue; }
-            mkdir -p "/tmp/wt/rp-drop/$NUME"
+            git worktree add /tmp/wt -B rp-drop origin/rp-drop || { git worktree prune; rm -rf /tmp/wt; continue; }
+            mkdir -p "/tmp/wt/rp-drop"
             rm -rf "/tmp/wt/rp-drop/$NUME" && cp -a "out/rp-drop/$NUME" "/tmp/wt/rp-drop/$NUME"
             git -C /tmp/wt add -A "rp-drop/$NUME"
             git -C /tmp/wt -c commit.gpgsign=false commit -qm "rp-drop: $NUME (text only, fara date de jucatori)" || echo "nimic nou"
-            git -C /tmp/wt push -q origin rp-drop && break
+            git -C /tmp/wt push -v origin "HEAD:refs/heads/rp-drop" && break
             git -C /tmp/wt pull -q --rebase origin rp-drop || true
-            git -C /tmp/wt push -q origin rp-drop || true
+            git -C /tmp/wt push -v origin "HEAD:refs/heads/rp-drop" || echo "push a esuat la incr $i"
           done
           true
