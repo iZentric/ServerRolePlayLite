@@ -1,12 +1,12 @@
 {
   "archive": "arhiva.rar",
   "bytes": 2372633828,
-  "listing": 22405,
-  "uncompressed_bytes": 1595433061,
+  "listing": 21541,
+  "uncompressed_bytes": 1215269467,
   "groups_top": {
     "region": {
-      "count": 135,
-      "bytes": 371788173
+      "count": 131,
+      "bytes": 353896353
     },
     "archive-2024-11-02T083126Z.tar.gz": {
       "count": 1,
@@ -21,32 +21,20 @@
       "bytes": 73391935
     },
     "latest.log": {
-      "count": 3,
-      "bytes": 71320504
-    },
-    "server.jar": {
-      "count": 3,
-      "bytes": 68022092
+      "count": 1,
+      "bytes": 71302437
     },
     "GriefDefender": {
       "count": 513,
       "bytes": 65531714
     },
     "net": {
-      "count": 35,
-      "bytes": 53553831
-    },
-    "mojang_1.19.4.jar": {
-      "count": 1,
-      "bytes": 47515675
-    },
-    "LuckPerms": {
-      "count": 127,
-      "bytes": 40385089
+      "count": 20,
+      "bytes": 49321887
     },
     "advancements": {
-      "count": 1144,
-      "bytes": 39102453
+      "count": 1119,
+      "bytes": 39067031
     },
     "Modernxl+1.16.5.jar": {
       "count": 1,
@@ -56,96 +44,83 @@
       "count": 1,
       "bytes": 37962360
     },
-    "org": {
-      "count": 63,
-      "bytes": 34720508
+    "LuckPerms": {
+      "count": 65,
+      "bytes": 24131675
     },
     "com": {
-      "count": 33,
-      "bytes": 30572778
-    },
-    "it": {
-      "count": 1,
-      "bytes": 23376043
-    },
-    "Citizens": {
-      "count": 104,
-      "bytes": 20960698
-    },
-    "1.19.4": {
-      "count": 1,
-      "bytes": 20803749
-    },
-    "luckperms": {
-      "count": 60,
-      "bytes": 17228259
+      "count": 16,
+      "bytes": 21034667
     },
     "spark": {
       "count": 84,
       "bytes": 16433920
     },
-    "AntiVPN-1.5.1-BETA-b1.jar": {
-      "count": 2,
-      "bytes": 16226416
-    },
-    "FastAsyncWorldEdit-Bukkit-2.6.5-SNAPSHOT-518.jar": {
-      "count": 1,
-      "bytes": 15768910
-    },
-    "enhancedglist-velocity-2.0.0-BETA6-SNAPSHOT.jar": {
-      "count": 1,
-      "bytes": 13785329
-    },
     "data": {
-      "count": 8357,
-      "bytes": 13673769
+      "count": 8352,
+      "bytes": 13672855
     },
-    "ajLeaderboards": {
-      "count": 28,
-      "bytes": 11323231
+    "org": {
+      "count": 26,
+      "bytes": 13385846
+    },
+    "bubusteinmoneymod-forge-mc1.16.5-1.0.7-final.jar": {
+      "count": 1,
+      "bytes": 11048504
+    },
+    "DiscordSRV-Build-1.28.0.jar": {
+      "count": 1,
+      "bytes": 10970877
+    },
+    "Citizens": {
+      "count": 39,
+      "bytes": 9291265
+    },
+    "server.jar": {
+      "count": 1,
+      "bytes": 8664935
+    },
+    "Roleplay+_1.16.5_1.0.5.jar": {
+      "count": 1,
+      "bytes": 8542373
+    },
+    "worldedit-bukkit-7.2.17.jar": {
+      "count": 1,
+      "bytes": 7094652
+    },
+    "LoneLibs.jar": {
+      "count": 1,
+      "bytes": 5992042
+    },
+    "ProtocolLib.jar": {
+      "count": 1,
+      "bytes": 5780256
+    },
+    "SkinsRestorer.jar": {
+      "count": 1,
+      "bytes": 5637572
+    },
+    "stats": {
+      "count": 1119,
+      "bytes": 5329323
     }
   },
   "nested": [
+    "roleplay.tar"
+  ],
+  "nested_sariti": [
     "lobby.tar",
-    "roleplay.tar",
     "velocity.tar"
   ],
-  "config_files_kept": 277,
-  "config_bytes": 7885943,
+  "config_files_kept": 233,
+  "config_bytes": 5436195,
   "skipped": {
-    "teren": 6809,
-    "suspect": 1046,
+    "teren": 6591,
+    "suspect": 623,
     "mare": 4,
-    "binar": 8490
+    "binar": 8456
   },
   "files": [
-    "lobby.tar/logs/latest.log",
-    "lobby.tar/plugins/Essentials/items.json",
-    "lobby.tar/plugins/Essentials/messages_en.properties",
-    "lobby.tar/plugins/Essentials/config.yml",
-    "lobby.tar/plugins/FastAsyncWorldEdit/lang/strings.json",
-    "lobby.tar/plugins/FastAsyncWorldEdit/config.yml",
-    "lobby.tar/plugins/DeluxeHub/config.yml",
-    "lobby.tar/plugins/ViaVersion/config.yml",
-    "lobby.tar/config/paper-world-defaults.yml",
-    "lobby.tar/plugins/DeluxeHub/menus/serverselector.yml",
-    "lobby.tar/spigot.yml",
-    "lobby.tar/config/paper-global.yml",
-    "lobby.tar/plugins/DecentHolograms/holograms/top_kills.yml",
-    "lobby.tar/plugins/DecentHolograms/holograms/top_deaths.yml",
-    "lobby.tar/plugins/DecentHolograms/holograms/top_parkour.yml",
-    "lobby.tar/wepif.yml",
-    "lobby.tar/server.properties",
-    "lobby.tar/plugins/Essentials/userdata/bdb3bb90-6a2d-3d0b-92ce-fe506f04e78f.yml",
-    "lobby.tar/plugins/Essentials/userdata/670526d5-95f3-3d67-a50e-763f6468b78a.yml",
-    "lobby.tar/plugins/Essentials/userdata/54b0bf69-35cd-39af-93c6-dfc5788753df.yml",
-    "lobby.tar/plugins/DecentHolograms/holograms/spawn.yml",
-    "lobby.tar/plugins/DecentHolograms/holograms/RolePlay.yml",
-    "lobby.tar/plugins/DecentHolograms/holograms/Survival.yml",
-    "lobby.tar/plugins/Essentials/userdata/d0dfc441-f6b4-3361-9169-7bb1f6f33f18.yml",
-    "lobby.tar/plugins/Essentials/userdata/13850d7f-e247-3168-be3c-34df6b49c136.yml",
-    "lobby.tar/plugins/Essentials/userdata/469759b7-b1fb-38de-8fd7-dead88107805.yml",
-    "lobby.tar/plugins/Citizens/lib/net/sf/4j.yml",
     "roleplay.tar/logs/debug.log",
     "roleplay.tar/logs/latest.log",
     "roleplay.tar/plugins/Vulcan/violations.txt",
@@ -378,31 +353,9 @@
     "roleplay.tar/config/PlasmoVoice/server_data.json",
     "roleplay.tar/plugins/GriefDefender/worlds/normal/dimension.conf",
     "roleplay.tar/plugins/ItemEdit/database/player-database.yml",
-    "roleplay.tar/plugins/ItemsAdder/storage/custom_fires_ids_cache-0.yml",
-    "velocity.tar/logs/latest.log",
-    "velocity.tar/plugins/skinsrestorer/recommendations.json",
-    "velocity.tar/plugins/jpremium/messages.yml",
-    "velocity.tar/plugins/botsentry/messages.yml",
-    "velocity.tar/plugins/skinsrestorer/locales/repository/locale_ru.json",
-    "velocity.tar/plugins/botsentry/config.yml",
-    "velocity.tar/plugins/skinsrestorer/locales/repository/locale_vi.json",
-    "velocity.tar/plugins/skinsrestorer/locales/repository/locale_hu.json",
-    "velocity.tar/plugins/skinsrestorer/locales/repository/locale_de.json",
-    "velocity.tar/plugins/skinsrestorer/locales/repository/locale_fr.json",
-    "velocity.tar/plugins/skinsrestorer/locales/repository/locale_es.json",
-    "velocity.tar/plugins/skinsrestorer/config.yml",
-    "velocity.tar/plugins/enhanced-glist-velocity/en.conf",
-    "velocity.tar/velocity.toml",
-    "velocity.tar/plugins/botsentry/logs/antiProxy.json",
-    "velocity.tar/config.yml",
-    "velocity.tar/server.properties"
+    "roleplay.tar/plugins/ItemsAdder/storage/custom_fires_ids_cache-0.yml"
   ],
   "tails": [
-    {
-      "file": "lobby.tar/logs/latest.log",
-      "src": 8322,
-      "written": 16
-    },
     {
       "file": "roleplay.tar/logs/debug.log",
       "src": 73391935,
@@ -487,11 +440,6 @@
       "file": "roleplay.tar/plugins/ItemEdit/logs/2023.10.25.log",
       "src": 206,
       "written": 13
-    },
-    {
-      "file": "velocity.tar/logs/latest.log",
-      "src": 9745,
-      "written": 6333
     }
   ]
 }
