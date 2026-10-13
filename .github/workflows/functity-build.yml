@@ -48,8 +48,9 @@ jobs:
           cd src
           chmod +x gradlew
           /usr/bin/time -v ./gradlew build -x test --no-daemon --max-workers=4 > ../build-out.log 2>&1
-          echo "gradle exit: $?" | tee -a ../build-out.log
-          tail -5 ../build-out.log
+          GE=$?
+          echo "gradle exit: $GE" | tee -a ../build-out.log
+          printf '::warning::gradle exit=%s tail=%s\n' "$GE" "$(tail -c 1400 ../build-out.log | tr '\n' '~')"
 
       - name: Colecteaza artefactele
         run: |
@@ -77,64 +78,36 @@ jobs:
           } > /tmp/fc/metadata.json
           ls -la /tmp/fc
 
-      - name: Publica faza 1 (diagnostice) pe functity-out
+      - name: Publica pe functity-out (model rp-drop cu token in URL)
         run: |
           set +e
-          exec > >(tee -a /tmp/fc/PUBLISH-DEBUG.txt) 2>&1
-          [ -d /tmp/fc ] || { mkdir -p /tmp/fc; echo "nu exista /tmp/fc" > /tmp/fc/ESUARE.txt; }
-          dbg() { echo "$(date -u +%T) $*" >> /tmp/fc/PUBLISH-DEBUG.txt; }
-          dbg "fisiere: $(ls -la /tmp/fc | wc -l) bucati, jar: $(ls /tmp/fc/*.jar 2>/dev/null | head -1)"
-          cd "$GITHUB_WORKSPACE" || exit 0
+          cd /tmp; rm -rf fcout
+          git clone -q "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" -b functity-out fcout 2>/tmp/clone.err
+          CL=$?
+          printf '::warning::clone functity-out: exit=%s err=%s\n' "$CL" "$(tr '\n' '~' < /tmp/clone.err | head -c 300)"
+          cd fcout || { echo "fara clone, opresc"; exit 0; }
           git config user.name 'functity-ci[bot]'
           git config user.email 'functity-ci@localhost'
-          if ! git ls-remote --exit-code origin refs/heads/functity-out >/dev/null 2>&1; then
-            dbg "ramura noua: creez radacina"
-            root=$(git commit-tree "$(git hash-object -w -t tree --stdin </dev/null)" -m "functity-out: radacina")
-            dbg "root=$root"
-            git push origin "$root:refs/heads/functity-out" && dbg "radacina impinsa" || dbg "IMPINGERE RADACINA ESUATA"
+          mkdir -p "builds/$BUILD_ID"
+          cp /tmp/fc/* "builds/$BUILD_ID/" 2>/dev/null
+          git add -A "builds/$BUILD_ID"
+          git commit -qm "functity $BUILD_ID" || echo "nimic de commituit"
+          git push -q origin HEAD:refs/heads/functity-out 2>/tmp/push.err
+          PE=$?
+          printf '::warning::push: exit=%s err=%s fisiere=%s\n' "$PE" "$(tr '\n' '~' < /tmp/push.err | head -c 400)" "$(cd builds/$BUILD_ID && ls | tr '\n' ',' | head -c 200)"
+          if [ $PE -ne 0 ]; then
+            git pull -q --rebase origin functity-out 2>/dev/null
+            git push -q origin HEAD:refs/heads/functity-out 2>/tmp/push2.err
+            printf '::warning::push retry: exit=%s err=%s\n' "$?" "$(tr '\n' '~' < /tmp/push2.err | head -c 400)"
           fi
-          git fetch origin refs/heads/functity-out && dbg "fetch ok: $(git rev-parse FETCH_HEAD | head -c8)" || dbg "FETCH ESUAT"
-          git worktree prune
-          rm -rf /tmp/wtf
-          git worktree add /tmp/wtf --detach FETCH_HEAD || dbg "WORKTREE ESUAT"
-          D="/tmp/wtf/builds/${BUILD_ID:-b0}"
-          mkdir -p "$D"
-          cp /tmp/fc/PUBLISH-DEBUG.txt /tmp/fc/ESUARE.txt /tmp/fc/metadata.json /tmp/fc/BUILD-LOG.txt /tmp/fc/SHA256SUMS.txt "$D/" 2>/dev/null
-          dbg "continut D:"; ls -la "$D"
-          git -C /tmp/wtf add -A "builds/${BUILD_ID:-b0}"
-          git -C /tmp/wtf -c commit.gpgsign=false commit -m "functity ${BUILD_ID:-b0}: loguri si diagnostice" || dbg "COMMIT ESUAT (nimic nou?)"
-          for i in 1 2 3; do
-            git -C /tmp/wtf push origin HEAD:refs/heads/functity-out && { dbg "PUSH1 OK"; break; }
-            dbg "push reincercare $i"
-            git -C /tmp/wtf pull -q --rebase origin functity-out || true
-            git -C /tmp/wtf push origin HEAD:refs/heads/functity-out || dbg "PUSH1 TOT ESUAT"
-          done
-          git -C "$GITHUB_WORKSPACE" worktree remove --force /tmp/wtf || true
-          exit 0
-
-      - name: Publica faza 2 (JAR)
+      - name: Verific local (infolare bara de progres)
+        if: always()
         run: |
           set +e
-          JAR=$(ls /tmp/fc/FunCity-*.jar 2>/dev/null | head -1)
-          [ -n "$JAR" ] || { echo "fara jar, sar peste"; exit 0; }
-          cd "$GITHUB_WORKSPACE"
-          git fetch origin refs/heads/functity-out
-          git worktree prune; rm -rf /tmp/wtf2
-          git worktree add /tmp/wtf2 --detach FETCH_HEAD || { echo "worktree esuat"; exit 0; }
-          D="/tmp/wtf2/builds/${BUILD_ID:-b0}"
-          mkdir -p "$D"
-          cp "$JAR" /tmp/fc/SHA256SUMS.txt "$D/"
-          git -C /tmp/wtf2 add -A "builds/${BUILD_ID:-b0}"
-          git -C /tmp/wtf2 -c user.name='functity-ci[bot]' -c user.email='functity-ci@localhost' -c commit.gpgsign=false commit -m "functity ${BUILD_ID:-b0}: JAR" || echo "nimic nou"
-          git -C /tmp/wtf2 push origin HEAD:refs/heads/functity-out || { git -C /tmp/wtf2 pull -q --rebase origin functity-out || true; git -C /tmp/wtf2 push origin HEAD:refs/heads/functity-out; }
-          git -C "$GITHUB_WORKSPACE" worktree remove --force /tmp/wtf2 || true
-          exit 0
+          echo "BUILD_ID=$BUILD_ID"
+          echo "::group::gradle tail"
+          tail -c 2000 build-out.log | tr '\n' '~' | head -c 1500
+          echo
+          echo "::endgroup::"
+          printf '::warning::sfarsit: build=%s jar=%s logmarime=%s\n' "$BUILD_ID" "$(ls /tmp/fc/*.jar 2>/dev/null | head -1 || echo NICIUN)" "$(stat -c %s build-out.log 2>/dev/null || echo 0)"
 
-      - name: Artefact paralel (canal sigur, nu depinde de push)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: functity-build-$BUILD_ID
-          path: /tmp/fc/
-          if-no-files-found: warn
-          retention-days: 30
