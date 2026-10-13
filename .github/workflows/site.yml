@@ -1,7 +1,11 @@
 name: Site CUANTIC (rezultate verificate)
 on:
   push:
-    branches: ["arena/a29b4ef4-serverroleplaylite"]
+    # Aditiv: ramura sesiunii curente pe langa cea istorica. Nu adaugam `main`
+    # pentru ca alive.yml comite analysis/ALIVE.md pe main la fiecare 20 de
+    # minute, iar un trigger pe main + analysis/** ar redesena pagina de 72 de
+    # ori pe zi. Deploy-ul din main ramane o decizie separata.
+    branches: ["arena/a29b4ef4-serverroleplaylite", "arena/9bbcb24f-serverroleplaylite"]
     paths: ["analysis/**", "docs/ENGINE-*.md", "docs/BENCHMARK-MOTOARE-CUANTIC-2026-10-12.md", "docs/STRATEGIE-ROLEPLAY-SURVIVAL.md", "docs/INCIDENT-*.md", "site/**", "tests/test_site_claims.py", "pack-rules.json", "deploy/play-address.txt", ".github/workflows/site.yml"]
   workflow_dispatch: {}
 permissions:
@@ -13,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   publish:
-    if: github.ref == 'refs/heads/arena/a29b4ef4-serverroleplaylite'
+    if: github.ref == 'refs/heads/arena/a29b4ef4-serverroleplaylite' || github.ref == 'refs/heads/arena/9bbcb24f-serverroleplaylite'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

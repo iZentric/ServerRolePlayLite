@@ -1,4 +1,4 @@
-motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7o__VER__ \u00A7f| \u00A7aorice PC, zero lag \u00A7f| \u00A7dOras+Survival+Claims \u00A7f| \u00A7ecost 0
+motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7o__VER__ \u00A7f| \u00A7aForge 1.16.5 \u00A7f| \u00A7dOras+Survival+Claims \u00A7f| \u00A7ecost 0
 max-players=25
 view-distance=4
 player-idle-timeout=0
@@ -11,6 +11,7 @@ max-tick-time=-1
 entity-broadcast-range-percentage=60
 online-mode=false
 pvp=true
+spawn-monsters=true
 difficulty=normal
 gamemode=survival
 level-name=world

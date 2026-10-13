@@ -13,11 +13,35 @@ env:
 jobs:
   c:
     runs-on: [self-hosted]
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+      - name: Diagnostic read-only pentru portul public (intra in raportul CHK)
+        run: bash scripts/netprobe.sh || true
       - run: bash scripts/chk.sh || true
 
       - name: Regula — serverul ramane pornit dupa orice comanda
         if: always()
         run: bash scripts/ensure-up.sh
+
+      # Baseline-ul se comite DE AICI, nu din chk.sh: scriptul de pe gazda e adus de
+      # un loop care nu face mereu pull, deci nu ne putem baza pe el sa-si actualizeze sursele.
+      - name: Referinta live pentru portile de migrare (citire only, nu atinge serverul)
+        if: always()
+        run: |
+          set -uo pipefail
+          OUT=analysis/CUANTIC-BASELINE.md
+          { echo "# Referință live pentru migrare — citită, nu măsurată activ"; echo;
+            echo "Rulată pe gazda pe care rulează serverul (CHK). Pasul doar citește /proc și live.log:";
+            echo "nu pornește, nu oprește și nu modifică serverul. Portul public 25565 și frpc rămân cum sunt."; echo;
+            echo '```json'
+            python3 scripts/cuantic_migrate.py baseline --out /tmp/cuantic-baseline 2>&1 \
+              | sed -n '/^{/,/^}/p' || echo "baseline indisponibil — gazda nu are python3/suruse actualizate"
+            echo '```';
+          } > "$OUT"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$OUT"
+          git commit -q -m 'chk: referinta live pentru portile de migrare' || echo "nimic nou"
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || true
+          git push origin "HEAD:$GITHUB_REF_NAME" >/dev/null 2>&1 || echo "push: nimic de trimis"

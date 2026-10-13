@@ -1,16 +1,16 @@
-# CHK — 2026-10-12 10:10:50 UTC
+# CHK — 2026-10-12 16:44:24 UTC
 
 ```
-== CHK — 2026-10-12 10:10:48 UTC ==
-stare la intrare in CHK: java=22897 sup=22783 port25565=1 frpc=22847
-dupa ensure-up: java=22897 (RUNNER_TRACKING_ID=0
-0) | sup=22783 (RUNNER_TRACKING_ID=0
-0) | frpc=22847
-uptime: 10:10:49 up 18:00,  0 users,  load average: 0.80, 0.33, 0.24
+== CHK — 2026-10-12 16:44:23 UTC ==
+stare la intrare in CHK: java=38256 sup=38143 port25565=1 frpc=38207
+dupa ensure-up: java=38256 (RUNNER_TRACKING_ID=0
+0) | sup=38143 (RUNNER_TRACKING_ID=0
+0) | frpc=38207
+uptime: 16:44:23 up 1 day, 33 min,  0 users,  load average: 0.93, 0.42, 0.20
 ss 25565:
   LISTEN 0      4096               *:25565            *:*          
-live.log: 6339 linii | Done (14.469s)
-log final: [10:10:04] [Server thread/INFO]: iZentric issued server command: / tps [10:10:05] [Server thread/INFO]: iZentric issued server command: /tps [10:10:39] [Server thread/INFO]: iZentric issued server command: /tps 
+live.log: 1091 linii | Done (11.827s)
+log final: [16:39:25] [Server thread/INFO]: iZentric issued server command: /tps [16:44:11] [Server thread/INFO]: iZentric issued server command: /tps [16:44:13] [Server thread/INFO]: iZentric issued server command: /tps 
 disc: /dev/sdb1       5.0G  3.4G  1.7G  67% /home/mndvasi9
 fisiere: ADRESA banned-ips.json banned-players.json bind.log boot.log bore.log bukkit.yml bukkit.yml.bak.1791636852 bukkit.yml.bak.1791639103 CatServer-1.16.5-1d8d6313-server.jar catserver.yml chat.log cin CIT
 pack marcat: .pack=CUANTIC-Server-CatServer-1.7.7.zip | .pack.new=1.7.7
@@ -85,153 +85,153 @@ pack marcat: .pack=CUANTIC-Server-CatServer-1.7.7.zip | .pack.new=1.7.7
   [OK] ops.json (7 linii, 136 bytes)
   [OK] manifest-cuantic.json (65 linii, 1893 bytes)
 unix_args complet (39 linii): -Xms1024M -Xmx6144M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=37 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=23 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99 -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=256M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=122M -XX:NonProfiledCodeHeapSize=122M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:AllocatePrefetchStyle=3 -Dio.netty.allocator.maxOrder=9 -Dio.netty.leakDetection.level=DISABLED -jar CatServer-1.16.5-1d8d6313-server.jar nogui 
-erori-cheie: [07:26:48] [Server thread/INFO]: Done (12.685s)! For help, type "help"|[16:53:59] [Server thread/INFO]: Done (11.861s)! For help, type "help"|[21:00:26] [Server thread/INFO]: Done (11.125s)! For help, type "help"|[22:15:42] [Server thread/INFO]: Done (10.936s)! For help, type "help"|[09:55:01] [Server thread/INFO]: Done (11.699s)! For help, type "help"|
+erori-cheie: [10:16:55] [Server thread/INFO]: Done (11.827s)! For help, type "help"|[15:04:26] [Server thread/INFO]: Done (12.066s)! For help, type "help"|
 === ISTORIC PORNIRI / OPRIRI / JUCATORI (live.log) ===
-5649:[22:02:20] [Server thread/INFO]: Sent secret to iZentric
-5650:==== pornire 2026-10-11 22:14:44 UTC (memorie: -Xmx6144M, java: /home/mndvasi9/.local/jdk17/bin/java) ====
-5872:[22:15:35] [Server thread/INFO]: [Cuantic] Motor hibrid activ: Cuantic 1.7.7 (MC 1.16.5, API 1.16.5-R0.1-SNAPSHOT, motor CUANTIC) | based on: 1.16.5-1d8d6313 (MC: 1.16.5) | runtime-tech: keepSpawnInMemory=false, enableSkipEntityTick=true, enableSkipTileEntityTick=true, maxEntityCollision=2, worldGenMaxTickTime=8, disableFMLStatusModInfo=true, enableDynmapCompatible=false, enableMythicMobsPatcherCompatible=false, defaultInstallPluginSpark=false, versionCheck=false, forceSaveOnWatchdog=true, noHopperEvent=3w, autoUnloadDims=[-1,1], disableStatSaving=true, saveUserCacheOnStopOnly=true, logVillagerDeaths=false, movedWronglyThreshold=0.35, movedTooQuicklyMultiplier=25.0
-5921:[22:15:42] [Server thread/INFO]: Done (10.936s)! For help, type "help"
-5994:[22:21:48] [User Authenticator #1/INFO]: UUID of player iZentric is 0e2f8d53-21b4-32a4-a498-0967ed108270
-5996:[22:21:50] [Server thread/INFO]: iZentric[/127.0.0.1:39850] logged in with entity id 1 at (1128.2466181762993, 69.0, -865.1362920923776)
-5997:[22:21:51] [Server thread/WARN]: Playerfile not found (iZentric - 0e2f8d53-21b4-32a4-a498-0967ed108270)
-5998:[22:21:51] [Server thread/INFO]: Received secret request of iZentric (15)
-5999:[22:21:51] [Server thread/INFO]: Sent secret to iZentric
-6000:[22:21:51] [Server thread/WARN]: Permissions lag notice with (LuckPermsHandler). Response took 39.356720ms. Summary: Getting prefix for iZentric
-6001:[22:22:08] [Server thread/INFO]: iZentric issued server command: /tps
-6002:[22:23:24] [Server thread/INFO]: iZentric issued server command: /tps
-6003:[22:26:10] [Server thread/INFO]: iZentric issued server command: /tps
-6004:[22:28:38] [Server thread/INFO]: iZentric issued server command: /tps
-6005:[22:29:53] [Server thread/INFO]: iZentric issued server command: /tps
-6006:[22:30:02] [Server thread/INFO]: iZentric issued server command: /tps
-6007:[22:30:32] [Server thread/INFO]: iZentric issued server command: /tps
-6008:[22:30:40] [Server thread/INFO]: iZentric issued server command: /tp
-6009:[22:30:47] [Server thread/INFO]: iZentric issued server command: /tps
-6010:[22:31:41] [Server thread/INFO]: iZentric issued server command: /tps
-6011:[22:31:43] [Server thread/INFO]: iZentric issued server command: /spark ping
-6012:[22:33:30] [Server thread/INFO]: iZentric issued server command: /tps
-6013:[22:34:32] [Server thread/INFO]: iZentric issued server command: /tps
-6014:[22:35:19] [Server thread/INFO]: iZentric issued server command: /tps
-6015:[22:35:36] [Server thread/INFO]: iZentric issued server command: /tps
-6016:[23:12:55] [Server thread/INFO]: iZentric issued server command: /tps
-6017:[23:42:15] [Server thread/INFO]: iZentric issued server command: /tps
-6018:[00:11:36] [Server thread/INFO]: iZentric issued server command: /tps
-6019:[00:11:37] [Server thread/INFO]: iZentric issued server command: /pl
-6020:[00:14:29] [Server thread/INFO]: iZentric issued server command: /tps
-6021:==== pornire 2026-10-12 09:54:02 UTC (memorie: -Xmx6144M, java: /home/mndvasi9/.local/jdk17/bin/java) ====
-6243:[09:54:53] [Server thread/INFO]: [Cuantic] Motor hibrid activ: Cuantic 1.7.7 (MC 1.16.5, API 1.16.5-R0.1-SNAPSHOT, motor CUANTIC) | based on: 1.16.5-1d8d6313 (MC: 1.16.5) | runtime-tech: keepSpawnInMemory=false, enableSkipEntityTick=true, enableSkipTileEntityTick=true, maxEntityCollision=2, worldGenMaxTickTime=8, disableFMLStatusModInfo=true, enableDynmapCompatible=false, enableMythicMobsPatcherCompatible=false, defaultInstallPluginSpark=false, versionCheck=false, forceSaveOnWatchdog=true, noHopperEvent=3w, autoUnloadDims=[-1,1], disableStatSaving=true, saveUserCacheOnStopOnly=true, logVillagerDeaths=false, movedWronglyThreshold=0.35, movedTooQuicklyMultiplier=25.0
-6298:[09:55:01] [Server thread/INFO]: Done (11.699s)! For help, type "help"
-6327:[09:57:01] [User Authenticator #1/INFO]: UUID of player iZentric is 0e2f8d53-21b4-32a4-a498-0967ed108270
-6329:[09:57:02] [Server thread/INFO]: iZentric[/127.0.0.1:33464] logged in with entity id 1 at (1169.408950353148, 75.0, 642.6596664993577)
-6330:[09:57:03] [Server thread/WARN]: Playerfile not found (iZentric - 0e2f8d53-21b4-32a4-a498-0967ed108270)
-6331:[09:57:03] [Server thread/INFO]: Received secret request of iZentric (15)
-6332:[09:57:03] [Server thread/INFO]: Sent secret to iZentric
-6333:[09:57:13] [Server thread/INFO]: iZentric issued server command: /tps
-6334:[09:59:08] [Server thread/INFO]: iZentric issued server command: /version
-6335:[09:59:08] [Server thread/INFO]: [Cuantic/version] iZentric: » Cuantic 1.7.7 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-6336:[10:09:30] [Server thread/INFO]: iZentric issued server command: /tps
-6337:[10:10:04] [Server thread/INFO]: iZentric issued server command: / tps
-6338:[10:10:05] [Server thread/INFO]: iZentric issued server command: /tps
-6339:[10:10:39] [Server thread/INFO]: iZentric issued server command: /tps
+1046:[15:12:11] [User Authenticator #1/INFO]: UUID of player iZentric is 0e2f8d53-21b4-32a4-a498-0967ed108270
+1048:[15:12:13] [Server thread/INFO]: iZentric[/127.0.0.1:55804] logged in with entity id 1 at (112.21578678140932, 71.0, -239.03597908873533)
+1049:[15:12:13] [Server thread/WARN]: Playerfile not found (iZentric - 0e2f8d53-21b4-32a4-a498-0967ed108270)
+1050:[15:12:13] [Server thread/INFO]: Received secret request of iZentric (15)
+1051:[15:12:13] [Server thread/INFO]: Sent secret to iZentric
+1052:[15:12:14] [Server thread/WARN]: Permissions lag notice with (LuckPermsHandler). Response took 27.375186ms. Summary: Getting prefix for iZentric
+1053:[15:12:19] [Server thread/INFO]: iZentric issued server command: /tps
+1054:[15:12:21] [Server thread/INFO]: iZentric issued server command: /pl
+1055:[15:12:23] [Server thread/INFO]: iZentric issued server command: /pl
+1056:[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
+1057:[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
+1058:[15:25:30] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
+1059:[15:25:36] [Server thread/WARN]: iZentric moved too quickly! -14.081310513660242,10.125000396529472,-25.733413867736886
+1060:[15:28:09] [Server thread/INFO]: iZentric issued server command: /gamemode creative
+1061:[15:36:16] [Server thread/INFO]: iZentric issued server command: /tps
+1062:[15:36:50] [Server thread/INFO]: iZentric issued server command: /tps
+1063:[15:36:52] [Server thread/INFO]: iZentric issued server command: /tps
+1064:[15:36:56] [Server thread/INFO]: iZentric issued server command: /
+1065:[15:36:58] [Server thread/INFO]: iZentric issued server command: /tps
+1066:[15:37:00] [Server thread/INFO]: iZentric issued server command: /pl
+1067:[15:38:31] [Server thread/INFO]: iZentric issued server command: /tps
+1068:[15:43:56] [Server thread/INFO]: iZentric issued server command: /tps
+1069:[15:46:55] [Server thread/INFO]: iZentric issued server command: /tps
+1070:[15:46:59] [Server thread/INFO]: iZentric issued server command: /tps
+1071:[15:47:04] [Server thread/INFO]: iZentric issued server command: //tps
+1072:[15:47:06] [Server thread/INFO]: iZentric issued server command: /tps
+1073:[15:47:22] [Server thread/INFO]: iZentric issued server command: /tps
+1074:[15:47:23] [Server thread/INFO]: iZentric issued server command: /tps
+1075:[15:47:28] [Server thread/INFO]: iZentric issued server command: /tps
+1076:[15:47:32] [Server thread/INFO]: iZentric issued server command: /tps
+1077:[15:47:35] [Server thread/INFO]: iZentric issued server command: /tps
+1078:[15:48:38] [Server thread/INFO]: iZentric issued server command: /tps
+1079:[15:57:07] [Server thread/INFO]: iZentric issued server command: /tps
+1080:[15:57:09] [Server thread/INFO]: iZentric issued server command: /tps
+1081:[16:23:50] [Server thread/INFO]: iZentric issued server command: /spark tps
+1082:[16:26:47] [Server thread/INFO]: iZentric issued server command: /tps
+1083:[16:26:48] [Server thread/INFO]: iZentric issued server command: /plw
+1084:[16:26:49] [Server thread/INFO]: iZentric issued server command: /tps
+1085:[16:26:51] [Server thread/INFO]: iZentric issued server command: /tps
+1086:[16:26:53] [Server thread/INFO]: iZentric issued server command: /tps
+1087:[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+1088:[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+1089:[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps
+1090:[16:44:11] [Server thread/INFO]: iZentric issued server command: /tps
+1091:[16:44:13] [Server thread/INFO]: iZentric issued server command: /tps
 === ULTIMELE 60 LINII DIN live.log ===
-[09:54:59] [Server thread/INFO]: [WorldGuard] Loading region data...
-[09:54:59] [Server thread/INFO]: [ClaimChunk] Enabling ClaimChunk v0.0.21
-[09:55:00] [Server thread/INFO]: [ClaimChunk] PlaceholderAPI not found, not loading API.
-[09:55:00] [Server thread/INFO]: [ClaimChunk] Initialization complete.
-[09:55:00] [Server thread/INFO]: Server permissions file permissions.yml is empty, ignoring it
-[09:55:00] [Server thread/INFO]: Ksyxis: Speeding up the world loading... Delete the mod, if it got stuck after this message. (net.minecraft.server.dedicated.DedicatedServer func_213186_a)
-[09:55:00] [Server thread/INFO]: Preparing start region for dimension minecraft:overworld
-[09:55:00] [Server thread/WARN]: Method overwrite conflict for removeIf in modernfix-common.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin, previously written by me.jellysquid.mods.lithium.mixin.world.chunk_tickets.SortedArraySetMixin. Skipping method.
-[09:55:00] [Server thread/INFO]: Ksyxis: Enabled compatibility hack with ModernFix. (removeSpawnChunks: false)
-[09:55:00] [Netty Server IO #0/INFO]: Disconnecting Player (server is still starting): Server is still starting! Please wait before reconnecting.
-[09:55:00] [Netty Server IO #2/INFO]: Disconnecting Player (server is still starting): Server is still starting! Please wait before reconnecting.
-[09:55:00] [Netty Server IO #3/INFO]: Disconnecting Player (server is still starting): Server is still starting! Please wait before reconnecting.
-[09:55:00] [Netty Server IO #1/INFO]: Disconnecting Player (server is still starting): Server is still starting! Please wait before reconnecting.
-[09:55:00] [Netty Server IO #1/INFO]: Disconnecting Player (server is still starting): Server is still starting! Please wait before reconnecting.
-[09:55:00] [Netty Server IO #2/INFO]: Disconnecting Player (server is still starting): Server is still starting! Please wait before reconnecting.
-[09:55:00] [Netty Server IO #3/INFO]: Disconnecting Player (server is still starting): Server is still starting! Please wait before reconnecting.
-[09:55:00] [Server thread/INFO]: Preparing spawn area: 0%
-[09:55:01] [Server thread/INFO]: Time elapsed: 272 ms
-[09:55:01] [Server thread/INFO]: Done (11.699s)! For help, type "help"
-[09:55:01] [Server thread/INFO]: Loaded 0 license plates
-[09:55:01] [Server thread/WARN]: Garagenordner nicht gefunden!
-[09:55:01] [Server thread/WARN]: Running in offline mode - Voice chat encryption is not secure!
-[09:55:01] [Server thread/INFO]: Successfully initialized RadioManager
-[09:55:01] [Server thread/WARN]: Dedicated server took 59.009 seconds to load
-[09:55:01] [VoiceChatServerThread/INFO]: Server started at port 24454
-[09:55:01] [Server thread/INFO]: Essentials found a compatible payment resolution method: Vault Compatibility Layer (v1.7.3-b131)!
-[09:55:01] [Craft Scheduler Thread - 3/INFO]: Fetching version information...
-[09:55:01] [Craft Scheduler Thread - 2/INFO]: [Vault] Checking for Updates ... 
-[09:55:01] [Craft Scheduler Thread - 2/INFO]: [Vault] No new version available
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer] ----------------------------------------------
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer]     +===================+
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer]     |   SkinsRestorer   |
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer]     |-------------------|
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer]     |  Standalone Mode  |
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer]     +===================+
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer] ----------------------------------------------
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer]     Version: 15.12.6
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer]     Commit: c8c321f
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer]     This is the latest version!
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer] ----------------------------------------------
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer] Do you have issues? Read our troubleshooting guide: https://skinsrestorer.net/docs/troubleshooting
-[09:55:01] [Craft Scheduler Thread - 1/INFO]: [SkinsRestorer] Want to support SkinsRestorer or receive priority support? Become a supporter: https://skinsrestorer.net/pricing
-[09:55:01] [Craft Scheduler Thread - 3/WARN]: There is a new EssentialsX version available for download: 2.22.0.
-[09:55:01] [Craft Scheduler Thread - 3/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
-[09:55:02] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
-[09:55:06] [Craft Scheduler Thread - 5/INFO]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
-[09:57:00] [Netty Server IO #2/WARN]: Login payload for Registry minecraft:block is using 20.8762% of max allowed vanilla size
-[09:57:01] [User Authenticator #1/INFO]: UUID of player iZentric is 0e2f8d53-21b4-32a4-a498-0967ed108270
-[09:57:02] [Server thread/INFO]: Using new advancement loading for net.minecraft.advancements.PlayerAdvancements@110d9e79
-[09:57:02] [Server thread/INFO]: iZentric[/127.0.0.1:33464] logged in with entity id 1 at (1169.408950353148, 75.0, 642.6596664993577)
-[09:57:03] [Server thread/WARN]: Playerfile not found (iZentric - 0e2f8d53-21b4-32a4-a498-0967ed108270)
-[09:57:03] [Server thread/INFO]: Received secret request of iZentric (15)
-[09:57:03] [Server thread/INFO]: Sent secret to iZentric
-[09:57:13] [Server thread/INFO]: iZentric issued server command: /tps
-[09:59:08] [Server thread/INFO]: iZentric issued server command: /version
-[09:59:08] [Server thread/INFO]: [Cuantic/version] iZentric: » Cuantic 1.7.7 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[10:09:30] [Server thread/INFO]: iZentric issued server command: /tps
-[10:10:04] [Server thread/INFO]: iZentric issued server command: / tps
-[10:10:05] [Server thread/INFO]: iZentric issued server command: /tps
-[10:10:39] [Server thread/INFO]: iZentric issued server command: /tps
+[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--threshold <percentage increase>]
+[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--threshold-tick <tick duration>]
+[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--without-gc]
+[15:07:14] [spark-worker-pool-1-thread-4/INFO]: > /spark gc
+[15:07:14] [spark-worker-pool-1-thread-4/INFO]: > /spark gcmonitor
+[15:07:14] [spark-worker-pool-1-thread-4/INFO]: > /spark heapsummary
+[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--save-to-file]
+[15:07:14] [spark-worker-pool-1-thread-4/INFO]: > /spark heapdump
+[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--compress <type>]
+[15:07:14] [spark-worker-pool-1-thread-4/INFO]: > /spark activity
+[15:07:14] [spark-worker-pool-1-thread-4/INFO]:        [--page <page no>]
+[15:07:15] [Server thread/INFO]: [Server] agent: puntea de comanda functioneaza (test)
+[15:07:30] [Server thread/INFO]: [Server] agent: puntea de comanda functioneaza (test)
+[15:12:11] [Netty Server IO #1/WARN]: Login payload for Registry minecraft:block is using 20.8762% of max allowed vanilla size
+[15:12:11] [User Authenticator #1/INFO]: UUID of player iZentric is 0e2f8d53-21b4-32a4-a498-0967ed108270
+[15:12:12] [Server thread/INFO]: Using new advancement loading for net.minecraft.advancements.PlayerAdvancements@3039dc7f
+[15:12:13] [Server thread/INFO]: iZentric[/127.0.0.1:55804] logged in with entity id 1 at (112.21578678140932, 71.0, -239.03597908873533)
+[15:12:13] [Server thread/WARN]: Playerfile not found (iZentric - 0e2f8d53-21b4-32a4-a498-0967ed108270)
+[15:12:13] [Server thread/INFO]: Received secret request of iZentric (15)
+[15:12:13] [Server thread/INFO]: Sent secret to iZentric
+[15:12:14] [Server thread/WARN]: Permissions lag notice with (LuckPermsHandler). Response took 27.375186ms. Summary: Getting prefix for iZentric
+[15:12:19] [Server thread/INFO]: iZentric issued server command: /tps
+[15:12:21] [Server thread/INFO]: iZentric issued server command: /pl
+[15:12:23] [Server thread/INFO]: iZentric issued server command: /pl
+[15:12:35] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
+[15:12:50] [Server thread/INFO]: iZentric issued server command: /gamemode creative
+[15:25:30] [Server thread/INFO]: iZentric issued server command: /gamemode spectator
+[15:25:36] [Server thread/WARN]: iZentric moved too quickly! -14.081310513660242,10.125000396529472,-25.733413867736886
+[15:28:09] [Server thread/INFO]: iZentric issued server command: /gamemode creative
+[15:36:16] [Server thread/INFO]: iZentric issued server command: /tps
+[15:36:50] [Server thread/INFO]: iZentric issued server command: /tps
+[15:36:52] [Server thread/INFO]: iZentric issued server command: /tps
+[15:36:56] [Server thread/INFO]: iZentric issued server command: /
+[15:36:58] [Server thread/INFO]: iZentric issued server command: /tps
+[15:37:00] [Server thread/INFO]: iZentric issued server command: /pl
+[15:38:31] [Server thread/INFO]: iZentric issued server command: /tps
+[15:43:56] [Server thread/INFO]: iZentric issued server command: /tps
+[15:46:55] [Server thread/INFO]: iZentric issued server command: /tps
+[15:46:59] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:04] [Server thread/INFO]: iZentric issued server command: //tps
+[15:47:06] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:22] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:23] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:28] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:32] [Server thread/INFO]: iZentric issued server command: /tps
+[15:47:35] [Server thread/INFO]: iZentric issued server command: /tps
+[15:48:38] [Server thread/INFO]: iZentric issued server command: /tps
+[15:57:07] [Server thread/INFO]: iZentric issued server command: /tps
+[15:57:09] [Server thread/INFO]: iZentric issued server command: /tps
+[16:23:50] [Server thread/INFO]: iZentric issued server command: /spark tps
+[16:26:47] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:48] [Server thread/INFO]: iZentric issued server command: /plw
+[16:26:49] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:51] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:53] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:56] [Server thread/INFO]: iZentric issued server command: /tps
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps
+[16:44:11] [Server thread/INFO]: iZentric issued server command: /tps
+[16:44:13] [Server thread/INFO]: iZentric issued server command: /tps
 === ULTIMELE 35 LINII DIN sup.log ===
-[0m 10:08:10 mc=DA port=SUS log=6335
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:42:18 mc=DA port=SUS log=1089
  log blocat:
-[09:59:08] [Server thread/INFO]: iZentric issued server command: /version
-[09:59:08] [Server thread/INFO]: [Cuantic/version] iZentric: » Cuantic 1.7.7 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[0m 10:08:25 mc=DA port=SUS log=6335
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:42:33 mc=DA port=SUS log=1089
  log blocat:
-[09:59:08] [Server thread/INFO]: iZentric issued server command: /version
-[09:59:08] [Server thread/INFO]: [Cuantic/version] iZentric: » Cuantic 1.7.7 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[0m 10:08:40 mc=DA port=SUS log=6335
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:42:48 mc=DA port=SUS log=1089
  log blocat:
-[09:59:08] [Server thread/INFO]: iZentric issued server command: /version
-[09:59:08] [Server thread/INFO]: [Cuantic/version] iZentric: » Cuantic 1.7.7 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[0m 10:08:55 mc=DA port=SUS log=6335
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:43:04 mc=DA port=SUS log=1089
  log blocat:
-[09:59:08] [Server thread/INFO]: iZentric issued server command: /version
-[09:59:08] [Server thread/INFO]: [Cuantic/version] iZentric: » Cuantic 1.7.7 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[0m 10:09:10 mc=DA port=SUS log=6335
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:43:19 mc=DA port=SUS log=1089
  log blocat:
-[09:59:08] [Server thread/INFO]: iZentric issued server command: /version
-[09:59:08] [Server thread/INFO]: [Cuantic/version] iZentric: » Cuantic 1.7.7 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[0m 10:09:25 mc=DA port=SUS log=6335
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:43:34 mc=DA port=SUS log=1089
  log blocat:
-[09:59:08] [Server thread/INFO]: iZentric issued server command: /version
-[09:59:08] [Server thread/INFO]: [Cuantic/version] iZentric: » Cuantic 1.7.7 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[0m 10:09:40 mc=DA port=SUS log=6336
- 10:09:56 mc=DA port=SUS log=6336
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:43:49 mc=DA port=SUS log=1089
  log blocat:
-[09:59:08] [Server thread/INFO]: [Cuantic/version] iZentric: » Cuantic 1.7.7 (build propriu, Java 17.0.20.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor CUANTIC | Cuantic based on / adapted from: 1.16.5-1d8d6313 (MC: 1.16.5)
-[10:09:30] [Server thread/INFO]: iZentric issued server command: /tps
-[0m 10:10:11 mc=DA port=SUS log=6338
- 10:10:26 mc=DA port=SUS log=6338
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:44:04 mc=DA port=SUS log=1089
  log blocat:
-[10:10:04] [Server thread/INFO]: iZentric issued server command: / tps
-[10:10:05] [Server thread/INFO]: iZentric issued server command: /tps
-[0m 10:10:41 mc=DA port=SUS log=6339
+[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps
+[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps
+[0m 16:44:19 mc=DA port=SUS log=1091
 === CRASH REPORTS ===
 === DMESG OOM ===
-sup.log:  10:10:26 mc=DA port=SUS log=6338| log blocat:|[10:10:04] [Server thread/INFO]: iZentric issued server command: / tps|[10:10:05] [Server thread/INFO]: iZentric issued server command: /tps|[0m 10:10:41 mc=DA port=SUS log=6339|
+sup.log: [0m 16:44:04 mc=DA port=SUS log=1089| log blocat:|[16:26:57] [Server thread/INFO]: iZentric issued server command: /tps|[16:39:25] [Server thread/INFO]: iZentric issued server command: /tps|[0m 16:44:19 mc=DA port=SUS log=1091|
 frpc.toml: 10
 adresa din fisier: 92.5.171.150:25565
   dinafara 1: "online":true | "version":"CUANTIC 1.16.5"

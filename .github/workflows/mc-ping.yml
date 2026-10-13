@@ -1,0 +1,86 @@
+name: MC-PING
+# Sonda externa a serverului viu: ping Minecraft (SLP) + parere independenta
+# mcsrvstat, executate de pe runner-ul GitHub (retea intreaga), publicate pe
+# bransa mc-run. Trigger: orice push care atinge deploy/mc-ping.txt.
+on:
+  push:
+    paths:
+      - deploy/mc-ping.txt
+      - .github/workflows/mc-ping.yml
+      - scripts/mc_run_check.py
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: SLP ping + mcsrvstat
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          sys.path.insert(0, "scripts")
+          from mc_run_check import slp_status
+          out = {}
+          try:
+              st = slp_status(25565, timeout=10, host="92.5.171.150")
+              out["slp"] = {
+                  "ok": True,
+                  "versiune": st.get("version", {}).get("name"),
+                  "protocol": st.get("version", {}).get("protocol"),
+                  "online": st.get("players", {}).get("online"),
+                  "max": st.get("players", {}).get("max"),
+                  "sample": [p.get("name") for p in (st.get("players", {}).get("sample") or [])][:12],
+                  "motd": (st.get("description") if isinstance(st.get("description"), str)
+                           else json.dumps(st.get("description"), ensure_ascii=False) or "")[:400],
+              }
+          except Exception as exc:
+              out["slp"] = {"ok": False, "eroare": repr(exc)[:200]}
+          json.dump(out, open("ping.json", "w"), ensure_ascii=False, indent=1)
+          print(json.dumps(out, ensure_ascii=False))
+          PY
+          curl -s -m 12 "https://api.mcsrvstat.us/3/92.5.171.150:25565" -o mcsrvstat.json || echo '{"online": false, "unreachable": "curl esuat"}' > mcsrvstat.json
+          python3 - <<'PY'
+          import json
+          try:
+              d = json.load(open("mcsrvstat.json"))
+          except Exception:
+              d = {"online": False, "eroare": "raspuns neglijent"}
+          rez = {
+              "online": d.get("online"),
+              "versiune": d.get("version"),
+              "motd": " ".join(d.get("motd", {}).get("clean", []) if isinstance(d.get("motd"), dict) else [])[:200],
+              "players": {"online": (d.get("players") or {}).get("online"), "max": (d.get("players") or {}).get("max")},
+              "sample": [p.get("name") for p in ((d.get("players") or {}).get("list") or [])][:12],
+              "debug": d.get("debug"),
+          }
+          json.dump(rez, open("mcsrvstat.json", "w"), ensure_ascii=False, indent=1)
+          print(json.dumps(rez, ensure_ascii=False))
+          PY
+
+      - name: Publica pe rp-drop/ping (canalul dovedit)
+        run: |
+          set -x
+          mkdir -p /tmp/pingout
+          exec > >(tee /tmp/pingout/DEBUG.txt) 2>&1
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git worktree prune || true
+          rm -rf /tmp/wt
+          for i in 1 2 3; do
+            git fetch -q origin rp-drop || break
+            git worktree add /tmp/wt -B rp-drop origin/rp-drop || { git worktree prune; rm -rf /tmp/wt; continue; }
+            mkdir -p /tmp/wt/rp-drop/ping
+            cp ping.json /tmp/wt/rp-drop/ping/PING-slp.json 2>/dev/null || echo "ping.json lipsa" >> /tmp/pingout/DEBUG2.txt
+            cp mcsrvstat.json /tmp/wt/rp-drop/ping/PING-mcsrvstat.json 2>/dev/null || true
+            echo "run $GITHUB_RUN_ID | sonda 92.5.171.150:25565 | $(date -u '+%F %T UTC')" > /tmp/wt/rp-drop/ping/PROVENIENTA.txt
+            cp /tmp/pingout/DEBUG2.txt /tmp/wt/rp-drop/ping/ 2>/dev/null || true
+            git -C /tmp/wt add -A rp-drop/ping
+            git -C /tmp/wt -c commit.gpgsign=false commit -qm "mc-ping: sonda 92.5.171.150" || echo "nimic nou"
+            git -C /tmp/wt push -v origin "HEAD:refs/heads/rp-drop" && break
+            git -C /tmp/wt pull -q --rebase origin rp-drop || true
+            git -C /tmp/wt push -v origin "HEAD:refs/heads/rp-drop" || echo "push esuat la incr $i"
+          done
+          true
