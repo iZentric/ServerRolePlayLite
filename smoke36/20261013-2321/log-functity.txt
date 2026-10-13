@@ -1,0 +1,109 @@
+
+
+ __    __   ______   __  __   __   ______   ______  
+/\ "-./  \ /\  __ \ /\ \_\ \ /\ \ /\  ___\ /\__  _\ 
+\ \ \-./\ \\ \ \/\ \\ \  __ \\ \ \\ \___  \\/_/\ \/ 
+ \ \_\ \ \_\\ \_____\\ \_\ \_\\ \_\\/\_____\  \ \_\ 
+  \/_/  \/_/ \/_____/ \/_/\/_/ \/_/ \/_____/   \/_/ 
+                                                    
+
+Welcome to Mohist 1.16.5 ! - Mohist Developement Group - 1.16.5-754b578e, Java 55.0
+Checking libraries, please wait...
+DownloadSource: MOHIST
+All libraries are nice :) !
+Checking the installation, please wait.
+Finished the install verification process !
+2026-10-13 23:13:48,299 main WARN Advanced terminal features are not available in this environment
+[23:13:48 INFO]: Update in check...
+[23:13:48 INFO]: If you don't want to enable update check, set check_update in mohist-config/mohist.yml to false
+[23:13:48 INFO]: [!] Can't connect to the ci to check updates or unable to download the update.
+[23:13:48 INFO]: ModLauncher running: args [--gameDir, ., --launchTarget, fmlserver, --fml.mohistVersion, 754b578e, --fml.forgeVersion, 36.2.42, --fml.mcpVersion, 20210115.111550, --fml.mcVersion, 1.16.5, --fml.forgeGroup, com.mohistmc, nogui]
+[23:13:48 INFO]: ModLauncher mohist-8.1.3 starting: java version 11.0.32.1 by Eclipse Adoptium
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by cpw.mods.modlauncher.SecureJarHandler (file:/tmp/s36/stage-functity/libraries/cpw/mods/modlauncher/mohist-8.1.3/modlauncher-mohist-8.1.3.jar) to field java.util.jar.Manifest.jv
+WARNING: Please consider reporting this to the maintainers of cpw.mods.modlauncher.SecureJarHandler
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[23:13:48 INFO]: Added Lets Encrypt root certificates as additional trust
+[23:13:48 INFO]: SpongePowered MIXIN Subsystem Version=0.8.4 Source=file:/tmp/s36/stage-functity/libraries/org/spongepowered/mixin/0.8.4/mixin-0.8.4.jar Service=ModLauncher Env=SERVER
+[23:13:49 INFO]: Launching target 'fmlserver' with arguments [--gameDir, ., nogui]
+[23:13:54 INFO]: Forge mod loading, version 36.2.42, for MC 1.16.5 with MCP 20210115.111550
+[23:13:54 INFO]: MinecraftForge v36.2.42 Initialized
+[23:13:54 INFO]: EventDispatcherRegistry initialized
+[23:13:56 INFO]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[23:13:57 INFO]: Found new data pack file/bukkit, loading it automatically
+[23:13:57 INFO]: Reloading ResourceManager: Default, mohist-1.16.5-754b578e-universal.jar, bukkit
+[23:13:58 INFO]: Loaded 927 recipes
+[23:13:59 INFO]: Starting minecraft server version 1.16.5
+[23:13:59 INFO]: Loading properties
+[23:13:59 INFO]: Default game type: SURVIVAL
+[23:13:59 INFO]: Generating keypair
+[23:13:59 INFO]: Starting Minecraft server on *:25,565
+[23:13:59 INFO]: Using epoll channel type
+[23:13:59 WARN]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[23:13:59 WARN]: The server will make no attempt to authenticate usernames. Beware.
+[23:13:59 WARN]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[23:13:59 WARN]: To change this, set "online-mode" to "true" in the server.properties file.
+[23:14:00 INFO]: This server is running Mohist version 1.16.5-754b578e (MC: 1.16.5) (Implementing API version 1.16.5-R0.1-SNAPSHOT, Forge version 36.2.42)
+[23:14:00 INFO]: Server Ping Player Sample Count: 12
+[23:14:00 INFO]: Using 2 threads for Netty based IO
+[23:14:00 INFO]: Debug logging is enabled
+[23:14:00 INFO]: Loaded inheritance map of 2322 classes
+[23:14:01 INFO]: Loading default config file from path /tmp/s36/stage-functity/defaultconfigs/forge-server.toml
+[23:14:01 INFO]: Preparing level "world"
+[23:14:07 INFO]: Preparing start region for dimension minecraft:overworld
+[23:14:07 INFO]: Preparing spawn area: 0%
+[23:14:08 INFO]: Preparing spawn area: 1%
+[23:14:09 INFO]: Preparing spawn area: 2%
+[23:14:09 INFO]: Preparing spawn area: 4%
+[23:14:10 INFO]: Preparing spawn area: 6%
+[23:14:11 INFO]: Preparing spawn area: 9%
+[23:14:11 INFO]: Preparing spawn area: 12%
+[23:14:13 INFO]: Preparing spawn area: 16%
+[23:14:13 INFO]: Preparing spawn area: 19%
+[23:14:14 INFO]: Preparing spawn area: 22%
+[23:14:14 INFO]: Preparing spawn area: 25%
+[23:14:15 INFO]: Preparing spawn area: 26%
+[23:14:15 INFO]: Preparing spawn area: 28%
+[23:14:16 INFO]: Preparing spawn area: 30%
+[23:14:16 INFO]: Preparing spawn area: 32%
+[23:14:17 INFO]: Preparing spawn area: 34%
+[23:14:18 INFO]: Preparing spawn area: 37%
+[23:14:18 INFO]: Preparing spawn area: 42%
+[23:14:19 INFO]: Preparing spawn area: 44%
+[23:14:20 INFO]: Preparing spawn area: 52%
+[23:14:21 INFO]: Preparing spawn area: 58%
+[23:14:21 INFO]: Preparing spawn area: 61%
+[23:14:22 INFO]: Preparing spawn area: 63%
+[23:14:22 INFO]: Preparing spawn area: 69%
+[23:14:23 INFO]: Preparing spawn area: 77%
+[23:14:23 INFO]: Preparing spawn area: 84%
+[23:14:24 INFO]: Preparing spawn area: 90%
+[23:14:24 INFO]: Preparing spawn area: 98%
+[23:14:24 INFO]: Time elapsed: 17,573 ms
+[23:14:24 INFO]: Preparing start region for dimension minecraft:the_nether
+[23:14:24 INFO]: Preparing spawn area: 0%
+[23:14:25 INFO]: Preparing spawn area: 1%
+[23:14:26 INFO]: Preparing spawn area: 5%
+[23:14:26 INFO]: Preparing spawn area: 13%
+[23:14:27 INFO]: Preparing spawn area: 19%
+[23:14:27 INFO]: Preparing spawn area: 29%
+[23:14:28 INFO]: Preparing spawn area: 36%
+[23:14:28 INFO]: Preparing spawn area: 45%
+[23:14:29 INFO]: Preparing spawn area: 52%
+[23:14:29 INFO]: Preparing spawn area: 63%
+[23:14:30 INFO]: Preparing spawn area: 73%
+[23:14:30 INFO]: Preparing spawn area: 84%
+[23:14:31 INFO]: Preparing spawn area: 94%
+[23:14:31 INFO]: Time elapsed: 6,734 ms
+[23:14:31 INFO]: Done (30.004s)! For help, type "help"
+[23:21:46 INFO]: Stopping server
+[23:21:46 INFO]: Saving players
+[23:21:46 INFO]: Saving worlds
+[23:21:46 INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[23:21:46 INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[23:21:46 INFO]: Saving chunks for level 'ServerLevel[DIM-1]'/minecraft:the_nether
+[23:21:46 INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[23:21:46 INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[23:21:46 INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[23:21:46 INFO]: Saving usercache.json
