@@ -10,13 +10,12 @@
 - **Licență**: MIT.
 - **Compatibil**: Forge 1.16.5; pe Mohist, peticurile care ating tile entity logic
   (hopper/dropper) se suprapun cu VanillaInventoryCodeHooks — fix P1 al nostru!
-  Regula: STOP suprapunerea — dacă activăm patch-ul de hopper din RandomPatches,
+  Regula: nicio suprapunere tăcută — dacă activăm patch-ul de hopper din RandomPatches,
   testingul P1 trebuie refăcut împreună.
 - **Risc**: mediu din cauza combinărilor; fiecare petic activat individual + testat
   individual (regula „nu orbi din start").
-- **Experiment**: activare doar: reduceLoggingSpam, hopperDistributorOptimization (dacă
-  există în 2.4.4 — de verificat lista), fixLitematica ghost block NU (client). Fiecare
+- **Experiment**: activare doar: reduceLoggingSpam, peticurile de hopper/tick (lista exactă a lui 2.4.4 se verifică la instalare), peticurile strict de client se ignoră. Fiecare
   pornit/oprit prin W1+W3.
 - **Rezultat**: în așteptarea măsurătorii.
-- **Decizie**: **reuse parțial** — doar peticuri selectate, niciodată config default
-  „all on".
+- **Decizie**: **reuse parțial** — doar peticuri selectate, niciodată cu configul implicit
+  „totul pornit".
