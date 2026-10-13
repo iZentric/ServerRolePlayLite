@@ -1,0 +1,17 @@
+diff --git a/build.gradle b/build.gradle
+index 2d4225a1..361f0c75 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -59,6 +59,12 @@ project(':clean') {
+     evaluationDependsOn(':mcp')
+     apply plugin: 'eclipse'
+     apply plugin: 'net.minecraftforge.gradle.patcher'
++    // FunCity P0c (build-infra): Gradle 8 treats using extractMapped output from
++    // compileJava without a declared dependency as an ERROR; with parallel workers
++    // the order is nondeterministic (killed build b14). Declare it explicitly.
++    afterEvaluate {
++        tasks.named('compileJava') { dependsOn tasks.named('extractMapped') }
++    }
+ 
+     repositories {
+         mavenLocal()
