@@ -1,25 +1,25 @@
 diff --git a/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java b/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
-index abb7757..ccc991e 100644
+index 4af3ce2e..3ab8de76 100644
 --- a/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
 +++ b/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
-@@ -110,14 +110,22 @@ public class VanillaInventoryCodeHooks
+@@ -95,14 +95,22 @@ public class VanillaInventoryCodeHooks
                      CraftItemStack oitemstack = CraftItemStack.asCraftMirror(stack.copy().split(1));
-                     InventoryHolder owner = InventoryOwner.get((BlockEntity) destination);
-                     Inventory destinationInventory = owner != null ? owner.getInventory() : InventoryOwner.inventoryFromForge(itemHandler);
+                     org.bukkit.inventory.InventoryHolder owner = InventoryOwner.get((TileEntity) destination);
+                     org.bukkit.inventory.Inventory destinationInventory = owner != null ? owner.getInventory() : InventoryOwner.inventoryFromForge(itemHandler);
 -                    InventoryMoveItemEvent event = new InventoryMoveItemEvent(dropper.getOwner().getInventory(), oitemstack.clone(), destinationInventory, true);
 -                    Bukkit.getPluginManager().callEvent(event);
 -                    if (event.isCancelled()) {
--                        return true;
-+                    // FunCity P1: sursa (dropper-ul) poate fi detinuta de un block-entity de vehicul
-+                    // fara owner Bukkit — getOwner() null = NPE in fiecare tick de hopper.
-+                    InventoryHolder sourceOwner = InventoryOwner.get(dropper);
-+                    Inventory sourceInventory = sourceOwner != null ? sourceOwner.getInventory() : null;
-+                    ItemStack moved = oitemstack;
+-                        return false;
++                    // FunCity P1: dropper.getOwner() poate fi null cand BE-ul e detinut de un mod
++                    // (vehicle/entitate-inventar) ori netratat ca BlockOwner — NPE in fiecare tick.
++                    // Fara ambele inventare nu putem face bridge-ul: sarim eventul, mergem pe semantica vanilla.
++                    org.bukkit.inventory.Inventory sourceInventory = dropper.getOwner() != null ? dropper.getOwner().getInventory() : null;
++                    ItemStack moved = (org.bukkit.inventory.ItemStack) oitemstack.clone();
 +                    if (sourceInventory != null && destinationInventory != null) {
 +                        InventoryMoveItemEvent event = new InventoryMoveItemEvent(sourceInventory, oitemstack.clone(), destinationInventory, true);
 +                        Bukkit.getPluginManager().callEvent(event);
 +                        if (event.isCancelled()) {
-+                            return true;
++                            return false;
 +                        }
 +                        moved = event.getItem();
                      }
@@ -29,5 +29,5 @@ index abb7757..ccc991e 100644
 -                    if (event.getItem().equals(oitemstack) && remainder.isEmpty())
 +                    if (moved.equals(oitemstack) && remainder.isEmpty())
                      {
+                         // CraftBukkit end
                          remainder = stack.copy();
-                         remainder.shrink(1);

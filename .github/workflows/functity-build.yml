@@ -30,17 +30,25 @@ jobs:
           git -C src log -1 --format='pin: %H %ci %s' | head -1
           git -C src describe --tags --abbrev=7 || echo "describe ESUAT (semnal ca clone-ul e stramb)"
           shopt -s nullglob
-          PATCHES=(functity/patches/*.patch)
+          APPLIED=()
+          REJECTED=""
           if grep -q NOPATCH deploy/functity-build.txt 2>/dev/null; then
-            PATCHES=()
             echo "NOPATCH: build de referinta, fara patch-uri"
+          else
+            for pt in functity/patches/*.patch; do
+              if git -C src apply --check "$pt" 2>/tmp/applycheck.txt; then
+                git -C src apply "$pt" && APPLIED+=("$(basename "$pt")")
+              else
+                REJECTED="$(basename "$pt")"
+                { echo "PATCH respins de git apply --check: $(basename "$pt")"; cat /tmp/applycheck.txt; } > /tmp/patch-rejected.txt
+              fi
+            done
           fi
-          if [ ${#PATCHES[@]} -gt 0 ]; then
-            git -C src apply --check "${PATCHES[0]}" 2>/tmp/applycheck.txt || { echo "PATCH respins:"; cat /tmp/applycheck.txt; exit 1; }
-            for pt in "${PATCHES[@]}"; do git -C src apply "$pt" && echo "aplicat: $(basename "$pt")"; done
+          if [ ${#APPLIED[@]} -gt 0 ]; then
+            echo "aplicate: ${APPLIED[*]}"
             echo "BUILD_ID=b1.$(date -u +%H%M)" >> "$GITHUB_ENV"
           else
-            echo "BUILD_ID=b0" >> "$GITHUB_ENV"
+            [ -n "$REJECTED" ] && echo "BUILD_ID=b0-patchrespins" >> "$GITHUB_ENV" || echo "BUILD_ID=b0" >> "$GITHUB_ENV"
           fi
 
       - uses: actions/setup-java@v4
@@ -84,6 +92,7 @@ jobs:
             echo "  \"java\": \"$(java -version 2>&1 | head -1 | tr -d '"')\""
             echo "}"
           } > /tmp/fc/metadata.json
+          cp /tmp/patch-rejected.txt /tmp/fc/ 2>/dev/null || true
           ls -la /tmp/fc
 
       - name: Publica pe functity-out (model rp-drop cu token in URL)
