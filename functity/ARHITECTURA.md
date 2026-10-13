@@ -124,6 +124,35 @@ reproducere pe runner + pe box.
 - Fiecare tur de build = commit + raport în `functity/JURNAL.md` (ce-am implementat,
   ce-am testat, cifre, ce e blocat, pasul următor — formatul cerut de misiune).
 
+
+### 6.9 Canalul CI de build (invataturile din b0-b12, fixate 2026-10-13)
+
+- Build-ul Mohist 1.16.5 ruleaza DOAR cu **JDK 11** (README + `java.toolchain 11` in
+  build.gradle); 8 si 17 sparg `:mcp` in 1 minut.
+- Reteta oficiala = `./gradlew setup mohistJar` (NU `build`), JAR final in
+  `projects/*/build/libs/*-server.jar`.
+- **P0 (buildfix, mereu aplicat)**: range-ul FG `[6.0.16,6.2)` din upstream prinde
+  ForgeGradle 6.1.x care esueaza la `srgutils MinecraftVersion.from("1-snapshot-1")`;
+  il ingustam la `[6.0.16,6.1)`. P0 e infrastructura de build, nu gameplay — baseline
+  (b0) il include si metadata o declara.
+- **P1 (gameplay, opt-in la build)**: garda NPE pe `dropperInsertHook` — regenerat pe
+  sursa reala de la pin (invatare dureroasa: first clone fusese pe branchul default
+  1.20.1, patchul nu se potrivea de loc cu 1.16.5).
+- Publicare artefacte pe bransa `functity-out`, model rp-drop: `git clone` cu
+  `x-access-token` in URL + `HEAD:refs/heads/functity-out`; `actions/checkout@v4` e
+  obligatoriu (fara el, patch files nu existeau pe runner). Cile relative la
+  `git -C src apply` se rezolva din radacina lui src — folosim cai absolute.
+- Diagnostic lizibil din sandbox: DOAR API (annotatii + fisiere pe bransa) —
+  logs.zip/artifacts pe `*.blob.core.windows.net` sunt blocate de proxy-ul retelei.
+- Comutare baseline: fisierul `deploy/functity-build.txt` continand `NOPATCH` =>
+  build b0 (fara P1, cu P0); altfel b1.HHMM cu patch-urile din functity/patches/.
+
+### 6.10 FISE
+
+Cardurile candidatilor (format §2) traiesc in `functity/FISE/`. Licente confirmate API
+GitHub 2026-10-13: FerriteCore MIT, KryptonReforged MIT, RandomPatches MIT,
+AI-Improvements MIT; Starlight = NOASSERTION (de citit LICENSE + identificat autorul
+portului Forge inainte de orice utilizare, chiar si in carantina).
 ## 7. Buget și limite declarate
 
 Bugetul prezentei etape: resursele gratuite de CI (runner GitHub, fără costuri), fără
