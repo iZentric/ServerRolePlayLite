@@ -40,6 +40,13 @@ jobs:
               out["slp"] = {"ok": False, "eroare": repr(exc)[:200]}
           json.dump(out, open("ping.json", "w"), ensure_ascii=False, indent=1)
           print(json.dumps(out, ensure_ascii=False))
+          slp = out.get("slp", {})
+          import os
+          with open(os.environ.get("GITHUB_STEP_SUMMARY", "/dev/null"), "a") as fh:
+              fh.write("## Sonda 92.5.171.150:25565\n```json\n" + json.dumps(out, ensure_ascii=False, indent=1)[:1500] + "\n```\n")
+          if not slp.get("ok"):
+              raise SystemExit("JOS: SLP fara raspuns")
+          print("VIU:", slp.get("online"), "jucatori /", slp.get("max"))
           PY
           curl -s -m 12 "https://api.mcsrvstat.us/3/92.5.171.150:25565" -o mcsrvstat.json || echo '{"online": false, "unreachable": "curl esuat"}' > mcsrvstat.json
           python3 - <<'PY'
