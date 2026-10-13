@@ -1,0 +1,162 @@
+name: MC-RUN
+# Butonul „porneste serverul": aduce serverul din release-ul lite, il porneste
+# pe runner (16 GB / 4 core), il probeaza (Done + SLP ping + rcon + soak RAM) si
+# publica DOAR logul redactat pe bransa mc-run. Lumea, bazele si parolele raman
+# pe runner: nada nu iese dincolo de console.log spalat de scrub().
+on:
+  push:
+    paths:
+      - deploy/mc-run.txt
+      - .github/workflows/mc-run.yml
+      - scripts/mc_run_check.py
+      - scripts/rp_archive_inspect.py
+
+jobs:
+  boot:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '16'
+
+      - name: Aduce serverul din release
+        run: |
+          set -euo pipefail
+          sudo mkdir -p /opt/mc && sudo chown -R "$USER" /opt/mc
+          cd /opt/mc
+          url=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/lite" \
+                --jq '.assets[] | select(.name=="CUANTIC-Server-CatServer-1.7.7.zip") | .browser_download_url')
+          echo "$url"
+          curl -sfL -H "Authorization: Bearer $GH_TOKEN" "$url" -o srv.zip
+          test -s srv.zip
+          unzip -oq srv.zip
+          # structuri de tip un-singur-director-la-radacina: aplatizeaza
+          if [ ! -f server.properties ]; then
+            d=$(find . -mindepth 1 -maxdepth 1 -type d | head -1)
+            if [ -n "${d:-}" ]; then (cd "$d" && find . -maxdepth 1 -mindepth 1 -exec mv -t /opt/mc {} +) || true; fi
+          fi
+          JAR=$(find . -maxdepth 2 -name '*.jar' ! -name '*client*' -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+          test -n "${JAR:-}" || { echo "NU AM GASIT JAR in srv.zip" && unzip -l srv.zip | head -40 && exit 1; }
+          echo "JAR=/opt/mc/${JAR#./}" >> "$GITHUB_ENV"
+          {
+            echo "== java =="; java -version 2>&1
+            echo "== fisierle din zip (maxdepth 2) =="; find . -maxdepth 2 | sed 's|^\./||' | sort | head -80
+            echo "== marime =="; du -sh .
+            echo "== disk =="; df -h /opt | tail -1
+          } > diag.txt || true
+
+      - name: Configurare sigura de staging
+        run: |
+          set -euo pipefail
+          cd /opt/mc
+          echo "eula=true" > eula.txt
+          openssl rand -hex 12 > .rcpass
+          python3 - <<'PY'
+          from pathlib import Path
+          sp = Path("/opt/mc/server.properties")
+          lines = sp.read_text(encoding="utf-8").splitlines() if sp.exists() else []
+          want = {
+              "online-mode": "false",            # nu punem nicio parola reala nicaieri
+              "server-port": "25565",            # doar pe loopback-ul runner-ului
+              "view-distance": "4",
+              "simulation-distance": "4",
+              "max-players": "2",
+              "spawn-protection": "0",
+              "level-name": "staging",
+              "level-type": "minecraft\\:flat",  # plat, ca sa booteze repede
+              "generate-structures": "false",
+              "allow-nether": "false",
+              "enable-command-block": "false",
+              "motd": "CUANTIC staging pe runner - nu intra",
+              "enable-rcon": "true",
+              "rcon.port": "25575",
+              "rcon.password": Path("/opt/mc/.rcpass").read_text().strip(),
+          }
+          out = []
+          seen = set()
+          for ln in lines:
+              k = ln.split("=", 1)[0].strip()
+              if k in want:
+                  out.append(f"{k}={want[k]}"); seen.add(k)
+              elif ln.strip():
+                  out.append(ln)
+          out += [f"{k}={v}" for k, v in want.items() if k not in seen]
+          sp.write_text("\n".join(out) + "\n", encoding="utf-8")
+          # world/nether/end generatele de pack-uri vechi: lasam ce e, dar
+          # stergem session.lock ramas din zip ca sa nu refuze pornirea
+          for lock in Path("/opt/mc").rglob("session.lock"):
+              lock.unlink(missing_ok=True)
+          PY
+
+      - name: Porneste si probeaza
+        run: |
+          cd /opt/mc
+          PASS=$(cat .rcpass)
+          nohup java -Xms1G -Xmx4608M -XX:+UseG1GC -XX:MaxGCPauseMillis=200 \
+               -jar "$JAR" nogui > console.log 2>&1 &
+          echo "java pid $!"
+          python3 "$GITHUB_WORKSPACE/scripts/mc_run_check.py" \
+            --log /opt/mc/console.log --wait 540 --port 25565 \
+            --rcon-port 25575 --rcon-pass "$PASS" --soak 45 \
+            --out /opt/mc/summary.json > checker.log 2>&1
+          echo "checker a iesit cu $?"
+          # oprire fortata daca pustiul a ramas agatat
+          pkill -9 -f 'java.*'"${JAR##*/}" || true
+          sleep 2
+
+      - name: Redacteaza
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import sys, pathlib
+          sys.path.insert(0, str(pathlib.Path("." ) / "scripts").resolve())
+          from rp_archive_inspect import scrub
+          base = pathlib.Path("/opt/mc")
+          for f in ("console.log", "checker.log", "diag.txt"):
+              p = base / f
+              if p.exists():
+                  scrub(p)
+          # siguranta extra: nici o urma de rcon pass chiar daca logul o citam
+          pw = (base / ".rcpass").read_text().strip()
+          for f in ("console.log", "checker.log", "diag.txt"):
+              p = base / f
+              if p.exists():
+                  t = p.read_text(encoding="utf-8", errors="replace")
+                  if pw and pw in t:
+                      p.write_text(t.replace(pw, "<REDACTAT>"), encoding="utf-8")
+          (base / "console.log").rename(base / "console-redacted.log")
+          PY
+          tail -c 400000 /opt/mc/console-redacted.log > /opt/mc/console-tail.log 2>/dev/null || true
+          head -c 160000 /opt/mc/console-redacted.log > /opt/mc/boot.log 2>/dev/null || true
+          rm -f /opt/mc/console-redacted.log /opt/mc/.rcpass
+
+      - name: Publica pe bransa mc-run
+        run: |
+          set -euo pipefail
+          test -s /opt/mc/summary.json || { echo "nimic de publicat"; exit 0; }
+          if ! git ls-remote --exit-code origin refs/heads/mc-run >/dev/null 2>&1; then
+            empty=$(git commit-tree "$(git hash-object -w -t tree --stdin </dev/null)" -m "mc-run: radacina")
+            git push -q origin "$empty:refs/heads/mc-run"
+          fi
+          git fetch -q origin refs/heads/mc-run
+          git worktree prune || true
+          rm -rf /tmp/wt
+          git worktree add -q /tmp/wt -B mc-run FETCH_HEAD
+          mkdir -p /tmp/wt/mc-run
+          cp /opt/mc/summary.json /tmp/wt/mc-run/
+          cp /opt/mc/boot.log /tmp/wt/mc-run/boot.log 2>/dev/null || true
+          cp /opt/mc/console-tail.log /tmp/wt/mc-run/console-tail.log 2>/dev/null || true
+          cp /opt/mc/diag.txt /tmp/wt/mc-run/diag.txt 2>/dev/null || true
+          cp /opt/mc/checker.log /tmp/wt/mc-run/checker.log 2>/dev/null || true
+          { echo "run: $GITHUB_RUN_ID  url: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; \
+            echo "data: $(date -u '+%F %T UTC')  engine: CUANTIC-Server-CatServer-1.7.7.zip (release lite)"; \
+            echo "note: serverul a trait doar pe runner; lumea si credentialele nu au parsit calculatorul."; } > /tmp/wt/mc-run/PROVENIENTA.txt
+          git -C /tmp/wt add -A mc-run
+          git -C /tmp/wt -c commit.gpgsign=false commit -qm "mc-run: boot pe runner $(date -u '+%H:%M')" || echo "nimic nou"
+          git -C /tmp/wt push -q origin HEAD:refs/heads/mc-run
+          echo "publicat pe bransa mc-run"
