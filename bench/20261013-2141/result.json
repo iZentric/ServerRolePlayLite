@@ -1,0 +1,42 @@
+{
+  "method": "scară CUANTIC: descărcare cu SHA, smoke pe pack identic 36/14, A/B sintetic cu N probe pe braț, pe un runner GitHub izolat",
+  "limits": "nu ating serverul live; nu declară compatibilitate cu clientul modat; un motor care nu pornește e INCOMPATIBIL, nu mai lent",
+  "baseline_pack": {
+    "mods": 36,
+    "plugins": 14,
+    "pack_sha256": "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15"
+  },
+  "candidates": {
+    "MohistOfficial1237": {
+      "url": "https://maven.mohistmc.com/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar",
+      "licence_declared": "GPL-3.0",
+      "sha256_expected": "17d08ed544aab50f0c9c0281507a44d765cfeb371289a10d47e2143146255bff",
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    },
+    "FunCityB0": {
+      "url": "file:///tmp/fcb/FunCity-1.16.5-b0.jar",
+      "licence_declared": "GPL-3.0 (build propriu",
+      "sha256_expected": null,
+      "sha256_actual": "58f329c7d2696526f948470aa6fd0b45545039b64cb75015e64c12194b373da6",
+      "baseline_jar_sha256": "96f824793ab3a685a390d82305202403ea8cbe5c011a1c79ce0ec024a4d7789c",
+      "candidate_jar_sha256": "58f329c7d2696526f948470aa6fd0b45545039b64cb75015e64c12194b373da6",
+      "smoke_passed": false,
+      "boot_done_s": 20.65,
+      "plugins_enabled": 0,
+      "key_lines": [
+        "[21:41:27] [Server thread/INFO]: Done (20.650s)! For help, type \"help\""
+      ],
+      "root_cause": null,
+      "ab": {
+        "verdict": "NEAVĂGAT",
+        "reason": "nu a ajuns la `Done` cu pack-ul intact: fără scor de performanță"
+      }
+    },
+    "pin 754b578e)": {
+      "url": "",
+      "licence_declared": "neverificată",
+      "sha256_expected": null,
+      "error": "ValueError: fără URL de descărcare → candidat neidentificat, nu e scor"
+    }
+  }
+}
