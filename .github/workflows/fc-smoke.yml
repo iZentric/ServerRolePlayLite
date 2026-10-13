@@ -26,7 +26,7 @@ jobs:
           gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/s36
           git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" /tmp/s36/out
           cp /tmp/s36/out/builds/b0/mohist-1.16.5-1237-server.jar /tmp/s36/arm-oficial.jar 2>/dev/null || true
-          BJ=$(ls /tmp/s36/out/builds/b2*/FunCity-*.jar 2>/dev/null | sort | tail -1)
+          BJ=$(ls /tmp/s36/out/builds/b*/FunCity-*.jar 2>/dev/null | sort | tail -1)
           [ -n "$BJ" ] && cp "$BJ" /tmp/s36/arm-functity.jar || true
           ls -la /tmp/s36/*.jar
       - name: Un boot curat per brat (fara pacaleli cu manifest)
