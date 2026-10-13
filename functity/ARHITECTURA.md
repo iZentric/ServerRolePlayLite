@@ -147,6 +147,24 @@ reproducere pe runner + pe box.
 - Comutare baseline: fisierul `deploy/functity-build.txt` continand `NOPATCH` =>
   build b0 (fara P1, cu P0); altfel b1.HHMM cu patch-urile din functity/patches/.
 
+### 6.9b Invataturi din banca (bench v1-v2, 2026-10-13 noaptea)
+
+- Build-ul mohistJar produce `projects/mohist/build/libs/mohist-*-server.jar` = BOOTSTRAP
+  cu manifest `ServerLaunchArgs`/`net.minecraftforge.server.ServerMain` + `data/server.lzma`.
+  `find` dupa "cel mai mare *-server.jar" prinde `clean-*-server.jar` (vanilla curat,
+  Main-Class=net.minecraft.server.Main, 0 FML) — am publicat accidental asta in b0/b1 si
+  "pornirea lui in 20s" NU e Mohist. Colectorul de la b20 inainte cauta tintit si refuza
+  orice jar fara ServerLaunchArgs in manifest.
+- Java de banca = **11**. Pe 17, Mohist 1.16.5 moare cu `NoSuchMethodError
+  ImmutableMap.toImmutableMap` (guava 21). CatServer 1.16.5 merge si el pe 11, deci
+  comparatia ramane aceeasi-Java-aceasi-masina (regula §5).
+- Bootstrap-ul Mohist la primul boot: "Remapping jar... Creating forge server jar" +
+  descarca libraries/ (~2-4 min). Orice measurement corect = 2 faze: instalare prealabila
+  in acelasi director, apoi probe "warm". Scara veche (ladder, 1 boot/tiara) masura si
+  instalarea in zgomot. De refacut la FC-BENCH v4.
+- Packul 36/14 + cerinta `passed_smoke >= 14 Enabling` raman standardul de compat:
+  un motor care nu aprinde toti cei 14 = INCOMPATIBIL, nu "mai lent" (regula §5).
+
 ### 6.10 FISE
 
 Cardurile candidatilor (format §2) traiesc in `functity/FISE/`. Licente confirmate API

@@ -1,0 +1,65 @@
+name: FC-SMOKE36
+# Smoke FUN pe pack 36/14: boot real cu FML/Bukkit, incluzand instalarea bootstrap-ului
+# Mohist. Fiecare brat curata in el: exepeg = java 11, acelasi pack, acelasi pas.
+# Iesirea = annotatie (done, plugini Enabling, moduri FML, linii critice) + loguri pe branch.
+on:
+  push:
+    paths:
+      - deploy/fc-smoke36.txt
+      - .github/workflows/fc-smoke.yml
+
+permissions:
+  contents: write
+
+jobs:
+  s36:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '11' }
+      - name: Packul + bratele
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/s36
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/s36
+          git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" /tmp/s36/out
+          cp /tmp/s36/out/builds/b0/mohist-1.16.5-1237-server.jar /tmp/s36/arm-oficial.jar 2>/dev/null || true
+          BJ=$(ls /tmp/s36/out/builds/b2*/FunCity-*.jar 2>/dev/null | sort | tail -1)
+          [ -n "$BJ" ] && cp "$BJ" /tmp/s36/arm-functity.jar || true
+          ls -la /tmp/s36/*.jar
+      - name: Un boot curat per brat (fara pacaleli cu manifest)
+        run: |
+          set +e
+          for ARM in oficial functity; do
+            J=/tmp/s36/arm-$ARM.jar
+            [ -f "$J" ] || { printf '::warning::arm %s: LIPSA JAR\n' "$ARM"; continue; }
+            S=/tmp/s36/stage-$ARM
+            rm -rf "$S"; mkdir -p "$S"
+            ( cd "$S" && unzip -q /tmp/s36/CUANTIC-Server-CatServer-1.7.7.zip )
+            # inlocuim motorul din pack cu bratul — numele fix il tine engine_lab-style
+            MAINJAR=$(cd "$S" && ls *.jar | grep -iE "server" | head -1)
+            cp "$J" "$S/$MAINJAR"
+            cd "$S"
+            timeout 480 java -Xms1536M -Xmx1536M -jar "$MAINJAR" nogui > boot.log 2>&1
+            DONE=$(grep -aoE "Done \([0-9.]+s\)" boot.log | tail -1)
+            ENAB=$(grep -acE "Enabling [A-Za-z0-9_.-]+ v" boot.log || true)
+            MODS=$(grep -acE "Forge Mod Loader loaded|Loading [0-9]+ mods|mods to load" boot.log || true)
+            CRIT=$(grep -acE "Exception in server tick loop|Failed to start|Mixin apply failed|Could not (load|enable) plugin" boot.log || true)
+            MV=$(grep -a "This server is running" boot.log | tail -1 | sed 's/\x1b\[[0-9;]*m//g' | head -c 110)
+            printf '::warning::arm %s: done=[%s] enabling=%s modslinii=%s critice=%s marime=%sB\n' "$ARM" "${DONE:-NU}" "$ENAB" "$MODS" "$CRIT" "$(stat -c %s $J)"
+            printf '::warning::arm %s bukkit: %s\n' "$ARM" "$MV"
+            tail -c 150000 boot.log > /tmp/s36/log-$ARM.txt
+            cd /tmp/s36
+          done
+      - name: Logurile pe functity-out
+        run: |
+          set +e
+          git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" pub
+          D="pub/smoke36/$(date -u +%Y%m%d-%H%M)"
+          mkdir -p "$D"
+          cp /tmp/s36/log-*.txt "$D/" 2>/dev/null
+          cd pub; git config user.name 'functity-ci[bot]'; git config user.email 'fc@localhost'
+          git add -A smoke36/ && git commit -qm "fc-smoke36 $(date -u +%H%M)" && git push -q origin HEAD:refs/heads/functity-out
+          printf '::warning::loguri publicate rc=%s\n' "$?"
