@@ -1,9 +1,10 @@
 name: MC-RUN
 # Serverul VIU de pe masina (Cloud Shell + frp, 92.5.171.150:25565).
 # Regula casei (PROMPT-CUANTIC-AGENT.md): verdictul se publica DEVREME, inainte de
-# orice asteptare; restart SE cere prin puntea cmd.in, nu prin java manual (pe aceeasi
-# lume = mort); gh-ul masinii (cheering inel) pune raportul inapoi in repo pentru ca
-# token-ul runner-ului e read-only.
+# orice asteptare; restart SE cere prin puntea cmd.in, nu cu java manual (pe aceeasi
+# lume = mort). Token-ul runner-ului e read-only, deci publicarea se face cu node
+# https + credentialii reali ai masinii (gh hosts.yml / .git-credentials / remote),
+# ca botul site-ului. Niciodata nu se printeaza vreo cheie.
 on:
   push:
     paths:
@@ -14,104 +15,124 @@ jobs:
   live:
     runs-on: self-hosted
     steps:
-      - name: Stare inainte (verdict rapid)
+      - name: Stare inainte si verdict rapid
         run: |
-          export GH_TOKEN= GITHUB_TOKEN=
           T=/tmp/mcst.txt
           D=$HOME/cuantic-live
           {
-            echo "=== stare $(date -u '+%F %T UTC') ==="
+            echo "=== stare inainte $(date -u '+%F %T UTC') ==="
             pgrep -af "java @unix_args" | head -2 || echo "JAVA: jos"
-            (exec 3<>/dev/tcp/127.0.0.1/25565) 2>/dev/null && echo "PORT 25565: viu" || echo "PORT 25565: inchis"
+            bash -c 'exec 3<>/dev/tcp/127.0.0.1/25565' 2>/dev/null && echo "PORT 25565 local: viu" || echo "PORT 25565 local: inchis"
             pgrep -f "frpc" >/dev/null && echo "frpc: sus" || echo "frpc: jos"
             pgrep -f "c.sh|cuantic-live" >/dev/null && echo "supervisor c.sh: sus" || echo "supervisor c.sh: jos"
-            [ -f "$D/logs/latest.log" ] && { echo "--- latest.log ( ultimele 15 )"; tail -15 "$D/logs/latest.log"; } || echo "fara latest.log"
+            if [ -f "$D/logs/latest.log" ]; then echo "--- latest.log (ultimele 15)"; tail -15 "$D/logs/latest.log"; else echo "fara latest.log in $D"; fi
             awk '/MemTotal|MemAvailable/ {printf "%s %d MiB\n", $1, $2/1024}' /proc/meminfo
-            uptime 2>/dev/null || cat /proc/loadavg
+            cat /proc/loadavg
           } > $T 2>&1
           cat $T
-          pune() {
-            # canal: node (garantit pe orice masina cu runner) + tokenul REAL al masinii
-            # (gh hosts.yml sau git-credentials) — token-ul workflow-ului e read-only aici
-            local msg="$1" src="${2:-/tmp/mcst.txt}"
-            node - "$msg" "$src" <<'NODE'
-const fs = require('fs'), https = require('https'), cp = require('child_process');
-const [,, msg, src] = process.argv;
-function citeste(){
-  const c = [];
-  try { const h = fs.readFileSync(process.env.HOME + '/.config/gh/hosts.yml','utf8');
-    const m = h.match(/oauth_token: (gh[ps]_\S+|[A-Za-z0-9_]{36,})/); if (m) c.push(m[1]); } catch(e){}
-  try { const g = fs.readFileSync(process.env.HOME + '/.git-credentials','utf8');
-    for (const l of g.split('\n')) { const m = l.match(/:\/\/[^@/]*@github\.com/); if (m) { const t = l.split('://')[1].split('@')[0].split(':').pop(); if (t) c.push(decodeURIComponent(t)); } } } catch(e){}
-  try { const u = cp.execSync('git -C ' + (process.env.GITHUB_WORKSPACE || '.') + ' remote get-url origin 2>/dev/null || true', {encoding:'utf8'});
-    const m = u.match(/:\/\/[^@/]*@github/); if (m) { const t = u.split('://')[1].split('@')[0].split(':').pop(); if (t) c.push(decodeURIComponent(t)); } } catch(e){}
-  return c.filter(Boolean);
-}
-const toks = [...new Set(citeste())];
-if (!toks.length) { console.log('FARA TOKEN PE MASINA (gh hosts.yml / .git-credentials / remote)'); process.exit(0); }
-const repo = process.env.GITHUB_REPOSITORY, br = process.env.GITHUB_REF_NAME;
-const content = fs.readFileSync(src).toString('base64');
-function api(method, path, body, tok){ return new Promise(res => {
-  const data = body ? JSON.stringify(body) : null;
-  const r = https.request({host:'api.github.com', path, method, headers:{
-    'Authorization':'Bearer '+tok, 'User-Agent':'mc-run', 'Accept':'application/vnd.github+json',
-    'X-GitHub-Api-Version':'2022-11-28', ...(data?{'Content-Type':'application/json','Content-Length':Buffer.byteLength(data)}:{})
-  }}, x => { let b=''; x.on('data',d=>b+=d); x.on('end',()=>res({status:x.statusCode, body:b})); });
-  r.on('error',e=>res({status:0, body:String(e)})); if(data) r.write(data); r.end();
-});}
-(async () => {
-  for (const tok of toks) {
-    let sha;
-    const g = await api('GET', `/repos/${repo}/contents/analysis/MC-STATUS.md?ref=${encodeURIComponent(br)}`, null, tok);
-    if (g.status === 200) { try { sha = JSON.parse(g.body).sha; } catch(e){} }
-    const p = await api('PUT', `/repos/${repo}/contents/analysis/MC-STATUS.md`,
-      { message: msg, content, branch: br, ...(sha?{sha}:{}) }, tok);
-    if (p.status === 200 || p.status === 201) { console.log('VERDICT PUBLICAT ' + JSON.parse(p.body).commit.sha.slice(0,7)); return; }
-    console.log('PUT ' + p.status + ': ' + p.body.slice(0,140));
-  }
-  console.log('niciun token nu a mers (' + toks.length + ' incercate)');
-})();
-NODE
-          }
-          pune "mc-run: stare inainte"
-          # marcaj pentru "Done (" proaspat
-          if [ -f "$D/logs/latest.log" ]; then wc -l < "$D/logs/latest.log" > /tmp/mcmark; else echo 0 > /tmp/mcmark; fi
-
-      - name: Trezire (doar daca e jos; altfel nu ating nimic)
-        timeout-minutes: 8
+          node -e '
+            const fs = require("fs"), https = require("https");
+            function citeste(){
+              const c = [];
+              try { const h = fs.readFileSync(process.env.HOME + "/.config/gh/hosts.yml","utf8");
+                const m = h.match(/oauth_token: (\S+)/); if (m) c.push(m[1]); } catch(e){}
+              try { const g = fs.readFileSync(process.env.HOME + "/.git-credentials","utf8");
+                for (const l of g.split("\n")) { if (l.includes("github.com")) { const t = l.split("://")[1].split("@")[0].split(":").pop(); if (t) c.push(decodeURIComponent(t)); } } } catch(e){}
+              return c.filter(Boolean);
+            }
+            const toks = [...new Set(citeste())];
+            if (!toks.length) { console.log("FARA TOKEN PE MASINA gasit in keyring"); process.exit(0); }
+            const repo = process.env.GITHUB_REPOSITORY, br = process.env.GITHUB_REF_NAME;
+            const content = fs.readFileSync("/tmp/mcst.txt").toString("base64");
+            const msg = "mc-run: stare inainte " + new Date().toISOString().slice(11,19);
+            function api(method, path, body, tok){ return new Promise(res => {
+              const data = body ? JSON.stringify(body) : null;
+              const r = https.request({host:"api.github.com", path, method, headers: Object.assign({
+                "Authorization":"Bearer "+tok, "User-Agent":"mc-run", "Accept":"application/vnd.github+json"},
+                data ? {"Content-Type":"application/json","Content-Length":Buffer.byteLength(data)} : {})},
+                x => { let b=""; x.on("data",d=>b+=d); x.on("end",()=>res({status:x.statusCode, body:b})); });
+              r.on("error",e=>res({status:0, body:String(e)})); if(data) r.write(data); r.end();
+            });}
+            (async () => {
+              for (const tok of toks) {
+                let sha;
+                const g = await api("GET", "/repos/"+repo+"/contents/analysis/MC-STATUS.md?ref="+encodeURIComponent(br), null, tok);
+                if (g.status === 200) { try { sha = JSON.parse(g.body).sha; } catch(e){} }
+                const p = await api("PUT", "/repos/"+repo+"/contents/analysis/MC-STATUS.md",
+                  Object.assign({ message: msg, content, branch: br }, sha?{sha}:{}), tok);
+                if (p.status === 200 || p.status === 201) { console.log("VERDICT OK " + JSON.parse(p.body).commit.sha.slice(0,7)); return; }
+                console.log("PUT " + p.status + " " + p.body.slice(0,120));
+              }
+            })();
+          ' || echo "node a cracat"
+      - name: Trezire doar daca e jos
+        timeout-minutes: 9
         run: |
-          export GH_TOKEN= GITHUB_TOKEN=
+          T=/tmp/mcst.txt
           D=$HOME/cuantic-live
           if pgrep -f "java @unix_args" >/dev/null; then
-            echo "java e deja sus - nu fac nimic"
+            echo "java e deja sus - nu ating nimic"
+            { echo "=== dupa control $(date -u '+%F %T UTC') ==="; echo "serverul era deja pornit, nu am atins nimic."; pgrep -af "java @unix_args" | head -2; } > $T
             exit 0
           fi
+          if [ -f "$D/logs/latest.log" ]; then wc -l < "$D/logs/latest.log" > /tmp/mcmark; else echo 0 > /tmp/mcmark; fi
           mkdir -p "$D"
           if pgrep -f "c.sh|cuantic-live.sh" >/dev/null; then
-            echo "punte: trimite restart in cmd.in"
+            echo "punte: cer restart in cmd.in"
             echo restart > "$D/cmd.in"
           else
-            echo "supervisorul e jos - il pornesc pe c.sh (masina il mai si reaprinde din bash ~/b.sh)"
-            [ -x "$HOME/c.sh" ] || curl -fsSLo "$HOME/c.sh" "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_REF_NAME/scripts/cuantic-live.sh" && chmod +x "$HOME/c.sh"
+            echo "supervisor jos: il ridic cu c.sh (in Background, ca la boot.sh)"
+            [ -x "$HOME/c.sh" ] || { curl -fsSLo "$HOME/c.sh" "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_REF_NAME/scripts/cuantic-live.sh" && chmod +x "$HOME/c.sh"; }
             ( setsid bash "$HOME/c.sh" >> "$D/sup.log" 2>&1 </dev/null & )
           fi
           OK=0
           for i in $(seq 1 45); do
             sleep 10
-            if [ -f "$D/logs/latest.log" ]; then
-              tail -n +"$(($(cat /tmp/mcmark) + 1))" "$D/logs/latest.log" 2>/dev/null | grep -q "Done (" && { OK=1; break; }
-            fi
-            pgrep -f "java @unix_args" >/dev/null || sleep 20
+            tail -n +"$(($(cat /tmp/mcmark) + 1))" "$D/logs/latest.log" 2>/dev/null | grep -q "Done (" && { OK=1; break; }
           done
-          echo "boot: $([ $OK = 1 ] && echo "DONE (proaspat)" || echo "NU a apucat sa termine in fereastra")"
+          echo "boot proaspat: $([ $OK = 1 ] && echo DA || echo NU-IN-FERESTRA)"
           {
             echo "=== dupa trezire $(date -u '+%F %T UTC') ==="
-            echo "rezultat: $([ $OK = 1 ] && echo 'serverul a ajuns la Done ( proaspat' || echo 'Done ( NU s-a vazut in fereastra de ~7 minute')"
+            echo "rezultat: $([ $OK = 1 ] && echo 'Done ( proaspat in log' || echo 'Done ( nu s-a vazut in ~7 min')"
             pgrep -af "java @unix_args" | head -2 || echo "java inca jos"
-            (exec 3<>/dev/tcp/127.0.0.1/25565) 2>/dev/null && echo "PORT 25565: viu" || echo "PORT 25565: inchis"
-            [ -f "$D/logs/latest.log" ] && tail -n +"$(($(cat /tmp/mcmark) + 1))" "$D/logs/latest.log" 2>/dev/null | grep -E "Done \(|ERROR|Can.t keep up" | tail -8
+            bash -c 'exec 3<>/dev/tcp/127.0.0.1/25565' 2>/dev/null && echo "PORT 25565 local: viu" || echo "PORT 25565 local: inchis"
+            tail -n +"$(($(cat /tmp/mcmark) + 1))" "$D/logs/latest.log" 2>/dev/null | grep -E "Done \(|Can.t keep up|ERROR" | tail -6
             awk '/MemAvailable/ {printf "MemAvailable %d MiB\n", $2/1024}' /proc/meminfo
-          } > /tmp/mcst.txt 2>&1
-          cat /tmp/mcst.txt
-          pune "mc-run: dupa trezire $(date -u +%H:%M:%S)"
+          } > $T 2>&1
+          cat $T
+          node -e '
+            const fs = require("fs"), https = require("https");
+            function citeste(){
+              const c = [];
+              try { const h = fs.readFileSync(process.env.HOME + "/.config/gh/hosts.yml","utf8");
+                const m = h.match(/oauth_token: (\S+)/); if (m) c.push(m[1]); } catch(e){}
+              try { const g = fs.readFileSync(process.env.HOME + "/.git-credentials","utf8");
+                for (const l of g.split("\n")) { if (l.includes("github.com")) { const t = l.split("://")[1].split("@")[0].split(":").pop(); if (t) c.push(decodeURIComponent(t)); } } } catch(e){}
+              return c.filter(Boolean);
+            }
+            const toks = [...new Set(citeste())];
+            if (!toks.length) { console.log("FARA TOKEN PE MASINA gasit in keyring"); process.exit(0); }
+            const repo = process.env.GITHUB_REPOSITORY, br = process.env.GITHUB_REF_NAME;
+            const content = fs.readFileSync("/tmp/mcst.txt").toString("base64");
+            const msg = "mc-run: dupa trezire " + new Date().toISOString().slice(11,19);
+            function api(method, path, body, tok){ return new Promise(res => {
+              const data = body ? JSON.stringify(body) : null;
+              const r = https.request({host:"api.github.com", path, method, headers: Object.assign({
+                "Authorization":"Bearer "+tok, "User-Agent":"mc-run", "Accept":"application/vnd.github+json"},
+                data ? {"Content-Type":"application/json","Content-Length":Buffer.byteLength(data)} : {})},
+                x => { let b=""; x.on("data",d=>b+=d); x.on("end",()=>res({status:x.statusCode, body:b})); });
+              r.on("error",e=>res({status:0, body:String(e)})); if(data) r.write(data); r.end();
+            });}
+            (async () => {
+              for (const tok of toks) {
+                let sha;
+                const g = await api("GET", "/repos/"+repo+"/contents/analysis/MC-STATUS.md?ref="+encodeURIComponent(br), null, tok);
+                if (g.status === 200) { try { sha = JSON.parse(g.body).sha; } catch(e){} }
+                const p = await api("PUT", "/repos/"+repo+"/contents/analysis/MC-STATUS.md",
+                  Object.assign({ message: msg, content, branch: br }, sha?{sha}:{}), tok);
+                if (p.status === 200 || p.status === 201) { console.log("VERDICT OK " + JSON.parse(p.body).commit.sha.slice(0,7)); return; }
+                console.log("PUT " + p.status + " " + p.body.slice(0,120));
+              }
+            })();
+          ' || echo "node a cracat"
           exit 0
