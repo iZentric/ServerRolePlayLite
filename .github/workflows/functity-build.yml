@@ -1,0 +1,89 @@
+name: FUNCITY-BUILD
+# Build 0 = referinta: Mohist 1.16.5 la commit fixat, compilat reproducibil pe runner
+# curat. Fara patch-uri FunCity in acest tur (incă). Arunca JAR-ul + logul + metadata
+# pe bransa functity-out; de acolo le citesc si decidem pasul cu patch-urile.
+on:
+  push:
+    paths:
+      - deploy/functity-build.txt
+      - .github/workflows/functity-build.yml
+      - functity/**
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      MOHIST_PIN: 754b578ef3e4881d854bcd1df5d299ada3fd429f
+    steps:
+      - name: Adu sursa la commit fixat
+        run: |
+          set -euo pipefail
+          git clone -q --filter=blob:none https://github.com/MohistMC/Mohist src
+          git -C src checkout -q "$MOHIST_PIN"
+          git -C src log -1 --format='pin: %H %ci %s' | head -1
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Compileaza
+        continue-on-error: true
+        run: |
+          set -uo pipefail
+          cd src
+          chmod +x gradlew
+          /usr/bin/time -v ./gradlew build -x test --no-daemon --max-workers=4 > ../build-out.log 2>&1
+          echo "gradle exit: $?" | tee -a ../build-out.log
+          tail -5 ../build-out.log
+
+      - name: Colecteaza artefactele
+        run: |
+          set -uo pipefail
+          mkdir -p /tmp/fc
+          JAR=$(find src/build src/run -name '*.jar' -size +5M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
+          if [ -n "${JAR:-}" ]; then
+            cp "$JAR" /tmp/fc/FunCity-1.16.5-b0.jar
+            ( cd /tmp/fc && sha256sum FunCity-1.16.5-b0.jar > SHA256SUMS.txt )
+            JNAME=$(basename "$JAR")
+          else
+            echo "NICIUN JAR GASIT" > /tmp/fc/ESUARE.txt
+            find src -name '*.jar' 2>/dev/null | head -20 >> /tmp/fc/ESUARE.txt || true
+          fi
+          tail -c 350000 build-out.log > /tmp/fc/BUILD-LOG.txt 2>/dev/null || cp src/build-out.log /tmp/fc/BUILD-LOG.txt 2>/dev/null || echo "log pierdut" > /tmp/fc/BUILD-LOG.txt
+          {
+            echo "{"
+            echo "  \"build\": \"b0-baseline\","
+            echo "  \"mohist_pin\": \"$MOHIST_PIN\","
+            echo "  \"jar\": \"${JNAME:-niciunul}\","
+            echo "  \"data_utc\": \"$(date -u '+%F %T')\","
+            echo "  \"runner\": \"ubuntu-24.04 hosted\","
+            echo "  \"java\": \"$(java -version 2>&1 | head -1 | tr -d '"')\""
+            echo "}"
+          } > /tmp/fc/metadata.json
+          ls -la /tmp/fc
+
+      - name: Publica pe functity-out
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE"
+          git config user.name 'functity-ci[bot]'
+          git config user.email 'functity-ci@localhost'
+          if ! git ls-remote --exit-code origin refs/heads/functity-out >/dev/null 2>&1; then
+            root=$(git commit-tree "$(git hash-object -w -t tree --stdin </dev/null)" -m "functity-out: radacina")
+            git push -q origin "$root:refs/heads/functity-out"
+          fi
+          git fetch -q origin refs/heads/functity-out
+          git worktree prune || true
+          rm -rf /tmp/wtf
+          git worktree add -q /tmp/wtf -B functity-out FETCH_HEAD
+          rm -rf /tmp/wtf/builds/b0-baseline; mkdir -p /tmp/wtf/builds/b0-baseline
+          cp -a /tmp/fc/. /tmp/wtf/builds/b0-baseline/
+          git -C /tmp/wtf add -A builds/b0-baseline
+          git -C /tmp/wtf -c commit.gpgsign=false commit -qm "functity b0: build de referinta $(date -u '+%H:%M')" || echo "nimic nou"
+          for i in 1 2 3; do
+            git -C /tmp/wtf push -q origin HEAD:refs/heads/functity-out && break
+            git -C /tmp/wtf pull -q --rebase origin functity-out || true
+          done
+          echo publicat
