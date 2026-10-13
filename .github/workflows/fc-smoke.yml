@@ -38,7 +38,7 @@ jobs:
             S=/tmp/s36/stage-$ARM
             rm -rf "$S"; mkdir -p "$S"
             # stage CURAT: fara libraries/run/version.json ale lui CatServer (le aduce Mohist)
-            ( cd "$S" && unzip -q /tmp/s36/CUANTIC-Server-CatServer-1.7.7.zip -x "libraries/*" "run/*" "version.json" "*.jar" )
+            ( cd "$S" && unzip -q /tmp/s36/CUANTIC-Server-CatServer-1.7.7.zip -x "libraries/*" "run/*" "version.json" "/*.jar" )
             cp "$J" "$S/mohist-boot.jar"
             cd "$S"
             # faza 1 = instalare bootstrap (remap + libraries); faza 2 = serverul real masurat
