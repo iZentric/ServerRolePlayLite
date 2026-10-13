@@ -175,6 +175,48 @@ jobs:
             "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
             -d "{\"message\":\"trace final\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 < trace.txt | tr -d '\n')\"}" || true
           true
+      - name: Creier (github-script, actionale node)
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const fs = require('fs'), path = require('path');
+            const mc = process.env.MC || path.join(process.env.GITHUB_WORKSPACE, 'mcw');
+            const owner = context.repo.owner, repo = context.repo.repo;
+            const nume = { 'trace.txt': 'TRACE.txt', 'put1.json': 'put1.json', 'summary.json': 'summary.json',
+              'boot.log': 'boot.log', 'console-tail.log': 'console-tail.log', 'javainstall.txt': 'javainstall.txt',
+              'ram.txt': 'ram.txt', 'skip.txt': 'skip.txt', 'diag.txt': 'diag.txt' };
+            const rap = [];
+            async function pune(fis, dest) {
+              let sha = undefined;
+              try {
+                const cur = await github.rest.repos.getContent({ owner, repo, path: 'mc-run/' + dest, ref: 'mc-run' });
+                sha = cur.data.sha;
+              } catch (e) { rap.push(dest + ': nou (' + e.status + ')'); }
+              try {
+                const r = await github.rest.repos.createOrUpdateFileContents({
+                  owner, repo, path: 'mc-run/' + dest,
+                  message: 'vps ' + fis + ' @ ' + new Date().toISOString(),
+                  content: fs.readFileSync(path.join(mc, fis)).toString('base64'),
+                  branch: 'mc-run', sha });
+                rap.push(dest + ': OK ' + (r.data && r.data.commit && r.data.commit.sha ? r.data.commit.sha.slice(0, 7) : ''));
+              } catch (e) {
+                rap.push(dest + ': ESEC ' + e.status + ' ' + String(e.message).slice(0, 120) +
+                  ' scopes=' + ((e.response && e.response.headers && e.response.headers['x-oauth-scopes']) || '?'));
+              }
+            }
+            for (const [fis, dest] of Object.entries(nume)) {
+              const q = path.join(mc, fis);
+              if (fs.existsSync(q) && fs.statSync(q).size < 900000) await pune(fis, dest);
+            }
+            const prov = 'run ' + process.env.GITHUB_RUN_ID + ' | mc=' + mc + '\n' + rap.join('\n') + '\n';
+            try {
+              let sha2; try { sha2 = (await github.rest.repos.getContent({ owner, repo, path: 'mc-run/PROVENIENTA.txt', ref: 'mc-run' })).data.sha; } catch (e) {}
+              await github.rest.repos.createOrUpdateFileContents({ owner, repo, path: 'mc-run/PROVENIENTA.txt',
+                message: 'provenienta vps', content: Buffer.from(prov).toString('base64'), branch: 'mc-run', sha: sha2 });
+            } catch (e) { core.warning('provenienta esuata: ' + e.status); }
+
       - name: Sonda git (canal 1)
         if: always()
         shell: bash
