@@ -131,5 +131,7 @@ jobs:
           echo "verdict publicat prin: ${ok:-NICIUNUL}"
           { echo "canale: gh=$(command -v gh >/dev/null && echo yes || echo no) node=$(command -v node >/dev/null && echo yes || echo no)"; echo "ok=${ok:-niciunul}"; } > /tmp/mcverdict2.txt
           V=$(cat /tmp/mcverdict 2>/dev/null || echo failure)
-          if [ -z "$ok" ]; then exit 42; fi
+          # ANOTATIA = singurul canal garantat de la self-hosted (verdict integral, o linie)
+          printf '::warning::verdict=%s; bransa=%s; continut: %s\n' "$V" "${ok:-niciunul}" "$(tr '\n' '~' < /tmp/mcst.txt | head -c 1500)"
+          if [ "$V" != success ] && [ -z "$ok" ]; then exit 42; fi
           [ "$V" = success ]
