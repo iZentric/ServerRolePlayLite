@@ -22,6 +22,15 @@ jobs:
           git clone -q --filter=blob:none https://github.com/MohistMC/Mohist src
           git -C src checkout -q "$MOHIST_PIN"
           git -C src log -1 --format='pin: %H %ci %s' | head -1
+          shopt -s nullglob
+          PATCHES=(functity/patches/*.patch)
+          if [ ${#PATCHES[@]} -gt 0 ]; then
+            git -C src apply --check "${PATCHES[0]}" 2>/tmp/applycheck.txt || { echo "PATCH respins:"; cat /tmp/applycheck.txt; exit 1; }
+            for pt in "${PATCHES[@]}"; do git -C src apply "$pt" && echo "aplicat: $(basename "$pt")"; done
+            echo "BUILD_ID=b$(( ${#PATCHES[@]} )).$(git -C src rev-parse --short HEAD | tail -c5)" >> "$GITHUB_ENV"
+          else
+            echo "BUILD_ID=b0" >> "$GITHUB_ENV"
+          fi
 
       - uses: actions/setup-java@v4
         with:
@@ -44,8 +53,8 @@ jobs:
           mkdir -p /tmp/fc
           JAR=$(find src/build src/run -name '*.jar' -size +5M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
           if [ -n "${JAR:-}" ]; then
-            cp "$JAR" /tmp/fc/FunCity-1.16.5-b0.jar
-            ( cd /tmp/fc && sha256sum FunCity-1.16.5-b0.jar > SHA256SUMS.txt )
+            cp "$JAR" "/tmp/fc/FunCity-1.16.5-${BUILD_ID:-b0}.jar"
+            ( cd /tmp/fc && sha256sum "FunCity-1.16.5-${BUILD_ID:-b0}.jar" > SHA256SUMS.txt )
             JNAME=$(basename "$JAR")
           else
             echo "NICIUN JAR GASIT" > /tmp/fc/ESUARE.txt
@@ -78,10 +87,10 @@ jobs:
           git worktree prune || true
           rm -rf /tmp/wtf
           git worktree add -q /tmp/wtf -B functity-out FETCH_HEAD
-          rm -rf /tmp/wtf/builds/b0-baseline; mkdir -p /tmp/wtf/builds/b0-baseline
-          cp -a /tmp/fc/. /tmp/wtf/builds/b0-baseline/
-          git -C /tmp/wtf add -A builds/b0-baseline
-          git -C /tmp/wtf -c commit.gpgsign=false commit -qm "functity b0: build de referinta $(date -u '+%H:%M')" || echo "nimic nou"
+          D="/tmp/wtf/builds/${BUILD_ID:-b0}"; rm -rf "$D"; mkdir -p "$D"
+          cp -a /tmp/fc/. "$D/"
+          git -C /tmp/wtf add -A "builds/${BUILD_ID:-b0}"
+          git -C /tmp/wtf -c commit.gpgsign=false commit -qm "functity ${BUILD_ID:-b0}: build CI $(date -u '+%H:%M')" || echo "nimic nou"
           for i in 1 2 3; do
             git -C /tmp/wtf push -q origin HEAD:refs/heads/functity-out && break
             git -C /tmp/wtf pull -q --rebase origin functity-out || true

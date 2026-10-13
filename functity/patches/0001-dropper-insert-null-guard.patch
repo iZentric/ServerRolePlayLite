@@ -1,0 +1,33 @@
+diff --git a/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java b/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
+index abb7757..ccc991e 100644
+--- a/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
++++ b/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
+@@ -110,14 +110,22 @@ public class VanillaInventoryCodeHooks
+                     CraftItemStack oitemstack = CraftItemStack.asCraftMirror(stack.copy().split(1));
+                     InventoryHolder owner = InventoryOwner.get((BlockEntity) destination);
+                     Inventory destinationInventory = owner != null ? owner.getInventory() : InventoryOwner.inventoryFromForge(itemHandler);
+-                    InventoryMoveItemEvent event = new InventoryMoveItemEvent(dropper.getOwner().getInventory(), oitemstack.clone(), destinationInventory, true);
+-                    Bukkit.getPluginManager().callEvent(event);
+-                    if (event.isCancelled()) {
+-                        return true;
++                    // FunCity P1: sursa (dropper-ul) poate fi detinuta de un block-entity de vehicul
++                    // fara owner Bukkit — getOwner() null = NPE in fiecare tick de hopper.
++                    InventoryHolder sourceOwner = InventoryOwner.get(dropper);
++                    Inventory sourceInventory = sourceOwner != null ? sourceOwner.getInventory() : null;
++                    ItemStack moved = oitemstack;
++                    if (sourceInventory != null && destinationInventory != null) {
++                        InventoryMoveItemEvent event = new InventoryMoveItemEvent(sourceInventory, oitemstack.clone(), destinationInventory, true);
++                        Bukkit.getPluginManager().callEvent(event);
++                        if (event.isCancelled()) {
++                            return true;
++                        }
++                        moved = event.getItem();
+                     }
+-                    ItemStack remainder = putStackInInventoryAllSlots(dropper, destination, itemHandler, CraftItemStack.asNMSCopy(event.getItem()));
++                    ItemStack remainder = putStackInInventoryAllSlots(dropper, destination, itemHandler, CraftItemStack.asNMSCopy(moved));
+ 
+-                    if (event.getItem().equals(oitemstack) && remainder.isEmpty())
++                    if (moved.equals(oitemstack) && remainder.isEmpty())
+                     {
+                         remainder = stack.copy();
+                         remainder.shrink(1);
