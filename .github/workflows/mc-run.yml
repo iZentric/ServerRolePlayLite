@@ -175,15 +175,39 @@ jobs:
             "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
             -d "{\"message\":\"trace final\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 < trace.txt | tr -d '\n')\"}" || true
           true
+      - name: Sonda git (canal 1)
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          cd "$GITHUB_WORKSPACE"
+          git -c user.name=vps -c user.email=vps@localhost -c commit.gpgsign=false commit --allow-empty -m "sonda-vps $(date -u +%H:%M)"
+          echo "commit rc=$?"
+          git push -q origin HEAD:refs/heads/vps-sonda
+          echo "push rc=$?"
+
+      - name: Sonda api (canal 2)
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          echo "canal2 $(date -u +%H:%M)" > ping.txt
+          B64=$(base64 < ping.txt | tr -d '\n')
+          gh api --method PUT "repos/$GITHUB_REPOSITORY/contents/mc-run/SONDA.txt" -f branch=mc-run -f message="sonda api vps" -f content="$B64" 2>&1 | head -3
+          echo "gh rc=$?"
+          curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/SONDA2.txt" -d "{\"message\":\"sonda2\",\"branch\":\"mc-run\",\"content\":\"$B64\"}" -o resp.json -w "http=%{http_code}\\n"
+          cat resp.json 2>/dev/null | head -c 200
+
       - name: Plan B — push fisierele pe bransa arena
         if: always()
+        shell: bash
         run: |
+          set +e
           cd "$GITHUB_WORKSPACE" || exit 0
-          git config user.name 'vps-runner[bot]'
-          git config user.email 'vps@localhost'
           git -c core.hooksPath=/dev/null add -f mcw/trace.txt mcw/put1.json mcw/summary.json mcw/boot.log mcw/console-tail.log mcw/javainstall.txt 2>/dev/null
           git ls-files --error-unmatch mcw/trace.txt >/dev/null 2>&1 || { echo "nimic de adaugat" >> mcw/trace.txt; git -c core.hooksPath=/dev/null add -f mcw/trace.txt; }
-          git -c commit.gpgsign=false commit -m "vps-run $GITHUB_RUN_ID: fisiere brute de pe f87f4bfcc00d" || true
-          git pull --rebase -q origin "$GITHUB_REF_NAME" || true
-          git push -q origin "HEAD:refs/heads/$GITHUB_REF_NAME" || echo "push si el a cracat"
+          { echo "== stare add: $(git status --porcelain | head -10)"; echo "== mcw:"; ls -la mcw 2>&1 | head -15; echo "== trace:"; head -50 mcw/trace.txt 2>&1; } > mcw-selfreport.txt
+          git add -f mcw mcw-selfreport.txt 2>/dev/null
+          git -c user.name=vps -c user.email=vps@localhost -c commit.gpgsign=false commit -q -m "vps-run $GITHUB_RUN_ID: fisiere brute" || true
+          git push -q origin HEAD:refs/heads/vps-run 2>&1 || echo "planB push esuat"
           true
