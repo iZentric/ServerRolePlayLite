@@ -178,6 +178,64 @@ def keep(rel: str) -> bool:
     return False
 
 
+<<<<<<< HEAD
+=======
+def headers(archive: Path, dest: Path, cap_bytes: int = 25_000_000) -> int:
+    """Trece fizic ARHIVA integrala si scrie antetul (primele 48 B) al FIECARUI fisier.
+    Asta e dovada ca «am vazut fiecare fisier», nu doar inventarul."""
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    name = archive.name.lower()
+    out = dest.open("w", encoding="utf-8")
+    n = 0
+    written = 0
+
+    def emit(relname: str, size: int, head: bytes) -> bool:
+        nonlocal n, written
+        h = head.replace(b"\x00", b".")[:48].decode("latin-1").replace("\n", " ")
+        line = "%d|%s|%s\n" % (size, relname, h)
+        if written + len(line) > cap_bytes:
+            return False
+        out.write(line)
+        n += 1
+        written += len(line)
+        return True
+
+    try:
+        if name.endswith((".tar", ".tar.gz", ".tgz")):
+            with tarfile.open(archive, "r:*") as tf:
+                for ti in tf:
+                    if not ti.isfile():
+                        continue
+                    f = tf.extractfile(ti)
+                    head = f.read(48) if f else b""
+                    if not emit(ti.name, ti.size, head):
+                        break
+        elif name.endswith(".zip"):
+            import zipfile
+            with zipfile.ZipFile(archive) as zf:
+                for zi in zf.infolist():
+                    if zi.is_dir():
+                        continue
+                    with zf.open(zi) as f:
+                        head = f.read(48)
+                    if not emit(zi.filename, zi.file_size, head):
+                        break
+        else:
+            out.write("(arhiva %s nu e tar/zip; antetele se iau din extragere)\n" % name)
+            root_dir = archive.parent
+            for pth in sorted(root_dir.rglob("*")):
+                if pth.is_file() and pth != archive:
+                    with open(pth, "rb") as f:
+                        head = f.read(48)
+                    rel = pth.relative_to(root_dir).as_posix()
+                    if not emit(rel, pth.stat().st_size, head):
+                        break
+    finally:
+        out.close()
+    return n
+
+
+>>>>>>> 09521e8 (rp-drop: tur HEADERS — antetul fiecarui fisier din cele 4 arhive, publicat pe rp-drop; 104 teste OK)
 def collect(root: Path, out: Path, budget: int = MAX_TOTAL, prefix: str = "") -> dict:
     (out / "config").mkdir(parents=True, exist_ok=True)
     kept, skipped = [], {"teren": 0, "suspect": 0, "mare": 0, "binar": 0}
@@ -276,9 +334,21 @@ def main(argv=None):
     ap.add_argument("--archive", required=True)
     ap.add_argument("--extract-dir", required=True)
     ap.add_argument("--out", required=True)
+<<<<<<< HEAD
     a = ap.parse_args(argv)
     archive, root, out = Path(a.archive), Path(a.extract_dir), Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
+=======
+    ap.add_argument("--headers", action="store_true",
+                    help="antetul a FIECARUI fisier din arhiva in antete.txt (dovada vizualizarii)")
+    a = ap.parse_args(argv)
+    archive, root, out = Path(a.archive), Path(a.extract_dir), Path(a.out)
+    out.mkdir(parents=True, exist_ok=True)
+    if a.headers:
+        n = headers(archive, out / "antete.txt")
+        print(json.dumps({"antete": n}))
+        return 0
+>>>>>>> 09521e8 (rp-drop: tur HEADERS — antetul fiecarui fisier din cele 4 arhive, publicat pe rp-drop; 104 teste OK)
     extract(archive, root)
     rows = list(_listing(archive))
     skipped = {"teren": 0, "suspect": 0, "mare": 0, "binar": 0}
