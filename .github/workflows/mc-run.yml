@@ -19,8 +19,8 @@ jobs:
 
       - name: Trace si unelte
         run: |
-          MC="${RUNNER_TEMP:-$GITHUB_WORKSPACE}/mcw"
-          mkdir -p "$MC"
+          MC="$GITHUB_WORKSPACE/mcw"
+          mkdir -p "$MC" || { MC="${RUNNER_TEMP:-/tmp}/mcw"; mkdir -p "$MC"; }
           echo "MC=$MC" >> "$GITHUB_ENV"
           {
             echo "data: $(date -u '+%F %T UTC')"
@@ -28,7 +28,7 @@ jobs:
             echo "python3: $(command -v python3 || echo absent)"
             echo "curl: $(command -v curl || echo absent)"
             echo "unzip: $(command -v unzip || echo absent)"
-            echo "java: $(command -v java || echo absent)"
+            echo "java: $(command -v java || echo absent)"; echo "shells: $(ls /bin | grep -cE '^(bash|sh)$') /busybox: $(readlink /bin/sh 2>/dev/null || echo nu)"
             echo "gh: $(command -v gh || echo absent)"
             echo "git: $(command -v git || echo absent)"
             echo "disk: $(df -h "$MC" | tail -1)"
@@ -39,8 +39,9 @@ jobs:
           curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
-            -d "{\"message\":\"trace pas1\",\"branch\":\"mc-run\",\"content\":\"$(base64 -w0 < "$MC/trace.txt")\"}" > "$MC/put1.json" 2>&1 \
-            || echo "PUT1 a esuat (vezi put1.json)"
+            -d "{\"message\":\"trace pas1\",\"branch\":\"mc-run\",\"content\":\"$(base64 < "$MC/trace.txt" | tr -d '\n')\"}" > "$MC/put1.json" 2>&1 \
+            || echo "PUT1 a esuat"
+          echo "  PUT1 raspuns: $(head -c 180 "$MC/put1.json" 2>/dev/null)" >> "$MC/trace.txt"
           true
 
       - name: Java 16
@@ -58,7 +59,7 @@ jobs:
           [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
           curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
-            -d "{\"message\":\"trace pas2\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 -w0 < "$MC/trace.txt")\"}" || echo "PUT2 esuat"
+            -d "{\"message\":\"trace pas2\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 < "$MC/trace.txt" | tr -d '\n')\"}" || echo "PUT2 esuat"
           true
 
       - name: Aduce serverul din release
@@ -70,8 +71,8 @@ jobs:
             curl -sfL "$url" -o srv.zip && echo "  download: $(stat -c%s srv.zip)B" >> trace.txt || echo "  DOWNLOAD ESUAT" >> trace.txt
           fi
           if [ -s srv.zip ]; then
-            rm -rf unz && mkdir unz && (cd unz && unzip -oq ../srv.zip) || echo "  UNZIP ESUAT" >> trace.txt
-            JAR=$(find unz -name '*.jar' ! -name '*client*' -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
+            rm -rf unz && mkdir unz && (cd unz && unzip -oq ../srv.zip) 2>>trace.txt || echo "  UNZIP ESUAT (busybox?)" >> trace.txt
+            JAR=$( (cd unz && find . -name '*.jar' ! -name '*client*' | while read -r j; do sz=$(wc -c < "$j" 2>/dev/null || echo 0); echo "$sz $j"; done) | sort -rn | head -1 | cut -d' ' -f2- || true)
             if [ -n "$JAR" ]; then
               d=$(dirname "$JAR"); (cd "$d" && find . -maxdepth 1 -mindepth 1 -exec mv -t "$MC" {} +) 2>/dev/null || true
               [ -f "$MC/$(basename "$JAR")" ] && echo "JAR=$MC/$(basename "$JAR")" >> "$GITHUB_ENV"
@@ -84,7 +85,7 @@ jobs:
           [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
           curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
-            -d "{\"message\":\"trace pas3\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 -w0 < trace.txt)\"}" || echo "PUT3 esuat"
+            -d "{\"message\":\"trace pas3\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 < trace.txt | tr -d '\n')\"}" || echo "PUT3 esuat"
           true
 
       - name: Configurare sigura
@@ -156,7 +157,7 @@ jobs:
             [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
             curl -sf -o /dev/null -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
               "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/$f" \
-              -d "{\"message\":\"mc-run $f la $(date -u '+%H:%M')\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 -w0 < "$f")\"}" \
+              -d "{\"message\":\"mc-run $f la $(date -u '+%H:%M')\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 < "$f" | tr -d '\n')\"}" \
               && echo "  $f: OK" >> trace.txt || echo "  $f: PUT-ESUAT cod $(curl -s -o /dev/null -w '%{http_code}' "https://api.github.com" )" >> trace.txt
           }
           upl summary.json
@@ -172,5 +173,5 @@ jobs:
           [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
           curl -sf -o /dev/null -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
-            -d "{\"message\":\"trace final\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 -w0 < trace.txt)\"}" || true
+            -d "{\"message\":\"trace final\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 < trace.txt | tr -d '\n')\"}" || true
           true
