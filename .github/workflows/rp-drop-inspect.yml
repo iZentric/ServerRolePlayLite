@@ -76,8 +76,12 @@ jobs:
         env:
           MATRIX_ID: ${{ matrix.id }}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       - name: Antete — citesc fizic FIECARE fisier din arhiva (tur cu_MARKER_HEADERS)
+=======
+      - name: Antete — citesc fizic FIECARE fisier din arhiva (tur cu marker HEADERS)
+>>>>>>> 2bcf08d (rp-drop: tur HEADERS — antet de 48B din fiecare fisier al celor 4 arhive, public pe rp-drop)
         continue-on-error: true
         if: contains(github.event.head_commit.message, 'HEADERS')
         run: |
@@ -90,7 +94,11 @@ jobs:
               rm -rf /tmp/h /tmp/hd; mkdir -p /tmp/h
               7z x -y -o/tmp/h "$A" >/dev/null 2>&1 || unar -quiet -force-overwrite -output-directory /tmp/h "$A" >/dev/null 2>&1 || true
               > "$D/antete.txt"
+<<<<<<< HEAD
               for f in $(find /tmp/h -maxdepth 1 -type f \( -name '*.tar' -o -name '*.tar.gz' -o -name '*.tgz' -o -name '*.zip' \)); do
+=======
+              for f in $(find /tmp/h -maxdepth 1 -type f \( -name '*.tar' -o -name '*.tar.gz' -o -name '*.tgz' -o -name '*.zip' \) | tr ' ' '\n'); do
+>>>>>>> 2bcf08d (rp-drop: tur HEADERS — antet de 48B din fiecare fisier al celor 4 arhive, public pe rp-drop)
                 python3 scripts/rp_archive_inspect.py --archive "$f" --extract-dir /tmp/hx --out /tmp/hd --headers || true
                 cat /tmp/hd/antete.txt >> "$D/antete.txt" 2>/dev/null || true
                 rm -rf /tmp/hd /tmp/hx
@@ -99,7 +107,10 @@ jobs:
               python3 scripts/rp_archive_inspect.py --archive "$A" --extract-dir /tmp/x --out "$D" --headers || true ;;
           esac
           wc -l "$D/antete.txt" 2>/dev/null | awk '{print "antete: " $1 " fisiere vazute"}' >> "$D/DIAGNOSTIC.txt" || true
+<<<<<<< HEAD
 >>>>>>> 09521e8 (rp-drop: tur HEADERS — antetul fiecarui fisier din cele 4 arhive, publicat pe rp-drop; 104 teste OK)
+=======
+>>>>>>> 2bcf08d (rp-drop: tur HEADERS — antet de 48B din fiecare fisier al celor 4 arhive, public pe rp-drop)
       - name: Dezarhiveaza si pastreaza doar textul
         continue-on-error: true
         run: |

@@ -179,10 +179,15 @@ def keep(rel: str) -> bool:
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 def headers(archive: Path, dest: Path, cap_bytes: int = 25_000_000) -> int:
     """Trece fizic ARHIVA integrala si scrie antetul (primele 48 B) al FIECARUI fisier.
     Asta e dovada ca «am vazut fiecare fisier», nu doar inventarul."""
+=======
+def headers(archive: Path, dest: Path, cap_bytes: int = 25_000_000) -> int:
+    """Trece fizic ARHIVA integrala si scrie antetul (primele 48 B) al FIECARUI fisier."""
+>>>>>>> 2bcf08d (rp-drop: tur HEADERS — antet de 48B din fiecare fisier al celor 4 arhive, public pe rp-drop)
     dest.parent.mkdir(parents=True, exist_ok=True)
     name = archive.name.lower()
     out = dest.open("w", encoding="utf-8")
@@ -235,7 +240,10 @@ def headers(archive: Path, dest: Path, cap_bytes: int = 25_000_000) -> int:
     return n
 
 
+<<<<<<< HEAD
 >>>>>>> 09521e8 (rp-drop: tur HEADERS — antetul fiecarui fisier din cele 4 arhive, publicat pe rp-drop; 104 teste OK)
+=======
+>>>>>>> 2bcf08d (rp-drop: tur HEADERS — antet de 48B din fiecare fisier al celor 4 arhive, public pe rp-drop)
 def collect(root: Path, out: Path, budget: int = MAX_TOTAL, prefix: str = "") -> dict:
     (out / "config").mkdir(parents=True, exist_ok=True)
     kept, skipped = [], {"teren": 0, "suspect": 0, "mare": 0, "binar": 0}
@@ -335,6 +343,7 @@ def main(argv=None):
     ap.add_argument("--extract-dir", required=True)
     ap.add_argument("--out", required=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
     a = ap.parse_args(argv)
     archive, root, out = Path(a.archive), Path(a.extract_dir), Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -344,11 +353,21 @@ def main(argv=None):
     a = ap.parse_args(argv)
     archive, root, out = Path(a.archive), Path(a.extract_dir), Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
+=======
+    ap.add_argument("--headers", action="store_true",
+                    help="antetul a FIECARUI fisier din arhiva in antete.txt")
+    a = ap.parse_args(argv)
+    archive, root, out = Path(a.archive), Path(a.extract_dir), Path(a.out)
+    out.mkdir(parents=True, exist_ok=True)
+>>>>>>> 2bcf08d (rp-drop: tur HEADERS — antet de 48B din fiecare fisier al celor 4 arhive, public pe rp-drop)
     if a.headers:
         n = headers(archive, out / "antete.txt")
         print(json.dumps({"antete": n}))
         return 0
+<<<<<<< HEAD
 >>>>>>> 09521e8 (rp-drop: tur HEADERS — antetul fiecarui fisier din cele 4 arhive, publicat pe rp-drop; 104 teste OK)
+=======
+>>>>>>> 2bcf08d (rp-drop: tur HEADERS — antet de 48B din fiecare fisier al celor 4 arhive, public pe rp-drop)
     extract(archive, root)
     rows = list(_listing(archive))
     skipped = {"teren": 0, "suspect": 0, "mare": 0, "binar": 0}
