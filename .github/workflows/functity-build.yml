@@ -96,14 +96,19 @@ jobs:
         run: |
           set +e
           mkdir -p /tmp/fc
-          JAR=$(find src/projects src/build src/run -name '*server*.jar' -size +5M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
-          [ -n "$JAR" ] || JAR=$(find src/projects src/build src/run -name '*.jar' -size +5M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
+          # Fix b20: mohistJar real = projects/mohist/build/libs/mohist-*-server.jar.
+          # Falsul "cel mai mare server.jar" prisese clean-*.jar (vanilla, Main-Class=server.Main, 0 FML).
+          JAR=$(ls -S src/projects/mohist/build/libs/mohist-*-server.jar 2>/dev/null | head -1 || true)
+          if [ -n "$JAR" ]; then
+            unzip -p "$JAR" META-INF/MANIFEST.MF | grep -q ServerLaunchArgs || {
+              echo "JAR gasit dar FARA semnatura mohist (ServerLaunchArgs lipsa in manifest): $JAR" > /tmp/jar-suspect.txt; JAR=""; }
+          fi
           if [ -n "${JAR:-}" ]; then
             cp "$JAR" "/tmp/fc/FunCity-1.16.5-${BUILD_ID:-b0}.jar"
             ( cd /tmp/fc && sha256sum "FunCity-1.16.5-${BUILD_ID:-b0}.jar" > SHA256SUMS.txt )
             JNAME=$(basename "$JAR")
           else
-            echo "NICIUN JAR GASIT" > /tmp/fc/ESUARE.txt
+            { echo "NICIUN JAR MOHIST VALID"; find src/projects -name '*.jar' -size +5M 2>/dev/null | head -20; cat /tmp/jar-suspect.txt 2>/dev/null; } > /tmp/fc/ESUARE.txt
             find src -name '*.jar' 2>/dev/null | head -20 >> /tmp/fc/ESUARE.txt || true
           fi
           tail -c 350000 build-out.log > /tmp/fc/BUILD-LOG.txt 2>/dev/null || cp src/build-out.log /tmp/fc/BUILD-LOG.txt 2>/dev/null || echo "log pierdut" > /tmp/fc/BUILD-LOG.txt
