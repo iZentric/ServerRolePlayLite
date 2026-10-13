@@ -15,7 +15,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 55
     env:
       MOHIST_PIN: 754b578ef3e4881d854bcd1df5d299ada3fd429f
     steps:
@@ -28,6 +28,9 @@ jobs:
           git -C src fetch -q --tags origin || true
           git -C src checkout -q "$MOHIST_PIN" -B 1.16.5
           git -C src log -1 --format='pin: %H %ci %s' | head -1
+          for bf in "$GITHUB_WORKSPACE"/functity/buildfix/*.patch; do
+            git -C src apply "$bf" && echo "buildfix aplicat: $(basename "$bf")" || echo "BUILDFIX_ESUAT: $(basename "$bf")"
+          done
           git -C src describe --tags --abbrev=7 || echo "describe ESUAT (semnal ca clone-ul e stramb)"
           shopt -s nullglob
           APPLIED=()
@@ -36,8 +39,9 @@ jobs:
             echo "NOPATCH: build de referinta, fara patch-uri"
           else
             for pt in functity/patches/*.patch; do
-              if git -C src apply --check "$pt" 2>/tmp/applycheck.txt; then
-                git -C src apply "$pt" && APPLIED+=("$(basename "$pt")")
+              ABS="$GITHUB_WORKSPACE/$pt"
+              if git -C src apply --check "$ABS" 2>/tmp/applycheck.txt; then
+                git -C src apply "$ABS" && APPLIED+=("$(basename "$pt")")
               else
                 REJECTED="$(basename "$pt")"
                 { echo "PATCH respins de git apply --check: $(basename "$pt")"; cat /tmp/applycheck.txt; } > /tmp/patch-rejected.txt
@@ -84,7 +88,8 @@ jobs:
           tail -c 350000 build-out.log > /tmp/fc/BUILD-LOG.txt 2>/dev/null || cp src/build-out.log /tmp/fc/BUILD-LOG.txt 2>/dev/null || echo "log pierdut" > /tmp/fc/BUILD-LOG.txt
           {
             echo "{"
-            echo "  \"build\": \"b0-baseline\","
+            echo "  \"build\": \"$BUILD_ID\",
+            echo "  \"buildfix\": \"P0=FG 6.0.x pin\","
             echo "  \"mohist_pin\": \"$MOHIST_PIN\","
             echo "  \"jar\": \"${JNAME:-niciunul}\","
             echo "  \"data_utc\": \"$(date -u '+%F %T')\","
