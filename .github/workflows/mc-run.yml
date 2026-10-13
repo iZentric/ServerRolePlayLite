@@ -303,6 +303,7 @@ jobs:
           os.makedirs(f"{wt}/mc-run", exist_ok=True)
           subprocess.run(["rm", "-rf", f"{wt}/mc-run"])
           os.makedirs(f"{wt}/mc-run", exist_ok=True)
+          pdiag = []
           moved = []
           for f in ("runner-diag.txt", "summary.json", "boot.log", "console-tail.log",
                      "diag.txt", "checker.log", "javainstall.txt", "ram.txt", "skip.txt"):
@@ -317,11 +318,16 @@ jobs:
                        f"data: {stamp}\n"
                        f"fisiere: {', '.join(moved)}\n"
                        "note: executat pe VPS-ul ARM64 (runner self-hosted); logrosit; lumea nu a fost atinguta.\n")
-          sh("git", "-C", wt, "add", "-A", "mc-run")
-          sh("git", "-C", wt, "-c", "commit.gpgsign=false", "commit", "-qm",
+          sh("git", "-C", wt, "config", "user.name", "github-actions[bot]")
+          sh("git", "-C", wt, "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
+          a = sh("git", "-C", wt, "add", "-A", "mc-run")
+          c = sh("git", "-C", wt, "-c", "commit.gpgsign=false", "commit", "-qm",
              f"mc-run: tur {datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M')} de pe VPS")
+          pdiag.append(f"add rc={a.returncode} {a.stderr[-160:]}")
+          pdiag.append(f"commit rc={c.returncode} {c.stdout[-120:]} {c.stderr[-160:]}")
           r = sh("git", "-C", wt, "push", "-q", "origin", "HEAD:refs/heads/mc-run")
-          print("push rc:", r.returncode, r.stderr[-300:])
+          pdiag.append(f"push rc={r.returncode} {r.stderr[-240:]}")
+          print(" | ".join(pdiag))
           r2 = sh("git", "-C", wt, "pull", "-q", "--rebase", "origin", "mc-run")
           r3 = sh("git", "-C", wt, "push", "-q", "origin", "HEAD:refs/heads/mc-run")
           print("retry push rc:", r3.returncode)
