@@ -156,6 +156,14 @@ jobs:
           fi
           JAR=$(find . -maxdepth 2 -name '*.jar' ! -name '*client*' -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
           {
+            echo "srv.zip: $(stat -c '%s bytes' srv.zip 2>/dev/null || echo LIPSA)"
+            echo "jar find: ${JAR:-NIMIC}"
+            echo "java: $(command -v java || echo LIPSA-pe-PATH)"
+            echo "JAVA_HOME=${JAVA_HOME:-nesetata}"
+            echo "continut MC:"; ls -1 "$MC" 2>/dev/null | head -25
+            echo "unzip -l cap:"; unzip -l srv.zip 2>/dev/null | head -15
+          } > jarstate.txt 2>&1
+          {
             echo "== jar: ${JAR:-NIMIC}"; du -sh . 2>/dev/null | tail -1
             find . -maxdepth 2 2>/dev/null | sed 's|^\./||' | sort | head -60
           } >> diag.txt || true
@@ -282,55 +290,49 @@ jobs:
         if: always()
         run: |
           python3 - <<'PY'
-          import os, subprocess, datetime
+          import base64, json, os, urllib.request, urllib.error
           mc = os.environ.get("MC", "")
-          if not mc or not os.path.isdir(mc):
-              print("nimic de publicat"); raise SystemExit(0)
-          def sh(*c, **kw):
-              return subprocess.run(list(c), cwd=kw.pop("cwd", None), capture_output=True, text=True)
-          wt = "/tmp/wt-mcrun"
-          r = subprocess.run(["git", "-C", os.getcwd(), "ls-remote", "--exit-code", "origin", "refs/heads/mc-run"],
-                             capture_output=True, text=True)
-          base = (r.stdout.strip().split() or [""])[0]
-          if not base:
-              print("bransa mc-run lipseste pe origin — renunt"); raise SystemExit(0)
-          sh("git", "worktree", "prune")
-          subprocess.run(["rm", "-rf", wt])
-          sh("git", "fetch", "-q", "origin", "refs/heads/mc-run")
-          r = sh("git", "worktree", "add", wt, "--detach", base)
-          if r.returncode != 0:
-              print("worktree esuat:", r.stderr[-400:]); raise SystemExit(0)
-          os.makedirs(f"{wt}/mc-run", exist_ok=True)
-          subprocess.run(["rm", "-rf", f"{wt}/mc-run"])
-          os.makedirs(f"{wt}/mc-run", exist_ok=True)
-          pdiag = []
-          moved = []
-          for f in ("runner-diag.txt", "summary.json", "boot.log", "console-tail.log",
-                     "diag.txt", "checker.log", "javainstall.txt", "ram.txt", "skip.txt"):
-              src = os.path.join(mc, f)
-              if os.path.isfile(src):
-                  subprocess.run(["cp", src, f"{wt}/mc-run/"])
-                  moved.append(f)
-          stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%F %T UTC")
-          with open(f"{wt}/mc-run/PROVENIENTA.txt", "w") as fh:
-              fh.write(f"run: {os.environ.get('GITHUB_RUN_ID','?')}\n"
-                       f"url: https://github.com/{os.environ.get('GITHUB_REPOSITORY','?')}/actions/runs/{os.environ.get('GITHUB_RUN_ID','?')}\n"
-                       f"data: {stamp}\n"
-                       f"fisiere: {', '.join(moved)}\n"
-                       "note: executat pe VPS-ul ARM64 (runner self-hosted); logrosit; lumea nu a fost atinguta.\n")
-          sh("git", "-C", wt, "config", "user.name", "github-actions[bot]")
-          sh("git", "-C", wt, "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
-          a = sh("git", "-C", wt, "add", "-A", "mc-run")
-          c = sh("git", "-C", wt, "-c", "commit.gpgsign=false", "commit", "-qm",
-             f"mc-run: tur {datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M')} de pe VPS")
-          pdiag.append(f"add rc={a.returncode} {a.stderr[-160:]}")
-          pdiag.append(f"commit rc={c.returncode} {c.stdout[-120:]} {c.stderr[-160:]}")
-          r = sh("git", "-C", wt, "push", "-q", "origin", "HEAD:refs/heads/mc-run")
-          pdiag.append(f"push rc={r.returncode} {r.stderr[-240:]}")
-          print(" | ".join(pdiag))
-          r2 = sh("git", "-C", wt, "pull", "-q", "--rebase", "origin", "mc-run")
-          r3 = sh("git", "-C", wt, "push", "-q", "origin", "HEAD:refs/heads/mc-run")
-          print("retry push rc:", r3.returncode)
-          sh("git", "-C", os.getcwd(), "worktree", "remove", "--force", wt)
+          tok = os.environ["GH_TOKEN"]
+          repo = os.environ.get("GITHUB_REPOSITORY", "")
+          api = os.environ.get("GITHUB_API_URL", "https://api.github.com")
+          files = ("runner-diag.txt", "summary.json", "boot.log", "console-tail.log",
+                   "diag.txt", "jarstate.txt", "checker.log", "javainstall.txt", "ram.txt", "skip.txt")
+          have = [f for f in files if os.path.isfile(os.path.join(mc, f)) and os.path.getsize(os.path.join(mc, f)) < 1_000_000]
+          import datetime
+          prov = ("run: %s\nurl: https://github.com/%s/actions/runs/%s\n"
+                  "data: %s UTC\nfisiere: %s\n"
+                  "note: VPS ARM64 runner; log redactat; lumea nu a fost atinguta de acest tur.\n"
+                  % (os.environ.get("GITHUB_RUN_ID", "?"), repo, os.environ.get("GITHUB_RUN_ID", "?"),
+                     datetime.datetime.now(datetime.timezone.utc).strftime("%F %T"), ", ".join(have))).encode()
+          def api_req(method, path, body=None):
+              req = urllib.request.Request(api + path, method=method,
+                                           headers={"Authorization": "Bearer " + tok,
+                                                    "Accept": "application/vnd.github+json",
+                                                    "X-GitHub-Api-Version": "2022-11-28"},
+                                           data=json.dumps(body).encode() if body else None)
+              if body:
+                  req.add_header("Content-Type", "application/json")
+              try:
+                  with urllib.request.urlopen(req, timeout=45) as r:
+                      return r.status, json.loads(r.read().decode() or "{}")
+              except urllib.error.HTTPError as e:
+                  return e.code, {"err": e.read().decode()[:300]}
+              except Exception as e:
+                  return 0, {"err": repr(e)[:300]}
+          log = []
+          for name in ["PROVENIENTA.txt"] + have:
+              raw = prov if name == "PROVENIENTA.txt" else open(os.path.join(mc, name), "rb").read()
+              st, cur = api_req("GET", "/repos/%s/contents/mc-run/%s?ref=mc-run" % (repo, name))
+              body = {"message": "mc-run: %s (tur %s UTC)" % (name, datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M")),
+                      "content": base64.b64encode(raw).decode(), "branch": "mc-run"}
+              if st == 200 and "sha" in cur:
+                  body["sha"] = cur["sha"]
+              st2, res = api_req("PUT", "/repos/%s/contents/mc-run/%s" % (repo, name), body)
+              log.append("%s: PUT %s %s" % (name, st2, (res.get("err") or res.get("commit", {}).get("sha", "ok"))[:80]))
+          # logul publicarii insasi, ca sa-l vad si pe bransa data viitoare
+          st3, _ = api_req("GET", "/repos/%s/contents/mc-run" % repo, None)
+          with open(os.path.join(mc, "publica-log.txt"), "w") as fh:
+              fh.write("\n".join(log) + "\ndir GET: %s\n" % st3)
+          print("\n".join(log))
           PY
           exit 0
