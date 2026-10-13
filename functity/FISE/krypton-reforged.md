@@ -2,7 +2,7 @@
 
 - **Problemă**: rețeaua (packet batching + flush) arde CPU pe tick-ul de rețea când sunt
   mulți jucători în același orase — fluxul vanilla trimite pachete mici nefragmentate.
-- **Mecanism**: înlocuiește logicoana de flush și adaugă batching la nivel de packet buffer
+- **Mecanism**: înlocuiește logica de flush și adaugă batching la nivel de packet buffer
   (port al lui Krypton de la Fabric la Forge, adaptat la netty din 1.16). Nu atinge
   logica de joc, doar transportul.
 - **Sursă**: github.com/txnimc/KryptonReforged (consultat 2026-10-13, API GitHub);
