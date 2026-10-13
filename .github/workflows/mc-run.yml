@@ -211,6 +211,30 @@ jobs:
               if (fs.existsSync(q) && fs.statSync(q).size < 900000) await pune(fis, dest);
             }
             const prov = 'run ' + process.env.GITHUB_RUN_ID + ' | mc=' + mc + '\n' + rap.join('\n') + '\n';
+            // canal de 140 caractere: commit status pe head-ul curent — il citesc de aici
+            const probe = [];
+            for (const f of fs.existsSync(mc) ? fs.readdirSync(mc) : []) {
+              probe.push(f + ':' + fs.statSync(path.join(mc, f)).size);
+            }
+            let apiTest = 'API-OK';
+            try { await github.rest.repos.createCommitStatus({ owner, repo, sha: context.sha,
+              state: 'success', context: 'vps-diag/0',
+              description: 'mc files ' + probe.join(' ').slice(0, 95) }); }
+            catch (e) { apiTest = 'PUT403'; }
+            const unu = rap.join(';').slice(0, 90);
+            try { await github.rest.repos.createCommitStatus({ owner, repo, sha: context.sha,
+              state: unu.includes('ESEC') ? 'failure' : 'success', context: 'vps-diag/1',
+              description: apiTest + ' rap: ' + unu }); } catch (e) { core.warning('status2: ' + e.status); }
+            try {
+              const t = fs.existsSync(path.join(mc, 'trace.txt')) ? fs.readFileSync(path.join(mc, 'trace.txt'), 'utf8') : 'FARA TRACE';
+              const rand = t.split('\n').filter(Boolean);
+              let ok = true;
+              for (let i = 0; i < Math.min(rand.length, 6); i++) {
+                await github.rest.repos.createCommitStatus({ owner, repo, sha: context.sha,
+                  state: 'success', context: 'vps-diag/t' + i,
+                  description: rand[i].replace(/[^\x20-\x7e]/g, '?').slice(0, 140) });
+              }
+            } catch (e) { core.warning('statuses trace: ' + e.status); }
             try {
               let sha2; try { sha2 = (await github.rest.repos.getContent({ owner, repo, path: 'mc-run/PROVENIENTA.txt', ref: 'mc-run' })).data.sha; } catch (e) {}
               await github.rest.repos.createOrUpdateFileContents({ owner, repo, path: 'mc-run/PROVENIENTA.txt',
