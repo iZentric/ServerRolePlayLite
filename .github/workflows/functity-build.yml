@@ -19,7 +19,8 @@ jobs:
       - name: Adu sursa la commit fixat
         run: |
           set -euo pipefail
-          git clone -q --filter=blob:none https://github.com/MohistMC/Mohist src
+          git clone -q --branch 1.16.5 https://github.com/MohistMC/Mohist src
+          git -C src fetch -q --tags origin || true
           git -C src checkout -q "$MOHIST_PIN"
           git -C src log -1 --format='pin: %H %ci %s' | head -1
           shopt -s nullglob
@@ -73,26 +74,55 @@ jobs:
           } > /tmp/fc/metadata.json
           ls -la /tmp/fc
 
-      - name: Publica pe functity-out
+      - name: Publica faza 1 (diagnostice) pe functity-out
         run: |
-          set -euo pipefail
-          cd "$GITHUB_WORKSPACE"
+          set +e
+          exec > >(tee -a /tmp/fc/PUBLISH-DEBUG.txt) 2>&1
+          [ -d /tmp/fc ] || { mkdir -p /tmp/fc; echo "nu exista /tmp/fc" > /tmp/fc/ESUARE.txt; }
+          dbg() { echo "$(date -u +%T) $*" >> /tmp/fc/PUBLISH-DEBUG.txt; }
+          dbg "fisiere: $(ls -la /tmp/fc | wc -l) bucati, jar: $(ls /tmp/fc/*.jar 2>/dev/null | head -1)"
+          cd "$GITHUB_WORKSPACE" || exit 0
           git config user.name 'functity-ci[bot]'
           git config user.email 'functity-ci@localhost'
           if ! git ls-remote --exit-code origin refs/heads/functity-out >/dev/null 2>&1; then
+            dbg "ramura noua: creez radacina"
             root=$(git commit-tree "$(git hash-object -w -t tree --stdin </dev/null)" -m "functity-out: radacina")
-            git push -q origin "$root:refs/heads/functity-out"
+            dbg "root=$root"
+            git push origin "$root:refs/heads/functity-out" && dbg "radacina impinsa" || dbg "IMPINGERE RADACINA ESUATA"
           fi
-          git fetch -q origin refs/heads/functity-out
-          git worktree prune || true
+          git fetch origin refs/heads/functity-out && dbg "fetch ok: $(git rev-parse FETCH_HEAD | head -c8)" || dbg "FETCH ESUAT"
+          git worktree prune
           rm -rf /tmp/wtf
-          git worktree add -q /tmp/wtf -B functity-out FETCH_HEAD
-          D="/tmp/wtf/builds/${BUILD_ID:-b0}"; rm -rf "$D"; mkdir -p "$D"
-          cp -a /tmp/fc/. "$D/"
+          git worktree add /tmp/wtf --detach FETCH_HEAD || dbg "WORKTREE ESUAT"
+          D="/tmp/wtf/builds/${BUILD_ID:-b0}"
+          mkdir -p "$D"
+          cp /tmp/fc/PUBLISH-DEBUG.txt /tmp/fc/ESUARE.txt /tmp/fc/metadata.json /tmp/fc/BUILD-LOG.txt /tmp/fc/SHA256SUMS.txt "$D/" 2>/dev/null
+          dbg "continut D:"; ls -la "$D"
           git -C /tmp/wtf add -A "builds/${BUILD_ID:-b0}"
-          git -C /tmp/wtf -c commit.gpgsign=false commit -qm "functity ${BUILD_ID:-b0}: build CI $(date -u '+%H:%M')" || echo "nimic nou"
+          git -C /tmp/wtf -c commit.gpgsign=false commit -m "functity ${BUILD_ID:-b0}: loguri si diagnostice" || dbg "COMMIT ESUAT (nimic nou?)"
           for i in 1 2 3; do
-            git -C /tmp/wtf push -q origin HEAD:refs/heads/functity-out && break
+            git -C /tmp/wtf push origin HEAD:refs/heads/functity-out && { dbg "PUSH1 OK"; break; }
+            dbg "push reincercare $i"
             git -C /tmp/wtf pull -q --rebase origin functity-out || true
+            git -C /tmp/wtf push origin HEAD:refs/heads/functity-out || dbg "PUSH1 TOT ESUAT"
           done
-          echo publicat
+          git -C "$GITHUB_WORKSPACE" worktree remove --force /tmp/wtf || true
+          exit 0
+
+      - name: Publica faza 2 (JAR)
+        run: |
+          set +e
+          JAR=$(ls /tmp/fc/FunCity-*.jar 2>/dev/null | head -1)
+          [ -n "$JAR" ] || { echo "fara jar, sar peste"; exit 0; }
+          cd "$GITHUB_WORKSPACE"
+          git fetch origin refs/heads/functity-out
+          git worktree prune; rm -rf /tmp/wtf2
+          git worktree add /tmp/wtf2 --detach FETCH_HEAD || { echo "worktree esuat"; exit 0; }
+          D="/tmp/wtf2/builds/${BUILD_ID:-b0}"
+          mkdir -p "$D"
+          cp "$JAR" /tmp/fc/SHA256SUMS.txt "$D/"
+          git -C /tmp/wtf2 add -A "builds/${BUILD_ID:-b0}"
+          git -C /tmp/wtf2 -c user.name='functity-ci[bot]' -c user.email='functity-ci@localhost' -c commit.gpgsign=false commit -m "functity ${BUILD_ID:-b0}: JAR" || echo "nimic nou"
+          git -C /tmp/wtf2 push origin HEAD:refs/heads/functity-out || { git -C /tmp/wtf2 pull -q --rebase origin functity-out || true; git -C /tmp/wtf2 push origin HEAD:refs/heads/functity-out; }
+          git -C "$GITHUB_WORKSPACE" worktree remove --force /tmp/wtf2 || true
+          exit 0
