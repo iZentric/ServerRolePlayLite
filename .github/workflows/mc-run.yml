@@ -1,7 +1,7 @@
 name: MC-RUN
-# Ruleaza pe VPS-ul lui marius (runner self-hosted, in container). Doua treburile lui:
-# 1) harta masinii (resurse libere, java, porturi, directoare de server banuite);
-# 2) dovada ca serverul din release-lite booteaza: pornire + SLP ping + rcon + soak.
+# Ruleaza pe VPS-ul ARM64 al lui marius (runner self-hosted in container docker).
+# 1) harta masinii (python pura, fara procps; merge si in cele mai sarace containere);
+# 2) dovada ca serverul din release-lite booteaza pe ARM: java 16 + SLP ping + rcon + soak.
 # Publica pe bransa mc-run DOAR text rosit. Lumea, bazele si parolele raman acasa.
 on:
   push:
@@ -19,54 +19,132 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Pregatitor (dir scrisibil + java)
-        run: |
-          MC="$RUNNER_TEMP/mcw"
-          mkdir -p "$MC"
-          echo "MC=$MC" >> "$GITHUB_ENV"
-          {
-            if command -v java >/dev/null 2>&1; then java -version 2>&1;
-            elif command -v apt-get >/dev/null 2>&1; then
-              sudo -n apt-get install -y -qq openjdk-16-jdk-headless 2>/dev/null \
-                || sudo -n apt-get install -y -qq openjdk-17-jdk-headless 2>/dev/null \
-                || sudo -n apt-get install -y -qq openjdk-11-jdk-headless 2>/dev/null || echo "JAVA LIPSA si instalarea a esuat"
-              command -v java >/dev/null 2>&1 && java -version 2>&1
-            else
-              echo "JAVA LIPSA, fara apt"
-            fi
-          } > "$MC/javainstall.txt" 2>&1
-          true
+      - name: Java 16 (temurin, merge si pe aarch64)
+        continue-on-error: true
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '16'
 
-      - name: Harta VPS (doar citire)
+      - name: Pregatitor
         run: |
-          D="$MC/runner-diag.txt"
-          {
-            echo "== cine ruleaza =="; id -un; hostname; uname -a 2>/dev/null || true
-            echo "== container? =="; [ -f /.dockerenv ] && echo "DA, runner-ul e in docker" || echo "nu semnale docker"
-            echo "== resurse libere =="
-            free -m | head -2; df -h "$RUNNER_TEMP" | tail -1
-            nproc; uptime
-            echo "== java-uri in viata =="
-            ps -eo pid,rss,etime,args 2>/dev/null | grep -i "[j]ava" | head -20 || echo "niciun proces java pe masina"
-            echo "== porturi de ascultare 25xxx =="
-            (ss -ltn 2>/dev/null || netstat -ltn 2>/dev/null) | grep -E ':25[0-9]{3}' | head -10 || echo "niciun port de joc ascultat (în spațiul de rețea al containerului)"
-            echo "== server.properties gasite (maxdepth 3 pe mount-uri) =="
-            for d in / /opt /srv /home /mnt /data; do
-              [ -d "$d" ] && find "$d" -maxdepth 3 -name "server.properties" 2>/dev/null | head -4
-            done | sort -u | head -12
-            echo "== unitati systemd de mc =="
-            systemctl list-units --type=service --all 2>/dev/null | grep -iE "mc|minecraft|craft|bukkit|paper|velocity|proxy" | head -8 || echo "fara systemd sau fara servicii mc"
-            echo "== python =="; python3 --version
-          } > "$D" 2>&1
-          true
+          python3 - <<'PY'
+          import os, shutil, subprocess, pathlib
+          mc = os.path.join(os.environ.get("RUNNER_TEMP", os.getcwd()), "mcw")
+          os.makedirs(mc, exist_ok=True)
+          with open(os.environ["GITHUB_ENV"], "a") as f:
+              f.write(f"MC={mc}\n")
+          out = []
+          java = shutil.which("java")
+          out.append(f"java: {java or 'LIPSA pe PATH'}")
+          if java:
+              r = subprocess.run([java, "-version"], capture_output=True, text=True, timeout=30)
+              out.append((r.stderr or r.stdout).strip())
+          if not java and shutil.which("apt-get"):
+              r = subprocess.run(["sudo", "-n", "apt-get", "install", "-y", "-qq",
+                                  "openjdk-17-jre-headless"], capture_output=True, text=True, timeout=600)
+              out.append(f"apt openjdk-17: rc={r.returncode}")
+              java = shutil.which("java")
+              if java:
+                  r = subprocess.run([java, "-version"], capture_output=True, text=True, timeout=30)
+                  out.append((r.stderr or r.stdout).strip())
+          if os.environ.get("JAVA_HOME"):
+              out.append(f"JAVA_HOME={os.environ['JAVA_HOME']}")
+          pathlib.Path(mc, "javainstall.txt").write_text("\n".join(out) + "\n", encoding="utf-8")
+          PY
+
+      - name: Harta VPS (doar citire, python curat)
+        run: |
+          python3 - <<'PY'
+          import os, re, socket, subprocess, pathlib
+          mc = os.environ["MC"]
+          L = []
+          def add(t):
+              L.append(t)
+          try:
+              add("== identitate ==")
+              add(f"utilizator: {os.environ.get('USER', '?')} / uid {os.getuid()}")
+              add(f"hostname: {socket.gethostname()}")
+              add(open("/proc/sys/kernel/osrelease").read().strip())
+              add("docker: " + ("DA (/.dockerenv)" if os.path.exists("//.dockerenv") else "nu semnale"))
+              add("== memorie ==")
+              mem = {}
+              for ln in open("/proc/meminfo"):
+                  k, _, v = ln.partition(":")
+                  mem[k] = int(v.split()[0])
+              add(f"MemTotal {mem.get('MemTotal',0)//1024} MiB, MemAvailable {mem.get('MemAvailable',0)//1024} MiB")
+              add("== disc ==")
+              st = os.statvfs(mc)
+              add(f"{mc}: liber {st.f_bavail * st.f_frsize // 2**20} MiB din {st.f_blocks * st.f_frsize // 2**20} MiB")
+              add("== cpu ==")
+              add(f"nproc: {os.cpu_count()}, loadavg: {open('/proc/loadavg').read().strip()}")
+              add("== java-uri in viata (pe acest host/container) ==")
+              found = False
+              for pid in sorted(os.listdir("/proc")):
+                  if not pid.isdigit():
+                      continue
+                  try:
+                      cmd = pathlib.Path(f"/proc/{pid}/cmdline").read_bytes().replace(b"\0", b" ").decode(errors="replace")
+                  except OSError:
+                      continue
+                  if "java" in cmd:
+                      found = True
+                      add(cmd[:240])
+              if not found:
+                  add("niciun proces java")
+              add("== porturi 25xxx in ascultare (spațiul de rețea al containerului) ==")
+              ports = []
+              for proto in ("tcp", "tcp6"):
+                  try:
+                      for ln in open(f"/proc/net/{proto}").read().splitlines()[1:]:
+                          f = ln.split()
+                          if f[3] == "0A":  # LISTEN
+                              port = int(f[1].split(":")[1], 16)
+                              if 25000 <= port <= 25999:
+                                  ports.append(port)
+                  except OSError:
+                      pass
+              add("ascultate: " + (", ".join(map(str, sorted(set(ports)))) or "niciun port de joc"))
+              add("== server.properties banuite (maxdepth 3, atat cat apuca) ==")
+              hits = []
+              for d in ("/opt", "/srv", "/data", "/mnt", "/var/lib"):
+                  base = pathlib.Path(d)
+                  if not base.is_dir():
+                      continue
+                  try:
+                      for a in base.iterdir():
+                          try:
+                              if (a / "server.properties").is_file():
+                                  hits.append(str(a))
+                              for b in a.iterdir():
+                                  if (b / "server.properties").is_file():
+                                      hits.append(str(b))
+                          except OSError:
+                              pass
+                  except OSError:
+                      pass
+              add("\n".join(hits[:10]) if hits else "niciun director de server vazut din container")
+              add("== misc ==")
+              for c in (["java", "-version"], ["python3", "--version"]):
+                  try:
+                      r = subprocess.run(c, capture_output=True, text=True, timeout=20)
+                      add((r.stderr or r.stdout).strip().splitlines()[0] if (r.stderr or r.stdout).strip() else " " + " ".join(c))
+                  except Exception as e:
+                      add(f"{' '.join(c)}: {e}")
+          except Exception as exc:
+              add(f"ERORI Harta: {exc!r}")
+          pathlib.Path(mc, "runner-diag.txt").write_text("\n".join(L) + "\n", encoding="utf-8")
+          print("\n".join(L[:6]))
+          PY
+          exit 0
 
       - name: Aduce serverul din release
         run: |
-          set -uo pipefail
-          cd "$MC"
+          set -u
+          cd "$MC" || exit 0
           url=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/lite" \
                 --jq '.assets[] | select(.name=="CUANTIC-Server-CatServer-1.7.7.zip") | .browser_download_url' 2>/dev/null || true)
-          if [ -n "$url" ] && [ ! -s srv.zip ]; then
+          if [ -n "${url:-}" ] && [ ! -s srv.zip ]; then
             curl -sfL -H "Authorization: Bearer $GH_TOKEN" "$url" -o srv.zip || true
           fi
           if [ -s srv.zip ]; then
@@ -78,36 +156,37 @@ jobs:
           fi
           JAR=$(find . -maxdepth 2 -name '*.jar' ! -name '*client*' -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
           {
-            echo "== jar gasit: ${JAR:-NIMIC}"
-            echo "== marime dir =="; du -sh . 2>/dev/null | tail -1
-            echo "== fisierle (maxdepth 2, cap 80) =="; find . -maxdepth 2 2>/dev/null | sed 's|^\./||' | sort | head -80
-          } >> diag.txt 2>&1
+            echo "== jar: ${JAR:-NIMIC}"; du -sh . 2>/dev/null | tail -1
+            find . -maxdepth 2 2>/dev/null | sed 's|^\./||' | sort | head -60
+          } >> diag.txt || true
           if [ -n "${JAR:-}" ] && command -v java >/dev/null 2>&1; then
             echo "JAR=$MC/${JAR#./}" >> "$GITHUB_ENV"
           else
             echo "JAR=" >> "$GITHUB_ENV"
-            echo "STOP: fara jar sau fara java pe VPS" >> diag.txt
+            echo "STOP: fara jar sau fara java" >> diag.txt || true
           fi
-          true
+          exit 0
 
       - name: Configurare sigura de staging
         run: |
-          set -uo pipefail
-          [ -n "${JAR:-}" ] || exit 0
-          cd "$MC"
-          echo "eula=true" > eula.txt
-          openssl rand -hex 12 > .rcpass
           python3 - <<'PY'
-          import os
+          import os, secrets
           from pathlib import Path
           mc = Path(os.environ["MC"])
+          jar = os.environ.get("JAR", "")
+          if not jar:
+              (mc / "skip.txt").write_text("fara jar/java - sar peste boot\n", encoding="utf-8")
+              raise SystemExit(0)
+          (mc / "eula.txt").write_text("eula=true\n", encoding="utf-8")
+          pw = secrets.token_hex(12)
+          (mc / ".rcpass").write_text(pw, encoding="utf-8")
           sp = mc / "server.properties"
           lines = sp.read_text(encoding="utf-8").splitlines() if sp.exists() else []
           want = {
               "online-mode": "false",
-              "server-port": "25575",           # alt port, ca sa NU calcam serverul live
-              "view-distance": "4",
-              "simulation-distance": "4",
+              "server-port": "25575",
+              "view-distance": "2",
+              "simulation-distance": "2",
               "max-players": "2",
               "spawn-protection": "0",
               "level-name": "staging",
@@ -115,13 +194,12 @@ jobs:
               "generate-structures": "false",
               "allow-nether": "false",
               "enable-command-block": "false",
-              "motd": "CUANTIC staging - nu intra",
+              "motd": "CUANTIC staging ARM - nu intra",
               "enable-rcon": "true",
               "rcon.port": "25585",
-              "rcon.password": (mc / ".rcpass").read_text().strip(),
+              "rcon.password": pw,
           }
-          out = []
-          seen = set()
+          out, seen = [], set()
           for ln in lines:
               k = ln.split("=", 1)[0].strip()
               if k in want:
@@ -136,23 +214,26 @@ jobs:
               except OSError:
                   pass
           PY
-          true
+          exit 0
 
       - name: Porneste si probeaza
         run: |
+          set -u
           [ -n "${JAR:-}" ] || { echo "sari: fara jar/java" > "$MC/checker.log"; exit 0; }
-          cd "$MC"
-          PASS=$(cat .rcpass 2>/dev/null || echo nimeni)
-          nohup java -Xms1G -Xmx3G -XX:+UseG1GC -jar "$JAR" nogui > console.log 2>&1 &
-          echo "java pid $!"
+          cd "$MC" || exit 0
+          FREE=$(awk '/MemAvailable/{print int($2/1024)}' /proc/meminfo 2>/dev/null || echo 1500)
+          if [ "$FREE" -gt 3200 ]; then X=2048; elif [ "$FREE" -gt 2100 ]; then X=1400; else X=900; fi
+          echo "MemAvailable ${FREE} MiB -> -Xmx${X}M" > ram.txt
+          PASS=$(cat .rcpass 2>/dev/null || echo niciuna)
+          nohup java -Xms256M -Xmx${X}M -XX:MaxMetaspaceSize=320M -XX:+UseG1GC -jar "$JAR" nogui > console.log 2>&1 &
+          JPID=$!
           python3 "$GITHUB_WORKSPACE/scripts/mc_run_check.py" \
-            --log "$MC/console.log" --wait 420 --port 25575 \
-            --rcon-port 25585 --rcon-pass "$PASS" --soak 30 \
-            --out "$MC/summary.json" > checker.log 2>&1
-          echo "checker: vezi checker.log" >> diag.txt
-          pkill -9 -f "staging" 2>/dev/null || true
-          sleep 2
-          true
+            --log "$MC/console.log" --wait 300 --port 25575 \
+            --rcon-port 25585 --rcon-pass "$PASS" --soak 25 \
+            --out "$MC/summary.json" > checker.log 2>&1 || echo "checker rc=$?" >> checker.log
+          kill -9 "$JPID" 2>/dev/null || true
+          for p in $(pgrep -f "$JAR" 2>/dev/null || true); do kill -9 "$p" 2>/dev/null || true; done
+          exit 0
 
       - name: Redacteaza ce se poate
         if: always()
@@ -165,9 +246,9 @@ jobs:
           except Exception as exc:
               scrub = None
               print("scrub indisponibil:", exc)
-          base = pathlib.Path(os.environ["MC"])
+          base = pathlib.Path(os.environ.get("MC", "/nonexistent"))
           names = ("console.log", "checker.log", "diag.txt", "runner-diag.txt",
-                   "summary.json", "javainstall.txt")
+                   "summary.json", "javainstall.txt", "ram.txt", "skip.txt")
           for f in names:
               p = base / f
               if p.exists() and scrub:
@@ -185,8 +266,8 @@ jobs:
                       p.write_text(t.replace(pw, "<REDACTAT>"), encoding="utf-8")
           try:
               raw = (base / "console.log").read_bytes()
-              (base / "console-tail.log").write_bytes(raw[-400000:])
-              (base / "boot.log").write_bytes(raw[:160000])
+              (base / "console-tail.log").write_bytes(raw[-380000:])
+              (base / "boot.log").write_bytes(raw[:150000])
               (base / "console.log").unlink()
           except OSError:
               pass
@@ -195,30 +276,55 @@ jobs:
           except OSError:
               pass
           PY
-          true
+          exit 0
 
       - name: Publica pe bransa mc-run
         if: always()
         run: |
-          set -euo pipefail
-          test -d "$MC" || { echo "nimic de publicat"; exit 0; }
-          if ! git ls-remote --exit-code origin refs/heads/mc-run >/dev/null 2>&1; then
-            empty=$(git commit-tree "$(git hash-object -w -t tree --stdin </dev/null)" -m "mc-run: radacina")
-            git push -q origin "$empty:refs/heads/mc-run"
-          fi
-          git fetch -q origin refs/heads/mc-run
-          git worktree prune || true
-          rm -rf /tmp/wt-mcrun
-          git worktree add -q /tmp/wt-mcrun -B mc-run FETCH_HEAD
-          mkdir -p /tmp/wt-mcrun/mc-run
-          cd "$MC"
-          for f in runner-diag.txt summary.json boot.log console-tail.log diag.txt checker.log javainstall.txt PROVENIENTA.txt; do
-            [ -f "$f" ] && cp "$f" /tmp/wt-mcrun/mc-run/ || true
-          done
-          { echo "run: $GITHUB_RUN_ID"; echo "url: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; \
-            echo "data: $(date -u '+%F %T UTC')"; \
-            echo "note: executat pe VPS-ul conectat ca runner; logrosit; lumea nu a fost atinguta."; } > /tmp/wt-mcrun/mc-run/PROVENIENTA.txt
-          git -C /tmp/wt-mcrun add -A mc-run
-          git -C /tmp/wt-mcrun -c commit.gpgsign=false commit -qm "mc-run: tur $(date -u '+%H:%M') de pe VPS" || echo "nimic nou"
-          git -C /tmp/wt-mcrun push -q origin HEAD:refs/heads/mc-run
-          echo "publicat pe mc-run"
+          python3 - <<'PY'
+          import os, subprocess, datetime
+          mc = os.environ.get("MC", "")
+          if not mc or not os.path.isdir(mc):
+              print("nimic de publicat"); raise SystemExit(0)
+          def sh(*c, **kw):
+              return subprocess.run(list(c), cwd=kw.pop("cwd", None), capture_output=True, text=True)
+          wt = "/tmp/wt-mcrun"
+          r = subprocess.run(["git", "-C", os.getcwd(), "ls-remote", "--exit-code", "origin", "refs/heads/mc-run"],
+                             capture_output=True, text=True)
+          base = (r.stdout.strip().split() or [""])[0]
+          if not base:
+              print("bransa mc-run lipseste pe origin — renunt"); raise SystemExit(0)
+          sh("git", "worktree", "prune")
+          subprocess.run(["rm", "-rf", wt])
+          sh("git", "fetch", "-q", "origin", "refs/heads/mc-run")
+          r = sh("git", "worktree", "add", wt, "--detach", base)
+          if r.returncode != 0:
+              print("worktree esuat:", r.stderr[-400:]); raise SystemExit(0)
+          os.makedirs(f"{wt}/mc-run", exist_ok=True)
+          subprocess.run(["rm", "-rf", f"{wt}/mc-run"])
+          os.makedirs(f"{wt}/mc-run", exist_ok=True)
+          moved = []
+          for f in ("runner-diag.txt", "summary.json", "boot.log", "console-tail.log",
+                     "diag.txt", "checker.log", "javainstall.txt", "ram.txt", "skip.txt"):
+              src = os.path.join(mc, f)
+              if os.path.isfile(src):
+                  subprocess.run(["cp", src, f"{wt}/mc-run/"])
+                  moved.append(f)
+          stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%F %T UTC")
+          with open(f"{wt}/mc-run/PROVENIENTA.txt", "w") as fh:
+              fh.write(f"run: {os.environ.get('GITHUB_RUN_ID','?')}\n"
+                       f"url: https://github.com/{os.environ.get('GITHUB_REPOSITORY','?')}/actions/runs/{os.environ.get('GITHUB_RUN_ID','?')}\n"
+                       f"data: {stamp}\n"
+                       f"fisiere: {', '.join(moved)}\n"
+                       "note: executat pe VPS-ul ARM64 (runner self-hosted); logrosit; lumea nu a fost atinguta.\n")
+          sh("git", "-C", wt, "add", "-A", "mc-run")
+          sh("git", "-C", wt, "-c", "commit.gpgsign=false", "commit", "-qm",
+             f"mc-run: tur {datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M')} de pe VPS")
+          r = sh("git", "-C", wt, "push", "-q", "origin", "HEAD:refs/heads/mc-run")
+          print("push rc:", r.returncode, r.stderr[-300:])
+          r2 = sh("git", "-C", wt, "pull", "-q", "--rebase", "origin", "mc-run")
+          r3 = sh("git", "-C", wt, "push", "-q", "origin", "HEAD:refs/heads/mc-run")
+          print("retry push rc:", r3.returncode)
+          sh("git", "-C", os.getcwd(), "worktree", "remove", "--force", wt)
+          PY
+          exit 0
