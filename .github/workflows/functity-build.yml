@@ -19,6 +19,8 @@ jobs:
     env:
       MOHIST_PIN: 754b578ef3e4881d854bcd1df5d299ada3fd429f
     steps:
+      - uses: actions/checkout@v4
+
       - name: Adu sursa la commit fixat
         run: |
           set -euo pipefail
@@ -28,10 +30,14 @@ jobs:
           git -C src log -1 --format='pin: %H %ci %s' | head -1
           shopt -s nullglob
           PATCHES=(functity/patches/*.patch)
+          if grep -q NOPATCH deploy/functity-build.txt 2>/dev/null; then
+            PATCHES=()
+            echo "NOPATCH: build de referinta, fara patch-uri"
+          fi
           if [ ${#PATCHES[@]} -gt 0 ]; then
             git -C src apply --check "${PATCHES[0]}" 2>/tmp/applycheck.txt || { echo "PATCH respins:"; cat /tmp/applycheck.txt; exit 1; }
             for pt in "${PATCHES[@]}"; do git -C src apply "$pt" && echo "aplicat: $(basename "$pt")"; done
-            echo "BUILD_ID=b$(( ${#PATCHES[@]} )).$(git -C src rev-parse --short HEAD | tail -c5)" >> "$GITHUB_ENV"
+            echo "BUILD_ID=b1.$(date -u +%H%M)" >> "$GITHUB_ENV"
           else
             echo "BUILD_ID=b0" >> "$GITHUB_ENV"
           fi
@@ -39,7 +45,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '8'
+          java-version: '11'
 
       - name: Compileaza
         continue-on-error: true
@@ -47,7 +53,7 @@ jobs:
           set -uo pipefail
           cd src
           chmod +x gradlew
-          /usr/bin/time -v ./gradlew build -x test --no-daemon --max-workers=4 > ../build-out.log 2>&1
+          /usr/bin/time -v ./gradlew build -x test --no-daemon --stacktrace --max-workers=4 > ../build-out.log 2>&1
           GE=$?
           echo "gradle exit: $GE" | tee -a ../build-out.log
           printf '::warning::gradle exit=%s tail=%s\n' "$GE" "$(tail -c 1400 ../build-out.log | tr '\n' '~')"
