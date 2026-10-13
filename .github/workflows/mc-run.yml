@@ -1,15 +1,13 @@
 name: MC-RUN
-# Ruleaza pe VPS-ul ARM64 al lui marius (runner self-hosted in container docker).
-# 1) harta masinii (python pura, fara procps; merge si in cele mai sarace containere);
-# 2) dovada ca serverul din release-lite booteaza pe ARM: java 16 + SLP ping + rcon + soak.
-# Publica pe bransa mc-run DOAR text rosit. Lumea, bazele si parolele raman acasa.
+# VPS ARM64 runner, bash+curl curat (fara incredere in python/git in container).
+# FIECARE pas isi scrie randul in TRACE.txt pe bransa mc-run prin contents API,
+# ca sa se vada si cand crapam pe loc. Boot de server = dovada "Done (" + port viu.
 on:
   push:
     paths:
       - deploy/mc-run.txt
       - .github/workflows/mc-run.yml
       - scripts/mc_run_check.py
-      - scripts/rp_archive_inspect.py
 
 jobs:
   boot:
@@ -19,320 +17,160 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Java 16 (temurin, merge si pe aarch64)
+      - name: Trace si unelte
+        run: |
+          MC="${RUNNER_TEMP:-$GITHUB_WORKSPACE}/mcw"
+          mkdir -p "$MC"
+          echo "MC=$MC" >> "$GITHUB_ENV"
+          {
+            echo "data: $(date -u '+%F %T UTC')"
+            echo "shell: $BASH_VERSION"
+            echo "python3: $(command -v python3 || echo absent)"
+            echo "curl: $(command -v curl || echo absent)"
+            echo "unzip: $(command -v unzip || echo absent)"
+            echo "java: $(command -v java || echo absent)"
+            echo "gh: $(command -v gh || echo absent)"
+            echo "git: $(command -v git || echo absent)"
+            echo "disk: $(df -h "$MC" | tail -1)"
+            echo "mem: $(awk '/MemTotal|MemAvailable/{printf "%s %dM ", $1, $2/1024}' /proc/meminfo)"
+            echo "container: $([ -e /.dockerenv ] && echo DA || echo nu-pare)"
+          } > "$MC/trace.txt" 2>&1
+          echo "PAS1: unelte inregistrate $(wc -l < "$MC/trace.txt") randuri" >> "$MC/trace.txt"
+          curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
+            -d "{\"message\":\"trace pas1\",\"branch\":\"mc-run\",\"content\":\"$(base64 -w0 < "$MC/trace.txt")\"}" > "$MC/put1.json" 2>&1 \
+            || echo "PUT1 a esuat (vezi put1.json)"
+          true
+
+      - name: Java 16
         continue-on-error: true
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '16'
 
-      - name: Pregatitor
+      - name: Trace java
         run: |
-          python3 - <<'PY'
-          import os, shutil, subprocess, pathlib
-          mc = os.path.join(os.environ.get("RUNNER_TEMP", os.getcwd()), "mcw")
-          os.makedirs(mc, exist_ok=True)
-          with open(os.environ["GITHUB_ENV"], "a") as f:
-              f.write(f"MC={mc}\n")
-          out = []
-          java = shutil.which("java")
-          out.append(f"java: {java or 'LIPSA pe PATH'}")
-          if java:
-              r = subprocess.run([java, "-version"], capture_output=True, text=True, timeout=30)
-              out.append((r.stderr or r.stdout).strip())
-          if not java and shutil.which("apt-get"):
-              r = subprocess.run(["sudo", "-n", "apt-get", "install", "-y", "-qq",
-                                  "openjdk-17-jre-headless"], capture_output=True, text=True, timeout=600)
-              out.append(f"apt openjdk-17: rc={r.returncode}")
-              java = shutil.which("java")
-              if java:
-                  r = subprocess.run([java, "-version"], capture_output=True, text=True, timeout=30)
-                  out.append((r.stderr or r.stdout).strip())
-          if os.environ.get("JAVA_HOME"):
-              out.append(f"JAVA_HOME={os.environ['JAVA_HOME']}")
-          pathlib.Path(mc, "javainstall.txt").write_text("\n".join(out) + "\n", encoding="utf-8")
-          PY
-
-      - name: Harta VPS (doar citire, python curat)
-        run: |
-          python3 - <<'PY'
-          import os, re, socket, subprocess, pathlib
-          mc = os.environ["MC"]
-          L = []
-          def add(t):
-              L.append(t)
-          try:
-              add("== identitate ==")
-              add(f"utilizator: {os.environ.get('USER', '?')} / uid {os.getuid()}")
-              add(f"hostname: {socket.gethostname()}")
-              add(open("/proc/sys/kernel/osrelease").read().strip())
-              add("docker: " + ("DA (/.dockerenv)" if os.path.exists("//.dockerenv") else "nu semnale"))
-              add("== memorie ==")
-              mem = {}
-              for ln in open("/proc/meminfo"):
-                  k, _, v = ln.partition(":")
-                  mem[k] = int(v.split()[0])
-              add(f"MemTotal {mem.get('MemTotal',0)//1024} MiB, MemAvailable {mem.get('MemAvailable',0)//1024} MiB")
-              add("== disc ==")
-              st = os.statvfs(mc)
-              add(f"{mc}: liber {st.f_bavail * st.f_frsize // 2**20} MiB din {st.f_blocks * st.f_frsize // 2**20} MiB")
-              add("== cpu ==")
-              add(f"nproc: {os.cpu_count()}, loadavg: {open('/proc/loadavg').read().strip()}")
-              add("== java-uri in viata (pe acest host/container) ==")
-              found = False
-              for pid in sorted(os.listdir("/proc")):
-                  if not pid.isdigit():
-                      continue
-                  try:
-                      cmd = pathlib.Path(f"/proc/{pid}/cmdline").read_bytes().replace(b"\0", b" ").decode(errors="replace")
-                  except OSError:
-                      continue
-                  if "java" in cmd:
-                      found = True
-                      add(cmd[:240])
-              if not found:
-                  add("niciun proces java")
-              add("== porturi 25xxx in ascultare (spațiul de rețea al containerului) ==")
-              ports = []
-              for proto in ("tcp", "tcp6"):
-                  try:
-                      for ln in open(f"/proc/net/{proto}").read().splitlines()[1:]:
-                          f = ln.split()
-                          if f[3] == "0A":  # LISTEN
-                              port = int(f[1].split(":")[1], 16)
-                              if 25000 <= port <= 25999:
-                                  ports.append(port)
-                  except OSError:
-                      pass
-              add("ascultate: " + (", ".join(map(str, sorted(set(ports)))) or "niciun port de joc"))
-              add("== server.properties banuite (maxdepth 3, atat cat apuca) ==")
-              hits = []
-              for d in ("/opt", "/srv", "/data", "/mnt", "/var/lib"):
-                  base = pathlib.Path(d)
-                  if not base.is_dir():
-                      continue
-                  try:
-                      for a in base.iterdir():
-                          try:
-                              if (a / "server.properties").is_file():
-                                  hits.append(str(a))
-                              for b in a.iterdir():
-                                  if (b / "server.properties").is_file():
-                                      hits.append(str(b))
-                          except OSError:
-                              pass
-                  except OSError:
-                      pass
-              add("\n".join(hits[:10]) if hits else "niciun director de server vazut din container")
-              add("== misc ==")
-              for c in (["java", "-version"], ["python3", "--version"]):
-                  try:
-                      r = subprocess.run(c, capture_output=True, text=True, timeout=20)
-                      add((r.stderr or r.stdout).strip().splitlines()[0] if (r.stderr or r.stdout).strip() else " " + " ".join(c))
-                  except Exception as e:
-                      add(f"{' '.join(c)}: {e}")
-          except Exception as exc:
-              add(f"ERORI Harta: {exc!r}")
-          pathlib.Path(mc, "runner-diag.txt").write_text("\n".join(L) + "\n", encoding="utf-8")
-          print("\n".join(L[:6]))
-          PY
-          exit 0
+          { java -version 2>&1 | head -1 || echo "java LIPSA"; } >> "$MC/trace.txt"
+          echo "PAS2: java $(command -v java || echo absent)" >> "$MC/trace.txt"
+          sha=$(curl -sf "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt?ref=mc-run" | grep -o '"sha": *"[a-f0-9]*"' | head -1 | cut -d'"' -f4)
+          [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
+          curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
+            -d "{\"message\":\"trace pas2\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 -w0 < "$MC/trace.txt")\"}" || echo "PUT2 esuat"
+          true
 
       - name: Aduce serverul din release
         run: |
-          set -u
           cd "$MC" || exit 0
-          url=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/lite" \
-                --jq '.assets[] | select(.name=="CUANTIC-Server-CatServer-1.7.7.zip") | .browser_download_url' 2>/dev/null || true)
-          if [ -n "${url:-}" ] && [ ! -s srv.zip ]; then
-            curl -sfL -H "Authorization: Bearer $GH_TOKEN" "$url" -o srv.zip || true
+          url=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/lite" --jq '.assets[] | select(.name=="CUANTIC-Server-CatServer-1.7.7.zip") | .browser_download_url' 2>/dev/null || true)
+          echo "PAS3: url=${url:-lipsa} srv.zip=$([ -s srv.zip ] && echo prezent $(stat -c%s srv.zip)B || echo absent)" >> trace.txt
+          if [ -n "$url" ] && [ ! -s srv.zip ]; then
+            curl -sfL "$url" -o srv.zip && echo "  download: $(stat -c%s srv.zip)B" >> trace.txt || echo "  DOWNLOAD ESUAT" >> trace.txt
           fi
           if [ -s srv.zip ]; then
-            unzip -oq srv.zip || true
-            if [ ! -f server.properties ]; then
-              d=$(find . -mindepth 1 -maxdepth 1 -type d | head -1)
-              if [ -n "${d:-}" ]; then (cd "$d" && find . -maxdepth 1 -mindepth 1 -exec mv -t "$MC" {} +) || true; fi
+            rm -rf unz && mkdir unz && (cd unz && unzip -oq ../srv.zip) || echo "  UNZIP ESUAT" >> trace.txt
+            JAR=$(find unz -name '*.jar' ! -name '*client*' -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
+            if [ -n "$JAR" ]; then
+              d=$(dirname "$JAR"); (cd "$d" && find . -maxdepth 1 -mindepth 1 -exec mv -t "$MC" {} +) 2>/dev/null || true
+              [ -f "$MC/$(basename "$JAR")" ] && echo "JAR=$MC/$(basename "$JAR")" >> "$GITHUB_ENV"
+              echo "  jar=$(basename "$JAR") mutat in \$MC" >> trace.txt
+            else
+              echo "  FARA JAR in zip:" >> trace.txt; unzip -l srv.zip | head -8 >> trace.txt 2>&1 || true
             fi
           fi
-          JAR=$(find . -maxdepth 2 -name '*.jar' ! -name '*client*' -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
-          {
-            echo "srv.zip: $(stat -c '%s bytes' srv.zip 2>/dev/null || echo LIPSA)"
-            echo "jar find: ${JAR:-NIMIC}"
-            echo "java: $(command -v java || echo LIPSA-pe-PATH)"
-            echo "JAVA_HOME=${JAVA_HOME:-nesetata}"
-            echo "continut MC:"; ls -1 "$MC" 2>/dev/null | head -25
-            echo "unzip -l cap:"; unzip -l srv.zip 2>/dev/null | head -15
-          } > jarstate.txt 2>&1
-          {
-            echo "== jar: ${JAR:-NIMIC}"; du -sh . 2>/dev/null | tail -1
-            find . -maxdepth 2 2>/dev/null | sed 's|^\./||' | sort | head -60
-          } >> diag.txt || true
-          if [ -n "${JAR:-}" ] && command -v java >/dev/null 2>&1; then
-            echo "JAR=$MC/${JAR#./}" >> "$GITHUB_ENV"
-          else
-            echo "JAR=" >> "$GITHUB_ENV"
-            echo "STOP: fara jar sau fara java" >> diag.txt || true
-          fi
-          exit 0
+          sha=$(curl -sf "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt?ref=mc-run" | grep -o '"sha": *"[a-f0-9]*"' | head -1 | cut -d'"' -f4)
+          [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
+          curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
+            -d "{\"message\":\"trace pas3\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 -w0 < trace.txt)\"}" || echo "PUT3 esuat"
+          true
 
-      - name: Configurare sigura de staging
+      - name: Configurare sigura
         run: |
-          python3 - <<'PY'
-          import os, secrets
-          from pathlib import Path
-          mc = Path(os.environ["MC"])
-          jar = os.environ.get("JAR", "")
-          if not jar:
-              (mc / "skip.txt").write_text("fara jar/java - sar peste boot\n", encoding="utf-8")
-              raise SystemExit(0)
-          (mc / "eula.txt").write_text("eula=true\n", encoding="utf-8")
-          pw = secrets.token_hex(12)
-          (mc / ".rcpass").write_text(pw, encoding="utf-8")
-          sp = mc / "server.properties"
-          lines = sp.read_text(encoding="utf-8").splitlines() if sp.exists() else []
-          want = {
-              "online-mode": "false",
-              "server-port": "25575",
-              "view-distance": "2",
-              "simulation-distance": "2",
-              "max-players": "2",
-              "spawn-protection": "0",
-              "level-name": "staging",
-              "level-type": "minecraft\\:flat",
-              "generate-structures": "false",
-              "allow-nether": "false",
-              "enable-command-block": "false",
-              "motd": "CUANTIC staging ARM - nu intra",
-              "enable-rcon": "true",
-              "rcon.port": "25585",
-              "rcon.password": pw,
-          }
-          out, seen = [], set()
-          for ln in lines:
-              k = ln.split("=", 1)[0].strip()
-              if k in want:
-                  out.append(f"{k}={want[k]}"); seen.add(k)
-              elif ln.strip():
-                  out.append(ln)
-          out += [f"{k}={v}" for k, v in want.items() if k not in seen]
-          sp.write_text("\n".join(out) + "\n", encoding="utf-8")
-          for lock in mc.rglob("session.lock"):
-              try:
-                  lock.unlink()
-              except OSError:
-                  pass
-          PY
-          exit 0
+          [ -n "${JAR:-}" ] || { echo "PAS4: sari (fara jar)" >> "$MC/trace.txt"; exit 0; }
+          cd "$MC" || exit 0
+          echo "eula=true" > eula.txt
+          PASS=$(head -c 24 /dev/urandom | md5sum | cut -c1-16)
+          echo "$PASS" > .rcpass
+          touch server.properties
+          for kv in "online-mode false" "server-port 25575" "view-distance 2" "simulation-distance 2" "max-players 2" "spawn-protection 0" "level-name staging" "level-type minecraft\\\\:flat" "generate-structures false" "allow-nether false" "enable-rcon true" "rcon.port 25585"; do
+            k=${kv%% *}; v=${kv#* }
+            grep -q "^$k=" server.properties && sed -i "s|^$k=.*|$k=$v|" server.properties || echo "$k=$v" >> server.properties
+          done
+          grep -q "^rcon.password=" server.properties && sed -i "s|^rcon.password=.*|rcon.password=$PASS|" server.properties || echo "rcon.password=$PASS" >> server.properties
+          rm -f -- */session.lock world/session.lock 2>/dev/null || true
+          echo "PAS4: configurat port 25575 rcon 25585" >> "$MC/trace.txt"
+          true
 
       - name: Porneste si probeaza
         run: |
-          set -u
-          [ -n "${JAR:-}" ] || { echo "sari: fara jar/java" > "$MC/checker.log"; exit 0; }
           cd "$MC" || exit 0
+          if [ -z "${JAR:-}" ]; then echo "PAS5: sari boot" >> trace.txt; exit 0; fi
           FREE=$(awk '/MemAvailable/{print int($2/1024)}' /proc/meminfo 2>/dev/null || echo 1500)
           if [ "$FREE" -gt 3200 ]; then X=2048; elif [ "$FREE" -gt 2100 ]; then X=1400; else X=900; fi
-          echo "MemAvailable ${FREE} MiB -> -Xmx${X}M" > ram.txt
-          PASS=$(cat .rcpass 2>/dev/null || echo niciuna)
+          echo "PAS5: porneesc -Xmx${X}M (liber ${FREE}M)" >> trace.txt
           nohup java -Xms256M -Xmx${X}M -XX:MaxMetaspaceSize=320M -XX:+UseG1GC -jar "$JAR" nogui > console.log 2>&1 &
           JPID=$!
-          python3 "$GITHUB_WORKSPACE/scripts/mc_run_check.py" \
-            --log "$MC/console.log" --wait 300 --port 25575 \
-            --rcon-port 25585 --rcon-pass "$PASS" --soak 25 \
-            --out "$MC/summary.json" > checker.log 2>&1 || echo "checker rc=$?" >> checker.log
-          kill -9 "$JPID" 2>/dev/null || true
-          for p in $(pgrep -f "$JAR" 2>/dev/null || true); do kill -9 "$p" 2>/dev/null || true; done
-          exit 0
+          echo "  pid $JPID" >> trace.txt
+          OK=0
+          for i in $(seq 1 100); do
+            sleep 4
+            if grep -q "Done (" console.log 2>/dev/null; then OK=1; break; fi
+            if ! kill -0 "$JPID" 2>/dev/null; then echo "  java a murit la it $i" >> trace.txt; break; fi
+          done
+          if [ "$OK" = 1 ]; then
+            SECS=$(grep -o "Done ([0-9.]*s)" console.log | head -1)
+            bash -c 'exec 3<>/dev/tcp/127.0.0.1/25575' 2>/dev/null && PORT=viu || PORT=inchis
+            RSS=$(awk "/VmRSS/{print int(\\$2/1024)}" /proc/$JPID/status 2>/dev/null || echo ?)
+            echo "  BOOT OK $SECS | port 25575 $PORT | RSS ${RSS} MiB" >> trace.txt
+            echo "{\"state\":\"booted\",\"boot\":\"$SECS\",\"port\":\"$PORT\",\"rss_mib\":$RSS}" > summary.json 2>/dev/null \
+              || printf '{"state":"booted","boot":"%s","port":"%s"}\n' "$SECS" "$PORT" > summary.json
+            sleep 25
+            echo "  soak 25s, rss max: $(awk "/VmRSS/{print int(\\$2/1024)}" /proc/$JPID/status 2>/dev/null || echo ?) MiB" >> trace.txt
+          else
+            echo "{\"state\":\"esuat\"}" > summary.json
+            echo "  BOOT ESUAT - vezi boot.log" >> trace.txt
+            head -c 60000 console.log > boot.log 2>/dev/null || true
+          fi
+          kill "$JPID" 2>/dev/null; sleep 6; kill -9 "$JPID" 2>/dev/null || true
+          tail -c 380000 console.log > console-tail.log 2>/dev/null || true
+          head -c 120000 console.log > boot.log 2>/dev/null || true
+          PASS=$(cat .rcpass 2>/dev/null)
+          for f in console-tail.log boot.log trace.txt summary.json; do
+            [ -f "$f" ] && sed -i "s|$PASS|<REDACTAT>|g" "$f" 2>/dev/null || true
+          done
+          rm -f .rcpass eula.txt console.log
+          true
 
-      - name: Redacteaza ce se poate
+      - name: Publica prin API
         if: always()
         run: |
-          python3 - <<'PY'
-          import os, pathlib, sys
-          sys.path.insert(0, "scripts")
-          try:
-              from rp_archive_inspect import scrub
-          except Exception as exc:
-              scrub = None
-              print("scrub indisponibil:", exc)
-          base = pathlib.Path(os.environ.get("MC", "/nonexistent"))
-          names = ("console.log", "checker.log", "diag.txt", "runner-diag.txt",
-                   "summary.json", "javainstall.txt", "ram.txt", "skip.txt")
-          for f in names:
-              p = base / f
-              if p.exists() and scrub:
-                  try:
-                      scrub(p)
-                  except Exception as exc:
-                      print("scrub esuat pe", f, exc)
-          pwfile = base / ".rcpass"
-          pw = pwfile.read_text().strip() if pwfile.exists() else ""
-          for f in names:
-              p = base / f
-              if pw and p.exists():
-                  t = p.read_text(encoding="utf-8", errors="replace")
-                  if pw in t:
-                      p.write_text(t.replace(pw, "<REDACTAT>"), encoding="utf-8")
-          try:
-              raw = (base / "console.log").read_bytes()
-              (base / "console-tail.log").write_bytes(raw[-380000:])
-              (base / "boot.log").write_bytes(raw[:150000])
-              (base / "console.log").unlink()
-          except OSError:
-              pass
-          try:
-              pwfile.unlink()
-          except OSError:
-              pass
-          PY
-          exit 0
-
-      - name: Publica pe bransa mc-run
-        if: always()
-        run: |
-          python3 - <<'PY'
-          import base64, json, os, urllib.request, urllib.error
-          mc = os.environ.get("MC", "")
-          tok = os.environ["GH_TOKEN"]
-          repo = os.environ.get("GITHUB_REPOSITORY", "")
-          api = os.environ.get("GITHUB_API_URL", "https://api.github.com")
-          files = ("runner-diag.txt", "summary.json", "boot.log", "console-tail.log",
-                   "diag.txt", "jarstate.txt", "checker.log", "javainstall.txt", "ram.txt", "skip.txt")
-          have = [f for f in files if os.path.isfile(os.path.join(mc, f)) and os.path.getsize(os.path.join(mc, f)) < 1_000_000]
-          import datetime
-          prov = ("run: %s\nurl: https://github.com/%s/actions/runs/%s\n"
-                  "data: %s UTC\nfisiere: %s\n"
-                  "note: VPS ARM64 runner; log redactat; lumea nu a fost atinguta de acest tur.\n"
-                  % (os.environ.get("GITHUB_RUN_ID", "?"), repo, os.environ.get("GITHUB_RUN_ID", "?"),
-                     datetime.datetime.now(datetime.timezone.utc).strftime("%F %T"), ", ".join(have))).encode()
-          def api_req(method, path, body=None):
-              req = urllib.request.Request(api + path, method=method,
-                                           headers={"Authorization": "Bearer " + tok,
-                                                    "Accept": "application/vnd.github+json",
-                                                    "X-GitHub-Api-Version": "2022-11-28"},
-                                           data=json.dumps(body).encode() if body else None)
-              if body:
-                  req.add_header("Content-Type", "application/json")
-              try:
-                  with urllib.request.urlopen(req, timeout=45) as r:
-                      return r.status, json.loads(r.read().decode() or "{}")
-              except urllib.error.HTTPError as e:
-                  return e.code, {"err": e.read().decode()[:300]}
-              except Exception as e:
-                  return 0, {"err": repr(e)[:300]}
-          log = []
-          for name in ["PROVENIENTA.txt"] + have:
-              raw = prov if name == "PROVENIENTA.txt" else open(os.path.join(mc, name), "rb").read()
-              st, cur = api_req("GET", "/repos/%s/contents/mc-run/%s?ref=mc-run" % (repo, name))
-              body = {"message": "mc-run: %s (tur %s UTC)" % (name, datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M")),
-                      "content": base64.b64encode(raw).decode(), "branch": "mc-run"}
-              if st == 200 and "sha" in cur:
-                  body["sha"] = cur["sha"]
-              st2, res = api_req("PUT", "/repos/%s/contents/mc-run/%s" % (repo, name), body)
-              log.append("%s: PUT %s %s" % (name, st2, (res.get("err") or res.get("commit", {}).get("sha", "ok"))[:80]))
-          # logul publicarii insasi, ca sa-l vad si pe bransa data viitoare
-          st3, _ = api_req("GET", "/repos/%s/contents/mc-run" % repo, None)
-          with open(os.path.join(mc, "publica-log.txt"), "w") as fh:
-              fh.write("\n".join(log) + "\ndir GET: %s\n" % st3)
-          print("\n".join(log))
-          PY
-          exit 0
+          cd "$MC" || exit 0
+          echo "PAS6: public" >> trace.txt
+          upl() {
+            f="$1"
+            [ -s "$f" ] || return 0
+            sha=$(curl -sf "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/$f?ref=mc-run" | grep -o '"sha": *"[a-f0-9]*"' | head -1 | cut -d'"' -f4)
+            [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
+            curl -sf -o /dev/null -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/$f" \
+              -d "{\"message\":\"mc-run $f la $(date -u '+%H:%M')\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 -w0 < "$f")\"}" \
+              && echo "  $f: OK" >> trace.txt || echo "  $f: PUT-ESUAT cod $(curl -s -o /dev/null -w '%{http_code}' "https://api.github.com" )" >> trace.txt
+          }
+          upl summary.json
+          upl boot.log
+          upl console-tail.log
+          upl trace.txt
+          { echo "run $GITHUB_RUN_ID: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "VPS ARM64 self-hosted; doar text rosit; lumea nu a fost atinguta."
+          } > PROVENIENTA.txt
+          upl PROVENIENTA.txt
+          # trace-ul actualizat merge din nou, ca sa arate si succesele PUT-urilor
+          sha=$(curl -sf "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt?ref=mc-run" | grep -o '"sha": *"[a-f0-9]*"' | head -1 | cut -d'"' -f4)
+          [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
+          curl -sf -o /dev/null -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
+            -d "{\"message\":\"trace final\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 -w0 < trace.txt)\"}" || true
+          true
