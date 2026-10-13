@@ -12,6 +12,8 @@ on:
 jobs:
   ping:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
 
@@ -60,20 +62,19 @@ jobs:
 
       - name: Publica pe mc-run
         run: |
-          set -euo pipefail
-          if ! git ls-remote --exit-code origin refs/heads/mc-run >/dev/null 2>&1; then
-            echo "bransa mc-run lipseste?!" && exit 1
-          fi
-          git fetch -q origin refs/heads/mc-run
-          git worktree prune || true
-          rm -rf /tmp/wtping
-          git worktree add -q /tmp/wtping -B mc-run FETCH_HEAD
-          mkdir -p /tmp/wtping/mc-run
-          cp ping.json /tmp/wtping/mc-run/PING-slp.json
-          cp mcsrvstat.json /tmp/wtping/mc-run/PING-mcsrvstat.json
-          git -C /tmp/wtping config user.name 'github-actions[bot]'
-          git -C /tmp/wtping config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git -C /tmp/wtping add -A mc-run
-          git -C /tmp/wtping -c commit.gpgsign=false commit -qm "mc-ping: sonda 92.5.171.150:25565 $(date -u '+%H:%M')"
-          git -C /tmp/wtping push -q origin HEAD:refs/heads/mc-run
-          echo publicat
+          set -u
+          pune() {
+            f="$1"; dest="$2"
+            [ -s "$f" ] || return 0
+            sha=$(curl -sf -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/$dest?ref=mc-run" | grep -o '"sha": *"[a-f0-9]*"' | head -1 | cut -d'"' -f4)
+            [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
+            curl -sf -o /dev/null -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/$dest" \
+              -d "{\"message\":\"mc-ping $dest\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 -w0 < "$f")\"}" \
+              && echo "$dest: OK" || echo "$dest: PUT esuat"
+          }
+          echo "run $GITHUB_RUN_ID | sonda 92.5.171.150:25565 | $(date -u '+%F %T UTC')" > PROVENIENTA.txt
+          pune ping.json PING-slp.json
+          pune mcsrvstat.json PING-mcsrvstat.json
+          pune PROVENIENTA.txt PROVENIENTA.txt
+          true
