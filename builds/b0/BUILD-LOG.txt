@@ -60,13 +60,13 @@ Executing steps
  > Running 'mcinject'
  > Running 'listLibraries'
  > Running 'mohistAccessTransformer'
-[21:35:56] [main/INFO]: Access Transformer processor running version 8.0.7+8.0.7+master.43473d43
-[21:35:56] [main/INFO]: Command line arguments [--inJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar, --outJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, --atFile, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg]
-[21:35:56] [main/INFO]: Reading from /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar
-[21:35:56] [main/INFO]: Writing to /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
-[21:35:56] [main/INFO]: Transformer file /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg
-[21:35:56] [main/WARN]: Found existing output jar /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, overwriting
-[21:35:59] [main/INFO]: JAR transformation complete /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
+[21:37:05] [main/INFO]: Access Transformer processor running version 8.0.7+8.0.7+master.43473d43
+[21:37:05] [main/INFO]: Command line arguments [--inJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar, --outJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, --atFile, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg]
+[21:37:05] [main/INFO]: Reading from /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar
+[21:37:05] [main/INFO]: Writing to /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
+[21:37:05] [main/INFO]: Transformer file /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg
+[21:37:05] [main/WARN]: Found existing output jar /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, overwriting
+[21:37:06] [main/INFO]: JAR transformation complete /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
  > Running 'mohistSideStripper'
  > Running 'decompile'
  > Running 'inject'
@@ -93,20 +93,34 @@ Note: Recompile with -Xlint:unchecked for details.
 > Task :mohist:fmllauncherClasses
 > Task :clean:extractSrg
 > Task :clean:createMcp2Srg
-> Task :clean:compileJava FAILED
+
+> Task :clean:compileJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :clean:processResources NO-SOURCE
+> Task :clean:classes
+> Task :clean:jar
+> Task :clean:reobfJar
+> Task :clean:genServerBinPatches
+> Task :mohist:createFakeSASPatches
+> Task :mohist:createMcp2Srg
+> Task :mohist:compileJava FAILED
 
 FAILURE: Build failed with an exception.
 
 * What went wrong:
-A problem was found with the configuration of task ':clean:compileJava' (type 'JavaCompile').
-  - Gradle detected a problem with the following location: '/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/clean/src/main/java'.
+A problem was found with the configuration of task ':mohist:compileJava' (type 'JavaCompile').
+  - Gradle detected a problem with the following location: '/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mohist/src/main/java'.
     
-    Reason: Task ':clean:compileJava' uses this output of task ':clean:extractMapped' without declaring an explicit or implicit dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed.
+    Reason: Task ':mohist:compileJava' uses this output of task ':mohist:extractMapped' without declaring an explicit or implicit dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed.
     
     Possible solutions:
-      1. Declare task ':clean:extractMapped' as an input of ':clean:compileJava'.
-      2. Declare an explicit dependency on ':clean:extractMapped' from ':clean:compileJava' using Task#dependsOn.
-      3. Declare an explicit dependency on ':clean:extractMapped' from ':clean:compileJava' using Task#mustRunAfter.
+      1. Declare task ':mohist:extractMapped' as an input of ':mohist:compileJava'.
+      2. Declare an explicit dependency on ':mohist:extractMapped' from ':mohist:compileJava' using Task#dependsOn.
+      3. Declare an explicit dependency on ':mohist:extractMapped' from ':mohist:compileJava' using Task#mustRunAfter.
     
     For more information, please refer to https://docs.gradle.org/8.4/userguide/validation_problems.html#implicit_dependency in the Gradle documentation.
 
@@ -116,15 +130,15 @@ A problem was found with the configuration of task ':clean:compileJava' (type 'J
 > Get more help at https://help.gradle.org.
 
 * Exception is:
-org.gradle.internal.execution.WorkValidationException: A problem was found with the configuration of task ':clean:compileJava' (type 'JavaCompile').
-  - Gradle detected a problem with the following location: '/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/clean/src/main/java'.
+org.gradle.internal.execution.WorkValidationException: A problem was found with the configuration of task ':mohist:compileJava' (type 'JavaCompile').
+  - Gradle detected a problem with the following location: '/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mohist/src/main/java'.
     
-    Reason: Task ':clean:compileJava' uses this output of task ':clean:extractMapped' without declaring an explicit or implicit dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed.
+    Reason: Task ':mohist:compileJava' uses this output of task ':mohist:extractMapped' without declaring an explicit or implicit dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed.
     
     Possible solutions:
-      1. Declare task ':clean:extractMapped' as an input of ':clean:compileJava'.
-      2. Declare an explicit dependency on ':clean:extractMapped' from ':clean:compileJava' using Task#dependsOn.
-      3. Declare an explicit dependency on ':clean:extractMapped' from ':clean:compileJava' using Task#mustRunAfter.
+      1. Declare task ':mohist:extractMapped' as an input of ':mohist:compileJava'.
+      2. Declare an explicit dependency on ':mohist:extractMapped' from ':mohist:compileJava' using Task#dependsOn.
+      3. Declare an explicit dependency on ':mohist:extractMapped' from ':mohist:compileJava' using Task#mustRunAfter.
     
     For more information, please refer to https://docs.gradle.org/8.4/userguide/validation_problems.html#implicit_dependency in the Gradle documentation.
 	at org.gradle.internal.execution.WorkValidationException$BuilderWithSummary.build(WorkValidationException.java:137)
@@ -188,27 +202,27 @@ org.gradle.internal.execution.WorkValidationException: A problem was found with 
 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
 
 
-BUILD FAILED in 4m 5s
-17 actionable tasks: 17 executed
+BUILD FAILED in 3m 40s
+23 actionable tasks: 23 executed
 Command exited with non-zero status 1
 	Command being timed: "./gradlew setup mohistJar --no-daemon --stacktrace --max-workers=4"
-	User time (seconds): 5.53
-	System time (seconds): 0.70
-	Percent of CPU this job got: 2%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:09.33
+	User time (seconds): 3.42
+	System time (seconds): 0.58
+	Percent of CPU this job got: 1%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:42.34
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 156804
+	Maximum resident set size (kbytes): 153368
 	Average resident set size (kbytes): 0
-	Major (requiring I/O) page faults: 251
-	Minor (reclaiming a frame) page faults: 22620
-	Voluntary context switches: 19401
-	Involuntary context switches: 735
+	Major (requiring I/O) page faults: 253
+	Minor (reclaiming a frame) page faults: 21976
+	Voluntary context switches: 17172
+	Involuntary context switches: 490
 	Swaps: 0
-	File system inputs: 69048
-	File system outputs: 541168
+	File system inputs: 69056
+	File system outputs: 541112
 	Socket messages sent: 0
 	Socket messages received: 0
 	Signals delivered: 0
