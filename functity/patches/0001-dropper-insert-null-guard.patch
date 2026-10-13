@@ -1,5 +1,5 @@
 diff --git a/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java b/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
-index 4af3ce2e..3ab8de76 100644
+index 4af3ce2e..e6b08beb 100644
 --- a/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
 +++ b/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
 @@ -95,14 +95,22 @@ public class VanillaInventoryCodeHooks
@@ -14,7 +14,7 @@ index 4af3ce2e..3ab8de76 100644
 +                    // (vehicle/entitate-inventar) ori netratat ca BlockOwner — NPE in fiecare tick.
 +                    // Fara ambele inventare nu putem face bridge-ul: sarim eventul, mergem pe semantica vanilla.
 +                    org.bukkit.inventory.Inventory sourceInventory = dropper.getOwner() != null ? dropper.getOwner().getInventory() : null;
-+                    ItemStack moved = (org.bukkit.inventory.ItemStack) oitemstack.clone();
++                    org.bukkit.inventory.ItemStack moved = (org.bukkit.inventory.ItemStack) oitemstack.clone();
 +                    if (sourceInventory != null && destinationInventory != null) {
 +                        InventoryMoveItemEvent event = new InventoryMoveItemEvent(sourceInventory, oitemstack.clone(), destinationInventory, true);
 +                        Bukkit.getPluginManager().callEvent(event);
