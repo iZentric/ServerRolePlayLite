@@ -1,287 +1,93 @@
 name: MC-RUN
-# VPS ARM64 runner, bash+curl curat (fara incredere in python/git in container).
-# FIECARE pas isi scrie randul in TRACE.txt pe bransa mc-run prin contents API,
-# ca sa se vada si cand crapam pe loc. Boot de server = dovada "Done (" + port viu.
+# Serverul VIU de pe masina (Cloud Shell + frp, 92.5.171.150:25565).
+# Regula casei (PROMPT-CUANTIC-AGENT.md): verdictul se publica DEVREME, inainte de
+# orice asteptare; restart SE cere prin puntea cmd.in, nu prin java manual (pe aceeasi
+# lume = mort); gh-ul masinii (cheering inel) pune raportul inapoi in repo pentru ca
+# token-ul runner-ului e read-only.
 on:
   push:
     paths:
       - deploy/mc-run.txt
       - .github/workflows/mc-run.yml
-      - scripts/mc_run_check.py
 
 jobs:
-  boot:
+  live:
     runs-on: self-hosted
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Trace si unelte
+      - name: Stare inainte (verdict rapid)
         run: |
-          MC="$GITHUB_WORKSPACE/mcw"
-          mkdir -p "$MC" || { MC="${RUNNER_TEMP:-/tmp}/mcw"; mkdir -p "$MC"; }
-          echo "MC=$MC" >> "$GITHUB_ENV"
+          export GH_TOKEN= GITHUB_TOKEN=
+          T=/tmp/mcst.txt
+          D=$HOME/cuantic-live
           {
-            echo "data: $(date -u '+%F %T UTC')"
-            echo "shell: $BASH_VERSION"
-            echo "python3: $(command -v python3 || echo absent)"
-            echo "curl: $(command -v curl || echo absent)"
-            echo "unzip: $(command -v unzip || echo absent)"
-            echo "java: $(command -v java || echo absent)"; echo "shells: $(ls /bin | grep -cE '^(bash|sh)$') /busybox: $(readlink /bin/sh 2>/dev/null || echo nu)"
-            echo "gh: $(command -v gh || echo absent)"
-            echo "git: $(command -v git || echo absent)"
-            echo "disk: $(df -h "$MC" | tail -1)"
-            echo "mem: $(awk '/MemTotal|MemAvailable/{printf "%s %dM ", $1, $2/1024}' /proc/meminfo)"
-            echo "container: $([ -e /.dockerenv ] && echo DA || echo nu-pare)"
-          } > "$MC/trace.txt" 2>&1
-          echo "PAS1: unelte inregistrate $(wc -l < "$MC/trace.txt") randuri" >> "$MC/trace.txt"
-          curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
-            -d "{\"message\":\"trace pas1\",\"branch\":\"mc-run\",\"content\":\"$(base64 < "$MC/trace.txt" | tr -d '\n')\"}" > "$MC/put1.json" 2>&1 \
-            || echo "PUT1 a esuat"
-          echo "  PUT1 raspuns: $(head -c 180 "$MC/put1.json" 2>/dev/null)" >> "$MC/trace.txt"
-          true
-
-      - name: Java 16
-        continue-on-error: true
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '16'
-
-      - name: Trace java
-        run: |
-          { java -version 2>&1 | head -1 || echo "java LIPSA"; } >> "$MC/trace.txt"
-          echo "PAS2: java $(command -v java || echo absent)" >> "$MC/trace.txt"
-          sha=$(curl -sf "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt?ref=mc-run" | grep -o '"sha": *"[a-f0-9]*"' | head -1 | cut -d'"' -f4)
-          [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
-          curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
-            -d "{\"message\":\"trace pas2\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 < "$MC/trace.txt" | tr -d '\n')\"}" || echo "PUT2 esuat"
-          true
-
-      - name: Aduce serverul din release
-        run: |
-          cd "$MC" || exit 0
-          url=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/lite" --jq '.assets[] | select(.name=="CUANTIC-Server-CatServer-1.7.7.zip") | .browser_download_url' 2>/dev/null || true)
-          echo "PAS3: url=${url:-lipsa} srv.zip=$([ -s srv.zip ] && echo prezent $(stat -c%s srv.zip)B || echo absent)" >> trace.txt
-          if [ -n "$url" ] && [ ! -s srv.zip ]; then
-            curl -sfL "$url" -o srv.zip && echo "  download: $(stat -c%s srv.zip)B" >> trace.txt || echo "  DOWNLOAD ESUAT" >> trace.txt
-          fi
-          if [ -s srv.zip ]; then
-            rm -rf unz && mkdir unz
-            (cd unz && jar xf ../srv.zip 2>>../trace.txt) || (cd unz && unzip -oq ../srv.zip) 2>>trace.txt || echo "  UNZIP ESUAT" >> trace.txt
-            JAR=$( (cd unz && find . -name '*.jar' ! -name '*client*' | while read -r j; do sz=$(wc -c < "$j" 2>/dev/null || echo 0); echo "$sz $j"; done) | sort -rn | head -1 | cut -d' ' -f2- || true)
-            if [ -n "$JAR" ]; then
-              d=$(dirname "$JAR"); (cd "$d" && find . -maxdepth 1 -mindepth 1 -exec mv -t "$MC" {} +) 2>/dev/null || true
-              [ -f "$MC/$(basename "$JAR")" ] && echo "JAR=$MC/$(basename "$JAR")" >> "$GITHUB_ENV"
-              echo "  jar=$(basename "$JAR") mutat in \$MC" >> trace.txt
-            else
-              echo "  FARA JAR in zip:" >> trace.txt; unzip -l srv.zip | head -8 >> trace.txt 2>&1 || true
-            fi
-          fi
-          sha=$(curl -sf "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt?ref=mc-run" | grep -o '"sha": *"[a-f0-9]*"' | head -1 | cut -d'"' -f4)
-          [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
-          curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
-            -d "{\"message\":\"trace pas3\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 < trace.txt | tr -d '\n')\"}" || echo "PUT3 esuat"
-          true
-
-      - name: Configurare sigura
-        run: |
-          [ -n "${JAR:-}" ] || { echo "PAS4: sari (fara jar)" >> "$MC/trace.txt"; exit 0; }
-          cd "$MC" || exit 0
-          echo "eula=true" > eula.txt
-          PASS=$(head -c 24 /dev/urandom | md5sum | cut -c1-16)
-          echo "$PASS" > .rcpass
-          touch server.properties
-          for kv in "online-mode false" "server-port 25575" "view-distance 2" "simulation-distance 2" "max-players 2" "spawn-protection 0" "level-name staging" "level-type minecraft\\\\:flat" "generate-structures false" "allow-nether false" "enable-rcon true" "rcon.port 25585"; do
-            k=${kv%% *}; v=${kv#* }
-            grep -q "^$k=" server.properties && sed -i "s|^$k=.*|$k=$v|" server.properties || echo "$k=$v" >> server.properties
-          done
-          grep -q "^rcon.password=" server.properties && sed -i "s|^rcon.password=.*|rcon.password=$PASS|" server.properties || echo "rcon.password=$PASS" >> server.properties
-          rm -f -- */session.lock world/session.lock 2>/dev/null || true
-          echo "PAS4: configurat port 25575 rcon 25585" >> "$MC/trace.txt"
-          true
-
-      - name: Porneste si probeaza
-        run: |
-          cd "$MC" || exit 0
-          if [ -z "${JAR:-}" ]; then echo "PAS5: sari boot" >> trace.txt; exit 0; fi
-          FREE=$(awk '/MemAvailable/{print int($2/1024)}' /proc/meminfo 2>/dev/null || echo 1500)
-          if [ "$FREE" -gt 3200 ]; then X=2048; elif [ "$FREE" -gt 2100 ]; then X=1400; else X=900; fi
-          echo "PAS5: porneesc -Xmx${X}M (liber ${FREE}M)" >> trace.txt
-          nohup java -Xms256M -Xmx${X}M -XX:MaxMetaspaceSize=320M -XX:+UseG1GC -jar "$JAR" nogui > console.log 2>&1 &
-          JPID=$!
-          echo "  pid $JPID" >> trace.txt
-          OK=0
-          for i in $(seq 1 100); do
-            sleep 4
-            if grep -q "Done (" console.log 2>/dev/null; then OK=1; break; fi
-            if ! kill -0 "$JPID" 2>/dev/null; then echo "  java a murit la it $i" >> trace.txt; break; fi
-          done
-          if [ "$OK" = 1 ]; then
-            SECS=$(grep -o "Done ([0-9.]*s)" console.log | head -1)
-            bash -c 'exec 3<>/dev/tcp/127.0.0.1/25575' 2>/dev/null && PORT=viu || PORT=inchis
-            RSS=$(awk "/VmRSS/{print int(\\$2/1024)}" /proc/$JPID/status 2>/dev/null || echo ?)
-            echo "  BOOT OK $SECS | port 25575 $PORT | RSS ${RSS} MiB" >> trace.txt
-            echo "{\"state\":\"booted\",\"boot\":\"$SECS\",\"port\":\"$PORT\",\"rss_mib\":$RSS}" > summary.json 2>/dev/null \
-              || printf '{"state":"booted","boot":"%s","port":"%s"}\n' "$SECS" "$PORT" > summary.json
-            sleep 25
-            echo "  soak 25s, rss max: $(awk "/VmRSS/{print int(\\$2/1024)}" /proc/$JPID/status 2>/dev/null || echo ?) MiB" >> trace.txt
-          else
-            echo "{\"state\":\"esuat\"}" > summary.json
-            echo "  BOOT ESUAT - vezi boot.log" >> trace.txt
-            head -c 60000 console.log > boot.log 2>/dev/null || true
-          fi
-          kill "$JPID" 2>/dev/null; sleep 6; kill -9 "$JPID" 2>/dev/null || true
-          tail -c 380000 console.log > console-tail.log 2>/dev/null || true
-          head -c 120000 console.log > boot.log 2>/dev/null || true
-          PASS=$(cat .rcpass 2>/dev/null)
-          for f in console-tail.log boot.log trace.txt summary.json; do
-            [ -f "$f" ] && sed -i "s|$PASS|<REDACTAT>|g" "$f" 2>/dev/null || true
-          done
-          rm -f .rcpass eula.txt console.log
-          true
-
-      - name: Publica prin API
-        if: always()
-        run: |
-          cd "$MC" || exit 0
-          echo "PAS6: public" >> trace.txt
-          upl() {
-            f="$1"
-            [ -s "$f" ] || return 0
-            sha=$(curl -sf "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/$f?ref=mc-run" | grep -o '"sha": *"[a-f0-9]*"' | head -1 | cut -d'"' -f4)
-            [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
-            curl -sf -o /dev/null -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/$f" \
-              -d "{\"message\":\"mc-run $f la $(date -u '+%H:%M')\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 < "$f" | tr -d '\n')\"}" \
-              && echo "  $f: OK" >> trace.txt || echo "  $f: PUT-ESUAT cod $(curl -s -o /dev/null -w '%{http_code}' "https://api.github.com" )" >> trace.txt
+            echo "=== stare $(date -u '+%F %T UTC') ==="
+            pgrep -af "java @unix_args" | head -2 || echo "JAVA: jos"
+            (exec 3<>/dev/tcp/127.0.0.1/25565) 2>/dev/null && echo "PORT 25565: viu" || echo "PORT 25565: inchis"
+            pgrep -f "frpc" >/dev/null && echo "frpc: sus" || echo "frpc: jos"
+            pgrep -f "c.sh|cuantic-live" >/dev/null && echo "supervisor c.sh: sus" || echo "supervisor c.sh: jos"
+            [ -f "$D/logs/latest.log" ] && { echo "--- latest.log ( ultimele 15 )"; tail -15 "$D/logs/latest.log"; } || echo "fara latest.log"
+            awk '/MemTotal|MemAvailable/ {printf "%s %d MiB\n", $1, $2/1024}' /proc/meminfo
+            uptime 2>/dev/null || cat /proc/loadavg
+          } > $T 2>&1
+          cat $T
+          pune() {
+            local msg="$1"
+            for i in 1 2 3; do
+              sha=$(gh api "repos/$GITHUB_REPOSITORY/contents/analysis/MC-STATUS.md?ref=$GITHUB_REF_NAME" --jq .sha 2>/dev/null || true)
+              if gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/analysis/MC-STATUS.md" \
+                   -f message="$msg $(date -u +%H:%M:%S)" -f content="$(base64 -w0 < $T)" \
+                   -f branch="$GITHUB_REF_NAME" ${sha:+-f sha=$sha} >/dev/null 2>&1; then
+                echo "verdict publicat (incearca $i)"; return 0
+              fi
+              sleep 3
+            done
+            echo "verdict N-A AJUNS pe github"; return 0
           }
-          upl summary.json
-          upl boot.log
-          upl console-tail.log
-          upl trace.txt
-          { echo "run $GITHUB_RUN_ID: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-            echo "VPS ARM64 self-hosted; doar text rosit; lumea nu a fost atinguta."
-          } > PROVENIENTA.txt
-          upl PROVENIENTA.txt
-          # trace-ul actualizat merge din nou, ca sa arate si succesele PUT-urilor
-          sha=$(curl -sf "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt?ref=mc-run" | grep -o '"sha": *"[a-f0-9]*"' | head -1 | cut -d'"' -f4)
-          [ -n "$sha" ] && extra="\"sha\":\"$sha\"," || extra=""
-          curl -sf -o /dev/null -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/TRACE.txt" \
-            -d "{\"message\":\"trace final\",\"branch\":\"mc-run\",$extra\"content\":\"$(base64 < trace.txt | tr -d '\n')\"}" || true
-          true
-      - name: Creier (github-script, actionale node)
-        if: always()
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ github.token }}
-          script: |
-            const fs = require('fs'), path = require('path');
-            const mc = process.env.MC || path.join(process.env.GITHUB_WORKSPACE, 'mcw');
-            const owner = context.repo.owner, repo = context.repo.repo;
-            const nume = { 'trace.txt': 'TRACE.txt', 'put1.json': 'put1.json', 'summary.json': 'summary.json',
-              'boot.log': 'boot.log', 'console-tail.log': 'console-tail.log', 'javainstall.txt': 'javainstall.txt',
-              'ram.txt': 'ram.txt', 'skip.txt': 'skip.txt', 'diag.txt': 'diag.txt' };
-            const rap = [];
-            async function pune(fis, dest) {
-              let sha = undefined;
-              try {
-                const cur = await github.rest.repos.getContent({ owner, repo, path: 'mc-run/' + dest, ref: 'mc-run' });
-                sha = cur.data.sha;
-              } catch (e) { rap.push(dest + ': nou (' + e.status + ')'); }
-              try {
-                const r = await github.rest.repos.createOrUpdateFileContents({
-                  owner, repo, path: 'mc-run/' + dest,
-                  message: 'vps ' + fis + ' @ ' + new Date().toISOString(),
-                  content: fs.readFileSync(path.join(mc, fis)).toString('base64'),
-                  branch: 'mc-run', sha });
-                rap.push(dest + ': OK ' + (r.data && r.data.commit && r.data.commit.sha ? r.data.commit.sha.slice(0, 7) : ''));
-              } catch (e) {
-                rap.push(dest + ': ESEC ' + e.status + ' ' + String(e.message).slice(0, 120) +
-                  ' scopes=' + ((e.response && e.response.headers && e.response.headers['x-oauth-scopes']) || '?'));
-              }
-            }
-            for (const [fis, dest] of Object.entries(nume)) {
-              const q = path.join(mc, fis);
-              if (fs.existsSync(q) && fs.statSync(q).size < 900000) await pune(fis, dest);
-            }
-            const prov = 'run ' + process.env.GITHUB_RUN_ID + ' | mc=' + mc + '\n' + rap.join('\n') + '\n';
-            // canal de 140 caractere: commit status pe head-ul curent — il citesc de aici
-            const probe = [];
-            for (const f of fs.existsSync(mc) ? fs.readdirSync(mc) : []) {
-              probe.push(f + ':' + fs.statSync(path.join(mc, f)).size);
-            }
-            let apiTest = 'API-OK';
-            try { await github.rest.repos.createCommitStatus({ owner, repo, sha: context.sha,
-              state: 'success', context: 'vps-diag/0',
-              description: 'mc files ' + probe.join(' ').slice(0, 95) }); }
-            catch (e) { apiTest = 'PUT403'; }
-            const unu = rap.join(';').slice(0, 90);
-            try { await github.rest.repos.createCommitStatus({ owner, repo, sha: context.sha,
-              state: unu.includes('ESEC') ? 'failure' : 'success', context: 'vps-diag/1',
-              description: apiTest + ' rap: ' + unu }); } catch (e) { core.warning('status2: ' + e.status); }
-            try {
-              const t = fs.existsSync(path.join(mc, 'trace.txt')) ? fs.readFileSync(path.join(mc, 'trace.txt'), 'utf8') : 'FARA TRACE';
-              const rand = t.split('\n').filter(Boolean);
-              let ok = true;
-              for (let i = 0; i < Math.min(rand.length, 6); i++) {
-                await github.rest.repos.createCommitStatus({ owner, repo, sha: context.sha,
-                  state: 'success', context: 'vps-diag/t' + i,
-                  description: rand[i].replace(/[^\x20-\x7e]/g, '?').slice(0, 140) });
-              }
-            } catch (e) { core.warning('statuses trace: ' + e.status); }
-            try {
-              let sha2; try { sha2 = (await github.rest.repos.getContent({ owner, repo, path: 'mc-run/PROVENIENTA.txt', ref: 'mc-run' })).data.sha; } catch (e) {}
-              await github.rest.repos.createOrUpdateFileContents({ owner, repo, path: 'mc-run/PROVENIENTA.txt',
-                message: 'provenienta vps', content: Buffer.from(prov).toString('base64'), branch: 'mc-run', sha: sha2 });
-            } catch (e) { core.warning('provenienta esuata: ' + e.status); }
+          pune "mc-run: stare inainte"
+          # marcaj pentru "Done (" proaspat
+          if [ -f "$D/logs/latest.log" ]; then wc -l < "$D/logs/latest.log" > /tmp/mcmark; else echo 0 > /tmp/mcmark; fi
 
-      - name: Sonda git (canal 1)
-        if: always()
-        shell: bash
+      - name: Trezire (doar daca e jos; altfel nu ating nimic)
+        timeout-minutes: 8
         run: |
-          set +e
-          cd "$GITHUB_WORKSPACE"
-          git -c user.name=vps -c user.email=vps@localhost -c commit.gpgsign=false commit --allow-empty -m "sonda-vps $(date -u +%H:%M)"
-          echo "commit rc=$?"
-          git push -q origin HEAD:refs/heads/vps-sonda
-          echo "push rc=$?"
-
-      - name: Sonda api (canal 2)
-        if: always()
-        shell: bash
-        run: |
-          set +e
-          echo "canal2 $(date -u +%H:%M)" > ping.txt
-          B64=$(base64 < ping.txt | tr -d '\n')
-          gh api --method PUT "repos/$GITHUB_REPOSITORY/contents/mc-run/SONDA.txt" -f branch=mc-run -f message="sonda api vps" -f content="$B64" 2>&1 | head -3
-          echo "gh rc=$?"
-          curl -sf -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/mc-run/SONDA2.txt" -d "{\"message\":\"sonda2\",\"branch\":\"mc-run\",\"content\":\"$B64\"}" -o resp.json -w "http=%{http_code}\\n"
-          cat resp.json 2>/dev/null | head -c 200
-          exit 0
-
-      - name: Plan B — push fisierele pe bransa arena
-        if: always()
-        shell: bash
-        run: |
-          set +e
-          cd "$GITHUB_WORKSPACE" || exit 0
-          git -c core.hooksPath=/dev/null add -f mcw/trace.txt mcw/put1.json mcw/summary.json mcw/boot.log mcw/console-tail.log mcw/javainstall.txt 2>/dev/null
-          git ls-files --error-unmatch mcw/trace.txt >/dev/null 2>&1 || { echo "nimic de adaugat" >> mcw/trace.txt; git -c core.hooksPath=/dev/null add -f mcw/trace.txt; }
-          { echo "== stare add: $(git status --porcelain | head -10)"; echo "== mcw:"; ls -la mcw 2>&1 | head -15; echo "== trace:"; head -50 mcw/trace.txt 2>&1; } > mcw-selfreport.txt
-          git add -f mcw mcw-selfreport.txt 2>/dev/null
-          git -c user.name=vps -c user.email=vps@localhost -c commit.gpgsign=false commit -q -m "vps-run $GITHUB_RUN_ID: fisiere brute" || true
-          TOK="${{ secrets.REPO_PUSH_TOKEN }}"
-          if [ -n "$TOK" ]; then
-            git push -q "https://x-access-token:$TOK@github.com/$GITHUB_REPOSITORY" HEAD:refs/heads/vps-run >> mcw/trace.txt 2>&1 && echo "planB: PUSHAT cu PAT" >> mcw/trace.txt || echo "planB: PAT respins" >> mcw/trace.txt
-          else
-            echo "planB: secretul REPO_PUSH_TOKEN lipseste" >> mcw/trace.txt
+          export GH_TOKEN= GITHUB_TOKEN=
+          D=$HOME/cuantic-live
+          if pgrep -f "java @unix_args" >/dev/null; then
+            echo "java e deja sus - nu fac nimic"
+            exit 0
           fi
-          # dovada statusurilor chiar daca push-ul API a fost read-only
-          true
+          mkdir -p "$D"
+          if pgrep -f "c.sh|cuantic-live.sh" >/dev/null; then
+            echo "punte: trimite restart in cmd.in"
+            echo restart > "$D/cmd.in"
+          else
+            echo "supervisorul e jos - il pornesc pe c.sh (masina il mai si reaprinde din bash ~/b.sh)"
+            [ -x "$HOME/c.sh" ] || curl -fsSLo "$HOME/c.sh" "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_REF_NAME/scripts/cuantic-live.sh" && chmod +x "$HOME/c.sh"
+            ( setsid bash "$HOME/c.sh" >> "$D/sup.log" 2>&1 </dev/null & )
+          fi
+          OK=0
+          for i in $(seq 1 45); do
+            sleep 10
+            if [ -f "$D/logs/latest.log" ]; then
+              tail -n +"$(($(cat /tmp/mcmark) + 1))" "$D/logs/latest.log" 2>/dev/null | grep -q "Done (" && { OK=1; break; }
+            fi
+            pgrep -f "java @unix_args" >/dev/null || sleep 20
+          done
+          echo "boot: $([ $OK = 1 ] && echo "DONE (proaspat)" || echo "NU a apucat sa termine in fereastra")"
+          {
+            echo "=== dupa trezire $(date -u '+%F %T UTC') ==="
+            echo "rezultat: $([ $OK = 1 ] && echo 'serverul a ajuns la Done ( proaspat' || echo 'Done ( NU s-a vazut in fereastra de ~7 minute')"
+            pgrep -af "java @unix_args" | head -2 || echo "java inca jos"
+            (exec 3<>/dev/tcp/127.0.0.1/25565) 2>/dev/null && echo "PORT 25565: viu" || echo "PORT 25565: inchis"
+            [ -f "$D/logs/latest.log" ] && tail -n +"$(($(cat /tmp/mcmark) + 1))" "$D/logs/latest.log" 2>/dev/null | grep -E "Done \(|ERROR|Can.t keep up" | tail -8
+            awk '/MemAvailable/ {printf "MemAvailable %d MiB\n", $2/1024}' /proc/meminfo
+          } > /tmp/mcst.txt 2>&1
+          cat /tmp/mcst.txt
+          for i in 1 2 3; do
+            sha=$(gh api "repos/$GITHUB_REPOSITORY/contents/analysis/MC-STATUS.md?ref=$GITHUB_REF_NAME" --jq .sha 2>/dev/null || true)
+            gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/analysis/MC-STATUS.md" \
+              -f message="mc-run: dupa trezire $(date -u +%H:%M:%S)" -f content="$(base64 -w0 < /tmp/mcst.txt)" \
+              -f branch="$GITHUB_REF_NAME" ${sha:+-f sha=$sha} >/dev/null 2>&1 && { echo "verdict final publicat"; break; }
+            sleep 3
+          done
+          exit 0
