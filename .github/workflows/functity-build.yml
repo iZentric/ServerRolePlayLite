@@ -71,6 +71,26 @@ jobs:
           echo "gradle exit: $GE" | tee -a ../build-out.log
           printf '::warning::gradle exit=%s tail=%s\n' "$GE" "$(tail -c 1400 ../build-out.log | tr '\n' '~')"
 
+      - name: Baseline oficial Mohist 1.16.5-1237 (independent de build-ul nostru)
+        if: always()
+        run: |
+          set +e
+          mkdir -p /tmp/fc
+          OK=""
+          for U in https://repo1.maven.org/maven2/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar https://maven.mohistmc.com/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar; do
+            curl -fsSL --max-time 600 -o /tmp/fc/mohist-1.16.5-1237-server.jar "$U" && { OK=$U; break; }
+          done
+          S=$(sha256sum /tmp/fc/mohist-1.16.5-1237-server.jar 2>/dev/null | cut -d" " -f1)
+          E=17d08ed544aab50f0c9c0281507a44d765cfeb371289a10d47e2143146255bff
+          if [ "$S" = "$E" ]; then
+            echo "SHA-256 OFICIAL OK; sursa: $OK; marime: $(stat -c %s /tmp/fc/mohist-1.16.5-1237-server.jar)B; descarcare: $(date -u '+%F %T')" > /tmp/fc/OFFICIAL.txt
+            echo "$S  mohist-1.16.5-1237-server.jar" >> /tmp/fc/SHA256SUMS.txt
+          else
+            rm -f /tmp/fc/mohist-1.16.5-1237-server.jar
+            echo "SHA MISMATCH sau esec descarcare: got=[$S]" > /tmp/fc/OFFICIAL.txt
+          fi
+          printf '::warning::oficial: %s\n' "$(tr '\n' '~' < /tmp/fc/OFFICIAL.txt | head -c 300)"
+
       - name: Colecteaza artefactele
         if: always()
         run: |
