@@ -1,5 +1,5 @@
 diff --git a/build.gradle b/build.gradle
-index 2d4225a1..70ceafc6 100644
+index 2d4225a1..9f1fe476 100644
 --- a/build.gradle
 +++ b/build.gradle
 @@ -22,8 +22,8 @@ plugins {
@@ -8,8 +8,8 @@ index 2d4225a1..70ceafc6 100644
      id 'net.minecraftforge.gradleutils' version '[2.2,2.3)'
 -    id 'net.minecraftforge.gradle.patcher' version '[6.0.16,6.2)' apply false
 -    id 'net.minecraftforge.gradle.mcp' version '[6.0.16,6.2)' apply false
-+    id 'net.minecraftforge.gradle.patcher' version '[6.0.16,6.1)' apply false
-+    id 'net.minecraftforge.gradle.mcp' version '[6.0.16,6.1)' apply false
++    id 'net.minecraftforge.gradle.patcher' version '6.0.16' apply false
++    id 'net.minecraftforge.gradle.mcp' version '6.0.16' apply false
      id 'eclipse'
      id 'de.undercouch.download' version '5.4.0'
  }
