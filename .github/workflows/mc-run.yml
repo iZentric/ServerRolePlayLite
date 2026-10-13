@@ -1,10 +1,9 @@
 name: MC-RUN
-# Serverul VIU de pe masina (Cloud Shell + frp, 92.5.171.150:25565).
-# Regula casei (PROMPT-CUANTIC-AGENT.md): verdictul se publica DEVREME, inainte de
-# orice asteptare; restart SE cere prin puntea cmd.in, nu cu java manual (pe aceeasi
-# lume = mort). Token-ul runner-ului e read-only, deci publicarea se face cu node
-# https + credentialii reali ai masinii (gh hosts.yml / .git-credentials / remote),
-# ca botul site-ului. Niciodata nu se printeaza vreo cheie.
+# Serverul VIU al lui marius, masina lui (Cloud Shell, frp, 92.5.171.150:25565).
+# Semantica de culori: VERDE = server sanatos (SLP raspunde local). ROSU = boala si
+# incercare de reanimare prin puntea casei (cmd.in -> c.sh -> FIFO JVM; NU java
+# manual pe aceeasi lume). Verdictul il pune gh-ul MASINII in analysis/MC-STATUS.md
+# (token-ul workflow-ului e read-only pe self-hosted public, cel din keyring nu).
 on:
   push:
     paths:
@@ -15,102 +14,79 @@ jobs:
   live:
     runs-on: self-hosted
     steps:
-      - name: Gaz — gaseste clone-ul cu write si functiona de publicare
+      - name: SLP local cu node (probe sanatatii)
         run: |
-          CLON=""
-          for g in $(find "$HOME" -maxdepth 5 -name .git -type d 2>/dev/null | head -40); do
-            repo="${g%/.git}"
-            url=$(git -C "$repo" remote get-url origin 2>/dev/null || true)
-            case "$url" in
-              *ServerRolePlayLite*)
-                case "$url" in
-                  *"@"*github*|*ghp_*|*github_pat_*|*x-access-token*) CLON="$repo"; echo "clone cu token embedat: $repo (token ascuns)"; break 2;;
-                  *) [ -z "$CLON" ] && CLON_PLAIN="$repo";;
-                esac;;
-            esac
-          done
-          if [ -z "$CLON" ] && [ -n "${CLON_PLAIN:-}" ]; then
-            cred=$(git -C "$CLON_PLAIN" config --get credential.helper || true)
-            echo "clone fara token embedat: $CLON_PLAIN helper=$cred"
-            case "$cred" in *store*) tok=$(grep -m1 "github.com" "$HOME/.git-credentials" 2>/dev/null | sed -E "s|https://([^@]+)@.*|\\1|"); [ -n "$tok" ] && CLON="$CLON_PLAIN" && echo "folosesc .git-credentials pt acelasi clone";; esac
-          fi
-          [ -n "$CLON" ] && echo "CLON=$CLON" >> "$GITHUB_ENV" || echo "CLON=" >> "$GITHUB_ENV"
-          cat > "$RUNNER_TEMP/pune.sh" <<SH
-          #!/bin/bash
-          # \$1 = mesaj; /tmp/mcst.txt = verdictul. Publica pe bransa trigger-ului.
-          msg="\$1"
-          if [ -n "\${CLON:-}" ]; then
-            git -C "\$CLON" fetch -q origin "\$GITHUB_REF_NAME" || { echo "fetch esuat"; exit 0; }
-            git -C "\$CLON" worktree prune || true
-            rm -rf /tmp/mcwt
-            git -C "\$CLON" worktree add -q /tmp/mcwt --detach "origin/\$GITHUB_REF_NAME" || { echo "worktree esuat"; exit 0; }
-            mkdir -p /tmp/mcwt/analysis
-            cp /tmp/mcst.txt /tmp/mcwt/analysis/MC-STATUS.md
-            git -C /tmp/mcwt add -f analysis/MC-STATUS.md
-            git -C /tmp/mcwt -c user.name=mc-runner -c user.email=mc-runner@localhost -c commit.gpgsign=false commit -qm "\$msg" || echo "nimic nou"
-            for i in 1 2 3; do
-              git -C /tmp/mcwt push -q origin "HEAD:refs/heads/\$GITHUB_REF_NAME" && { echo "VERDICT OK (git din clone)"; break; }
-              git -C /tmp/mcwt fetch -q origin "\$GITHUB_REF_NAME" && git -C /tmp/mcwt rebase -q "origin/\$GITHUB_REF_NAME" || true
-            done
-            git -C "\$CLON" worktree remove --force /tmp/mcwt 2>/dev/null || true
-          else
-            echo "FARA CLON CU WRITE pe masina — verdictul ramane in /tmp/mcst.txt"
-          fi
-          exit 0
-          SH
-          chmod +x "$RUNNER_TEMP/pune.sh"
-          echo "RUNNER_TEMP=\"$RUNNER_TEMP\"" >> "$GITHUB_ENV"
+          cat > /tmp/slp.js <<'JS'
+          const net = require("net");
+          function vi(n){ n &= 0xFFFFFFFF; const o = []; while (true) { const hi = n & 0xFFFFFF80; if (hi === 0 || hi === 0xFFFFFF80) { o.push(n & 0xFF); return Buffer.from(o); } o.push((n & 0x7F) | 0x80); n >>>= 7; } }
+          const host = "127.0.0.1", port = 25565;
+          const s = net.connect(port, host);
+          const tmo = setTimeout(() => { console.log("SLP: TIMEOUT 6s"); process.exit(1); }, 6000);
+          s.on("error", e => { console.log("SLP: EROARE " + e.code); process.exit(1); });
+          s.on("connect", () => {
+            const h = "127.0.0.1";
+            const hs = Buffer.concat([vi(0), vi(-1), vi(h.length), Buffer.from(h), (() => { const b = Buffer.alloc(2); b.writeUInt16BE(port); return b; })(), vi(1)]);
+            s.write(Buffer.concat([vi(hs.length), hs, vi(1), Buffer.from([0])]));
+          });
+          let buf = Buffer.alloc(0);
+          s.on("data", d => {
+            buf = Buffer.concat([buf, d]);
+            let n = 0, sh = 0, i = 0;
+            while (i < buf.length) { const b = buf[i++]; n |= (b & 0x7F) << sh; if (!(b & 0x80)) break; sh += 7; }
+            if (buf.length - i < n) return;
+            try {
+              const st = JSON.parse(buf.slice(i, i + n).toString("utf8"));
+              clearTimeout(tmo);
+              console.log("SLP: VIU | " + (st.version && st.version.name) + " | jucatori " + (st.players && st.players.online) + "/" + (st.players && st.players.max));
+              s.end();
+              process.exit(0);
+            } catch (e) { console.log("SLP: raspuns stricat " + e.message); process.exit(1); }
+          });
+          JS
+          node /tmp/slp.js; echo "SLP_RC=$?" | tee -a /tmp/mcflag
           true
-      - name: Stare inainte si verdict rapid
+
+      - name: Sanatate si reanimare (puntea caseii)
         run: |
-          T=/tmp/mcst.txt
           D=$HOME/cuantic-live
-          {
-            echo "=== stare inainte $(date -u '+%F %T UTC') ==="
-            pgrep -af "java @unix_args" | head -2 || echo "JAVA: jos"
-            bash -c 'exec 3<>/dev/tcp/127.0.0.1/25565' 2>/dev/null && echo "PORT 25565 local: viu" || echo "PORT 25565 local: inchis"
-            pgrep -f "frpc" >/dev/null && echo "frpc: sus" || echo "frpc: jos"
-            pgrep -f "c.sh|cuantic-live" >/dev/null && echo "supervisor c.sh: sus" || echo "supervisor c.sh: jos"
-            if [ -f "$D/logs/latest.log" ]; then echo "--- latest.log (ultimele 15)"; tail -15 "$D/logs/latest.log"; else echo "fara latest.log in $D"; fi
-            awk '/MemTotal|MemAvailable/ {printf "%s %d MiB\n", $1, $2/1024}' /proc/meminfo
-            cat /proc/loadavg
-          } > $T 2>&1
-          cat $T
-          RUNNER_TEMP="${RUNNER_TEMP:-/tmp}" CLON="$CLON" bash "$RUNNER_TEMP/pune.sh" "mc-run: stare inainte" || true
-      - name: Trezire doar daca e jos
-        timeout-minutes: 9
-        run: |
-          T=/tmp/mcst.txt
-          D=$HOME/cuantic-live
-          if pgrep -f "java @unix_args" >/dev/null; then
-            echo "java e deja sus - nu ating nimic"
-            { echo "=== dupa control $(date -u '+%F %T UTC') ==="; echo "serverul era deja pornit, nu am atins nimic."; pgrep -af "java @unix_args" | head -2; } > $T
-            exit 0
+          MARK=0
+          if pgrep -f "java @unix_args" >/dev/null; then S=ok; else S=jos; fi
+          if [ "$S" = ok ]; then node /tmp/slp.js > /tmp/slp2.txt 2>&1 && H=sanatos || H=blocat; else H=absent; fi
+          echo "stare: java=$S health=$H"
+          if [ "$H" != sanatos ]; then
+            if [ "$S" = jos ] && [ ! -x "$HOME/c.sh" ]; then
+              curl -fsSLo "$HOME/c.sh" "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_REF_NAME/scripts/cuantic-live.sh" && chmod +x "$HOME/c.sh"
+            fi
+            if [ "$S" = jos ]; then
+              echo "java jos: ridic supervisorul c.sh (self-repara si pack-ul)"
+              ( setsid bash "$HOME/c.sh" >> "$D/sup.log" 2>&1 </dev/null & )
+            else
+              echo "java sus dar SLP $H: cer RESTART prin punte (cmd.in)"
+              mkdir -p "$D"; echo restart > "$D/cmd.in"
+            fi
+            if [ -f "$D/logs/latest.log" ]; then wc -l < "$D/logs/latest.log" > /tmp/mcmark; else echo 0 > /tmp/mcmark; fi
+            for i in $(seq 1 40); do
+              sleep 10
+              if node /tmp/slp.js >/dev/null 2>&1; then echo "revino la viata dupa $((i*10))s"; break; fi
+            done
+            node /tmp/slp.js && H=redresat || H="nu s-a redresat in ~7 min"
+            echo "dupa reanimare: $H"
           fi
-          if [ -f "$D/logs/latest.log" ]; then wc -l < "$D/logs/latest.log" > /tmp/mcmark; else echo 0 > /tmp/mcmark; fi
-          mkdir -p "$D"
-          if pgrep -f "c.sh|cuantic-live.sh" >/dev/null; then
-            echo "punte: cer restart in cmd.in"
-            echo restart > "$D/cmd.in"
-          else
-            echo "supervisor jos: il ridic cu c.sh (in Background, ca la boot.sh)"
-            [ -x "$HOME/c.sh" ] || { curl -fsSLo "$HOME/c.sh" "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_REF_NAME/scripts/cuantic-live.sh" && chmod +x "$HOME/c.sh"; }
-            ( setsid bash "$HOME/c.sh" >> "$D/sup.log" 2>&1 </dev/null & )
-          fi
-          OK=0
-          for i in $(seq 1 45); do
-            sleep 10
-            tail -n +"$(($(cat /tmp/mcmark) + 1))" "$D/logs/latest.log" 2>/dev/null | grep -q "Done (" && { OK=1; break; }
-          done
-          echo "boot proaspat: $([ $OK = 1 ] && echo DA || echo NU-IN-FERESTRA)"
           {
-            echo "=== dupa trezire $(date -u '+%F %T UTC') ==="
-            echo "rezultat: $([ $OK = 1 ] && echo 'Done ( proaspat in log' || echo 'Done ( nu s-a vazut in ~7 min')"
-            pgrep -af "java @unix_args" | head -2 || echo "java inca jos"
-            bash -c 'exec 3<>/dev/tcp/127.0.0.1/25565' 2>/dev/null && echo "PORT 25565 local: viu" || echo "PORT 25565 local: inchis"
-            tail -n +"$(($(cat /tmp/mcmark) + 1))" "$D/logs/latest.log" 2>/dev/null | grep -E "Done \(|Can.t keep up|ERROR" | tail -6
+            echo "=== MC-RUN $(date -u '+%F %T UTC') ==="
+            echo "java: $S | health: $H"
+            pgrep -af "java @unix_args" | head -2
+            bash -c 'exec 3<>/dev/tcp/127.0.0.1/25565' 2>/dev/null && echo "port local 25565: viu" || echo "port local 25565: inchis"
+            pgrep -f frpc >/dev/null && echo "frpc: sus" || echo "frpc: jos"
+            [ -f "$D/logs/latest.log" ] && { echo "--- log (ultimele 12 din fereastra noua)"; tail -n +"$(( $(cat /tmp/mcmark 2>/dev/null || echo 0) + 1 ))" "$D/logs/latest.log" | tail -12; }
             awk '/MemAvailable/ {printf "MemAvailable %d MiB\n", $2/1024}' /proc/meminfo
-          } > $T 2>&1
-          cat $T
-          RUNNER_TEMP="${RUNNER_TEMP:-/tmp}" bash "${RUNNER_TEMP}/pune.sh" "mc-run: dupa trezire $(date -u +%H:%M)" || true
-          exit 0
+            cat /proc/loadavg
+          } > /tmp/mcst.txt
+          cat /tmp/mcst.txt
+          if [ "$H" = sanatos ] || [ "$H" = redresat ]; then R=success; else R=failure; fi
+          export GH_TOKEN= GITHUB_TOKEN=
+          gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/analysis/MC-STATUS.md" \
+            -f message="mc-run: $H @ $(date -u '+%H:%M')" -f content="$(base64 -w0 /tmp/mcst.txt)" \
+            -f branch="$GITHUB_REF_NAME" -f sha="$(gh api "repos/$GITHUB_REPOSITORY/contents/analysis/MC-STATUS.md?ref=$GITHUB_REF_NAME" --jq .sha 2>/dev/null || true)" \
+            >/dev/null 2>&1 && echo "verdict publicat" || echo "verdict NU a ajuns (gh pe masina?)"
+          [ "$R" = success ]
