@@ -133,5 +133,6 @@ jobs:
           V=$(cat /tmp/mcverdict 2>/dev/null || echo failure)
           # ANOTATIA = singurul canal garantat de la self-hosted (verdict integral, o linie)
           printf '::warning::verdict=%s; bransa=%s; continut: %s\n' "$V" "${ok:-niciunul}" "$(tr '\n' '~' < /tmp/mcst.txt | head -c 1500)"
+          printf '::warning::log-server: %s\n' "$(sed -n '/--- log/,$p' /tmp/mcst.txt | tr '\n' '~' | head -c 3800)"
           if [ "$V" != success ] && [ -z "$ok" ]; then exit 42; fi
           [ "$V" = success ]
