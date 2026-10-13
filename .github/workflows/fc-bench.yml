@@ -91,6 +91,10 @@ jobs:
           D="/tmp/fcb/pub/bench/$(date -u +%Y%m%d-%H%M)"
           mkdir -p "$D"
           cp /tmp/fcb/report/result.json "$D/" 2>/dev/null
+          for f in /tmp/fcb/report/*/smoke.log; do
+            [ -f "$f" ] || continue
+            tail -c 200000 "$f" > "$D/$(basename $(dirname $f))-smoke.log"
+          done
           cp /tmp/fcb/ladder-err.txt "$D/ladder-err.txt" 2>/dev/null
           cp /tmp/fcb/spec.txt "$D/spec-used.txt" 2>/dev/null
           cd /tmp/fcb/pub
