@@ -1,0 +1,230 @@
+Downloading https://services.gradle.org/distributions/gradle-8.4-bin.zip
+............10%............20%.............30%............40%.............50%............60%.............70%............80%.............90%............100%
+
+Welcome to Gradle 8.4!
+
+Here are the highlights of this release:
+ - Compiling and testing with Java 21
+ - Faster Java compilation on Windows
+ - Role focused dependency configurations creation
+
+For more details see https://docs.gradle.org/8.4/release-notes.html
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.4/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :buildSrc:compileJava NO-SOURCE
+> Task :buildSrc:compileGroovy
+> Task :buildSrc:processResources NO-SOURCE
+> Task :buildSrc:classes
+> Task :buildSrc:jar
+
+> Configure project :
+Java: 11.0.32.1 JVM: 11.0.32.1+1(Eclipse Adoptium) Arch: amd64
+Forge Version: 36.2.42
+Setting up MCP environment
+Initializing steps
+Executing steps
+ > Running 'downloadManifest'
+ > Running 'downloadJson'
+ > Running 'downloadServer'
+ > Running 'strip'
+ > Running 'rename'
+Stopping at requested step: /home/runner/.gradle/caches/forge_gradle/mcp_repo/de/oceanlabs/mcp/mcp_config/1.16.5-20210115.111550/server/rename/output.jar
+Setting up MCP environment
+Initializing steps
+Executing steps
+ > Running 'downloadManifest'
+ > Running 'downloadJson'
+ > Running 'downloadClient'
+ > Running 'downloadServer'
+ > Running 'stripClient'
+ > Running 'stripServer'
+ > Running 'merge'
+ > Running 'rename'
+Stopping at requested step: /home/runner/.gradle/caches/forge_gradle/mcp_repo/de/oceanlabs/mcp/mcp_config/1.16.5-20210115.111550/joined/rename/output.jar
+
+> Task :mcp:downloadConfig
+
+> Task :mcp:setupMCP
+Setting up MCP environment
+Initializing steps
+Executing steps
+ > Running 'downloadManifest'
+ > Running 'downloadJson'
+ > Running 'downloadClient'
+ > Running 'downloadServer'
+ > Running 'stripClient'
+ > Running 'stripServer'
+ > Running 'merge'
+ > Running 'rename'
+ > Running 'mcinject'
+ > Running 'listLibraries'
+ > Running 'mohistAccessTransformer'
+[22:24:54] [main/INFO]: Access Transformer processor running version 8.0.7+8.0.7+master.43473d43
+[22:24:54] [main/INFO]: Command line arguments [--inJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar, --outJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, --atFile, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg]
+[22:24:54] [main/INFO]: Reading from /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar
+[22:24:54] [main/INFO]: Writing to /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
+[22:24:54] [main/INFO]: Transformer file /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg
+[22:24:54] [main/WARN]: Found existing output jar /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, overwriting
+[22:24:56] [main/INFO]: JAR transformation complete /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
+ > Running 'mohistSideStripper'
+ > Running 'decompile'
+ > Running 'inject'
+ > Running 'patch'
+MCP environment setup is complete
+
+> Task :clean:applyPatches
+> Task :clean:downloadMappings
+> Task :clean:srg2mcp
+> Task :clean:extractMapped
+> Task :mohist:applyPatches
+> Task :mohist:downloadMappings
+> Task :mohist:srg2mcp
+> Task :mohist:extractMapped
+> Task :setup
+
+> Task :mohist:compileFmllauncherJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/fmllauncher/java/net/minecraftforge/fml/loading/RuntimeDistCleaner.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :mohist:processFmllauncherResources
+> Task :mohist:fmllauncherClasses
+> Task :clean:extractSrg
+> Task :clean:createMcp2Srg
+
+> Task :clean:compileJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :clean:processResources NO-SOURCE
+> Task :clean:classes
+> Task :clean:jar
+> Task :clean:reobfJar
+> Task :clean:genServerBinPatches
+> Task :mohist:createFakeSASPatches
+> Task :mohist:createMcp2Srg
+> Task :mohist:compileJava FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+A problem was found with the configuration of task ':mohist:compileJava' (type 'JavaCompile').
+  - Gradle detected a problem with the following location: '/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mohist/src/main/java'.
+    
+    Reason: Task ':mohist:compileJava' uses this output of task ':mohist:extractMapped' without declaring an explicit or implicit dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed.
+    
+    Possible solutions:
+      1. Declare task ':mohist:extractMapped' as an input of ':mohist:compileJava'.
+      2. Declare an explicit dependency on ':mohist:extractMapped' from ':mohist:compileJava' using Task#dependsOn.
+      3. Declare an explicit dependency on ':mohist:extractMapped' from ':mohist:compileJava' using Task#mustRunAfter.
+    
+    For more information, please refer to https://docs.gradle.org/8.4/userguide/validation_problems.html#implicit_dependency in the Gradle documentation.
+
+* Try:
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+* Exception is:
+org.gradle.internal.execution.WorkValidationException: A problem was found with the configuration of task ':mohist:compileJava' (type 'JavaCompile').
+  - Gradle detected a problem with the following location: '/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mohist/src/main/java'.
+    
+    Reason: Task ':mohist:compileJava' uses this output of task ':mohist:extractMapped' without declaring an explicit or implicit dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed.
+    
+    Possible solutions:
+      1. Declare task ':mohist:extractMapped' as an input of ':mohist:compileJava'.
+      2. Declare an explicit dependency on ':mohist:extractMapped' from ':mohist:compileJava' using Task#dependsOn.
+      3. Declare an explicit dependency on ':mohist:extractMapped' from ':mohist:compileJava' using Task#mustRunAfter.
+    
+    For more information, please refer to https://docs.gradle.org/8.4/userguide/validation_problems.html#implicit_dependency in the Gradle documentation.
+	at org.gradle.internal.execution.WorkValidationException$BuilderWithSummary.build(WorkValidationException.java:137)
+	at org.gradle.internal.execution.WorkValidationException$BuilderWithSummary.get(WorkValidationException.java:119)
+	at org.gradle.internal.execution.steps.ValidateStep.throwValidationException(ValidateStep.java:178)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:100)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:55)
+	at org.gradle.internal.execution.steps.CaptureStateBeforeExecutionStep.execute(CaptureStateBeforeExecutionStep.java:71)
+	at org.gradle.internal.execution.steps.CaptureStateBeforeExecutionStep.execute(CaptureStateBeforeExecutionStep.java:45)
+	at org.gradle.internal.execution.steps.SkipEmptyWorkStep.executeWithNonEmptySources(SkipEmptyWorkStep.java:177)
+	at org.gradle.internal.execution.steps.SkipEmptyWorkStep.execute(SkipEmptyWorkStep.java:86)
+	at org.gradle.internal.execution.steps.SkipEmptyWorkStep.execute(SkipEmptyWorkStep.java:53)
+	at org.gradle.internal.execution.steps.RemoveUntrackedExecutionStateStep.execute(RemoveUntrackedExecutionStateStep.java:32)
+	at org.gradle.internal.execution.steps.RemoveUntrackedExecutionStateStep.execute(RemoveUntrackedExecutionStateStep.java:21)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.CleanupStaleOutputsStep.execute(CleanupStaleOutputsStep.java:75)
+	at org.gradle.internal.execution.steps.CleanupStaleOutputsStep.execute(CleanupStaleOutputsStep.java:41)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:66)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:66)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:38)
+	at org.gradle.internal.execution.steps.AssignWorkspaceStep.lambda$execute$0(AssignWorkspaceStep.java:32)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:293)
+	at org.gradle.internal.execution.steps.AssignWorkspaceStep.execute(AssignWorkspaceStep.java:30)
+	at org.gradle.internal.execution.steps.AssignWorkspaceStep.execute(AssignWorkspaceStep.java:21)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:37)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:27)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:47)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:34)
+	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:64)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:145)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:134)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:78)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+
+
+BUILD FAILED in 4m 29s
+23 actionable tasks: 23 executed
+Command exited with non-zero status 1
+	Command being timed: "./gradlew setup mohistJar --no-daemon --stacktrace --max-workers=4"
+	User time (seconds): 5.75
+	System time (seconds): 0.70
+	Percent of CPU this job got: 2%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:30.53
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 160048
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 263
+	Minor (reclaiming a frame) page faults: 23665
+	Voluntary context switches: 18066
+	Involuntary context switches: 925
+	Swaps: 0
+	File system inputs: 69720
+	File system outputs: 541160
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
