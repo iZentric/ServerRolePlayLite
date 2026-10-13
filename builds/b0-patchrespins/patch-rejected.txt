@@ -1,0 +1,2 @@
+PATCH respins de git apply --check: 0001-dropper-insert-null-guard.patch
+error: can't open patch 'functity/patches/0001-dropper-insert-null-guard.patch': No such file or directory
