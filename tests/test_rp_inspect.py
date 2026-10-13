@@ -100,3 +100,15 @@ class NestedFilterTest(unittest.TestCase):
         self.assertFalse(R.nested_allowed("Lobby-SNAPSHOT.tar.gz"))
         self.assertTrue(R.nested_allowed("roleplay.tar"))
         self.assertTrue(R.nested_allowed("archive-2024-09-11T124205Z.tar.gz"))
+
+
+class VarintTest(unittest.TestCase):
+    def test_varint_semnat(self):
+        import importlib, sys
+        sys.path.insert(0, "scripts")
+        import mc_run_check as M
+        importlib.reload(M)
+        self.assertEqual(M._varint(-1), b"\xff")
+        self.assertEqual(M._varint(0), b"\x00")
+        self.assertEqual(M._varint(127), b"\x7f")
+        self.assertEqual(M._varint(300), b"\xac\x02")

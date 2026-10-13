@@ -45,14 +45,17 @@ def read_text(path: str) -> str:
 # ---------- protocolul minim de status Minecraft (SLP, protocol -1) ----------
 
 def _varint(n: int) -> bytes:
+    # regulile Netty (Minecraft): se opreste cand restul dincolo de 7 bits
+    # e ori 0 ori tot 1 (semn extins) — -1 iese ca un singur octet 0xff
+    n &= 0xFFFFFFFF
     out = bytearray()
-    n &= 0xFFFFFFFF  # varint semnat in protocol
     while True:
-        b = n & 0x7F
-        n >>= 7
-        out.append(b | (0x80 if n else 0))
-        if not n:
+        hi = n & 0xFFFFFF80
+        if hi == 0 or hi == 0xFFFFFF80:
+            out.append(n & 0xFF)
             return bytes(out)
+        out.append((n & 0x7F) | 0x80)
+        n >>= 7
 
 
 def _read_varint(sock: socket.socket) -> int:
@@ -71,10 +74,10 @@ def _read_varint(sock: socket.socket) -> int:
             raise ValueError("varint prea lung")
 
 
-def slp_status(port: int, timeout: float = 8.0) -> dict:
-    with socket.create_connection(("127.0.0.1", port), timeout=timeout) as s:
+def slp_status(port: int, timeout: float = 8.0, host: str = "127.0.0.1") -> dict:
+    with socket.create_connection((host, port), timeout=timeout) as s:
         s.settimeout(timeout)
-        host = b"127.0.0.1"
+        host = host.encode()
         hs = _varint(0) + _varint(-1) + _varint(len(host)) + host + struct.pack(">H", port) + _varint(1)
         s.sendall(_varint(len(hs)) + hs)
         s.sendall(_varint(1) + b"\x00")
