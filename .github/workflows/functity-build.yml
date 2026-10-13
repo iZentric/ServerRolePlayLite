@@ -72,8 +72,9 @@ jobs:
           printf '::warning::gradle exit=%s tail=%s\n' "$GE" "$(tail -c 1400 ../build-out.log | tr '\n' '~')"
 
       - name: Colecteaza artefactele
+        if: always()
         run: |
-          set -uo pipefail
+          set +e
           mkdir -p /tmp/fc
           JAR=$(find src/projects src/build src/run -name '*server*.jar' -size +5M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
           [ -n "$JAR" ] || JAR=$(find src/projects src/build src/run -name '*.jar' -size +5M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
@@ -101,6 +102,7 @@ jobs:
           ls -la /tmp/fc
 
       - name: Publica pe functity-out (model rp-drop cu token in URL)
+        if: always()
         run: |
           set +e
           cd /tmp; rm -rf fcout
