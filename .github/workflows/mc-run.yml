@@ -1,6 +1,6 @@
 name: MC-RUN
-# Ruleaza pe VPS-ul lui marius (runner self-hosted). Doua treburile lui:
-# 1) harta VPS-ului (cat e de liber, ce java ruleaza, unde sta serverul real);
+# Ruleaza pe VPS-ul lui marius (runner self-hosted, in container). Doua treburile lui:
+# 1) harta masinii (resurse libere, java, porturi, directoare de server banuite);
 # 2) dovada ca serverul din release-lite booteaza: pornire + SLP ping + rcon + soak.
 # Publica pe bransa mc-run DOAR text rosit. Lumea, bazele si parolele raman acasa.
 on:
@@ -19,32 +19,43 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Pregatitor (dir scrisibil + java)
+        run: |
+          MC="$RUNNER_TEMP/mcw"
+          mkdir -p "$MC"
+          echo "MC=$MC" >> "$GITHUB_ENV"
+          {
+            if command -v java >/dev/null 2>&1; then java -version 2>&1;
+            elif command -v apt-get >/dev/null 2>&1; then
+              sudo -n apt-get install -y -qq openjdk-16-jdk-headless 2>/dev/null \
+                || sudo -n apt-get install -y -qq openjdk-17-jdk-headless 2>/dev/null \
+                || sudo -n apt-get install -y -qq openjdk-11-jdk-headless 2>/dev/null || echo "JAVA LIPSA si instalarea a esuat"
+              command -v java >/dev/null 2>&1 && java -version 2>&1
+            else
+              echo "JAVA LIPSA, fara apt"
+            fi
+          } > "$MC/javainstall.txt" 2>&1
+          true
+
       - name: Harta VPS (doar citire)
         run: |
-          mkdir -p /opt/mc || sudo mkdir -p /opt/mc && sudo chown -R "$(id -un)" /opt/mc || true
-          D=/opt/mc/runner-diag.txt
+          D="$MC/runner-diag.txt"
           {
-            echo "== cine ruleaza =="; id -un; hostname; uname -a
+            echo "== cine ruleaza =="; id -un; hostname; uname -a 2>/dev/null || true
+            echo "== container? =="; [ -f /.dockerenv ] && echo "DA, runner-ul e in docker" || echo "nu semnale docker"
             echo "== resurse libere =="
-            free -m | head -2
-            df -h / /opt /home 2>/dev/null | tail -4
+            free -m | head -2; df -h "$RUNNER_TEMP" | tail -1
             nproc; uptime
-            echo "== java-uri in viata pe masina =="
-            ps -eo pid,rss,etime,cmd | grep -i "[j]ava" | head -20 || echo "niciun proces java"
-            echo "== porturi de ascultare (25xxx/255xx) =="
-            (ss -ltnp 2>/dev/null || netstat -ltnp 2>/dev/null) | grep -E ':25[0-9]{3}' | head -10 || echo "niciun port de joc ascultat"
-            echo "== directoare de server banuite =="
-            for d in /opt /srv /home/*/ /root; do
-              [ -d "$d" ] || continue
-              find "$d" -maxdepth 3 -name "server.properties" 2>/dev/null | head -6
-            done
-            echo "== scripturi de pornire gasite =="
-            for d in /opt /srv /home/*/; do
-              [ -d "$d" ] || continue
-              find "$d" -maxdepth 3 \( -name "start*.sh" -o -name "start*.bat" -o -name "*.service" \) 2>/dev/null | head -8
-            done
-            echo "== systemd servicii mc =="
-            systemctl list-units --type=service --all 2>/dev/null | grep -iE "mc|minecraft|craft|bukkit|paper|velocity" | head -8 || true
+            echo "== java-uri in viata =="
+            ps -eo pid,rss,etime,args 2>/dev/null | grep -i "[j]ava" | head -20 || echo "niciun proces java pe masina"
+            echo "== porturi de ascultare 25xxx =="
+            (ss -ltn 2>/dev/null || netstat -ltn 2>/dev/null) | grep -E ':25[0-9]{3}' | head -10 || echo "niciun port de joc ascultat (în spațiul de rețea al containerului)"
+            echo "== server.properties gasite (maxdepth 3 pe mount-uri) =="
+            for d in / /opt /srv /home /mnt /data; do
+              [ -d "$d" ] && find "$d" -maxdepth 3 -name "server.properties" 2>/dev/null | head -4
+            done | sort -u | head -12
+            echo "== unitati systemd de mc =="
+            systemctl list-units --type=service --all 2>/dev/null | grep -iE "mc|minecraft|craft|bukkit|paper|velocity|proxy" | head -8 || echo "fara systemd sau fara servicii mc"
             echo "== python =="; python3 --version
           } > "$D" 2>&1
           true
@@ -52,43 +63,49 @@ jobs:
       - name: Aduce serverul din release
         run: |
           set -uo pipefail
-          cd /opt/mc
+          cd "$MC"
           url=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/lite" \
-                --jq '.assets[] | select(.name=="CUANTIC-Server-CatServer-1.7.7.zip") | .browser_download_url')
-          if [ ! -s srv.zip ]; then
-            curl -sfL -H "Authorization: Bearer $GH_TOKEN" "$url" -o srv.zip || echo "DESCARCARE ESUATA" >> diag.txt
+                --jq '.assets[] | select(.name=="CUANTIC-Server-CatServer-1.7.7.zip") | .browser_download_url' 2>/dev/null || true)
+          if [ -n "$url" ] && [ ! -s srv.zip ]; then
+            curl -sfL -H "Authorization: Bearer $GH_TOKEN" "$url" -o srv.zip || true
           fi
           if [ -s srv.zip ]; then
             unzip -oq srv.zip || true
             if [ ! -f server.properties ]; then
               d=$(find . -mindepth 1 -maxdepth 1 -type d | head -1)
-              if [ -n "${d:-}" ]; then (cd "$d" && find . -maxdepth 1 -mindepth 1 -exec mv -t /opt/mc {} +) || true; fi
+              if [ -n "${d:-}" ]; then (cd "$d" && find . -maxdepth 1 -mindepth 1 -exec mv -t "$MC" {} +) || true; fi
             fi
-            JAR=$(find . -maxdepth 2 -name '*.jar' ! -name '*client*' -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
-            if [ -n "${JAR:-}" ]; then echo "JAR=/opt/mc/${JAR#./}" >> "$GITHUB_ENV"; fi
           fi
+          JAR=$(find . -maxdepth 2 -name '*.jar' ! -name '*client*' -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || true)
           {
-            echo "== java =="; java -version 2>&1 || echo "JAVA LIPSA pe VPS"
-            echo "== marime dir =="; du -sh . 2>/dev/null
+            echo "== jar gasit: ${JAR:-NIMIC}"
+            echo "== marime dir =="; du -sh . 2>/dev/null | tail -1
             echo "== fisierle (maxdepth 2, cap 80) =="; find . -maxdepth 2 2>/dev/null | sed 's|^\./||' | sort | head -80
-            test -n "${JAR:-}" || echo "FARA JAR - release-ul nu a putut fi adus/pregatit pe VPS"
           } >> diag.txt 2>&1
+          if [ -n "${JAR:-}" ] && command -v java >/dev/null 2>&1; then
+            echo "JAR=$MC/${JAR#./}" >> "$GITHUB_ENV"
+          else
+            echo "JAR=" >> "$GITHUB_ENV"
+            echo "STOP: fara jar sau fara java pe VPS" >> diag.txt
+          fi
           true
 
       - name: Configurare sigura de staging
-        if: env.JAR != ''
         run: |
           set -uo pipefail
-          cd /opt/mc
+          [ -n "${JAR:-}" ] || exit 0
+          cd "$MC"
           echo "eula=true" > eula.txt
           openssl rand -hex 12 > .rcpass
           python3 - <<'PY'
+          import os
           from pathlib import Path
-          sp = Path("/opt/mc/server.properties")
+          mc = Path(os.environ["MC"])
+          sp = mc / "server.properties"
           lines = sp.read_text(encoding="utf-8").splitlines() if sp.exists() else []
           want = {
               "online-mode": "false",
-              "server-port": "25575",           # alt port, ca sa NU calcam serverul live al lui marius
+              "server-port": "25575",           # alt port, ca sa NU calcam serverul live
               "view-distance": "4",
               "simulation-distance": "4",
               "max-players": "2",
@@ -101,7 +118,7 @@ jobs:
               "motd": "CUANTIC staging - nu intra",
               "enable-rcon": "true",
               "rcon.port": "25585",
-              "rcon.password": Path("/opt/mc/.rcpass").read_text().strip(),
+              "rcon.password": (mc / ".rcpass").read_text().strip(),
           }
           out = []
           seen = set()
@@ -113,26 +130,27 @@ jobs:
                   out.append(ln)
           out += [f"{k}={v}" for k, v in want.items() if k not in seen]
           sp.write_text("\n".join(out) + "\n", encoding="utf-8")
-          for lock in Path("/opt/mc").rglob("session.lock"):
+          for lock in mc.rglob("session.lock"):
               try:
                   lock.unlink()
               except OSError:
                   pass
           PY
+          true
 
       - name: Porneste si probeaza
-        if: env.JAR != ''
         run: |
-          cd /opt/mc
+          [ -n "${JAR:-}" ] || { echo "sari: fara jar/java" > "$MC/checker.log"; exit 0; }
+          cd "$MC"
           PASS=$(cat .rcpass 2>/dev/null || echo nimeni)
           nohup java -Xms1G -Xmx3G -XX:+UseG1GC -jar "$JAR" nogui > console.log 2>&1 &
           echo "java pid $!"
           python3 "$GITHUB_WORKSPACE/scripts/mc_run_check.py" \
-            --log /opt/mc/console.log --wait 420 --port 25575 \
+            --log "$MC/console.log" --wait 420 --port 25575 \
             --rcon-port 25585 --rcon-pass "$PASS" --soak 30 \
-            --out /opt/mc/summary.json > checker.log 2>&1
-          echo "checker a iesit cu $?" >> /opt/mc/diag.txt
-          pkill -9 -f 'staging' 2>/dev/null || true
+            --out "$MC/summary.json" > checker.log 2>&1
+          echo "checker: vezi checker.log" >> diag.txt
+          pkill -9 -f "staging" 2>/dev/null || true
           sleep 2
           true
 
@@ -140,15 +158,17 @@ jobs:
         if: always()
         run: |
           python3 - <<'PY'
-          import pathlib, sys
+          import os, pathlib, sys
           sys.path.insert(0, "scripts")
           try:
               from rp_archive_inspect import scrub
           except Exception as exc:
               scrub = None
               print("scrub indisponibil:", exc)
-          base = pathlib.Path("/opt/mc")
-          for f in ("console.log", "checker.log", "diag.txt", "runner-diag.txt", "summary.json"):
+          base = pathlib.Path(os.environ["MC"])
+          names = ("console.log", "checker.log", "diag.txt", "runner-diag.txt",
+                   "summary.json", "javainstall.txt")
+          for f in names:
               p = base / f
               if p.exists() and scrub:
                   try:
@@ -157,21 +177,21 @@ jobs:
                       print("scrub esuat pe", f, exc)
           pwfile = base / ".rcpass"
           pw = pwfile.read_text().strip() if pwfile.exists() else ""
-          for f in ("console.log", "checker.log", "diag.txt", "runner-diag.txt", "summary.json"):
+          for f in names:
               p = base / f
               if pw and p.exists():
                   t = p.read_text(encoding="utf-8", errors="replace")
                   if pw in t:
                       p.write_text(t.replace(pw, "<REDACTAT>"), encoding="utf-8")
           try:
-              tail = (base / "console.log").read_bytes()[-400000:]
-              (base / "console-tail.log").write_bytes(tail)
-              (base / "boot.log").write_bytes((base / "console.log").read_bytes()[:160000])
+              raw = (base / "console.log").read_bytes()
+              (base / "console-tail.log").write_bytes(raw[-400000:])
+              (base / "boot.log").write_bytes(raw[:160000])
+              (base / "console.log").unlink()
           except OSError:
               pass
           try:
               pwfile.unlink()
-              (base / "console.log").unlink()
           except OSError:
               pass
           PY
@@ -181,7 +201,7 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
-          test -d /opt/mc || { echo "nimic de publicat"; exit 0; }
+          test -d "$MC" || { echo "nimic de publicat"; exit 0; }
           if ! git ls-remote --exit-code origin refs/heads/mc-run >/dev/null 2>&1; then
             empty=$(git commit-tree "$(git hash-object -w -t tree --stdin </dev/null)" -m "mc-run: radacina")
             git push -q origin "$empty:refs/heads/mc-run"
@@ -191,15 +211,13 @@ jobs:
           rm -rf /tmp/wt-mcrun
           git worktree add -q /tmp/wt-mcrun -B mc-run FETCH_HEAD
           mkdir -p /tmp/wt-mcrun/mc-run
-          cp /opt/mc/runner-diag.txt /tmp/wt-mcrun/mc-run/ 2>/dev/null || true
-          cp /opt/mc/summary.json /tmp/wt-mcrun/mc-run/ 2>/dev/null || true
-          cp /opt/mc/boot.log /tmp/wt-mcrun/mc-run/boot.log 2>/dev/null || true
-          cp /opt/mc/console-tail.log /tmp/wt-mcrun/mc-run/console-tail.log 2>/dev/null || true
-          cp /opt/mc/diag.txt /tmp/wt-mcrun/mc-run/diag.txt 2>/dev/null || true
-          cp /opt/mc/checker.log /tmp/wt-mcrun/mc-run/checker.log 2>/dev/null || true
+          cd "$MC"
+          for f in runner-diag.txt summary.json boot.log console-tail.log diag.txt checker.log javainstall.txt PROVENIENTA.txt; do
+            [ -f "$f" ] && cp "$f" /tmp/wt-mcrun/mc-run/ || true
+          done
           { echo "run: $GITHUB_RUN_ID"; echo "url: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; \
             echo "data: $(date -u '+%F %T UTC')"; \
-            echo "note: executat pe VPS-ul conectat ca runner self-hosted; logrosit, lumea nu a fost atinguta de acest tur."; } > /tmp/wt-mcrun/mc-run/PROVENIENTA.txt
+            echo "note: executat pe VPS-ul conectat ca runner; logrosit; lumea nu a fost atinguta."; } > /tmp/wt-mcrun/mc-run/PROVENIENTA.txt
           git -C /tmp/wt-mcrun add -A mc-run
           git -C /tmp/wt-mcrun -c commit.gpgsign=false commit -qm "mc-run: tur $(date -u '+%H:%M') de pe VPS" || echo "nimic nou"
           git -C /tmp/wt-mcrun push -q origin HEAD:refs/heads/mc-run
