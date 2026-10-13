@@ -1,0 +1,99 @@
+name: FC-BENCH
+# Banca de proba FunCity: reutilizeaza scara CUANTIC (aceasi metodologie, aceasi masina
+# efemera, acelasi pack 36/14 din release) pe bratele din deploy/fc-bench.txt.
+# Baseline = CatServer oficial din pack (motorul live). Fiecare brat: smoke + 3 probe.
+# Verdictul il scoatem NOII pe annotatie + report.json pe functity-out. Fara javadoc
+# de vendor, fara "cel mai rapid" — doar cifrele masurate aici.
+on:
+  push:
+    paths:
+      - deploy/fc-bench.txt
+      - .github/workflows/fc-bench.yml
+
+permissions:
+  contents: write
+
+jobs:
+  bench:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+
+      - name: Testele de garda inaintea oricarei masuratori
+        run: python3 -m unittest discover -s tests -q
+
+      - name: Packul de referinta, neschimbat, din release-ul lite
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/fcb
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/fcb
+          sha256sum /tmp/fcb/CUANTIC-Server-CatServer-1.7.7.zip
+
+      - name: Umple jar-urile proprii de pe functity-out
+        run: |
+          set +e
+          git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/out
+          cp /tmp/fcb/out/builds/b0/FunCity-1.16.5-b0.jar /tmp/fcb/ 2>/dev/null && echo "b0: $(sha256sum /tmp/fcb/FunCity-1.16.5-b0.jar | cut -c1-16)"
+          B1=$(ls /tmp/fcb/out/builds/b1.*/FunCity-1.16.5-b1.*.jar 2>/dev/null | sort | tail -1)
+          if [ -n "$B1" ]; then cp "$B1" /tmp/fcb/FunCity-ultim.jar; echo "b1: $B1"; fi
+          ls -la /tmp/fcb/*.jar
+
+      - name: Scara 36/14 pe bratele declarate
+        run: |
+          set +e
+          # convertim lista din deploy/fc-bench.txt in spec cuent (virgula intre brate)
+          python3 - <<'PY'
+          import pathlib
+          rows = [l.strip() for l in pathlib.Path('deploy/fc-bench.txt').read_text(encoding='utf-8').splitlines()
+                  if l.strip() and not l.strip().startswith('#')]
+          spec = ",".join(rows)
+          pathlib.Path('/tmp/fcb/spec.txt').write_text(spec, encoding='utf-8')
+          print("spec:", spec[:400])
+          PY
+          python3 scripts/cuantic_ladder.py --spec-file /tmp/fcb/spec.txt \
+            --pack /tmp/fcb/CUANTIC-Server-CatServer-1.7.7.zip \
+            --out /tmp/fcb/report --trials 3 > /tmp/fcb/ladder-stdout.json 2>/tmp/fcb/ladder-err.txt
+          RC=$?
+          echo "ladder rc=$RC"
+          head -c 900 /tmp/fcb/ladder-err.txt | tr '\n' '~'
+          printf '::warning::scara rc=%s; stdout_marime=%s\n' "$RC" "$(stat -c %s /tmp/fcb/ladder-stdout.json 2>/dev/null || echo 0)"
+
+      - name: Verdict scurt + report pe functity-out
+        if: always()
+        run: |
+          set +e
+          python3 - <<'PY'
+          import json, pathlib
+          try:
+              data = json.loads(pathlib.Path('/tmp/fcb/report/result.json').read_text(encoding='utf-8'))
+          except Exception as e:
+              print(f"::warning::fara report: {e}")
+              raise SystemExit(0)
+          for name, row in (data.get('candidates') or {}).items():
+              ab = row.get('ab') or {}
+              metrics = ab.get('metrics') or {}
+              def fmt(k):
+                  v = metrics.get(k) or {}
+                  b = (v.get('baseline') or {}).get('median', '?') if isinstance(v.get('baseline'), dict) else '?'
+                  c = (v.get('candidate') or {}).get('median', '?') if isinstance(v.get('candidate'), dict) else '?'
+                  return f"{k} b={b} c={c}"
+              parts = [fmt(k) for k in list(metrics)[:6]]
+              err = row.get('error', '')
+              print(("::warning::brat %s: smoke=%s done_s=%s plugins=%s ab=%s | %s %s" % (
+                  name, 'DA' if row.get('smoke_passed') else 'NU', row.get('boot_done_s'),
+                  row.get('plugins_enabled'), ab.get('verdict', '-'), ' | '.join(parts), err))[:900])
+          PY
+          git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/pub
+          D="/tmp/fcb/pub/bench/$(date -u +%Y%m%d-%H%M)"
+          mkdir -p "$D"
+          cp /tmp/fcb/report/result.json "$D/" 2>/dev/null
+          cp /tmp/fcb/ladder-err.txt "$D/ladder-err.txt" 2>/dev/null
+          cp /tmp/fcb/spec.txt "$D/spec-used.txt" 2>/dev/null
+          cd /tmp/fcb/pub
+          git config user.name 'functity-ci[bot]'; git config user.email 'fc@localhost'
+          git add -A bench/ && git commit -qm "fc-bench $(date -u +%H%M)" && git push -q origin HEAD:refs/heads/functity-out
+          printf '::warning::report publicat: rc=%s\n' "$?"
