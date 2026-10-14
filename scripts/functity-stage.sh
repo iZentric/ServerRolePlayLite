@@ -57,24 +57,23 @@ java11_adoptium(){
   echo "$D/jdk11/bin/java"
 }
 
-voicechat_port(){ # Simple Voice Chat 1.16.5-2.3.23 = ForgeConfigSpec (verificat din sursa
-  # oficiala, branch outdated/1.16.5-forge, ServerConfig.java): cheia e voice_chat.port, iar
-  # fisierul e config/voicechat-server.toml. *.properties NU exista in acest version.
-  # Productia tine UDP 24454 -> staging primeste 24455.
-  local toml="$D/config/voicechat-server.toml"
-  if grep -qE '^\s*port\s*=' "$toml" 2>/dev/null && grep -qE '^\s*\[voice_chat\]' "$toml" 2>/dev/null; then
-    python3 - "$toml" <<'PYT'
-import re,sys
-p=sys.argv[1]; t=open(p).read()
-t=re.sub(r'(\[voice_chat\][^\[]*?)port\s*=\s*\d+', r'\1port = 24455', t, count=1, flags=re.S)
-open(p,'w').write(t)
-PYT
+voicechat_port(){ # Simple Voice Chat 1.16.5-2.3.x: configbuilder -> cheia PLATA `port`,
+  # fisierul REAL e <rădăcină>/serverconfig/voicechat-server.toml (verificat in ConfigMigrator.java
+  # din sursa oficiala, branch 1.16.5). config/voicechat/*.properties e doar calea VECHE de migrare.
+  # Productia retine UDP 24454 -> staging foloseste 24455.
+  local toml="$D/serverconfig/voicechat-server.toml"
+  mkdir -p "$D/serverconfig"
+  if [ -f "$toml" ] && grep -qE '^[[:space:]]*port[[:space:]]*=' "$toml"; then
+    sed -i -E 's/^[[:space:]]*port[[:space:]]*=.*/port = 24455/' "$toml"
   elif [ -f "$toml" ]; then
-    printf '\n[voice_chat]\n    port = 24455\n' >> "$toml"
+    printf 'port = 24455\n' >> "$toml"
   else
-    printf '# FunCity staging: voice chat pe 24455 (productia retine 24454)\n[voice_chat]\n    port = 24455\n' > "$toml"
+    printf '# FunCity staging (productia tine 24454)\nport = 24455\n' > "$toml"
   fi
-  say "  voicechat: config/voicechat-server.toml -> $(grep -A2 'voice_chat' "$toml" | tr -s ' \n' ' ')"
+  # si varianta veche, complete, ca migrarea sa nu o restabileasca pe 24454
+  mkdir -p "$D/config/voicechat"
+  printf 'port=24455\n' > "$D/config/voicechat/voicechat-server.properties"
+  say "  voicechat: serverconfig/voicechat-server.toml -> $(grep -m1 -E '^[[:space:]]*port' "$toml" | tr -d ' ')"
 }
 
 moduri_count(){ ls "$D/mods" 2>/dev/null | grep -c '\.jar$' || echo 0; }
