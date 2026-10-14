@@ -1,1 +1,1 @@
-v4.9 2026-10-14 (fix resolve_boot_jar(conf,jar,stage) — era inversat si crapa pe stage vid; jar-diag pe git)
+v4.10 2026-10-14 (fix CR-in-YAML: tr -d CR devenise tr -d gol -> refuz fals de manifest; inlocuit cu sed s/CR$//)

@@ -95,7 +95,7 @@ jobs:
           esac
           cp "/tmp/fcb/out/$REF" /tmp/fcb/arm.jar || { say "::error::lipseste $REF: $(ls /tmp/fcb/out/builds 2>/dev/null | tr '\n' ' ')"; exit 1; }
           echo '${{ matrix.arm.sha }}  /tmp/fcb/arm.jar' | sha256sum -c - || { say "::error::SHA jar brat nepotrivit"; exit 1; }
-          unzip -p /tmp/fcb/arm.jar META-INF/MANIFEST.MF | tr -d '\r' | grep -q 'ServerLaunchArgs' || { say "::error::jar fara manifest ServerLaunchArgs — ambalaj fals, refuz"; exit 1; }
+          unzip -p /tmp/fcb/arm.jar META-INF/MANIFEST.MF | sed 's/\r$//' | grep -q 'ServerLaunchArgs' || { say "::error::jar fara manifest ServerLaunchArgs — ambalaj fals, refuz"; exit 1; }
           say "jar OK: $REF marime=$(stat -c %s /tmp/fcb/arm.jar)"
 
       - name: Gonest pe runner (documentat in raport)
