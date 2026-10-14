@@ -71,26 +71,21 @@ print("trimis:", sys.argv[2])
 PY
 }
 
-start_server(){ # nohup + fifo stdin; supravietuieste jobului CI (TRACKING_ID curatat sus)
+start_server(){ # supervisor separat (functity/ci/functity-supervise.py): nu da EOF pe stdin,
+  # supravietuieste jobului CI (setsid + session separation) si traieste cat JVM-ul.
   local JAVA=$1
   say "pornesc FunCity pe portul $PORT (heap $XMX, java: $JAVA)"
+  mkdir -p "$D" || { say "nu pot crea $D"; return 1; }
+  cd "$D" || return 1
+  [ -p console.in ] || mkfifo -m 600 console.in
   : > "$LOG"
-  ( cd "$D" && mkfifo -m 600 console.in 2>/dev/null; rm -f console.fifo
-    python3 - "$JAVA" "$PORT" "$LOG" <<'PY' &
-import os, subprocess, sys
-java, port, log = sys.argv[1:4]
-fifo = "console.in"
-fd = os.open(fifo, os.O_RDWR)
-lf = open(log, "ab", buffering=0)
-p = subprocess.Popen([java, "-Xms1G", f"-Xmx{os.environ.get('FUNCITY_XMX','3G')}",
-                      "-XX:MaxGCPauseMillis=200", "-jar",
-                      os.environ.get("FUNCITY_JARFILE", "FunCity.jar"), "nogui"],
-                     stdin=fd, stdout=lf, stderr=subprocess.STDOUT,
-                     start_new_session=True, cwd=os.getcwd())
-open("server.pid", "w").write(str(p.pid))
-PY
-  ) </dev/null >/dev/null 2>&1 &
-  disown 2>/dev/null || true
+  rm -f "$D/server.pid"
+  setsid env FUNCITY_JAVA="$JAVA" FUNCITY_LOG="$LOG" FUNCITY_XMX="$XMX" \
+    FUNCITY_JARFILE="${FUNCITY_JARFILE:-$(cat "$D/.jarname" 2>/dev/null || echo FunCity.jar)}" \
+    python3 "$GITHUB_WORKSPACE/functity/ci/functity-supervise.py" >/dev/null 2>&1 &
+  for t in 1 2 3 4 5 6; do sleep 3; [ -f "$D/server.pid" ] && break; done
+  [ -s "$D/server.pid" ] || { say "supervisorul nu a scris server.pid"; return 1; }
+  return 0
 }
 
 asteapta_done(){ # $1 = secunde max
