@@ -23,27 +23,14 @@ say(){ echo "$*" | tee -a "$REPORT"; }
 fail(){ say "ERORE: $*"; finish 1; }
 finish(){ mkdir -p /tmp; cp "$REPORT" /tmp/funcity-stage.txt 2>/dev/null; say "(sfarsit rc=$1)"; exit "$1"; }
 
-sync_port(){ # pune server-port-ul curent din marker in server.properties (up/test pot schimba portul intre cicluri)
-  python3 - "$D/server.properties" "$PORT" <<'PYS' 2>>"$REPORT" || true
-import sys
-p, port = sys.argv[1:3]
-try:
-    lines = open(p, encoding='utf-8').read().splitlines()
-except FileNotFoundError:
-    lines = []
-found = False
-out = []
-for l in lines:
-    if l.startswith('server-port='):
-        out.append('server-port=' + port); found = True
-    else:
-        out.append(l)
-if not found: out.append('server-port=' + port)
-open(p, 'w', encoding='utf-8').write('
-'.join(out) + '
-')
-print('server-port sincronizat cu markerul:', port)
-PYS
+sync_port(){ # aliniaza server-port din server.properties cu marker (sed, fara escapoare fragile)
+  [ -f "$D/server.properties" ] || return 0
+  if grep -q '^server-port=' "$D/server.properties"; then
+    sed -i "s/^server-port=.*/server-port=$PORT/" "$D/server.properties"
+  else
+    printf 'server-port=%s\n' "$PORT" >> "$D/server.properties"
+  fi
+  say "  server-port sincronizat cu markerul: $PORT"
 }
 
 prod_java(){ pgrep -f 'java @unix_args' | head -1 || true; }
@@ -279,8 +266,11 @@ PY
     say "RESULTAT: boot1+stop+boot2 OK, 0 crash la salvare/realuare"
     finish 0
     ;;
-  up)
-    [ "$(port_viu "$PORT")" = nu ] || fail "portul $PORT ocupat"
+  restart|up)
+    if [ "$M" = restart ] && [ -f "$D/server.pid" ] && kill -0 "$(cat "$D/server.pid")" 2>/dev/null; then
+      opreste_server || true; sleep 3
+    fi
+    [ "$(port_viu "$PORT")" = nu ] || { [ "$M" = restart ] && say "port $PORT ocupat de altceva"; [ "$(port_viu "$PORT")" = nu ] || fail "portul $PORT ocupat"; }
     JAVA=$(java11_gaseste) || JAVA=$(java11_adoptium) || fail "java11 indisponibil"
     export FUNCITY_XMX="$XMX" FUNCITY_JARFILE="$(cat "$D/.jarname")"
     sync_port
