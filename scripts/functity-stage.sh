@@ -15,8 +15,7 @@ P=$HOME/cuantic-live          # producție (doar citire)
 B=$HOME/funcity-backup        # backup-uri
 REPO=${GITHUB_REPOSITORY:-iZentric/ServerRolePlayLite}
 BR_OUT=functity-out
-CAND=${FUNCITY_JAR:-b1.2256}  # build din functity-out:builds/<CAND>/
-PORT=${FUNCITY_PORT:-25566}
+CAND=b1.2256; PORT=25566          # defaulturile; le pot suprascrie din marker (mai jos)
 XMX=${FUNCITY_XMX:-3G}
 LOG=$D/stage.log; REPORT=/tmp/funcity-stage.txt
 mkdir -p "$(dirname "$REPORT")" 2>/dev/null; : > "$REPORT" 2>/dev/null || true
@@ -130,9 +129,10 @@ verifica_log(){
 M=${1:-test}
 if [ "$M" = auto ] && [ -f deploy/funcity-stage.txt ]; then
   read -r M FP FJ < deploy/funcity-stage.txt || true
-  export FUNCITY_PORT=${FP:-25566} FUNCITY_JAR=${FJ:-$CAND}; M=${M:-test}
+  export FUNCITY_PORT=${FP:-25566} FUNCITY_JAR=${FJ:-}; M=${M:-test}
   say "mod automat din marker: $M port=$FUNCITY_PORT jar=$FUNCITY_JAR" 2>/dev/null || true
 fi
+CAND=${FUNCITY_JAR:-b1.2256}; PORT=${FUNCITY_PORT:-25566}; XMX=${FUNCITY_XMX:-3G}
 case "$M" in
   host-info)  # read-only: ce avem aici — CPU/RAM/disc/java/porturi/jucatori
     say "== FUNCTITY HOST-INFO (read-only) — $(date -u '+%F %T UTC') =="
@@ -198,7 +198,7 @@ case "$M" in
       [ -f "$P/$f" ] && cp -n "$P/$f" "$D/" && say "  copiat $f"
     done
     for w in world world_nether world_the_end; do
-      if [ -d "$P/$w" ]; then say "  copie $w (${$FUNCITY_NO_WORLD:-rsync -a --delete} nu, copiem intotdeauna): "; rsync -a "$P/$w" "$D/" 2>>"$REPORT" || cp -a "$P/$w" "$D/"; say "  lume $w copiata in staging ($(du -sm "$D/$w" 2>/dev/null | cut -f1) MiB) — originalul neatins"; fi
+      if [ -d "$P/$w" ]; then rsync -a "$P/$w" "$D/" 2>>"$REPORT" || cp -a "$P/$w" "$D/"; say "  lume $w copiata in staging ($(du -sm "$D/$w" 2>/dev/null | cut -f1) MiB) - originalul neatins"; fi
     done
     say "ajustari de identitate doar pentru staging, pe portul $PORT:"
     python3 - "$D/server.properties" "$PORT" "$CAND" <<'PY'
