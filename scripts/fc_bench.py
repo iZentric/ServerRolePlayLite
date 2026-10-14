@@ -35,6 +35,7 @@ TPS_LINE_RE = re.compile(r"(?i)(tps|per second|from last)")
 MSPT_RE = re.compile(r"(?i)(mspt|ticks)[^\n]{0,90}?([0-9]+\.[0-9]+)\s*ms")
 OVERRUN_RE = re.compile(r"Can't keep up!.*?Running (\d+)ms", re.I)
 GC_RE = re.compile(r"GC\(\d+\).*?TotalTime: ([0-9.]+)ms")
+GC_RE2 = re.compile(r"Pause[^0-9\n]{0,40}([0-9]+\.[0-9]+)ms")
 CRIT_RES = [
     re.compile(r"Exception in server tick loop", re.I),
     re.compile(r"Failed to start", re.I),
@@ -313,7 +314,7 @@ class JvmRun:
         except Exception as e:
             log(f"send('{line}') esuat: {e}")
 
-    def wait_done(self, boot_timeout, poll=2.0):
+    def wait_done(self, boot_timeout, poll=0.25):
         t0 = time.monotonic()
         port_seen_at = None
         port = self.port or 25565
@@ -323,6 +324,8 @@ class JvmRun:
                 if m:
                     self.done_wall_s = round(time.monotonic() - t0, 2)
                     self.done_log_s = float(m.group(1))
+                    u = re.search(r"\[([0-9]+\.[0-9]+)s\]", l)
+                    self.done_uptime_s = float(u.group(1)) if u else None
                     return True
             if self.p.poll() is not None:
                 self.exit_early = self.p.returncode
@@ -453,6 +456,7 @@ def one_trial(conf, stage, bootjar, port, idx, outdir, run_seconds):
     if ok:
         res["boot_timp_real_s"] = j.done_wall_s
         res["boot_timp_logic_s"] = j.done_log_s
+        res["boot_uptime_logic_s"] = getattr(j, "done_uptime_s", None)
     else:
         res["boot_esec_motiv"] = f"exit={getattr(j, 'exit_early', 'timeout')}"
         try:
@@ -532,6 +536,7 @@ def one_trial(conf, stage, bootjar, port, idx, outdir, run_seconds):
     if os.path.exists(gcp):
         pauses = [float(m.group(1)) for m in GC_RE.finditer(open(gcp, encoding="utf-8", errors="replace").read())]
     res["gc_pauze_ms_max"] = round(max(pauses), 1) if pauses else None
+    res["gc_format_recunoscut"] = bool(pauses)
     res["gc_pauze_ms_medie"] = round(statistics.mean(pauses), 2) if pauses else None
     res["gc_pauze_n"] = len(pauses)
     j.close()
@@ -712,6 +717,10 @@ def main():
     report["probe"] = results
     open(os.path.join(outdir, "heartbeat"), "w").write(str(time.time()))
     report["probate_reusite"] = okn
+    upt = [r.get("boot_uptime_logic_s") for r in results if r.get("boot_uptime_logic_s")]
+    if upt:
+        report["boot_uptime_medie_s"] = round(statistics.mean(upt), 2)
+        report["boot_uptime_cv_pct"] = round(statistics.pstdev(upt) / statistics.mean(upt) * 100, 1) if len(upt) > 1 else 0.0
     if okn:
         report["boot_medie_s"] = round(statistics.mean(boot_times), 2)
         report["boot_cv_pct"] = round(statistics.pstdev(boot_times) / statistics.mean(boot_times) * 100, 1) if okn > 1 else 0.0

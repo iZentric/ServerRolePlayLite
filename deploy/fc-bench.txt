@@ -1,1 +1,1 @@
-v4.18 2026-10-14 (FIX DEADLOCK real: open(fifo,"w") fara cititor bloca infinit instalarea — inlocuit cu fd O_RDWR; si JvmRun la fel)
+v4.19 2026-10-14 (poll 0.25s, boot obiectiv prin uptime-ul din log, fallback GC pt JDK11 unified logging)

@@ -222,13 +222,13 @@ jobs:
           lines = ["# FC-BENCH v4 — rezultate (masurate, nu estimate)", "",
                    "Metoda: boot la cald, 3 probe/arm, world comun post-instalare, java 11, -Xmx1536M, pack 36/14 cu SHA fix.",
                    "Deviatii declarate: seed fix, online-mode=false pentru probele de login, view-distance=10, check_update=false (Mohist).", ""]
-          hdr = ["brat", "stare", "boot_mediu_s", "CV%", "join_mediu_ms", "TPS_p50", "overrun", "overrun_max_ms", "critice", "RSS_MB", "CPU%", "GC_max_ms"]
+          hdr = ["brat", "stare", "boot_mediu_s", "boot_uptime_s", "CV%", "join_mediu_ms", "TPS_p50", "overrun", "overrun_max_ms", "critice", "RSS_MB", "CPU%", "GC_max_ms"]
           lines.append("| " + " | ".join(hdr) + " |")
           lines.append("|" + "---|" * len(hdr))
           for a in order:
               d = rows[a]
               lines.append("| " + " | ".join(str(x) for x in [
-                  d.get('eticheta', a), d.get('status'), d.get('boot_medie_s'), d.get('boot_cv_pct'),
+                  d.get('eticheta', a), d.get('status'), d.get('boot_medie_s'), d.get('boot_uptime_medie_s'), d.get('boot_cv_pct'),
                   d.get('join_medie_ms'), d.get('tps_p50'), d.get('overrun_total'), d.get('overrun_max_ms'),
                   d.get('critice_total'), d.get('rss_medie_mb'), d.get('cpu_medie_pct'), d.get('gc_pauza_max_ms')]) + " |")
           # verdicturi comparative, doar unde ambele brațe au MASURAT
