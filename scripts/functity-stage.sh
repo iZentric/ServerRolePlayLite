@@ -57,12 +57,25 @@ java11_adoptium(){
   echo "$D/jdk11/bin/java"
 }
 
-voicechat_port(){ # Simple Voice Chat isi lipeste propriul port TCP/UDP; pe staging
-  # productia tine 24454 -> il mutam pe 24455 ca sa nu se omoare reciproc
-  mkdir -p "$D/config/voicechat" 2>/dev/null || true
-  printf 'port=%s\n' "$((PORT+1))" > "$D/config/voicechat/voicechat-server.properties"
-  printf 'port=%s\n' "$((PORT+1))" > "$D/config/voicechat.properties" 2>/dev/null || true
-  say "  voicechat port -> $((PORT+1)) (evitam coliziunea cu productia pe $((PORT+1)-1))"
+voicechat_port(){ # Simple Voice Chat isi leaga portul propriu (24454 default). Productia il
+  # tine — ii dam staging-ului 24455. Folosim exact calea/numele de fisier din productia viie,
+  # ca nu ghicim layout-ul de config.
+  local src vcport
+  src=$(find "$P/config" -iname '*server.properties' -path '*voice*' 2>/dev/null | head -1)
+  [ -n "$src" ] || src=$(find "$P/config" -iname '*voicechat*' -type f 2>/dev/null | head -1)
+  if [ -n "$src" ]; then
+    mkdir -p "$D/config/$(basename "$(dirname "$src")")"
+    cp "$src" "$D/config/$(basename "$(dirname "$src")")/$(basename "$src")"
+    local dst="$D/config/$(basename "$(dirname "$src")")/$(basename "$src")"
+    local base; base=$(grep -m1 -E '^\s*port=' "$dst" | tr -dc '0-9'); base=${base:-24454}
+    vcport=$((base+1))
+    sed -i -E "s/^([[:space:]]*port=).*/\1$vcport/" "$dst"
+    say "  voicechat: mostenit $src, port $base -> $vcport (staging)"
+  else
+    mkdir -p "$D/config/voicechat"
+    printf 'port=24455\n' > "$D/config/voicechat/voicechat-server.properties"
+    say "  voicechat: fisar de config absent in productie — incerc config/voicechat/voicechat-server.properties port=24455"
+  fi
 }
 
 moduri_count(){ ls "$D/mods" 2>/dev/null | grep -c '\.jar$' || echo 0; }
