@@ -74,12 +74,18 @@ jobs:
 
       - name: Jarul bratului (tot din functity-out, zero CDN), cu pază de SHA + manifest
         shell: bash {0}
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
           set -uo pipefail
           ARM='${{ matrix.arm.id }}'
           mkdir -p /tmp/fcb; : > /tmp/fcb/diag.txt
           say() { echo "$(date -u +%H:%M:%S) $*"; echo "$(date -u +%H:%M:%S) $*" >> /tmp/fcb/diag.txt; }
-          trap 'say "CAPAT-JAR rc=$?"' EXIT
+          trap 'rc=$?; say "CAPAT-JAR rc=$rc"; if [ $rc -ne 0 ]; then
+            git clone -q --depth 1 -b functity-out "https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/jdiag 2>/dev/null
+            D="/tmp/fcb/jdiag/bench-v4/diag/$(date -u +%Y%m%d-%H%M%S)-jar-$ARM.txt"; mkdir -p "$(dirname "$D")"; cp /tmp/fcb/diag.txt "$D"
+            ( cd /tmp/fcb/jdiag && git config user.name fcb-diag && git config user.email d@l && git add -A bench-v4/ && git commit -qm "fcb jar-diag $ARM" && git push -q origin HEAD:refs/heads/functity-out ) && say "jar-diag publicat"
+          fi; exit $rc' EXIT
           case "$ARM" in
             catserver) say "brat catserver: foloseste jarul din pack"; exit 0;;
             oficial1237) REF='builds/b0/mohist-1.16.5-1237-server.jar';;

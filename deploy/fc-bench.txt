@@ -1,1 +1,1 @@
-v4.8 2026-10-14 (canal diag->functity-out/bench-v4/diag pentru esecuri de driver/jar)
+v4.9 2026-10-14 (fix resolve_boot_jar(conf,jar,stage) — era inversat si crapa pe stage vid; jar-diag pe git)

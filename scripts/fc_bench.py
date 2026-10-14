@@ -381,13 +381,15 @@ def build_stage(conf, jar, stage):
                 if (info.external_attr >> 16) & 0o111:
                     os.chmod(target, (info.external_attr >> 16) & 0o777)
 
-def resolve_boot_jar(conf, stage, jar):
+def resolve_boot_jar(conf, jar, stage):
     kind = conf.get("boot_jar")
     if kind == "from_pack_root":
         # bratul CatServer: isi pune singur jarul in stage la patch (nu-l redenumim)
         path = conf.get("pack_boot_jar_path") or ""
-        real = os.path.join(stage, path) if path else ""
+        real = os.path.join(stage, path) if (path and stage) else ""
         if not real or not os.path.exists(real):
+            if not os.path.isdir(stage):
+                raise RuntimeError(f"stage lipsa: '{stage}' — verifica env FC_STAGE in workflow")
             cands = [x for x in os.listdir(stage) if x.lower().endswith(".jar") and os.path.isfile(os.path.join(stage, x))]
             if not cands:
                 raise RuntimeError("niciun jar la radacina stage-ului pentru bratul catserver")
@@ -564,7 +566,7 @@ def main():
 
     log(f"=== brat {conf['arm']}: stage ===")
     build_stage(conf, jar, stage)
-    bootjar = resolve_boot_jar(conf, jar and os.path.abspath(jar) or "", stage)
+    bootjar = resolve_boot_jar(conf, os.path.abspath(jar) if jar else "", stage)
     sdir = lambda d: len([f for f in os.listdir(os.path.join(stage, d)) if f.endswith(".jar")]) if os.path.isdir(os.path.join(stage, d)) else 0
     mods, plugins = sdir("mods"), sdir("plugins")
     if conf.get("boot_jar") == "from_pack_root" and not conf.get("pack_boot_jar_path"):
