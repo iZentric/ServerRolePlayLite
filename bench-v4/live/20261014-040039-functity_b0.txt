@@ -1,0 +1,24 @@
+live-snapshot 16 la 04:00:34
+[03:11:00] === brat functity_b0: stage ===
+[03:11:00] === faza A: instalare bootstrap (limita 360s, nemasurata) ===
+[03:11:38] === proba 1/3 ===
+
+--- driver tail ---
+a.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+[03:11:37 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+[03:11:37 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+[03:11:37 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:37)
+[03:11:37 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
+[03:11:37 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	... 6 more
+[03:11:37 INFO]: [java.lang.Throwable:printStackTrace:648]: Caused by: java.lang.NoSuchMethodError: 'java.util.stream.Collector com.google.common.collect.ImmutableMap.toImmutableMap(java.util.function.Function, java.util.function.Function)'
+[03:11:37 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.world.GameRules.<init>(GameRules.java:103)
+[03:11:37 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.MinecraftServer.<clinit>(MinecraftServer.java:177)
+[03:11:37 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.Main.main(Main.java:117)
+[03:11:37 INFO]: [java.lang.Throwable:printStackTrace:648]: 	... 12 more
+
+[03:11:37] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1059]: 	... 6 more
+[03:11:37] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: Caused by: java.lang.NoSuchMethodError: 'java.util.stream.Collector com.google.common.collect.ImmutableMap.toImmutableMap(java.util.function.Function, java.util.function.Function)'
+[03:11:37] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.world.GameRules.<init>(GameRules.java:103)
+[03:11:37] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.MinecraftServer.<clinit>(MinecraftServer.java:177)
+[03:11:37] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.Main.main(Main.java:117)
+[03:11:37] [main/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:648]: 	... 12 more
