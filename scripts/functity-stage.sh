@@ -57,16 +57,31 @@ java11_adoptium(){
   echo "$D/jdk11/bin/java"
 }
 
-voicechat_port(){ # Simple Voice Chat (Forge 1.16.5) citeste config/voicechat.properties si
-  # binding-ul UDP 24454 il face INAINTE de a refuza pornirea serverului intreg (Shutting down
-  # server). Productia tine 24454 -> staging primeste 24455 in AMBELE fisiere posibile.
-  mkdir -p "$D/config/voicechat"
+voicechat_port(){ # Simple Voice Chat 1.16.5-2.3.23 refuza sa porneasca serverul intreg daca
+  # UDP 24454 e ocupat (de productie). Doua incercari de override in cai standard esuate —
+  # acum extragem CALEA REALA de config din clasele din jar si scriem portul peste tot.
+  local vj; vj=$(ls "$D"/mods/*voicechat*.jar 2>/dev/null | head -1)
+  local found=""
+  if [ -n "$vj" ]; then
+    found=$(unzip -p "$vj" '*.class' 2>/dev/null | strings 2>/dev/null | grep -oE '[A-Za-z0-9_./-]+(voicechat|VoiceChat)[A-Za-z0-9_./-]*\.(properties|toml)' | sed 's#^/*config/*##; s#^#config/#' | sort -u | head -8)
+    [ -n "$found" ] || found=$(unzip -Z1 "$vj" 2>/dev/null | grep -iE '\.(properties|toml)$' | grep -viE 'lang|assets' | head -6)
+  fi
+  say "  voicechat: cai de config vazute in jar: $(printf '%s' "$found" | tr '\n' ' ')"
   local f
-  for f in "$D/config/voicechat.properties" "$D/config/voicechat/voicechat-server.properties"; do
-    [ -f "$f" ] || printf 'port=24455\n' > "$f"
-    grep -q '^port=' "$f" && sed -i -E 's/^port=.*/port=24455/' "$f" || printf 'port=24455\n' >> "$f"
+  for f in voicechat/voicechat-server.properties voicechat/voicechat.properties voicechat.properties voicechat-server.properties voicechat-client.properties $found; do
+    [ -n "$f" ] || continue
+    case "$f" in config/*) : ;; *) f="config/$f";; esac
+    case "$f" in *.toml) local tom=1 ;; *) local tom=0 ;; esac
+    mkdir -p "$D/$(dirname "$f")" 2>/dev/null
+    if [ "$tom" = 1 ]; then
+      [ -f "$D/$f" ] || printf 'port = 24455\n' > "$D/$f"
+      sed -i -E 's/^([[:space:]]*port[[:space:]]*=).*/\1 24455/' "$D/$f"
+    else
+      [ -f "$D/$f" ] || printf 'port=24455\n' > "$D/$f"
+      grep -q '^port=' "$D/$f" && sed -i -E 's/^port=.*/port=24455/' "$D/$f" || printf 'port=24455\n' >> "$D/$f"
+    fi
   done
-  say "  voicechat: port UDP 24455 scris in config/voicechat.properties (+varianta veche subdirector)"
+  say "  voicechat: 24455 scris in $(printf '%s' "$found config/voicechat/voicechat.properties" | wc -w) fisiere-candidate"
 }
 
 moduri_count(){ ls "$D/mods" 2>/dev/null | grep -c '\.jar$' || echo 0; }
