@@ -1,0 +1,8 @@
+profil OCI: DEFAULT | cheie: ?
+regiune OCI: eu-frankfurt-1
+instante: Evovv(RUNNING,VM.Standard.E2.1.Micro), iZen(RUNNING,VM.Standard.E2.1.Micro)
+subnet mostenit de la Evovv -> 5umibvawfq vcn nkrk4hvobq
+imagine: Canonical-Ubuntu-24.04-aarch64-2026.09.18-0 | OCID: byfk6rzn57qq
+cloud-init: https://raw.githubusercontent.com/iZentric/ServerRolePlayLite/arena/7d6a2ca3-serverroleplaylite/scripts/cuantic-vm.sh
+eroare: {'target_service': 'compute', 'status': 400, 'code': 'LimitExceeded', 'opc-request-id': 'E6A2267855FA4DD1AC3043FD675D5B6F/85EB1AAF3F4DF7136966CF6A46524155/3BE9E6D0D6104CC9F84EC8510
+VM: EȘUAT - {'target_service': 'compute', 'status': 400, 'code': 'LimitExceeded', 'opc-request-id': 'E6A2267855FA4DD1AC3043FD675D5B6F/85EB1AAF3F4DF7136966CF6A46524155/3BE9E6D0D6104CC9F84EC8510
