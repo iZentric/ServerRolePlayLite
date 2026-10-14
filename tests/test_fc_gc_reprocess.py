@@ -62,18 +62,34 @@ class ParserTest(unittest.TestCase):
 
 class SummaryTest(unittest.TestCase):
     def test_boot_idle_split(self):
-        s = gc.summarize(gc.parse_gc_lines(SAMPLE.splitlines()), boot_s=10.0)
+        lines = SAMPLE.splitlines()
+        s = gc.summarize(gc.parse_gc_lines(lines), boot_s=10.0, exit_s=gc.jvm_exit_uptime(lines))
         self.assertEqual(s["stare"], "MASURAT")
         self.assertEqual(s["total"]["n"], 6)
         self.assertEqual(s["full_gc"], 1)
+        self.assertEqual(s["full_detalii"], ["(System.gc()) @140.0s 456.789ms"])
         self.assertEqual(s["boot"]["n"], 4)
         self.assertEqual(s["idle"]["n"], 2)
         self.assertEqual(s["idle"]["max_ms"], 456.8)
         self.assertEqual(s["total"]["max_ms"], 456.8)
         self.assertEqual(s["young_max_ms"], 31.2)
         self.assertEqual(s["heap_dupa_ultimul_young_mb"], 200.0)
-        self.assertEqual(s["durata_jurnal_s"], 140.0)
-        self.assertAlmostEqual(s["idle"]["pauze_pe_minut"], 2 / 130.0 * 60, places=2)
+        self.assertEqual(s["jvm_iesire_s"], 200.0)          # din linia [gc,heap,exit] Heap
+        self.assertEqual(s["ultima_pauza_s"], 140.0)
+        self.assertEqual(s["durata_jurnal_s"], 200.0)
+        self.assertEqual(s["idle"]["fereastra_s"], 190.0)   # exit - boot, nu ultima pauza - boot
+        self.assertAlmostEqual(s["idle"]["pauze_pe_minut"], 2 / 190.0 * 60, places=3)
+
+    def test_idle_without_pauses_is_measured_zero(self):
+        lines = [l for l in SAMPLE.splitlines() if "80.000s" not in l and "140.000s" not in l]
+        s = gc.summarize(gc.parse_gc_lines(lines), boot_s=10.0, exit_s=gc.jvm_exit_uptime(lines))
+        self.assertEqual(s["idle"]["n"], 0)
+        self.assertEqual(s["idle"]["max_ms"], 0.0)          # fereastra observata, zero pauze = masurat
+        self.assertEqual(s["idle"]["pauze_pe_minut"], 0.0)
+        self.assertEqual(s["idle"]["fereastra_s"], 190.0)
+
+    def test_exit_uptime_absent(self):
+        self.assertIsNone(gc.jvm_exit_uptime(["[1.0s][info][gc] GC(0) Pause Young (Normal) (G1 Evacuation Pause) 1M->1M(2M) 1.0ms"]))
 
     def test_empty_is_unmeasured_not_zero(self):
         s = gc.summarize([])
@@ -114,12 +130,19 @@ class ArtifactTreeTest(unittest.TestCase):
             self.assertEqual(b1["probe_masurate"], 2)
             self.assertEqual(b1["toate_pauzele"]["n"], 12)
             self.assertEqual(b1["full_gc_total"], 1)
-            self.assertEqual(b1["idle_max_ms_pe_proba"], [456.8, 40.0])
+            self.assertEqual(b1["boot"]["pauze_pe_proba"], [4, 4])
+            self.assertEqual(b1["boot"]["pooled"]["n"], 8)
+            self.assertEqual(b1["idle"]["pauze_total"], 4)
+            self.assertEqual(b1["idle"]["pauze_pe_proba"], [2, 2])
+            self.assertEqual(b1["idle"]["fereastra_total_s"], 380.0)
+            self.assertEqual(b1["idle"]["pooled"]["max_ms"], 456.8)
+            self.assertEqual(b1["heap_dupa_ultimul_young_mb_pe_proba"], [200.0, 200.0])
             self.assertEqual(arms["catserver"]["stare"], "NEMASURAT")
             self.assertIn("motiv", arms["catserver"])
             md = gc.render_markdown(data)
             self.assertIn("FunCity b1.2256", md)
             self.assertIn("456.8", md)
+            self.assertIn("4 / 380 s", md)
             self.assertIn("| CatServer | 0 | NEMASURAT |", md)
             out = root / "out"
             self.assertEqual(gc.main(["--in", str(root), "--out", str(out)]), 0)

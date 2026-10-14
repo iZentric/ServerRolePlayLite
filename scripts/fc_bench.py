@@ -32,10 +32,16 @@ ANSI = re.compile(r"\x1b\[[0-9;]*m")
 DONE_RE = re.compile(r"Done \(([0-9]+\.[0-9]+)s\)")
 TPS_RE = re.compile(r"(?i)tps[\s\S]{0,40}?([0-9]{1,2}\.\d{1,4})")
 TPS_LINE_RE = re.compile(r"(?i)(tps|per second|from last)")
-MSPT_RE = re.compile(r"(?i)(mspt|ticks)[^\n]{0,90}?([0-9]+\.[0-9]+)\s*ms")
+MSPT_RE = re.compile(r"(?i)(mspt|ticks|tick time)[^\n]{0,90}?([0-9]+\.[0-9]+)\s*ms")
+FORGE_OVERALL_RE = re.compile(r"(?i)Overall:\s*Mean tick time:\s*([0-9]+\.[0-9]+)\s*ms")
 OVERRUN_RE = re.compile(r"Can't keep up!.*?Running (\d+)ms", re.I)
-GC_RE = re.compile(r"GC\(\d+\).*?TotalTime: ([0-9.]+)ms")
-GC_RE2 = re.compile(r"Pause[^0-9\n]{0,40}([0-9]+\.[0-9]+)ms")
+# GC: formatul real -Xlog:gc* (JDK 11) e in scripts/fc_gc_reprocess.py (acelasi parser ca FC-GC);
+# vechile GC_RE/GC_RE2 cautau un format inexistent si raportau NEMASURAT (v4 A/B).
+try:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import fc_gc_reprocess as _gc
+except Exception:  # pragma: no cover - fara modul = ramane NEMASURAT, nu inventam
+    _gc = None
 CRIT_RES = [
     re.compile(r"Exception in server tick loop", re.I),
     re.compile(r"Failed to start", re.I),
@@ -254,11 +260,14 @@ def parse_tps_mspt(lines):
             continue
         if "mspt" in low or ("tick" in low and "ms" in low):
             raw.append(l[:220])
+        fo = FORGE_OVERALL_RE.search(l)
         m = MSPT_RE.search(l)
-        if m:
+        if fo or m:
             try:
-                v = float(m.group(2))
-                if 0.0 < v < 1000.0:
+                v = float(fo.group(1) if fo else m.group(2))
+                # forge tps scrie o linie pe dimensiune + "Overall"; numaram doar Overall (sau
+                # liniile fara "Dim " - mspt/ticks de pe alte motoare) ca sa nu triplam esantionul
+                if 0.0 < v < 1000.0 and (fo or not re.search(r"(?i)\bDim\b", l)):
                     mspt.append(v)
             except ValueError:
                 pass
@@ -493,9 +502,9 @@ def one_trial(conf, stage, bootjar, port, idx, outdir, run_seconds):
     while time.monotonic() < t_end:
         if time.monotonic() >= next_cmd:
             tick_samples += 1
-            j.send("ticks tps")
-            j.send("mspt")
-            j.send("tps")
+            j.send("forge tps")   # Forge 36: "Dim ...: Mean tick time: x ms" + "Overall: Mean tick time: x ms. Mean TPS: y"
+            j.send("mspt")        # Paper-only; pe hibride da "Unknown command" (ignorat)
+            j.send("tps")         # Spigot: "TPS from last 1m, 5m, 15m: *20.0, *20.0, *20.0"
             time.sleep(6)
             lines = j.log.new_lines()
             a, b, rawl = parse_tps_mspt(lines)
@@ -532,13 +541,21 @@ def one_trial(conf, stage, bootjar, port, idx, outdir, run_seconds):
         res.update({"rss_medie_kb": None, "rss_max_kb": None, "cpu_medie_pct": None, "threads_max": None})
     res["linii_consola_esantion"] = raw_console[:30]
     gcp = os.path.join(outdir, f'gc-trial{idx}.log')
-    pauses = []
-    if os.path.exists(gcp):
-        pauses = [float(m.group(1)) for m in GC_RE.finditer(open(gcp, encoding="utf-8", errors="replace").read())]
-    res["gc_pauze_ms_max"] = round(max(pauses), 1) if pauses else None
-    res["gc_format_recunoscut"] = bool(pauses)
-    res["gc_pauze_ms_medie"] = round(statistics.mean(pauses), 2) if pauses else None
-    res["gc_pauze_n"] = len(pauses)
+    gcs = None
+    if _gc is not None and os.path.exists(gcp):
+        gcs = _gc.summarize_file(__import__("pathlib").Path(gcp), res.get("boot_timp_real_s"))
+    pauses_ok = bool(gcs and gcs.get("stare") == "MASURAT")
+    res["gc_format_recunoscut"] = pauses_ok
+    res["gc_pauze_n"] = gcs["total"]["n"] if pauses_ok else 0
+    res["gc_pauze_ms_max"] = gcs["total"]["max_ms"] if pauses_ok else None
+    res["gc_pauze_ms_medie"] = gcs["total"]["medie_ms"] if pauses_ok else None
+    res["gc_p95_ms"] = gcs["total"]["p95_ms"] if pauses_ok else None
+    res["gc_full"] = gcs["full_gc"] if pauses_ok else None
+    res["gc_boot"] = gcs.get("boot") if pauses_ok else None
+    res["gc_idle"] = gcs.get("idle") if pauses_ok else None
+    res["gc_heap_dupa_ultimul_young_mb"] = gcs.get("heap_dupa_ultimul_young_mb") if pauses_ok else None
+    if not pauses_ok:
+        res["gc_motiv"] = (gcs or {}).get("motiv") or ("jurnal GC absent" if not os.path.exists(gcp) else "parser indisponibil")
     j.close()
     return res, j
 
@@ -733,7 +750,7 @@ def main():
         report["tps_min"] = round(min(tpsv), 2)
     else:
         report["tps_p50"] = None
-        report["tps_motiv"] = "comenzile console (ticks tps/mspt/tps) n-au produs linii parse-abile pe acest motor — NEMASURAT, nu 20.0 inventat"
+        report["tps_motiv"] = "comenzile console (forge tps/mspt/tps) n-au produs linii parse-abile pe acest motor — NEMASURAT, nu 20.0 inventat"
     report["overrun_total"] = sum(r.get("overrun_count", 0) for r in results)
     report["overrun_max_ms"] = max([r.get("overrun_max_ms", 0) for r in results] or [0])
     report["critice_total"] = sum(r.get("critice", 0) for r in results)
@@ -746,6 +763,21 @@ def main():
     gcm = [r["gc_pauze_ms_max"] for r in results if r.get("gc_pauze_ms_max")]
     if gcm:
         report["gc_pauza_max_ms"] = round(max(gcm), 1)
+        p95s = [r["gc_p95_ms"] for r in results if r.get("gc_p95_ms") is not None]
+        report["gc_p95_ms_max_pe_probe"] = round(max(p95s), 1) if p95s else None
+        report["gc_full_total"] = sum(r.get("gc_full") or 0 for r in results)
+        report["gc_idle_p95_ms_pe_proba"] = [r["gc_idle"]["p95_ms"] for r in results if r.get("gc_idle")]
+        report["gc_idle_max_ms_pe_proba"] = [r["gc_idle"]["max_ms"] for r in results if r.get("gc_idle")]
+    else:
+        report["gc_pauza_max_ms"] = None
+        report["gc_motiv"] = "; ".join(sorted({r.get("gc_motiv", "") for r in results if r.get("gc_motiv")})) or "fara jurnal GC"
+    msptv = [v for r in results for v in (r.get("mspt_probe") or [])]
+    if msptv:
+        report["mspt_medie_ms"] = round(statistics.mean(msptv), 2)
+        report["mspt_max_ms"] = round(max(msptv), 2)
+    else:
+        report["mspt_medie_ms"] = None
+        report["mspt_motiv"] = "forge tps/mspt n-au produs linii parse-abile — NEMASURAT"
     report["status"] = "MASURAT" if okn == trials else ("ESUAT_TEHNIC" if okn == 0 else "PARTIAL")
     dump(report, outdir)
     log(f"RESUMAT {conf['arm']}: status={report['status']} boot_medie={report.get('boot_medie_s')}s cv={report.get('boot_cv_pct')}% join={report.get('join_medie_ms')}ms tps_p50={report.get('tps_p50')} overrun={report.get('overrun_total')} critice={report.get('critice_total')}")

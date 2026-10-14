@@ -43,7 +43,7 @@ PAUSE_RE = re.compile(
     r"(?P<before>\d+)(?P<bu>[KMG])->(?P<after>\d+)(?P<au>[KMG])\((?P<cap>\d+)(?P<cu>[KMG])\)\s+"
     r"(?P<ms>[0-9]+(?:\.[0-9]+)?)ms\s*$"
 )
-HEAP_MAX_RE = re.compile(r"\[gc,init\s*\]\s+Heap Max Capacity:\s+([0-9]+)([KMG])|size:\s+([0-9]+)\s+MB, Compressed Oops")
+EXIT_RE = re.compile(r"^(?:\[[^\]]*\])?\[(?P<uptime>[0-9]+(?:\.[0-9]+)?)s\]\[[a-z]+\s*\]\[gc,heap,exit\s*\]\s+Heap\s*$")
 
 _UNIT_MB = {"K": 1 / 1024.0, "M": 1.0, "G": 1024.0}
 
@@ -74,6 +74,16 @@ def parse_gc_lines(lines: Iterable[str]) -> list[dict]:
     return out
 
 
+def jvm_exit_uptime(lines: Iterable[str]) -> float | None:
+    """Uptime-ul JVM la iesire (linia `[gc,heap,exit] Heap`), ca sa stim cat a durat fereastra idle."""
+    last = None
+    for raw in lines:
+        m = EXIT_RE.match(raw.rstrip("\r\n"))
+        if m:
+            last = float(m.group("uptime"))
+    return last
+
+
 def percentile(values: list[float], pct: float) -> float | None:
     """Percentila nearest-rank (fara interpolare — nu inventam valori intre probe)."""
     if not values:
@@ -83,10 +93,12 @@ def percentile(values: list[float], pct: float) -> float | None:
     return s[k - 1]
 
 
-def _stats(pauses: list[dict]) -> dict:
+def _stats(pauses: list[dict], zero_masurat: bool = False) -> dict:
+    """zero_masurat=True: fereastra a fost observata si n-a avut pauze => 0.0 (masurat), nu None."""
     ms = [p["ms"] for p in pauses]
     if not ms:
-        return {"n": 0, "total_ms": 0.0, "max_ms": None, "medie_ms": None, "p95_ms": None, "p99_ms": None}
+        z = 0.0 if zero_masurat else None
+        return {"n": 0, "total_ms": 0.0, "max_ms": z, "medie_ms": z, "p95_ms": z, "p99_ms": z}
     return {
         "n": len(ms),
         "total_ms": round(sum(ms), 1),
@@ -97,29 +109,39 @@ def _stats(pauses: list[dict]) -> dict:
     }
 
 
-def summarize(pauses: list[dict], boot_s: float | None = None) -> dict:
-    """Statistica unei probe: total + pe tip + boot/idle (daca stim durata bootului)."""
+def summarize(pauses: list[dict], boot_s: float | None = None, exit_s: float | None = None) -> dict:
+    """Statistica unei probe: total + pe tip + boot/idle (daca stim durata bootului).
+    exit_s = uptime-ul JVM la iesire: fereastra idle = exit_s - boot_s (nu pana la ultima pauza —
+    altfel o singura pauza imediat dupa Done ar da o rata absurda de 'pauze pe minut')."""
     kinds = {k: sum(1 for p in pauses if p["kind"] == k) for k in ("Young", "Remark", "Cleanup", "Full")}
+    ultima = max((p["uptime_s"] for p in pauses if p["uptime_s"] is not None), default=None) if pauses else None
     res = {
         "stare": "MASURAT" if pauses else "NEMASURAT",
         "total": _stats(pauses),
         "pe_tip": kinds,
         "full_gc": kinds["Full"],
+        "full_detalii": sorted({(p["detail"] or "?") + f" @{p['uptime_s']}s {p['ms']}ms" for p in pauses if p["kind"] == "Full"}),
         "young_max_ms": round(max((p["ms"] for p in pauses if p["kind"] == "Young"), default=0.0), 1) if pauses else None,
         "heap_dupa_ultimul_young_mb": next((p["heap_after_mb"] for p in reversed(pauses) if p["kind"] == "Young"), None),
         "heap_cap_mb": pauses[-1]["heap_cap_mb"] if pauses else None,
-        "durata_jurnal_s": max((p["uptime_s"] for p in pauses if p["uptime_s"] is not None), default=None) if pauses else None,
+        "ultima_pauza_s": ultima,
+        "jvm_iesire_s": exit_s,
+        "durata_jurnal_s": exit_s if exit_s is not None else ultima,
     }
     if boot_s is not None and pauses and all(p["uptime_s"] is not None for p in pauses):
         boot = [p for p in pauses if p["uptime_s"] <= boot_s]
         idle = [p for p in pauses if p["uptime_s"] > boot_s]
         res["boot_s_folosit"] = boot_s
-        res["boot"] = _stats(boot)
-        res["idle"] = _stats(idle)
-        if idle and res["durata_jurnal_s"] and res["durata_jurnal_s"] > boot_s:
-            fereastra = res["durata_jurnal_s"] - boot_s
-            res["idle"]["pauze_pe_minut"] = round(len(idle) / fereastra * 60.0, 2)
-            res["idle"]["timp_oprit_pct"] = round(sum(p["ms"] for p in idle) / 1000.0 / fereastra * 100.0, 3)
+        res["boot"] = _stats(boot, zero_masurat=True)
+        res["idle"] = _stats(idle, zero_masurat=True)
+        fin = res["durata_jurnal_s"]
+        if fin is not None and fin > boot_s:
+            fereastra = fin - boot_s
+            res["idle"]["fereastra_s"] = round(fereastra, 1)
+            res["idle"]["pauze_pe_minut"] = round(len(idle) / fereastra * 60.0, 3)
+            res["idle"]["timp_oprit_pct"] = round(sum(p["ms"] for p in idle) / 1000.0 / fereastra * 100.0, 4)
+        else:
+            res["idle"]["fereastra_s"] = None
     else:
         res["boot"] = None
         res["idle"] = None
@@ -132,8 +154,9 @@ def summarize_file(path: pathlib.Path, boot_s: float | None = None) -> dict:
         text = path.read_text(encoding="utf-8", errors="replace")
     except OSError as e:
         return {"stare": "NEMASURAT", "motiv": f"jurnal absent: {e}", "fisier": str(path)}
-    pauses = parse_gc_lines(text.splitlines())
-    res = summarize(pauses, boot_s)
+    lines = text.splitlines()
+    pauses = parse_gc_lines(lines)
+    res = summarize(pauses, boot_s, jvm_exit_uptime(lines))
     res["fisier"] = path.name
     res["linii_jurnal"] = text.count("\n")
     if not pauses:
@@ -174,6 +197,18 @@ def process_artifact_dir(d: pathlib.Path) -> dict:
     for lg in sorted(d.glob("gc-trial*.log*")):
         all_p += parse_gc_lines(lg.read_text(encoding="utf-8", errors="replace").splitlines())
     masurate = [t for t in trials if t.get("stare") == "MASURAT"]
+    cu_split = [t for t in masurate if t.get("boot") and t.get("idle")]
+    boot_pool, idle_pool = [], []
+    for lg in sorted(d.glob("gc-trial*.log*")):
+        m = re.search(r"gc-trial(\d+)", lg.name)
+        bs = _trial_boot_seconds(arm_json, int(m.group(1))) if m else None
+        if bs is None:
+            continue
+        for p in parse_gc_lines(lg.read_text(encoding="utf-8", errors="replace").splitlines()):
+            if p["uptime_s"] is None:
+                continue
+            (boot_pool if p["uptime_s"] <= bs else idle_pool).append(p)
+    idle_fer = [t["idle"]["fereastra_s"] for t in cu_split if t["idle"].get("fereastra_s")]
     agg = {
         "arm": arm,
         "eticheta": (arm_json or {}).get("eticheta", arm),
@@ -183,10 +218,20 @@ def process_artifact_dir(d: pathlib.Path) -> dict:
         "stare": "MASURAT" if masurate else "NEMASURAT",
         "toate_pauzele": _stats(all_p),
         "full_gc_total": sum(1 for p in all_p if p["kind"] == "Full"),
-        "idle_p95_ms_pe_proba": [t["idle"]["p95_ms"] for t in masurate if t.get("idle")],
-        "idle_max_ms_pe_proba": [t["idle"]["max_ms"] for t in masurate if t.get("idle")],
-        "idle_pauze_pe_minut_pe_proba": [t["idle"].get("pauze_pe_minut") for t in masurate if t.get("idle")],
-        "boot_total_ms_pe_proba": [t["boot"]["total_ms"] for t in masurate if t.get("boot")],
+        "full_detalii": sorted({x for t in masurate for x in t.get("full_detalii", [])}),
+        "boot": {
+            "pauze_pe_proba": [t["boot"]["n"] for t in cu_split],
+            "total_ms_pe_proba": [t["boot"]["total_ms"] for t in cu_split],
+            "pooled": _stats(boot_pool, zero_masurat=bool(cu_split)),
+        },
+        "idle": {
+            "pauze_total": len(idle_pool),
+            "fereastra_total_s": round(sum(idle_fer), 1) if idle_fer else None,
+            "pauze_pe_minut": round(len(idle_pool) / sum(idle_fer) * 60.0, 3) if idle_fer else None,
+            "pauze_pe_proba": [t["idle"]["n"] for t in cu_split],
+            "pooled": _stats(idle_pool, zero_masurat=bool(cu_split)),
+        },
+        "heap_dupa_ultimul_young_mb_pe_proba": [t.get("heap_dupa_ultimul_young_mb") for t in masurate],
         "probe": trials,
     }
     if not trials:
@@ -220,25 +265,32 @@ def render_markdown(data: dict, titlu: str = "FC-GC — pauze GC masurate din ju
     L = [f"# {titlu}", "", data.get("metoda", ""), ""]
     for run_id, run in data.get("runs", {}).items():
         L += [f"## Alergare {run_id}", "",
-              "| brat | probe | pauze (toate) | max ms | p95 ms | medie ms | Full-GC | idle p95/proba ms | idle max/proba ms | idle pauze/min | boot total ms/proba |",
-              "|---|---|---|---|---|---|---|---|---|---|---|"]
+              "| brat | probe | boot: pauze/proba | boot: total ms/proba | boot max ms | boot p95 ms | "
+              "idle (dupa Done): pauze / fereastra | idle max ms | Full-GC | heap dupa ultimul young (MB) |",
+              "|---|---|---|---|---|---|---|---|---|---|"]
         for arm, a in run["arms"].items():
-            t = a["toate_pauzele"]
             if a["stare"] != "MASURAT":
-                L.append(f"| {a['eticheta']} | {a['probe_cu_jurnal']} | NEMASURAT | — | — | — | — | — | — | — | — |")
+                L.append(f"| {a['eticheta']} | {a['probe_cu_jurnal']} | NEMASURAT | — | — | — | — | — | — | — |")
                 continue
+            b, i = a["boot"], a["idle"]
+            fer = i.get("fereastra_total_s")
+            idle_txt = (f"{i['pauze_total']} / {fer:.0f} s ({i['pauze_pe_minut']:.2f}/min)" if fer
+                        else f"{i['pauze_total']} (fereastra necunoscuta)")
+            full_txt = str(a["full_gc_total"]) + (" — " + "; ".join(a["full_detalii"])[:120] if a["full_gc_total"] else "")
             L.append("| " + " | ".join([
-                a["eticheta"], f"{a['probe_masurate']}/{a['probe_cu_jurnal']}", str(t["n"]),
-                _f(t["max_ms"]), _f(t["p95_ms"]), _f(t["medie_ms"], "%.2f"), str(a["full_gc_total"]),
-                "/".join(_f(x) for x in a["idle_p95_ms_pe_proba"]) or "—",
-                "/".join(_f(x) for x in a["idle_max_ms_pe_proba"]) or "—",
-                "/".join(_f(x, "%.2f") for x in a["idle_pauze_pe_minut_pe_proba"]) or "—",
-                "/".join(_f(x, "%.0f") for x in a["boot_total_ms_pe_proba"]) or "—",
+                a["eticheta"], f"{a['probe_masurate']}/{a['probe_cu_jurnal']}",
+                "/".join(str(x) for x in b["pauze_pe_proba"]) or "—",
+                "/".join(_f(x, "%.0f") for x in b["total_ms_pe_proba"]) or "—",
+                _f(b["pooled"]["max_ms"]), _f(b["pooled"]["p95_ms"]),
+                idle_txt, _f(i["pooled"]["max_ms"]), full_txt,
+                "/".join(_f(x, "%.0f") for x in a["heap_dupa_ultimul_young_mb_pe_proba"]) or "—",
             ]) + " |")
         L.append("")
     L += ["Semnificatie: pauza = timp in care TOATE firele serverului stau (STW). Un tick are 50 ms; o pauza sub ~10 ms",
-          "nu se vede in joc, una peste 50 ms = tick sarit. `idle` = dupa `Done`, server gol cu 36 moduri + 14 plugini;",
-          "nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fereastra masurata.", ""]
+          "nu se vede in joc, una peste 50 ms = tick sarit. `boot` = de la pornirea JVM pana la `Done` (incarcare moduri,",
+          "nu gameplay). `idle` = dupa `Done`, server gol cu 36 moduri + 14 plugini, fara jucatori — 0 pauze inseamna",
+          "ca heap-ul nu s-a umplut in fereastra, nu ca GC-ul ar fi gratuit sub sarcina. Full-GC cu `(System.gc())`",
+          "= cerut explicit de cod la pornire, nu presiune de memorie.", ""]
     return "\n".join(L)
 
 

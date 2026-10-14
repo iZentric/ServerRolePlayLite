@@ -5,6 +5,8 @@ name: FC-BENCH
 # comun, probe de login protocol 1.16.5, esantionare TPS/MSPT prin consola, "Can't keep
 # up!" numarata, RSS/CPU, jurnal GC). Practici noi de CI: pasul de garda esueaza chior
 # (fara exit-0 mascat), rapoarte JSON + loguri pe functity-out, verdict doar din cifre.
+# v4.2 (2026-10-14): GC citit cu parserul real -Xlog:gc* (scripts/fc_gc_reprocess.py, acelasi ca
+# FC-GC), MSPT din `forge tps` (Overall: Mean tick time), jurnalele GC publicate pe functity-out.
 on:
   push:
     paths:
@@ -162,6 +164,8 @@ jobs:
             D="rpub/bench-v4/$(date -u +%Y%m%d-%H%M)"
             mkdir -p "$D"; cp /tmp/fcb/results/$ARM.json "$D/"
             for lg in /tmp/fcb/results/server-trial*.log; do [ -f "$lg" ] && tail -c 300000 "$lg" > "$D/$(basename $lg .log)-$ARM.log"; done
+            # v4.2: jurnalele GC brute (-Xlog:gc*) merg si ele pe functity-out, ca FC-GC sa le poata reprocesa oricand
+            for g in /tmp/fcb/results/gc-trial*.log; do [ -f "$g" ] && head -c 2000000 "$g" > "$D/$(basename $g .log)-$ARM.log"; done
             tail -c 12000 /tmp/fcb/driver-$ARM.log > "$D/driver-$ARM.txt"
             ( cd rpub && git config user.name fcb-pub && git config user.email p@l && git add -A bench-v4/ && git commit -qm "fcb $ARM raport $(date -u +%H%M)" && git push -q origin HEAD:refs/heads/functity-out ) && echo "raport publicat $D" || echo "PUSH rapoarte esuat"
           fi
@@ -180,8 +184,8 @@ jobs:
           import json, pathlib
           d = json.loads(pathlib.Path('/tmp/fcb/results/${{ matrix.arm.id }}.json').read_text(encoding='utf-8'))
           parts = [f"status={d.get('status')}", f"probe={d.get('probate_reusite')}/{len(d.get('probe', []))}"]
-          for k in ("boot_medie_s", "boot_cv_pct", "join_medie_ms", "tps_p50", "overrun_total", "overrun_max_ms",
-                    "critice_total", "rss_medie_mb", "cpu_medie_pct", "gc_pauza_max_ms"):
+          for k in ("boot_medie_s", "boot_cv_pct", "join_medie_ms", "tps_p50", "mspt_medie_ms", "overrun_total", "overrun_max_ms",
+                    "critice_total", "rss_medie_mb", "cpu_medie_pct", "gc_pauza_max_ms", "gc_p95_ms_max_pe_probe", "gc_full_total", "gc_idle_max_ms_pe_proba"):
               if d.get(k) is not None:
                 parts.append(f"{k}={d[k]}")
           print("::warning::FC-BENCH ${{ matrix.arm.id }}: " + " ".join(parts))
@@ -222,15 +226,16 @@ jobs:
           lines = ["# FC-BENCH v4 — rezultate (masurate, nu estimate)", "",
                    "Metoda: boot la cald, 3 probe/arm, world comun post-instalare, java 11, -Xmx1536M, pack 36/14 cu SHA fix.",
                    "Deviatii declarate: seed fix, online-mode=false pentru probele de login, view-distance=10, check_update=false (Mohist).", ""]
-          hdr = ["brat", "stare", "boot_mediu_s", "boot_uptime_s", "CV%", "join_mediu_ms", "TPS_p50", "overrun", "overrun_max_ms", "critice", "RSS_MB", "CPU%", "GC_max_ms"]
+          hdr = ["brat", "stare", "boot_mediu_s", "boot_uptime_s", "CV%", "join_mediu_ms", "TPS_p50", "MSPT_ms", "overrun", "overrun_max_ms", "critice", "RSS_MB", "CPU%", "GC_max_ms", "GC_p95_ms", "Full-GC", "GC_idle_max_ms/proba"]
           lines.append("| " + " | ".join(hdr) + " |")
           lines.append("|" + "---|" * len(hdr))
           for a in order:
               d = rows[a]
               lines.append("| " + " | ".join(str(x) for x in [
                   d.get('eticheta', a), d.get('status'), d.get('boot_medie_s'), d.get('boot_uptime_medie_s'), d.get('boot_cv_pct'),
-                  d.get('join_medie_ms'), d.get('tps_p50'), d.get('overrun_total'), d.get('overrun_max_ms'),
-                  d.get('critice_total'), d.get('rss_medie_mb'), d.get('cpu_medie_pct'), d.get('gc_pauza_max_ms')]) + " |")
+                  d.get('join_medie_ms'), d.get('tps_p50'), d.get('mspt_medie_ms'), d.get('overrun_total'), d.get('overrun_max_ms'),
+                  d.get('critice_total'), d.get('rss_medie_mb'), d.get('cpu_medie_pct'), d.get('gc_pauza_max_ms'),
+                  d.get('gc_p95_ms_max_pe_probe'), d.get('gc_full_total'), d.get('gc_idle_max_ms_pe_proba')]) + " |")
           # verdicturi comparative, doar unde ambele brațe au MASURAT
           def cmp(metric, a, b, better="lower", pct=True):
               if a in rows and b in rows and rows[a].get(metric) is not None and rows[b].get(metric) is not None:
@@ -247,6 +252,9 @@ jobs:
               cmp("join_medie_ms", "functity_b1", "oficial1237", better="lower"),
               cmp("rss_medie_mb", "functity_b1", "oficial1237", better="lower"),
               cmp("tps_p50", "functity_b1", "oficial1237", better="higher"),
+              cmp("mspt_medie_ms", "functity_b1", "oficial1237", better="lower"),
+              cmp("gc_pauza_max_ms", "functity_b1", "oficial1237", better="lower"),
+              cmp("gc_pauza_max_ms", "functity_b1", "catserver", better="lower"),
               cmp("boot_medie_s", "oficial1237", "catserver"),
           ]
           lines += ["", "## Verdicturi comparative", ""] + [f"- {c}" for c in checks]
@@ -265,6 +273,8 @@ jobs:
                     "- TPS vine din comenzile console; NEMASURAT inseamna ca motorul nu le publica parseabil, NU ca ar fi 20.",
                     "- probele de login masoara intarzierea de logare headless (offline); nu includ ecranul de asset-uri al clientului.",
                     "- overrun = numar de 'Can't keep up!' in fereastra masurata; 0 nu garanteaza absenta sub 120s idle.",
+                    "- MSPT = 'Overall: Mean tick time' din `forge tps` (media Forge de la pornire, server gol); NEMASURAT daca motorul nu raspunde la comanda.",
+                    "- GC = pauze STW din -Xlog:gc* (JDK 11 G1): max/p95 pe toate pauzele (majoritatea la boot), Full-GC numarate, idle = dupa Done; vezi analysis/FUNCTITY-GC.md pentru metoda.",
                     ""]
           out = pathlib.Path('/tmp/fcb/ARTEFACT/summary.md'); out.parent.mkdir(parents=True, exist_ok=True)
           out.write_text("\n".join(lines), encoding='utf-8')
