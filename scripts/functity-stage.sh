@@ -308,6 +308,16 @@ PY
     say "jos curat"
     finish 0
     ;;
+  status)
+    say "== FUNCTITY STATUS — $(date -u '+%F %T UTC') =="
+    say "  staging java: $(pgrep -af 'java.*$(cat "$D/.jarname" 2>/dev/null || echo FunCity)' | head -2 | cut -c1-160 || echo NICIUNA)"
+    say "  port $PORT: $(port_viu $PORT) | 25565: $(port_viu 25565) | 25566: $(port_viu 25566)"
+    say "  log: Done = $(grep -c 'Done (' "$LOG" 2>/dev/null) | erori = $(grep -cE ' ERROR ' "$LOG" 2>/dev/null) | keep-up = $(grep -c "Can't keep up" "$LOG" 2>/dev/null)"
+    say "  plugini Enabling: $(grep -cE 'Enabling ' "$LOG" 2>/dev/null) | ultimi 6 linii:"
+    tail -6 "$LOG" 2>/dev/null | sed 's/^/    /' | tee -a "$REPORT"
+    say "  libertate disc: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB"
+    finish 0
+    ;;
   *)
-    echo "folosire: $0 host-info|backup|assemble|test|up|down"; exit 2;;
+    echo "folosire: $0 host-info|backup|assemble|test|status|up|down"; exit 2;;
 esac
