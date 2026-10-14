@@ -1,0 +1,27 @@
+live-snapshot 1 la 06:02:16
+[06:00:16] === brat functity_b1: stage ===
+[06:00:16] === faza A: instalare bootstrap (limita 360s, nemasurata) ===
+[06:00:46] watch[30s] alive=True log=9878B ? libs=76 rss=692MB thr=25
+[06:00:54] === proba 1/3 ===
+[06:01:16] watch[60s] alive=False log=15597B +5719B libs=76 rss=1335MB thr=48
+[06:01:46] watch[90s] alive=False log=15597B CRESTE libs=76 rss=2216MB thr=105
+
+--- driver tail ---
+a.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+[06:00:53 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+[06:00:53 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+[06:00:53 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:37)
+[06:00:53 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
+[06:00:53 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	... 6 more
+[06:00:53 INFO]: [java.lang.Throwable:printStackTrace:648]: Caused by: java.lang.NoSuchMethodError: 'java.util.stream.Collector com.google.common.collect.ImmutableMap.toImmutableMap(java.util.function.Function, java.util.function.Function)'
+[06:00:53 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.world.GameRules.<init>(GameRules.java:103)
+[06:00:53 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.MinecraftServer.<clinit>(MinecraftServer.java:177)
+[06:00:53 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.Main.main(Main.java:117)
+[06:00:53 INFO]: [java.lang.Throwable:printStackTrace:648]: 	... 12 more
+
+[06:01:46] [Netty Epoll Server IO #2/INFO] [net.minecraftforge.fml.server.ServerLifecycleHooks/SERVERHOOKS]: Disconnecting VANILLA connection attempt: This server has mods that require Forge to be installed on the client. Contact your server admin for more details.
+[06:01:48] [Craft Scheduler Thread - 0/INFO] [Minecraft/]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
+[06:01:49] [Netty Epoll Server IO #3/ERROR] [net.minecraftforge.fml.network.NetworkRegistry/NETREGISTRY]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecraftmodernxl,cgm:play,supplementaries:network,modernlife:network] rejected vanilla connections
+[06:01:49] [Netty Epoll Server IO #3/INFO] [net.minecraftforge.fml.server.ServerLifecycleHooks/SERVERHOOKS]: Disconnecting VANILLA connection attempt: This server has mods that require Forge to be installed on the client. Contact your server admin for more details.
+[06:01:52] [Server thread/INFO] [Essentials/]: CONSOLE issued server command: /list 
+[06:01:52] [Server thread/INFO] [/]: There are 0 out of maximum 25 players online.
