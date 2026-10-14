@@ -1,0 +1,41 @@
+live-snapshot 4 la 05:19:46
+[05:11:42] === brat functity_b0: stage ===
+[05:11:42] === faza A: instalare bootstrap (limita 360s, nemasurata) ===
+[05:12:12] watch[30s] alive=True log=11353B ? libs=76 rss=887MB thr=30
+[05:12:17] === proba 1/3 ===
+[05:12:42] watch[60s] alive=False log=15597B +4244B libs=76 rss=1866MB thr=64
+[05:13:12] watch[90s] alive=False log=15597B CRESTE libs=76 rss=2330MB thr=106
+[05:13:42] watch[120s] alive=False log=15597B CRESTE libs=76 rss=2330MB thr=99
+[05:14:12] watch[150s] alive=False log=15597B CRESTE libs=76 rss=2329MB thr=88
+[05:14:42] watch[180s] alive=False log=15597B CRESTE libs=76 rss=2329MB thr=86
+[05:15:12] watch[210s] alive=False log=15597B CRESTE libs=76 rss=2329MB thr=86
+[05:15:42] watch[240s] alive=False log=15597B CRESTE libs=76 rss=2329MB thr=84
+[05:16:12] watch[270s] alive=False log=15597B CRESTE libs=76 rss=2329MB thr=85
+[05:16:42] watch[300s] alive=False log=15597B CRESTE libs=76 rss=2330MB thr=85
+[05:17:12] watch[330s] alive=False log=15597B CRESTE libs=76 rss=2330MB thr=85
+[05:17:42] watch[360s] alive=False log=15597B CRESTE libs=76 rss=2330MB thr=84
+[05:18:12] watch[390s] alive=False log=15597B CRESTE libs=76 rss=2334MB thr=48
+[05:18:14] === proba 2/3 ===
+[05:18:42] watch[420s] alive=False log=15597B CRESTE libs=76 rss=1794MB thr=64
+[05:19:12] watch[450s] alive=False log=15597B CRESTE libs=76 rss=2207MB thr=99
+[05:19:42] watch[480s] alive=False log=15597B CRESTE libs=76 rss=2207MB thr=91
+
+--- driver tail ---
+a.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+[05:12:16 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+[05:12:16 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+[05:12:16 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:37)
+[05:12:16 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37)
+[05:12:16 INFO]: [java.lang.ThreadGroup:uncaughtException:1059]: 	... 6 more
+[05:12:16 INFO]: [java.lang.Throwable:printStackTrace:648]: Caused by: java.lang.NoSuchMethodError: 'java.util.stream.Collector com.google.common.collect.ImmutableMap.toImmutableMap(java.util.function.Function, java.util.function.Function)'
+[05:12:16 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.world.GameRules.<init>(GameRules.java:103)
+[05:12:16 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.MinecraftServer.<clinit>(MinecraftServer.java:177)
+[05:12:16 INFO]: [java.lang.Throwable:printStackTrace:648]: 	at net.minecraft.server.Main.main(Main.java:117)
+[05:12:16 INFO]: [java.lang.Throwable:printStackTrace:648]: 	... 12 more
+
+[05:19:02] [Netty Epoll Server IO #3/INFO] [net.minecraftforge.fml.server.ServerLifecycleHooks/SERVERHOOKS]: Disconnecting VANILLA connection attempt: This server has mods that require Forge to be installed on the client. Contact your server admin for more details.
+[05:19:05] [Server thread/INFO] [Essentials/]: CONSOLE issued server command: /list 
+[05:19:05] [Server thread/INFO] [/]: There are 0 out of maximum 25 players online.
+[05:19:35] [Server thread/INFO] [/]: Unknown command. Type "/help" for help.
+[05:19:35] [Server thread/INFO] [/]: Unknown command. Type "/help" for help.
+[05:19:35] [Server thread/INFO] [/]: TPS from last 1m, 5m, 15m: 20.0, 20.0, 20.0
