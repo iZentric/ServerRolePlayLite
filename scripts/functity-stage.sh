@@ -290,7 +290,15 @@ PY
     finish 0
     ;;
   down)
-    opreste_server && say "jos curat"
+    opreste_server || true
+    # maturam orice JVM de staging ramas din cicluri anterioare (pid vechi suprasris)
+    for pid in $(pgrep -f 'funcity-live' | grep -v $$ || true); do
+      kill "$pid" 2>/dev/null || true
+    done
+    sleep 12
+    for pid in $(pgrep -f 'java.*funcity-live|java.*FunCity' || true); do kill -9 "$pid" 2>/dev/null || true; done
+    say "curatari: java staging ramas = $(pgrep -cf 'funcity-live.*jar|FunCity.*jar' || echo 0) | port 25565: $(port_viu 25565) | port 25566: $(port_viu 25566)"
+    say "jos curat"
     finish 0
     ;;
   *)
