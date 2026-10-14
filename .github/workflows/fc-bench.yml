@@ -43,45 +43,57 @@ jobs:
 
       - name: Packul de referinta, cu pază de SHA
         run: |
-          set -euo pipefail
+          set -uo pipefail
+          fail() { printf '::error::%s\n' "$1" | tr ':' '.' ; printf '%s\n' "$1" >> "$GITHUB_STEP_SUMMARY"; exit 1; }
           mkdir -p /tmp/fcb
+          DL=""
           for i in 1 2 3 4 5; do
-            if gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/fcb; then break; fi
-            [ "$i" = 5 ] && { echo "::error::packul nu s-a putut descarca in 5 incercari"; exit 1; }
-            sleep $((i*15))
+            if OUT=$(gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/fcb 2>&1); then DL=ok; break; fi
+            printf 'incercarea %s esuata: %s\n' "$i" "$(printf '%s' "$OUT" | tr '\n' ' ' | cut -c1-200)" >> /tmp/fcb/dl-err.txt
+            sleep $((i*10))
           done
+          [ "$DL" = ok ] || fail "pack descarcare esuata x5: $(tr '\n' '|' < /tmp/fcb/dl-err.txt | cut -c1-600)"
           echo "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  /tmp/fcb/pack.zip" > /tmp/fcb/pack.sha256
-          sha256sum -c /tmp/fcb/pack.sha256
+          sha256sum -c /tmp/fcb/pack.sha256 2>&1 | tee /tmp/fcb/pack-check.txt || fail "SHA pack potrit: $(tail -1 /tmp/fcb/pack-check.txt)"
+          ls -la /tmp/fcb/pack.zip >> "$GITHUB_STEP_SUMMARY"
 
       - name: Jarul bratului, cu pază de SHA
         run: |
-          set -euo pipefail
+          set -uo pipefail
+          fail() { printf '::error::%s\n' "$1" | tr ':' '.' ; printf '%s\n' "$1" >> "$GITHUB_STEP_SUMMARY"; exit 1; }
           ARM='${{ matrix.arm.id }}'
           case "$ARM" in
             catserver) echo "brat catserver: foloseste jarul din pack"; exit 0;;
-            oficial1237) curl -fsSL --retry 4 --retry-delay 10 -o /tmp/fcb/arm.jar '${{ matrix.arm.jar }}';;
+            oficial1237)
+              if ! curl -fsSL --retry 4 --retry-delay 10 -o /tmp/fcb/arm.jar '${{ matrix.arm.jar }}' 2>/tmp/fcb/curl-err.txt; then
+                fail "jar oficial descarcare esuata: $(tr '\n' '|' < /tmp/fcb/curl-err.txt | cut -c1-300)"
+              fi;;
             functity_b0) REF='builds/b0/FunCity-1.16.5-b0.jar';;
             functity_b1) REF='builds/b1.2256/FunCity-1.16.5-b1.2256.jar';;
-            *) echo "::error::brat necunoscut $ARM"; exit 1;;
+            *) fail "brat necunoscut $ARM";;
           esac
           if [ "$ARM" != "oficial1237" ]; then
-            git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/out
-            git -C /tmp/fcb/out lfs pull 2>/dev/null || true
-            cp "/tmp/fcb/out/$REF" /tmp/fcb/arm.jar
+            git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/out 2>/tmp/fcb/clone-err.txt || fail "clone functity-out esuata: $(tr '\n' '|' < /tmp/fcb/clone-err.txt | cut -c1-300)"
+            cp "/tmp/fcb/out/$REF" /tmp/fcb/arm.jar || fail "lipseste $REF din functity-out: $(ls /tmp/fcb/out/builds 2>/dev/null | tr '\n' ' ')"
           fi
           echo '${{ matrix.arm.sha }}  /tmp/fcb/arm.jar' > /tmp/fcb/arm.sha256
-          sha256sum -c /tmp/fcb/arm.sha256
-          unzip -p /tmp/fcb/arm.jar META-INF/MANIFEST.MF | tr -d '\r' | grep -q 'ServerLaunchArgs' || { echo "::error::jar fara manifest de server (ServerLaunchArgs) — refuz sa benchesz un ambalaj fals"; exit 1; }
+          sha256sum -c /tmp/fcb/arm.sha256 2>&1 | tee /tmp/fcb/arm-check.txt || fail "SHA jar brat potrit: $(tail -1 /tmp/fcb/arm-check.txt)"
+          unzip -p /tmp/fcb/arm.jar META-INF/MANIFEST.MF | tr -d '\r' | grep -q 'ServerLaunchArgs' || fail "jar fara manifest ServerLaunchArgs — refuz sa benchesz un ambalaj fals"
+
 
       - name: Gonest pe runner (documentat in raport)
+        env: { ARM: '${{ matrix.arm.id }}' }
         run: lscpu | sed -n '1,15p'; free -l | head -2; nproc
 
       - name: Alergare banca (faza A instalare + 3 probe la cald a 300s)
+        env: { ARM: '${{ matrix.arm.id }}' }
         run: |
           set +e
-          python3 scripts/fc_bench.py --arm-conf benches/functity/arms/${{ matrix.arm.conf }}.json
+          python3 scripts/fc_bench.py --arm-conf benches/functity/arms/${{ matrix.arm.conf }}.json > /tmp/fcb/driver-$ARM.log 2>&1
           RC=$?
           echo "driver rc=$RC"
+          grep -E 'RESUMAT|Traceback|ERROR' /tmp/fcb/driver-$ARM.log | tail -8 >> "$GITHUB_STEP_SUMMARY"
+          tail -3 /tmp/fcb/driver-$ARM.log
           if [ ! -f /tmp/fcb/results/${{ matrix.arm.id }}.json ]; then
             echo "::error::bratul ${{ matrix.arm.id }} nu a produs raport (rc=$RC) — ALERGAREA CADE, nu se mascheaza"
             tail -c 4000 /tmp/fcb/results/install.log 2>/dev/null
