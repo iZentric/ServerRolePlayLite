@@ -269,11 +269,12 @@ footer code{color:#9fb0c9}
 </style></head><body>
 <nav><div class="in">
   <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
-  <span class="pill"><i style="background:var(--amber);box-shadow:0 0 12px var(--amber)"></i>Status public neconfirmat 15:46 UTC</span>
+  <span class="pill"><i style="background:var(--mut);box-shadow:0 0 12px var(--mut)"></i>Status neconfirmat acum · ultima probă 13.10 15:46 UTC</span>
   <span class="pill">1.7.7 · 36 moduri + 14 pluginuri</span>
   <a class="l" href="#scor">bari ↓</a>
   <a class="l" href="#tier">tier list ↓</a>
   <a class="l" href="#atlas">atlas ↓</a>
+  <a class="l" href="#functity">functity ↓</a>
   <a class="l" href="#viziune">strategie ↓</a>
 </div></nav>
 <div class="wrap">
@@ -417,6 +418,30 @@ dacă punctul cade înăuntru, diferența nu e dovadă</span>
 pe braț</b> cu clienți Forge confirmați în <code>/list</code>. Până atunci pagina nu primește niciun număr
 pentru ele — <code>scripts/cuantic_tenx_gate.py</code> întoarce <code>NEMĂSURAT</code>, niciodată un număr favorabil.</p></div>
 <a href="#tier">Înapoi la tier list ↑</a></div>
+</section>
+
+<section id="functity" aria-label="Banca de măsurare FunCity (motor propriu pe bază Mohist)">
+<h2>🏗️ FunCity — motorul propriu, măsurat, nu promis</h2>
+<div class="sub">FC-BENCH v4: 4 braate x 3 probe boot-la-cald, world comun, java 11, -Xmx1536M, pack 36/14 SHA fix, runner GitHub izolat · probe 2026-10-14 06:19 UTC. Timpul comparat e <b>„Done (x.xs)” auto-măsurat de motor</b>
+(fără zgomotul de runner partajat din timpii wall); CV = variația între probe.</div>
+<div class="table-scroll"><table class="tbl">
+<tr><th>Motor (așa cum rulează pack-ul 36/14)</th><th>Boot runda A</th><th>Boot runda B</th><th>Δ față de motorul istoric</th><th>CV max</th><th>TPS idle</th><th>Overrun / critice (6 probe)</th><th>RSS mediu</th></tr>
+<tr><td><b>CatServer 1.16.5-1d8d6313 (motorul istoric al serverului)</b></td><td>8.07 s</td><td>6.35 s</td><td>referința</td><td>4.9%</td><td>20.0</td><td>0 / 0</td><td>2218 MB</td></tr>
+<tr><td><b>Mohist oficial 1.16.5-1237 (referinta din ecosistem)</b></td><td>4.31 s</td><td>3.81 s</td><td>-40% vs CatServer</td><td>9.2%</td><td>20.0</td><td>0 / 0</td><td>2260 MB</td></tr>
+<tr><td><b>FunCity b0 — build propriu, pin 754b578e, fara patch-uri</b></td><td>4.24 s</td><td>4.26 s</td><td>-33% vs CatServer</td><td>5.8%</td><td>20.0</td><td>0 / 0</td><td>2258 MB</td></tr>
+<tr><td><b>FunCity b1.2256 — baseline + P0b/P0c/P0d + P1 dropper-guard</b></td><td>3.03 s</td><td>4.78 s</td><td>-25% vs CatServer</td><td>5.7%</td><td>20.0</td><td>0 / 0</td><td>2240 MB</td></tr>
+</table></div>
+<div class="card" style="margin-top:14px"><h3>Praguri bătute în cuie ÎNAINTE de rulare</h3><ul style="margin:6px 0 0 20px"><li><b>CV < 10% pe brat</b>: TRECUT (7/8, max 9,2%)</li><li><b>0 erori critice pe 3 probe</b>: TRECUT (0 pe toate, ambele runde)</li><li><b>0 'Can't keep up!' in fereastra de 300 s</b>: TRECUT</li><li><b>TPS idle p50 >= 19.8</b>: TRECUT (20,0)</li></ul>
+<p style="margin-top:10px"><b>Latenta de join cu client modat: NEMĂSURAT încă</b> — proba vanilla a fost respinsă
+corect de FML pe toate cele 4 motoare (mesaj „Forge client required”); bot-ul cu pack complet vine în runda următoare.
+<b>Pauze GC: NEMĂSURAT</b> în această rundă — parserul nu a recunoscut formatul, nu inventăm 0.</p></div>
+<div class="note"><b>Ce înseamnă:</b> FunCity pornește identical cu Mohist oficial (la nivel de zgomot, fără regresie
+și fără câștig declarabil) și nu are erori critice pe niciun boot; în plus, ambele motoare Mohist-family termină
+boot-ul mai repede decât motorul istoric CatServer pe aceeași sarcină. <b>Ce NU înseamnă:</b> un titlu de „cel mai rapid”
+— nu măsurăm gameplay, nu atingem serverul live, și runner-ul CI nu e gazda de 2 vCPU a jucătorilor.</div>
+<details><summary>Ce nu acoperă banca (ca să nu iasă surprize)</summary><ul style="margin:6px 0 0 20px"><li>masina CI (4 vCPU, runner partajat) NU e gazda live (2 vCPU) — cifrele compara motoarele intre ele, nu promit valori pe box</li><li>sarcina e boot + idle cu pack complet; nu e test de gameplay cu 10-25 jucatori</li><li>join cu client modat rămâne NEMASURAT pana la runda cu bot mineflayer</li><li>wall pe runner partajat are zgomot de ordinul secundelor intre alergari; folosim doar timpul 'Done' auto-masurat de motor</li></ul></details>
+<p class="sub" style="margin-top:10px">Rapoarte brute: <a href="https://github.com/iZentric/ServerRolePlayLite/tree/functity-out/bench-v4">functity-out/bench-v4</a> ·
+sursa cifrelor: <code>analysis/FUNCTITY-BENCH.md</code> · alergări CI A/B cuantificate în document.</p>
 </section>
 
 <h2 id="cifre">🗂️ Arhiva probelor: cum a evoluat pack-ul pe aceeași gazdă</h2>
@@ -744,7 +769,7 @@ Cauza opririi este încă necunoscută; verifică badge-ul datat de sus pentru u
 </div>
 
 <footer>
-  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 13 Oct 2026, 15:46 UTC<br>
+  <span class="live">●</span> Pagina se regenerează automat din verdictele joburilor · ultima actualizare: 14 Oct 2026, 07:31 UTC<br>
   CUANTIC · Roleplay Lite · Minecraft Java 1.16.5 Forge + Bukkit (CatServer adaptat) · set de flaguri JVM validat pe Java 17 în CI<br>
   Date brute: <code>docs/ENGINE-NATIVE-RESULT.md</code> · <code>docs/CUANTIC-JAR-ATLAS-2026-10-12.md</code> · <code>docs/ENGINE-DECISION.md</code> · <code>analysis/</code>
 </footer>

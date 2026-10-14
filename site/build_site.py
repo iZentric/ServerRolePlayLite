@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generatorul site-ului CUANTIC - citeste verdictele reale din analysis/ si naste index.html"""
 import os, re, glob, datetime
-from engine_results import latest_status, panel, strategy_panel
+from engine_results import latest_status, panel, strategy_panel, functity_panel
 from jar_atlas import panel as atlas_panel, STYLE as ATLAS_STYLE, SCRIPT as ATLAS_SCRIPT
 from jar_tier import panel as tier_panel, STYLE as TIER_STYLE, SCRIPT as TIER_SCRIPT
 from jar_delta import panel as delta_panel, STYLE as DELTA_STYLE
@@ -428,6 +428,7 @@ html = f"""<!DOCTYPE html>
   <a class="l" href="#scor">bari ↓</a>
   <a class="l" href="#tier">tier list ↓</a>
   <a class="l" href="#atlas">atlas ↓</a>
+  <a class="l" href="#functity">functity ↓</a>
   <a class="l" href="#viziune">strategie ↓</a>
 </div></nav>
 <div class="wrap">
@@ -458,6 +459,8 @@ html = f"""<!DOCTYPE html>
 {tier_panel()}
 
 {delta_panel()}
+
+{functity_panel()}
 
 <h2 id="cifre">🗂️ Arhiva probelor: cum a evoluat pack-ul pe aceeași gazdă</h2>
 <div class="sub">Tabelele de mai jos sunt <b>istoric</b>, nu benchmark: rândurile vin din runde diferite, cu sarcini,

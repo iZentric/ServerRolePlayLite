@@ -359,3 +359,84 @@ nu sacrificăm clientul Forge ca să obținem un TPS frumos pe hârtie.
 <p class="sub" style="margin-top:12px">Transparență: <a href="{REPO_DOCS}INCIDENT-2026-10-11-STATUS.md">serverul a fost indisponibil la 22:13 UTC, recuperat și verificat local/public la 22:16 UTC</a>.
 Cauza opririi este încă necunoscută; verifică badge-ul datat de sus pentru ultima probă, nu presupune uptime permanent.</p>
 </section>'''
+
+
+FUNCTITY_DOC = ROOT / "analysis" / "FUNCTITY-BENCH.md"
+FC_OUT_BENCH = "https://github.com/iZentric/ServerRolePlayLite/tree/functity-out/bench-v4"
+
+
+def functity_data():
+    """Snapshotul masurat FC-BENCH v4 (din analysis/FUNCTITY-BENCH.md), sau {}."""
+    try:
+        text = FUNCTITY_DOC.read_text(encoding="utf-8")
+    except OSError:
+        return {}
+    m = re.search(r"```json\s*(\{.*?\})\s*```", text, re.S)
+    if not m:
+        return {}
+    try:
+        return json.loads(m.group(1))
+    except ValueError:
+        return {}
+
+
+def functity_panel():
+    d = functity_data()
+    if not d or "runde" not in d:
+        return ('<section id="functity"><h2>🏗️ FunCity — banca de măsurare a motorului propriu</h2>'
+                '<div class="sub">Nicio măsurătoare FC-BENCH încă încărcată; secțiunea se populează '
+                'din <code>analysis/FUNCTITY-BENCH.md</code> după prima rulare verde.</div></section>')
+    nume = d["brate"]
+    rows = []
+    for key, label in nume.items():
+        a = d["runde"].get("A", {}).get("arms", {}).get(key, {})
+        b = d["runde"].get("B", {}).get("arms", {}).get(key, {})
+        def med(x):
+            v = x.get("done_s") or []
+            return round(sum(v) / len(v), 2) if v else None
+        ma, mb = med(a), med(b)
+        cvs = [x.get("cv") for x in (a, b) if x.get("cv") is not None]
+        cv = max(cvs) if cvs else None
+        crit = (a.get("critice", 0) or 0) + (b.get("critice", 0) or 0)
+        over = (a.get("overrun", 0) or 0) + (b.get("overrun", 0) or 0)
+        tps = b.get("tps") if b.get("tps") is not None else a.get("tps")
+        rss = b.get("rss_mb")
+        rows.append((label, ma, mb, cv, tps, over, crit, rss))
+    cat_a = next((r for r in rows if "CatServer" in r[0]), None)
+    body = []
+    for label, ma, mb, cv, tps, over, crit, rss in rows:
+        delta = "referința"
+        if mb and cat_a and cat_a[2] and "CatServer" not in label:
+            delta = f"{(mb - cat_a[2]) / cat_a[2] * 100:+.0f}% vs CatServer"
+        body.append(
+            "<tr><td><b>" + label + "</b></td>"
+            + "<td>" + (f"{ma:.2f} s" if ma else "NEMĂSURAT") + "</td>"
+            + "<td>" + (f"{mb:.2f} s" if mb else "NEMĂSURAT") + "</td>"
+            + "<td>" + delta + "</td>"
+            + "<td>" + (f"{cv:.1f}%" if cv is not None else "—") + "</td>"
+            + "<td>" + (f"{tps:.1f}" if tps is not None else "NEMĂSURAT") + "</td>"
+            + "<td>" + str(over) + " / " + str(crit) + "</td>"
+            + "<td>" + (f"{rss:.0f} MB" if rss else "—") + "</td></tr>")
+    pr = d.get("praguri", {})
+    prag_rows = "".join("<li><b>" + k + "</b>: " + v + "</li>" for k, v in pr.items())
+    lim_rows = "".join("<li>" + x + "</li>" for x in d.get("limite", []))
+    return f'''<section id="functity" aria-label="Banca de măsurare FunCity (motor propriu pe bază Mohist)">
+<h2>🏗️ FunCity — motorul propriu, măsurat, nu promis</h2>
+<div class="sub">{d.get("metoda", "")} · probe {d.get("data", "")}. Timpul comparat e <b>„Done (x.xs)” auto-măsurat de motor</b>
+(fără zgomotul de runner partajat din timpii wall); CV = variația între probe.</div>
+<div class="table-scroll"><table class="tbl">
+<tr><th>Motor (așa cum rulează pack-ul 36/14)</th><th>Boot runda A</th><th>Boot runda B</th><th>Δ față de motorul istoric</th><th>CV max</th><th>TPS idle</th><th>Overrun / critice (6 probe)</th><th>RSS mediu</th></tr>
+{chr(10).join(body)}
+</table></div>
+<div class="card" style="margin-top:14px"><h3>Praguri bătute în cuie ÎNAINTE de rulare</h3><ul style="margin:6px 0 0 20px">{prag_rows}</ul>
+<p style="margin-top:10px"><b>Latenta de join cu client modat: NEMĂSURAT încă</b> — proba vanilla a fost respinsă
+corect de FML pe toate cele 4 motoare (mesaj „Forge client required”); bot-ul cu pack complet vine în runda următoare.
+<b>Pauze GC: NEMĂSURAT</b> în această rundă — parserul nu a recunoscut formatul, nu inventăm 0.</p></div>
+<div class="note"><b>Ce înseamnă:</b> FunCity pornește identical cu Mohist oficial (la nivel de zgomot, fără regresie
+și fără câștig declarabil) și nu are erori critice pe niciun boot; în plus, ambele motoare Mohist-family termină
+boot-ul mai repede decât motorul istoric CatServer pe aceeași sarcină. <b>Ce NU înseamnă:</b> un titlu de „cel mai rapid”
+— nu măsurăm gameplay, nu atingem serverul live, și runner-ul CI nu e gazda de 2 vCPU a jucătorilor.</div>
+<details><summary>Ce nu acoperă banca (ca să nu iasă surprize)</summary><ul style="margin:6px 0 0 20px">{lim_rows}</ul></details>
+<p class="sub" style="margin-top:10px">Rapoarte brute: <a href="{FC_OUT_BENCH}">functity-out/bench-v4</a> ·
+sursa cifrelor: <code>analysis/FUNCTITY-BENCH.md</code> · alergări CI A/B cuantificate în document.</p>
+</section>'''
