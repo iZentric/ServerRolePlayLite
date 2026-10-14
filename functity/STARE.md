@@ -68,3 +68,23 @@ pack via CDN intermitent → functity-out:pack/ (blob git, auto-reparat de FC-PA
 instalare intrerupa la EOF pe stdin → FIFO si la faza A + kill pe intreg grupul (killpg);
 rapoarte ingestibile prin loguri (Azure blocheaza sandbox-ul) → canal git functity-out +
 live-snapshots la 2 min; summary-API/annotations gh: gh nu expun nimic util → tot pe git.
+
+## 7b. Runda B (confirmare, FC-BENCH v4.19, run 38519665645, 2026-10-14 06:19)
+v4.19 a introdus poll 0,25 s + **timp obiectiv `Done (x.xs)` auto-măsurat de motor**, pentru că wall-ul pe runner
+partajat s-a dovedit zgomotos (ordinea bratelor s-a inversat între runde: b1 cel mai rapid la wall în A, cel mai lent
+în B — în ambele runde timpul „Done" e stabil, 2–10 s). Medii Done pe 3 probe (A · B): CatServer 8,07 · 6,35 s;
+oficial 4,31 · 3,81 s; b0 4,24 · 4,26 s; b1 3,03 · 4,78 s.
+**Verdic final: fără regresie vs mohist oficial (la nivel de zgomot, la boot), câștig măsurat vs CatServer la boot
+(29–55%), CV ≤ 9,2%, 0 erori critice, TPS idle 20,0, oprire curată 24/24 porniri. Nu declarăm „cel mai rapid".**
+Nu au ieftinit nulla din pack ca sa iasa cifrele; pragurile au ramas cele batute in cuie inainte.
+Date complete: `analysis/FUNCTITY-BENCH.md` (JSON verificat prin test, nu hardcodat) — aceleasi cifre sint publicate
+si pe site, sectiunea „FunCity — motorul propriu, măsurat, nu promis", cu garda proprie
+(`tests/test_functity_bench_site.py`: ce n-a fost măsurat apare NEMĂSURAT, nu umplut).
+
+## 8. Urmatorii pasi (in ordine)
+1. Bot mineflayer cu pachet complet → tinta „masurat" pentru latenta de join (singura marime din sectiunea 5 inca
+   acoperita doar de respingerea corecta a clientului vanilla).
+2. Parser MSPT/GC pe formatul real din loguri (datele brute sint pastrate in functity-out/bench-v4/*/server-*.log,
+   deci se poate reprocessa fara reincarcare).
+3. FISE/STARE: upgrade „netestat" → „masurat" pentru cele cite sectiunea 7 le-a acoperit.
+4. Linie de trezire in box (MC-RUN v9, doar dupa acord).
