@@ -1,0 +1,28 @@
+name: FC-PACKPROBE
+on:
+  push:
+    paths:
+      - deploy/fc-packprobe.txt
+permissions:
+  contents: read
+jobs:
+  p:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Sondeaza calea de download a packului
+        run: |
+          set -uo pipefail
+          S="${GITHUB_STEP_SUMMARY:-/tmp/sum.md}"
+          echo "GITHUB_STEP_SUMMARY=${GITHUB_STEP_SUMMARY:-nesetata}" >> "$S"
+          echo "pass-id test" >> "$S"
+          A=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/lite" --jq '.assets[] | select(.name=="CUANTIC-Server-CatServer-1.7.7.zip") | [.id,.size,.browser_download_url,.updated_at] | @tsv' 2>&1) ; echo "ghapi: $A" >> "$S"
+          AID=$(printf '%s' "$A" | cut -f1)
+          CODE=$(curl -sS -o /dev/null -w '%{http_code} %{size_download} %{time_total}s' --max-time 40 -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/octet-stream" -r 0-1000 "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/assets/$AID" 2>&1); echo "api-range: $CODE" >> "$S"
+          CODE=$(curl -sS -o /dev/null -w '%{http_code} %{size_download} %{time_total}s' --max-time 40 -r 0-1000 "$(printf '%s' "$A" | cut -f3)" 2>&1); echo "browser-url-range: $CODE" >> "$S"
+          echo "gh-rel-test:" >> "$S"
+          (cd /tmp && timeout 60 gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp 2>&1 | tail -3) >> "$S"
+          ls -la /tmp/CUANTIC* >> "$S" 2>&1
+          echo "sfarsit ok" >> "$S"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
