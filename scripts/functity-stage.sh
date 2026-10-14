@@ -334,6 +334,13 @@ PY
     say "  plugini Enabling: $(grep -cE 'Enabling ' "$LOG" 2>/dev/null) | ultimi 6 linii:"
     tail -6 "$LOG" 2>/dev/null | sed 's/^/    /' | tee -a "$REPORT"
     say "  libertate disc: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB"
+    say "  interior jar voicechat (fisiere config citate):"
+    local vj; vj=$(ls "$D"/mods/*voicechat*.jar 2>/dev/null | head -1)
+    if [ -n "$vj" ]; then
+      unzip -Z1 "$vj" 2>/dev/null | grep -iE '\.(properties|toml|json)$|pack.png|mod.json|mods.toml' | head -10 | sed 's/^/    J /' | tee -a "$REPORT"
+      unzip -p "$vj" 'assets/voicechat/lang/en_us.json' 2>/dev/null | grep -oE '"voicechat[^"]*port[^"]*"' | head -4 | sed 's/^/    K /' | tee -a "$REPORT"
+      unzip -p "$vj" $(unzip -Z1 "$vj" | grep -m1 -iE 'VoiceChatConfig|ServerConfig|ConfigManager' | head -1) 2>/dev/null | strings 2>/dev/null | grep -oE '[a-zA-Z0-9_/.-]*voicechat[a-zA-Z0-9_/.-]*\.(properties|toml)' | sort -u | head -6 | sed 's/^/    F /' | tee -a "$REPORT"
+    fi
     say "  moduri voice/chat in pack:"
     ls "$D/mods" 2>/dev/null | grep -iE 'voice|chat|talk|plastic' | sed 's/^/    M /' | tee -a "$REPORT"
     say "  configuri voicechat staging:"
