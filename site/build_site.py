@@ -413,8 +413,8 @@ if _noua and _istoric:
 html = f"""<!DOCTYPE html>
 <html lang="ro"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CUANTIC — hibrid Forge + Bukkit măsurat, nu promis | Minecraft 1.16.5</title>
-<meta name="description" content="CUANTIC: server Minecraft Forge 1.16.5 cu 36 de moduri și 14 pluginuri, cu tier list pe probe, diferență măsurată de consum față de binarul oficial și limite scrise explicit. Fără „zero lag” inventat.">
+<title>FunCity — motorul propriu pentru RP Lite: măsurat, nu promis | Minecraft 1.16.5</title>
+<meta name="description" content="FunCity: server Minecraft 1.16.5 cu 36 de moduri și 14 pluginuri, construit pe baza Mohist cu patchuri proprii justificate. Dovezi, probe, limite și ce NU am măsurat — scrise explicit. Fără „zero lag” inventat. Arhiva proiectului CUANTIC rămâne păstrată.">
 <style>{STYLE}
 {ATLAS_STYLE}
 {TIER_STYLE}
@@ -422,7 +422,7 @@ html = f"""<!DOCTYPE html>
 {SCORE_STYLE}
 </style></head><body>
 <nav><div class="in">
-  <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>CUANTIC</div>
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" fill="#5ff0c0"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#7fb0ff" stroke-width="1.3"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#b79cff" stroke-width="1.3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.4" stroke="#5ff0c0" stroke-width="1.3" transform="rotate(120 12 12)"/></svg>FUNCIŢY</div>
   <span class="pill"><i style="background:{alive_cul};box-shadow:0 0 12px {alive_cul}"></i>{alive_txt}</span>
   <span class="pill">{PACKV} · 36 moduri + 14 pluginuri</span>
   <a class="l" href="#scor">bari ↓</a>
@@ -435,7 +435,7 @@ html = f"""<!DOCTYPE html>
 
 <header>
   <div class="eyebrow">Minecraft Java 1.16.5 · Forge + Bukkit · Palma City · cost 0 lei</div>
-  <h1>Server hibrid măsurat, <span>nu lăudat.</span></h1>
+  <h1>FunCity — motor hibrid al nostru: măsurat, <span>nu lăudat.</span></h1>
   <p class="lede">CUANTIC rulează <b>36 de moduri Forge și 14 pluginuri Bukkit</b> în același proces, pe un host de 2 vCPU.
   Pe pagina asta găsești exact trei lucruri: <b>clasamentul pe probe</b>, <b>diferența reală de performanță și consum</b>
   față de fiecare alternativă testată, și <b>ce nu știm încă</b>. Cifrele vin din rapoarte commit-uite, nu din marketing.</p>

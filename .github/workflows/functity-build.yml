@@ -112,17 +112,10 @@ jobs:
             find src -name '*.jar' 2>/dev/null | head -20 >> /tmp/fc/ESUARE.txt || true
           fi
           tail -c 350000 build-out.log > /tmp/fc/BUILD-LOG.txt 2>/dev/null || cp src/build-out.log /tmp/fc/BUILD-LOG.txt 2>/dev/null || echo "log pierdut" > /tmp/fc/BUILD-LOG.txt
-          {
-            echo "{"
-            echo "  \"build\": \"$BUILD_ID\",
-            echo "  \"buildfix\": \"P0=FG 6.0.x pin\","
-            echo "  \"mohist_pin\": \"$MOHIST_PIN\","
-            echo "  \"jar\": \"${JNAME:-niciunul}\","
-            echo "  \"data_utc\": \"$(date -u '+%F %T')\","
-            echo "  \"runner\": \"ubuntu-24.04 hosted\","
-            echo "  \"java\": \"$(java -version 2>&1 | head -1 | tr -d '"')\""
-            echo "}"
-          } > /tmp/fc/metadata.json
+          # metadata = lant complet de provenienta, generat de functity/ci/meta.py
+          # (fara echo cu citiri in bash: fix-ul blocajului din run-urile 38519696768/38528969346)
+          python3 "$GITHUB_WORKSPACE/functity/ci/meta.py" /tmp/fc "$BUILD_ID" "$MOHIST_PIN" "$GITHUB_WORKSPACE" > /tmp/fc/metadata.json
+          python3 -m json.tool /tmp/fc/metadata.json >/dev/null || { echo "::error::metadata.json INVALID"; exit 1; }
           cp /tmp/patch-rejected.txt /tmp/fc/ 2>/dev/null || true
           ls -la /tmp/fc
 

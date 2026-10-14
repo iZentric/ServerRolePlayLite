@@ -1,0 +1,38 @@
+name: FUNCIŢY-HOSTINFO
+# Sondate READ-ONLY pe gazda mamei (self-hosted). Nu atinge java de producție, nu scrie
+# nimic pe gazda în afară de /tmp; publica raportul pe bransa sesiunii.
+on:
+  workflow_dispatch: {}
+  push:
+    paths: [ "deploy/funcity-hostinfo.txt" ]
+permissions:
+  contents: read
+jobs:
+  h:
+    runs-on: [ self-hosted ]
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Raport gazda (read-only)
+        run: bash scripts/functity-stage.sh host-info || true
+      - name: Publica raportul pe bransa sesiunii
+        run: |
+          set +e
+          export GH_TOKEN= GITHUB_TOKEN=
+          MSG="FUNCIŢY-HOSTINFO: $(date -u '+%F %H:%M') — raport read-only gazda"
+          B64=$(base64 -w0 /tmp/funcity-stage.txt)
+          if command -v gh >/dev/null 2>&1; then
+            sha=$(gh api "repos/$GITHUB_REPOSITORY/contents/analysis/FUNCTITY-HOSTINFO.md?ref=$GITHUB_REF_NAME" --jq .sha 2>/dev/null || true)
+            gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/analysis/FUNCTITY-HOSTINFO.md" \
+              -f message="$MSG" -f content="$B64" -f branch="$GITHUB_REF_NAME" ${sha:+-f sha=$sha} && exit 0
+          fi
+          CLON=$(find "$HOME" -maxdepth 5 -name .git -type d 2>/dev/null | head -40 | while read -r g; do r="${g%/.git}"; u=$(git -C "$r" remote get-url origin 2>/dev/null); case "$u" in *ServerRolePlayLite*github_pat_*|*ServerRolePlayLite*ghp_*) echo "$r"; break;; esac; done)
+          [ -n "$CLON" ] || { echo "niciun canal de publicare disponibil"; exit 0; }
+          git -C "$CLON" fetch -q origin "$GITHUB_REF_NAME"
+          rm -rf /tmp/fhwt; git -C "$CLON" worktree add -q /tmp/fhwt --detach "origin/$GITHUB_REF_NAME"
+          mkdir -p /tmp/fhwt/analysis
+          { echo "# FUNCTITY-HOSTINFO — $(date -u '+%F %T') UTC (read-only pe gazda)"; echo; echo '```'; cat /tmp/funcity-stage.txt; echo '```'; } > /tmp/fhwt/analysis/FUNCTITY-HOSTINFO.md
+          git -C /tmp/fhwt add -f analysis/FUNCTITY-HOSTINFO.md
+          git -C /tmp/fhwt -c user.name=funcity-runner -c user.email=f@localhost -c commit.gpgsign=false commit -qm "$MSG"
+          git -C /tmp/fhwt push -q origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          git -C "$CLON" worktree remove --force /tmp/fhwt

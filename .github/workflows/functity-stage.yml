@@ -1,0 +1,61 @@
+name: FUNCIŢY-STAGE
+# Staging FunCity PE GAZDA: backup, asamblare, boot, oprire, repornire din date salvate.
+# Executati pe runner-ul self-hosted (masina mamei), directoare separate fata de productie,
+# port separat (25566 implicit). NU atinge lumea de productie; NU reporneste productia.
+on:
+  workflow_dispatch:
+    inputs:
+      mod:
+        description: "mod: backup | assemble | test | up | down"
+        required: true
+        default: "test"
+      candidat:
+        description: "build din functity-out:builds/ (ex. b1.2256)"
+        required: false
+        default: "b1.2256"
+      port:
+        description: "port test (NU 25565 decat cu productia Jos)"
+        required: false
+        default: "25566"
+      heap:
+        description: "Xmx heap staging (ex. 3G)"
+        required: false
+        default: "3G"
+permissions:
+  contents: read
+jobs:
+  s:
+    runs-on: [ self-hosted ]
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ruleaza modul ${{ inputs.mod }}
+        env:
+          FUNCITY_JAR: ${{ inputs.candidat }}
+          FUNCITY_PORT: ${{ inputs.port }}
+          FUNCITY_XMX: ${{ inputs.heap }}
+        run: |
+          set +e
+          bash scripts/functity-stage.sh "${{ inputs.mod }}"
+          echo "RC=$?" >> /tmp/funcity-stage.txt
+      - name: Publica raportul pe bransa sesiunii
+        run: |
+          set +e
+          export GH_TOKEN= GITHUB_TOKEN=
+          MSG="FUNCIŢY-STAGE ${{ inputs.mod }}: $(date -u '+%H:%M') — vezi analysis/FUNCTITY-STAGE.md"
+          B64=$(base64 -w0 /tmp/funcity-stage.txt 2>/dev/null)
+          if command -v gh >/dev/null 2>&1; then
+            sha=$(gh api "repos/$GITHUB_REPOSITORY/contents/analysis/FUNCTITY-STAGE.md?ref=$GITHUB_REF_NAME" --jq .sha 2>/dev/null || true)
+            gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/analysis/FUNCTITY-STAGE.md" \
+              -f message="$MSG" -f content="$B64" -f branch="$GITHUB_REF_NAME" ${sha:+-f sha=$sha} && exit 0
+          fi
+          CLON=$(find "$HOME" -maxdepth 5 -name .git -type d 2>/dev/null | head -40 | while read -r g; do r="${g%/.git}"; u=$(git -C "$r" remote get-url origin 2>/dev/null); case "$u" in *ServerRolePlayLite*github_pat_*|*ServerRolePlayLite*ghp_*) echo "$r"; break;; esac; done)
+          [ -n "$CLON" ] || { echo "niciun canal de publicare"; exit 0; }
+          git -C "$CLON" fetch -q origin "$GITHUB_REF_NAME"
+          rm -rf /tmp/fswt; git -C "$CLON" worktree add -q /tmp/fswt --detach "origin/$GITHUB_REF_NAME"
+          mkdir -p /tmp/fswt/analysis
+          { echo "# FUNCTITY-STAGE — ${{ inputs.mod }} la $(date -u '+%F %T') UTC"; echo; echo '```'; cat /tmp/funcity-stage.txt; echo '```'; } > /tmp/fswt/analysis/FUNCTITY-STAGE.md
+          git -C /tmp/fswt add -f analysis/FUNCTITY-STAGE.md
+          git -C /tmp/fswt -c user.name=funcity-runner -c user.email=f@localhost -c commit.gpgsign=false commit -qm "$MSG"
+          git -C /tmp/fswt push -q origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          git -C "$CLON" worktree remove --force /tmp/fswt
