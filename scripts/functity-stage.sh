@@ -270,7 +270,11 @@ PY
     if [ "$M" = restart ] && [ -f "$D/server.pid" ] && kill -0 "$(cat "$D/server.pid")" 2>/dev/null; then
       opreste_server || true; sleep 3
     fi
-    [ "$(port_viu "$PORT")" = nu ] || { [ "$M" = restart ] && say "port $PORT ocupat de altceva"; [ "$(port_viu "$PORT")" = nu ] || fail "portul $PORT ocupat"; }
+    if [ "$(port_viu "$PORT")" = da ]; then
+      say "ocupant port $PORT:"; ss -lntp 2>/dev/null | grep ":$PORT " | sed 's/^/  /' | tee -a "$REPORT"
+      ps -o pid,user,etime,args -p "$(ss -lntp 2>/dev/null | awk -Fpid= '/:"'"$PORT"'" /{split($2,a,",");print a[1]; exit}')" 2>/dev/null | tail -1 | sed 's/^/  /' | tee -a "$REPORT"
+      fail "portul $PORT ocupat de altceva — nu Fortez"
+    fi
     JAVA=$(java11_gaseste) || JAVA=$(java11_adoptium) || fail "java11 indisponibil"
     export FUNCITY_XMX="$XMX" FUNCITY_JARFILE="$(cat "$D/.jarname")"
     sync_port
