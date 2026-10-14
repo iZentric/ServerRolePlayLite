@@ -228,6 +228,8 @@ PY
   test)
     say "== FUNCTITY TEST (boot->stop->reboot->persistenta) — $(date -u '+%F %T UTC') =="
     [ -d "$D/mods" ] || fail "ruleaza intai assemble"
+    [ -f "$D/eula.txt" ] || { [ -f "$P/eula.txt" ] && cp "$P/eula.txt" "$D/" || printf 'eula=true\n' > "$D/eula.txt"; say "  eula.txt scris la pornire (gasda eula=produtiei)"; }
+  mkdir -p "$D/mohist-config" && [ -f "$D/mohist-config/mohist.yml" ] || printf 'check_update: false\n' > "$D/mohist-config/mohist.yml"
     if [ "$PORT" = 25565 ] && [ -n "$(prod_java)" ]; then fail "productia e SUS pe 25565 — nu testez in acelasi loc"; fi
     [ "$(port_viu "$PORT")" = nu ] || fail "portul $PORT e deja ocupat"
     JAVA=$(java11_gaseste) || JAVA=$(java11_adoptium) || fail "java11 indisponibil"
