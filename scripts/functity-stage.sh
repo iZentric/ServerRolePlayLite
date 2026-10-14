@@ -35,14 +35,14 @@ java11_gaseste(){
 java11_adoptium(){
   # Fără JDK 11 pe gazda? Luam Temurin 11 de la GitHub adoptium (aceeasi sursa folosita
   # de CI), cu verificare sha256 impotriva fisierului .sha256.txt de langa arhiva.
-  say "java11 absent local: descarc Temurin 11 JRE (adoptium, verificat sha256)"
+  say "java11 absent local: descarc Temurin 11 JRE (adoptium, verificat sha256)" >&2
   local v=11.0.24+8 arch f
   case $(uname -m) in aarch64) arch=aarch64;; *) arch=x64;; esac
   f=OpenJDK11U-jre_${arch}_linux_hotspot_11.0.24_8.tar.gz
   mkdir -p "$D" && cd "$D" || fail "nu pot intra $D"
-  curl -fsSLo "$f" "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${v}/${f}" || fail "descarcare JRE esuata"
-  curl -fsSLo "$f.sha256.txt" "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${v}/${f}.sha256.txt" || fail "descarcare sha esuata"
-  ( sha256sum -c "$f.sha256.txt" ) || fail "SHA-256 JRE NU COINCIDE — opresc, nu rulez binar necunoscut"
+  curl -fsSLo "$f" "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${v}/${f}" 2>/dev/null || { say "JRE descarcare esuata" >&2; return 1; }
+  curl -fsSLo "$f.sha256.txt" "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${v}/${f}.sha256.txt" 2>/dev/null || { say "JRE sha descarcare esuata" >&2; return 1; }
+  ( sha256sum -c "$f.sha256.txt" >&2 ) || { say "SHA-256 JRE NU COINCIDE - opresc, nu rulez binar necunoscut" >&2; return 1; }
   tar xzf "$f" && mv jdk-11.0.24+8-jre jdk11 2>/dev/null && rm -f "$f" "$f.sha256.txt"
   echo "$D/jdk11/bin/java"
 }
