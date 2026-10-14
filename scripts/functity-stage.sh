@@ -57,31 +57,24 @@ java11_adoptium(){
   echo "$D/jdk11/bin/java"
 }
 
-voicechat_port(){ # Simple Voice Chat 1.16.5-2.3.23 refuza sa porneasca serverul intreg daca
-  # UDP 24454 e ocupat (de productie). Doua incercari de override in cai standard esuate —
-  # acum extragem CALEA REALA de config din clasele din jar si scriem portul peste tot.
-  local vj; vj=$(ls "$D"/mods/*voicechat*.jar 2>/dev/null | head -1)
-  local found=""
-  if [ -n "$vj" ]; then
-    found=$(unzip -p "$vj" '*.class' 2>/dev/null | strings 2>/dev/null | grep -oE '[A-Za-z0-9_./-]+(voicechat|VoiceChat)[A-Za-z0-9_./-]*\.(properties|toml)' | sed 's#^/*config/*##; s#^#config/#' | sort -u | head -8)
-    [ -n "$found" ] || found=$(unzip -Z1 "$vj" 2>/dev/null | grep -iE '\.(properties|toml)$' | grep -viE 'lang|assets' | head -6)
+voicechat_port(){ # Simple Voice Chat 1.16.5-2.3.23 = ForgeConfigSpec (verificat din sursa
+  # oficiala, branch outdated/1.16.5-forge, ServerConfig.java): cheia e voice_chat.port, iar
+  # fisierul e config/voicechat-server.toml. *.properties NU exista in acest version.
+  # Productia tine UDP 24454 -> staging primeste 24455.
+  local toml="$D/config/voicechat-server.toml"
+  if grep -qE '^\s*port\s*=' "$toml" 2>/dev/null && grep -qE '^\s*\[voice_chat\]' "$toml" 2>/dev/null; then
+    python3 - "$toml" <<'PYT'
+import re,sys
+p=sys.argv[1]; t=open(p).read()
+t=re.sub(r'(\[voice_chat\][^\[]*?)port\s*=\s*\d+', r'\1port = 24455', t, count=1, flags=re.S)
+open(p,'w').write(t)
+PYT
+  elif [ -f "$toml" ]; then
+    printf '\n[voice_chat]\n    port = 24455\n' >> "$toml"
+  else
+    printf '# FunCity staging: voice chat pe 24455 (productia retine 24454)\n[voice_chat]\n    port = 24455\n' > "$toml"
   fi
-  say "  voicechat: cai de config vazute in jar: $(printf '%s' "$found" | tr '\n' ' ')"
-  local f
-  for f in voicechat/voicechat-server.properties voicechat/voicechat.properties voicechat.properties voicechat-server.properties voicechat-client.properties $found; do
-    [ -n "$f" ] || continue
-    case "$f" in config/*) : ;; *) f="config/$f";; esac
-    case "$f" in *.toml) local tom=1 ;; *) local tom=0 ;; esac
-    mkdir -p "$D/$(dirname "$f")" 2>/dev/null
-    if [ "$tom" = 1 ]; then
-      [ -f "$D/$f" ] || printf 'port = 24455\n' > "$D/$f"
-      sed -i -E 's/^([[:space:]]*port[[:space:]]*=).*/\1 24455/' "$D/$f"
-    else
-      [ -f "$D/$f" ] || printf 'port=24455\n' > "$D/$f"
-      grep -q '^port=' "$D/$f" && sed -i -E 's/^port=.*/port=24455/' "$D/$f" || printf 'port=24455\n' >> "$D/$f"
-    fi
-  done
-  say "  voicechat: 24455 scris in $(printf '%s' "$found config/voicechat/voicechat.properties" | wc -w) fisiere-candidate"
+  say "  voicechat: config/voicechat-server.toml -> $(grep -A2 'voice_chat' "$toml" | tr -s ' \n' ' ')"
 }
 
 moduri_count(){ ls "$D/mods" 2>/dev/null | grep -c '\.jar$' || echo 0; }
