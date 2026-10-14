@@ -26,26 +26,27 @@ fi
 # 1b) CANALUL DOVEDIT AL GAZDEI (mc-run 13 Oct): node https cu PAT din hosts.yml /
 # .git-credentials / remote-urile clone-urilor de pe gazda. gh lipseste de obicei aici.
 if command -v node >/dev/null 2>&1; then
-  node <<'NODE' 2>/tmp/fpnode.err && { say "canal node OK"; exit 0; }
-  const fs=require("fs"), https=require("https");
-  const toks=[];
-  try{ const h=fs.readFileSync(process.env.HOME+"/.config/gh/hosts.yml","utf8"); for(const m of h.matchAll(/oauth_token: (\S+)/g)) toks.push(m[1]); }catch(e){}
-  try{ for(const l of fs.readFileSync(process.env.HOME+"/.git-credentials","utf8").split("\n")){ if(l.includes("github.com")){ const t=l.split("://")[1].split("@")[0].split(":").pop(); if(t) toks.push(decodeURIComponent(t)); } } }catch(e){}
-  try{ for(const l of fs.readFileSync(process.env.HOME+"/.config/git/credentials","utf8").split("\n")){ if(l.includes("github.com")){ const t=l.split("://")[1].split("@")[0].split(":").pop(); if(t) toks.push(decodeURIComponent(t)); } } }catch(e){}
-  const repo=process.env.GITHUB_REPOSITORY||"iZentric/ServerRolePlayLite", br=process.env.GITHUB_REF_NAME;
-  const dest=process.env.FP_DEST||"analysis/FUNCTITY-REPORT.md";
-  const msg=process.env.FP_MSG||("funcity-publish "+new Date().toISOString());
-  const content=fs.readFileSync("/tmp/fp-content.b64").toString().trim();
-  function api(m,path,b,t){return new Promise(r=>{const d=b?JSON.stringify(b):null;const q=https.request({host:"api.github.com",path,method:m,headers:Object.assign({"Authorization":"Bearer "+t,"User-Agent":"funcity-publish","Accept":"application/vnd.github+json"},d?{"Content-Type":"application/json","Content-Length":Buffer.byteLength(d)}:{})},x=>{let s="";x.on("data",y=>s+=y);x.on("end",()=>r({status:x.statusCode,body:s}))});q.on("error",e=>r({status:0,body:String(e)}));if(d)q.write(d);q.end();});}
-  (async()=>{ for(const t of new Set(toks)){
-      let sha; const g=await api("GET","/repos/"+repo+"/contents/"+dest+"?ref="+encodeURIComponent(br),null,t);
-      if(g.status===200){ try{sha=JSON.parse(g.body).sha}catch(e){} }
-      const body=Object.assign({message:msg,content,branch:br}, sha?{sha}:{});
-      const pu=await api("PUT","/repos/"+repo+"/contents/"+dest,body,t);
-      if(pu.status===200||pu.status===201){ console.log("node: OK cu un token din "+new Set(toks).size); process.exit(0); }
-    }
-    console.error("node: niciun token functionabil"); process.exit(2); })();
-  NODE
+  cat > /tmp/fp-publish.js <<'NODEJS'
+const fs=require("fs"), https=require("https");
+const toks=[];
+try{ const h=fs.readFileSync(process.env.HOME+"/.config/gh/hosts.yml","utf8"); for(const m of h.matchAll(/oauth_token: (\S+)/g)) toks.push(m[1]); }catch(e){}
+try{ for(const l of fs.readFileSync(process.env.HOME+"/.git-credentials","utf8").split("\n")){ if(l.includes("github.com")){ const t=l.split("://")[1].split("@")[0].split(":").pop(); if(t) toks.push(decodeURIComponent(t)); } } }catch(e){}
+try{ for(const l of fs.readFileSync(process.env.HOME+"/.config/git/credentials","utf8").split("\n")){ if(l.includes("github.com")){ const t=l.split("://")[1].split("@")[0].split(":").pop(); if(t) toks.push(decodeURIComponent(t)); } } }catch(e){}
+const repo=process.env.GITHUB_REPOSITORY||"iZentric/ServerRolePlayLite", br=process.env.GITHUB_REF_NAME;
+const dest=process.env.FP_DEST||"analysis/FUNCTITY-REPORT.md";
+const msg=process.env.FP_MSG||("funcity-publish "+new Date().toISOString());
+const content=fs.readFileSync("/tmp/fp-content.b64").toString().trim();
+function api(m,path,b,t){return new Promise(r=>{const d=b?JSON.stringify(b):null;const q=https.request({host:"api.github.com",path,method:m,headers:Object.assign({"Authorization":"Bearer "+t,"User-Agent":"funcity-publish","Accept":"application/vnd.github+json"},d?{"Content-Type":"application/json","Content-Length":Buffer.byteLength(d)}:{})},x=>{let s="";x.on("data",y=>s+=y);x.on("end",()=>r({status:x.statusCode,body:s}))});q.on("error",e=>r({status:0,body:String(e)}));if(d)q.write(d);q.end();});}
+(async()=>{ for(const t of new Set(toks)){
+    let sha; const g=await api("GET","/repos/"+repo+"/contents/"+dest+"?ref="+encodeURIComponent(br),null,t);
+    if(g.status===200){ try{sha=JSON.parse(g.body).sha}catch(e){} }
+    const body=Object.assign({message:msg,content,branch:br}, sha?{sha}:{});
+    const pu=await api("PUT","/repos/"+repo+"/contents/"+dest,body,t);
+    if(pu.status===200||pu.status===201){ console.log("node: OK cu un token din "+new Set(toks).size); process.exit(0); }
+  }
+  console.error("node: niciun token functionabil"); process.exit(2); })();
+NODEJS
+  node /tmp/fp-publish.js 2>/tmp/fpnode.err && { say "canal node OK"; exit 0; }
   say "canal node esuat: $(tr '\n' ' ' < /tmp/fpnode.err | head -c 150)"
 fi
 
