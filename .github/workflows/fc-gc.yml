@@ -1,0 +1,130 @@
+name: FC-GC
+# Pauzele GC ale bancii FC-BENCH, scoase din artefactele alergarilor deja facute (gc-trialN.log,
+# retentie 14 zile) — FARA alergare noua, FARA gazda. Jurnalele brute se publica pe
+# functity-out:bench-v4/gc/<run>/, verdictul (MD + JSON) vine pe ramura in analysis/FUNCTITY-GC.md.
+# Marker: deploy/fc-gc.txt — linia 1 = data, linia 2 = ID-uri de alergari separate prin virgula.
+on:
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: "ID-uri de alergari FC-BENCH (virgula); gol = linia 2 din deploy/fc-gc.txt"
+        required: false
+        default: ""
+  push:
+    paths:
+      - deploy/fc-gc.txt
+      - scripts/fc_gc_reprocess.py
+      - .github/workflows/fc-gc.yml
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: fc-gc-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  gc:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: '${{ github.ref_name }}' }
+
+      - name: Testele de garda (parserul pe formatul JDK 11; rosu = nu publicam nimic)
+        run: python3 -m unittest tests.test_fc_gc_reprocess -q
+
+      - name: Artefactele alergarilor FC-BENCH (gh run download, acelasi repo)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUNS_IN: ${{ inputs.runs }}
+        shell: bash {0}
+        run: |
+          set -uo pipefail
+          RUNS="$RUNS_IN"
+          [ -z "$RUNS" ] && RUNS=$(sed -n '2p' deploy/fc-gc.txt 2>/dev/null | tr -d ' \r')
+          [ -z "$RUNS" ] && RUNS="38510786719,38519665645"
+          echo "alergari: $RUNS"
+          mkdir -p /tmp/gc
+          : > /tmp/gc/descarcare.txt
+          for r in ${RUNS//,/ }; do
+            if gh run download "$r" -R "$GITHUB_REPOSITORY" -p 'fcbench-*' -D "/tmp/gc/$r" 2>/tmp/gc/err-$r.txt; then
+              n=$(find "/tmp/gc/$r" -name 'gc-trial*' | wc -l)
+              echo "run $r: $(ls /tmp/gc/$r | tr '\n' ' ') | jurnale gc: $n" | tee -a /tmp/gc/descarcare.txt
+            else
+              echo "run $r: artefacte indisponibile ($(head -c 200 /tmp/gc/err-$r.txt | tr '\n' ' '))" | tee -a /tmp/gc/descarcare.txt
+              echo "::warning::alergarea $r nu are artefacte descarcabile (expirate sau inexistente)"
+            fi
+          done
+          find /tmp/gc -name 'gc-trial*' -printf '%p %s B\n' | sort | head -60
+
+      - name: Reprocesare (rc=2 = nicio pauza recunoscuta => ramane NEMASURAT, nu 0)
+        shell: bash {0}
+        run: |
+          python3 scripts/fc_gc_reprocess.py --in /tmp/gc --out /tmp/gc/out
+          echo "RC=$?" | tee /tmp/gc/rc.txt
+          [ -f /tmp/gc/out/GC.md ] && cat /tmp/gc/out/GC.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Jurnalele brute pe functity-out (bench-v4/gc/<run>/<brat>/gc-trialN.log)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash {0}
+        run: |
+          set -uo pipefail
+          [ -d /tmp/gc/out ] || { echo "nimic de publicat"; exit 0; }
+          for att in 1 2 3 4; do
+            rm -rf /tmp/gc/pub
+            git clone -q --filter=blob:none --no-checkout -b functity-out "https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY" /tmp/gc/pub 2>/dev/null \
+              && ( cd /tmp/gc/pub && git sparse-checkout init --no-cone && git sparse-checkout set bench-v4/gc && git checkout -q functity-out ) && break
+            sleep $((att*5))
+          done
+          cd /tmp/gc/pub || exit 0
+          for rd in /tmp/gc/[0-9]*/; do
+            r=$(basename "$rd")
+            for ad in "$rd"fcbench-*/; do
+              [ -d "$ad" ] || continue
+              a=$(basename "$ad" | sed 's/^fcbench-//')
+              mkdir -p "bench-v4/gc/$r/$a"
+              for lg in "$ad"gc-trial*; do [ -f "$lg" ] && head -c 2000000 "$lg" > "bench-v4/gc/$r/$a/$(basename "$lg")"; done
+              [ -f "$ad/$a.json" ] && cp "$ad/$a.json" "bench-v4/gc/$r/$a/" || true
+            done
+          done
+          cp /tmp/gc/out/gc.json /tmp/gc/out/GC.md bench-v4/gc/ 2>/dev/null || true
+          cp /tmp/gc/descarcare.txt bench-v4/gc/ 2>/dev/null || true
+          git config user.name fc-gc; git config user.email gc@localhost
+          git add -A bench-v4/gc
+          git commit -qm "fc-gc: jurnale GC brute + statistica ($(date -u +%Y-%m-%dT%H:%MZ))" || { echo "nimic nou"; exit 0; }
+          for i in 1 2 3 4 5; do
+            git push -q origin HEAD:refs/heads/functity-out && { echo "publicat pe functity-out:bench-v4/gc"; exit 0; }
+            git pull -q --no-rebase -X theirs origin functity-out || true
+            sleep $((i*6))
+          done
+          echo "::warning::nu am putut publica pe functity-out (verdictul pe ramura ramane sursa)"
+
+      - name: Verdictul pe ramura (analysis/FUNCTITY-GC.md = MD + JSON verificabil)
+        shell: bash {0}
+        run: |
+          set -uo pipefail
+          RUNS_LINE=$(sed -n '2p' deploy/fc-gc.txt 2>/dev/null | tr -d '\r')
+          {
+            echo "# FUNCTITY-GC — pauzele GC ale FC-BENCH v4, reprocesate din artefacte ($(date -u '+%F %H:%M') UTC)"
+            echo
+            echo "Alergare CI: ${GITHUB_RUN_ID} · artefacte: $(tr '\n' ';' < /tmp/gc/descarcare.txt 2>/dev/null) · rc parser: $(cat /tmp/gc/rc.txt 2>/dev/null)"
+            echo "Jurnale brute: https://github.com/${GITHUB_REPOSITORY}/tree/functity-out/bench-v4/gc"
+            echo
+            if [ -f /tmp/gc/out/GC.md ]; then sed '1d' /tmp/gc/out/GC.md; else echo "NEMASURAT — reprocesarea nu a produs raport (vezi pasii de mai sus)."; fi
+            echo
+            echo '```json'
+            if [ -f /tmp/gc/out/gc.json ]; then cat /tmp/gc/out/gc.json; else echo '{"stare": "NEMASURAT"}'; fi
+            echo '```'
+          } > analysis/FUNCTITY-GC.md
+          git config user.name fc-gc; git config user.email gc@localhost
+          git add analysis/FUNCTITY-GC.md
+          git commit -qm "FC-GC: pauze GC reprocesate din artefactele FC-BENCH ($(date -u '+%F %H:%M') UTC) [skip ci]" || { echo "fara schimbari"; exit 0; }
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase origin "$GITHUB_REF_NAME" 2>/dev/null || git rebase --abort 2>/dev/null || true
+            git push -q origin "HEAD:refs/heads/$GITHUB_REF_NAME" && { echo "verdict publicat"; exit 0; }
+            sleep $((i*5))
+          done
+          echo "::error::nu am putut impinge verdictul pe ramura"; exit 1
