@@ -1,103 +1,208 @@
 name: FC-BENCH
-# Banca de proba FunCity: reutilizeaza scara CUANTIC (aceasi metodologie, aceasi masina
-# efemera, acelasi pack 36/14 din release) pe bratele din deploy/fc-bench.txt.
-# Baseline = CatServer oficial din pack (motorul live). Fiecare brat: smoke + 3 probe.
-# Verdictul il scoatem NOII pe annotatie + report.json pe functity-out. Fara javadoc
-# de vendor, fara "cel mai rapid" — doar cifrele masurate aici.
+# v4 — banca de MASURARE (v1-v3 masurau instalarea bootstrap-ului si/sau mergeau cu
+# jar-uri false + java 17; acum: acelasi harness 2-faze validat de FC-SMOKE36, java 11,
+# pack 36/14 neschimbat cu SHA fix, 4 braate in paralel, 3 probe boot-la-cald pe world
+# comun, probe de login protocol 1.16.5, esantionare TPS/MSPT prin consola, "Can't keep
+# up!" numarata, RSS/CPU, jurnal GC). Practici noi de CI: pasul de garda esueaza chior
+# (fara exit-0 mascat), rapoarte JSON + loguri pe functity-out, verdict doar din cifre.
 on:
   push:
     paths:
       - deploy/fc-bench.txt
       - .github/workflows/fc-bench.yml
+      - benches/functity/arms/**
+      - scripts/fc_bench.py
 
 permissions:
   contents: write
 
 jobs:
-  bench:
+  leg:
+    name: FC-BENCH36 ${{ matrix.arm.id }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 150
+    timeout-minutes: ${{ matrix.arm.budget_min }}
+    strategy:
+      fail-fast: false
+      matrix:
+        arm:
+          - { id: oficial1237, conf: oficial, jar: "https://repo1.maven.org/maven2/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar", sha: "17d08ed544aab50f0c9c0281507a44d765cfeb371289a10d47e2143146255bff", budget_min: 120 }
+          - { id: functity_b0, conf: functity_b0, jar: "AUTO-B0", sha: "248fb54d4a97d8396a45e3edf859a19275c67c81e6115ca219ece5ebb0ef7f79", budget_min: 120 }
+          - { id: functity_b1, conf: functity_b1, jar: "AUTO-B1", sha: "6a63721c376ffb48d2fbff9c5bba425c9c69b9b9392bb543a53af64f70a98194", budget_min: 120 }
+          - { id: catserver, conf: catserver, jar: "PACK", sha: "", budget_min: 150 }
+    env:
+      TRIALS: "3"
+      RUN_SECONDS: "300"
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: '17' }
+        with: { distribution: temurin, java-version: '11' }
 
-      - name: Testele de garda inaintea oricarei masuratori
+      - name: Testele de garda (iesirea nenula = alergarea cade, nu se maschcheaza)
         run: python3 -m unittest discover -s tests -q
 
-      - name: Packul de referinta, neschimbat, din release-ul lite
+      - name: Packul de referinta, cu pază de SHA
         run: |
           set -euo pipefail
           mkdir -p /tmp/fcb
-          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/fcb
-          sha256sum /tmp/fcb/CUANTIC-Server-CatServer-1.7.7.zip
+          for i in 1 2 3 4 5; do
+            if gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/fcb; then break; fi
+            [ "$i" = 5 ] && { echo "::error::packul nu s-a putut descarca in 5 incercari"; exit 1; }
+            sleep $((i*15))
+          done
+          echo "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  /tmp/fcb/pack.zip" > /tmp/fcb/pack.sha256
+          sha256sum -c /tmp/fcb/pack.sha256
 
-      - name: Umple jar-urile proprii de pe functity-out
+      - name: Jarul bratului, cu pază de SHA
+        run: |
+          set -euo pipefail
+          ARM='${{ matrix.arm.id }}'
+          case "$ARM" in
+            catserver) echo "brat catserver: foloseste jarul din pack"; exit 0;;
+            oficial1237) curl -fsSL --retry 4 --retry-delay 10 -o /tmp/fcb/arm.jar '${{ matrix.arm.jar }}';;
+            functity_b0) REF='builds/b0/FunCity-1.16.5-b0.jar';;
+            functity_b1) REF='builds/b1.2256/FunCity-1.16.5-b1.2256.jar';;
+            *) echo "::error::brat necunoscut $ARM"; exit 1;;
+          esac
+          if [ "$ARM" != "oficial1237" ]; then
+            git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/out
+            git -C /tmp/fcb/out lfs pull 2>/dev/null || true
+            cp "/tmp/fcb/out/$REF" /tmp/fcb/arm.jar
+          fi
+          echo '${{ matrix.arm.sha }}  /tmp/fcb/arm.jar' > /tmp/fcb/arm.sha256
+          sha256sum -c /tmp/fcb/arm.sha256
+          unzip -p /tmp/fcb/arm.jar META-INF/MANIFEST.MF | tr -d '\r' | grep -q 'ServerLaunchArgs' || { echo "::error::jar fara manifest de server (ServerLaunchArgs) — refuz sa benchesz un ambalaj fals"; exit 1; }
+
+      - name: Gonest pe runner (documentat in raport)
+        run: lscpu | sed -n '1,15p'; free -l | head -2; nproc
+
+      - name: Alergare banca (faza A instalare + 3 probe la cald a 300s)
         run: |
           set +e
-          git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/out
-          cp /tmp/fcb/out/builds/b0/FunCity-1.16.5-b0.jar /tmp/fcb/ 2>/dev/null && echo "b0: $(sha256sum /tmp/fcb/FunCity-1.16.5-b0.jar | cut -c1-16)"
-          B1=$(ls /tmp/fcb/out/builds/b1.*/FunCity-1.16.5-b1.*.jar 2>/dev/null | sort | tail -1)
-          if [ -n "$B1" ]; then cp "$B1" /tmp/fcb/FunCity-ultim.jar; echo "b1: $B1"; fi
-          ls -la /tmp/fcb/*.jar
-
-      - name: Scara 36/14 pe bratele declarate
-        run: |
-          set +e
-          # convertim lista din deploy/fc-bench.txt in spec cuent (virgula intre brate)
-          python3 - <<'PY'
-          import pathlib
-          rows = [l.strip() for l in pathlib.Path('deploy/fc-bench.txt').read_text(encoding='utf-8').splitlines()
-                  if l.strip() and not l.strip().startswith('#')]
-          spec = ",".join(rows)
-          pathlib.Path('/tmp/fcb/spec.txt').write_text(spec, encoding='utf-8')
-          print("spec:", spec[:400])
-          PY
-          python3 scripts/cuantic_ladder.py --spec-file /tmp/fcb/spec.txt \
-            --pack /tmp/fcb/CUANTIC-Server-CatServer-1.7.7.zip \
-            --out /tmp/fcb/report --trials 3 > /tmp/fcb/ladder-stdout.json 2>/tmp/fcb/ladder-err.txt
+          python3 scripts/fc_bench.py --arm-conf benches/functity/arms/${{ matrix.arm.conf }}.json
           RC=$?
-          echo "ladder rc=$RC"
-          head -c 900 /tmp/fcb/ladder-err.txt | tr '\n' '~'
-          printf '::warning::scara rc=%s; stdout_marime=%s\n' "$RC" "$(stat -c %s /tmp/fcb/ladder-stdout.json 2>/dev/null || echo 0)"
+          echo "driver rc=$RC"
+          if [ ! -f /tmp/fcb/results/${{ matrix.arm.id }}.json ]; then
+            echo "::error::bratul ${{ matrix.arm.id }} nu a produs raport (rc=$RC) — ALERGAREA CADE, nu se mascheaza"
+            tail -c 4000 /tmp/fcb/results/install.log 2>/dev/null
+            exit 1
+          fi
+          if [ "$RC" -ge 3 ]; then
+            echo "::error::bratul ${{ matrix.arm.id }} nu a bootat in nicio proba (rc=$RC) — inregistrat ESUAT_TEHNIC"
+          fi
 
-      - name: Verdict scurt + report pe functity-out
-        if: always()
+      - name: Verdict pe leg
         run: |
-          set +e
           python3 - <<'PY'
           import json, pathlib
-          try:
-              data = json.loads(pathlib.Path('/tmp/fcb/report/result.json').read_text(encoding='utf-8'))
-          except Exception as e:
-              print(f"::warning::fara report: {e}")
-              raise SystemExit(0)
-          for name, row in (data.get('candidates') or {}).items():
-              ab = row.get('ab') or {}
-              metrics = ab.get('metrics') or {}
-              def fmt(k):
-                  v = metrics.get(k) or {}
-                  b = (v.get('baseline') or {}).get('median', '?') if isinstance(v.get('baseline'), dict) else '?'
-                  c = (v.get('candidate') or {}).get('median', '?') if isinstance(v.get('candidate'), dict) else '?'
-                  return f"{k} b={b} c={c}"
-              parts = [fmt(k) for k in list(metrics)[:6]]
-              err = row.get('error', '')
-              print(("::warning::brat %s: smoke=%s done_s=%s plugins=%s ab=%s | %s %s" % (
-                  name, 'DA' if row.get('smoke_passed') else 'NU', row.get('boot_done_s'),
-                  row.get('plugins_enabled'), ab.get('verdict', '-'), ' | '.join(parts), err))[:900])
+          d = json.loads(pathlib.Path('/tmp/fcb/results/${{ matrix.arm.id }}.json').read_text(encoding='utf-8'))
+          parts = [f"status={d.get('status')}", f"probe={d.get('probate_reusite')}/{len(d.get('probe', []))}"]
+          for k in ("boot_medie_s", "boot_cv_pct", "join_medie_ms", "tps_p50", "overrun_total", "overrun_max_ms",
+                    "critice_total", "rss_medie_mb", "cpu_medie_pct", "gc_pauza_max_ms"):
+              if d.get(k) is not None:
+                parts.append(f"{k}={d[k]}")
+          print("::warning::FC-BENCH ${{ matrix.arm.id }}: " + " ".join(parts))
+          if d.get("tps_p50") is None:
+              print("::warning::FC-BENCH ${{ matrix.arm.id }}: TPS NEMASURAT prin consola — " + str(d.get("tps_motiv", "")))
           PY
-          git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/pub
-          D="/tmp/fcb/pub/bench/$(date -u +%Y%m%d-%H%M)"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fcbench-${{ matrix.arm.id }}
+          path: /tmp/fcb/results/
+          if-no-files-found: error
+          retention-days: 14
+
+  agregat:
+    name: FC-BENCH36 verdict comparat
+    needs: leg
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { pattern: 'fcbench-*', path: /tmp/fcb/arms, merge-multiple: true }
+      - name: Compara + praguri + publicare pe functity-out
+        run: |
+          set -uo pipefail
+          python3 - <<'PY'
+          import json, pathlib, statistics, sys
+          rows = {}
+          for f in sorted(pathlib.Path('/tmp/fcb/arms').glob('*.json')):
+              d = json.loads(f.read_text(encoding='utf-8'))
+              rows[d['arm']] = d
+          if not rows:
+              print("::error::nicun raport de la legs"); sys.exit(1)
+          order = [a for a in ("catserver", "oficial1237", "functity_b0", "functity_b1") if a in rows]
+          lines = ["# FC-BENCH v4 — rezultate (masurate, nu estimate)", "",
+                   "Metoda: boot la cald, 3 probe/arm, world comun post-instalare, java 11, -Xmx1536M, pack 36/14 cu SHA fix.",
+                   "Deviatii declarate: seed fix, online-mode=false pentru probele de login, view-distance=10, check_update=false (Mohist).", ""]
+          hdr = ["brat", "stare", "boot_mediu_s", "CV%", "join_mediu_ms", "TPS_p50", "overrun", "overrun_max_ms", "critice", "RSS_MB", "CPU%", "GC_max_ms"]
+          lines.append("| " + " | ".join(hdr) + " |")
+          lines.append("|" + "---|" * len(hdr))
+          for a in order:
+              d = rows[a]
+              lines.append("| " + " | ".join(str(x) for x in [
+                  d.get('eticheta', a), d.get('status'), d.get('boot_medie_s'), d.get('boot_cv_pct'),
+                  d.get('join_medie_ms'), d.get('tps_p50'), d.get('overrun_total'), d.get('overrun_max_ms'),
+                  d.get('critice_total'), d.get('rss_medie_mb'), d.get('cpu_medie_pct'), d.get('gc_pauza_max_ms')]) + " |")
+          # verdicturi comparative, doar unde ambele brațe au MASURAT
+          def cmp(metric, a, b, better="lower", pct=True):
+              if a in rows and b in rows and rows[a].get(metric) is not None and rows[b].get(metric) is not None:
+                  va, vb = rows[a][metric], rows[b][metric]
+              else:
+                  return f"{metric} {a} vs {b}: NEMASURAT (lipsa date)"
+              diff = (va - vb) / vb * 100 if pct and vb else va - vb
+              cast = "MAI BINE" if (diff < 0) == (better == "lower") and diff != 0 else ("egal" if diff == 0 else "MAI PROST")
+              return f"{metric} {a} vs {b}: {va} vs {vb} ({diff:+.1f}%) — {a} {cast}"
+          checks = [
+              cmp("boot_medie_s", "functity_b1", "functity_b0"),
+              cmp("boot_medie_s", "functity_b0", "oficial1237"),
+              cmp("boot_medie_s", "functity_b1", "oficial1237"),
+              cmp("join_medie_ms", "functity_b1", "oficial1237", better="lower"),
+              cmp("rss_medie_mb", "functity_b1", "oficial1237", better="lower"),
+              cmp("tps_p50", "functity_b1", "oficial1237", better="higher"),
+              cmp("boot_medie_s", "oficial1237", "catserver"),
+          ]
+          lines += ["", "## Verdicturi comparative", ""] + [f"- {c}" for c in checks]
+          # praguri fixes (acceptante)
+          praguri = []
+          for a in order:
+              d = rows[a]
+              cv = d.get("boot_cv_pct")
+              praguri.append((f"{a}: boot CV<10%", "TRECUT" if cv is not None and cv < 10 else ("ESUAT" if cv is not None else "NEMĂSURAT")))
+              if a == "functity_b1":
+                  crit = d.get("critice_total")
+                  praguri.append(("functity_b1: 0 erori critice pe 3 probe", "TRECUT" if crit == 0 else ("ESUAT" if crit is not None else "NEMĂSURAT")))
+          lines += ["", "## Praguri (fixate INAINTE de rulare)", ""] + [f"- {k}: {v}" for k, v in praguri]
+          lines += ["", "## Semnificatie si limite", "",
+                    "- 'boot_medie_s' = timp real de pornire pana la 'Done' (Include FML+plugini, world deja existent). Nu e un castig de gameplay.",
+                    "- TPS vine din comenzile console; NEMASURAT inseamna ca motorul nu le publica parseabil, NU ca ar fi 20.",
+                    "- probele de login masoara intarzierea de logare headless (offline); nu includ ecranul de asset-uri al clientului.",
+                    "- overrun = numar de 'Can't keep up!' in fereastra masurata; 0 nu garanteaza absenta sub 120s idle.",
+                    ""]
+          out = pathlib.Path('/tmp/fcb/ARTEFACT/summary.md'); out.parent.mkdir(parents=True, exist_ok=True)
+          out.write_text("\n".join(lines), encoding='utf-8')
+          json.dump(rows, open('/tmp/fcb/ARTEFACT/combined.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+          print("\n".join(lines))
+          PY
+      - name: Publicare pe functity-out (esec = rosu, nu warn)
+        run: |
+          set -euo pipefail
+          git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" pub
+          D="pub/bench-v4/$(date -u +%Y%m%d-%H%M)"
           mkdir -p "$D"
-          cp /tmp/fcb/report/result.json "$D/" 2>/dev/null
-          for f in /tmp/fcb/report/*/smoke.log; do
-            [ -f "$f" ] || continue
-            tail -c 200000 "$f" > "$D/$(basename $(dirname $f))-smoke.log"
-          done
-          cp /tmp/fcb/ladder-err.txt "$D/ladder-err.txt" 2>/dev/null
-          cp /tmp/fcb/spec.txt "$D/spec-used.txt" 2>/dev/null
-          cd /tmp/fcb/pub
+          cp /tmp/fcb/ARTEFACT/summary.md /tmp/fcb/ARTEFACT/combined.json "$D/"
+          cp /tmp/fcb/arms/*.json "$D/" 2>/dev/null || true
+          cd pub
           git config user.name 'functity-ci[bot]'; git config user.email 'fc@localhost'
-          git add -A bench/ && git commit -qm "fc-bench $(date -u +%H%M)" && git push -q origin HEAD:refs/heads/functity-out
-          printf '::warning::report publicat: rc=%s\n' "$?"
+          git add -A bench-v4/
+          git commit -qm "fc-bench v4 $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4 5; do
+            if git push -q origin HEAD:refs/heads/functity-out; then echo "publicat in $D"; exit 0; fi
+            git pull -q --no-rebase -X theirs origin functity-out && git commit -qm rerere || true
+            sleep $((i*7))
+          done
+          echo "::error::nu am putut publica pe functity-out"; exit 1
