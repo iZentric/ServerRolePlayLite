@@ -1,0 +1,35 @@
+=== driver log ===
+[00:41:21] === brat catserver: stage ===
+Traceback (most recent call last):
+  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/fc_bench.py", line 662, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/fc_bench.py", line 567, in main
+    bootjar = resolve_boot_jar(conf, jar and os.path.abspath(jar) or "", stage)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/fc_bench.py", line 391, in resolve_boot_jar
+    cands = [x for x in os.listdir(stage) if x.lower().endswith(".jar") and os.path.isfile(os.path.join(stage, x))]
+                        ^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: ''
+=== install.log tail ===
+=== ls stage ===
+total 7908
+drwxr-xr-x 6 runner runner    4096 Oct 14 00:41 .
+drwxr-xr-x 6 runner runner    4096 Oct 14 00:41 ..
+-rw-r--r-- 1 runner runner    1009 Oct 14 00:41 CITESTE-MA.txt
+-rw-r--r-- 1 runner runner 8009910 Oct 14 00:41 CatServer-1.16.5-1d8d6313-server.jar
+-rw-r--r-- 1 runner runner     380 Oct 14 00:41 bukkit.yml
+-rw-r--r-- 1 runner runner     459 Oct 14 00:41 catserver.yml
+-rw-r--r-- 1 runner runner     186 Oct 14 00:41 commands.yml
+drwxr-xr-x 3 runner runner    4096 Oct 14 00:41 config
+drwxr-xr-x 2 runner runner    4096 Oct 14 00:41 defaultconfigs
+-rw-r--r-- 1 runner runner      81 Oct 14 00:41 eula.txt
+-rw-r--r-- 1 runner runner    1893 Oct 14 00:41 manifest-cuantic.json
+drwxr-xr-x 2 runner runner    4096 Oct 14 00:41 mods
+-rw-r--r-- 1 runner runner     135 Oct 14 00:41 ops.json
+drwxr-xr-x 2 runner runner    4096 Oct 14 00:41 plugins
+-rw-r--r-- 1 runner runner    8830 Oct 14 00:41 server-icon.png
+-rw-r--r-- 1 runner runner     647 Oct 14 00:41 server.properties
+-rw-r--r-- 1 runner runner    1449 Oct 14 00:41 spigot.yml
+-rw-r--r-- 1 runner runner    1269 Oct 14 00:41 start.bat
+-rw-r--r-- 1 runner runner    1269 Oct 14 00:41 start.sh
