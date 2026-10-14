@@ -1,1 +1,1 @@
-v4.1 2026-10-14 (diagnostic prin STEP_SUMMARY ca logurile Azure nu-s accesibile din sandbox; restul identic cu v4)
+v4.2 2026-10-14 (diag real: fail() lipsea -> error inghit; fallback asset-API pt pack; restul identic)

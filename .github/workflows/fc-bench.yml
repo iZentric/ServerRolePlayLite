@@ -44,41 +44,65 @@ jobs:
       - name: Packul de referinta, cu pază de SHA
         run: |
           set -uo pipefail
-          fail() { printf '::error::%s\n' "$1" | tr ':' '.' ; printf '%s\n' "$1" >> "$GITHUB_STEP_SUMMARY"; exit 1; }
           mkdir -p /tmp/fcb
+          diag() { printf '::error::%s\n' "$*" | tr ':' ' '; printf '%s\n' "$*" >> "$GITHUB_STEP_SUMMARY"; }
+          AID=$(gh api repos/$GITHUB_REPOSITORY/releases/tags/lite --jq '.assets[] | select(.name=="CUANTIC-Server-CatServer-1.7.7.zip") | .id' 2>/tmp/fcb/api-err.txt) || true
+          [ -n "$AID" ] || diag "fara asset id (gh api): $(tr '\n' '|' < /tmp/fcb/api-err.txt | cut -c1-200)"
           DL=""
-          for i in 1 2 3 4 5; do
-            if OUT=$(gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/fcb 2>&1); then DL=ok; break; fi
-            printf 'incercarea %s esuata: %s\n' "$i" "$(printf '%s' "$OUT" | tr '\n' ' ' | cut -c1-200)" >> /tmp/fcb/dl-err.txt
+          for i in 1 2 3 4 5 6; do
+            OUT=$(gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/fcb 2>&1) && DL=gh || true
+            [ "$DL" = gh ] && break
+            printf 'gh#%s: %s | ' "$i" "$(printf '%s' "$OUT" | tr '\n' '|' | cut -c1-140)" >> /tmp/fcb/dl-err.txt
+            if [ -n "$AID" ]; then
+              if curl -fsSL --retry 2 --retry-delay 5 -H "Authorization: Bearer $(gh auth token)" -H "Accept: application/octet-stream" -o /tmp/fcb/pack.zip "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/assets/$AID" 2>>/tmp/fcb/dl-err.txt; then DL=curl; break; fi
+            fi
             sleep $((i*10))
           done
-          [ "$DL" = ok ] || fail "pack descarcare esuata x5: $(tr '\n' '|' < /tmp/fcb/dl-err.txt | cut -c1-600)"
-          echo "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  /tmp/fcb/pack.zip" > /tmp/fcb/pack.sha256
-          sha256sum -c /tmp/fcb/pack.sha256 2>&1 | tee /tmp/fcb/pack-check.txt || fail "SHA pack potrit: $(tail -1 /tmp/fcb/pack-check.txt)"
-          ls -la /tmp/fcb/pack.zip >> "$GITHUB_STEP_SUMMARY"
+          if [ "$DL" != gh ] && [ "$DL" != curl ]; then
+            diag "pack: 5 incercari esuate.detaileri: $(cut -c1-700 /tmp/fcb/dl-err.txt 2>/dev/null)"
+            exit 1
+          fi
+          if ! echo "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  /tmp/fcb/pack.zip" | sha256sum -c - >/tmp/fcb/pack-check.txt 2>&1; then
+            diag "pack SHA nepotrivit: $(tail -1 /tmp/fcb/pack-check.txt) (dl=$DL)"
+            exit 1
+          fi
+          echo "pack ok prin $DL: $(ls -la /tmp/fcb/pack.zip)" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Jarul bratului, cu pază de SHA
         run: |
           set -uo pipefail
-          fail() { printf '::error::%s\n' "$1" | tr ':' '.' ; printf '%s\n' "$1" >> "$GITHUB_STEP_SUMMARY"; exit 1; }
+          diag() { printf '::error::%s\n' "$*" | tr ':' ' '; printf '%s\n' "$*" >> "$GITHUB_STEP_SUMMARY"; }
           ARM='${{ matrix.arm.id }}'
           case "$ARM" in
-            catserver) echo "brat catserver: foloseste jarul din pack"; exit 0;;
+            catserver) echo "brat catserver: foloseste jarul din pack" >> "$GITHUB_STEP_SUMMARY"; exit 0;;
             oficial1237)
               if ! curl -fsSL --retry 4 --retry-delay 10 -o /tmp/fcb/arm.jar '${{ matrix.arm.jar }}' 2>/tmp/fcb/curl-err.txt; then
-                fail "jar oficial descarcare esuata: $(tr '\n' '|' < /tmp/fcb/curl-err.txt | cut -c1-300)"
+                diag "jar oficial descarcare esuata: $(tr '\n' '|' < /tmp/fcb/curl-err.txt | cut -c1-300)"
+                exit 1
               fi;;
             functity_b0) REF='builds/b0/FunCity-1.16.5-b0.jar';;
             functity_b1) REF='builds/b1.2256/FunCity-1.16.5-b1.2256.jar';;
-            *) fail "brat necunoscut $ARM";;
+            *) diag "brat necunoscut $ARM"; exit 1;;
           esac
           if [ "$ARM" != "oficial1237" ]; then
-            git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/out 2>/tmp/fcb/clone-err.txt || fail "clone functity-out esuata: $(tr '\n' '|' < /tmp/fcb/clone-err.txt | cut -c1-300)"
-            cp "/tmp/fcb/out/$REF" /tmp/fcb/arm.jar || fail "lipseste $REF din functity-out: $(ls /tmp/fcb/out/builds 2>/dev/null | tr '\n' ' ')"
+            if ! git clone -q --depth 1 -b functity-out "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/out 2>/tmp/fcb/clone-err.txt; then
+              diag "clone functity-out esuata: $(tr '\n' '|' < /tmp/fcb/clone-err.txt | cut -c1-300)"
+              exit 1
+            fi
+            if ! cp "/tmp/fcb/out/$REF" /tmp/fcb/arm.jar; then
+              diag "lipseste $REF din functity-out: $(ls /tmp/fcb/out/builds 2>/dev/null | tr '\n' ' ')"
+              exit 1
+            fi
           fi
-          echo '${{ matrix.arm.sha }}  /tmp/fcb/arm.jar' > /tmp/fcb/arm.sha256
-          sha256sum -c /tmp/fcb/arm.sha256 2>&1 | tee /tmp/fcb/arm-check.txt || fail "SHA jar brat potrit: $(tail -1 /tmp/fcb/arm-check.txt)"
-          unzip -p /tmp/fcb/arm.jar META-INF/MANIFEST.MF | tr -d '\r' | grep -q 'ServerLaunchArgs' || fail "jar fara manifest ServerLaunchArgs — refuz sa benchesz un ambalaj fals"
+          if ! echo '${{ matrix.arm.sha }}  /tmp/fcb/arm.jar' | sha256sum -c - >/tmp/fcb/arm-check.txt 2>&1; then
+            diag "SHA jar brat nepotrivit: $(tail -1 /tmp/fcb/arm-check.txt)"
+            exit 1
+          fi
+          if ! unzip -p /tmp/fcb/arm.jar META-INF/MANIFEST.MF | tr -d '\r' | grep -q 'ServerLaunchArgs'; then
+            diag "jar fara manifest ServerLaunchArgs — refuz sa benchesz un ambalaj fals"
+            exit 1
+          fi
+
 
 
       - name: Gonest pe runner (documentat in raport)
