@@ -1,16 +1,17 @@
 name: FUNCIŢY-HOSTINFO
-# Sondate READ-ONLY pe gazda mamei (self-hosted). Nu atinge java de producție, nu scrie
-# nimic pe gazda în afară de /tmp; publica raportul pe bransa sesiunii.
+# Sondate READ-ONLY pe gazda (self-hosted). Gazda nu are canal de push; artefactul
+# ii dus inapoi pe bransa de o a doua slujba hosted (retea libera + token write).
 on:
-  workflow_dispatch: {}
   push:
     paths: [ "deploy/funcity-hostinfo.txt" ]
+  workflow_dispatch: {}
 permissions:
-  contents: read
+  contents: write
 jobs:
   h:
     runs-on: [ self-hosted ]
     timeout-minutes: 6
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - name: Raport gazda (read-only)
@@ -18,10 +19,28 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: funcity-hostinfo
+          name: hostinfo-raw
           path: /tmp/funcity-stage.txt
-      - name: Publica raportul pe bransa sesiunii (canale locale, diagnostic atasat)
+  relay:
+    needs: h
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: '${{ github.ref_name }}' }
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with: { name: hostinfo-raw, path: /tmp/relay }
+      - name: Comite raportul adus de pe gazda
         run: |
-          { echo; echo "== DIAGNOSTICA CANALE =="; command -v gh >/dev/null && gh auth status 2>&1 | head -4 || echo "gh absent"; ls -l "$HOME/.git-credentials" 2>/dev/null || echo "(fara .git-credentials)"; } >> /tmp/funcity-stage.txt
-          bash scripts/functity-publish.sh /tmp/funcity-stage.txt analysis/FUNCTITY-HOSTINFO.md "FUNCIŢY-HOSTINFO: raport read-only gazda $(date -u '+%F %H:%M') UTC"
-
+          set -uo pipefail
+          F=/tmp/relay/funcity-stage.txt
+          [ -f "$F" ] || { echo "artefact absent — gazda nu a produs raportul (runner jos?)"; exit 0; }
+          git config user.name funcity-relay; git config user.email f@localhost
+          { echo "# FUNCTITY-HOSTINFO — raport read-only de pe gazda (via artefact relay)"; echo; echo '```'; tr -d '\r' < "$F" | sed 's/\r//' ; echo '```'; } > analysis/FUNCTITY-HOSTINFO.md
+          git add -f analysis/FUNCTITY-HOSTINFO.md
+          git commit -qm "FUNCIŢY-HOSTINFO $(date -u '+%F %H:%M') UTC — raport gazda (relay)" || true
+          for i in 1 2 3; do
+            git pull --rebase -q origin "$GITHUB_REF_NAME" 2>/dev/null || git rebase --abort 2>/dev/null || true
+            git push -q origin "HEAD:refs/heads/$GITHUB_REF_NAME" && break; sleep 4
+          done

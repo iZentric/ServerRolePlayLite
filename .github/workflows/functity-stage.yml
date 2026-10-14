@@ -38,8 +38,36 @@ jobs:
           set +e
           bash scripts/functity-stage.sh "${{ inputs.mod }}"
           echo "RC=$?" >> /tmp/funcity-stage.txt
-      - name: Publica raportul pe bransa sesiunii
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage-raw
+          path: /tmp/funcity-stage.txt
+      - name: Publica raportul pe bransa sesiunii      - name: Publica raportul pe bransa sesiunii
         run: |
           { echo; echo "(raport complet: si in /tmp/funcity-stage.txt pe gazda la $(date -u '+%F %T') UTC)"; } >> /tmp/funcity-stage.txt
           bash scripts/functity-publish.sh /tmp/funcity-stage.txt analysis/FUNCTITY-STAGE.md "FUNCIŢY-STAGE ${{ inputs.mod }}: raport $(date -u '+%F %H:%M') UTC"
 
+  relay:
+    needs: s
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: '${{ github.ref_name }}' }
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with: { name: stage-raw, path: /tmp/relay }
+      - name: Comite raportul de staging adus de pe gazda
+        run: |
+          set -uo pipefail
+          F=/tmp/relay/funcity-stage.txt
+          [ -f "$F" ] || { echo "artefact absent — jobul de pe gazda nu a produs raport"; exit 0; }
+          git config user.name funcity-relay; git config user.email f@localhost
+          { echo "# FUNCTITY-STAGE — ${{ inputs.mod }} la $(date -u '+%F %T') UTC (gazda → artefact → relay)"; echo; echo '```'; tr -d '\r' < "$F"; echo '```'; } > analysis/FUNCTITY-STAGE.md
+          git add -f analysis/FUNCTITY-STAGE.md
+          git commit -qm "FUNCIŢY-STAGE ${{ inputs.mod }}: raport $(date -u '+%F %H:%M') UTC (relay)" || true
+          for i in 1 2 3; do
+            git pull --rebase -q origin "$GITHUB_REF_NAME" 2>/dev/null || git rebase --abort 2>/dev/null || true
+            git push -q origin "HEAD:refs/heads/$GITHUB_REF_NAME" && break; sleep 4
+          done
