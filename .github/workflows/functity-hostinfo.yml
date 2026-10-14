@@ -15,6 +15,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Raport gazda (read-only)
         run: bash scripts/functity-stage.sh host-info || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: funcity-hostinfo
+          path: /tmp/funcity-stage.txt
       - name: Publica raportul pe bransa sesiunii (canale locale, diagnostic atasat)
         run: |
           { echo; echo "== DIAGNOSTICA CANALE =="; command -v gh >/dev/null && gh auth status 2>&1 | head -4 || echo "gh absent"; ls -l "$HOME/.git-credentials" 2>/dev/null || echo "(fara .git-credentials)"; } >> /tmp/funcity-stage.txt
