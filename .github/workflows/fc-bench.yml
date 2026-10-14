@@ -25,10 +25,10 @@ jobs:
       fail-fast: false
       matrix:
         arm:
-          - { id: oficial1237, conf: oficial, jar: "https://repo1.maven.org/maven2/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar", sha: "17d08ed544aab50f0c9c0281507a44d765cfeb371289a10d47e2143146255bff", budget_min: 120 }
-          - { id: functity_b0, conf: functity_b0, jar: "AUTO-B0", sha: "248fb54d4a97d8396a45e3edf859a19275c67c81e6115ca219ece5ebb0ef7f79", budget_min: 120 }
-          - { id: functity_b1, conf: functity_b1, jar: "AUTO-B1", sha: "6a63721c376ffb48d2fbff9c5bba425c9c69b9b9392bb543a53af64f70a98194", budget_min: 120 }
-          - { id: catserver, conf: catserver, jar: "PACK", sha: "", budget_min: 150 }
+          - { id: oficial1237, conf: oficial, sha: "17d08ed544aab50f0c9c0281507a44d765cfeb371289a10d47e2143146255bff", trials: 3, run_seconds: 300, budget_min: 120 }
+          - { id: functity_b0, conf: functity_b0, sha: "248fb54d4a97d8396a45e3edf859a19275c67c81e6115ca219ece5ebb0ef7f79", trials: 3, run_seconds: 300, budget_min: 120 }
+          - { id: functity_b1, conf: functity_b1, sha: "6a63721c376ffb48d2fbff9c5bba425c9c69b9b9392bb543a53af64f70a98194", trials: 3, run_seconds: 300, budget_min: 120 }
+          - { id: catserver, conf: catserver, sha: "", trials: 3, run_seconds: 300, budget_min: 150 }
     env:
       TRIALS: "3"
       RUN_SECONDS: "300"
@@ -109,10 +109,19 @@ jobs:
         run: lscpu | sed -n '1,15p'; free -l | head -2; nproc
 
       - name: Alergare banca (faza A instalare + 3 probe la cald a 300s)
-        env: { ARM: '${{ matrix.arm.id }}', GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
+        env:
+          ARM: '${{ matrix.arm.id }}'
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          FC_JAR: '/tmp/fcb/arm.jar'
+          FC_STAGE: '/tmp/fcb/stage'
+          FC_OUT: '/tmp/fcb/results'
+          FC_TRIALS: '${{ matrix.arm.trials }}'
+          FC_RUN_SECONDS: '${{ matrix.arm.run_seconds }}'
+          FC_JAVA_LABEL: 'temurin-11 @ ubuntu-24.04 (4 vCPU, 16GB)'
         shell: bash {0}
         run: |
           set +e
+          if [ ! -f "$FC_JAR" ] && [ "$ARM" != "catserver" ]; then echo "FC_JAR lipseste ($FC_JAR) — il creeaza pasul jar"; fi
           python3 scripts/fc_bench.py --arm-conf benches/functity/arms/${{ matrix.arm.conf }}.json > /tmp/fcb/driver-$ARM.log 2>&1
           RC=$?
           echo "driver rc=$RC"
@@ -126,6 +135,17 @@ jobs:
             ( cd dpub && git config user.name fcb-diag && git config user.email d@l && git add -A bench-v4/ && git commit -qm "fcb diag $ARM" && git push -q origin HEAD:refs/heads/functity-out ) && echo "diag publicat $D"
             echo "::error::bratul $ARM nu a produs raport (rc=$RC) — vezi bench-v4/diag pe functity-out"
             exit 1
+          fi
+          if [ -f /tmp/fcb/results/$ARM.json ]; then
+            cd /tmp/fcb
+            for att in 1 2 3 4 5; do
+              rm -rf rpub; git clone -q --depth 1 -b functity-out "https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY" rpub && break; sleep $((att*6))
+            done
+            D="rpub/bench-v4/$(date -u +%Y%m%d-%H%M)"
+            mkdir -p "$D"; cp /tmp/fcb/results/$ARM.json "$D/"
+            for lg in /tmp/fcb/results/server-trial*.log; do [ -f "$lg" ] && tail -c 300000 "$lg" > "$D/$(basename $lg .log)-$ARM.log"; done
+            tail -c 12000 /tmp/fcb/driver-$ARM.log > "$D/driver-$ARM.txt"
+            ( cd rpub && git config user.name fcb-pub && git config user.email p@l && git add -A bench-v4/ && git commit -qm "fcb $ARM raport $(date -u +%H%M)" && git push -q origin HEAD:refs/heads/functity-out ) && echo "raport publicat $D" || echo "PUSH rapoarte esuat"
           fi
           if [ "$RC" -ge 3 ]; then
             { echo "=== driver log (raport exista, boot esuat) ==="; tail -c 12000 /tmp/fcb/driver-$ARM.log; } > /tmp/fcb/diag-$ARM.txt
