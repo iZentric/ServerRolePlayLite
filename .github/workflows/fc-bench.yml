@@ -42,39 +42,37 @@ jobs:
         run: python3 -m unittest discover -s tests -q
 
       - name: Packul de referinta, cu pază de SHA
-        shell: bash -x {0}
+        shell: bash {0}
         run: |
           set -uo pipefail
-          echo "SENTINELA: pas pornit; SUM=${GITHUB_STEP_SUMMARY:-nesetata}" | tee -a "${GITHUB_STEP_SUMMARY:-/dev/null}" 2>/dev/null || true
+          diag() { printf '::error::DIAG %s\n' "$*" | tr ':' '.'; }
+          diag "pas pornit; repo=$GITHUB_REPOSITORY run=$GITHUB_RUN_ID"
           mkdir -p /tmp/fcb
-          diag() { printf '::error::%s\n' "$*" | tr ':' ' '; printf '%s\n' "$*" >> "$GITHUB_STEP_SUMMARY"; }
-          snap() {
-            { echo "AID=$AID DL=$DL"; ls -la /tmp/fcb/ | head -12; echo "--api-err--"; cat /tmp/fcb/api-err.txt 2>/dev/null; echo "--dl-err--"; cat /tmp/fcb/dl-err.txt 2>/dev/null; echo "--curl-err tail--"; tail -4 /tmp/fcb/curl-dl.log 2>/dev/null; } >> "$GITHUB_STEP_SUMMARY"
-          }
-          AID=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/lite" --jq '.assets[] | select(.name=="CUANTIC-Server-CatServer-1.7.7.zip") | [.id,.size,.browser_download_url] | @tsv' 2>/tmp/fcb/api-err.txt) || true
-          if [ -z "$AID" ]; then diag "gh api asset lipseste"; snap; exit 1; fi
-          URL=$(printf '%s' "$AID" | cut -f3)
+          A=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/lite" --jq '.assets[] | select(.name=="CUANTIC-Server-CatServer-1.7.7.zip") | [.id,.size] | @tsv' 2>&1)
+          diag "ghapi rc=$? raspuns=[$(printf '%s' "$A" | tr '\n|' '  ' | cut -c1-160)]"
+          AID=$(printf '%s' "$A" | awk -F'\t' '{print $1}' | tr -dc '0-9')
+          [ -n "$AID" ] && diag "AID=$AID" || diag "fara AID"
           DL=""
-          for i in 1 2 3 4; do
-            CODE=$(curl -sS -L --retry 2 --retry-delay 5 -w '%{http_code}' -o /tmp/fcb/pack.zip \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/octet-stream" \
-              "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/assets/$(printf '%s' "$AID" | cut -f1)" 2>>/tmp/fcb/curl-dl.log) || CODE=err
+          for i in 1 2 3; do
+            CODE=$(curl -sS -o /tmp/fcb/pack.zip -w '%{http_code}' --max-time 300 \
+              -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/octet-stream" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/assets/$AID" 2>/tmp/fcb/curl$i.err); RC=$?
             SZ=$(stat -c %s /tmp/fcb/pack.zip 2>/dev/null || echo 0)
-            echo "incercare $i: http=$CODE bytes=$SZ" >> /tmp/fcb/dl-err.txt
-            if [ "$CODE" = 200 ] && [ "$SZ" -gt 40000000 ]; then DL=api; break; fi
-            sleep $((i*10))
+            diag "try$i rc=$RC http=$CODE bytes=$SZ err=[$(tr '\n' ' ' < /tmp/fcb/curl$i.err 2>/dev/null | cut -c1-140)]"
+            if [ "$RC" = 0 ] && [ "$CODE" = 200 ] && [ "$SZ" -gt 40000000 ]; then DL=api; break; fi
+            sleep $((i*8))
           done
           if [ -z "$DL" ]; then
-            echo "--- fallback gh release download ---" >> /tmp/fcb/curl-dl.log
-            gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/fcb >> /tmp/fcb/curl-dl.log 2>&1 && DL=gh || true
+            OUT=$(gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -D /tmp/fcb 2>&1); RC=$?
+            diag "gh-download rc=$RC out=[$(printf '%s' "$OUT" | tr '\n' ' ' | cut -c1-240)]"
+            [ $RC = 0 ] && DL=gh
           fi
-          if [ -z "$DL" ]; then diag "pack esuata (vezi snapshot)"; snap; exit 1; fi
-          echo "SENTINELA: inainte de SHA check" >> "$GITHUB_STEP_SUMMARY"
-          if ! echo "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  /tmp/fcb/pack.zip" | sha256sum -c - >/tmp/fcb/pack-check.txt 2>&1; then
-            diag "pack SHA nepotrivit: $(tail -1 /tmp/fcb/pack-check.txt)"; snap; exit 1
-          fi
-          echo "pack ok prin $DL, SHA TRECUT, marime $(stat -c %s /tmp/fcb/pack.zip)" >> "$GITHUB_STEP_SUMMARY"
-
+          [ -n "$DL" ] || { diag "PACK ESUAT pe toate cai"; exit 1; }
+          SHA=$(sha256sum /tmp/fcb/pack.zip | cut -d' ' -f1)
+          diag "pack OK prin $DL sha=$SHA"
+          [ "$SHA" = fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15 ] || { diag "SHA POTRIT: $SHA"; exit 1; }
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Jarul bratului, cu pază de SHA
         shell: bash -x {0}
