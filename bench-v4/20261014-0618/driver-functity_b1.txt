@@ -1,0 +1,43 @@
+[06:00:16] === brat functity_b1: stage ===
+[06:00:16] === faza A: instalare bootstrap (limita 360s, nemasurata) ===
+[06:00:46] watch[30s] alive=True log=9878B ? libs=76 rss=692MB thr=25
+[06:00:54] === proba 1/3 ===
+[06:01:16] watch[60s] alive=False log=15597B +5719B libs=76 rss=1335MB thr=48
+[06:01:46] watch[90s] alive=False log=15597B CRESTE libs=76 rss=2216MB thr=105
+[06:02:16] watch[120s] alive=False log=15597B CRESTE libs=76 rss=2242MB thr=101
+[06:02:46] watch[150s] alive=False log=15597B CRESTE libs=76 rss=2242MB thr=89
+[06:03:16] watch[180s] alive=False log=15597B CRESTE libs=76 rss=2242MB thr=87
+[06:03:46] watch[210s] alive=False log=15597B CRESTE libs=76 rss=2242MB thr=87
+[06:04:16] watch[240s] alive=False log=15597B CRESTE libs=76 rss=2241MB thr=85
+[06:04:46] watch[270s] alive=False log=15597B CRESTE libs=76 rss=2242MB thr=86
+[06:05:16] watch[300s] alive=False log=15597B CRESTE libs=76 rss=2244MB thr=85
+[06:05:46] watch[330s] alive=False log=15597B CRESTE libs=76 rss=2245MB thr=87
+[06:06:16] watch[360s] alive=False log=15597B CRESTE libs=76 rss=2245MB thr=83
+[06:06:46] watch[390s] alive=False log=15597B CRESTE libs=76 rss=2245MB thr=82
+[06:06:54] === proba 2/3 ===
+[06:07:16] watch[420s] alive=False log=15597B CRESTE libs=76 rss=1587MB thr=48
+[06:07:46] watch[450s] alive=False log=15597B CRESTE libs=76 rss=2244MB thr=99
+[06:08:16] watch[480s] alive=False log=15597B CRESTE libs=76 rss=2243MB thr=90
+[06:08:46] watch[510s] alive=False log=15597B CRESTE libs=76 rss=2244MB thr=82
+[06:09:16] watch[540s] alive=False log=15597B CRESTE libs=76 rss=2243MB thr=81
+[06:09:46] watch[570s] alive=False log=15597B CRESTE libs=76 rss=2243MB thr=80
+[06:10:16] watch[600s] alive=False log=15597B CRESTE libs=76 rss=2240MB thr=79
+[06:10:46] watch[630s] alive=False log=15597B CRESTE libs=76 rss=2240MB thr=79
+[06:11:16] watch[660s] alive=False log=15597B CRESTE libs=76 rss=2241MB thr=79
+[06:11:46] watch[690s] alive=False log=15597B CRESTE libs=76 rss=2241MB thr=79
+[06:12:16] watch[720s] alive=False log=15597B CRESTE libs=76 rss=2241MB thr=79
+[06:12:46] watch[750s] alive=False log=15597B CRESTE libs=76 rss=2248MB thr=77
+[06:12:50] === proba 3/3 ===
+[06:13:16] watch[780s] alive=False log=15597B CRESTE libs=76 rss=1853MB thr=63
+[06:13:46] watch[810s] alive=False log=15597B CRESTE libs=76 rss=2235MB thr=95
+[06:14:16] watch[840s] alive=False log=15597B CRESTE libs=76 rss=2236MB thr=89
+[06:14:46] watch[870s] alive=False log=15597B CRESTE libs=76 rss=2237MB thr=81
+[06:15:16] watch[900s] alive=False log=15597B CRESTE libs=76 rss=2237MB thr=80
+[06:15:46] watch[930s] alive=False log=15597B CRESTE libs=76 rss=2237MB thr=79
+[06:16:16] watch[960s] alive=False log=15597B CRESTE libs=76 rss=2231MB thr=78
+[06:16:46] watch[990s] alive=False log=15597B CRESTE libs=76 rss=2231MB thr=78
+[06:17:16] watch[1020s] alive=False log=15597B CRESTE libs=76 rss=2231MB thr=78
+[06:17:46] watch[1050s] alive=False log=15597B CRESTE libs=76 rss=2233MB thr=78
+[06:18:16] watch[1080s] alive=False log=15597B CRESTE libs=76 rss=2237MB thr=78
+[06:18:44] raport scris: /tmp/fcb/results/functity_b1.json
+[06:18:44] RESUMAT functity_b1: status=MASURAT boot_medie=45.41s cv=5.1% join=Nonems tps_p50=20.0 overrun=0 critice=0
