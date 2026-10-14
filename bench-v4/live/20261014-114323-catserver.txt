@@ -1,0 +1,32 @@
+live-snapshot 2 la 11:43:22
+[11:39:20] === brat catserver: stage ===
+[11:39:20] === faza A: instalare bootstrap (limita 360s, nemasurata) ===
+[11:39:50] watch[30s] alive=True log=1621B ? libs=20 rss=140MB thr=18
+[11:40:20] watch[60s] alive=True log=4535B +2914B libs=67 rss=160MB thr=21
+[11:40:50] watch[90s] alive=True log=107984B +103449B libs=71 rss=1445MB thr=45
+[11:41:21] watch[120s] alive=True log=136788B +28804B libs=71 rss=0MB thr=2
+[11:41:21] === proba 1/3 ===
+[11:41:51] watch[150s] alive=False log=136788B CRESTE libs=71 rss=1787MB thr=66
+[11:42:21] watch[180s] alive=False log=136788B CRESTE libs=71 rss=2220MB thr=102
+[11:42:51] watch[210s] alive=False log=136788B CRESTE libs=71 rss=2221MB thr=101
+[11:43:21] watch[240s] alive=False log=136788B CRESTE libs=71 rss=2220MB thr=84
+
+--- driver tail ---
+2;1m    +==================+[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    Current version: [31;1m14.2.12[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    New version: [31;1m15.12.6[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    A new version is available! Downloading it now...[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    Update downloaded successfully, it will be applied on the next restart.[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[11:41:20] [Craft Scheduler Thread - 4/WARN]: There is a new EssentialsX version available for download: 2.22.0.
+[11:41:20] [Craft Scheduler Thread - 4/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
+[11:41:20] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m
+[11:41:20] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
+
+[11:42:44] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer]: Dim minecraft:the_nether (minecraft:the_nether): Mean tick time: 0.009 ms. Mean TPS: 20.000
+[11:42:44] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer]: Dim minecraft:the_end (minecraft:the_end): Mean tick time: 0.007 ms. Mean TPS: 20.000
+[11:42:44] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer]: Overall: Mean tick time: 0.124 ms. Mean TPS: 20.000
+[11:42:44] [Server thread/INFO] []: Unknown command. Type "/help" for help.
+[11:42:44] [Server thread/INFO] []: TPS from last 1m, 5m, 15m: *20.0, *20.0, *20.0
+[11:42:44] [Server thread/INFO] []: Current Memory Usage: 1145/1536 mb (Max: 1536 mb)
