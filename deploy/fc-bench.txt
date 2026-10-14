@@ -1,1 +1,1 @@
-v4.15 2026-10-14 (FIX instalare furtata: bootstrap cu FIFO ca la smoke, taiat doar la marker+libraries/ existent — guava-21 crash venea din instalare intrerisa la 38s)
+v4.16 2026-10-14 (watch la instalare: alive/log/libs/rss la 30s — vedem in sfarsit ce face bootstrap-ul)

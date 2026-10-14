@@ -605,6 +605,38 @@ def main():
         limit = conf.get("install_timeout", 420)
         done_markers = ("Successfully installed", "Server installed", "install complete", "Done (")
         rc = None
+        watch = {"stop": False, "last_size": -1, "lib_seen": None}
+        def watcher():
+            i = 0
+            while not watch["stop"] and i < 600:
+                i += 1
+                time.sleep(30)
+                try:
+                    sz = os.path.getsize(log_install)
+                except OSError:
+                    sz = -1
+                alive = ip.poll() is None
+                nlibs = 0
+                libs_dir = os.path.join(stage, "libraries")
+                if os.path.isdir(libs_dir):
+                    for _dp, _dn, _fn in os.walk(libs_dir):
+                        nlibs += len(_fn)
+                        if nlibs > 400:
+                            break
+                if watch["lib_seen"] is None and nlibs:
+                    watch["lib_seen"] = round(time.monotonic() - t0, 1)
+                grow = "CRESTE" if sz == watch["last_size"] else "s-a-ocolit" if sz < 0 else ("+%sB" % (sz - watch["last_size"]) if watch["last_size"] >= 0 else "?")
+                cpu = ""
+                try:
+                    st = proc_stat_jvm()
+                    cpu = " rss=%dMB thr=%d" % (st[1] // 1024, st[2]) if st else " FARA-JVM"
+                except Exception:
+                    pass
+                log(f"watch[{int(time.monotonic()-t0)}s] alive={alive} log={sz}B {grow} libs={nlibs}{cpu}")
+                watch["last_size"] = sz
+            return
+        wt = threading.Thread(target=watcher, daemon=True)
+        wt.start()
         while time.monotonic() - t0 < limit:
             try:
                 ip.wait(5)
