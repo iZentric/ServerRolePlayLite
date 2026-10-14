@@ -592,14 +592,42 @@ def main():
     log_install = os.path.join(outdir, "install.log")
     cmd = ["java"] + conf["java_args"] + ["-jar", bootjar, "nogui"]
     t0 = time.monotonic()
+    # stdin ca la smoke: FIFO cu writer mentinut (EOF grabit rupe instalarea bootstrap-ului)
+    fifi = os.path.join(stage, ".fcbench-install-in")
+    if not os.path.exists(fifi):
+        os.mkfifo(fifi)
+    wr = open(fifi, "w")
+    rd = open(fifi, "rb", buffering=0)
     with open(log_install, "wb") as lf:
-        ip = subprocess.Popen(cmd, cwd=stage, stdout=lf, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL,
+        ip = subprocess.Popen(cmd, cwd=stage, stdout=lf, stderr=subprocess.STDOUT, stdin=rd,
                               start_new_session=True)
-        try:
-            ip.wait(conf.get("install_timeout", 420))
-            rc = ip.returncode
-        except subprocess.TimeoutExpired:
-            # bootstrap-ul Mohist isi lasa urmasi prin pipes; omoaram TOT grupul, nu doar parintele
+        rd.close()
+        limit = conf.get("install_timeout", 420)
+        done_markers = ("Successfully installed", "Server installed", "install complete")
+        rc = None
+        while time.monotonic() - t0 < limit:
+            try:
+                ip.wait(5)
+                rc = ip.returncode
+                break
+            except subprocess.TimeoutExpired:
+                try:
+                    txt = open(log_install, encoding="utf-8", errors="replace").read()
+                except OSError:
+                    txt = ""
+                if any(mk.lower() in txt.lower() for mk in done_markers) and os.path.exists(os.path.join(stage, "libraries")):
+                    # instalare completa => taiem grupul (bootstrap-ului ii place sa atarne de consola)
+                    try:
+                        os.killpg(os.getpgid(ip.pid), signal.SIGKILL)
+                    except Exception:
+                        ip.kill()
+                    try:
+                        ip.wait(20)
+                    except Exception:
+                        pass
+                    rc = "OK(marker instalare + kill grup)"
+                    break
+        if rc is None:
             try:
                 os.killpg(os.getpgid(ip.pid), signal.SIGKILL)
             except Exception:
@@ -609,7 +637,10 @@ def main():
             except Exception:
                 pass
             rc = "TIMEOUT(grupul a fost omorat)"
-    report["install_reusit"] = (rc == 0) or (time.monotonic() - t0 > 30)
+    try:
+        wr.close()
+    except Exception:
+        pass
     report["install_timp_s"] = round(time.monotonic() - t0, 1)
     report["install_cod"] = rc
 

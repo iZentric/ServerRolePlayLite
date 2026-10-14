@@ -1,1 +1,1 @@
-v4.14 2026-10-14 (FIX HANG: killpg pe grupul intreg la timeout de instalare — subprocess.run lasa nepotul JVM agatat de pipe; Popen+start_new_session si la probe)
+v4.15 2026-10-14 (FIX instalare furtata: bootstrap cu FIFO ca la smoke, taiat doar la marker+libraries/ existent — guava-21 crash venea din instalare intrerisa la 38s)
