@@ -342,8 +342,12 @@ PY
     say "  libertate disc: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB"
     say "  moduri voice/chat in pack:"
     ls "$D/mods" 2>/dev/null | grep -iE 'voice|chat|talk|plastic' | sed 's/^/    M /' | tee -a "$REPORT"
-    say "  configuri voicechat gasite:"
-    find "$D/config" -iname '*voice*' -o -iname '*chat*' 2>/dev/null | head -8 | sed 's/^/    C /' | tee -a "$REPORT"
+    say "  configuri voicechat staging:"
+    find "$D/config" -iname '*voice*' 2>/dev/null | head -8 | sed 's/^/    C /' | tee -a "$REPORT"
+    for f in $(find "$D/config" -iname '*voicechat*server*' 2>/dev/null | head -2); do say "    continut $f:"; head -8 "$f" | sed 's/^/      /' | tee -a "$REPORT"; done
+    say "  porturi voicechat pe gazda:"; ss -lntup 2>/dev/null | grep -E ':(24454|24455) ' | sed 's/^/    P /' | tee -a "$REPORT"
+    say "  linii voicechat din log:"
+    grep -iE 'voicechat|voice chat' "$LOG" 2>/dev/null | tail -8 | cut -c1-200 | sed 's/^/    V /' | tee -a "$REPORT"
     finish 0
     ;;
   *)
