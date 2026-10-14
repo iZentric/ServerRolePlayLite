@@ -57,25 +57,16 @@ java11_adoptium(){
   echo "$D/jdk11/bin/java"
 }
 
-voicechat_port(){ # Simple Voice Chat isi leaga portul propriu (24454 default). Productia il
-  # tine — ii dam staging-ului 24455. Folosim exact calea/numele de fisier din productia viie,
-  # ca nu ghicim layout-ul de config.
-  local src vcport
-  src=$(find "$P/config" -iname '*server.properties' -path '*voice*' 2>/dev/null | head -1)
-  [ -n "$src" ] || src=$(find "$P/config" -iname '*voicechat*' -type f 2>/dev/null | head -1)
-  if [ -n "$src" ]; then
-    mkdir -p "$D/config/$(basename "$(dirname "$src")")"
-    cp "$src" "$D/config/$(basename "$(dirname "$src")")/$(basename "$src")"
-    local dst="$D/config/$(basename "$(dirname "$src")")/$(basename "$src")"
-    local base; base=$(grep -m1 -E '^\s*port=' "$dst" | tr -dc '0-9'); base=${base:-24454}
-    vcport=$((base+1))
-    sed -i -E "s/^([[:space:]]*port=).*/\1$vcport/" "$dst"
-    say "  voicechat: mostenit $src, port $base -> $vcport (staging)"
-  else
-    mkdir -p "$D/config/voicechat"
-    printf 'port=24455\n' > "$D/config/voicechat/voicechat-server.properties"
-    say "  voicechat: fisar de config absent in productie — incerc config/voicechat/voicechat-server.properties port=24455"
-  fi
+voicechat_port(){ # Simple Voice Chat (Forge 1.16.5) citeste config/voicechat.properties si
+  # binding-ul UDP 24454 il face INAINTE de a refuza pornirea serverului intreg (Shutting down
+  # server). Productia tine 24454 -> staging primeste 24455 in AMBELE fisiere posibile.
+  mkdir -p "$D/config/voicechat"
+  local f
+  for f in "$D/config/voicechat.properties" "$D/config/voicechat/voicechat-server.properties"; do
+    [ -f "$f" ] || printf 'port=24455\n' > "$f"
+    grep -q '^port=' "$f" && sed -i -E 's/^port=.*/port=24455/' "$f" || printf 'port=24455\n' >> "$f"
+  done
+  say "  voicechat: port UDP 24455 scris in config/voicechat.properties (+varianta veche subdirector)"
 }
 
 moduri_count(){ ls "$D/mods" 2>/dev/null | grep -c '\.jar$' || echo 0; }
