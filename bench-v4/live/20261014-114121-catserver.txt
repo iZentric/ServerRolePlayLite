@@ -1,0 +1,26 @@
+live-snapshot 1 la 11:41:20
+[11:39:20] === brat catserver: stage ===
+[11:39:20] === faza A: instalare bootstrap (limita 360s, nemasurata) ===
+[11:39:50] watch[30s] alive=True log=1621B ? libs=20 rss=140MB thr=18
+[11:40:20] watch[60s] alive=True log=4535B +2914B libs=67 rss=160MB thr=21
+[11:40:50] watch[90s] alive=True log=107984B +103449B libs=71 rss=1445MB thr=45
+
+--- driver tail ---
+m[32;1m    |  [34;1m[4m[21mStandalone Mode[0;39m[32;1m |[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    +==================+[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    Current version: [31;1m14.2.12[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    New version: [31;1m15.12.6[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    A new version is available! Downloading it now...[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    Update downloaded successfully, it will be applied on the next restart.[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[11:41:20] [Craft Scheduler Thread - 4/WARN]: There is a new EssentialsX version available for download: 2.22.0.
+[11:41:20] [Craft Scheduler Thread - 4/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
+[11:41:20] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m
+
+[11:41:19] [Craft Scheduler Thread - 0/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    A new version is available! Downloading it now...[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    Update downloaded successfully, it will be applied on the next restart.[0;39m
+[11:41:19] [Craft Scheduler Thread - 0/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[11:41:20] [Craft Scheduler Thread - 4/WARN] [Essentials]: There is a new EssentialsX version available for download: 2.22.0.
+[11:41:20] [Craft Scheduler Thread - 4/WARN] [Essentials]: Download it here: https://essentialsx.net/downloads.html?branch=stable
+[11:41:20] [Craft Scheduler Thread - 0/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m
