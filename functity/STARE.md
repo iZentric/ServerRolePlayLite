@@ -36,3 +36,35 @@
 4. MC-RUN v9 pe box — WAITING USER: runner-ul masinii a murit ~20:48; fara
    wake nu mai am canal sa-l ridic. (Serverul box-ului: java viu, port ascultat, SLP
    nu raspunde de la ~17:00 — verdictul v8 arata „nu s-a redresat in 7 min".)
+
+## 7. FC-BENCH v4 — PRIMA MASURARE REALA (rulare 38510786719, brațe publicate 05:29–05:38 UTC, 2026-10-14)
+
+Metoda: 4 brațe × 3 probe boot-la-cald, world comun dupa instalare, java 11 Temurin, -Xmx1536M,
+runner ubuntu-24.04 izolat, pack CUANTIC 36/14 cu SHA256 fix (fe1e26…), sursa 100% din git
+(functity-out), zero CDN. Verificat in timpul alergarii: 36 mods/14 plugins prezente in stage.
+
+| brat | boot mediu (wall,ant) | CV% | TPS idle | overrun | critice | RSS MB | CPU% idle | login probe |
+|---|---|---|---|---|---|---|---|---|
+| CatServer 1d8d6313 (motorul istoric, din pack) | 43.35 | 4.3 | 20.0 | 0 | 0 | 2227.8 | 2.5 | refuz Forge (corect) |
+| Mohist oficial 1237 | 44.68 | 8.5 | 20.0 | 0 | 0 | 2254.6 | 2.7 | refuz Forge (corect) |
+| FunCity b0 (fara patch-uri) | 42.68 | 5.8 | 20.0 | 0 | 0 | 2267.6 | 2.4 | refuz Forge (corect) |
+| FunCity b1.2256 (P0+P1) | 33.34 | 5.7 | 20.0 | 0 | 0 | 2256.1 | 1.8 | refuz Forge (corect) |
+
+Ce declaram: b1 nu are regresie fata de oficial la pornire/idle (dimpotriva, -25.4% wall in aceasta
+alergare) si zero erori critice pe 12 boot-uri totale. Ce NU declaram: ca b1 "e mai rapid" —
+cifrele wall aveau cuantificare de 2s (polling), iar avantajul de ~9s trebuie confirmat cu
+v4.19 (poll 0.25s + uptime obiectiv din log) inainte de orice FISE "castig".
+Proba de login (client vanilla 1.16.5, protocol 754) a primit refuz FML cu mesajul de Forge-obligatoriu
+pe TOATE bratele — consistent cu live-ul (clientii modati intra, vanilla nu); intarzierea reala de
+join cu client modat ramane de masurat printr-o faza viitoare (bot mineflayer inmediat ce legam
+npm in aceeasi banda de retea).
+Prag inainte de rulare: CV<10% pe brat → TRECUT toate 4.
+Raportari: functity-out: bench-v4/{20261014-0529,0531,0537,0538}/ (JSON+server-loguri+driver),
+verdict agregat: bench-v4/20261014-0538/summary.md.
+
+Banchetul a scos la lumina si 6 buguri de infra CI, acum fixate (mencțiuneat ca sa nu le re-luam):
+pack via CDN intermitent → functity-out:pack/ (blob git, auto-reparat de FC-PACKPROBE);
+`tr -d '\r'` in YAML devine `tr -d ''` → sed; deadlock `open(fifo,'w')` fara cititor → fd O_RDWR;
+instalare intrerupa la EOF pe stdin → FIFO si la faza A + kill pe intreg grupul (killpg);
+rapoarte ingestibile prin loguri (Azure blocheaza sandbox-ul) → canal git functity-out +
+live-snapshots la 2 min; summary-API/annotations gh: gh nu expun nimic util → tot pe git.
