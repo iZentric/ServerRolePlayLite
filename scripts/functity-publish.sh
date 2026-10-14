@@ -7,7 +7,7 @@ set -uo pipefail
 SRC=$1; DEST=$2; MSG=$3
 BR=${GITHUB_REF_NAME:-arena/9bbcb24f-serverroleplaylite}
 REPO_URL=${GITHUB_SERVER_URL:-https://github.com}/${GITHUB_REPOSITORY:-iZentric/ServerRolePlayLite}
-say(){ echo "publish: $*"; }
+say(){ echo "publish: $*"; printf "::warning::publish %s\n" "$*" | head -c 380; }
 [ -f "$SRC" ] || { echo "raport absent: $SRC"; exit 0; }
 B64=$(base64 -w0 "$SRC"); echo "$B64" > /tmp/fp-content.b64
 export FP_DEST="$DEST" FP_MSG="$MSG"
