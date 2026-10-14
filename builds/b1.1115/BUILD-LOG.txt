@@ -1,0 +1,152 @@
+Downloading https://services.gradle.org/distributions/gradle-8.4-bin.zip
+............10%............20%.............30%............40%.............50%............60%.............70%............80%.............90%............100%
+
+Welcome to Gradle 8.4!
+
+Here are the highlights of this release:
+ - Compiling and testing with Java 21
+ - Faster Java compilation on Windows
+ - Role focused dependency configurations creation
+
+For more details see https://docs.gradle.org/8.4/release-notes.html
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.4/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :buildSrc:compileJava NO-SOURCE
+> Task :buildSrc:compileGroovy
+> Task :buildSrc:processResources NO-SOURCE
+> Task :buildSrc:classes
+> Task :buildSrc:jar
+
+> Configure project :
+Java: 11.0.32.1 JVM: 11.0.32.1+1(Eclipse Adoptium) Arch: amd64
+Forge Version: 36.2.42
+Setting up MCP environment
+Initializing steps
+Executing steps
+ > Running 'downloadManifest'
+ > Running 'downloadJson'
+ > Running 'downloadServer'
+ > Running 'strip'
+ > Running 'rename'
+Stopping at requested step: /home/runner/.gradle/caches/forge_gradle/mcp_repo/de/oceanlabs/mcp/mcp_config/1.16.5-20210115.111550/server/rename/output.jar
+Setting up MCP environment
+Initializing steps
+Executing steps
+ > Running 'downloadManifest'
+ > Running 'downloadJson'
+ > Running 'downloadClient'
+ > Running 'downloadServer'
+ > Running 'stripClient'
+ > Running 'stripServer'
+ > Running 'merge'
+ > Running 'rename'
+Stopping at requested step: /home/runner/.gradle/caches/forge_gradle/mcp_repo/de/oceanlabs/mcp/mcp_config/1.16.5-20210115.111550/joined/rename/output.jar
+
+> Task :mcp:downloadConfig
+
+> Task :mcp:setupMCP
+Setting up MCP environment
+Initializing steps
+Executing steps
+ > Running 'downloadManifest'
+ > Running 'downloadJson'
+ > Running 'downloadClient'
+ > Running 'downloadServer'
+ > Running 'stripClient'
+ > Running 'stripServer'
+ > Running 'merge'
+ > Running 'rename'
+ > Running 'mcinject'
+ > Running 'listLibraries'
+ > Running 'mohistAccessTransformer'
+[11:17:26] [main/INFO]: Access Transformer processor running version 8.0.7+8.0.7+master.43473d43
+[11:17:26] [main/INFO]: Command line arguments [--inJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar, --outJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, --atFile, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg]
+[11:17:26] [main/INFO]: Reading from /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar
+[11:17:26] [main/INFO]: Writing to /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
+[11:17:26] [main/INFO]: Transformer file /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg
+[11:17:26] [main/WARN]: Found existing output jar /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, overwriting
+[11:17:28] [main/INFO]: JAR transformation complete /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
+ > Running 'mohistSideStripper'
+ > Running 'decompile'
+ > Running 'inject'
+ > Running 'patch'
+MCP environment setup is complete
+
+> Task :clean:applyPatches
+> Task :clean:downloadMappings
+> Task :clean:srg2mcp
+> Task :clean:extractMapped
+> Task :mohist:applyPatches
+> Task :mohist:downloadMappings
+> Task :mohist:srg2mcp
+> Task :mohist:extractMapped
+> Task :setup
+
+> Task :mohist:compileFmllauncherJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/fmllauncher/java/net/minecraftforge/fml/loading/RuntimeDistCleaner.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :mohist:processFmllauncherResources
+> Task :mohist:fmllauncherClasses
+> Task :clean:extractSrg
+> Task :clean:createMcp2Srg
+
+> Task :clean:compileJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :clean:processResources NO-SOURCE
+> Task :clean:classes
+> Task :clean:jar
+> Task :clean:reobfJar
+> Task :clean:genServerBinPatches
+> Task :mohist:createFakeSASPatches
+> Task :mohist:createMcp2Srg
+> Task :mohist:compileJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :mohist:processResources
+> Task :mohist:classes
+> Task :mohist:jar
+> Task :mohist:reobfJar
+> Task :mohist:genServerBinPatches
+> Task :mohist:filterJarNew
+> Task :mohist:universalJar
+> Task :mohist:signUniversalJar SKIPPED
+> Task :mohist:mohistJar
+> Task :mohist:signMohistJar SKIPPED
+
+BUILD SUCCESSFUL in 5m 14s
+30 actionable tasks: 30 executed
+	Command being timed: "./gradlew setup mohistJar --no-daemon --stacktrace --max-workers=4"
+	User time (seconds): 5.31
+	System time (seconds): 0.74
+	Percent of CPU this job got: 1%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 5:15.98
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 156724
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 255
+	Minor (reclaiming a frame) page faults: 21400
+	Voluntary context switches: 20830
+	Involuntary context switches: 825
+	Swaps: 0
+	File system inputs: 69272
+	File system outputs: 541216
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+gradle exit: 0
