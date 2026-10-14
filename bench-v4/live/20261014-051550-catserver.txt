@@ -1,0 +1,32 @@
+live-snapshot 2 la 05:15:49
+[05:11:47] === brat catserver: stage ===
+[05:11:47] === faza A: instalare bootstrap (limita 360s, nemasurata) ===
+[05:12:17] watch[30s] alive=True log=3656B ? libs=61 rss=155MB thr=20
+[05:12:47] watch[60s] alive=True log=52761B +49105B libs=71 rss=1349MB thr=34
+[05:13:18] watch[90s] alive=True log=127137B +74376B libs=71 rss=2102MB thr=83
+[05:13:28] === proba 1/3 ===
+[05:13:48] watch[120s] alive=False log=136341B +9204B libs=71 rss=1278MB thr=45
+[05:14:18] watch[150s] alive=False log=136341B CRESTE libs=71 rss=2215MB thr=99
+[05:14:48] watch[180s] alive=False log=136341B CRESTE libs=71 rss=2232MB thr=98
+[05:15:18] watch[210s] alive=False log=136341B CRESTE libs=71 rss=2232MB thr=84
+[05:15:48] watch[240s] alive=False log=136341B CRESTE libs=71 rss=2232MB thr=82
+
+--- driver tail ---
+2;1m    +==================+[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    Current version: [31;1m14.2.12[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    New version: [31;1m15.12.6[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    A new version is available! Downloading it now...[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    Update downloaded successfully, it will be applied on the next restart.[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[05:13:24] [Craft Scheduler Thread - 4/WARN]: There is a new EssentialsX version available for download: 2.22.0.
+[05:13:24] [Craft Scheduler Thread - 4/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
+[05:13:24] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m
+[05:13:24] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
+
+[05:14:53] [Server thread/INFO] []: TPS from last 1m, 5m, 15m: *20.0, *20.0, *20.0
+[05:14:53] [Server thread/INFO] []: Current Memory Usage: 1217/1536 mb (Max: 1536 mb)
+[05:15:44] [Server thread/INFO] []: Unknown command. Type "/help" for help.
+[05:15:44] [Server thread/INFO] []: Unknown command. Type "/help" for help.
+[05:15:44] [Server thread/INFO] []: TPS from last 1m, 5m, 15m: *20.0, *20.0, *20.0
+[05:15:44] [Server thread/INFO] []: Current Memory Usage: 1237/1536 mb (Max: 1536 mb)
