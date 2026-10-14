@@ -161,6 +161,9 @@ case "$M" in
     say "  jar producție: $(ls "$P"/*.jar 2>/dev/null | head -3)"
     say "  config port/motd/online-mode: $(grep -E '^(server-port|motd|online-mode|max-players)=' "$P/server.properties" 2>/dev/null | tr '\n' ' ')"
     say "— procese si porturi:"
+    say "  toate java de pe gazda:"
+    for p in $(pgrep java); do ps -o pid=,etime=,args= -p "$p" 2>/dev/null | sed 's/^/    /' | cut -c1-220 | tee -a "$REPORT"; done
+    say "  ocupanti porturi 25565/25566:"; ss -lntp 2>/dev/null | grep -E ':(25565|25566) ' | sed 's/^/    /' | tee -a "$REPORT"
     say "  java producție: $(prod_java || echo JOS) | supervisor c.sh: $(pgrep -f 'bash .*c\.sh' | head -1 || echo NU)"
     say "  frpc: $(pgrep -f 'frpc -c' | head -1 || echo JOS) | port 25565: $(port_viu 25565) | port 25566: $(port_viu 25566)"
     say "  jucatori (din live.log, ultima 'There are'): $(grep -oE 'There are [0-9]+ out of maximum [0-9]+' "$P/live.log" 2>/dev/null | tail -1 || grep -oE 'There are [0-9]+ out of maximum [0-9]+' "$P/logs/latest.log" 2>/dev/null | tail -1 || echo 'niciun eveniment recent')"
