@@ -3,14 +3,28 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-14 11:37:57 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-14 11:41:46 UTC — gazda → artefact → relay
 
 ```
 mod automat din marker: status port=25566 jar=b1.0827
-== FUNCTITY STATUS — 2026-10-14 11:37:41 UTC ==
+== FUNCTITY STATUS — 2026-10-14 11:41:28 UTC ==
   staging java: 32144 /home/mndvasi9/.local/jdk17/bin/java @unix_args.txt
   port 25566: nu | 25565: da | 25566: nu
   log: Done = 1 | erori = 0 | keep-up = 0
+  post-Done (12 linii):
+    D [11:32:52 INFO]: Loaded 0 license plates
+    D [11:32:52 WARN]: Garagenordner nicht gefunden!
+    D [11:32:52 WARN]: Running in offline mode - Voice chat encryption is not secure!
+    D [11:32:52 INFO]: Successfully initialized RadioManager
+    D [11:32:52 WARN]: Dedicated server took 64.614 seconds to load
+    D [11:32:52 ERROR]: Failed to run voice chat at UDP port 24454, make sure no other application is running at that port
+    D [11:32:52 ERROR]: Voice chat server error Address already in use (Bind failed)
+    D [11:32:52 ERROR]: Shutting down server
+    D [11:32:52 ERROR]: Couldnt load server icon
+    D [11:32:52 INFO]: Shutting down locating executor service
+    D [11:32:52 INFO]: Saved 0 license plates
+    D [11:32:52 INFO]: CarClear: 0 | true
+  pidfile staging: mort:0
   linii ERROR:
   bind port:
     B [11:32:17 INFO]: Starting Minecraft server on *:25,566
@@ -35,7 +49,7 @@ mod automat din marker: status port=25566 jar=b1.0827
     [11:32:54 INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
     [11:32:54 INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
     [11:32:54 INFO]: Saving usercache.json
-  libertate disc: 673 MiB
+  libertate disc: 672 MiB
   moduri voice/chat in pack:
     M voicechat-forge-1.16.5-2.3.23.jar
   configuri voicechat staging:
