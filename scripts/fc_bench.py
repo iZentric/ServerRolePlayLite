@@ -296,20 +296,20 @@ class JvmRun:
         self.stdin_fh = None
 
     def start(self):
-        if not os.path.exists(self.fifo):
-            os.mkfifo(self.fifo)
-        # un writer MASCARE deschis ca fifo-ul sa nu dea EOF serverului
-        self.writer = open(self.fifo, "w")
+        if os.path.exists(self.fifo):
+            os.unlink(self.fifo)
+        os.mkfifo(self.fifo)
+        # O_RDWR: deschiderea nu blocheaza nicioadata si serverul nu primeste EOF
+        # (modelul veche writer- apoi -reader deadlocka la fix acest open)
+        self.fifo_fd = os.open(self.fifo, os.O_RDWR)
         self.log_fh = open(self.logpath, "ab", buffering=0)
-        self.stdin_keep = open(self.fifo, "rb", buffering=0)
-        self.p = subprocess.Popen(self.cmd, stdin=self.stdin_keep, stdout=self.log_fh,
+        self.p = subprocess.Popen(self.cmd, stdin=self.fifo_fd, stdout=self.log_fh,
                                   stderr=subprocess.STDOUT, cwd=self.stage, start_new_session=True)
         self.log = ServerLog(self.logpath)
 
     def send(self, line):
         try:
-            self.writer.write(line + "\n")
-            self.writer.flush()
+            os.write(self.fifo_fd, (line + "\n").encode())
         except Exception as e:
             log(f"send('{line}') esuat: {e}")
 
@@ -344,12 +344,15 @@ class JvmRun:
         return "CLEAN"
 
     def close(self):
-        for fh in (getattr(self, "writer", None), getattr(self, "stdin_keep", None), getattr(self, "log_fh", None)):
-            try:
-                if fh:
-                    fh.close()
-            except Exception:
-                pass
+        try:
+            if getattr(self, "fifo_fd", None) is not None:
+                os.close(self.fifo_fd)
+        except Exception:
+            pass
+        try:
+            self.log_fh.close()
+        except Exception:
+            pass
 
 # NOTE: JvmRun.port e setate de apelant inainte de wait_done.
 
@@ -594,14 +597,14 @@ def main():
     t0 = time.monotonic()
     # stdin ca la smoke: FIFO cu writer mentinut (EOF grabit rupe instalarea bootstrap-ului)
     fifi = os.path.join(stage, ".fcbench-install-in")
-    if not os.path.exists(fifi):
-        os.mkfifo(fifi)
-    wr = open(fifi, "w")
-    rd = open(fifi, "rb", buffering=0)
+    if os.path.exists(fifi):
+        os.unlink(fifi)
+    os.mkfifo(fifi)
+    ifd = os.open(fifi, os.O_RDWR)
     with open(log_install, "wb") as lf:
-        ip = subprocess.Popen(cmd, cwd=stage, stdout=lf, stderr=subprocess.STDOUT, stdin=rd,
+        ip = subprocess.Popen(cmd, cwd=stage, stdout=lf, stderr=subprocess.STDOUT, stdin=ifd,
                               start_new_session=True)
-        rd.close()
+        os.close(ifd)
         limit = conf.get("install_timeout", 420)
         done_markers = ("Successfully installed", "Server installed", "install complete", "Done (")
         rc = None

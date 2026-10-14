@@ -1,1 +1,1 @@
-v4.17 2026-10-14 (live-pusher cu clone partial/sparse — nu mai canibalizeaza bandwidth; snapshot la 2 min)
+v4.18 2026-10-14 (FIX DEADLOCK real: open(fifo,"w") fara cititor bloca infinit instalarea — inlocuit cu fd O_RDWR; si JvmRun la fel)
