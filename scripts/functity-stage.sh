@@ -327,6 +327,10 @@ PY
     say "  plugini Enabling: $(grep -cE 'Enabling ' "$LOG" 2>/dev/null) | ultimi 6 linii:"
     tail -6 "$LOG" 2>/dev/null | sed 's/^/    /' | tee -a "$REPORT"
     say "  libertate disc: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB"
+    say "  moduri voice/chat in pack:"
+    ls "$D/mods" 2>/dev/null | grep -iE 'voice|chat|talk|plastic' | sed 's/^/    M /' | tee -a "$REPORT"
+    say "  configuri voicechat gasite:"
+    find "$D/config" -iname '*voice*' -o -iname '*chat*' 2>/dev/null | head -8 | sed 's/^/    C /' | tee -a "$REPORT"
     finish 0
     ;;
   *)
