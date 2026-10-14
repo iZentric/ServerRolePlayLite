@@ -263,7 +263,16 @@ PY
     start_server "$JAVA"
     asteapta_done 480 || fail "nu porneste — vezi $LOG"
     verifica_log
-    say "STAGING SUS pentru testul tau (port $PORT). Oprire: functity-stage down"
+    ok=nu
+    for t in 1 2 3; do
+      sleep 15
+      kill -0 "$(cat "$D/server.pid" 2>/dev/null)" 2>/dev/null || { say "JVM-ul a murat dupa Done (rc final: $(tail -1 "$LOG" | head -c 160))"; break; }
+      if exec 3<>/dev/tcp/127.0.0.1/$PORT 2>/dev/null; then exec 3>&- 3<&-; ok=da; break; fi
+      say "  port $PORT inchis inca, reincep ($t/3)"
+    done
+    say "port local $PORT: $( [ $ok = da ] && echo VIU || echo INCHIS )"
+    echo $ok > "$D/.portviu"
+    say "STAGING $( [ $ok = da ] && echo SUS || echo SUS-PORT-PROBLEMA ) pentru testul tau (port $PORT). Oprire: functity-stage down"
     finish 0
     ;;
   down)
