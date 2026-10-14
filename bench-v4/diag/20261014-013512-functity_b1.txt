@@ -1,0 +1,39 @@
+=== driver log ===
+[01:35:10] === brat functity_b1: stage ===
+Traceback (most recent call last):
+  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/fc_bench.py", line 664, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/fc_bench.py", line 569, in main
+    bootjar = resolve_boot_jar(conf, os.path.abspath(jar) if jar else "", stage)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/fc_bench.py", line 398, in resolve_boot_jar
+    shutil_copy(jar, os.path.join(stage, kind))
+  File "/home/runner/work/ServerRolePlayLite/ServerRolePlayLite/scripts/fc_bench.py", line 403, in shutil_copy
+    shutil.copyfile(a, b)
+  File "/usr/lib/python3.12/shutil.py", line 260, in copyfile
+    with open(src, 'rb') as fsrc:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: ''
+=== install.log tail ===
+=== ls stage ===
+total 84
+drwxr-xr-x 6 runner runner 4096 Oct 14 01:35 .
+drwxr-xr-x 6 runner runner 4096 Oct 14 01:35 ..
+-rw-r--r-- 1 runner runner 1009 Oct 14 01:35 CITESTE-MA.txt
+-rw-r--r-- 1 runner runner  380 Oct 14 01:35 bukkit.yml
+-rw-r--r-- 1 runner runner  459 Oct 14 01:35 catserver.yml
+-rw-r--r-- 1 runner runner  186 Oct 14 01:35 commands.yml
+drwxr-xr-x 3 runner runner 4096 Oct 14 01:35 config
+drwxr-xr-x 2 runner runner 4096 Oct 14 01:35 defaultconfigs
+-rw-r--r-- 1 runner runner   81 Oct 14 01:35 eula.txt
+-rw-r--r-- 1 runner runner 1893 Oct 14 01:35 manifest-cuantic.json
+drwxr-xr-x 2 runner runner 4096 Oct 14 01:35 mods
+-rw-r--r-- 1 runner runner  135 Oct 14 01:35 ops.json
+drwxr-xr-x 2 runner runner 4096 Oct 14 01:35 plugins
+-rw-r--r-- 1 runner runner 8830 Oct 14 01:35 server-icon.png
+-rw-r--r-- 1 runner runner  647 Oct 14 01:35 server.properties
+-rw-r--r-- 1 runner runner 1449 Oct 14 01:35 spigot.yml
+-rw-r--r-- 1 runner runner 1269 Oct 14 01:35 start.bat
+-rw-r--r-- 1 runner runner 1269 Oct 14 01:35 start.sh
+-rw-r--r-- 1 runner runner 1058 Oct 14 01:35 unix_args.txt
