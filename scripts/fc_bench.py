@@ -603,7 +603,7 @@ def main():
                               start_new_session=True)
         rd.close()
         limit = conf.get("install_timeout", 420)
-        done_markers = ("Successfully installed", "Server installed", "install complete")
+        done_markers = ("Successfully installed", "Server installed", "install complete", "Done (")
         rc = None
         while time.monotonic() - t0 < limit:
             try:
