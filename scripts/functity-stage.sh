@@ -57,6 +57,14 @@ java11_adoptium(){
   echo "$D/jdk11/bin/java"
 }
 
+voicechat_port(){ # Simple Voice Chat isi lipeste propriul port TCP/UDP; pe staging
+  # productia tine 24454 -> il mutam pe 24455 ca sa nu se omoare reciproc
+  mkdir -p "$D/config/voicechat" 2>/dev/null || true
+  printf 'port=%s\n' "$((PORT+1))" > "$D/config/voicechat/voicechat-server.properties"
+  printf 'port=%s\n' "$((PORT+1))" > "$D/config/voicechat.properties" 2>/dev/null || true
+  say "  voicechat port -> $((PORT+1)) (evitam coliziunea cu productia pe $((PORT+1)-1))"
+}
+
 moduri_count(){ ls "$D/mods" 2>/dev/null | grep -c '\.jar$' || echo 0; }
 plugini_count(){ ls "$D/plugins" 2>/dev/null | grep -c '\.jar$' || echo 0; }
 
@@ -242,6 +250,7 @@ PY
     [ "$(port_viu "$PORT")" = nu ] || fail "portul $PORT e deja ocupat"
     JAVA=$(java11_gaseste) || JAVA=$(java11_adoptium) || fail "java11 indisponibil"
     export FUNCITY_XMX="$XMX" FUNCITY_JARFILE="$(cat "$D/.jarname")"
+    sync_port; voicechat_port
     say "--- PROBA 1: boot (include instalarea bibliotecilor Mohist daca lips) ---"
     start_server "$JAVA"
     if ! asteapta_done 240; then
@@ -276,6 +285,7 @@ PY
     JAVA=$(java11_gaseste) || JAVA=$(java11_adoptium) || fail "java11 indisponibil"
     export FUNCITY_XMX="$XMX" FUNCITY_JARFILE="$(cat "$D/.jarname")"
     sync_port
+    voicechat_port
     start_server "$JAVA"
     asteapta_done 480 || fail "nu porneste — vezi $LOG"
     verifica_log
