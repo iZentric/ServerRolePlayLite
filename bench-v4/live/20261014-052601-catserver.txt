@@ -1,0 +1,54 @@
+live-snapshot 7 la 05:26:00
+[05:11:47] === brat catserver: stage ===
+[05:11:47] === faza A: instalare bootstrap (limita 360s, nemasurata) ===
+[05:12:17] watch[30s] alive=True log=3656B ? libs=61 rss=155MB thr=20
+[05:12:47] watch[60s] alive=True log=52761B +49105B libs=71 rss=1349MB thr=34
+[05:13:18] watch[90s] alive=True log=127137B +74376B libs=71 rss=2102MB thr=83
+[05:13:28] === proba 1/3 ===
+[05:13:48] watch[120s] alive=False log=136341B +9204B libs=71 rss=1278MB thr=45
+[05:14:18] watch[150s] alive=False log=136341B CRESTE libs=71 rss=2215MB thr=99
+[05:14:48] watch[180s] alive=False log=136341B CRESTE libs=71 rss=2232MB thr=98
+[05:15:18] watch[210s] alive=False log=136341B CRESTE libs=71 rss=2232MB thr=84
+[05:15:48] watch[240s] alive=False log=136341B CRESTE libs=71 rss=2232MB thr=82
+[05:16:18] watch[270s] alive=False log=136341B CRESTE libs=71 rss=2232MB thr=81
+[05:16:48] watch[300s] alive=False log=136341B CRESTE libs=71 rss=2232MB thr=80
+[05:17:18] watch[330s] alive=False log=136341B CRESTE libs=71 rss=2232MB thr=80
+[05:17:48] watch[360s] alive=False log=136341B CRESTE libs=71 rss=2232MB thr=80
+[05:18:18] watch[390s] alive=False log=136341B CRESTE libs=71 rss=2233MB thr=80
+[05:18:48] watch[420s] alive=False log=136341B CRESTE libs=71 rss=2233MB thr=80
+[05:19:18] watch[450s] alive=False log=136341B CRESTE libs=71 rss=2234MB thr=78
+[05:19:25] === proba 2/3 ===
+[05:19:48] watch[480s] alive=False log=136341B CRESTE libs=71 rss=1671MB thr=59
+[05:20:18] watch[510s] alive=False log=136341B CRESTE libs=71 rss=2234MB thr=96
+[05:20:48] watch[540s] alive=False log=136341B CRESTE libs=71 rss=2235MB thr=95
+[05:21:18] watch[570s] alive=False log=136341B CRESTE libs=71 rss=2234MB thr=81
+[05:21:48] watch[600s] alive=False log=136341B CRESTE libs=71 rss=2234MB thr=80
+[05:22:18] watch[630s] alive=False log=136341B CRESTE libs=71 rss=2231MB thr=79
+[05:22:48] watch[660s] alive=False log=136341B CRESTE libs=71 rss=2231MB thr=81
+[05:23:18] watch[690s] alive=False log=136341B CRESTE libs=71 rss=2231MB thr=79
+[05:23:48] watch[720s] alive=False log=136341B CRESTE libs=71 rss=2231MB thr=78
+[05:24:18] watch[750s] alive=False log=136341B CRESTE libs=71 rss=2236MB thr=78
+[05:24:48] watch[780s] alive=False log=136341B CRESTE libs=71 rss=2237MB thr=78
+[05:25:18] watch[810s] alive=False log=136341B CRESTE libs=71 rss=0MB thr=1
+[05:25:18] === proba 3/3 ===
+[05:25:48] watch[840s] alive=False log=136341B CRESTE libs=71 rss=1787MB thr=64
+
+--- driver tail ---
+2;1m    +==================+[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    Current version: [31;1m14.2.12[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    New version: [31;1m15.12.6[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    A new version is available! Downloading it now...[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    Update downloaded successfully, it will be applied on the next restart.[0;39m
+[05:13:23] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[05:13:24] [Craft Scheduler Thread - 4/WARN]: There is a new EssentialsX version available for download: 2.22.0.
+[05:13:24] [Craft Scheduler Thread - 4/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
+[05:13:24] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m
+[05:13:24] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
+
+[05:26:00] [Craft Scheduler Thread - 1/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    Version: [32;1m15.12.6[0;39m
+[05:26:00] [Craft Scheduler Thread - 1/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    Commit: [32;1mc8c321f[0;39m
+[05:26:00] [Craft Scheduler Thread - 1/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m    This is the latest version![0;39m
+[05:26:00] [Craft Scheduler Thread - 1/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[05:26:00] [Craft Scheduler Thread - 1/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[34;1mDo you have issues? Read our troubleshooting guide: [33;1mhttps://skinsrestorer.net/docs/troubleshooting[0;39m
+[05:26:00] [Craft Scheduler Thread - 1/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[34;1mWant to support SkinsRestorer or receive priority support? Become a supporter: [33;1mhttps://skinsrestorer.net/pricing[0;39m
