@@ -622,8 +622,12 @@ def main():
         results.append(res)
         if res.get("boot_reusit"):
             boot_times.append(res["boot_timp_real_s"])
+        else:
+            log(f"proba {i}: boot ESUAT ({res.get('boot_esec_motiv')}) — restul probelor se sarta (fail-fast)")
+            break
     okn = len(boot_times)
     report["probe"] = results
+    open(os.path.join(outdir, "heartbeat"), "w").write(str(time.time()))
     report["probate_reusite"] = okn
     if okn:
         report["boot_medie_s"] = round(statistics.mean(boot_times), 2)
