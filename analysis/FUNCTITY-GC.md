@@ -1,6 +1,6 @@
-# FUNCTITY-GC — pauzele GC ale FC-BENCH v4, reprocesate din artefacte (2026-10-14 11:34 UTC)
+# FUNCTITY-GC — pauzele GC ale FC-BENCH v4, reprocesate din artefacte (2026-10-14 11:39 UTC)
 
-Alergare CI: 38557476084 · artefacte: run 38510786719: fcbench-catserver fcbench-functity_b0 fcbench-functity_b1 fcbench-oficial1237  | jurnale gc: 12;run 38519665645: fcbench-catserver fcbench-functity_b0 fcbench-functity_b1 fcbench-oficial1237  | jurnale gc: 12; · rc parser: RC=0
+Alergare CI: 38558064589 · artefacte: run 38510786719: fcbench-catserver fcbench-functity_b0 fcbench-functity_b1 fcbench-oficial1237  | jurnale gc: 12;run 38519665645: fcbench-catserver fcbench-functity_b0 fcbench-functity_b1 fcbench-oficial1237  | jurnale gc: 12; · rc parser: RC=0
 Jurnale brute: https://github.com/iZentric/ServerRolePlayLite/tree/functity-out/bench-v4/gc
 
 
@@ -8,25 +8,27 @@ FC-GC: pauzele STW din -Xlog:gc* (Java 11 G1) ale alergarilor FC-BENCH v4, repro
 
 ## Alergare 38510786719
 
-| brat | probe | pauze (toate) | max ms | p95 ms | medie ms | Full-GC | idle p95/proba ms | idle max/proba ms | idle pauze/min | boot total ms/proba |
-|---|---|---|---|---|---|---|---|---|---|---|
-| CatServer din pack (motorul istoric al serverului) | 3/3 | 151 | 146.3 | 94.6 | 30.64 | 3 | 32.0/NEMASURAT/33.8 | 32.0/NEMASURAT/33.8 | 0.31/NEMASURAT/0.27 | 1479/1545/1536 |
-| FunCity b0 — build propriu, pin 754b578e, FARA patch-uri (baseline) | 3/3 | 143 | 105.2 | 75.0 | 29.90 | 0 | 42.6/NEMASURAT/NEMASURAT | 42.6/NEMASURAT/NEMASURAT | 102.51/NEMASURAT/NEMASURAT | 1372/1446/1381 |
-| FunCity b1.2256 — baseline + P0b/P0c/P0d + P1 dropper-guard | 3/3 | 147 | 96.7 | 76.4 | 27.72 | 0 | NEMASURAT/NEMASURAT/45.0 | NEMASURAT/NEMASURAT/45.0 | NEMASURAT/NEMASURAT/1034.48 | 1332/1360/1339 |
-| Mohist oficial 1.16.5-1237 (referinta) | 3/3 | 150 | 118.6 | 81.0 | 30.61 | 0 | 37.0/NEMASURAT/NEMASURAT | 37.0/NEMASURAT/NEMASURAT | 0.35/NEMASURAT/NEMASURAT | 1592/1476/1486 |
+| brat | probe | boot: pauze/proba | boot: total ms/proba | boot max ms | boot p95 ms | idle (dupa Done): pauze / fereastra | idle max ms | Full-GC | heap dupa ultimul young (MB) |
+|---|---|---|---|---|---|---|---|---|---|
+| CatServer din pack (motorul istoric al serverului) | 3/3 | 49/47/53 | 1479/1545/1536 | 146.3 | 94.6 | 2 / 929 s (0.13/min) | 33.8 | 3 — (System.gc()) @0.534s 5.061ms; (System.gc()) @0.555s 4.787ms; (System.gc()) @0.555s 5.139ms | 635/624/632 |
+| FunCity b0 — build propriu, pin 754b578e, FARA patch-uri (baseline) | 3/3 | 47/48/45 | 1372/1446/1381 | 105.2 | 75.0 | 3 / 929 s (0.19/min) | 42.6 | 0 | 532/549/544 |
+| FunCity b1.2256 — baseline + P0b/P0c/P0d + P1 dropper-guard | 3/3 | 53/47/46 | 1332/1360/1339 | 96.7 | 76.4 | 1 / 928 s (0.07/min) | 45.0 | 0 | 545/558/560 |
+| Mohist oficial 1.16.5-1237 (referinta) | 3/3 | 53/48/48 | 1592/1476/1486 | 118.6 | 81.0 | 1 / 929 s (0.07/min) | 37.0 | 0 | 572/544/547 |
 
 ## Alergare 38519665645
 
-| brat | probe | pauze (toate) | max ms | p95 ms | medie ms | Full-GC | idle p95/proba ms | idle max/proba ms | idle pauze/min | boot total ms/proba |
-|---|---|---|---|---|---|---|---|---|---|---|
-| CatServer din pack (motorul istoric al serverului) | 3/3 | 149 | 174.4 | 99.3 | 32.78 | 3 | NEMASURAT/NEMASURAT/49.0 | NEMASURAT/NEMASURAT/49.0 | NEMASURAT/NEMASURAT/71.17 | 1723/1613/1499 |
-| FunCity b0 — build propriu, pin 754b578e, FARA patch-uri (baseline) | 3/3 | 143 | 83.6 | 70.7 | 30.99 | 0 | NEMASURAT/NEMASURAT/42.1 | NEMASURAT/NEMASURAT/42.1 | NEMASURAT/NEMASURAT/4.30 | 1466/1441/1454 |
-| FunCity b1.2256 — baseline + P0b/P0c/P0d + P1 dropper-guard | 3/3 | 139 | 127.5 | 71.7 | 31.47 | 0 | 51.0/NEMASURAT/NEMASURAT | 51.0/NEMASURAT/NEMASURAT | 350.88/NEMASURAT/NEMASURAT | 1558/1317/1449 |
-| Mohist oficial 1.16.5-1237 (referinta) | 3/3 | 141 | 98.6 | 60.0 | 26.04 | 0 | 34.2/37.3/NEMASURAT | 34.2/37.3/NEMASURAT | 3.85/0.29/NEMASURAT | 1176/1237/1186 |
+| brat | probe | boot: pauze/proba | boot: total ms/proba | boot max ms | boot p95 ms | idle (dupa Done): pauze / fereastra | idle max ms | Full-GC | heap dupa ultimul young (MB) |
+|---|---|---|---|---|---|---|---|---|---|
+| CatServer din pack (motorul istoric al serverului) | 3/3 | 50/53/45 | 1723/1613/1499 | 174.4 | 99.3 | 1 / 928 s (0.07/min) | 49.0 | 3 — (System.gc()) @0.437s 5.378ms; (System.gc()) @0.459s 5.679ms; (System.gc()) @0.473s 5.726ms | 653/617/625 |
+| FunCity b0 — build propriu, pin 754b578e, FARA patch-uri (baseline) | 3/3 | 48/45/47 | 1466/1441/1454 | 83.6 | 70.7 | 3 / 929 s (0.19/min) | 42.1 | 0 | 516/550/553 |
+| FunCity b1.2256 — baseline + P0b/P0c/P0d + P1 dropper-guard | 3/3 | 49/43/46 | 1558/1317/1449 | 127.5 | 71.7 | 1 / 929 s (0.07/min) | 51.0 | 0 | 535/550/551 |
+| Mohist oficial 1.16.5-1237 (referinta) | 3/3 | 48/45/46 | 1176/1237/1186 | 98.6 | 68.0 | 2 / 929 s (0.13/min) | 37.3 | 0 | 536/557/547 |
 
 Semnificatie: pauza = timp in care TOATE firele serverului stau (STW). Un tick are 50 ms; o pauza sub ~10 ms
-nu se vede in joc, una peste 50 ms = tick sarit. `idle` = dupa `Done`, server gol cu 36 moduri + 14 plugini;
-nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fereastra masurata.
+nu se vede in joc, una peste 50 ms = tick sarit. `boot` = de la pornirea JVM pana la `Done` (incarcare moduri,
+nu gameplay). `idle` = dupa `Done`, server gol cu 36 moduri + 14 plugini, fara jucatori — 0 pauze inseamna
+ca heap-ul nu s-a umplut in fereastra, nu ca GC-ul ar fi gratuit sub sarcina. Full-GC cu `(System.gc())`
+= cerut explicit de cod la pornire, nu presiune de memorie.
 
 ```json
 {
@@ -50,25 +52,53 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
       "p99_ms": 145.7
      },
      "full_gc_total": 3,
-     "idle_p95_ms_pe_proba": [
-      32.0,
-      null,
-      33.8
+     "full_detalii": [
+      "(System.gc()) @0.534s 5.061ms",
+      "(System.gc()) @0.555s 4.787ms",
+      "(System.gc()) @0.555s 5.139ms"
      ],
-     "idle_max_ms_pe_proba": [
-      32.0,
-      null,
-      33.8
-     ],
-     "idle_pauze_pe_minut_pe_proba": [
-      0.31,
-      null,
-      0.27
-     ],
-     "boot_total_ms_pe_proba": [
-      1478.7,
-      1545.4,
-      1536.0
+     "boot": {
+      "pauze_pe_proba": [
+       49,
+       47,
+       53
+      ],
+      "total_ms_pe_proba": [
+       1478.7,
+       1545.4,
+       1536.0
+      ],
+      "pooled": {
+       "n": 149,
+       "total_ms": 4560.1,
+       "max_ms": 146.3,
+       "medie_ms": 30.6,
+       "p95_ms": 94.6,
+       "p99_ms": 145.7
+      }
+     },
+     "idle": {
+      "pauze_total": 2,
+      "fereastra_total_s": 928.8,
+      "pauze_pe_minut": 0.129,
+      "pauze_pe_proba": [
+       1,
+       0,
+       1
+      ],
+      "pooled": {
+       "n": 2,
+       "total_ms": 65.9,
+       "max_ms": 33.8,
+       "medie_ms": 32.94,
+       "p95_ms": 33.8,
+       "p99_ms": 33.8
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      635.0,
+      624.0,
+      632.0
      ],
      "probe": [
       {
@@ -89,10 +119,15 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 1
        },
        "full_gc": 1,
+       "full_detalii": [
+        "(System.gc()) @0.555s 4.787ms"
+       ],
        "young_max_ms": 146.3,
        "heap_dupa_ultimul_young_mb": 635.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 238.067,
+       "ultima_pauza_s": 238.067,
+       "jvm_iesire_s": 355.485,
+       "durata_jurnal_s": 355.485,
        "boot_s_folosit": 46.01,
        "boot": {
         "n": 49,
@@ -109,8 +144,9 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "medie_ms": 32.03,
         "p95_ms": 32.0,
         "p99_ms": 32.0,
-        "pauze_pe_minut": 0.31,
-        "timp_oprit_pct": 0.017
+        "fereastra_s": 309.5,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0103
        },
        "fisier": "gc-trial1.log",
        "linii_jurnal": 651
@@ -133,10 +169,15 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 1
        },
        "full_gc": 1,
+       "full_detalii": [
+        "(System.gc()) @0.534s 5.061ms"
+       ],
        "young_max_ms": 132.5,
        "heap_dupa_ultimul_young_mb": 624.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 41.819,
+       "ultima_pauza_s": 41.819,
+       "jvm_iesire_s": 351.61,
+       "durata_jurnal_s": 351.61,
        "boot_s_folosit": 42.02,
        "boot": {
         "n": 47,
@@ -149,10 +190,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial2.log",
        "linii_jurnal": 612
@@ -175,10 +219,15 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 1
        },
        "full_gc": 1,
+       "full_detalii": [
+        "(System.gc()) @0.555s 5.139ms"
+       ],
        "young_max_ms": 145.7,
        "heap_dupa_ultimul_young_mb": 632.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 260.448,
+       "ultima_pauza_s": 260.448,
+       "jvm_iesire_s": 351.663,
+       "durata_jurnal_s": 351.663,
        "boot_s_folosit": 42.01,
        "boot": {
         "n": 53,
@@ -195,8 +244,9 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "medie_ms": 33.85,
         "p95_ms": 33.8,
         "p99_ms": 33.8,
-        "pauze_pe_minut": 0.27,
-        "timp_oprit_pct": 0.015
+        "fereastra_s": 309.7,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0109
        },
        "fisier": "gc-trial3.log",
        "linii_jurnal": 701
@@ -219,25 +269,49 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
       "p99_ms": 85.6
      },
      "full_gc_total": 0,
-     "idle_p95_ms_pe_proba": [
-      42.6,
-      null,
-      null
-     ],
-     "idle_max_ms_pe_proba": [
-      42.6,
-      null,
-      null
-     ],
-     "idle_pauze_pe_minut_pe_proba": [
-      102.51,
-      null,
-      null
-     ],
-     "boot_total_ms_pe_proba": [
-      1371.7,
-      1446.3,
-      1380.8
+     "full_detalii": [],
+     "boot": {
+      "pauze_pe_proba": [
+       47,
+       48,
+       45
+      ],
+      "total_ms_pe_proba": [
+       1371.7,
+       1446.3,
+       1380.8
+      ],
+      "pooled": {
+       "n": 140,
+       "total_ms": 4198.8,
+       "max_ms": 105.2,
+       "medie_ms": 29.99,
+       "p95_ms": 75.0,
+       "p99_ms": 85.6
+      }
+     },
+     "idle": {
+      "pauze_total": 3,
+      "fereastra_total_s": 928.9,
+      "pauze_pe_minut": 0.194,
+      "pauze_pe_proba": [
+       3,
+       0,
+       0
+      ],
+      "pooled": {
+       "n": 3,
+       "total_ms": 77.0,
+       "max_ms": 42.6,
+       "medie_ms": 25.65,
+       "p95_ms": 42.6,
+       "p99_ms": 42.6
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      532.0,
+      549.0,
+      544.0
      ],
      "probe": [
       {
@@ -258,10 +332,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 105.2,
        "heap_dupa_ultimul_young_mb": 532.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 47.766,
+       "ultima_pauza_s": 47.766,
+       "jvm_iesire_s": 355.594,
+       "durata_jurnal_s": 355.594,
        "boot_s_folosit": 46.01,
        "boot": {
         "n": 47,
@@ -278,8 +355,9 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "medie_ms": 25.65,
         "p95_ms": 42.6,
         "p99_ms": 42.6,
-        "pauze_pe_minut": 102.51,
-        "timp_oprit_pct": 4.382
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.581,
+        "timp_oprit_pct": 0.0249
        },
        "fisier": "gc-trial1.log",
        "linii_jurnal": 644
@@ -302,10 +380,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 85.6,
        "heap_dupa_ultimul_young_mb": 549.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 41.546,
+       "ultima_pauza_s": 41.546,
+       "jvm_iesire_s": 351.66,
+       "durata_jurnal_s": 351.66,
        "boot_s_folosit": 42.01,
        "boot": {
         "n": 48,
@@ -318,10 +399,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.7,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial2.log",
        "linii_jurnal": 620
@@ -344,10 +428,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 84.2,
        "heap_dupa_ultimul_young_mb": 544.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 39.127,
+       "ultima_pauza_s": 39.127,
+       "jvm_iesire_s": 349.603,
+       "durata_jurnal_s": 349.603,
        "boot_s_folosit": 40.01,
        "boot": {
         "n": 45,
@@ -360,10 +447,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial3.log",
        "linii_jurnal": 581
@@ -386,25 +476,49 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
       "p99_ms": 93.2
      },
      "full_gc_total": 0,
-     "idle_p95_ms_pe_proba": [
-      null,
-      null,
-      45.0
-     ],
-     "idle_max_ms_pe_proba": [
-      null,
-      null,
-      45.0
-     ],
-     "idle_pauze_pe_minut_pe_proba": [
-      null,
-      null,
-      1034.48
-     ],
-     "boot_total_ms_pe_proba": [
-      1331.5,
-      1359.6,
-      1339.0
+     "full_detalii": [],
+     "boot": {
+      "pauze_pe_proba": [
+       53,
+       47,
+       46
+      ],
+      "total_ms_pe_proba": [
+       1331.5,
+       1359.6,
+       1339.0
+      ],
+      "pooled": {
+       "n": 146,
+       "total_ms": 4030.0,
+       "max_ms": 96.7,
+       "medie_ms": 27.6,
+       "p95_ms": 76.4,
+       "p99_ms": 93.2
+      }
+     },
+     "idle": {
+      "pauze_total": 1,
+      "fereastra_total_s": 928.3,
+      "pauze_pe_minut": 0.065,
+      "pauze_pe_proba": [
+       0,
+       0,
+       1
+      ],
+      "pooled": {
+       "n": 1,
+       "total_ms": 45.0,
+       "max_ms": 45.0,
+       "medie_ms": 44.95,
+       "p95_ms": 45.0,
+       "p99_ms": 45.0
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      545.0,
+      558.0,
+      560.0
      ],
      "probe": [
       {
@@ -425,10 +539,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 96.7,
        "heap_dupa_ultimul_young_mb": 545.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 34.222,
+       "ultima_pauza_s": 34.222,
+       "jvm_iesire_s": 345.415,
+       "durata_jurnal_s": 345.415,
        "boot_s_folosit": 36.01,
        "boot": {
         "n": 53,
@@ -441,10 +558,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.4,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial1.log",
        "linii_jurnal": 683
@@ -467,10 +587,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 76.4,
        "heap_dupa_ultimul_young_mb": 558.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 31.886,
+       "ultima_pauza_s": 31.886,
+       "jvm_iesire_s": 341.521,
+       "durata_jurnal_s": 341.521,
        "boot_s_folosit": 32.01,
        "boot": {
         "n": 47,
@@ -483,10 +606,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.5,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial2.log",
        "linii_jurnal": 605
@@ -509,10 +635,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 90.9,
        "heap_dupa_ultimul_young_mb": 560.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 32.068,
+       "ultima_pauza_s": 32.068,
+       "jvm_iesire_s": 341.444,
+       "durata_jurnal_s": 341.444,
        "boot_s_folosit": 32.01,
        "boot": {
         "n": 46,
@@ -529,8 +658,9 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "medie_ms": 44.95,
         "p95_ms": 45.0,
         "p99_ms": 45.0,
-        "pauze_pe_minut": 1034.48,
-        "timp_oprit_pct": 77.505
+        "fereastra_s": 309.4,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0145
        },
        "fisier": "gc-trial3.log",
        "linii_jurnal": 605
@@ -553,25 +683,49 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
       "p99_ms": 114.5
      },
      "full_gc_total": 0,
-     "idle_p95_ms_pe_proba": [
-      37.0,
-      null,
-      null
-     ],
-     "idle_max_ms_pe_proba": [
-      37.0,
-      null,
-      null
-     ],
-     "idle_pauze_pe_minut_pe_proba": [
-      0.35,
-      null,
-      null
-     ],
-     "boot_total_ms_pe_proba": [
-      1591.6,
-      1475.8,
-      1486.4
+     "full_detalii": [],
+     "boot": {
+      "pauze_pe_proba": [
+       53,
+       48,
+       48
+      ],
+      "total_ms_pe_proba": [
+       1591.6,
+       1475.8,
+       1486.4
+      ],
+      "pooled": {
+       "n": 149,
+       "total_ms": 4553.8,
+       "max_ms": 118.6,
+       "medie_ms": 30.56,
+       "p95_ms": 81.0,
+       "p99_ms": 114.5
+      }
+     },
+     "idle": {
+      "pauze_total": 1,
+      "fereastra_total_s": 928.6,
+      "pauze_pe_minut": 0.065,
+      "pauze_pe_proba": [
+       1,
+       0,
+       0
+      ],
+      "pooled": {
+       "n": 1,
+       "total_ms": 37.0,
+       "max_ms": 37.0,
+       "medie_ms": 37.05,
+       "p95_ms": 37.0,
+       "p99_ms": 37.0
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      572.0,
+      544.0,
+      547.0
      ],
      "probe": [
       {
@@ -592,10 +746,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 118.6,
        "heap_dupa_ultimul_young_mb": 572.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 222.26,
+       "ultima_pauza_s": 222.26,
+       "jvm_iesire_s": 359.451,
+       "durata_jurnal_s": 359.451,
        "boot_s_folosit": 50.02,
        "boot": {
         "n": 53,
@@ -612,8 +769,9 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "medie_ms": 37.05,
         "p95_ms": 37.0,
         "p99_ms": 37.0,
-        "pauze_pe_minut": 0.35,
-        "timp_oprit_pct": 0.022
+        "fereastra_s": 309.4,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.012
        },
        "fisier": "gc-trial1.log",
        "linii_jurnal": 696
@@ -636,10 +794,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 114.5,
        "heap_dupa_ultimul_young_mb": 544.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 41.767,
+       "ultima_pauza_s": 41.767,
+       "jvm_iesire_s": 351.601,
+       "durata_jurnal_s": 351.601,
        "boot_s_folosit": 42.01,
        "boot": {
         "n": 48,
@@ -652,10 +813,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial2.log",
        "linii_jurnal": 618
@@ -678,10 +842,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 84.8,
        "heap_dupa_ultimul_young_mb": 547.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 41.598,
+       "ultima_pauza_s": 41.598,
+       "jvm_iesire_s": 351.59,
+       "durata_jurnal_s": 351.59,
        "boot_s_folosit": 42.01,
        "boot": {
         "n": 48,
@@ -694,10 +861,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial3.log",
        "linii_jurnal": 618
@@ -724,25 +894,53 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
       "p99_ms": 166.2
      },
      "full_gc_total": 3,
-     "idle_p95_ms_pe_proba": [
-      null,
-      null,
-      49.0
+     "full_detalii": [
+      "(System.gc()) @0.437s 5.378ms",
+      "(System.gc()) @0.459s 5.679ms",
+      "(System.gc()) @0.473s 5.726ms"
      ],
-     "idle_max_ms_pe_proba": [
-      null,
-      null,
-      49.0
-     ],
-     "idle_pauze_pe_minut_pe_proba": [
-      null,
-      null,
-      71.17
-     ],
-     "boot_total_ms_pe_proba": [
-      1723.0,
-      1613.4,
-      1499.1
+     "boot": {
+      "pauze_pe_proba": [
+       50,
+       53,
+       45
+      ],
+      "total_ms_pe_proba": [
+       1723.0,
+       1613.4,
+       1499.1
+      ],
+      "pooled": {
+       "n": 148,
+       "total_ms": 4835.5,
+       "max_ms": 174.4,
+       "medie_ms": 32.67,
+       "p95_ms": 99.3,
+       "p99_ms": 166.2
+      }
+     },
+     "idle": {
+      "pauze_total": 1,
+      "fereastra_total_s": 928.5,
+      "pauze_pe_minut": 0.065,
+      "pauze_pe_proba": [
+       0,
+       0,
+       1
+      ],
+      "pooled": {
+       "n": 1,
+       "total_ms": 49.0,
+       "max_ms": 49.0,
+       "medie_ms": 49.0,
+       "p95_ms": 49.0,
+       "p99_ms": 49.0
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      653.0,
+      617.0,
+      625.0
      ],
      "probe": [
       {
@@ -763,10 +961,15 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 1
        },
        "full_gc": 1,
+       "full_detalii": [
+        "(System.gc()) @0.473s 5.726ms"
+       ],
        "young_max_ms": 174.4,
        "heap_dupa_ultimul_young_mb": 653.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 37.036,
+       "ultima_pauza_s": 37.036,
+       "jvm_iesire_s": 346.855,
+       "durata_jurnal_s": 346.855,
        "boot_s_folosit": 37.32,
        "boot": {
         "n": 50,
@@ -779,10 +982,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.5,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial1.log",
        "linii_jurnal": 651
@@ -805,10 +1011,15 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 1
        },
        "full_gc": 1,
+       "full_detalii": [
+        "(System.gc()) @0.459s 5.679ms"
+       ],
        "young_max_ms": 146.8,
        "heap_dupa_ultimul_young_mb": 617.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 33.174,
+       "ultima_pauza_s": 33.174,
+       "jvm_iesire_s": 342.81,
+       "durata_jurnal_s": 342.81,
        "boot_s_folosit": 33.31,
        "boot": {
         "n": 53,
@@ -821,10 +1032,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.5,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial2.log",
        "linii_jurnal": 688
@@ -847,10 +1061,15 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 1
        },
        "full_gc": 1,
+       "full_detalii": [
+        "(System.gc()) @0.437s 5.378ms"
+       ],
        "young_max_ms": 166.2,
        "heap_dupa_ultimul_young_mb": 625.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 35.153,
+       "ultima_pauza_s": 35.153,
+       "jvm_iesire_s": 343.852,
+       "durata_jurnal_s": 343.852,
        "boot_s_folosit": 34.31,
        "boot": {
         "n": 45,
@@ -867,8 +1086,9 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "medie_ms": 49.0,
         "p95_ms": 49.0,
         "p99_ms": 49.0,
-        "pauze_pe_minut": 71.17,
-        "timp_oprit_pct": 5.812
+        "fereastra_s": 309.5,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0158
        },
        "fisier": "gc-trial3.log",
        "linii_jurnal": 599
@@ -891,25 +1111,49 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
       "p99_ms": 81.4
      },
      "full_gc_total": 0,
-     "idle_p95_ms_pe_proba": [
-      null,
-      null,
-      42.1
-     ],
-     "idle_max_ms_pe_proba": [
-      null,
-      null,
-      42.1
-     ],
-     "idle_pauze_pe_minut_pe_proba": [
-      null,
-      null,
-      4.3
-     ],
-     "boot_total_ms_pe_proba": [
-      1465.5,
-      1440.6,
-      1454.5
+     "full_detalii": [],
+     "boot": {
+      "pauze_pe_proba": [
+       48,
+       45,
+       47
+      ],
+      "total_ms_pe_proba": [
+       1465.5,
+       1440.6,
+       1454.5
+      ],
+      "pooled": {
+       "n": 140,
+       "total_ms": 4360.7,
+       "max_ms": 83.6,
+       "medie_ms": 31.15,
+       "p95_ms": 70.7,
+       "p99_ms": 81.4
+      }
+     },
+     "idle": {
+      "pauze_total": 3,
+      "fereastra_total_s": 928.8,
+      "pauze_pe_minut": 0.194,
+      "pauze_pe_proba": [
+       0,
+       0,
+       3
+      ],
+      "pooled": {
+       "n": 3,
+       "total_ms": 70.5,
+       "max_ms": 42.1,
+       "medie_ms": 23.5,
+       "p95_ms": 42.1,
+       "p99_ms": 42.1
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      516.0,
+      550.0,
+      553.0
      ],
      "probe": [
       {
@@ -930,10 +1174,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 83.6,
        "heap_dupa_ultimul_young_mb": 516.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 45.626,
+       "ultima_pauza_s": 45.626,
+       "jvm_iesire_s": 355.825,
+       "durata_jurnal_s": 355.825,
        "boot_s_folosit": 46.33,
        "boot": {
         "n": 48,
@@ -946,10 +1193,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.5,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial1.log",
        "linii_jurnal": 618
@@ -972,10 +1222,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 81.4,
        "heap_dupa_ultimul_young_mb": 550.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 41.404,
+       "ultima_pauza_s": 41.404,
+       "jvm_iesire_s": 351.188,
+       "durata_jurnal_s": 351.188,
        "boot_s_folosit": 41.57,
        "boot": {
         "n": 45,
@@ -988,10 +1241,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial2.log",
        "linii_jurnal": 581
@@ -1014,10 +1270,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 76.5,
        "heap_dupa_ultimul_young_mb": 553.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 86.236,
+       "ultima_pauza_s": 86.236,
+       "jvm_iesire_s": 354.0,
+       "durata_jurnal_s": 354.0,
        "boot_s_folosit": 44.33,
        "boot": {
         "n": 47,
@@ -1034,8 +1293,9 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "medie_ms": 23.5,
         "p95_ms": 42.1,
         "p99_ms": 42.1,
-        "pauze_pe_minut": 4.3,
-        "timp_oprit_pct": 0.168
+        "fereastra_s": 309.7,
+        "pauze_pe_minut": 0.581,
+        "timp_oprit_pct": 0.0228
        },
        "fisier": "gc-trial3.log",
        "linii_jurnal": 644
@@ -1058,25 +1318,49 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
       "p99_ms": 95.0
      },
      "full_gc_total": 0,
-     "idle_p95_ms_pe_proba": [
-      51.0,
-      null,
-      null
-     ],
-     "idle_max_ms_pe_proba": [
-      51.0,
-      null,
-      null
-     ],
-     "idle_pauze_pe_minut_pe_proba": [
-      350.88,
-      null,
-      null
-     ],
-     "boot_total_ms_pe_proba": [
-      1558.1,
-      1316.6,
-      1449.3
+     "full_detalii": [],
+     "boot": {
+      "pauze_pe_proba": [
+       49,
+       43,
+       46
+      ],
+      "total_ms_pe_proba": [
+       1558.1,
+       1316.6,
+       1449.3
+      ],
+      "pooled": {
+       "n": 138,
+       "total_ms": 4324.0,
+       "max_ms": 127.5,
+       "medie_ms": 31.33,
+       "p95_ms": 71.7,
+       "p99_ms": 95.0
+      }
+     },
+     "idle": {
+      "pauze_total": 1,
+      "fereastra_total_s": 928.9,
+      "pauze_pe_minut": 0.065,
+      "pauze_pe_proba": [
+       1,
+       0,
+       0
+      ],
+      "pooled": {
+       "n": 1,
+       "total_ms": 51.0,
+       "max_ms": 51.0,
+       "medie_ms": 51.05,
+       "p95_ms": 51.0,
+       "p99_ms": 51.0
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      535.0,
+      550.0,
+      551.0
      ],
      "probe": [
       {
@@ -1097,10 +1381,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 78.3,
        "heap_dupa_ultimul_young_mb": 535.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 48.751,
+       "ultima_pauza_s": 48.751,
+       "jvm_iesire_s": 358.195,
+       "durata_jurnal_s": 358.195,
        "boot_s_folosit": 48.58,
        "boot": {
         "n": 49,
@@ -1117,8 +1404,9 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "medie_ms": 51.05,
         "p95_ms": 51.0,
         "p99_ms": 51.0,
-        "pauze_pe_minut": 350.88,
-        "timp_oprit_pct": 29.851
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0165
        },
        "fisier": "gc-trial1.log",
        "linii_jurnal": 644
@@ -1141,10 +1429,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 94.0,
        "heap_dupa_ultimul_young_mb": 550.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 44.479,
+       "ultima_pauza_s": 44.479,
+       "jvm_iesire_s": 354.202,
+       "durata_jurnal_s": 354.202,
        "boot_s_folosit": 44.58,
        "boot": {
         "n": 43,
@@ -1157,10 +1448,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial2.log",
        "linii_jurnal": 555
@@ -1183,10 +1477,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 127.5,
        "heap_dupa_ultimul_young_mb": 551.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 42.998,
+       "ultima_pauza_s": 42.998,
+       "jvm_iesire_s": 352.724,
+       "durata_jurnal_s": 352.724,
        "boot_s_folosit": 43.07,
        "boot": {
         "n": 46,
@@ -1199,10 +1496,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.7,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial3.log",
        "linii_jurnal": 592
@@ -1225,25 +1525,49 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
       "p99_ms": 87.3
      },
      "full_gc_total": 0,
-     "idle_p95_ms_pe_proba": [
-      34.2,
-      37.3,
-      null
-     ],
-     "idle_max_ms_pe_proba": [
-      34.2,
-      37.3,
-      null
-     ],
-     "idle_pauze_pe_minut_pe_proba": [
-      3.85,
-      0.29,
-      null
-     ],
-     "boot_total_ms_pe_proba": [
-      1176.1,
-      1237.4,
-      1186.4
+     "full_detalii": [],
+     "boot": {
+      "pauze_pe_proba": [
+       48,
+       45,
+       46
+      ],
+      "total_ms_pe_proba": [
+       1176.1,
+       1237.4,
+       1186.4
+      ],
+      "pooled": {
+       "n": 139,
+       "total_ms": 3600.0,
+       "max_ms": 98.6,
+       "medie_ms": 25.9,
+       "p95_ms": 68.0,
+       "p99_ms": 87.3
+      }
+     },
+     "idle": {
+      "pauze_total": 2,
+      "fereastra_total_s": 928.7,
+      "pauze_pe_minut": 0.129,
+      "pauze_pe_proba": [
+       1,
+       1,
+       0
+      ],
+      "pooled": {
+       "n": 2,
+       "total_ms": 71.5,
+       "max_ms": 37.3,
+       "medie_ms": 35.77,
+       "p95_ms": 37.3,
+       "p99_ms": 37.3
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      536.0,
+      557.0,
+      547.0
      ],
      "probe": [
       {
@@ -1264,10 +1588,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 87.3,
        "heap_dupa_ultimul_young_mb": 536.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 55.92,
+       "ultima_pauza_s": 55.92,
+       "jvm_iesire_s": 349.911,
+       "durata_jurnal_s": 349.911,
        "boot_s_folosit": 40.32,
        "boot": {
         "n": 48,
@@ -1284,8 +1611,9 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "medie_ms": 34.21,
         "p95_ms": 34.2,
         "p99_ms": 34.2,
-        "pauze_pe_minut": 3.85,
-        "timp_oprit_pct": 0.219
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0111
        },
        "fisier": "gc-trial1.log",
        "linii_jurnal": 631
@@ -1308,10 +1636,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 98.6,
        "heap_dupa_ultimul_young_mb": 557.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 242.015,
+       "ultima_pauza_s": 242.015,
+       "jvm_iesire_s": 342.312,
+       "durata_jurnal_s": 342.312,
        "boot_s_folosit": 32.81,
        "boot": {
         "n": 45,
@@ -1328,8 +1659,9 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "medie_ms": 37.32,
         "p95_ms": 37.3,
         "p99_ms": 37.3,
-        "pauze_pe_minut": 0.29,
-        "timp_oprit_pct": 0.018
+        "fereastra_s": 309.5,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0121
        },
        "fisier": "gc-trial2.log",
        "linii_jurnal": 594
@@ -1352,10 +1684,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
         "Full": 0
        },
        "full_gc": 0,
+       "full_detalii": [],
        "young_max_ms": 83.3,
        "heap_dupa_ultimul_young_mb": 547.0,
        "heap_cap_mb": 1536.0,
-       "durata_jurnal_s": 33.767,
+       "ultima_pauza_s": 33.767,
+       "jvm_iesire_s": 343.658,
+       "durata_jurnal_s": 343.658,
        "boot_s_folosit": 34.05,
        "boot": {
         "n": 46,
@@ -1368,10 +1703,13 @@ nu e gameplay. Full-GC = 0 inseamna ca G1 nu a ajuns la colectare completa in fe
        "idle": {
         "n": 0,
         "total_ms": 0.0,
-        "max_ms": null,
-        "medie_ms": null,
-        "p95_ms": null,
-        "p99_ms": null
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
        },
        "fisier": "gc-trial3.log",
        "linii_jurnal": 592
