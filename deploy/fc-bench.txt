@@ -1,1 +1,1 @@
-v4.13 2026-10-14 (fail-fast la boot esuat + live heartbeat pe functity-out/bench-v4/live la fiecare 3 min)
+v4.14 2026-10-14 (FIX HANG: killpg pe grupul intreg la timeout de instalare — subprocess.run lasa nepotul JVM agatat de pipe; Popen+start_new_session si la probe)

@@ -26,7 +26,7 @@ Rulare (de CI): python3 fc_bench.py --arm-conf arm.json cu env:
   FC_OUT=director rezultate ; FC_TRIALS=3 FC_RUN_SECONDS=300 FC_BOOT_TIMEOUT=600
   FC_INSTALL_TIMEOUT=420 FC_EXCLUDE='libraries/* run/* version.json /*.jar'
 """
-import argparse, json, os, re, socket, statistics, struct, subprocess, sys, threading, time, uuid, zipfile
+import argparse, json, os, re, signal, socket, statistics, struct, subprocess, sys, threading, time, uuid, zipfile
 
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
 DONE_RE = re.compile(r"Done \(([0-9]+\.[0-9]+)s\)")
@@ -303,7 +303,7 @@ class JvmRun:
         self.log_fh = open(self.logpath, "ab", buffering=0)
         self.stdin_keep = open(self.fifo, "rb", buffering=0)
         self.p = subprocess.Popen(self.cmd, stdin=self.stdin_keep, stdout=self.log_fh,
-                                  stderr=subprocess.STDOUT, cwd=self.stage)
+                                  stderr=subprocess.STDOUT, cwd=self.stage, start_new_session=True)
         self.log = ServerLog(self.logpath)
 
     def send(self, line):
@@ -336,7 +336,10 @@ class JvmRun:
         while time.monotonic() - t0 < grace and self.p.poll() is None:
             time.sleep(2)
         if self.p.poll() is None:
-            self.p.kill()
+            try:
+                os.killpg(os.getpgid(self.p.pid), signal.SIGKILL)
+            except Exception:
+                self.p.kill()
             return "KILLED_DUPA_GRACE"
         return "CLEAN"
 
@@ -449,6 +452,11 @@ def one_trial(conf, stage, bootjar, port, idx, outdir, run_seconds):
         res["boot_timp_logic_s"] = j.done_log_s
     else:
         res["boot_esec_motiv"] = f"exit={getattr(j, 'exit_early', 'timeout')}"
+        try:
+            os.killpg(os.getpgid(j.p.pid), signal.SIGKILL)
+            j.p.wait(15)
+        except Exception:
+            pass
         res.update({"join_probe_ms": None, "join_probe_detaliu": "nu a bootat",
                     "tps_medie": None, "mspt_medie_ms": None, "overrun_count": 0, "overrun_max_ms": 0,
                     "critice": 0, "gc_pauze_ms_max": None})
@@ -584,14 +592,23 @@ def main():
     log_install = os.path.join(outdir, "install.log")
     cmd = ["java"] + conf["java_args"] + ["-jar", bootjar, "nogui"]
     t0 = time.monotonic()
-    rc = None
-    try:
-        with open(log_install, "wb") as lf:
-            r = subprocess.run(cmd, cwd=stage, stdout=lf, stderr=subprocess.STDOUT, input=b"",
-                               timeout=conf.get("install_timeout", 420))
-        rc = r.returncode
-    except subprocess.TimeoutExpired:
-        rc = "TIMEOUT(faza de instalare)"
+    with open(log_install, "wb") as lf:
+        ip = subprocess.Popen(cmd, cwd=stage, stdout=lf, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL,
+                              start_new_session=True)
+        try:
+            ip.wait(conf.get("install_timeout", 420))
+            rc = ip.returncode
+        except subprocess.TimeoutExpired:
+            # bootstrap-ul Mohist isi lasa urmasi prin pipes; omoaram TOT grupul, nu doar parintele
+            try:
+                os.killpg(os.getpgid(ip.pid), signal.SIGKILL)
+            except Exception:
+                ip.kill()
+            try:
+                ip.wait(20)
+            except Exception:
+                pass
+            rc = "TIMEOUT(grupul a fost omorat)"
     report["install_reusit"] = (rc == 0) or (time.monotonic() - t0 > 30)
     report["install_timp_s"] = round(time.monotonic() - t0, 1)
     report["install_cod"] = rc
