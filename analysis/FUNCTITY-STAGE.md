@@ -1,9 +1,12 @@
-# FUNCTITY-STAGE 2026-10-14 08:49:30 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-14 08:51:47 UTC — gazda → artefact → relay
 
 ```
-mod automat din marker: test port=25566 jar=b1.0827
-== FUNCTITY TEST (boot->stop->reboot->persistenta) — 2026-10-14 08:49:18 UTC ==
-ERORE: ruleaza intai assemble
-(sfarsit rc=1)
-RC=1
+mod automat din marker: backup port=25566 jar=b1.0827
+== FUNCTITY BACKUP — 2026-10-14 08:51:25 UTC ==
+tar scris: /home/mndvasi9/funcity-backup/prod-20261014-0851.tar.gz (156 MiB)
+integritate tar: OK (1178 intrari)
+verificare sha: OK
+rollback: copile /home/mndvasi9/funcity-backup/prod-20261014-0851.tar.gz inapoi in /home/mndvasi9/cuantic-live (procedura: opresti serverul, extragi in /home/mndvasi9/cuantic-live, pornești)
+(sfarsit rc=0)
+RC=0
 ```
