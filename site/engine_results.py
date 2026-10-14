@@ -387,6 +387,21 @@ def functity_panel():
                 '<div class="sub">Nicio măsurătoare FC-BENCH încă încărcată; secțiunea se populează '
                 'din <code>analysis/FUNCTITY-BENCH.md</code> după prima rulare verde.</div></section>')
     nume = d["brate"]
+    gc = d.get("gc") or {}
+    if gc.get("runde"):
+        parts = []
+        for key, label in nume.items():
+            ra = gc["runde"].get("A", {}).get(key)
+            rb = gc["runde"].get("B", {}).get(key)
+            if not (ra and rb):
+                continue
+            parts.append(f"{escape(label.split(' (')[0].split(' — ')[0])}: boot max {ra['boot_max_ms']:.0f}/{rb['boot_max_ms']:.0f} ms, "
+                         f"idle max {ra['idle_max_ms']:.0f}/{rb['idle_max_ms']:.0f} ms, Full-GC {ra['full_gc'] + rb['full_gc']}")
+        gc_html = ("<b>Pauze GC: MĂSURATE</b> (STW din <code>-Xlog:gc*</code>, reprocesate din artefactele A/B — "
+                   "<code>analysis/FUNCTITY-GC.md</code>): " + "; ".join(parts) +
+                   ". După „Done” (server gol) pauzele rămân în jurul unui tick (34–51 ms, 1–3 pe brat în ~930 s); GC sub sarcină cu jucători: NEMĂSURAT.")
+    else:
+        gc_html = "<b>Pauze GC: NEMĂSURAT</b> — jurnalul GC nu a fost încă reprocesat; nu inventăm 0."
     rows = []
     for key, label in nume.items():
         a = d["runde"].get("A", {}).get("arms", {}).get(key, {})
@@ -431,7 +446,7 @@ def functity_panel():
 <div class="card" style="margin-top:14px"><h3>Praguri bătute în cuie ÎNAINTE de rulare</h3><ul style="margin:6px 0 0 20px">{prag_rows}</ul>
 <p style="margin-top:10px"><b>Latenta de join cu client modat: NEMĂSURAT încă</b> — proba vanilla a fost respinsă
 corect de FML pe toate cele 4 motoare (mesaj „Forge client required”); bot-ul cu pack complet vine în runda următoare.
-<b>Pauze GC: NEMĂSURAT</b> în această rundă — parserul nu a recunoscut formatul, nu inventăm 0.</p></div>
+{gc_html}</p></div>
 <div class="note"><b>Ce înseamnă:</b> FunCity pornește identical cu Mohist oficial (la nivel de zgomot, fără regresie
 și fără câștig declarabil) și nu are erori critice pe niciun boot; în plus, ambele motoare Mohist-family termină
 boot-ul mai repede decât motorul istoric CatServer pe aceeași sarcină. <b>Ce NU înseamnă:</b> un titlu de „cel mai rapid”

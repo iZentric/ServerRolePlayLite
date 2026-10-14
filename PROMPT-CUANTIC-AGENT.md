@@ -34,6 +34,12 @@ CUM SE LUCREAZA (bucla fixa, fara paste pentru utilizator)
    jobul e "succes" degeaba - NU ma bucura verdele, cauta fisierul.
 4. Citesc verdictul cu git fetch + git show origin/...:analysis/X.md. Joburile care pot muri in
    mijloc (Cloud Shell) trebuie sa impinga verdictul DEVREME, inainte de orice asteptare lunga.
+5. Mai multe sesiuni pot lucra in paralel pe ramuri arena/* diferite; runner-ul self-hosted e UNUL
+   (verific `gh run list` inainte de orice job pe box). Triggerele pe cai (deploy/*.txt, scripts,
+   workflow-uri) NU au filtru de ramura: un merge/cherry-pick de pe alta ramura re-declanseaza tot
+   ce atinge - sincronizarea se impinge ca un commit separat cu `[skip ci]` in mesaj, iar commiturile
+   proprii separat. `gh run download` din afara CI nu merge (blob Azure blocat): artefactele se
+   recupereaza doar dintr-un job hosted care le publica pe git (model: fc-gc.yml).
 
 CIFRELE PE CARE LE AM (aceeasi metodologie: 1 jucator, warm 120 s, Spark, aceeasi masina)
 | heap | MSPT 10s med/p95/max | MSPT 1m max | GC young mediu | VmHWM=RSS |

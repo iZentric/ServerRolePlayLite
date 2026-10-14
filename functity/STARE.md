@@ -84,7 +84,12 @@ si pe site, sectiunea „FunCity — motorul propriu, măsurat, nu promis", cu g
 ## 8. Urmatorii pasi (in ordine)
 1. Bot mineflayer cu pachet complet → tinta „masurat" pentru latenta de join (singura marime din sectiunea 5 inca
    acoperita doar de respingerea corecta a clientului vanilla).
-2. Parser MSPT/GC pe formatul real din loguri (datele brute sint pastrate in functity-out/bench-v4/*/server-*.log,
-   deci se poate reprocessa fara reincarcare).
+2. ~~Parser MSPT/GC pe formatul real din loguri~~ → **GC FACUT** (2026-10-14 11:39 UTC): FC-GC
+   (`.github/workflows/fc-gc.yml` + `scripts/fc_gc_reprocess.py`) a reprocesat jurnalele `-Xlog:gc*` din
+   artefactele rundelor A/B fara alergare noua — verdict in `analysis/FUNCTITY-GC.md`, jurnale brute pe
+   `functity-out:bench-v4/gc/`. Rezultat: fara regresie b1 vs 1237/b0 (boot max 97/128 vs 119/99 vs 105/84 ms,
+   idle 1–3 pauze ≤ 51 ms in ~930 s, 0 Full-GC); CatServer are pauzele de boot cele mai mari (146/174 ms) si un
+   `Full (System.gc())` de 5 ms la pornire. **MSPT** ramine NEMASURAT pina la runda C (v4.2 trimite `forge tps`;
+   `ticks tps`/`mspt` erau comenzi necunoscute pe hibride — cauza reala a lipsei din A/B).
 3. FISE/STARE: upgrade „netestat" → „masurat" pentru cele cite sectiunea 7 le-a acoperit.
 4. Linie de trezire in box (MC-RUN v9, doar dupa acord).

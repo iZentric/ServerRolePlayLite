@@ -28,6 +28,20 @@ class FunctityPanelTest(unittest.TestCase):
         for forbidden in ("cel mai rapid server", "zero lag", "1000×"):
             self.assertNotIn(forbidden.lower(), page.lower())
 
+    def test_gc_paragraph_follows_snapshot(self):
+        d = engine_results.functity_data()
+        page = engine_results.functity_panel()
+        gc = d.get("gc", {}).get("runde", {})
+        if not gc:
+            self.assertIn("Pauze GC: NEMĂSURAT", page)
+            return
+        self.assertIn("Pauze GC: MĂSURATE", page)
+        for arm in d["brate"]:
+            a, b = gc.get("A", {}).get(arm), gc.get("B", {}).get(arm)
+            if a and b:
+                self.assertIn("boot max %.0f/%.0f ms" % (a["boot_max_ms"], b["boot_max_ms"]), page)
+        self.assertIn("sub sarcină cu jucători: NEMĂSURAT", page)
+
     def test_degrades_honestly_without_data(self):
         with patch.object(engine_results, "functity_data", return_value={}):
             page = engine_results.functity_panel()
