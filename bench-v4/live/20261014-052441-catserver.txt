@@ -1,0 +1,24 @@
+live-snapshot 43 la 05:24:35
+[03:11:01] === brat catserver: stage ===
+[03:11:02] === faza A: instalare bootstrap (limita 360s, nemasurata) ===
+[03:17:02] === proba 1/3 ===
+
+--- driver tail ---
+-------------------------------[0;39m
+[03:12:39] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    Current version: [31;1m14.2.12[0;39m
+[03:12:39] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[36;1m    New version: [31;1m15.12.6[0;39m
+[03:12:39] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    A new version is available! Downloading it now...[0;39m
+[03:12:39] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m    Update downloaded successfully, it will be applied on the next restart.[0;39m
+[03:12:39] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[03:12:39] [Craft Scheduler Thread - 3/WARN]: There is a new EssentialsX version available for download: 2.22.0.
+[03:12:39] [Craft Scheduler Thread - 3/WARN]: Download it here: https://essentialsx.net/downloads.html?branch=stable
+[03:12:40] [Craft Scheduler Thread - 0/INFO]: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m
+[03:12:42] [Server thread/INFO]: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
+[03:12:44] [Craft Scheduler Thread - 2/INFO]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
+
+[03:12:39] [Craft Scheduler Thread - 0/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[32;1m----------------------------------------------[0;39m
+[03:12:39] [Craft Scheduler Thread - 3/WARN] [Essentials]: There is a new EssentialsX version available for download: 2.22.0.
+[03:12:39] [Craft Scheduler Thread - 3/WARN] [Essentials]: Download it here: https://essentialsx.net/downloads.html?branch=stable
+[03:12:40] [Craft Scheduler Thread - 0/INFO] []: [33;1m[[32;22mSkinsRestorer[33;1m] [0;39m[GitHubUpdate] Update saved as plugins/update/SkinsRestorer.jar[0;39m
+[03:12:42] [Server thread/INFO] []: [ProtocolLib] The updater found an update: 5.4.0 (Running 4.8.0). Download at https://www.spigotmc.org/resources/protocollib.1997/
+[03:12:44] [Craft Scheduler Thread - 2/INFO] [Minecraft]: [ClaimChunk] An update for ClaimChunk is available! Your version: 0.0.21 | Latest version: 0.0.25-FIX1
