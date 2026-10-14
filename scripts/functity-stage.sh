@@ -19,6 +19,7 @@ CAND=${FUNCITY_JAR:-b1.2256}  # build din functity-out:builds/<CAND>/
 PORT=${FUNCITY_PORT:-25566}
 XMX=${FUNCITY_XMX:-3G}
 LOG=$D/stage.log; REPORT=/tmp/funcity-stage.txt
+mkdir -p "$(dirname "$REPORT")" 2>/dev/null; : > "$REPORT" 2>/dev/null || true
 say(){ echo "$*" | tee -a "$REPORT"; }
 fail(){ say "ERORE: $*"; finish 1; }
 finish(){ mkdir -p /tmp; cp "$REPORT" /tmp/funcity-stage.txt 2>/dev/null; say "(sfarsit rc=$1)"; exit "$1"; }
@@ -36,7 +37,9 @@ java11_adoptium(){
   # Fără JDK 11 pe gazda? Luam Temurin 11 de la GitHub adoptium (aceeasi sursa folosita
   # de CI), cu verificare sha256 impotriva fisierului .sha256.txt de langa arhiva.
   say "java11 absent local: descarc Temurin 11 JRE (adoptium, verificat sha256)"
-  local v=11.0.24+8 f=OpenJDK11U-jre_x64_linux_hotspot_11.0.24_8.tar.gz
+  local v=11.0.24+8 arch f
+  case $(uname -m) in aarch64) arch=aarch64;; *) arch=x64;; esac
+  f=OpenJDK11U-jre_${arch}_linux_hotspot_11.0.24_8.tar.gz
   mkdir -p "$D" && cd "$D" || fail "nu pot intra $D"
   curl -fsSLo "$f" "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${v}/${f}" || fail "descarcare JRE esuata"
   curl -fsSLo "$f.sha256.txt" "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${v}/${f}.sha256.txt" || fail "descarcare sha esuata"
@@ -125,6 +128,11 @@ verifica_log(){
 
 # ============ SUBCOMENZI ============
 M=${1:-test}
+if [ "$M" = auto ] && [ -f deploy/funcity-stage.txt ]; then
+  read -r M FP FJ < deploy/funcity-stage.txt || true
+  export FUNCITY_PORT=${FP:-25566} FUNCITY_JAR=${FJ:-$CAND}; M=${M:-test}
+  say "mod automat din marker: $M port=$FUNCITY_PORT jar=$FUNCITY_JAR" 2>/dev/null || true
+fi
 case "$M" in
   host-info)  # read-only: ce avem aici — CPU/RAM/disc/java/porturi/jucatori
     say "== FUNCTITY HOST-INFO (read-only) — $(date -u '+%F %T UTC') =="
@@ -189,7 +197,9 @@ case "$M" in
     for f in server.properties server-icon.png ops.json whitelist.json spigot.yml bukkit.yml; do
       [ -f "$P/$f" ] && cp -n "$P/$f" "$D/" && say "  copiat $f"
     done
-    say "lumi: copie fisa (originalul NU se atinge — copieaza manual inainte de test cu: rsync -a $P/world*/ $D/)"
+    for w in world world_nether world_the_end; do
+      if [ -d "$P/$w" ]; then say "  copie $w (${$FUNCITY_NO_WORLD:-rsync -a --delete} nu, copiem intotdeauna): "; rsync -a "$P/$w" "$D/" 2>>"$REPORT" || cp -a "$P/$w" "$D/"; say "  lume $w copiata in staging ($(du -sm "$D/$w" 2>/dev/null | cut -f1) MiB) — originalul neatins"; fi
+    done
     say "ajustari de identitate doar pentru staging, pe portul $PORT:"
     python3 - "$D/server.properties" "$PORT" "$CAND" <<'PY'
 import sys
@@ -219,9 +229,16 @@ PY
     [ "$(port_viu "$PORT")" = nu ] || fail "portul $PORT e deja ocupat"
     JAVA=$(java11_gaseste) || JAVA=$(java11_adoptium) || fail "java11 indisponibil"
     export FUNCITY_XMX="$XMX" FUNCITY_JARFILE="$(cat "$D/.jarname")"
-    say "--- PROBA 1: boot pe copie/goala ---"
+    say "--- PROBA 1: boot (include instalarea bibliotecilor Mohist daca lips) ---"
     start_server "$JAVA"
-    asteapta_done 420 || { tail -30 "$LOG" | sed 's/^/  /' >>"$REPORT"; fail "nu a vazut 'Done (' in 420s"; }
+    if ! asteapta_done 240; then
+      if grep -qiE "install|libraries" "$LOG" 2>/dev/null && ! grep -q "Done (" "$LOG"; then
+        say "  bootstrap Mohist a instalat biblioteci — repornim o data (identic cu faza A din CI)"
+        start_server "$JAVA"; asteapta_done 420 || { tail -40 "$LOG" | sed 's/^/  /' >>"$REPORT"; fail "nu a vazut 'Done (' nici dupa repornirea post-instalare"; }
+      else
+        tail -40 "$LOG" | sed 's/^/  /' >>"$REPORT"; fail "nu a vazut 'Done (' in 240s si nu pare instalare"
+      fi
+    fi
     verifica_log
     opreste_server || say "oprire problemati (raportat, mai incerc o data)"
     say "--- PROBA 2: repornire din datele salvate (persistenta) ---"

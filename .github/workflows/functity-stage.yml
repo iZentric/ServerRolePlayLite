@@ -1,12 +1,13 @@
 name: FUNCIŢY-STAGE
 # Staging FunCity PE GAZDA: backup, asamblare, boot, oprire, repornire din date salvate.
-# Executati pe runner-ul self-hosted (masina mamei), directoare separate fata de productie,
-# port separat (25566 implicit). NU atinge lumea de productie; NU reporneste productia.
+# Jobul h ruleaza pe masina (self-hosted); rezultatul se intoarce pe bransa prin artefact
+# + relay hosted (gazda n-are chei de push). Reguli: nu atingem productia, port separat,
+#backup inainte de orice boot. Mod: din inputs (dispatch) sau din markerul deploy/funcity-stage.txt (push).
 on:
   workflow_dispatch:
     inputs:
       mod:
-        description: "mod: backup | assemble | test | up | down"
+        description: "backup | assemble | test | up | down"
         required: true
         default: "test"
       candidat:
@@ -18,36 +19,35 @@ on:
         required: false
         default: "25566"
       heap:
-        description: "Xmx heap staging (ex. 3G)"
+        description: "Xmx heap staging"
         required: false
         default: "3G"
+  push:
+    paths: [ "deploy/funcity-stage.txt" ]
 permissions:
-  contents: read
+  contents: write
 jobs:
   s:
     runs-on: [ self-hosted ]
-    timeout-minutes: 25
+    timeout-minutes: 28
+    continue-on-error: true
+    env:
+      FUNCITY_JAR: ${{ inputs.candidat }}
+      FUNCITY_PORT: ${{ inputs.port }}
+      FUNCITY_XMX: ${{ inputs.heap }}
     steps:
       - uses: actions/checkout@v4
-      - name: Ruleaza modul ${{ inputs.mod }}
-        env:
-          FUNCITY_JAR: ${{ inputs.candidat }}
-          FUNCITY_PORT: ${{ inputs.port }}
-          FUNCITY_XMX: ${{ inputs.heap }}
+        with: { ref: '${{ github.ref_name }}' }
+      - name: Ruleaza modul cerut (auto = din marker)
         run: |
           set +e
-          bash scripts/functity-stage.sh "${{ inputs.mod }}"
+          MOD="${{ inputs.mod }}"
+          [ -z "$MOD" ] && MOD=auto
+          bash scripts/functity-stage.sh "$MOD"
           echo "RC=$?" >> /tmp/funcity-stage.txt
       - uses: actions/upload-artifact@v4
         if: always()
-        with:
-          name: stage-raw
-          path: /tmp/funcity-stage.txt
-      - name: Publica raportul pe bransa sesiunii      - name: Publica raportul pe bransa sesiunii
-        run: |
-          { echo; echo "(raport complet: si in /tmp/funcity-stage.txt pe gazda la $(date -u '+%F %T') UTC)"; } >> /tmp/funcity-stage.txt
-          bash scripts/functity-publish.sh /tmp/funcity-stage.txt analysis/FUNCTITY-STAGE.md "FUNCIŢY-STAGE ${{ inputs.mod }}: raport $(date -u '+%F %H:%M') UTC"
-
+        with: { name: stage-raw, path: /tmp/funcity-stage.txt }
   relay:
     needs: s
     if: always()
@@ -64,9 +64,9 @@ jobs:
           F=/tmp/relay/funcity-stage.txt
           [ -f "$F" ] || { echo "artefact absent — jobul de pe gazda nu a produs raport"; exit 0; }
           git config user.name funcity-relay; git config user.email f@localhost
-          { echo "# FUNCTITY-STAGE — ${{ inputs.mod }} la $(date -u '+%F %T') UTC (gazda → artefact → relay)"; echo; echo '```'; tr -d '\r' < "$F"; echo '```'; } > analysis/FUNCTITY-STAGE.md
+          { echo "# FUNCTITY-STAGE $(date -u '+%F %T') UTC — gazda → artefact → relay"; echo; echo '```'; tr -d '\r' < "$F"; echo '```'; } > analysis/FUNCTITY-STAGE.md
           git add -f analysis/FUNCTITY-STAGE.md
-          git commit -qm "FUNCIŢY-STAGE ${{ inputs.mod }}: raport $(date -u '+%F %H:%M') UTC (relay)" || true
+          git commit -qm "FUNCIŢY-STAGE: raport staging $(date -u '+%F %H:%M') UTC (relay)" || true
           for i in 1 2 3; do
             git pull --rebase -q origin "$GITHUB_REF_NAME" 2>/dev/null || git rebase --abort 2>/dev/null || true
             git push -q origin "HEAD:refs/heads/$GITHUB_REF_NAME" && break; sleep 4
