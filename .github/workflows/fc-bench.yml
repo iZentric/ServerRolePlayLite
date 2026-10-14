@@ -95,7 +95,13 @@ jobs:
           esac
           cp "/tmp/fcb/out/$REF" /tmp/fcb/arm.jar || { say "::error::lipseste $REF: $(ls /tmp/fcb/out/builds 2>/dev/null | tr '\n' ' ')"; exit 1; }
           echo '${{ matrix.arm.sha }}  /tmp/fcb/arm.jar' | sha256sum -c - || { say "::error::SHA jar brat nepotrivit"; exit 1; }
-          unzip -p /tmp/fcb/arm.jar META-INF/MANIFEST.MF | sed 's/\r$//' | grep -q 'ServerLaunchArgs' || { say "::error::jar fara manifest ServerLaunchArgs — ambalaj fals, refuz"; exit 1; }
+          unzip -p /tmp/fcb/arm.jar META-INF/MANIFEST.MF > /tmp/fcb/MANIFEST.MF 2>/tmp/fcb/unzip.err; UZ=$?
+          say "unzip rc=$UZ marime_manifest=$(stat -c %s /tmp/fcb/MANIFEST.MF 2>/dev/null || echo 0) unzip_err=$(head -c 80 /tmp/fcb/unzip.err 2>/dev/null | tr '\n' ' ')"
+          say "fisiere_jar=$(unzip -l /tmp/fcb/arm.jar 2>/dev/null | sed -n '$d' ; unzip -l /tmp/fcb/arm.jar 2>/dev/null | tail -1)"
+          NLINES=$(sed 's/\r$//' /tmp/fcb/MANIFEST.MF 2>/dev/null | wc -l); say "manifest_nlinii_sed=$NLINES"
+          GCOUNT=$(sed 's/\r$//' /tmp/fcb/MANIFEST.MF 2>/dev/null | grep -c ServerLaunchArgs || true); say "grep_count=$GCOUNT"
+          grep -c . /tmp/fcb/MANIFEST.MF >/dev/null 2>&1 || say "manifest illegibil"
+          [ "$UZ" = 0 ] && [ "$GCOUNT" -ge 1 ] || { say "::error::jar fara manifest ServerLaunchArgs — refuz (vezi linii de mai sus)"; exit 1; }
           say "jar OK: $REF marime=$(stat -c %s /tmp/fcb/arm.jar)"
 
       - name: Gonest pe runner (documentat in raport)

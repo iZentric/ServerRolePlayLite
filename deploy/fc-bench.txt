@@ -1,1 +1,1 @@
-v4.10 2026-10-14 (fix CR-in-YAML: tr -d CR devenise tr -d gol -> refuz fals de manifest; inlocuit cu sed s/CR$//)
+v4.11 2026-10-14 (jar-gate cu trasare completa: unzip rc, marimi, grep_count in diag)
