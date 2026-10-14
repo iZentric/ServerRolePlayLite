@@ -128,7 +128,7 @@ verifica_log(){
 # ============ SUBCOMENZI ============
 M=${1:-test}
 if [ "$M" = auto ] && [ -f deploy/funcity-stage.txt ]; then
-  read -r M FP FJ < deploy/funcity-stage.txt || true
+  read -r M FP FJ _ < deploy/funcity-stage.txt || true
   export FUNCITY_PORT=${FP:-25566} FUNCITY_JAR=${FJ:-}; M=${M:-test}
   say "mod automat din marker: $M port=$FUNCITY_PORT jar=$FUNCITY_JAR" 2>/dev/null || true
 fi
@@ -180,7 +180,7 @@ case "$M" in
     say "== FUNCTITY ASSEMBLE staging — $(date -u '+%F %T UTC') =="
     mkdir -p "$D" || fail "nu pot crea $D"
     say "ia artefactul validat din functity-out (builds/$CAND), cu SHA de manifest"
-    rm -rf /tmp/fcsrc; git clone -q --filter=blob:none --depth 2 "https://github.com/$REPO" /tmp/fcclone 2>/dev/null || git clone -q --depth 2 "https://github.com/$REPO" -b "$BR_OUT" /tmp/fcclone || fail "clone esuat"
+    rm -rf /tmp/fcclone /tmp/fcsrc; git clone -q --filter=blob:none --depth 2 "https://github.com/$REPO" /tmp/fcclone 2>/dev/null || git clone -q --depth 2 "https://github.com/$REPO" -b "$BR_OUT" /tmp/fcclone || fail "clone esuat"
     ( cd /tmp/fcclone && git fetch -q --depth 2 origin "refs/heads/$BR_OUT" && git checkout -q FETCH_HEAD ) || fail "nu gasesc $BR_OUT"
     SRC=/tmp/fcclone/builds/$CAND
     [ -d "$SRC" ] || { ls /tmp/fcclone/builds/ | sed 's/^/    /'; fail "nu exista builds/$CAND"; }
