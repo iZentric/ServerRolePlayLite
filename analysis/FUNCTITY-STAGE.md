@@ -3,11 +3,11 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-14 11:49:42 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-14 11:53:18 UTC — gazda → artefact → relay
 
 ```
 mod automat din marker: status port=25566 jar=b1.0827
-== FUNCTITY STATUS — 2026-10-14 11:49:23 UTC ==
+== FUNCTITY STATUS — 2026-10-14 11:53:00 UTC ==
   staging java: 32144 /home/mndvasi9/.local/jdk17/bin/java @unix_args.txt
   port 25566: nu | 25565: da | 25566: nu
   log: Done = 1 | erori = 0 | keep-up = 0
@@ -49,7 +49,18 @@ mod automat din marker: status port=25566 jar=b1.0827
     [11:46:15 INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
     [11:46:15 INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
     [11:46:15 INFO]: Saving usercache.json
-  libertate disc: 672 MiB
+  libertate disc: 678 MiB
+  interior jar voicechat (fisiere config citate):
+    J assets/voicechat/lang/ca_es.json
+    J assets/voicechat/lang/cs_cz.json
+    J assets/voicechat/lang/de_de.json
+    J assets/voicechat/lang/en_us.json
+    J assets/voicechat/lang/es_ar.json
+    J assets/voicechat/lang/es_es.json
+    J assets/voicechat/lang/es_mx.json
+    J assets/voicechat/lang/fr_ca.json
+    J assets/voicechat/lang/fr_fr.json
+    J assets/voicechat/lang/it_it.json
   moduri voice/chat in pack:
     M voicechat-forge-1.16.5-2.3.23.jar
   configuri voicechat staging:
