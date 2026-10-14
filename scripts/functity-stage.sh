@@ -23,6 +23,29 @@ say(){ echo "$*" | tee -a "$REPORT"; }
 fail(){ say "ERORE: $*"; finish 1; }
 finish(){ mkdir -p /tmp; cp "$REPORT" /tmp/funcity-stage.txt 2>/dev/null; say "(sfarsit rc=$1)"; exit "$1"; }
 
+sync_port(){ # pune server-port-ul curent din marker in server.properties (up/test pot schimba portul intre cicluri)
+  python3 - "$D/server.properties" "$PORT" <<'PYS' 2>>"$REPORT" || true
+import sys
+p, port = sys.argv[1:3]
+try:
+    lines = open(p, encoding='utf-8').read().splitlines()
+except FileNotFoundError:
+    lines = []
+found = False
+out = []
+for l in lines:
+    if l.startswith('server-port='):
+        out.append('server-port=' + port); found = True
+    else:
+        out.append(l)
+if not found: out.append('server-port=' + port)
+open(p, 'w', encoding='utf-8').write('
+'.join(out) + '
+')
+print('server-port sincronizat cu markerul:', port)
+PYS
+}
+
 prod_java(){ pgrep -f 'java @unix_args' | head -1 || true; }
 port_viu(){ ss -lnt 2>/dev/null | grep -q ":$1 " && echo da || echo nu; }
 
@@ -86,7 +109,7 @@ PY
 asteapta_done(){ # $1 = secunde max
   local lim=$1 i=0
   while [ $i -lt "$lim" ]; do
-    grep -q "Done (" "$LOG" 2>/dev/null && { grep "Done (" "$LOG" | tail -1 | sed 's/^/  /'; return 0; }
+    grep -q "Done (" "$LOG" 2>/dev/null && { grep "Done (" "$LOG" | tail -1 | sed 's/^/  /' | tee -a "$REPORT"; return 0; }
     if ! pgrep -f "FunCity.*jar nogui" >/dev/null 2>&1 && ! pgrep -f "funcity-live" >/dev/null 2>&1; then
       kill -0 "$(cat "$D/server.pid" 2>/dev/null)" 2>/dev/null || { say "JVM-ul a murat la boot:"; tail -25 "$LOG" | sed 's/^/  /' >>"$REPORT"; return 1; }
     fi
@@ -260,6 +283,7 @@ PY
     [ "$(port_viu "$PORT")" = nu ] || fail "portul $PORT ocupat"
     JAVA=$(java11_gaseste) || JAVA=$(java11_adoptium) || fail "java11 indisponibil"
     export FUNCITY_XMX="$XMX" FUNCITY_JARFILE="$(cat "$D/.jarname")"
+    sync_port
     start_server "$JAVA"
     asteapta_done 480 || fail "nu porneste — vezi $LOG"
     verifica_log
