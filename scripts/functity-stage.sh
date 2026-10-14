@@ -200,6 +200,9 @@ case "$M" in
     for w in world world_nether world_the_end; do
       if [ -d "$P/$w" ]; then rsync -a "$P/$w" "$D/" 2>>"$REPORT" || cp -a "$P/$w" "$D/"; say "  lume $w copiata in staging ($(du -sm "$D/$w" 2>/dev/null | cut -f1) MiB) - originalul neatins"; fi
     done
+    [ -f "$P/eula.txt" ] && cp "$P/eula.txt" "$D/" || printf 'eula=true\n' > "$D/eula.txt"
+    say "  eula: $(cat "$D/eula.txt") (identic cu productia)"
+    mkdir -p "$D/mohist-config" && printf 'check_update: false\n' > "$D/mohist-config/mohist.yml" 2>/dev/null && say "  mohist.yml: check_update=false (fara legaturi inutile la pornire)"
     say "ajustari de identitate doar pentru staging, pe portul $PORT:"
     python3 - "$D/server.properties" "$PORT" "$CAND" <<'PY'
 import sys
