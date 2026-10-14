@@ -127,11 +127,12 @@ jobs:
           (
             n=0
             while kill -0 $DPID 2>/dev/null; do
-              sleep 180; kill -0 $DPID 2>/dev/null || break
+              sleep 120; kill -0 $DPID 2>/dev/null || break
               n=$((n+1))
               { echo "live-snapshot $n la $(date -u +%H:%M:%S)"; tail -c 6000 /tmp/fcb/driver-$ARM.log; echo; echo "--- driver tail ---"; tail -c 1500 /tmp/fcb/results/install.log 2>/dev/null; echo; tail -c 1500 /tmp/fcb/stage/logs/latest.log 2>/dev/null | tail -6; } > /tmp/fcb/live-$ARM.txt
               rm -rf /tmp/fcb/lpub
-              git clone -q --depth 1 -b functity-out "https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/lpub 2>/dev/null || continue
+              git clone -q --filter=blob:none --no-checkout -b functity-out "https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY" /tmp/fcb/lpub 2>/dev/null || continue
+              ( cd /tmp/fcb/lpub && git sparse-checkout init --no-cone && git sparse-checkout set bench-v4 && git checkout -q functity-out ) || true
               mkdir -p /tmp/fcb/lpub/bench-v4/live
               cp /tmp/fcb/live-$ARM.txt "/tmp/fcb/lpub/bench-v4/live/$(date -u +%Y%m%d-%H%M%S)-$ARM.txt"
               ( cd /tmp/fcb/lpub && git config user.name fcb-live && git config user.email l@l && git add -A bench-v4/live && git commit -qm "live $ARM #$n" && git push -q origin HEAD:refs/heads/functity-out ) || true
@@ -154,7 +155,9 @@ jobs:
           if [ -f /tmp/fcb/results/$ARM.json ]; then
             cd /tmp/fcb
             for att in 1 2 3 4 5; do
-              rm -rf rpub; git clone -q --depth 1 -b functity-out "https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY" rpub && break; sleep $((att*6))
+              rm -rf rpub
+              git clone -q --filter=blob:none --no-checkout -b functity-out "https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY" rpub 2>/dev/null && ( cd rpub && git sparse-checkout init --no-cone && git sparse-checkout set bench-v4 && git checkout -q functity-out ) && break
+              sleep $((att*6))
             done
             D="rpub/bench-v4/$(date -u +%Y%m%d-%H%M)"
             mkdir -p "$D"; cp /tmp/fcb/results/$ARM.json "$D/"
