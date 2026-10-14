@@ -77,7 +77,9 @@ jobs:
         run: |
           set -uo pipefail
           ARM='${{ matrix.arm.id }}'
-          say() { echo "$(date -u +%H:%M:%S) $*"; }
+          mkdir -p /tmp/fcb; : > /tmp/fcb/diag.txt
+          say() { echo "$(date -u +%H:%M:%S) $*"; echo "$(date -u +%H:%M:%S) $*" >> /tmp/fcb/diag.txt; }
+          trap 'say "CAPAT-JAR rc=$?"' EXIT
           case "$ARM" in
             catserver) say "brat catserver: foloseste jarul din pack"; exit 0;;
             oficial1237) REF='builds/b0/mohist-1.16.5-1237-server.jar';;
@@ -95,22 +97,31 @@ jobs:
         run: lscpu | sed -n '1,15p'; free -l | head -2; nproc
 
       - name: Alergare banca (faza A instalare + 3 probe la cald a 300s)
-        env: { ARM: '${{ matrix.arm.id }}' }
-        shell: bash -x {0}
+        env: { ARM: '${{ matrix.arm.id }}', GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
+        shell: bash {0}
         run: |
           set +e
           python3 scripts/fc_bench.py --arm-conf benches/functity/arms/${{ matrix.arm.conf }}.json > /tmp/fcb/driver-$ARM.log 2>&1
           RC=$?
           echo "driver rc=$RC"
-          grep -E 'RESUMAT|Traceback|ERROR' /tmp/fcb/driver-$ARM.log | tail -8 >> "$GITHUB_STEP_SUMMARY"
           tail -3 /tmp/fcb/driver-$ARM.log
-          if [ ! -f /tmp/fcb/results/${{ matrix.arm.id }}.json ]; then
-            echo "::error::bratul ${{ matrix.arm.id }} nu a produs raport (rc=$RC) — ALERGAREA CADE, nu se mascheaza"
-            tail -c 4000 /tmp/fcb/results/install.log 2>/dev/null
+          if [ ! -f /tmp/fcb/results/$ARM.json ]; then
+            { echo "=== driver log ==="; tail -c 12000 /tmp/fcb/driver-$ARM.log; echo "=== install.log tail ==="; tail -c 8000 /tmp/fcb/results/install.log 2>/dev/null; echo "=== ls stage ==="; ls -la /tmp/fcb/stage 2>/dev/null | head -20; } > /tmp/fcb/diag-$ARM.txt
+            cd /tmp/fcb
+            git clone -q --depth 1 -b functity-out "https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY" dpub
+            D="dpub/bench-v4/diag/$(date -u +%Y%m%d-%H%M%S)-$ARM.txt"
+            mkdir -p "$(dirname "$D")" && cp /tmp/fcb/diag-$ARM.txt "$D"
+            ( cd dpub && git config user.name fcb-diag && git config user.email d@l && git add -A bench-v4/ && git commit -qm "fcb diag $ARM" && git push -q origin HEAD:refs/heads/functity-out ) && echo "diag publicat $D"
+            echo "::error::bratul $ARM nu a produs raport (rc=$RC) — vezi bench-v4/diag pe functity-out"
             exit 1
           fi
           if [ "$RC" -ge 3 ]; then
-            echo "::error::bratul ${{ matrix.arm.id }} nu a bootat in nicio proba (rc=$RC) — inregistrat ESUAT_TEHNIC"
+            { echo "=== driver log (raport exista, boot esuat) ==="; tail -c 12000 /tmp/fcb/driver-$ARM.log; } > /tmp/fcb/diag-$ARM.txt
+            cd /tmp/fcb
+            git clone -q --depth 1 -b functity-out "https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY" dpub 2>/dev/null || true
+            D="dpub/bench-v4/diag/$(date -u +%Y%m%d-%H%M%S)-$ARM-bootesec.txt"
+            mkdir -p "$(dirname "$D")" && cp /tmp/fcb/diag-$ARM.txt "$D"
+            ( cd dpub && git config user.name fcb-diag && git config user.email d@l && git add -A bench-v4/ && git commit -qm "fcb diag $ARM boot" && git push -q origin HEAD:refs/heads/functity-out ) && echo "diag publicat $D"
           fi
 
       - name: Verdict pe leg
