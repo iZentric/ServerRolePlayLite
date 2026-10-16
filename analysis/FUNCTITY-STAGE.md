@@ -3,10 +3,10 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-16 23:46:19 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-16 23:49:05 UTC — gazda → artefact → relay
 
 ```
-mod automat din marker: benchsum port=zero jar=25565
+mod automat din marker: benchsum port=x jar=x
 == FC-BENCH v5 — SUMAR (mediana a 3 runde, hardware real) ==
   25565     : niciun boot OK in 0 masuratori
   functity  : niciun boot OK in 0 masuratori
