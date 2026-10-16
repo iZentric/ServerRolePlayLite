@@ -84,6 +84,7 @@ jobs:
           F=/tmp/relay/funcity-stage.txt
           [ -f "$F" ] || { echo "artefact absent — jobul de pe gazda nu a produs raport"; exit 0; }
           git config user.name funcity-relay; git config user.email f@localhost
+          mkdir -p analysis
           { echo "== SONDA EXTERNA 25565 =="; timeout 20 python3 scripts/minecraft_status.py 92.5.171.150 25565 2>&1 || true; echo "== SONDA EXTERNA 25566 =="; timeout 20 python3 scripts/minecraft_status.py 92.5.171.150 25566 2>&1 || true; echo; echo "# FUNCTITY-STAGE $(date -u '+%F %T') UTC — gazda → artefact → relay"; echo; echo '```'; tr -d '\r' < "$F"; echo '```'; } > analysis/FUNCTITY-STAGE.md
           { echo; echo "== SONDA EXTERNA (de pe runner hosted, nu din gazda) =="; echo "-- 25565 (productie):"; python3 scripts/minecraft_status.py 92.5.171.150 25565 2>&1 || true; echo "-- 25566 (staging FunCity):"; python3 scripts/minecraft_status.py 92.5.171.150 25566 2>&1 | head -3 || true; } >> /tmp/relay/funcity-stage.txt
           git add -f analysis/FUNCTITY-STAGE.md

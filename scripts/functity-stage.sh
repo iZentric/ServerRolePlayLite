@@ -628,6 +628,18 @@ X
     say "  liber la disc acum: $(df -m "$HOME" | tail -1 | awk "{print \$4}") MiB"
     finish 0
     ;;
+  benchsum) # aduna rundele FC-BENCH v5 din $B/bench si scoate medianele per motor
+  say "== FC-BENCH v5 — SUMAR (mediana a 3 runde, hardware real) =="
+  for f in "$B"/bench/*.tsv; do [ -f "$f" ] || continue
+    E=$(basename "$f" .tsv)
+    awk -v e="$E" '$3=="OK"{d[++n]=$4; w[n]=$5; r[n]=$6; k[n]=$7}
+      END{if(n==0){printf "  %-10s: niciun boot OK in %d masuratori\n",e,n; exit}
+        asort(d); asort(w); asort(r);
+        printf "  %-10s: Done mediu %ss | zid %ss | RSS %s MiB (mediana %d runde)\n",e,d[int((n+1)/2)],w[int((n+1)/2)],r[int((n+1)/2)],n}' "$f" | tee -a "$REPORT"
+  done
+  say "  brut:"; cat "$B"/bench/*.tsv 2>/dev/null | sed 's/^/    /' | tee -a "$REPORT"
+  finish 0
+  ;;
   down)
     opreste_server || true
     # maturam orice JVM de staging ramas din cicluri anterioare (pid vechi suprasris)
