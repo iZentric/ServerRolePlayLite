@@ -612,9 +612,12 @@ X
       rm -rf "$D"; mkdir -p "$D"
       for f in "$P"/*; do
         b=$(basename "$f")
-        case "$b" in world*|logs|run.log|*.log|stage.log|funcity*.json|FunCity*.jar|*.pid|backup*) ;; *) cp -a "$f" "$D/" 2>/dev/null;; esac
+        case "$b" in
+          world*|logs|run.log|*.log|stage.log|funcity*.json|*.jar|*.pid|backups) ;;
+          libraries|versions|foxlaunch-data) [ -e "$D/$b" ] || cp -al "$f" "$D/" 2>/dev/null || cp -a "$f" "$D/" 2>/dev/null;;
+          *) [ -e "$D/$b" ] || cp -a "$f" "$D/" 2>/dev/null;;
+        esac
       done
-      rm -f "$D"/*.jar.bak 2>/dev/null
       rsync -a "$P/world" "$D/" 2>/dev/null || cp -a "$P/world" "$D/"
       sync_port
       cp "$JARF" "$D/engine.jar"
