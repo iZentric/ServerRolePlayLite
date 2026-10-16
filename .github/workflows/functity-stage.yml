@@ -83,20 +83,7 @@ jobs:
           set +e
           F=/tmp/relay/funcity-stage.txt
           [ -f "$F" ] || { echo "fara raport de la gazda"; exit 0; }
-          HEAD=$(git rev-parse HEAD)
-          SLP=$(timeout 15 python3 scripts/minecraft_status.py 92.5.171.150 25565 2>/dev/null | grep -oE '"online": [0-9]+|"max": [0-9]+' | tr "\n" " ")
-          TXT=$(python3 -c 'import sys,os,json
-t=open("/tmp/relay/funcity-stage.txt").read()
-t=t.replace("\r","")
-slp=os.environ.get("SLP","")
-msg=("sonda: "+slp+" | " if slp else "")+t
-print(json.dumps(msg)[:5800])' 2>/dev/null)
-          SLP="$SLP" python3 - <<'EO' > /tmp/payload.json 2>/dev/null || true
-import os,json
-t=open("/tmp/relay/funcity-stage.txt").read().replace("\r","")
-slp=os.environ.get("SLP","")
-msg=(("sonda 25565: "+slp+" | ") if slp else "")+t
-head=os.environ.get("HEAD")
-print(json.dumps({"commit_id":head,"annotations":[{"path":"functity-stage","start_line":1,"end_line":1,"annotation_level":"notice","title":"Raport gazda (annotation, nu fisier)","message":msg[:5900]}]}))
-EO
-          HEAD="$HEAD" curl -s -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/json" --data @/tmp/payload.json "https://api.github.com/repos/$GITHUB_REPOSITORY/check-runs" -o /dev/null -w "annotation HTTP %{http_code}\n"
+          export HEAD=$(git rev-parse HEAD)
+          export SLP=$(timeout 15 python3 scripts/minecraft_status.py 92.5.171.150 25565 2>/dev/null | grep -oE '"online": [0-9]+|"max": [0-9]+' | tr "\n" " ")
+          python3 -c "import os,json;t=open('/tmp/relay/funcity-stage.txt').read().replace(chr(13),'');m=(('sonda 25565: '+os.environ['SLP']+' | ') if os.environ.get('SLP') else '')+t;p={'commit_id':os.environ['HEAD'],'annotations':[{'path':'functity-stage','start_line':1,'end_line':1,'annotation_level':'notice','title':'Raport gazda (annotation, nu fisier)','message':m[:5900]}]};open('/tmp/payload.json','w').write(json.dumps(p))"
+          curl -s -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/json" --data @/tmp/payload.json "https://api.github.com/repos/$GITHUB_REPOSITORY/check-runs" -o /dev/null -w "annotation HTTP %{http_code}\n"
