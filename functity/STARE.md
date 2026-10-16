@@ -84,12 +84,14 @@ si pe site, sectiunea „FunCity — motorul propriu, măsurat, nu promis", cu g
 ## 8. Urmatorii pasi (in ordine)
 1. Bot mineflayer cu pachet complet → tinta „masurat" pentru latenta de join (singura marime din sectiunea 5 inca
    acoperita doar de respingerea corecta a clientului vanilla).
-2. ~~Parser MSPT/GC pe formatul real din loguri~~ → **GC FACUT** (2026-10-14 11:39 UTC): FC-GC
-   (`.github/workflows/fc-gc.yml` + `scripts/fc_gc_reprocess.py`) a reprocesat jurnalele `-Xlog:gc*` din
-   artefactele rundelor A/B fara alergare noua — verdict in `analysis/FUNCTITY-GC.md`, jurnale brute pe
-   `functity-out:bench-v4/gc/`. Rezultat: fara regresie b1 vs 1237/b0 (boot max 97/128 vs 119/99 vs 105/84 ms,
-   idle 1–3 pauze ≤ 51 ms in ~930 s, 0 Full-GC); CatServer are pauzele de boot cele mai mari (146/174 ms) si un
-   `Full (System.gc())` de 5 ms la pornire. **MSPT** ramine NEMASURAT pina la runda C (v4.2 trimite `forge tps`;
-   `ticks tps`/`mspt` erau comenzi necunoscute pe hibride — cauza reala a lipsei din A/B).
+2. ~~Parser MSPT/GC pe formatul real~~ → **MSPT + GC MĂSURATE pe hosted** (2026-10-16): FC-BENCH v4.2 run
+   38558064533 a măsurat `forge tps` (`Overall: Mean tick time`), 18 citiri/arm, în probe idle de 300 s;
+   mediile MSPT: CatServer 0,08; 1237 0,18; b0 0,09; b1 0,08 ms. Nu sunt p95 sau maxime de tick individual,
+   iar serverul era gol — nu declarăm câștig de gameplay. FC-GC 38978721931 a reprocesat A/B/C din artefacte:
+   raport și jurnale în `analysis/FUNCTITY-GC.md` / `functity-out:bench-v4/gc/`. În C, pauza GC maximă b1
+   (144,2 ms) depășește 1237 (131,6) și b0 (112,4), deși p95-ul pooled b1 (82,4) este sub 1237 (99,0) și
+   peste b0 (74,3); nu tragem verdict „fără regresie” din doar 3 probe. Idle max C: 44,3–66,7 ms în ~929 s;
+   Full-GC: 3 la CatServer (apel explicit `System.gc()`), 0 la Mohist-family. Sub sarcină cu jucători rămâne
+   NEMĂSURAT; MSPT A/B rămâne NEMĂSURAT deoarece harness-ul v4 trimitea comenzi necunoscute.
 3. FISE/STARE: upgrade „netestat" → „masurat" pentru cele cite sectiunea 7 le-a acoperit.
 4. Linie de trezire in box (MC-RUN v9, doar dupa acord).

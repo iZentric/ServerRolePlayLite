@@ -20,6 +20,13 @@ class FunctityPanelTest(unittest.TestCase):
                 v = arm.get("done_s") or []
                 if v:
                     self.assertIn("%.2f s" % (sum(v) / len(v)), page)
+        c = d["runde"].get("C", {})
+        self.assertTrue(c.get("arms"), "runda C lipsa din snapshot")
+        for arm in c["arms"].values():
+            boot = "%.2f s" % arm["boot_medie_wall_s"]
+            mspt = "%.2f ms" % arm["mspt_medie_ms"]
+            self.assertIn(boot.replace(".", ","), page)
+            self.assertIn(mspt.replace(".", ","), page)
 
     def test_unmeasured_stays_declared(self):
         page = engine_results.functity_panel()
@@ -36,10 +43,14 @@ class FunctityPanelTest(unittest.TestCase):
             self.assertIn("Pauze GC: NEMĂSURAT", page)
             return
         self.assertIn("Pauze GC: MĂSURATE", page)
+        c = gc.get("C", {})
+        self.assertTrue(c, "reprocesarea rundei C lipseste din snapshot")
         for arm in d["brate"]:
-            a, b = gc.get("A", {}).get(arm), gc.get("B", {}).get(arm)
-            if a and b:
-                self.assertIn("boot max %.0f/%.0f ms" % (a["boot_max_ms"], b["boot_max_ms"]), page)
+            a = c.get(arm)
+            if a:
+                self.assertIn("boot max/p95 %.0f/%.0f ms" % (a["boot_max_ms"], a["boot_p95_ms"]), page)
+        self.assertIn("Runda C", page)
+        self.assertIn("trei probe nu justifică", page)
         self.assertIn("sub sarcină cu jucători: NEMĂSURAT", page)
 
     def test_degrades_honestly_without_data(self):

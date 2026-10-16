@@ -388,20 +388,67 @@ def functity_panel():
                 'din <code>analysis/FUNCTITY-BENCH.md</code> după prima rulare verde.</div></section>')
     nume = d["brate"]
     gc = d.get("gc") or {}
-    if gc.get("runde"):
+    gc_rounds = gc.get("runde") or {}
+    gc_round_key = "C" if "C" in gc_rounds else (next(reversed(gc_rounds)) if gc_rounds else None)
+    gc_round = gc_rounds.get(gc_round_key, {}) if gc_round_key else {}
+    if gc_round:
         parts = []
         for key, label in nume.items():
-            ra = gc["runde"].get("A", {}).get(key)
-            rb = gc["runde"].get("B", {}).get(key)
-            if not (ra and rb):
+            g = gc_round.get(key)
+            if not g:
                 continue
-            parts.append(f"{escape(label.split(' (')[0].split(' — ')[0])}: boot max {ra['boot_max_ms']:.0f}/{rb['boot_max_ms']:.0f} ms, "
-                         f"idle max {ra['idle_max_ms']:.0f}/{rb['idle_max_ms']:.0f} ms, Full-GC {ra['full_gc'] + rb['full_gc']}")
-        gc_html = ("<b>Pauze GC: MĂSURATE</b> (STW din <code>-Xlog:gc*</code>, reprocesate din artefactele A/B — "
-                   "<code>analysis/FUNCTITY-GC.md</code>): " + "; ".join(parts) +
-                   ". După „Done” (server gol) pauzele rămân în jurul unui tick (34–51 ms, 1–3 pe brat în ~930 s); GC sub sarcină cu jucători: NEMĂSURAT.")
+            parts.append(f"{escape(label.split(' (')[0].split(' — ')[0])}: boot max/p95 "
+                         f"{g['boot_max_ms']:.0f}/{g['boot_p95_ms']:.0f} ms, idle max {g['idle_max_ms']:.0f} ms, "
+                         f"Full-GC {g['full_gc']}")
+        caution = ""
+        if gc_round_key == "C":
+            b1, official, b0 = (gc_round.get(k) for k in ("functity_b1", "oficial1237", "functity_b0"))
+            if b1 and official and b0:
+                caution = (f" Max-ul b1 ({b1['boot_max_ms']:.1f} ms) depășește 1237 ({official['boot_max_ms']:.1f}) "
+                           f"și b0 ({b0['boot_max_ms']:.1f}), dar p95-ul b1 ({b1['boot_p95_ms']:.1f}) este sub 1237 "
+                           f"({official['boot_p95_ms']:.1f}) și peste b0 ({b0['boot_p95_ms']:.1f}); trei probe nu justifică "
+                           "un verdict general de regresie sau de lipsă a regresiei.")
+        gc_html = (f"<b>Pauze GC: MĂSURATE</b> (STW din <code>-Xlog:gc*</code>; runda {escape(str(gc_round_key))}, "
+                   f"reprocesată din artefacte în <code>analysis/FUNCTITY-GC.md</code>): " + "; ".join(parts) + "." +
+                   caution + " GC sub sarcină cu jucători: NEMĂSURAT.")
     else:
         gc_html = "<b>Pauze GC: NEMĂSURAT</b> — jurnalul GC nu a fost încă reprocesat; nu inventăm 0."
+
+    c_round = d.get("runde", {}).get("C") or {}
+    c_arms = c_round.get("arms") or {}
+    c_gc = gc_rounds.get("C", {})
+    c_rows = []
+    def fmt_num(value, places=2):
+        try:
+            return f"{float(value):.{places}f}".replace(".", ",")
+        except (TypeError, ValueError):
+            return "NEMĂSURAT"
+    for key, label in nume.items():
+        arm = c_arms.get(key) or {}
+        if not arm:
+            continue
+        g = c_gc.get(key) or {}
+        c_rows.append(
+            "<tr><td><b>" + escape(label) + "</b></td>"
+            + "<td>" + fmt_num(arm.get("boot_medie_wall_s")) + " s</td>"
+            + "<td>" + fmt_num(arm.get("cv_wall_pct"), 1) + "%</td>"
+            + "<td>" + fmt_num(arm.get("mspt_medie_ms")) + " ms</td>"
+            + "<td>" + fmt_num(arm.get("mspt_max_esantion_ms")) + " ms</td>"
+            + "<td>" + fmt_num(arm.get("tps_p50"), 1) + "</td>"
+            + "<td>" + fmt_num(g.get("boot_max_ms"), 1) + " ms</td></tr>")
+    if c_rows:
+        c_samples = max((a.get("mspt_esantioane", 0) for a in c_arms.values()), default=0)
+        c_run = escape(str(c_round.get("run", "C")))
+        mspt_html = (f'<h3 style="margin-top:22px">Runda C — MSPT măsurat cu <code>forge tps</code></h3>'
+                     f'<p class="sub">FC-BENCH run {c_run}; {c_samples} citiri/arm din '
+                     '<code>Overall: Mean tick time</code>, server gol. Boot-ul C este cronometrat extern până la Done '
+                     'și nu se compară direct cu timpii interni A/B; „max MSPT” de mai jos este maximul citirilor '
+                     'cumulative, nu maximul unui tick și nici p95.</p>'
+                     '<div class="table-scroll"><table class="tbl"><tr><th>Motor</th><th>Boot extern, medie</th>'
+                     '<th>CV boot</th><th>MSPT mediu</th><th>MSPT maxim observat</th><th>TPS p50</th>'
+                     f'<th>GC boot max</th></tr>{chr(10).join(c_rows)}</table></div>')
+    else:
+        mspt_html = '<p><b>MSPT: NEMĂSURAT</b> — runda C nu este prezentă în snapshot.</p>'
     rows = []
     for key, label in nume.items():
         a = d["runde"].get("A", {}).get("arms", {}).get(key, {})
@@ -437,21 +484,18 @@ def functity_panel():
     lim_rows = "".join("<li>" + x + "</li>" for x in d.get("limite", []))
     return f'''<section id="functity" aria-label="Banca de măsurare FunCity (motor propriu pe bază Mohist)">
 <h2>🏗️ FunCity — motorul propriu, măsurat, nu promis</h2>
-<div class="sub">{d.get("metoda", "")} · probe {d.get("data", "")}. Timpul comparat e <b>„Done (x.xs)” auto-măsurat de motor</b>
-(fără zgomotul de runner partajat din timpii wall); CV = variația între probe.</div>
+<div class="sub">{d.get("metoda", "")} · ultima probă {d.get("data", "")}. Tabelul de mai jos păstrează separat timpii „Done” interni din A/B; runda C folosește ceas extern și are tabel propriu.</div>
 <div class="table-scroll"><table class="tbl">
-<tr><th>Motor (așa cum rulează pack-ul 36/14)</th><th>Boot runda A</th><th>Boot runda B</th><th>Δ față de motorul istoric</th><th>CV max</th><th>TPS idle</th><th>Overrun / critice (6 probe)</th><th>RSS mediu</th></tr>
+<tr><th>Motor (pack 36/14)</th><th>Done intern A</th><th>Done intern B</th><th>Δ vs CatServer (A/B)</th><th>CV max A/B</th><th>TPS idle A/B</th><th>Overrun / critice (6 probe/motor)</th><th>RSS mediu B</th></tr>
 {chr(10).join(body)}
 </table></div>
+{mspt_html}
 <div class="card" style="margin-top:14px"><h3>Praguri bătute în cuie ÎNAINTE de rulare</h3><ul style="margin:6px 0 0 20px">{prag_rows}</ul>
 <p style="margin-top:10px"><b>Latenta de join cu client modat: NEMĂSURAT încă</b> — proba vanilla a fost respinsă
 corect de FML pe toate cele 4 motoare (mesaj „Forge client required”); bot-ul cu pack complet vine în runda următoare.
 {gc_html}</p></div>
-<div class="note"><b>Ce înseamnă:</b> FunCity pornește identical cu Mohist oficial (la nivel de zgomot, fără regresie
-și fără câștig declarabil) și nu are erori critice pe niciun boot; în plus, ambele motoare Mohist-family termină
-boot-ul mai repede decât motorul istoric CatServer pe aceeași sarcină. <b>Ce NU înseamnă:</b> un titlu de „cel mai rapid”
-— nu măsurăm gameplay, nu atingem serverul live, și runner-ul CI nu e gazda de 2 vCPU a jucătorilor.</div>
+<div class="note"><b>Ce înseamnă:</b> toate cele 36 de porniri A/B/C au ajuns la Done, fără erori critice sau overrun. A/B folosește timpul Done intern; C măsoară MSPT cu forge tps și boot extern, deci timpii de boot nu se compară între runde. MSPT-ul C este de la server gol; <b>nu este test de gameplay cu jucători</b>. <b>Ce NU înseamnă:</b> titlu de „cel mai rapid”, promisiune de TPS/MSPT sub sarcină sau garanția absenței lagului. Runner-ul CI nu este gazda live de 2 vCPU.</div>
 <details><summary>Ce nu acoperă banca (ca să nu iasă surprize)</summary><ul style="margin:6px 0 0 20px">{lim_rows}</ul></details>
 <p class="sub" style="margin-top:10px">Rapoarte brute: <a href="{FC_OUT_BENCH}">functity-out/bench-v4</a> ·
-sursa cifrelor: <code>analysis/FUNCTITY-BENCH.md</code> · alergări CI A/B cuantificate în document.</p>
+sursa cifrelor: <code>analysis/FUNCTITY-BENCH.md</code> · alergări CI A/B/C cuantificate în document.</p>
 </section>'''
