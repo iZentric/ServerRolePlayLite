@@ -3,14 +3,15 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-16 21:27:25 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-16 21:31:12 UTC — gazda → artefact → relay
 
 ```
-mod automat din marker: persist port=25565 jar=b1.0827
-== PERSIST (systemd --user + linger) ==
-  linger: System has not been booted with systemd as init system (PID 1). Can't operate.
-  linger: Failed to create bus connection: Host is down
-  systemd --user nu e accesibil din job (bus) — scriu un fallback cron-free:
-  nici cron — trebuie un paste de la tine
+mod automat din marker: autowake port=25565 jar=b1.0827
+== AUTOWAKE hook (.bashrc) ==
+  hook scris in ~/.bashrc
+c.sh SUS -> hook nu face nimic (corect)
+  R 
+  R # FUNCITY-AUTOWAKE: self-heal la deschidere de shell (ruleaza DOAR daca supervisorul e jos)
+  R if ! pgrep -f "bash .*[/]c[.]sh" >/dev/null 2>&1; then ( setsid bash "$HOME/c.sh" >> "$HOME/cuantic-live/sup.log" 2>&1 </dev/null & ) ; fi
 RC=0
 ```
