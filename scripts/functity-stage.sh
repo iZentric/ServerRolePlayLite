@@ -610,8 +610,11 @@ X
     for i in 1 2 3; do
       pkill -f "java.*[/]funcity-live" 2>/dev/null; sleep 3
       rm -rf "$D"; mkdir -p "$D"
-      for f in mods plugins libraries versions config server.properties eula.txt; do [ -e "$P/$f" ] && cp -a "$P/$f" "$D/" 2>/dev/null; done
-      [ -d "$P/run" ] && cp -a "$P/run/." "$D/" 2>/dev/null
+      for f in "$P"/*; do
+        b=$(basename "$f")
+        case "$b" in world*|logs|run.log|*.log|stage.log|funcity*.json|FunCity*.jar|*.pid|backup*) ;; *) cp -a "$f" "$D/" 2>/dev/null;; esac
+      done
+      rm -f "$D"/*.jar.bak 2>/dev/null
       rsync -a "$P/world" "$D/" 2>/dev/null || cp -a "$P/world" "$D/"
       sync_port
       cp "$JARF" "$D/engine.jar"
