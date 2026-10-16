@@ -23,14 +23,11 @@ say(){ echo "$*" | tee -a "$REPORT"; }
 fail(){ say "ERORE: $*"; finish 1; }
 finish(){ mkdir -p /tmp; cp "$REPORT" /tmp/funcity-stage.txt 2>/dev/null; say "(sfarsit rc=$1)"; exit "$1"; }
 
-sync_port(){ # aliniaza server-port din server.properties cu marker (sed, fara escapoare fragile)
-  [ -f "$D/server.properties" ] || return 0
-  if grep -q '^server-port=' "$D/server.properties"; then
-    sed -i "s/^server-port=.*/server-port=$PORT/" "$D/server.properties"
-  else
-    printf 'server-port=%s\n' "$PORT" >> "$D/server.properties"
-  fi
-  say "  server-port sincronizat cu markerul: $PORT"
+sync_port(){ # aduce server.properties din staging la portul din marker + MOTD FunCity (doar
+  # directorul de staging $D — productia nu se atinge ici).
+  sed -i -E "s/^server-port=.*/server-port=$PORT/" "$D/server.properties"
+  grep -q '^motd=' "$D/server.properties" && sed -i -E "s/^motd=.*/motd=FunCity RP Lite/" "$D/server.properties" || printf 'motd=FunCity RP Lite\n' >> "$D/server.properties"
+  say "  server-port sincronizat cu markerul: $PORT | motd: FunCity RP Lite"
 }
 
 prod_java(){ pgrep -f 'java @unix_args' | head -1 || true; }
