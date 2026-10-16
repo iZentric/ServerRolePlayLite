@@ -1,0 +1,49 @@
+name: cloudshell-on
+# Trezeste Cloud Shell-ul prin API-ul OCI (create = exact butonul Start din consola).
+# Liniile de mai jos se activeaza cand exista secret-urile OCI_PEM + OCI_FINGERPRINT
+# (cheia API, generata de owner in consola OCI -> pusa in repo Secrets; cheia NU trece prin chat).
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 */4 * * *"
+permissions: {}
+jobs:
+  wake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Porneste mediul Cloud Shell (nevoie doar de cheie API)
+        env:
+          PEM: ${{ secrets.OCI_PEM }}
+          FP: ${{ secrets.OCI_FINGERPRINT }}
+          TEN: ${{ vars.OCI_TENANCY }}
+          USR: ${{ vars.OCI_USER }}
+          REG: ${{ vars.OCI_REGION }}
+        run: |
+          set +e
+          if [ -z "$PEM" ] || [ -z "$FP" ] || [ -z "$TEN" ]; then
+            echo "inactiv: lipsesc OCI_PEM/OCI_FINGERPRINT/vars OCI_TENANCY|OCI_USER|OCI_REGION — workflow nu face nimic pana le added"
+            exit 0
+          fi
+          python3 -m venv ~/venv-oci >/dev/null 2>&1
+          ~/venv-oci/bin/pip -q install oci-cli 2>/dev/null
+          OCI=~/venv-oci/bin/oci
+          mkdir -p ~/.oci && umask 077
+          printf '%s\n' "$PEM" > ~/.oci/gh.pem
+          cat > ~/.oci/config <<EOF
+          [DEFAULT]
+          user=$USR
+          fingerprint=$FP
+          tenancy=$TEN
+          region=$REG
+          key_file=~/.oci/gh.pem
+          EOF
+          echo "--- stare inainte:"
+          $OCI cloud-shell environment get 2>&1 | grep -oE '"lifecycleState": *"[A-Z_]+"' || true
+          echo "--- create (porneste daca e INACTIVE; deja ACTIV = eroare inofensiva):"
+          $OCI cloud-shell environment create 2>&1 | head -3
+          sleep 8
+          echo "--- stare dupa:"
+          $OCI cloud-shell environment get 2>&1 | grep -oE '"lifecycleState": *"[A-Z_]+"' || true
+          rc=$?
+          echo "verdict: $([ $rc -eq 0 ] && echo SUS || echo 'de verificat manual') la $(date -u '+%F %T') UTC"
