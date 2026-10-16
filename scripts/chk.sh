@@ -98,4 +98,11 @@ L="$D/live.log"; [ -f "$L" ] || L=$(ls -t "$D"/*.log 2>/dev/null | head -1)
   tail -4000 "$L" 2>/dev/null | grep -ai "Cuantic/version" | tail -2
   echo "esecuri plugin: $(tail -4000 "$L" 2>/dev/null | grep -aiE 'Could not (load|enable)|error occurred while enabling' | wc -l)"
   tail -4000 "$L" 2>/dev/null | grep -aiE 'Could not (load|enable)|error occurred while enabling' | tail -3 | cut -c1-160
+  echo "== referinta pentru migrare (citire only, nu pornim nimic) =="
+  PY="$(command -v python3 || true)"
+  if [ -n "$PY" ] && [ -f "$(dirname "$0")/cuantic_migrate.py" ]; then
+    "$PY" "$(dirname "$0")/cuantic_migrate.py" baseline --out /tmp/cuantic-baseline 2>/dev/null \
+      | python3 -c "import json,sys;d=json.load(sys.stdin);print('cpu:',d.get('cpu',{}).get('model'),'| micro ops/s:',d.get('micro_ops_s'),'| RSS:',d.get('rss_peak_mib'),'MiB | boot:',d.get('boot_done_s'),'s | steal:',d.get('steal_pct'),'%% | jar:',d.get('jar'))" 2>/dev/null \
+      || echo "baseline: nu s-a putut masura (bine, nu fortam nimic)"
+  fi
 } >> "$ANALYSIS/chk.md" 2>/dev/null || true

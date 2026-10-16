@@ -20,7 +20,8 @@ UNRESOLVED = []
 def packv():
     """Versiunea din pack-rules.json, citita de oriunde (main() are `rules` local)."""
     try:
-        return json.load(open(os.path.join(ROOT, "pack-rules.json"), encoding="utf-8"))["pack_version"]
+        with open(os.path.join(ROOT, "pack-rules.json"), encoding="utf-8") as source:
+            return json.load(source)["pack_version"]
     except Exception:
         return "?"
   # slug-uri care nu au rezolvat pe catalog -> devin vizibile, nu se mai pierd in liniste
@@ -605,7 +606,7 @@ UNRESOLVED = []
 
 SERVER_PROPERTIES = r"""\
 #Minecraft server properties - CUANTIC (consum minim)
-motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7o__VER__ \u00A7f| \u00A7aorice PC, zero lag \u00A7f| \u00A7dOras+Survival+Claims \u00A7f| \u00A7ecost 0
+motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7o__VER__ \u00A7f| \u00A7aForge 1.16.5 \u00A7f| \u00A7dOras+Survival+Claims \u00A7f| \u00A7ecost 0
 max-players=25
 view-distance=4
 player-idle-timeout=0
@@ -619,6 +620,7 @@ max-tick-time=-1
 entity-broadcast-range-percentage=60
 online-mode=false
 pvp=true
+spawn-monsters=true
 difficulty=normal
 gamemode=survival
 level-name=world
@@ -670,21 +672,22 @@ world-settings:
     item-despawn-rate: 2400
     max-entity-collisions: 2
     tick-inactive-villagers: false
-    nerf-spawner-mobs: true
+    # Păstrează AI-ul spawnerilor și funcționarea fermelor / redstone.
+    nerf-spawner-mobs: false
     ticks-per:
-      hopper-transfer: 24
-      hopper-check: 24
+      hopper-transfer: 8
+      hopper-check: 1
       monster-spawns: 10
-    hopper-amount: 3
+    hopper-amount: 1
     arrow-despawn-rate: 200
     trident-despawn-rate: 200
-    zombie-aggressive-towards-villager: false
+    zombie-aggressive-towards-villager: true
 """
 
 BUKKIT_YML = """\
-# bukkit.yml - stratul de tuning CUANTIC (fara lilieci in pesteri, mobi redusi pt RolePlay)
+# bukkit.yml - stratul de tuning CUANTIC; End-ul trebuie sa ramana accesibil in survival.
 settings:
-  allow-end: false
+  allow-end: true
 spawn-limits:
   monsters: 20
   animals: 6
@@ -920,7 +923,11 @@ def write_start_scripts(sdir, server_jar):
         import hashlib
         import uuid as _uuid
         op_file = os.path.join(ROOT, "deploy", "op-name")
-        op_name = open(op_file, encoding="utf-8").read().strip().splitlines()[0].strip() if os.path.isfile(op_file) else "iZentric"
+        if os.path.isfile(op_file):
+            with open(op_file, encoding="utf-8") as source:
+                op_name = source.read().strip().splitlines()[0].strip()
+        else:
+            op_name = "iZentric"
         if op_name:
             md = bytearray(hashlib.md5(("OfflinePlayer:" + op_name).encode("utf-8")).digest())
             md[6] = (md[6] & 0x0f) | 0x30
@@ -938,7 +945,8 @@ def write_start_scripts(sdir, server_jar):
     FLAGS_17 = AIKAR_FLAGS
     vfile = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "deploy", "jvm-flags-17.txt")
     if os.path.isfile(vfile):
-        cand = " ".join(x for x in open(vfile, encoding="utf-8").read().split("\n") if x.strip() and not x.startswith("#"))
+        with open(vfile, encoding="utf-8") as source:
+            cand = " ".join(x for x in source.read().splitlines() if x.strip() and not x.startswith("#"))
         if "-XX:+UseG1GC" in cand:
             FLAGS_17 = cand
             log(f"  flaguri luate din {os.path.relpath(vfile, os.getcwd())} (validate pe Java 17)")
@@ -961,15 +969,15 @@ def write_start_scripts(sdir, server_jar):
     with open(os.path.join(sdir, "start.sh"), "w") as f:
         f.write("#!/bin/sh" + chr(10)
                 + "echo '" + BN + "'" + chr(10)
-                + "echo '  CUANTIC " + VER + " - motor forjat de noi'" + chr(10)
-                + "echo '  orice PC / zero lag / cost 0'" + chr(10)
+                + "echo '  CUANTIC " + VER + " - CatServer upstream + Forge 1.16.5'" + chr(10)
+                + "echo '  RP modat / survival / cost 0'" + chr(10)
                 + "echo '" + BN + "'" + chr(10)
                 + "exec java -Xms1G -Xmx2G " + FLAGS_17 + " -jar " + server_jar + " nogui" + chr(10))
     with open(os.path.join(sdir, "start.bat"), "w") as f:
         f.write("@echo off" + chr(13) + chr(10)
                 + "echo " + BN + chr(13) + chr(10)
-                + "echo   CUANTIC " + VER + " - motor forjat de noi" + chr(13) + chr(10)
-                + "echo   orice PC / zero lag / cost 0" + chr(13) + chr(10)
+                + "echo   CUANTIC " + VER + " - CatServer upstream + Forge 1.16.5" + chr(13) + chr(10)
+                + "echo   RP modat / survival / cost 0" + chr(13) + chr(10)
                 + "echo " + BN + chr(13) + chr(10)
                 + "java -Xms1G -Xmx2G " + FLAGS_17 + " -jar " + server_jar + " nogui" + chr(13) + chr(10)
                 + "pause" + chr(13) + chr(10))
@@ -1000,8 +1008,12 @@ def write_start_scripts(sdir, server_jar):
         f.write("# generat gol intentionat - ModernLife il umple la primul boot (ucide eroarea File not found)\n")
     inc = os.path.join(cfg, "incontrol")
     os.makedirs(inc, exist_ok=True)
-    with open(os.path.join(inc, "spawn.json"), "w") as f:
-        f.write('[\n  {"hostile": true, "maxcount": 50, "result": "deny"}\n]\n')
+    # Nu refuzam spawnurile naturale pe baza unui maxcount: maxcount + deny
+    # potriveste tocmai populatiile sub prag (documentatia In Control 1.16+).
+    # Fara regula custom, Forge/vanilla decid mobcap-ul. Un cap experimental
+    # scalat se testeaza separat, cu client real si memorie masurata.
+    with open(os.path.join(inc, "spawn.json"), "w", encoding="utf-8") as f:
+        f.write('[]\n')
 
 
 def main():
@@ -1127,7 +1139,7 @@ def main():
     new_index = {
         "formatVersion": 1, "game": "minecraft", "versionId": ver,
         "name": rules["pack_name"],
-        "summary": "CUANTIC (Palma City RP) - serverul de viitor: merge pe orice PC, ruleaza cu 2.6GB, boot 11s.",
+        "summary": "CUANTIC (Palma City RP) - Forge 1.16.5 modat; performanta si compatibilitatea necesita teste pe hardware-ul tinta.",
         "dependencies": {"minecraft": mc, "forge": forge},
         "files": client_files,
     }
@@ -1327,12 +1339,12 @@ def main():
     write_start_scripts(s4, rules["catserver_jar"])
     with open(os.path.join(s4, "CITESTE-MA.txt"), "w") as f:
         f.write(README_ARCLIGHT.replace("Arclight 1.16.5 = Forge + pluginuri Bukkit",
-                                        "CatServer 1.16.5 = Forge + pluginuri Bukkit/Spigot (cel mai STABIL hibrid)")
+                                        "CatServer 1.16.5 = Forge + pluginuri Bukkit/Spigot (upstream CatServer)")
                 .replace("arclight-forge-1.16.5-1.0.25.jar", rules["catserver_jar"])
                 .replace("(Arclight isi descarca librariile)", "(isi descarca librariile)")
-                + "\nNOTA: CatServer e renumit pentru compatibilitate maxima moduri+pluginuri\n"
-                  "(build mai 2023, cel mai recent hibrid 1.16.5 intretinut). Daca Mist crapa,\n"
-                  "incearca intai varianta asta inainte de Arclight.\n")
+                + "\nNOTA: CatServer este un upstream hibrid Forge+Bukkit.\n"
+                  "Verifica pe staging clientul modat, pluginurile si survivalul;\n"
+                  "compatibilitatea universala nu este demonstrata.\n")
     z4 = os.path.join(out_dir, f"CUANTIC-Server-CatServer-{ver}.zip")
     with zipfile.ZipFile(z4, "w", zipfile.ZIP_DEFLATED) as z:
         zip_dir(z, s4)
@@ -1358,9 +1370,9 @@ def main():
         for n in report["server_added"]:
             f.write(f"- ✅ {n}\n")
         f.write("\n### Setari consum minim\n")
-        f.write("- JVM: porneste la 1 GB, creste doar la nevoie (max 4 GB), G1GC Aikar\n")
-        f.write("- view-distance=4 + sync-chunk-writes=false, max-players=15, mobi activati doar langa jucatori\n")
-        f.write("- Arclight in plus: hoppers rarite, spawn-limits mici, villagers inactivi inghetati\n")
+        f.write("- Scripturile de start incluse folosesc -Xms1G -Xmx2G; in CI flagurile sunt verificate pe Java 17, iar memoria hostului tinta se dimensioneaza separat\n")
+        f.write("- view-distance=4, transport nativ activ, max-players=25; spawnurile naturale si RAM necesita validare in staging\n")
+        f.write("- End activ, AI-ul moburilor din spawner si hoppers la timingul standard; alte limite de spawn si activation-range necesita test de gameplay\n")
 
     shutil.rmtree(work, ignore_errors=True)
     shutil.rmtree(base, ignore_errors=True)
