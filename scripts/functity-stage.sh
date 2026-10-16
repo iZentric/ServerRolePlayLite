@@ -304,6 +304,17 @@ PY
   echo "$S ${SZ}MiB $(date -u '+%F %T')" > "$HOME/functity-out/worldsync.ready"
   say "  worldsync.tar.gz ${SZ} MiB sha $S — pregatit pt release"
   ;;
+  ocicfg) # extrag tenancy+region din configul pre-autenticat al cloud shell + verific comanda de pornire
+  say "== OCICFG =="
+  T=$(grep -rhE "tenancy[[:space:]]*=" /etc/oci/config 2>/dev/null | head -1 | sed "s/.*= *//")
+  R=$(grep -rhE "region[[:space:]]*=" /etc/oci/config 2>/dev/null | head -1 | sed "s/.*= *//")
+  say "  tenancy: ${T:-NU-GASIT}"
+  say "  region: ${R:-NU-GASIT}"
+  say "  user-ocid (din mediu): ${OCI_CS_USER_OCID:-absent}"
+  H=$(OCI_CLI_CONFIG_FILE=/etc/oci/config ${OCI:+} /usr/bin/oci cloud-shell environment get 2>&1 | head -6)
+  say "  cli get: $(echo "$H" | tr "\n" " | " | cut -c1-220)"
+  say "  cli help create: $(OCI_CLI_CONFIG_FILE=/etc/oci/config /usr/bin/oci cloud-shell environment --help 2>&1 | grep -oE "^  [a-z-]+" | tr "\n" " ")"
+  ;;
   sshcheck) # verific ipoteza "masina = OCI Cloud Shell" si ce usi avem (portul ssh, chei)
   say "== SSHCHECK =="
   say "  variabile mediu cloud shell: $(env | grep -iE "CLOUD_SHELL|OCI" | head -4 | tr "\n" " ")"
