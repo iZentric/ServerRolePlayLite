@@ -1,9 +1,0 @@
-RECUPERARE CUANTIC — snapshot al surselor locale, 12.10.2026
-
-Această sesiune este închisă pentru operații GitHub. Fișierele de lucru există, dar checkout-ul Git local a fost recreat și NU mai conține obiectele commiturilor locale 2f37bb9, db764f9, ffca180 sau f15d86b. Nu încercați push-ul acelor hashuri: nu există în acest checkout.
-
-Arhiva RECUPERARE-CUANTIC-surse-2026-10-12.tar.gz conține întregul cod-sursă curent, workflow-urile, site-ul și documentația, plus doar rapoartele de analiză de care depind testele/site-ul. Exclude .git, deploy, rapoartele de server nefolosite, cache-urile și artefactele mari. Este un snapshot de fișiere, NU o serie de commituri și NU dovedește performanța sau compatibilitatea unui JAR.
-
-Pentru a continua în sesiunea NOUĂ Arena pentru iZentric/ServerRolePlayLite: atașați arhiva, extrageți-o într-un director temporar (NU direct peste clone), comparați fișierele cu origin/main și aplicați numai diferențele necesare pe branch-ul acelei sesiuni. Rulați python3 -m unittest discover -s tests -q și git diff --check. Nu ștergeți release-ul lite, nu modificați serverul live și nu publicați un JAR netestat. Verificați diferențele înainte de orice push.
-
-Status anterior recreării checkout-ului: 27 teste locale trecute; nicio publicare/deploy după commiturile locale menționate.
