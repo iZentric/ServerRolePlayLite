@@ -298,7 +298,7 @@ PY
   snapgit) # plasa de siguranta: world -> tar.gz + marchat pt upload pe release (pasul din workflow il urca)
   mkdir -p "$HOME/functity-out"
   say "== SNAPGIT =="
-  tar -C "$D" -czf "$HOME/functity-out/worldsync.tar.gz" world 2>>"$LOGF"
+  tar -C "$D" -czf "$HOME/functity-out/worldsync.tar.gz" world 2>>"$REPORT"
   S=$(sha256sum "$HOME/functity-out/worldsync.tar.gz" 2>/dev/null | cut -c1-16)
   SZ=$(du -m "$HOME/functity-out/worldsync.tar.gz" 2>/dev/null | cut -f1)
   echo "$S ${SZ}MiB $(date -u '+%F %T')" > "$HOME/functity-out/worldsync.ready"

@@ -57,21 +57,16 @@ jobs:
           API=https://api.github.com/repos/$GITHUB_REPOSITORY
           UP=https://uploads.github.com/repos/$GITHUB_REPOSITORY
           TOK="${{ secrets.GITHUB_TOKEN }}"
-          RID=$(curl -s -H "Authorization: Bearer $TOK" $API/releases/tags/world-live | python3 -c 'import sys,json
-try: print(json.load(sys.stdin)["id"])
-except Exception: print("")')
-          if [ -z "$RID" ]; then
-            RID=$(curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/json" -d '{"tag_name":"world-live","name":"FunCity world snapshots","draft":false,"body":"Plasa de siguranta a lumii FunCity. Nu stergeti release-ul."}' $API/releases | python3 -c 'import sys,json
-try: print(json.load(sys.stdin)["id"])
-except Exception: print("")')
+          GETID='import sys,json;print(json.load(sys.stdin).get("id","") or "")'
+          RID=$(curl -s -H "Authorization: Bearer $TOK" $API/releases/tags/world-live 2>/dev/null | python3 -c "$GETID" 2>/dev/null)
+          if [ -z "$RID" ] || [ "$RID" = None ]; then
+            RID=$(curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/json" -d '{"tag_name":"world-live","name":"FunCity world snapshots","draft":false,"body":"Plasa de siguranta a lumii FunCity. Nu stergeti release-ul."}' $API/releases | python3 -c "$GETID" 2>/dev/null)
           fi
-          [ -n "$RID" ] || { echo "ESUEC: nu am putut crea/gasi release world-live"; rm -f "$R"; exit 0; }
-          AID=$(curl -s -H "Authorization: Bearer $TOK" $API/releases/$RID/assets | python3 -c 'import sys,json
-a=json.load(sys.stdin)
-print(next((x["id"] for x in a if x["name"]=="worldsync.tar.gz"),""))' 2>/dev/null)
+          if [ -z "$RID" ] || [ "$RID" = None ]; then echo "ESUEC: nu am putut crea/gasi release world-live"; rm -f "$R"; exit 0; fi
+          AID=$(curl -s -H "Authorization: Bearer $TOK" $API/releases/$RID/assets | python3 -c 'import sys,json;print(next((x["id"] for x in json.load(sys.stdin) if x["name"]=="worldsync.tar.gz"),""))' 2>/dev/null)
           if [ -n "$AID" ]; then curl -s -X DELETE -H "Authorization: Bearer $TOK" $API/releases/assets/$AID > /dev/null; fi
-          curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/gzip" --data-binary "@$HOME/functity-out/worldsync.tar.gz" "$UP/releases/$RID/assets?name=worldsync.tar.gz" | grep -o '"size":[0-9]*' | head -1
-          echo "upload finalizat: $(cat $R)"
+          curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/gzip" --data-binary "@$HOME/functity-out/worldsync.tar.gz" "$UP/releases/$RID/assets?name=worldsync.tar.gz" | python3 -c 'import sys,json;d=json.load(sys.stdin);print("ASSET OK, bytes:",d.get("size"))' 2>/dev/null || echo "ESUEC UPLOAD (raspuns negat)"
+          echo "semnatura: $(cat $R)"
           rm -f "$R"
   relay:
     needs: s
