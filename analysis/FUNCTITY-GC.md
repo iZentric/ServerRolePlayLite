@@ -1,6 +1,6 @@
-# FUNCTITY-GC — pauzele GC ale FC-BENCH v4, reprocesate din artefacte (2026-10-14 11:39 UTC)
+# FUNCTITY-GC — pauzele GC ale FC-BENCH v4, reprocesate din artefacte (2026-10-16 22:57 UTC)
 
-Alergare CI: 38558064589 · artefacte: run 38510786719: fcbench-catserver fcbench-functity_b0 fcbench-functity_b1 fcbench-oficial1237  | jurnale gc: 12;run 38519665645: fcbench-catserver fcbench-functity_b0 fcbench-functity_b1 fcbench-oficial1237  | jurnale gc: 12; · rc parser: RC=0
+Alergare CI: 38978721931 · artefacte: run 38510786719: fcbench-catserver fcbench-functity_b0 fcbench-functity_b1 fcbench-oficial1237  | jurnale gc: 12;run 38519665645: fcbench-catserver fcbench-functity_b0 fcbench-functity_b1 fcbench-oficial1237  | jurnale gc: 12;run 38558064533: fcbench-catserver fcbench-functity_b0 fcbench-functity_b1 fcbench-oficial1237  | jurnale gc: 12; · rc parser: RC=0
 Jurnale brute: https://github.com/iZentric/ServerRolePlayLite/tree/functity-out/bench-v4/gc
 
 
@@ -23,6 +23,15 @@ FC-GC: pauzele STW din -Xlog:gc* (Java 11 G1) ale alergarilor FC-BENCH v4, repro
 | FunCity b0 — build propriu, pin 754b578e, FARA patch-uri (baseline) | 3/3 | 48/45/47 | 1466/1441/1454 | 83.6 | 70.7 | 3 / 929 s (0.19/min) | 42.1 | 0 | 516/550/553 |
 | FunCity b1.2256 — baseline + P0b/P0c/P0d + P1 dropper-guard | 3/3 | 49/43/46 | 1558/1317/1449 | 127.5 | 71.7 | 1 / 929 s (0.07/min) | 51.0 | 0 | 535/550/551 |
 | Mohist oficial 1.16.5-1237 (referinta) | 3/3 | 48/45/46 | 1176/1237/1186 | 98.6 | 68.0 | 2 / 929 s (0.13/min) | 37.3 | 0 | 536/557/547 |
+
+## Alergare 38558064533
+
+| brat | probe | boot: pauze/proba | boot: total ms/proba | boot max ms | boot p95 ms | idle (dupa Done): pauze / fereastra | idle max ms | Full-GC | heap dupa ultimul young (MB) |
+|---|---|---|---|---|---|---|---|---|---|
+| CatServer din pack (motorul istoric al serverului) | 3/3 | 49/47/52 | 1561/1344/1456 | 151.2 | 93.8 | 2 / 929 s (0.13/min) | 44.3 | 3 — (System.gc()) @0.52s 4.327ms; (System.gc()) @0.554s 4.443ms; (System.gc()) @0.584s 8.118ms | 626/625/641 |
+| FunCity b0 — build propriu, pin 754b578e, FARA patch-uri (baseline) | 3/3 | 47/47/46 | 1364/1296/1428 | 112.4 | 74.3 | 2 / 929 s (0.13/min) | 50.9 | 0 | 534/555/547 |
+| FunCity b1.2256 — baseline + P0b/P0c/P0d + P1 dropper-guard | 3/3 | 48/49/43 | 1495/1428/1527 | 144.2 | 82.4 | 1 / 929 s (0.07/min) | 54.5 | 0 | 522/544/559 |
+| Mohist oficial 1.16.5-1237 (referinta) | 3/3 | 48/48/48 | 1646/1767/1789 | 131.6 | 99.0 | 2 / 929 s (0.13/min) | 66.7 | 0 | 535/550/553 |
 
 Semnificatie: pauza = timp in care TOATE firele serverului stau (STW). Un tick are 50 ms; o pauza sub ~10 ms
 nu se vede in joc, una peste 50 ms = tick sarit. `boot` = de la pornirea JVM pana la `Done` (incarcare moduri,
@@ -1713,6 +1722,848 @@ ca heap-ul nu s-a umplut in fereastra, nu ca GC-ul ar fi gratuit sub sarcina. Fu
        },
        "fisier": "gc-trial3.log",
        "linii_jurnal": 592
+      }
+     ]
+    }
+   }
+  },
+  "38558064533": {
+   "arms": {
+    "catserver": {
+     "arm": "catserver",
+     "eticheta": "CatServer din pack (motorul istoric al serverului)",
+     "java": "temurin-11 @ ubuntu-24.04 (4 vCPU, 16GB)",
+     "probe_cu_jurnal": 3,
+     "probe_masurate": 3,
+     "stare": "MASURAT",
+     "toate_pauzele": {
+      "n": 150,
+      "total_ms": 4435.9,
+      "max_ms": 151.2,
+      "medie_ms": 29.57,
+      "p95_ms": 93.8,
+      "p99_ms": 132.7
+     },
+     "full_gc_total": 3,
+     "full_detalii": [
+      "(System.gc()) @0.52s 4.327ms",
+      "(System.gc()) @0.554s 4.443ms",
+      "(System.gc()) @0.584s 8.118ms"
+     ],
+     "boot": {
+      "pauze_pe_proba": [
+       49,
+       47,
+       52
+      ],
+      "total_ms_pe_proba": [
+       1560.9,
+       1344.0,
+       1455.5
+      ],
+      "pooled": {
+       "n": 148,
+       "total_ms": 4360.5,
+       "max_ms": 151.2,
+       "medie_ms": 29.46,
+       "p95_ms": 93.8,
+       "p99_ms": 132.7
+      }
+     },
+     "idle": {
+      "pauze_total": 2,
+      "fereastra_total_s": 928.8,
+      "pauze_pe_minut": 0.129,
+      "pauze_pe_proba": [
+       1,
+       1,
+       0
+      ],
+      "pooled": {
+       "n": 2,
+       "total_ms": 75.4,
+       "max_ms": 44.3,
+       "medie_ms": 37.72,
+       "p95_ms": 44.3,
+       "p99_ms": 44.3
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      626.0,
+      625.0,
+      641.0
+     ],
+     "probe": [
+      {
+       "trial": 1,
+       "stare": "MASURAT",
+       "total": {
+        "n": 50,
+        "total_ms": 1592.1,
+        "max_ms": 151.2,
+        "medie_ms": 31.84,
+        "p95_ms": 106.0,
+        "p99_ms": 151.2
+       },
+       "pe_tip": {
+        "Young": 35,
+        "Remark": 7,
+        "Cleanup": 7,
+        "Full": 1
+       },
+       "full_gc": 1,
+       "full_detalii": [
+        "(System.gc()) @0.584s 8.118ms"
+       ],
+       "young_max_ms": 151.2,
+       "heap_dupa_ultimul_young_mb": 626.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 353.502,
+       "jvm_iesire_s": 353.722,
+       "durata_jurnal_s": 353.722,
+       "boot_s_folosit": 44.08,
+       "boot": {
+        "n": 49,
+        "total_ms": 1560.9,
+        "max_ms": 151.2,
+        "medie_ms": 31.86,
+        "p95_ms": 106.0,
+        "p99_ms": 151.2
+       },
+       "idle": {
+        "n": 1,
+        "total_ms": 31.2,
+        "max_ms": 31.2,
+        "medie_ms": 31.16,
+        "p95_ms": 31.2,
+        "p99_ms": 31.2,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0101
+       },
+       "fisier": "gc-trial1.log",
+       "linii_jurnal": 649
+      },
+      {
+       "trial": 2,
+       "stare": "MASURAT",
+       "total": {
+        "n": 48,
+        "total_ms": 1388.3,
+        "max_ms": 132.7,
+        "medie_ms": 28.92,
+        "p95_ms": 67.2,
+        "p99_ms": 132.7
+       },
+       "pe_tip": {
+        "Young": 35,
+        "Remark": 6,
+        "Cleanup": 6,
+        "Full": 1
+       },
+       "full_gc": 1,
+       "full_detalii": [
+        "(System.gc()) @0.52s 4.327ms"
+       ],
+       "young_max_ms": 132.7,
+       "heap_dupa_ultimul_young_mb": 625.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 41.696,
+       "jvm_iesire_s": 351.216,
+       "durata_jurnal_s": 351.216,
+       "boot_s_folosit": 41.57,
+       "boot": {
+        "n": 47,
+        "total_ms": 1344.0,
+        "max_ms": 132.7,
+        "medie_ms": 28.6,
+        "p95_ms": 67.2,
+        "p99_ms": 132.7
+       },
+       "idle": {
+        "n": 1,
+        "total_ms": 44.3,
+        "max_ms": 44.3,
+        "medie_ms": 44.29,
+        "p95_ms": 44.3,
+        "p99_ms": 44.3,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0143
+       },
+       "fisier": "gc-trial2.log",
+       "linii_jurnal": 625
+      },
+      {
+       "trial": 3,
+       "stare": "MASURAT",
+       "total": {
+        "n": 52,
+        "total_ms": 1455.5,
+        "max_ms": 123.9,
+        "medie_ms": 27.99,
+        "p95_ms": 81.0,
+        "p99_ms": 123.9
+       },
+       "pe_tip": {
+        "Young": 37,
+        "Remark": 7,
+        "Cleanup": 7,
+        "Full": 1
+       },
+       "full_gc": 1,
+       "full_detalii": [
+        "(System.gc()) @0.554s 4.443ms"
+       ],
+       "young_max_ms": 123.9,
+       "heap_dupa_ultimul_young_mb": 641.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 40.717,
+       "jvm_iesire_s": 351.186,
+       "durata_jurnal_s": 351.186,
+       "boot_s_folosit": 41.57,
+       "boot": {
+        "n": 52,
+        "total_ms": 1455.5,
+        "max_ms": 123.9,
+        "medie_ms": 27.99,
+        "p95_ms": 81.0,
+        "p99_ms": 123.9
+       },
+       "idle": {
+        "n": 0,
+        "total_ms": 0.0,
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
+       },
+       "fisier": "gc-trial3.log",
+       "linii_jurnal": 675
+      }
+     ]
+    },
+    "functity_b0": {
+     "arm": "functity_b0",
+     "eticheta": "FunCity b0 — build propriu, pin 754b578e, FARA patch-uri (baseline)",
+     "java": "temurin-11 @ ubuntu-24.04 (4 vCPU, 16GB)",
+     "probe_cu_jurnal": 3,
+     "probe_masurate": 3,
+     "stare": "MASURAT",
+     "toate_pauzele": {
+      "n": 142,
+      "total_ms": 4180.7,
+      "max_ms": 112.4,
+      "medie_ms": 29.44,
+      "p95_ms": 74.3,
+      "p99_ms": 100.8
+     },
+     "full_gc_total": 0,
+     "full_detalii": [],
+     "boot": {
+      "pauze_pe_proba": [
+       47,
+       47,
+       46
+      ],
+      "total_ms_pe_proba": [
+       1364.4,
+       1296.2,
+       1427.8
+      ],
+      "pooled": {
+       "n": 140,
+       "total_ms": 4088.4,
+       "max_ms": 112.4,
+       "medie_ms": 29.2,
+       "p95_ms": 74.3,
+       "p99_ms": 100.8
+      }
+     },
+     "idle": {
+      "pauze_total": 2,
+      "fereastra_total_s": 928.9,
+      "pauze_pe_minut": 0.129,
+      "pauze_pe_proba": [
+       1,
+       1,
+       0
+      ],
+      "pooled": {
+       "n": 2,
+       "total_ms": 92.4,
+       "max_ms": 50.9,
+       "medie_ms": 46.18,
+       "p95_ms": 50.9,
+       "p99_ms": 50.9
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      534.0,
+      555.0,
+      547.0
+     ],
+     "probe": [
+      {
+       "trial": 1,
+       "stare": "MASURAT",
+       "total": {
+        "n": 48,
+        "total_ms": 1405.8,
+        "max_ms": 89.4,
+        "medie_ms": 29.29,
+        "p95_ms": 69.2,
+        "p99_ms": 89.4
+       },
+       "pe_tip": {
+        "Young": 36,
+        "Remark": 6,
+        "Cleanup": 6,
+        "Full": 0
+       },
+       "full_gc": 0,
+       "full_detalii": [],
+       "young_max_ms": 89.4,
+       "heap_dupa_ultimul_young_mb": 534.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 47.22,
+       "jvm_iesire_s": 356.14,
+       "durata_jurnal_s": 356.14,
+       "boot_s_folosit": 46.58,
+       "boot": {
+        "n": 47,
+        "total_ms": 1364.4,
+        "max_ms": 89.4,
+        "medie_ms": 29.03,
+        "p95_ms": 69.2,
+        "p99_ms": 89.4
+       },
+       "idle": {
+        "n": 1,
+        "total_ms": 41.4,
+        "max_ms": 41.4,
+        "medie_ms": 41.45,
+        "p95_ms": 41.4,
+        "p99_ms": 41.4,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0134
+       },
+       "fisier": "gc-trial1.log",
+       "linii_jurnal": 620
+      },
+      {
+       "trial": 2,
+       "stare": "MASURAT",
+       "total": {
+        "n": 48,
+        "total_ms": 1347.1,
+        "max_ms": 96.6,
+        "medie_ms": 28.06,
+        "p95_ms": 63.4,
+        "p99_ms": 96.6
+       },
+       "pe_tip": {
+        "Young": 34,
+        "Remark": 7,
+        "Cleanup": 7,
+        "Full": 0
+       },
+       "full_gc": 0,
+       "full_detalii": [],
+       "young_max_ms": 96.6,
+       "heap_dupa_ultimul_young_mb": 555.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 40.781,
+       "jvm_iesire_s": 350.228,
+       "durata_jurnal_s": 350.228,
+       "boot_s_folosit": 40.56,
+       "boot": {
+        "n": 47,
+        "total_ms": 1296.2,
+        "max_ms": 96.6,
+        "medie_ms": 27.58,
+        "p95_ms": 63.4,
+        "p99_ms": 96.6
+       },
+       "idle": {
+        "n": 1,
+        "total_ms": 50.9,
+        "max_ms": 50.9,
+        "medie_ms": 50.91,
+        "p95_ms": 50.9,
+        "p99_ms": 50.9,
+        "fereastra_s": 309.7,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0164
+       },
+       "fisier": "gc-trial2.log",
+       "linii_jurnal": 618
+      },
+      {
+       "trial": 3,
+       "stare": "MASURAT",
+       "total": {
+        "n": 46,
+        "total_ms": 1427.8,
+        "max_ms": 112.4,
+        "medie_ms": 31.04,
+        "p95_ms": 83.8,
+        "p99_ms": 112.4
+       },
+       "pe_tip": {
+        "Young": 34,
+        "Remark": 6,
+        "Cleanup": 6,
+        "Full": 0
+       },
+       "full_gc": 0,
+       "full_detalii": [],
+       "young_max_ms": 112.4,
+       "heap_dupa_ultimul_young_mb": 547.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 39.317,
+       "jvm_iesire_s": 349.144,
+       "durata_jurnal_s": 349.144,
+       "boot_s_folosit": 39.57,
+       "boot": {
+        "n": 46,
+        "total_ms": 1427.8,
+        "max_ms": 112.4,
+        "medie_ms": 31.04,
+        "p95_ms": 83.8,
+        "p99_ms": 112.4
+       },
+       "idle": {
+        "n": 0,
+        "total_ms": 0.0,
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
+       },
+       "fisier": "gc-trial3.log",
+       "linii_jurnal": 594
+      }
+     ]
+    },
+    "functity_b1": {
+     "arm": "functity_b1",
+     "eticheta": "FunCity b1.2256 — baseline + P0b/P0c/P0d + P1 dropper-guard",
+     "java": "temurin-11 @ ubuntu-24.04 (4 vCPU, 16GB)",
+     "probe_cu_jurnal": 3,
+     "probe_masurate": 3,
+     "stare": "MASURAT",
+     "toate_pauzele": {
+      "n": 141,
+      "total_ms": 4504.3,
+      "max_ms": 144.2,
+      "medie_ms": 31.95,
+      "p95_ms": 82.4,
+      "p99_ms": 110.0
+     },
+     "full_gc_total": 0,
+     "full_detalii": [],
+     "boot": {
+      "pauze_pe_proba": [
+       48,
+       49,
+       43
+      ],
+      "total_ms_pe_proba": [
+       1494.6,
+       1428.0,
+       1527.2
+      ],
+      "pooled": {
+       "n": 140,
+       "total_ms": 4449.8,
+       "max_ms": 144.2,
+       "medie_ms": 31.78,
+       "p95_ms": 82.4,
+       "p99_ms": 110.0
+      }
+     },
+     "idle": {
+      "pauze_total": 1,
+      "fereastra_total_s": 928.9,
+      "pauze_pe_minut": 0.065,
+      "pauze_pe_proba": [
+       0,
+       0,
+       1
+      ],
+      "pooled": {
+       "n": 1,
+       "total_ms": 54.5,
+       "max_ms": 54.5,
+       "medie_ms": 54.52,
+       "p95_ms": 54.5,
+       "p99_ms": 54.5
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      522.0,
+      544.0,
+      559.0
+     ],
+     "probe": [
+      {
+       "trial": 1,
+       "stare": "MASURAT",
+       "total": {
+        "n": 48,
+        "total_ms": 1494.6,
+        "max_ms": 110.0,
+        "medie_ms": 31.14,
+        "p95_ms": 82.4,
+        "p99_ms": 110.0
+       },
+       "pe_tip": {
+        "Young": 34,
+        "Remark": 7,
+        "Cleanup": 7,
+        "Full": 0
+       },
+       "full_gc": 0,
+       "full_detalii": [],
+       "young_max_ms": 110.0,
+       "heap_dupa_ultimul_young_mb": 522.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 40.113,
+       "jvm_iesire_s": 350.155,
+       "durata_jurnal_s": 350.155,
+       "boot_s_folosit": 40.58,
+       "boot": {
+        "n": 48,
+        "total_ms": 1494.6,
+        "max_ms": 110.0,
+        "medie_ms": 31.14,
+        "p95_ms": 82.4,
+        "p99_ms": 110.0
+       },
+       "idle": {
+        "n": 0,
+        "total_ms": 0.0,
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
+       },
+       "fisier": "gc-trial1.log",
+       "linii_jurnal": 618
+      },
+      {
+       "trial": 2,
+       "stare": "MASURAT",
+       "total": {
+        "n": 49,
+        "total_ms": 1428.0,
+        "max_ms": 99.6,
+        "medie_ms": 29.14,
+        "p95_ms": 66.1,
+        "p99_ms": 99.6
+       },
+       "pe_tip": {
+        "Young": 35,
+        "Remark": 7,
+        "Cleanup": 7,
+        "Full": 0
+       },
+       "full_gc": 0,
+       "full_detalii": [],
+       "young_max_ms": 99.6,
+       "heap_dupa_ultimul_young_mb": 544.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 36.878,
+       "jvm_iesire_s": 346.768,
+       "durata_jurnal_s": 346.768,
+       "boot_s_folosit": 37.07,
+       "boot": {
+        "n": 49,
+        "total_ms": 1428.0,
+        "max_ms": 99.6,
+        "medie_ms": 29.14,
+        "p95_ms": 66.1,
+        "p99_ms": 99.6
+       },
+       "idle": {
+        "n": 0,
+        "total_ms": 0.0,
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.7,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
+       },
+       "fisier": "gc-trial2.log",
+       "linii_jurnal": 631
+      },
+      {
+       "trial": 3,
+       "stare": "MASURAT",
+       "total": {
+        "n": 44,
+        "total_ms": 1581.7,
+        "max_ms": 144.2,
+        "medie_ms": 35.95,
+        "p95_ms": 92.1,
+        "p99_ms": 144.2
+       },
+       "pe_tip": {
+        "Young": 32,
+        "Remark": 6,
+        "Cleanup": 6,
+        "Full": 0
+       },
+       "full_gc": 0,
+       "full_detalii": [],
+       "young_max_ms": 144.2,
+       "heap_dupa_ultimul_young_mb": 559.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 335.531,
+       "jvm_iesire_s": 345.172,
+       "durata_jurnal_s": 345.172,
+       "boot_s_folosit": 35.57,
+       "boot": {
+        "n": 43,
+        "total_ms": 1527.2,
+        "max_ms": 144.2,
+        "medie_ms": 35.52,
+        "p95_ms": 92.1,
+        "p99_ms": 144.2
+       },
+       "idle": {
+        "n": 1,
+        "total_ms": 54.5,
+        "max_ms": 54.5,
+        "medie_ms": 54.52,
+        "p95_ms": 54.5,
+        "p99_ms": 54.5,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0176
+       },
+       "fisier": "gc-trial3.log",
+       "linii_jurnal": 568
+      }
+     ]
+    },
+    "oficial1237": {
+     "arm": "oficial1237",
+     "eticheta": "Mohist oficial 1.16.5-1237 (referinta)",
+     "java": "temurin-11 @ ubuntu-24.04 (4 vCPU, 16GB)",
+     "probe_cu_jurnal": 3,
+     "probe_masurate": 3,
+     "stare": "MASURAT",
+     "toate_pauzele": {
+      "n": 146,
+      "total_ms": 5320.0,
+      "max_ms": 131.6,
+      "medie_ms": 36.44,
+      "p95_ms": 99.0,
+      "p99_ms": 121.2
+     },
+     "full_gc_total": 0,
+     "full_detalii": [],
+     "boot": {
+      "pauze_pe_proba": [
+       48,
+       48,
+       48
+      ],
+      "total_ms_pe_proba": [
+       1646.0,
+       1767.0,
+       1789.3
+      ],
+      "pooled": {
+       "n": 144,
+       "total_ms": 5202.2,
+       "max_ms": 131.6,
+       "medie_ms": 36.13,
+       "p95_ms": 99.0,
+       "p99_ms": 121.2
+      }
+     },
+     "idle": {
+      "pauze_total": 2,
+      "fereastra_total_s": 928.9,
+      "pauze_pe_minut": 0.129,
+      "pauze_pe_proba": [
+       1,
+       0,
+       1
+      ],
+      "pooled": {
+       "n": 2,
+       "total_ms": 117.8,
+       "max_ms": 66.7,
+       "medie_ms": 58.89,
+       "p95_ms": 66.7,
+       "p99_ms": 66.7
+      }
+     },
+     "heap_dupa_ultimul_young_mb_pe_proba": [
+      535.0,
+      550.0,
+      553.0
+     ],
+     "probe": [
+      {
+       "trial": 1,
+       "stare": "MASURAT",
+       "total": {
+        "n": 49,
+        "total_ms": 1697.1,
+        "max_ms": 117.9,
+        "medie_ms": 34.63,
+        "p95_ms": 94.7,
+        "p99_ms": 117.9
+       },
+       "pe_tip": {
+        "Young": 35,
+        "Remark": 7,
+        "Cleanup": 7,
+        "Full": 0
+       },
+       "full_gc": 0,
+       "full_detalii": [],
+       "young_max_ms": 117.9,
+       "heap_dupa_ultimul_young_mb": 535.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 108.391,
+       "jvm_iesire_s": 357.441,
+       "durata_jurnal_s": 357.441,
+       "boot_s_folosit": 47.84,
+       "boot": {
+        "n": 48,
+        "total_ms": 1646.0,
+        "max_ms": 117.9,
+        "medie_ms": 34.29,
+        "p95_ms": 94.7,
+        "p99_ms": 117.9
+       },
+       "idle": {
+        "n": 1,
+        "total_ms": 51.1,
+        "max_ms": 51.1,
+        "medie_ms": 51.1,
+        "p95_ms": 51.1,
+        "p99_ms": 51.1,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0165
+       },
+       "fisier": "gc-trial1.log",
+       "linii_jurnal": 631
+      },
+      {
+       "trial": 2,
+       "stare": "MASURAT",
+       "total": {
+        "n": 48,
+        "total_ms": 1767.0,
+        "max_ms": 121.2,
+        "medie_ms": 36.81,
+        "p95_ms": 79.2,
+        "p99_ms": 121.2
+       },
+       "pe_tip": {
+        "Young": 34,
+        "Remark": 7,
+        "Cleanup": 7,
+        "Full": 0
+       },
+       "full_gc": 0,
+       "full_detalii": [],
+       "young_max_ms": 121.2,
+       "heap_dupa_ultimul_young_mb": 550.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 43.425,
+       "jvm_iesire_s": 353.504,
+       "durata_jurnal_s": 353.504,
+       "boot_s_folosit": 43.83,
+       "boot": {
+        "n": 48,
+        "total_ms": 1767.0,
+        "max_ms": 121.2,
+        "medie_ms": 36.81,
+        "p95_ms": 79.2,
+        "p99_ms": 121.2
+       },
+       "idle": {
+        "n": 0,
+        "total_ms": 0.0,
+        "max_ms": 0.0,
+        "medie_ms": 0.0,
+        "p95_ms": 0.0,
+        "p99_ms": 0.0,
+        "fereastra_s": 309.7,
+        "pauze_pe_minut": 0.0,
+        "timp_oprit_pct": 0.0
+       },
+       "fisier": "gc-trial2.log",
+       "linii_jurnal": 618
+      },
+      {
+       "trial": 3,
+       "stare": "MASURAT",
+       "total": {
+        "n": 49,
+        "total_ms": 1856.0,
+        "max_ms": 131.6,
+        "medie_ms": 37.88,
+        "p95_ms": 107.6,
+        "p99_ms": 131.6
+       },
+       "pe_tip": {
+        "Young": 35,
+        "Remark": 7,
+        "Cleanup": 7,
+        "Full": 0
+       },
+       "full_gc": 0,
+       "full_detalii": [],
+       "young_max_ms": 131.6,
+       "heap_dupa_ultimul_young_mb": 553.0,
+       "heap_cap_mb": 1536.0,
+       "ultima_pauza_s": 222.245,
+       "jvm_iesire_s": 352.881,
+       "durata_jurnal_s": 352.881,
+       "boot_s_folosit": 43.33,
+       "boot": {
+        "n": 48,
+        "total_ms": 1789.3,
+        "max_ms": 131.6,
+        "medie_ms": 37.28,
+        "p95_ms": 107.6,
+        "p99_ms": 131.6
+       },
+       "idle": {
+        "n": 1,
+        "total_ms": 66.7,
+        "max_ms": 66.7,
+        "medie_ms": 66.68,
+        "p95_ms": 66.7,
+        "p99_ms": 66.7,
+        "fereastra_s": 309.6,
+        "pauze_pe_minut": 0.194,
+        "timp_oprit_pct": 0.0215
+       },
+       "fisier": "gc-trial3.log",
+       "linii_jurnal": 631
       }
      ]
     }
