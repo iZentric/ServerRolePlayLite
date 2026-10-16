@@ -588,10 +588,11 @@ X
     ;;
   bench) # FC-BENCH v5 PE GAZDA reala: 3 boot-uri la rece pe staging-world identic. Motorul = token 3 al markerului.
     ENG="$CAND"
+    if [ -n "$(pgrep -f "java.*engine.jar" || true)" ]; then say "  alt bench ruleaza deja pe boxa — amana (ruleaza din nou marcajul dupa ce termina)"; finish 1; fi
     say "== FC-BENCH v5 — engine: $ENG — $(nproc) fire, Xmx$XMX, world copiat din productie =="
     case "$ENG" in
-      catserver) JARF=$(find "$B" -maxdepth 3 -iname "*.jar" 2>/dev/null | grep -viE "funclite|/mods/|/plugins/|paper|spigot" | head -1);;
-      mohist)    JARF=$(find "$HOME" -maxdepth 3 -iname "mohist*.jar" 2>/dev/null | head -1)
+      catserver) JARF=$(ls "$P"/CatServer*.jar 2>/dev/null | head -1); [ -f "${JARF:-x}" ] || JARF=$(find "$B" -maxdepth 3 -iname "*CatServer*.jar" 2>/dev/null | head -1);;
+      mohist)    JARF=$( { ls "$P"/mohist*.jar "$B"/mohist*.jar 2>/dev/null; find "$HOME" -maxdepth 3 -iname "mohist*.jar" 2>/dev/null; } | head -1)
                  if [ ! -f "${JARF:-none}" ]; then
                    URL=$(curl -s --max-time 20 https://api.github.com/repos/MohistMC/MohistMC/releases/latest 2>/dev/null | grep -oE "https://[^\"]+mohist-1[.]16[.]5[^\"]*[.]jar" | head -1)
                    [ -z "$URL" ] && URL=$(curl -s --max-time 20 https://api.github.com/repos/MohistMC/Mohist/releases/latest 2>/dev/null | grep -oE "https://[^\"]+mohist-1[.]16[.]5[^\"]*[.]jar" | head -1)
