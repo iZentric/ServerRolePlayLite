@@ -78,17 +78,25 @@ jobs:
       - uses: actions/download-artifact@v4
         continue-on-error: true
         with: { name: stage-raw, path: /tmp/relay }
-      - name: Comite raportul de staging adus de pe gazda
+      - name: Raport = check annotation (zero fisiere md)
         run: |
-          set -uo pipefail
+          set +e
           F=/tmp/relay/funcity-stage.txt
-          [ -f "$F" ] || { echo "artefact absent — jobul de pe gazda nu a produs raport"; exit 0; }
-          git config user.name funcity-relay; git config user.email f@localhost
-          { echo "== SONDA EXTERNA 25565 =="; timeout 20 python3 scripts/minecraft_status.py 92.5.171.150 25565 2>&1 || true; echo "== SONDA EXTERNA 25566 =="; timeout 20 python3 scripts/minecraft_status.py 92.5.171.150 25566 2>&1 || true; echo; echo "# FUNCTITY-STAGE $(date -u '+%F %T') UTC — gazda → artefact → relay"; echo; echo '```'; tr -d '\r' < "$F"; echo '```'; } > analysis/FUNCTITY-STAGE.md
-          { echo; echo "== SONDA EXTERNA (de pe runner hosted, nu din gazda) =="; echo "-- 25565 (productie):"; python3 scripts/minecraft_status.py 92.5.171.150 25565 2>&1 || true; echo "-- 25566 (staging FunCity):"; python3 scripts/minecraft_status.py 92.5.171.150 25566 2>&1 | head -3 || true; } >> /tmp/relay/funcity-stage.txt
-          git add -f analysis/FUNCTITY-STAGE.md
-          git commit -qm "FUNCIŢY-STAGE: raport staging $(date -u '+%F %H:%M') UTC (relay)" || true
-          for i in 1 2 3; do
-            git pull --rebase -q origin "$GITHUB_REF_NAME" 2>/dev/null || git rebase --abort 2>/dev/null || true
-            git push -q origin "HEAD:refs/heads/$GITHUB_REF_NAME" && break; sleep 4
-          done
+          [ -f "$F" ] || { echo "fara raport de la gazda"; exit 0; }
+          HEAD=$(git rev-parse HEAD)
+          SLP=$(timeout 15 python3 scripts/minecraft_status.py 92.5.171.150 25565 2>/dev/null | grep -oE '"online": [0-9]+|"max": [0-9]+' | tr "\n" " ")
+          TXT=$(python3 -c 'import sys,os,json
+t=open("/tmp/relay/funcity-stage.txt").read()
+t=t.replace("\r","")
+slp=os.environ.get("SLP","")
+msg=("sonda: "+slp+" | " if slp else "")+t
+print(json.dumps(msg)[:5800])' 2>/dev/null)
+          SLP="$SLP" python3 - <<'EO' > /tmp/payload.json 2>/dev/null || true
+import os,json
+t=open("/tmp/relay/funcity-stage.txt").read().replace("\r","")
+slp=os.environ.get("SLP","")
+msg=(("sonda 25565: "+slp+" | ") if slp else "")+t
+head=os.environ.get("HEAD")
+print(json.dumps({"commit_id":head,"annotations":[{"path":"functity-stage","start_line":1,"end_line":1,"annotation_level":"notice","title":"Raport gazda (annotation, nu fisier)","message":msg[:5900]}]}))
+EO
+          HEAD="$HEAD" curl -s -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/json" --data @/tmp/payload.json "https://api.github.com/repos/$GITHUB_REPOSITORY/check-runs" -o /dev/null -w "annotation HTTP %{http_code}\n"
