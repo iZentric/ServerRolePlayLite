@@ -284,6 +284,39 @@ PY
     say "RESULTAT: boot1+stop+boot2 OK, 0 crash la salvare/realuare"
     finish 0
     ;;
+  expose) # tunele de TEST in frpc (game 25566 + voice UDP 24454) ca sa poata intra jucatorul
+    # real de pe PC. Backup + verify-gate + autorefacere la config invalid. Tunelul de producție
+    # existent (25565) nu se atinge — doar i se alatura una linie noua.
+    F="$HOME/frpc.toml"
+    [ -f "$F" ] || fail "nu gasesc $F"
+    BK="$B/frpc.toml.bak-$(date -u +%Y%m%d-%H%M%S)"; mkdir -p "$B"; cp "$F" "$BK"
+    say "== EXPOSE tuneluri test (frpc) — backup: $BK =="
+    if grep -q 'name = "fcgame"' "$F"; then
+      say "  tunelele de test exista deja in config — doar repornesc frpc"
+    else
+      printf '\n[[proxies]]\nname = "fcgame"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 25566\nremotePort = 25566\n\n[[proxies]]\nname = "fcvoice"\ntype = "udp"\nlocalIP = "127.0.0.1"\nlocalPort = 24454\nremotePort = 24454\n' >> "$F"
+      say "  adaugate: tcp 25566 (game) si udp 24454 (voicechat) — porturi distincte de productie"
+    fi
+    if "$HOME/frpc" verify -c "$F" >/tmp/frpc-verify.txt 2>&1; then
+      say "  frpc verify: OK"
+      tmux send-keys -t frpc C-c 2>/dev/null; sleep 2
+      pkill -x frpc 2>/dev/null; sleep 1
+      tmux send-keys -t frpc "exec $HOME/frpc -c $HOME/frpc.toml >> $HOME/frpc.log 2>&1" Enter 2>/dev/null \
+        || { setsid bash -c "exec $HOME/frpc -c $HOME/frpc.toml >> $HOME/frpc.log 2>&1" >/dev/null 2>&1 < /dev/null & }
+      sleep 4
+      if pgrep -x frpc >/dev/null; then
+        say "  frpc: REPORNIT cu tunelele de test — clientul tau poate intra pe 92.5.171.150:25566"
+      else
+        cp "$BK" "$F"; setsid bash -c "exec $HOME/frpc -c $HOME/frpc.toml >> $HOME/frpc.log 2>&1" >/dev/null 2>&1 < /dev/null &
+        say "  ATENTIE: frpc nu a supravietuit — config readus din backup si repornit cum era (25565 functiona din nou)"
+      fi
+    else
+      cp "$BK" "$F"
+      say "  frpc verify a CASUT -> config readus din backup, frpc neatins. Eroare verify:"
+      tail -4 /tmp/frpc-verify.txt | sed 's/^/    V /' | tee -a "$REPORT"
+    fi
+    say "  porturi acum: 25565 $(ss -lnt 2>/dev/null | grep -q ':25565 ' && echo VIU || echo mort) | 25566 $(ss -lnt 2>/dev/null | grep -q ':25566 ' && echo VIU || echo mort) | frpc: $(pgrep -x frpc >/dev/null && echo viu || echo mort)"
+    ;;
   restart|up)
     if [ "$M" = restart ] && [ -f "$D/server.pid" ] && kill -0 "$(cat "$D/server.pid")" 2>/dev/null; then
       opreste_server || true; sleep 3
