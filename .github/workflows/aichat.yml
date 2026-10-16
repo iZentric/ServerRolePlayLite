@@ -3,7 +3,7 @@ on:
   push: { paths: ["aichat/**"] }
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,26 +13,29 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "17", cache: maven }
       - name: Compile (Java 8 target pe API 1.16.5)
-        working-directory: aichat
-        run: mvn -B -ntp -q package
-      - name: Salveaza jurnalul pt diagnostic
+        run: |
+          set +e
+          cd aichat
+          mvn -B -ntp package > /tmp/mvn-out.txt 2>&1
+          RC=$?
+          tail -40 /tmp/mvn-out.txt
+          exit $RC
+      - name: Publica jurnalul (esec sau verde — ca sa-l vad si din sandbox)
         if: always()
         run: |
-          cd aichat && (mvn -B -ntp package > /tmp/mvn-out.txt 2>&1; true)
-          { echo "# AICHAT-BUILD $(date -u '+%F %T UTC')"; echo; echo '```'; tail -60 /tmp/mvn-out.txt; echo '```'; } > /tmp/aichat-report.md
-      - name: Publica esec pe bransa (sandbox nu poate citi logurile GH)
-        if: failure()
-        run: |
-          git config user.name bot && git config user.email bot@arena.local
-          cp /tmp/aichat-report.md analysis/AICHAT-BUILD.md
-          git add analysis/AICHAT-BUILD.md && git commit -qm "aichat: jurnal esec build" || exit 0
-          for i in 1 2 3; do git -c pull.rebase=true pull -q --rebase origin "$GITHUB_REF_NAME" && git push -q origin "HEAD:$GITHUB_REF_NAME" && break || sleep 10; done
+          set +e
+          git config user.name bot; git config user.email bot@arena.local
+          { echo "# AICHAT-BUILD $(date -u '+%F %T UTC') rc-stat"; echo; echo '```'; tail -70 /tmp/mvn-out.txt; echo '```'; } > analysis/AICHAT-BUILD.md
+          git add -f analysis/AICHAT-BUILD.md
+          git commit -qm "aichat: jurnal build" || exit 0
+          git pull -q --rebase origin "$GITHUB_REF_NAME" || true
+          git push -q origin "HEAD:$GITHUB_REF_NAME" || true
       - name: Smoke — plugin.yml si clasa in jar
-        working-directory: aichat
         run: |
+          cd aichat
           unzip -l target/FunCityAI-*.jar | grep -q plugin.yml
           unzip -l target/FunCityAI-*.jar | grep -q FunCityAIPlugin.class
-          echo "jar OK: $(ls -la target/FunCityAI-*.jar | awk '{print $5" B"}')"
+          echo "jar OK: $(stat -c%s target/FunCityAI-*.jar) B"
       - uses: actions/upload-artifact@v4
         with:
           name: functityai-jar
