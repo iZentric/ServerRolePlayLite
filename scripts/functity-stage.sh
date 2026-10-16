@@ -281,6 +281,59 @@ PY
     say "RESULTAT: boot1+stop+boot2 OK, 0 crash la salvare/realuare"
     finish 0
     ;;
+  install) # SCHIMB VALIDAT pe productie: FunCity b1.0827 devine serverul de pe 25565,
+    # sub supravegherea lui c.sh (auto-restart, runner keepalive, frpc — tot ce are omul acasa).
+    # Ordine: backup -> stop curat prin puntea cmd.in -> c.sh oprit -> jar+args+props inlocuite
+    # (world NU se atinge) -> c.sh repornit -> verificare. Fiecare pas are drum de intoarcere.
+    say "== INSTALL FunCity pe productie =="
+    SHA_ASTEPTATA=d6ffa35c1ea9032a4a95f7f1e34b734aa7f53b0358dda6b9e6592326640a15dd
+    TS=$(date -u +%Y%m%d-%H%M%S)
+    # 0. canditatul exista si e cel validat?
+    [ -f "$D/FunCity-1.16.5-b1.0827.jar" ] || fail "jar candidat absent in $D"
+    ACTUAL=$(sha256sum "$D/FunCity-1.16.5-b1.0827.jar" | cut -d' ' -f1)
+    [ "$ACTUAL" = "$SHA_ASTEPTATA" ] || fail "SHA candidat diferit: $ACTUAL"
+    # 1. snapshot de rollback (marime mica, cat e nevoie: jar, args, props, c.sh, consola)
+    mkdir -p "$B/install-$TS"; for f in unix_args.txt server.properties start.sh; do [ -f "$P/$f" ] && cp "$P/$f" "$B/install-$TS/"; done
+    [ -f "$HOME/c.sh" ] && cp "$HOME/c.sh" "$B/install-$TS/c.sh"
+    [ -f "$P/world/level.dat" ] && cp "$P/world/level.dat" "$B/install-$TS/level.dat"
+    say "  rollback: $B/install-$TS (tar world complet: ~1-2 min)"
+    tar -czf "$B/prod-world-$TS.tar.gz" -C "$P" world world_nether world_the_end 2>/dev/null && say "  snapshot lumi: $(du -m "$B/prod-world-$TS.tar.gz" | cut -f1) MiB OK" || say "  ATENTIE: tar world a esuat (disc?) — instalez oricum, rollback partial ramas"
+    # 2. oprire curata a serverului curent prin puntea supervisorului
+    if pgrep -f 'java @unix_args' >/dev/null; then
+      : > "$P/cmd.in"; echo stop > "$P/cmd.in"
+      for k in $(seq 1 24); do sleep 5; pgrep -f 'java @unix_args' >/dev/null || break; done
+      pgrep -f 'java @unix_args' >/dev/null && fail "serverul actual nu a iesit dupa 120s — NU fortez, instalezi manual" || say "  server vechi: oprit curat (save facut de el)"
+    fi
+    # 3. opresc supervisorul ca sa nu-si repornesc singur motorul vechi in timpul mutarii
+    pkill -f 'bash .*[/]c\.sh' 2>/dev/null; sleep 2
+    # 4. instalare: java 11 in c.sh + unix_args pentru FunCity + jar + properties(+MOTD) + configuri identice cu staging-ul validat
+    sed -i 's#^J=\$HOME/\.local/jdk17/bin/java#J=$( [ -x "$HOME/funcity-live/jdk11/bin/java" ] \&\& echo "$HOME/funcity-live/jdk11/bin/java" || echo "$HOME/.local/jdk17/bin/java" )#' "$HOME/c.sh"
+    say "  c.sh: java -> $(grep -m1 '^J=' "$HOME/c.sh" | cut -c1-80)..."
+    printf -- '-Xms1G\n-Xmx3G\n-XX:MaxGCPauseMillis=200\n-jar\nFunCity-1.16.5-b1.0827.jar\nnogui\n' > "$P/unix_args.txt"
+    cp "$D/FunCity-1.16.5-b1.0827.jar" "$P/"
+    cp "$D/server.properties" "$P/server.properties"
+    rsync -a --delete "$D/mods/" "$P/mods/" 2>/dev/null
+    rsync -a "$D/plugins/" "$P/plugins/" 2>/dev/null
+    rsync -a "$D/config/" "$P/config/" --exclude 'voicechat*' 2>/dev/null
+    [ -f "$D/server-icon.png" ] && cp "$D/server-icon.png" "$P/"
+    rm -f "$P/serverconfig/voicechat-server.toml" 2>/dev/null # pe productie voicechat vrea default 24454
+    say "  jar+args+props+mods->productie (world neatins, voicechat pe default)"
+    # 5. pornire sub supraveghere deplina
+    ( env -u RUNNER_TRACKING_ID setsid bash "$HOME/c.sh" >> "$P/sup.log" 2>&1 < /dev/null & )
+    say "  c.sh repornit — il las sa faca boot (max 150s)"
+    OK=NU
+    for k in $(seq 1 30); do sleep 5
+      if ss -lnt 2>/dev/null | grep -q ':25565 ' && grep -qa 'Done (' "$P/live.log" 2>/dev/null; then OK=DA; break; fi
+    done
+    say "  boot 25565: $OK | $(grep -a 'Done (' "$P/live.log" 2>/dev/null | tail -1 | cut -c1-60)"
+    say "  erori la pornire: $(grep -acE 'ERROR' "$P/live.log" 2>/dev/null | tail -1) ( numaratoare la intreg logul, nu doar boot-ul curent)"
+    grep -a 'Starting Minecraft server on' "$P/live.log" | tail -1 | sed 's/^/    B /' | tee -a "$REPORT"
+    if [ "$OK" = DA ]; then say "  FUNCITY E PE PRODUCTIE — intri pe 92.5.171.150:25565"; else
+      cp "$B/install-$TS/unix_args.txt" "$P/" 2>/dev/null; cp "$B/install-$TS/server.properties" "$P/" 2>/dev/null
+      printf 'ROLLBACK manual: fisierele in $B/install-%s/, jar vechi in $P/.world salvat; repornire: setsid bash ~/c.sh\n' "$TS" > "$P/ROLLBACK.txt"
+      say "  boot NU s-a confirmat in 150s — am readus unix_args+properties vechi; LAS c.sh pornit sa incerce motorul vechi singur; ROLLBACK.txt in $P"
+    fi
+    ;;
   expose) # tunele de TEST in frpc (game 25566 + voice UDP 24454) ca sa poata intra jucatorul
     # real de pe PC. Backup + verify-gate + autorefacere la config invalid. Tunelul de producție
     # existent (25565) nu se atinge — doar i se alatura una linie noua.
