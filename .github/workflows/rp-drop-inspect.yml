@@ -1,0 +1,145 @@
+name: RP-DROP — citire arhive de backup din Drive (text only, pe runner gazdă)
+on:
+  push:
+    paths:
+      - "deploy/rp-drop.txt"
+      - "scripts/rp_archive_inspect.py"
+      - ".github/workflows/rp-drop-inspect.yml"
+  workflow_dispatch:
+    inputs:
+      only: { description: "doar un id din Drive (gol = toate 4)", required: false, default: "" }
+permissions:
+  contents: write
+concurrency:
+  group: rp-drop
+  cancel-in-progress: false
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  citeste:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix:
+        id:
+          - 17YDGCEJN1qpXLmeHEnQm3oqkcyiGcHVY
+          - 14YtH6Bm4bXxBZAVhkSXUuZHz342R8Xg-
+          - 1unw5JV39l4Amk1ympYjCffq1n31inOO_
+          - 16JmFxSCCIzcNgFiMko8XbH9ggRzHqdlV
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          set -eu
+          NUME=""; ARH=""
+          case "${{ matrix.id }}" in
+            17YDG*) NUME=cffc205d-server; ARH=cffc205d-d386-43d2-a4d2-085561081fec.tar.gz;;
+            14YtH*) NUME=minecity-network; ARH=minecity-network.rar;;
+            1unw5*) NUME=folder-1; ARH=c8b2d730-5dc5-4937-ab90-8f35f48c27ec.tar.gz;;
+            16JmF*) NUME=vibe-rp; ARH=archive-2024-09-14T122917Z.tar.gz;;
+          esac
+          [ -n "$NUME" ] || { echo "id necunoscut"; exit 1; }
+          printf 'NUME=%s\nARH=%s\n' "$NUME" "$ARH" >> "$GITHUB_ENV"
+          mkdir -p /tmp/drop "out/rp-drop/$NUME"
+          : > "out/rp-drop/$NUME/DIAGNOSTIC.txt"
+      - name: Unelte (7zip pentru .rar, gdown pentru Drive)
+        continue-on-error: true
+        run: |
+          sudo apt-get update -qq >/dev/null 2>&1 || echo "apt update a esuat"
+          sudo apt-get install -y -qq p7zip-full unar >/dev/null 2>&1 || echo "apt install a esuat"
+          python3 -m pip install --quiet --disable-pip-version-check gdown 2>&1 | tail -3 || echo "pip gdown a esuat"
+          python3 -c "import gdown;print('gdown', gdown.__version__)" 2>&1 | tail -1 || echo "gdown absent"
+      - name: Descarcă arhiva din Drive
+        continue-on-error: true
+        run: |
+          python3 - "$PWD/out/rp-drop/$NUME/DIAGNOSTIC.txt" <<'PY' > /tmp/drop/gdown.log 2>&1
+          import os, sys, pathlib
+          fid = os.environ["MATRIX_ID"]
+          out = "/tmp/drop/" + os.environ["ARH"]
+          log = open(sys.argv[1], "a", encoding="utf-8")
+          def note(s):
+              print(s); log.write(s + "\n"); log.flush()
+          note("== descarcare %s (%s)" % (fid, os.environ["ARH"]))
+          try:
+              import gdown
+              note("gdown " + getattr(gdown, "__version__", "?"))
+              r = gdown.download(id=fid, output=out, quiet=False)
+              if r is None:
+                  note("gdown a primit NULL: fisierul NU e partajat public (link 'oricine cu linkul') sau e in vantul altcuiva")
+              note("rezultat gdown: " + repr(r))
+          except Exception as e:
+              note("EXCEPTIE gdown: %s: %s" % (type(e).__name__, e))
+          for p in pathlib.Path("/tmp/drop").glob("*"):
+              if p.is_file():
+                  note("fisier %s %d B" % (p.name, p.stat().st_size))
+          PY
+        env:
+          MATRIX_ID: ${{ matrix.id }}
+      - name: Antete — citesc fizic FIECARE fisier din arhiva (tur cu marker HEADERS)
+        continue-on-error: true
+        run: |
+          set -x
+          grep -q HEADERS deploy/rp-drop.txt || { echo "antete: doar la tururile marcate cu HEADERS in deploy/rp-drop.txt"; exit 0; }
+          D="out/rp-drop/$NUME"
+          A=$(find /tmp/drop -type f -size +1M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+          [ -n "${A:-}" ] || { echo "nicio arhiva descarcata, sar peste antete" >> "$D/DIAGNOSTIC.txt"; exit 0; }
+          case "$A" in
+            *.rar)
+              rm -rf /tmp/h /tmp/hd; mkdir -p /tmp/h
+              7z x -y -o/tmp/h "$A" >/dev/null 2>&1 || unar -quiet -force-overwrite -output-directory /tmp/h "$A" >/dev/null 2>&1 || true
+              > "$D/antete.txt"
+              for f in $(find /tmp/h -type f \( -name '*.tar' -o -name '*.tar.gz' -o -name '*.tgz' -o -name '*.zip' \) | grep -vEi "lobby|velocity|bungee|waterfall"); do
+                python3 scripts/rp_archive_inspect.py --archive "$f" --extract-dir /tmp/hx --out /tmp/hd --headers || true
+                cat /tmp/hd/antete.txt >> "$D/antete.txt" 2>/dev/null || true
+                rm -rf /tmp/hd /tmp/hx
+              done ;;
+            *)
+              python3 scripts/rp_archive_inspect.py --archive "$A" --extract-dir /tmp/x --out "$D" --headers || true ;;
+          esac
+          wc -l "$D/antete.txt" 2>/dev/null | awk '{print "antete: " $1 " fisiere vazute"}' >> "$D/DIAGNOSTIC.txt" || true
+      - name: Dezarhiveaza si pastreaza doar textul
+        continue-on-error: true
+        run: |
+          set -x
+          A=$(find /tmp/drop -type f -size +1M -printf '%s %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+          D="out/rp-drop/$NUME"
+          if [ -n "${A:-}" ]; then
+            case "$A" in
+              *.rar) cp "$A" /tmp/drop/arhiva.rar;;
+              *) cp "$A" /tmp/drop/arhiva.tar.gz;;
+            esac
+            F=$(ls /tmp/drop/arhiva.* | head -1)
+            python3 scripts/rp_archive_inspect.py --archive "$F" --extract-dir /tmp/x --out "$D" 2>&1 | tail -40 | tee -a "$D/DIAGNOSTIC.txt" || true
+            if [ -d "$D/config" ]; then
+              cd "$D/config"; ls -1S | tail -n +601 | xargs -r rm -f   # scriptul isi face singur selecia pe latime; aici doar plasa de siguranta
+              cd "$GITHUB_WORKSPACE"
+            fi
+            rm -rf /tmp/x /tmp/drop
+          else
+            echo "niciun fisier descarcat" >> "$D/DIAGNOSTIC.txt"
+            echo "SKIP_PUBLISH=yes" >> "$GITHUB_ENV"
+          fi
+          df -h /tmp | tail -1 >> "$D/DIAGNOSTIC.txt"
+          ls -l /tmp/drop >> "$D/DIAGNOSTIC.txt" 2>&1 || true
+      - name: Publica pe ramura rp-drop
+        if: env.SKIP_PUBLISH != 'yes'
+        run: |
+          set -x
+          exec > >(tee -a "out/rp-drop/$NUME/DIAGNOSTIC.txt") 2>&1
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git worktree prune || true
+          rm -rf /tmp/wt
+          echo "surse: $(find out/rp-drop/$NUME -type f | wc -l) fisiere, $(du -sh out/rp-drop/$NUME | cut -f1)"
+          for i in 1 2 3; do
+            git fetch -q origin rp-drop || break
+            git worktree add /tmp/wt -B rp-drop origin/rp-drop || { git worktree prune; rm -rf /tmp/wt; continue; }
+            mkdir -p "/tmp/wt/rp-drop"
+            rm -rf "/tmp/wt/rp-drop/$NUME" && cp -a "out/rp-drop/$NUME" "/tmp/wt/rp-drop/$NUME"
+            git -C /tmp/wt add -A "rp-drop/$NUME"
+            git -C /tmp/wt -c commit.gpgsign=false commit -qm "rp-drop: $NUME (text only, fara date de jucatori)" || echo "nimic nou"
+            git -C /tmp/wt push -v origin "HEAD:refs/heads/rp-drop" && break
+            git -C /tmp/wt pull -q --rebase origin rp-drop || true
+            git -C /tmp/wt push -v origin "HEAD:refs/heads/rp-drop" || echo "push a esuat la incr $i"
+          done
+          true
