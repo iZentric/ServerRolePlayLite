@@ -26,7 +26,6 @@ on:
     paths: [ "deploy/funcity-stage.txt" ]
 permissions:
   contents: write
-  secrets: write
 jobs:
   s:
     runs-on: [ self-hosted ]
@@ -44,7 +43,6 @@ jobs:
           set +e
           MOD="${{ inputs.mod }}"
           [ -z "$MOD" ] && MOD=auto
-          export ACTIONS_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           bash scripts/functity-stage.sh "$MOD"
           echo "RC=$?" >> /tmp/funcity-stage.txt
       - uses: actions/upload-artifact@v4
@@ -80,12 +78,17 @@ jobs:
       - uses: actions/download-artifact@v4
         continue-on-error: true
         with: { name: stage-raw, path: /tmp/relay }
-      - name: Raport = check annotation (zero fisiere md)
+      - name: Comite raportul de staging adus de pe gazda
         run: |
-          set +e
+          set -uo pipefail
           F=/tmp/relay/funcity-stage.txt
-          [ -f "$F" ] || { echo "fara raport de la gazda"; exit 0; }
-          export HEAD=$(git rev-parse HEAD)
-          export SLP=$(timeout 15 python3 scripts/minecraft_status.py 92.5.171.150 25565 2>/dev/null | grep -oE '"online": [0-9]+|"max": [0-9]+' | tr "\n" " ")
-          python3 -c "import os,json;t=open('/tmp/relay/funcity-stage.txt').read().replace(chr(13),'');m=(('sonda 25565: '+os.environ['SLP']+' | ') if os.environ.get('SLP') else '')+t;p={'name':'Raport gazda','commit_id':os.environ['HEAD'],'annotations':[{'path':'functity-stage','start_line':1,'end_line':1,'annotation_level':'notice','title':'Raport gazda (annotation, nu fisier)','message':m[:5900]}]};open('/tmp/payload.json','w').write(json.dumps(p))"
-          curl -s -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/json" --data @/tmp/payload.json "https://api.github.com/repos/$GITHUB_REPOSITORY/check-runs" -o /dev/null -w "annotation HTTP %{http_code}\n"
+          [ -f "$F" ] || { echo "artefact absent — jobul de pe gazda nu a produs raport"; exit 0; }
+          git config user.name funcity-relay; git config user.email f@localhost
+          { echo "== SONDA EXTERNA 25565 =="; timeout 20 python3 scripts/minecraft_status.py 92.5.171.150 25565 2>&1 || true; echo "== SONDA EXTERNA 25566 =="; timeout 20 python3 scripts/minecraft_status.py 92.5.171.150 25566 2>&1 || true; echo; echo "# FUNCTITY-STAGE $(date -u '+%F %T') UTC — gazda → artefact → relay"; echo; echo '```'; tr -d '\r' < "$F"; echo '```'; } > analysis/FUNCTITY-STAGE.md
+          { echo; echo "== SONDA EXTERNA (de pe runner hosted, nu din gazda) =="; echo "-- 25565 (productie):"; python3 scripts/minecraft_status.py 92.5.171.150 25565 2>&1 || true; echo "-- 25566 (staging FunCity):"; python3 scripts/minecraft_status.py 92.5.171.150 25566 2>&1 | head -3 || true; } >> /tmp/relay/funcity-stage.txt
+          git add -f analysis/FUNCTITY-STAGE.md
+          git commit -qm "FUNCIŢY-STAGE: raport staging $(date -u '+%F %H:%M') UTC (relay)" || true
+          for i in 1 2 3; do
+            git pull --rebase -q origin "$GITHUB_REF_NAME" 2>/dev/null || git rebase --abort 2>/dev/null || true
+            git push -q origin "HEAD:refs/heads/$GITHUB_REF_NAME" && break; sleep 4
+          done
