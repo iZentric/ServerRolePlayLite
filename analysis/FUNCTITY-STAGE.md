@@ -3,7 +3,7 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-16 23:53:19 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-16 23:55:55 UTC — gazda → artefact → relay
 
 ```
 mod automat din marker: benchsum port=x jar=x
@@ -18,6 +18,7 @@ mod automat din marker: benchsum port=x jar=x
     catserver r1 CRASH  4  0 0
     catserver r2 CRASH  2  0 0
     catserver r3 CRASH  3  0 0
+    catserver r1 CRASH  1   
     functity r1 CRASH  30  0 0
     functity r2 CRASH  31  0 0
     functity r3 CRASH  32  0 0
