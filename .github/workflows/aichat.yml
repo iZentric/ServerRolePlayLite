@@ -36,6 +36,15 @@ jobs:
           unzip -l target/FunCityAI-*.jar | grep -q plugin.yml
           unzip -l target/FunCityAI-*.jar | grep -q FunCityAIPlugin.class
           echo "jar OK: $(stat -c%s target/FunCityAI-*.jar) B"
+      - name: Comite jarul direct pe bransa noastra (15KB — joburile self-hosted il au la checkout, fara artefacte)
+        run: |
+          set +e
+          cp aichat/target/FunCityAI-*.jar aichat/FunCityAI-1.16.5-1.0.0.jar
+          (cd aichat && sha256sum FunCityAI-1.16.5-1.0.0.jar > SHA256SUMS.txt)
+          git config user.name bot; git config user.email bot@arena.local
+          git add -f aichat/FunCityAI-1.16.5-1.0.0.jar aichat/SHA256SUMS.txt
+          git commit -qm "aichat: jar construit in CI ($(cut -c1-12 aichat/SHA256SUMS.txt))" || { echo "novedatat (identic cu ce era)"; exit 0; }
+          for i in 1 2 3; do git pull -q --rebase origin "$GITHUB_REF_NAME" && git push -q origin "HEAD:$GITHUB_REF_NAME" && echo PUBLICAT && break || sleep 8; done
       - uses: actions/upload-artifact@v4
         with:
           name: functityai-jar
