@@ -3,11 +3,11 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-16 22:18:59 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-16 22:23:32 UTC — gazda → artefact → relay
 
 ```
 mod automat din marker: snapgit port=25565 jar=b1.0827
 == SNAPGIT ==
-  worldsync.tar.gz 1 MiB sha 06eabb83a5245f6f — pregatit pt release
+  worldsync.tar.gz 96 MiB sha 4400b4db7f39dc4f — pregatit pt release
 RC=0
 ```
