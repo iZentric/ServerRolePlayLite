@@ -3,15 +3,14 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-16 22:29:37 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-16 22:33:25 UTC — gazda → artefact → relay
 
 ```
-mod automat din marker: ocicfg port=25565 jar=b1.0827
-== OCICFG ==
-  tenancy: ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa
-  region: us-abilene-1
-  user-ocid (din mediu): ocid1.user.oc1..aaaaaaaafg2fu7zqt4q7kzdy7fzqbvg6wr5wj2f3yb5e452eas7cu3hbghma
-  cli get: scripts/functity-stage.sh: line 314: /usr/bin/oci: No such file or directory 
-  cli help create: 
+mod automat din marker: apick port=25565 jar=b1.0827
+== APICK ==
+  chei in ~/.ssh: cuantic_oci cuantic_oci.pub known_hosts 
+  cuantic_oci: OpenSSH private key | sha256-fp: 47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=
+  inregistrate in tenancy: FARA-RASPUNS (permisiune insuficienta sau CLI refuza)
+  tip cheie cloud (oci session?): nu
 RC=0
 ```
