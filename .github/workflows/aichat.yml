@@ -1,0 +1,28 @@
+name: aichat-build
+on:
+  push: { paths: ["aichat/**"] }
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17", cache: maven }
+      - name: Compile (Java 8 target pe API 1.16.5)
+        working-directory: aichat
+        run: mvn -B -ntp -q package
+      - name: Smoke — plugin.yml si clasa in jar
+        working-directory: aichat
+        run: |
+          unzip -l target/FunCityAI-*.jar | grep -q plugin.yml
+          unzip -l target/FunCityAI-*.jar | grep -q FunCityAIPlugin.class
+          echo "jar OK: $(ls -la target/FunCityAI-*.jar | awk '{print $5" B"}')"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: functityai-jar
+          path: aichat/target/FunCityAI-*.jar
+          if-no-files-found: error
