@@ -295,6 +295,20 @@ PY
   fi
   ls -t "$B" | head -5 | sed 's/^/    /' | tee -a "$REPORT"
   ;;
+  autowake) # machine fara systemd/cron: hook in .bashrc = trezire automata la orice shell
+    # deschis (inclus Cloud Shell dupa recyclere/reboot). c.sh e idempotent: daca java/runner
+    # ruleaza deja, el doar le supervizeaza — hook-ul nu strica niciodata ce e viu.
+  say "== AUTOWAKE hook (.bashrc) =="
+  if grep -q "FUNCITY-AUTOWAKE" "$HOME/.bashrc" 2>/dev/null; then
+    say "  hook exista deja"
+  else
+    printf '\n# FUNCITY-AUTOWAKE: self-heal la deschidere de shell (ruleaza DOAR daca supervisorul e jos)\nif ! pgrep -f "bash .*[/]c[.]sh" >/dev/null 2>&1; then ( setsid bash "$HOME/c.sh" >> "$HOME/cuantic-live/sup.log" 2>&1 </dev/null & ) ; fi\n' >> "$HOME/.bashrc"
+    say "  hook scris in ~/.bashrc"
+  fi
+  # dovada: pornim noi acuma varianta de test a hook-ului (ruleaza linia fix ca la shell)
+  bash -c 'if ! pgrep -f "bash .*[/]c[.]sh" >/dev/null 2>&1; then echo "c.sh JOS -> hook l-ar trezi"; else echo "c.sh SUS -> hook nu face nimic (corect)"; fi' | tee -a "$REPORT" | sed "s/^/  /"
+  tail -3 "$HOME/.bashrc" | sed "s/^/  R /" | tee -a "$REPORT"
+  ;;
   persist) # systemd user units + linger: runner-ul si serverul traiesc ETERN pe masina,
     # fara Cloud Shell deschis si supravietuiesc reboot-ului. NU repornim nimic acum —
     # unit-urile intra in actiune cand procesele curente mor natural (sau la reboot).
