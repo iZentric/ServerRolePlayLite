@@ -3,12 +3,12 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-16 23:49:19 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-16 23:49:32 UTC — gazda → artefact → relay
 
 ```
-mod automat din marker: bench port=25566 jar=catserver
-== FC-BENCH v5 — engine: catserver — 2 fire, Xmx3G, world copiat din productie ==
-  jar negasit pentru catserver — ce exista prin preajma:
+mod automat din marker: bench port=25566 jar=mohist
+== FC-BENCH v5 — engine: mohist — 2 fire, Xmx3G, world copiat din productie ==
+  jar negasit pentru mohist — ce exista prin preajma:
     /home/mndvasi9/cuantic-live/CatServer-1.16.5-1d8d6313-server.jar
     /home/mndvasi9/cuantic-live/FunCity-1.16.5-b1.0827.jar
 (sfarsit rc=1)
