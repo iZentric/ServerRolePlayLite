@@ -1,0 +1,23 @@
+name: ops
+on:
+  push:
+    paths: [ "ops/cmd.txt" ]
+permissions:
+  contents: write
+jobs:
+  s:
+    runs-on: [ self-hosted ]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ruleaza comanda
+        run: bash ops/ops.sh ops/cmd.txt; echo "RC=$?" >> "$HOME/functity-out/ops-out.txt"
+      - name: Raport pe branch ops-report (fara fisiere in proiect)
+        run: |
+          set +e
+          cd "$RUNNER_TEMP" && rm -rf rep && git init -q rep && cd rep
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
+          cp "$HOME/functity-out/ops-out.txt" out.txt
+          git config user.name ops; git config user.email ops@localhost
+          git add out.txt && git commit -qm "raport $(date -u '+%F %T')"
+          git push -f origin HEAD:ops-report && echo "BRANCH-OK"
