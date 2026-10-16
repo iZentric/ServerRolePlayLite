@@ -324,6 +324,17 @@ PY
   say "  inregistrate in tenancy: ${L:-FARA-RASPUNS (permisiune insuficienta sau CLI refuza)}"
   say "  tip cheie cloud (oci session?): $(grep -l "session" /etc/oci/config 2>/dev/null || echo nu)"
   ;;
+  probe) # ce pot face SINGUR de pe boxa: drepturi OCI CLI + chei gh existente + retea
+  say "== PROBE =="
+  OCI=$(command -v oci || echo /usr/bin/oci)
+  say "  oci bin: $OCI"
+  say "  can compute: $(OCI_CLI_CONFIG_FILE=/etc/oci/config $OCI compute instance list --compartment-id $(grep -m1 tenancy /etc/oci/config 2>/dev/null | sed "s/.*= *//") 2>&1 | grep -oE "\"id\"|\"message\": *\"[^\"]{0,60}" | head -1)"
+  say "  vcn: $(OCI_CLI_CONFIG_FILE=/etc/oci/config $OCI network vcn list --compartment-id $(grep -m1 tenancy /etc/oci/config 2>/dev/null | sed "s/.*= *//") 2>&1 | grep -cE "\"id\"") bucati | subnets: $(OCI_CLI_CONFIG_FILE=/etc/oci/config $OCI network subnet list --compartment-id $(grep -m1 tenancy /etc/oci/config 2>/dev/null | sed "s/.*= *//") 2>&1 | grep -cE "\"id\"")"
+  say "  shape A1 free: $(OCI_CLI_CONFIG_FILE=/etc/oci/config $OCI limits availability-domain list --compartment-id $(grep -m1 tenancy /etc/oci/config 2>/dev/null | sed "s/.*= *//") 2>&1 | grep -oE "\"name\": *\"[^\"]+\"" | head -1)"
+  say "  gh pe boxa: $(command -v gh || echo absent) | auth: $(gh auth status 2>&1 | grep -oE "Logged in|not logged" | head -1)"
+  say "  token vechi prin repo-uri: $(ls ~/.config/gh 2>/dev/null | tr "\n" " ")"
+  say "  free disk: $(df -m "$HOME" | tail -1 | awk "{print $4}") MiB"
+  ;;
   sshcheck) # verific ipoteza "masina = OCI Cloud Shell" si ce usi avem (portul ssh, chei)
   say "== SSHCHECK =="
   say "  variabile mediu cloud shell: $(env | grep -iE "CLOUD_SHELL|OCI" | head -4 | tr "\n" " ")"
