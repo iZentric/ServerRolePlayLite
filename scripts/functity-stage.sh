@@ -295,6 +295,58 @@ PY
   fi
   ls -t "$B" | head -5 | sed 's/^/    /' | tee -a "$REPORT"
   ;;
+  persist) # systemd user units + linger: runner-ul si serverul traiesc ETERN pe masina,
+    # fara Cloud Shell deschis si supravietuiesc reboot-ului. NU repornim nimic acum —
+    # unit-urile intra in actiune cand procesele curente mor natural (sau la reboot).
+  say "== PERSIST (systemd --user + linger) =="
+  U="$HOME/.config/systemd/user"; mkdir -p "$U"
+  R=$(ls -d "$HOME"/actions-runner* "$HOME"/*/actions-runner* 2>/dev/null | head -1)
+  [ -n "$R" ] || fail "nu gasesc folderul actions-runner"
+  cat > "$U/functity-runner.service" <<UNIT
+[Unit]
+Description=FunCity GitHub runner
+[Service]
+WorkingDirectory=$R
+ExecStart=/bin/bash ./run.sh
+Restart=always
+RestartSec=15
+UNIT
+  cat > "$U/functity-server.service" <<UNIT
+[Unit]
+Description=CUANTIC-FunCity supervisor (c.sh)
+[Service]
+WorkingDirectory=$HOME
+ExecStart=/bin/bash $HOME/c.sh
+Restart=always
+RestartSec=20
+StandardOutput=append:$HOME/cuantic-live/sup.log
+StandardError=append:$HOME/cuantic-live/sup.log
+UNIT
+  cat > "$U/default.target.wants-ignore" <<'X'
+X
+  rm -f "$U/default.target.wants-ignore"
+  export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+  export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/systemd/private" 2>/dev/null
+  loginctl enable-linger "$(id -un)" 2>&1 | sed 's/^/  linger: /' | tee -a "$REPORT"
+  if systemctl --user daemon-reload 2>/dev/null; then
+    systemctl --user enable functity-runner.service functity-server.service 2>&1 | tail -1 | sed 's/^/  enable: /' | tee -a "$REPORT"
+    # pornim DOAR runner-ul prin systemd acum (c.sh il are deja sub pază; dublu = 2 run-uri — nu)
+    if systemctl --user is-active --quiet functity-runner.service; then
+      say "  runner: deja sub systemd"
+    elif pgrep -f 'actions-runner/run.sh' >/dev/null; then
+      say "  runner: ruleaza manual — systemd il preia cand moare (enable face pornirea la next boot)"
+    else
+      systemctl --user start functity-runner.service && say "  runner: PORNIT prin systemd acum"
+    fi
+    say "  server c.sh: unit enable-uit pentru boot; ruleaza manual — systemd il ia de la urmatoarea moarte/reboot"
+    systemctl --user list-unit-files "functity*" --no-pager 2>/dev/null | sed -n '2,4p' | sed 's/^/  /' | tee -a "$REPORT"
+  else
+    say "  systemd --user nu e accesibil din job (bus) — scriu un fallback cron-free:"
+    echo "@reboot bash \$HOME/c.sh >> \$HOME/cuantic-live/sup.log 2>&1 & cd $R && ./run.sh" > /tmp/functity-cron.txt
+    ( crontab -l 2>/dev/null; cat /tmp/functity-cron.txt ) | grep -v "Nu exista" | crontab - 2>/dev/null \
+      && say "  cron @reboot scris (mai slab ca systemd dar merge)" || say "  nici cron — trebuie un paste de la tine"
+  fi
+  ;;
   prune) # elibereaza spatiu: doar duplicalele din staging, niciodata productia
   say "== PRUNE disc (staging only) =="
   say "  inainte: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB liberi"
