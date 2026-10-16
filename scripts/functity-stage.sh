@@ -281,6 +281,20 @@ PY
     say "RESULTAT: boot1+stop+boot2 OK, 0 crash la salvare/realuare"
     finish 0
     ;;
+  snap) # snapshot rollabil pe parti: doar lumea principala, gzip rapid — incape si pe disc stramt
+  ts=$(date -u +%Y%m%d-%H%M)
+  say "== SNAP world (prod, main only, gzip -1) =="
+  say "  liber: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB | world: $(du -sm "$P/world" 2>/dev/null | cut -f1) MiB"
+  if tar -I 'gzip -1' -C "$P" -cf "$B/world-$ts.tar" world 2>/dev/null; then
+    SZ=$(du -m "$B/world-$ts.tar" | cut -f1)
+    N=$(tar -tf "$B/world-$ts.tar" 2>/dev/null | grep -c 'region/\|level.dat')
+    if [ "$N" -gt 3 ]; then say "  OK: $B/world-$ts.tar ($SZ MiB, $N fisiere verificate prin listing)"; rm -f "$B/world-$ts.tar".part
+    else say "  tar OK dar continut suspecte ($N) — pastrat pentru inspectie: $B/world-$ts.tar"; fi
+  else
+    say "  inca nu incapa — stau pe level.dat + arhiva 14.10"
+  fi
+  ls -t "$B" | head -5 | sed 's/^/    /' | tee -a "$REPORT"
+  ;;
   prune) # elibereaza spatiu: doar duplicalele din staging, niciodata productia
   say "== PRUNE disc (staging only) =="
   say "  inainte: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB liberi"
