@@ -295,6 +295,18 @@ PY
   fi
   ls -t "$B" | head -5 | sed 's/^/    /' | tee -a "$REPORT"
   ;;
+  sshcheck) # verific ipoteza "masina = OCI Cloud Shell" si ce usi avem (portul ssh, chei)
+  say "== SSHCHECK =="
+  say "  variabile mediu cloud shell: $(env | grep -iE "CLOUD_SHELL|OCI" | head -4 | tr "\n" " ")"
+  say "  hostname: $(hostname 2>/dev/null) | uptime: $(uptime | sed "s/^ *//")"
+  say "  sshd: $(pgrep -x sshd >/dev/null && echo "VIA (porturile: $(ss -lnt 2>/dev/null | grep -oE "0.0.0.0:22|0.0.0.0:[0-9]+ " | tr "\n" " "))" || echo absent)"
+  say "  ~/.ssh: $(ls -A "$HOME/.ssh" 2>/dev/null | tr "\n" " ")"
+  say "  authorized_keys: $(wc -l < "$HOME/.ssh/authorized_keys" 2>/dev/null || echo 0) linii"
+  say "  porturi ascultate acum: $(ss -lnt 2>/dev/null | tail -n +2 | awk "{print $4}" | sed "s/.*://" | sort -un | tr "\n" " " | cut -c1-100)"
+  say "  cine e 92.5.171.150: ip local? $(ip -4 addr 2>/dev/null | grep -c 92.5.171.150 || echo 0) aparitii pe interfete | ip public vazut: $(curl -s --max-time 8 https://api.github.com/meta --connect-timeout 5 >/dev/null 2>&1 && curl -s --max-time 8 ifconfig.me 2>/dev/null || echo "nu am verificat")"
+  say "  cron daemon: $(pgrep -x crond >/dev/null && echo via || echo absent)"
+  say "  systemd PID1: $(ps -p 1 -o comm= 2>/dev/null)"
+  ;;
   autowake) # machine fara systemd/cron: hook in .bashrc = trezire automata la orice shell
     # deschis (inclus Cloud Shell dupa recyclere/reboot). c.sh e idempotent: daca java/runner
     # ruleaza deja, el doar le supervizeaza — hook-ul nu strica niciodata ce e viu.
