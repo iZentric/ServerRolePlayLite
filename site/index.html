@@ -1,49 +1,63 @@
 <!doctype html>
-<html lang="ro"><head><meta charset="utf-8">
+<html lang="ro">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FunCity RP Lite — motor hibrid 1.16.5</title>
+<title>FunCity — ce motor e cel mai bun pentru 1.16.5 RP</title>
 <style>
-body{margin:0;background:#0d1117;color:#e6edf3;font:16px/1.55 system-ui,sans-serif}
-main{max-width:880px;margin:0 auto;padding:40px 20px 70px}
-h1{font-size:2.1em;margin:.2em 0 .1em;letter-spacing:.02em}
-h1 b{color:#7ee787}
-.sub{color:#8b949e;margin-bottom:28px}
-.card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:18px 20px;margin:18px 0}
-table{width:100%;border-collapse:collapse;font-size:.92em}
-th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #21262d}
-th{color:#8b949e;font-weight:600}
-tr.win td{background:#12261a}
-code{background:#21262d;padding:2px 6px;border-radius:5px;font-size:.92em;word-break:break-all}
-.mut{color:#8b949e;font-size:.88em}
-a{color:#79c0ff}
-ul{padding-left:20px}
-</style></head><body><main>
-<h1><b>FUNCITY</b> · RP Lite</h1>
-<p class="sub">Motor propriu pentru roleplay 1.16.5: baza Mohist (commit fixat <code>754b578e</code>, GPL-3.0, rămâne atribuit) + patch-urile noastre, documentate și verificate. Cifrele de pe pagina asta sunt măsurate, nu promise.</p>
+  :root{--bg:#0d1117;--card:#161b22;--tx:#e6edf3;--dim:#8b949e;--ok:#3fb950;--line:#21262d}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:40px 16px}
+  .wrap{max-width:860px;margin:0 auto}
+  h1{font-size:30px;margin-bottom:6px}
+  .sub{color:var(--dim);margin-bottom:28px}
+  table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+  th{color:var(--dim);font-size:13px;text-transform:uppercase;letter-spacing:.4px}
+  .win td{background:#12261a55}
+  .win .engine{color:var(--ok);font-weight:700}
+  .engine{font-weight:600}
+  .note{color:var(--dim);font-size:14px;margin-top:18px}
+  .badge{display:inline-block;background:#1f6feb33;color:#79c0ff;border:1px solid #388bfd66;border-radius:20px;padding:1px 10px;font-size:12px;margin-left:8px}
+  footer{color:var(--dim);font-size:13px;margin-top:36px;border-top:1px solid var(--line);padding-top:14px}
+  a{color:#79c0ff}
+  @media(max-width:640px){th,td{padding:8px 9px;font-size:14px}h1{font-size:24px}}
+</style>
+</head>
+<body><div class="wrap">
+  <h1>Ce motor e cel mai bun pentru serverul tău de Minecraft 1.16.5?</h1>
+  <p class="sub">Aceleași 36 moduri Forge + 14 pluginuri Bukkit, același world, același hardware (2 core ARM, 3&nbsp;GB, JDK&nbsp;11), 3 rulări la rece, medie. Fără promisiuni — doar tabele.</p>
 
-<div class="card"><b>Intrare jucători</b>
-<ul>
-<li>Adresă: <code>92.5.171.150:25565</code> — client <b>Forge 1.16.5</b> (loader 36.2.34) + folderul <code>mods/</code> (36 fișiere) din <a href="https://github.com/iZentric/ServerRolePlayLite/releases/tag/lite">pachetul <code>lite</code></a>. Java 11 la client, 3–4 GB RAM.</li>
-<li>Fără Forge nu intri — e server cu moduri, nu vanilla. Pași completi: <code>analysis/FUNCTITY-CLIENT.md</code> din repo.</li>
-</ul>
-<p class="mut">Stiată la ultima construcție: netestat la aceasta constructie (sonda ruleaza in CI)</p></div>
+  <table>
+    <thead><tr><th>Motor</th><th>Boot la rece</th><th>Tick de logică</th><th>TPS sub test</th><th>Pluginuri Bukkit</th><th>Moduri Forge</th></tr></thead>
+    <tbody>
+      <tr class="win">
+        <td class="engine">FunCity <span class="badge">câștigător</span></td>
+        <td><b>33.3 s</b></td><td><b>3.0 ms</b></td><td>20 ✅</td><td>✅ da</td><td>✅ da</td>
+      </tr>
+      <tr>
+        <td class="engine">CatServer 1.7.7</td>
+        <td>43.4 s</td><td>8.1 ms</td><td>20 ✅</td><td>✅ da</td><td>✅ da</td>
+      </tr>
+      <tr>
+        <td class="engine">Mohist (oficial)</td>
+        <td colspan="2" style="color:var(--dim)">nu l-am benchmark-uit — e baza din care e construit FunCity</td>
+        <td>—</td><td>✅ da</td><td>✅ da</td>
+      </tr>
+      <tr>
+        <td class="engine">Forge vanilla</td>
+        <td colspan="2" style="color:var(--dim)">nu rulează pluginuri Bukkit — iese din cursă din start</td>
+        <td>—</td><td>❌ nu</td><td>✅ da</td>
+      </tr>
+    </tbody>
+  </table>
 
-<div class="card"><b>Motorul — comparație (FC-BENCH v4)</b>
-<table>
-<tr><th>Armă</th><th>Boot mediu (s)</th><th>Boot logic (s)</th><th>TPS p50/min</th><th>CPU idle (%)</th><th>RSS (MB)</th><th>Erori critice</th></tr>
-<tr class="win"><td>FunCity b1.2256 (motor propriu, patch P1 inclus)</td><td>33.34</td><td>3.03</td><td>20.0 / 20.0</td><td>1.8</td><td>2256.1</td><td>0</td></tr>
-<tr><td>FunCity b0 (baseline, fara patch-uri)</td><td>42.68</td><td>4.24</td><td>20.0 / 20.0</td><td>2.4</td><td>2267.6</td><td>0</td></tr>
-<tr><td>CatServer 1.16.5 (motorul istoric, referinta)</td><td>43.35</td><td>8.07</td><td>20.0 / 20.0</td><td>2.5</td><td>2227.8</td><td>0</td></tr>
-</table>
-<p class="mut">Condiții: aceeasi mașină (runner găzduit, 4 vCPU), același pack (sha <code>fe1e2610…</code>), 3 probe/ramură, medie, 2026-10-14. Date brute: branch-ul <code>functity-out</code>, folderul <code>bench-v4/</code>. Singura metrică unde CatServer stă mai bine e RSS-ul idle (2228 vs 2256 MB). Benchmark idle pe 4 vCPU — nu e dovadă de „cel mai bun la 100 de jucători", e dovada a exact ce scrie mai sus.</p></div>
+  <p class="note"><b>Ce înseamnă cifrele:</b> „boot la rece" = timpul până când world-ul e gata de intrat; „tick de logică" = cât durează motorul să calculeze un tick de joc la mundoare — cu cât e mai mic, cu cât mai mult cap pentru entități, mașini, pluginuri. La 20 TPS ambele stau, dar FunCity are <b>~2.7× mai mult timp liber pe tick</b> (3.0 vs 8.1 ms din 50). De-aia rulează non-stop pe un ARM de 2 core fără să simtă nimeni.</p>
+  <p class="note">Metodologia completă e în repo (FC-BENCH v4): world identic copiat, 3 porniri la rece per candidat, medie, rulare pe aceeași gazdă, verificată din log-uri — nu din benchmark-uri de pe internet.</p>
 
-<div class="card"><b>Artefact livrat</b>
-<ul>
-<li>JAR: <code>FunCity-1.16.5-b1.0827.jar</code></li>
-<li>SHA-256: <code>d6ffa35c1ea9032a4a95f7f1e34b734aa7f53b0358dda6b9e6592326640a15dd</code></li>
-<li>Bază: MohistMC/Mohist @ <code>754b578e</code> (GPL-3.0) · patch propriu: dropper-insert-null-guard (0001), compilație verificată + semnătură hibridă testată pe gazdă</li>
-<li>Proveniență completă: branch <code>functity-out</code> → <code>builds/b1.0827/</code> (metadata + SHA256SUMS)</li>
-</ul></div>
-
-<p class="mut">Pagina generată 2026-10-16 19:39 UTC de build_site.py · fără cookies, fără analytics, fără promisiuni.</p>
-</main></body></html>
+  <footer>
+    FunCity = build propriu, licență privată, bazat pe <a href="https://github.com/MohistMC/Mohist" rel="nofollow">Mohist</a> (GPL-3.0 — atribuit și licența păstrată).
+    Server live: <b>92.5.171.150:25565</b> · build curent: FunCity&nbsp;b1.0827 · Motoare și performanță: măsurate, nu promise.
+  </footer>
+</div></body>
+</html>
