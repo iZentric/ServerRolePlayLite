@@ -17,7 +17,10 @@ XMX = os.environ.get("FUNCITY_XMX", "3G")
 def main():
     fd = os.open(FIFO, os.O_RDWR)  # singurul care tine scriitorul viu
     lf = open(LOG, "ab", buffering=0)
-    cmd = [JAVA, "-Xms1G", f"-Xmx{XMX}", "-XX:MaxGCPauseMillis=200", "-jar", JAR, "nogui"]
+    cmd = [JAVA, "-Xms1G", f"-Xmx{XMX}",
+           "-XX:+UseG1GC", "-XX:+ParallelRefProcEnabled", "-XX:MaxGCPauseMillis=200",
+           "-XX:+DisableExplicitGC", "-XX:+AlwaysPreTouch", "-XX:+PerfDisableSharedMem",
+           "-XX:MaxTenuringThreshold=1", "-jar", JAR, "nogui"]
     p = subprocess.Popen(cmd, stdin=fd, stdout=lf, stderr=subprocess.STDOUT,
                          start_new_session=True)
     with open(os.path.join(D, "server.pid"), "w") as f:

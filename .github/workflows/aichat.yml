@@ -15,6 +15,18 @@ jobs:
       - name: Compile (Java 8 target pe API 1.16.5)
         working-directory: aichat
         run: mvn -B -ntp -q package
+      - name: Salveaza jurnalul pt diagnostic
+        if: always()
+        run: |
+          cd aichat && (mvn -B -ntp package > /tmp/mvn-out.txt 2>&1; true)
+          { echo "# AICHAT-BUILD $(date -u '+%F %T UTC')"; echo; echo '```'; tail -60 /tmp/mvn-out.txt; echo '```'; } > /tmp/aichat-report.md
+      - name: Publica esec pe bransa (sandbox nu poate citi logurile GH)
+        if: failure()
+        run: |
+          git config user.name bot && git config user.email bot@arena.local
+          cp /tmp/aichat-report.md analysis/AICHAT-BUILD.md
+          git add analysis/AICHAT-BUILD.md && git commit -qm "aichat: jurnal esec build" || exit 0
+          for i in 1 2 3; do git -c pull.rebase=true pull -q --rebase origin "$GITHUB_REF_NAME" && git push -q origin "HEAD:$GITHUB_REF_NAME" && break || sleep 10; done
       - name: Smoke — plugin.yml si clasa in jar
         working-directory: aichat
         run: |
