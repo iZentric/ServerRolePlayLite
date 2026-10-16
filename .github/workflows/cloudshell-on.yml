@@ -21,8 +21,11 @@ jobs:
           REG: ${{ vars.OCI_REGION }}
         run: |
           set +e
-          if [ -z "$PEM" ] || [ -z "$FP" ] || [ -z "$TEN" ]; then
-            echo "inactiv: lipsesc OCI_PEM/OCI_FINGERPRINT/vars OCI_TENANCY|OCI_USER|OCI_REGION — workflow nu face nimic pana le added"
+          TEN="${TEN:-ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa}"
+          USR="${USR:-ocid1.user.oc1..aaaaaaaafg2fu7zqt4q7kzdy7fzqbvg6wr5wj2f3yb5e452eas7cu3hbghma}"
+          REG="${REG:-us-abilene-1}"
+          if [ -z "$PEM" ] || [ -z "$FP" ]; then
+            echo "inactiv: lipsesc OCI_PEM/OCI_FINGERPRINT — workflow nu face nimic pana le added (tenancy/user/region deja hardcode)"
             exit 0
           fi
           python3 -m venv ~/venv-oci >/dev/null 2>&1
@@ -39,11 +42,11 @@ jobs:
           key_file=~/.oci/gh.pem
           EOF
           echo "--- stare inainte:"
-          $OCI cloud-shell environment get 2>&1 | grep -oE '"lifecycleState": *"[A-Z_]+"' || true
+          $OCI --region $REG cloud-shell environment get 2>&1 | grep -oE '"lifecycleState": *"[A-Z_]+"' || true
           echo "--- create (porneste daca e INACTIVE; deja ACTIV = eroare inofensiva):"
-          $OCI cloud-shell environment create 2>&1 | head -3
+          $OCI --region $REG cloud-shell environment create 2>&1 | head -3
           sleep 8
           echo "--- stare dupa:"
-          $OCI cloud-shell environment get 2>&1 | grep -oE '"lifecycleState": *"[A-Z_]+"' || true
+          $OCI --region $REG cloud-shell environment get 2>&1 | grep -oE '"lifecycleState": *"[A-Z_]+"' || true
           rc=$?
           echo "verdict: $([ $rc -eq 0 ] && echo SUS || echo 'de verificat manual') la $(date -u '+%F %T') UTC"
