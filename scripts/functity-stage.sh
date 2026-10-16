@@ -590,8 +590,13 @@ X
     ENG="$CAND"
     say "== FC-BENCH v5 — engine: $ENG — $(nproc) fire, Xmx$XMX, world copiat din productie =="
     case "$ENG" in
-      catserver) JARF=$(find "$B" "$HOME" -maxdepth 3 -iname "*catserver*.jar" 2>/dev/null | grep -v "/mods/" | grep -v "/plugins/" | head -1);;
-      mohist)    JARF=$(find "$HOME" -maxdepth 3 -iname "mohist*.jar" 2>/dev/null | head -1);;
+      catserver) JARF=$(find "$B" -maxdepth 3 -iname "*.jar" 2>/dev/null | grep -viE "funclite|/mods/|/plugins/|paper|spigot" | head -1);;
+      mohist)    JARF=$(find "$HOME" -maxdepth 3 -iname "mohist*.jar" 2>/dev/null | head -1)
+                 if [ ! -f "${JARF:-none}" ]; then
+                   URL=$(curl -s --max-time 20 https://api.github.com/repos/MohistMC/MohistMC/releases/latest 2>/dev/null | grep -oE "https://[^\"]+mohist-1[.]16[.]5[^\"]*[.]jar" | head -1)
+                   [ -z "$URL" ] && URL=$(curl -s --max-time 20 https://api.github.com/repos/MohistMC/Mohist/releases/latest 2>/dev/null | grep -oE "https://[^\"]+mohist-1[.]16[.]5[^\"]*[.]jar" | head -1)
+                   if [ -n "$URL" ]; then say "  descarc mohist official: $(basename "$URL")"; curl -sL --max-time 240 -o "$B/mohist-official.jar" "$URL" && JARF="$B/mohist-official.jar"; fi
+                 fi;;
       *)         JARF=$(ls "$P"/FunCity-*.jar 2>/dev/null | head -1);;
     esac
     if [ ! -f "$JARF" ]; then
@@ -604,7 +609,8 @@ X
     for i in 1 2 3; do
       pkill -f "java.*[/]funcity-live" 2>/dev/null; sleep 3
       rm -rf "$D"; mkdir -p "$D"
-      for f in mods plugins config server.properties eula.txt; do [ -e "$P/$f" ] && cp -a "$P/$f" "$D/" 2>/dev/null; done
+      for f in mods plugins libraries versions config server.properties eula.txt; do [ -e "$P/$f" ] && cp -a "$P/$f" "$D/" 2>/dev/null; done
+      [ -d "$P/run" ] && cp -a "$P/run/." "$D/" 2>/dev/null
       rsync -a "$P/world" "$D/" 2>/dev/null || cp -a "$P/world" "$D/"
       sync_port
       cp "$JARF" "$D/engine.jar"
@@ -616,6 +622,7 @@ X
         kill -0 "$(cat "$D/bench.pid")" 2>/dev/null || { RES=CRASH; break; }
       done
       WALL=$(( $(date +%s) - T0 ))
+      if [ "$RES" != OK ]; then say "    log la $RES:"; tail -12 "$D/stage.log" 2>/dev/null | cut -c1-160 | sed "s/^/      | /" | tee -a "$REPORT"; fi
       DS=$(grep -m1 -oE "Done \([0-9.]+s\)" "$D/stage.log" 2>/dev/null | tr -dc "0-9.")
       sleep 40
       RSS=$(awk '/VmRSS/{print int($2/1024)}' "/proc/$(cat "$D/bench.pid")/status" 2>/dev/null)
