@@ -340,6 +340,9 @@ PY
     head -12 "$LOG" 2>/dev/null | cut -c1-160 | sed 's/^/    L /' | tee -a "$REPORT"
     say "  plugini Enabling: $(grep -cE 'Enabling ' "$LOG" 2>/dev/null) | ultimi 6 linii:"
     tail -6 "$LOG" 2>/dev/null | sed 's/^/    /' | tee -a "$REPORT"
+    say "  frpc: porturi expuse (fara tokenuri):"
+    grep -E 'remotePort|localPort|^name' "$HOME/frpc.toml" 2>/dev/null | paste - - - 2>/dev/null | head -6 | sed 's/^/    T /' | tee -a "$REPORT"
+    say "  java staging vie acum: $(pgrep -fc 'funcity-live' 2>/dev/null || echo 0)"
     say "  libertate disc: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB"
     say "  interior jar voicechat (fisiere config citate):"
     local vj; vj=$(ls "$D"/mods/*voicechat*.jar 2>/dev/null | head -1)
