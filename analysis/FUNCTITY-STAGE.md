@@ -3,14 +3,17 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-16 20:38:21 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-16 20:40:34 UTC — gazda → artefact → relay
 
 ```
-mod automat din marker: prune port=25565 jar=b1.0827
-== PRUNE disc (staging only) ==
-  inainte: 433 MiB liberi
-  staging world: 149	/home/mndvasi9/funcity-live/world
-  dupa: 581 MiB liberi
-  snapshot inca NU incapa — ramane level.dat + arhiva din 14.10 ca rollback
+mod automat din marker: snap port=25565 jar=b1.0827
+== SNAP world (prod, main only, gzip -1) ==
+  liber: 581 MiB | world: 150 MiB
+  OK: /home/mndvasi9/funcity-backup/world-20261016-2040.tar (89 MiB, 54 fisiere verificate prin listing)
+    world-20261016-2040.tar
+    prod-world-20261016-195252.tar.gz
+    install-20261016-195252
+    prod-world-20261016-194714.tar.gz
+    install-20261016-194714
 RC=0
 ```
