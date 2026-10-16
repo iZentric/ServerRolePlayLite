@@ -48,6 +48,31 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with: { name: stage-raw, path: /tmp/funcity-stage.txt }
+      - name: Plasa de siguranta world -> release (ruleaza DOAR dupa snapgit)
+        if: always()
+        run: |
+          set +e
+          R="$HOME/functity-out/worldsync.ready"
+          [ -f "$R" ] || exit 0
+          API=https://api.github.com/repos/$GITHUB_REPOSITORY
+          UP=https://uploads.github.com/repos/$GITHUB_REPOSITORY
+          TOK="${{ secrets.GITHUB_TOKEN }}"
+          RID=$(curl -s -H "Authorization: Bearer $TOK" $API/releases/tags/world-live | python3 -c 'import sys,json
+try: print(json.load(sys.stdin)["id"])
+except Exception: print("")')
+          if [ -z "$RID" ]; then
+            RID=$(curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/json" -d '{"tag_name":"world-live","name":"FunCity world snapshots","draft":false,"body":"Plasa de siguranta a lumii FunCity. Nu stergeti release-ul."}' $API/releases | python3 -c 'import sys,json
+try: print(json.load(sys.stdin)["id"])
+except Exception: print("")')
+          fi
+          [ -n "$RID" ] || { echo "ESUEC: nu am putut crea/gasi release world-live"; rm -f "$R"; exit 0; }
+          AID=$(curl -s -H "Authorization: Bearer $TOK" $API/releases/$RID/assets | python3 -c 'import sys,json
+a=json.load(sys.stdin)
+print(next((x["id"] for x in a if x["name"]=="worldsync.tar.gz"),""))' 2>/dev/null)
+          if [ -n "$AID" ]; then curl -s -X DELETE -H "Authorization: Bearer $TOK" $API/releases/assets/$AID > /dev/null; fi
+          curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/gzip" --data-binary "@$HOME/functity-out/worldsync.tar.gz" "$UP/releases/$RID/assets?name=worldsync.tar.gz" | grep -o '"size":[0-9]*' | head -1
+          echo "upload finalizat: $(cat $R)"
+          rm -f "$R"
   relay:
     needs: s
     if: always()
