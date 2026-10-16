@@ -287,7 +287,8 @@ PY
     # (world NU se atinge) -> c.sh repornit -> verificare. Fiecare pas are drum de intoarcere.
     say "== INSTALL FunCity pe productie =="
     SHA_ASTEPTATA=d6ffa35c1ea9032a4a95f7f1e34b734aa7f53b0358dda6b9e6592326640a15dd
-    TS=$(date -u +%Y%m%d-%H%M%S)
+    TS=$(date -u +%Y%m%d-%H%M%S); rm -rf /tmp/fcclone /tmp/fcsrc 2>/dev/null
+    say "  disc liber inainte: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB"
     # 0. canditatul exista si e cel validat?
     [ -f "$D/FunCity-1.16.5-b1.0827.jar" ] || fail "jar candidat absent in $D"
     ACTUAL=$(sha256sum "$D/FunCity-1.16.5-b1.0827.jar" | cut -d' ' -f1)
@@ -312,6 +313,8 @@ PY
     printf -- '-Xms1G\n-Xmx3G\n-XX:MaxGCPauseMillis=200\n-jar\nFunCity-1.16.5-b1.0827.jar\nnogui\n' > "$P/unix_args.txt"
     cp "$D/FunCity-1.16.5-b1.0827.jar" "$P/"
     cp "$D/server.properties" "$P/server.properties"
+    sed -i -E "s/^server-port=.*/server-port=$PORT/" "$P/server.properties"
+    say "  $P/server.properties: server-port=$PORT (fortat de la $D care era port de staging)"
     rsync -a --delete "$D/mods/" "$P/mods/" 2>/dev/null
     rsync -a "$D/plugins/" "$P/plugins/" 2>/dev/null
     rsync -a "$D/config/" "$P/config/" --exclude 'voicechat*' 2>/dev/null
