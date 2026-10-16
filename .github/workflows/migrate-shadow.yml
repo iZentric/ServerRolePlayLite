@@ -1,0 +1,45 @@
+name: MIGRATE UMBRĂ — gazda nouă, măsurată lângă live (nu pe live)
+on:
+  push:
+    paths:
+      - "deploy/migrate.txt"
+      - "scripts/cuantic_migrate.py"
+      - ".github/workflows/migrate-shadow.yml"
+permissions:
+  contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  RUNNER_TRACKING_ID: ""
+jobs:
+  umbra:
+    # Eticheta e obligatorie: fără runner etichetat „cuantic-new” jobul nici nu pornește,
+    # asa nu ajunge din greseala masuratoarea pe gazda live.
+    runs-on: [self-hosted, cuantic-new]
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gazda noua — masuratoare completa (identitate, CPU, umbra pe 25599)
+        run: |
+          set -uo pipefail
+          mkdir -p /tmp/cuantic-migrate
+          python3 scripts/cuantic_migrate.py measure --out /tmp/cuantic-migrate/new \
+            > /tmp/cuantic-migrate/new.txt 2>&1 || true
+          cat /tmp/cuantic-migrate/new.txt
+      - name: Publică raportul-umbra (esecurile ramân scrise, nu se ascund)
+        if: always()
+        run: |
+          set -euo pipefail
+          { echo '# Gazda nouă — măsurătoare-umbra (fără atingerea live-ului)'; echo;
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"; echo;
+            echo 'Server-umbra în /tmp, port 25599, pack din release-ul `lite` verificat ca sha256, fără frpc și fără date de jucători.';
+            echo 'Live-ul (92.5.171.150:25565, ~/cuantic-live) nu a fost atins de acest job.'; echo;
+            echo '```json'; cat /tmp/cuantic-migrate/new/measure.json 2>/dev/null || echo 'INCOMPLET — vezi logul runului'; echo '```';
+          } > docs/CUANTIC-MIGRATE-RESULT.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/CUANTIC-MIGRATE-RESULT.md
+          git commit -m 'migrate: masuratoare umbra pe gazda noua' >/dev/null 2>&1 || echo "commit: nimic nou"
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" >/dev/null 2>&1 || true
+          git push origin "HEAD:$GITHUB_REF_NAME" || true
