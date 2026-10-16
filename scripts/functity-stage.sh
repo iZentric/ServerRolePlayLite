@@ -315,6 +315,15 @@ PY
   say "  cli get: $(echo "$H" | tr "\n" " | " | cut -c1-220)"
   say "  cli help create: $(OCI_CLI_CONFIG_FILE=/etc/oci/config /usr/bin/oci cloud-shell environment --help 2>&1 | grep -oE "^  [a-z-]+" | tr "\n" " ")"
   ;;
+  apick) # existenta cheii API OCI de pe boxa: e inregistrata in tenancy?
+  say "== APICK =="
+  say "  chei in ~/.ssh: $(ls -A "$HOME/.ssh" 2>/dev/null | tr "\n" " ")"
+  FP=$(openssl pkey -pubout -in "$HOME/.ssh/cuantic_oci" 2>/dev/null | openssl sha256 -binary | base64)
+  say "  cuantic_oci: $(file -b "$HOME/.ssh/cuantic_oci" 2>/dev/null | cut -c1-40) | sha256-fp: ${FP:-nu-i-cheie-rsa-sau-criptata}"
+  L=$(OCI_CLI_CONFIG_FILE=/etc/oci/config /usr/bin/oci iam user api-key list --user-id "$OCI_CS_USER_OCID" 2>&1 | grep -oE '"fingerprint": *"[^"]+"' | head -4)
+  say "  inregistrate in tenancy: ${L:-FARA-RASPUNS (permisiune insuficienta sau CLI refuza)}"
+  say "  tip cheie cloud (oci session?): $(grep -l "session" /etc/oci/config 2>/dev/null || echo nu)"
+  ;;
   sshcheck) # verific ipoteza "masina = OCI Cloud Shell" si ce usi avem (portul ssh, chei)
   say "== SSHCHECK =="
   say "  variabile mediu cloud shell: $(env | grep -iE "CLOUD_SHELL|OCI" | head -4 | tr "\n" " ")"
