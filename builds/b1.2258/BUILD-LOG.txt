@@ -60,13 +60,13 @@ Executing steps
  > Running 'mcinject'
  > Running 'listLibraries'
  > Running 'mohistAccessTransformer'
-[22:59:48] [main/INFO]: Access Transformer processor running version 8.0.7+8.0.7+master.43473d43
-[22:59:48] [main/INFO]: Command line arguments [--inJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar, --outJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, --atFile, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg]
-[22:59:48] [main/INFO]: Reading from /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar
-[22:59:48] [main/INFO]: Writing to /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
-[22:59:48] [main/INFO]: Transformer file /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg
-[22:59:48] [main/WARN]: Found existing output jar /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, overwriting
-[22:59:49] [main/INFO]: JAR transformation complete /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
+[23:00:23] [main/INFO]: Access Transformer processor running version 8.0.7+8.0.7+master.43473d43
+[23:00:23] [main/INFO]: Command line arguments [--inJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar, --outJar, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, --atFile, /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg]
+[23:00:23] [main/INFO]: Reading from /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mcinject/output.jar
+[23:00:23] [main/INFO]: Writing to /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
+[23:00:23] [main/INFO]: Transformer file /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/src/main/resources/META-INF/accesstransformer.cfg
+[23:00:23] [main/WARN]: Found existing output jar /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar, overwriting
+[23:00:26] [main/INFO]: JAR transformation complete /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/src/projects/mcp/build/mcp/mohistAccessTransformer/output.jar
  > Running 'mohistSideStripper'
  > Running 'decompile'
  > Running 'inject'
@@ -107,7 +107,6 @@ Note: Recompile with -Xlint:unchecked for details.
 > Task :clean:genServerBinPatches
 > Task :mohist:createFakeSASPatches
 > Task :mohist:createMcp2Srg
-
 > Task :mohist:compileJava
 Note: Some input files use or override a deprecated API.
 Note: Recompile with -Xlint:deprecation for details.
@@ -125,26 +124,26 @@ Note: Recompile with -Xlint:unchecked for details.
 > Task :mohist:mohistJar
 > Task :mohist:signMohistJar SKIPPED
 
-BUILD SUCCESSFUL in 4m 15s
+BUILD SUCCESSFUL in 5m 33s
 30 actionable tasks: 30 executed
 	Command being timed: "./gradlew setup mohistJar --no-daemon --stacktrace --max-workers=4"
-	User time (seconds): 3.91
-	System time (seconds): 0.55
+	User time (seconds): 5.28
+	System time (seconds): 0.70
 	Percent of CPU this job got: 1%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:15.80
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 5:34.41
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 164120
+	Maximum resident set size (kbytes): 153256
 	Average resident set size (kbytes): 0
-	Major (requiring I/O) page faults: 302
-	Minor (reclaiming a frame) page faults: 24389
-	Voluntary context switches: 18157
-	Involuntary context switches: 488
+	Major (requiring I/O) page faults: 304
+	Minor (reclaiming a frame) page faults: 21399
+	Voluntary context switches: 20640
+	Involuntary context switches: 926
 	Swaps: 0
-	File system inputs: 72088
-	File system outputs: 541144
+	File system inputs: 72664
+	File system outputs: 541192
 	Socket messages sent: 0
 	Socket messages received: 0
 	Signals delivered: 0

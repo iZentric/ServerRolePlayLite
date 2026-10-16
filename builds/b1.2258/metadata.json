@@ -19,11 +19,11 @@
  ],
  "patchuri_respinse": "",
  "jar": "FunCity-1.16.5-b1.2258.jar",
- "jar_sha256": "c8da024ca5ca21b3f89124beeab9cbf7a575b747765feb4c643ff44e6982daaf",
- "jar_marime_b": "8704337",
+ "jar_sha256": "70a6ad5d14441051aa6fa6226b097c5f5b47877095afdf1ecf118029e6c9cab1",
+ "jar_marime_b": "8704330",
  "semnatura_manifest": "MOHIST (ServerLaunchArgs prezent)",
  "gradle_exit": "gradle exit: 0",
- "data_utc": "2026-10-16 23:02:23",
+ "data_utc": "2026-10-16 23:04:06",
  "masina_build": "ubuntu-24.04 hosted (GitHub runner)",
  "java": "openjdk version \"11.0.32.1\" 2026-08-18"
 }
