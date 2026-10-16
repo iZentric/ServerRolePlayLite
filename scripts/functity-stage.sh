@@ -586,6 +586,48 @@ X
     say "STAGING $( [ $ok = da ] && echo SUS || echo SUS-PORT-PROBLEMA ) pentru testul tau (port $PORT). Oprire: functity-stage down"
     finish 0
     ;;
+  bench) # FC-BENCH v5 PE GAZDA reala: 3 boot-uri la rece pe staging-world identic. Motorul = token 3 al markerului.
+    ENG="$CAND"
+    say "== FC-BENCH v5 — engine: $ENG — $(nproc) fire, Xmx$XMX, world copiat din productie =="
+    case "$ENG" in
+      catserver) JARF=$(find "$B" "$HOME" -maxdepth 3 -iname "*catserver*.jar" 2>/dev/null | grep -v "/mods/" | grep -v "/plugins/" | head -1);;
+      mohist)    JARF=$(find "$HOME" -maxdepth 3 -iname "mohist*.jar" 2>/dev/null | head -1);;
+      *)         JARF=$(ls "$P"/FunCity-*.jar 2>/dev/null | head -1);;
+    esac
+    if [ ! -f "$JARF" ]; then
+      say "  jar negasit pentru $ENG — ce exista prin preajma:"
+      { ls "$P"/*.jar 2>/dev/null; ls "$B"/install-*/*.jar 2>/dev/null; } | head -10 | sed 's/^/    /' | tee -a "$REPORT"
+      finish 1
+    fi
+    say "  jar: $(basename "$JARF") ($(du -m "$JARF" | cut -f1) MiB) sha $(sha256sum "$JARF" | cut -c1-12)"
+    mkdir -p "$B/bench"
+    for i in 1 2 3; do
+      pkill -f "java.*[/]funcity-live" 2>/dev/null; sleep 3
+      rm -rf "$D"; mkdir -p "$D"
+      for f in mods plugins config server.properties eula.txt; do [ -e "$P/$f" ] && cp -a "$P/$f" "$D/" 2>/dev/null; done
+      rsync -a "$P/world" "$D/" 2>/dev/null || cp -a "$P/world" "$D/"
+      sync_port
+      cp "$JARF" "$D/engine.jar"
+      cd "$D" && JB=$(java11_gaseste) || JB=$(java11_adoptium); cd "$D" 2>/dev/null && nohup "$JB" -Xms1G -Xmx"$XMX" -XX:MaxGCPauseMillis=200 -jar engine.jar nogui > "$D/stage.log" 2>&1 & echo $! > "$D/bench.pid"
+      T0=$(date +%s); RES=ESUAT
+      for t in $(seq 1 280); do
+        sleep 1
+        grep -q "Done (" "$D/stage.log" 2>/dev/null && { RES=OK; break; }
+        kill -0 "$(cat "$D/bench.pid")" 2>/dev/null || { RES=CRASH; break; }
+      done
+      WALL=$(( $(date +%s) - T0 ))
+      DS=$(grep -m1 -oE "Done \([0-9.]+s\)" "$D/stage.log" 2>/dev/null | tr -dc "0-9.")
+      sleep 40
+      RSS=$(awk '/VmRSS/{print int($2/1024)}' "/proc/$(cat "$D/bench.pid")/status" 2>/dev/null)
+      KU=$(grep -c "Can't keep up" "$D/stage.log" 2>/dev/null); ERR=$(grep -c " ERROR " "$D/stage.log" 2>/dev/null)
+      kill "$(cat "$D/bench.pid")" 2>/dev/null; sleep 4
+      say "  runda $i: $RES Done=${DS:-?}s zid=${WALL}s RSS=${RSS:-?}MiB keep-up=$KU erori=$ERR"
+      { echo "$ENG r$i $RES ${DS} ${WALL} ${RSS} ${KU} ${ERR}"; } >> "$B/bench/$ENG.tsv"
+    done
+    pkill -f "java.*[/]funcity-live" 2>/dev/null
+    say "  liber la disc acum: $(df -m "$HOME" | tail -1 | awk "{print \$4}") MiB"
+    finish 0
+    ;;
   down)
     opreste_server || true
     # maturam orice JVM de staging ramas din cicluri anterioare (pid vechi suprasris)
