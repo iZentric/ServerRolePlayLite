@@ -21,8 +21,7 @@ jobs:
             echo "cuantic-live: $([ -d ~/cuantic-live ] && echo DA-BOXA || echo NU)"
             echo "srpl-claie: $([ -d ~/srpl-claie ] && echo DA-CLOUDSHELL || echo NU)"
             if [ -d ~/srpl-claie ] || { [ ! -d ~/cuantic-live ] && [ "$(whoami)" = "mndvasi9" ]; }; then
-              echo "=== EXEC CMD.SH (curatenie + lite) ==="
-              bash cmd.sh 2>&1 | tail -40
+              echo "=== doar identitate (claia executa) ==="
             else
               echo "=== ACEASTA E BOXA DE PRODUCTIE - NU EXECUT NIMIC, doar inventar ==="
               ls ~/cuantic-live | head -8
