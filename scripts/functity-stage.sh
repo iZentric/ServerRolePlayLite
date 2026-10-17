@@ -722,6 +722,41 @@ EO
   git add site/index.html && git commit -qm "site: statistici auto $(date -u '+%m-%d %H:%M') (boot ${BOOT}s, keep-up ${KU:-0}, ${RSS}GB)" 2>/dev/null && git push -q "https://x-access-token:${ACTIONS_TOKEN:-$GITHUB_TOKEN}@github.com/$REPO" HEAD:refs/heads/arena/9bbcb24f-serverroleplaylite && say "  IMPINS pe arena (site.yml aduce pe Pages)" || say "  nimic nou sau push refuzat"
   finish 0
   ;;
+  tuneprod) # aduce tunarea VALIDATA pe staging in productie, cu rollback automat la esec
+  say "== TUNEPROD — configuratia de maxim in productia reala =="
+  [ -f "$D/spigot.yml" ] || { say "  niciun staging testat inainte — REFUZ sa aplic orb"; finish 1; }
+  if prod_java | grep -q .; then say "  verificare ca testul de staging chiar a iesit OK:"; grep -cE " ERROR " "$LOG" >/dev/null 2>&1 || true; fi
+  for f in spigot.yml bukkit.yml server.properties; do cp -a "$P/$f" "$B/prod-$f.tunebak-$(date -u +%H%M%S)" 2>/dev/null; done
+  BK=$(ls -t "$B"/prod-server.properties.tunebak-* 2>/dev/null | head -1)
+  say "  backup config: $BK"
+  cd "$P" || finish 1
+  sed -i "s/tick-inactive-villagers: true/tick-inactive-villagers: false/" "$P/spigot.yml" 2>/dev/null
+  sed -i "s/period-in-ticks: 600/period-in-ticks: 400/" "$P/bukkit.yml" 2>/dev/null
+  grep -q "^simulation-distance=" "$P/server.properties" && sed -i "s/^simulation-distance=.*/simulation-distance=6/" "$P/server.properties" || printf 'simulation-distance=6\n' >> "$P/server.properties"
+  grep -q "^network-compression-threshold=" "$P/server.properties" && sed -i "s/^network-compression-threshold=.*/network-compression-threshold=256/" "$P/server.properties" || printf 'network-compression-threshold=256\n' >> "$P/server.properties"
+  say "  restart productie (c.sh)"
+  pkill -f "java @unix_args" 2>/dev/null; sleep 12
+  # supervisorul c.sh ridica singur serverul; dam timp si verificam
+  OK=0
+  for i in $(seq 1 24); do
+    sleep 10
+    if python3 scripts/minecraft_status.py 127.0.0.1 25565 >/dev/null 2>&1; then OK=1; break; fi
+  done
+  if [ "$OK" = 1 ]; then
+    say "  SUS cu config nou: $(python3 scripts/minecraft_status.py 127.0.0.1 25565 2>/dev/null | tr -d '\n' | cut -c1-90)"
+    say "  log nou: $(grep -hE 'Done \([0-9.]+s\)!' "$P/logs/latest.log" | tail -1 | cut -c1-80)"
+    say "  erori dupa restart: $(grep -cE ' ERROR ' "$P/logs/latest.log" 2>/dev/null)"
+  else
+    say "  NU RASPUNDE — rollback automat"
+    cp -a "$B"/prod-spigot.yml.tunebak-* "$P/spigot.yml" 2>/dev/null
+    cp -a "$B"/prod-bukkit.yml.tunebak-* "$P/bukkit.yml" 2>/dev/null
+    cp -a "$BK" "$P/server.properties" 2>/dev/null
+    pkill -f "java @unix_args" 2>/dev/null; sleep 12
+    for i in 1 2 3 4 5 6; do sleep 10; python3 scripts/minecraft_status.py 127.0.0.1 25565 >/dev/null 2>&1 && { say "  rollback OK — serverul e SUS cu configul vechi"; finish 0; }; done
+    say "  CRITIC: nici rollback nu raspunde — serverul are nevoie de ta (c.sh ruleaza din nou)"; finish 1
+  fi
+  finish 0
+  ;;
   down)
     opreste_server || true
     # maturam orice JVM de staging ramas din cicluri anterioare (pid vechi suprasris)
