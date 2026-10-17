@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
-        with: { repository: txnimc/KryptonReforged, ref: "1.16.5", fetch-depth: 1 }
+        with: { repository: txnimc/KryptonReforged, ref: "forge-1.16", fetch-depth: 1 }
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 8 }
       - name: Build cu ForgeGradle
@@ -33,6 +33,6 @@ jobs:
           mkdir -p pack
           cp "$SRC/$J" pack/krypton-reforged-1.16.5.jar
           S=$(sha256sum pack/krypton-reforged-1.16.5.jar | cut -d" " -f1)
-          { echo "sursa: github.com/txnimc/KryptonReforged @ $SHA (ramura 1.16.5)"; echo "build: Actions hosted, Temurin JDK8, ./gradlew build -x test, $(date -u '+%F %T') UTC"; echo "licenta: MIT"; echo "sha256: $S"; } > pack/krypton-reforged-1.16.5.meta.txt
+          { echo "sursa: github.com/txnimc/KryptonReforged @ $SHA (ramura forge-1.16)"; echo "build: Actions hosted, Temurin JDK8, ./gradlew build -x test, $(date -u '+%F %T') UTC"; echo "licenta: MIT"; echo "sha256: $S"; } > pack/krypton-reforged-1.16.5.meta.txt
           git config user.name pack-ci; git config user.email p@ci
           git add -A && git commit -qm "krypton-reforged 1.16.5 — build propriu de la commit pinat" && git push -q origin HEAD:functity-out && echo "JAR-PUS sha=${S:0:12}"
