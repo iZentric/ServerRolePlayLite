@@ -32,6 +32,9 @@ jobs:
           print('modpack:',idx.get('name'),idx.get('versionId'))
           ok=fail=skip=0
           for f in idx.get('files',[]):
+            env=f.get('env') or {}
+            if (env.get('server') or 'required')=='unsupported':
+              print('skip client-only:',f['path']); continue
             dest=os.path.join('mods',f['path'])
             os.makedirs(os.path.dirname(dest),exist_ok=True)
             if os.path.exists(dest): skip+=1; continue
