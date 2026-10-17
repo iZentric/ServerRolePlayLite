@@ -84,6 +84,18 @@
       <tr><td>Interfață</td><td class="engine">FastFurnace, FastWorkbench, LazyDFU</td><td class="dim">rețete instant, menu-uri rapide</td></tr>
     </tbody>
   </table>
+  <h2>De ce exact 36 moduri — și niciunul „la întâmplare"</h2>
+  <p class="note" style="margin-top:0">Regula pack-ului: un mod intră pe server DOAR dacă binarul poate fi potrivit cu sursa lui (repo + commit/tag + SHA). Candidați testați și respinși onest:</p>
+  <table>
+    <thead><tr><th>Candidat</th><th>Ce aducea</th><th>De ce NU e pe server</th></tr></thead>
+    <tbody>
+      <tr><td class="engine">KryptonReforged</td><td class="dim">netty 4.1 pe Forge</td><td class="dim">am încercat build din source @ <code>forge-1.16</code> — esueaza pe dependinta <code>curse.maven:magnesium</code> (maven mort din 2020); singurul jar e pe CurseForge, nepotrivit cu niciun commit public; plus coliziune cu patch-ul netty propriu al Mohist (fișa FISE)</td></tr>
+      <tr><td class="engine">Starlight (Forge)</td><td class="dim">iluminare de 7x mai rapidă la chunk-gen</td><td class="dim">portul 1.16.5 fără repo verificabil prin API; pe puntea Mohist e „zona periculoasă" conform fișei — refuzat pentru ca nu-i putem semna proveniența</td></tr>
+      <tr><td class="engine">RandomPatches</td><td class="dim">reparații RNG/leaks</td><td class="dim">2.4.4 publicat doar ca arhivă CF, SHA de manifest negăsit pe sursă; functional acoperit deja de memoryleakfix+FerriteCore din pack</td></tr>
+    </tbody>
+  </table>
+  <p class="note">Runda asta a însemnat și un <b>build real în CI</b> (pack-build.yml, commit pinat) — a eșuat din cauza dependency-ului mort al autorului, dovada că nu e vină de lene. Cine dă binar „mai bun" cu SHA de git = intră în staging (mod <code>packtest</code>) și iese singur dacă strică ceva (<code>packpromote</code> cu rollback la 300 s).</p>
+
   <h2>Setări recomandate pe client slab</h2>
   <ul>
     <li>Java 11, alocare <b>-Xmx3G</b> (nu mai mult — se chinuie garbage-collector-ul)</li>
