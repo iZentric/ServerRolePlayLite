@@ -18,8 +18,8 @@ def hdr(method, path, host, c, body=None):
         raise RuntimeError("sign: " + sig.stderr.decode()[:150])
     b64 = subprocess.run(["openssl","base64","-A"], input=sig.stdout, capture_output=True).stdout.decode()
     keyid = f'{c.get("tenancy","")}/{c["user"]}/{c["fingerprint"]}'
-    auth = (f'Signature keyId="{keyid}",algorithm="rsa-sha256",'
-            f'headers="(request-target) host date",signature="{b64}"')
+    auth = (f'Signature algorithm="rsa-sha256",headers="(request-target) host date",'
+            f'keyId="{keyid}",signature="{b64}",version="1"')
     h = {"Date": date, "Accept": "application/json", "Content-Type": "application/json",
          "Authorization": auth}
     if body is not None:
