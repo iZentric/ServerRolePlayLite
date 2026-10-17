@@ -148,6 +148,7 @@ verifica_log(){
 
 # ============ SUBCOMENZI ============
 M=${1:-test}
+if [ "${RUNNER_OS:-Linux}" != "Linux" ]; then echo "RUNNER GREȘIT (job prins de PC, nu de boxa) — ignora, ruleaza marker din nou"; exit 1; fi
 if [ "$M" = auto ] && [ -f deploy/funcity-stage.txt ]; then
   read -r M FP FJ _ < deploy/funcity-stage.txt || true
   export FUNCITY_PORT=${FP:-25566} FUNCITY_JAR=${FJ:-}; M=${M:-test}
