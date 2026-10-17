@@ -10,51 +10,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: MC ping extern
+      - name: MC ping extern (mcstatus)
         run: |
           AD=$(cat diag/addr.txt 2>/dev/null | tr -d '\n[:space:]')
           echo "adresa: $AD"
-          python3 - "$AD" <<'PY'
-          import socket,json,sys
-          ad=sys.argv[1].replace('https://','')
-          host=ad.split(':')[0]; port=int(ad.split(':')[1]) if ':' in ad else 443
-          def rv(f):
-              n=0;sh=0
-              for _ in range(5):
-                  c=f.read(1)
-                  if not c: raise Exception('eof')
-                  b=c[0]; n|=(b&0x7f)<<sh; sh+=7
-                  if not b&0x80: return n
-              raise Exception('varint')
-          try:
-              # handshake corect: id=0, prot=-1(varint), host, port, next=1
-              import struct
-              def wv(n):
-                  o=b''
-                  n&=0xFFFFFFFFFFFFFFFF
-                  while True:
-                      if (n&~0x7F)==0: return o+bytes([n])
-                      o+=bytes([(n&0x7F)|0x80]); n>>=7
-              h=wv(0)+wv(-1&0xFFFFFFFFFFFFFFFF)+wv(len(host))+host.encode()+struct.pack('>H',port)+wv(1)+wv(0)
-              s2=socket.create_connection((host,port),10); s2.settimeout(10); f2=s2.makefile('rb')
-              s2.sendall(wv(len(h))+h)
-              q=wv(0)+wv(0)
-              s2.sendall(wv(len(q))+q)
-              ln=rv(f2); data=b''
-              while len(data)<ln: data+=f2.read(ln-len(data))
-              i=0
-              while data[i]&0x80: i+=1
-              i+=1
-              n=0;sh=0
-              while data[i]&0x80: n|=(data[i]&0x7f)<<sh; sh+=7; i+=1
-              n|=(data[i]&0x7f)<<sh; i+=1
-              d=json.loads(data[i:i+n].decode('utf8'))
-              print('EXTERIOR OK |',d.get('version',{}).get('name'),'| online:',d.get('players',{}).get('online'))
-              open('/tmp/verdict.txt','w').write('EXTERIOR: JUCABIL\n')
-          except Exception as e:
-              print('EXTERIOR esuat:',str(e)[:100])
-              open('/tmp/verdict.txt','w').write('EXTERIOR: ESUAT '+str(e)[:60]+'\n')
-          PY
+          pip install -q mcstatus 2>&1 | tail -1
+          if mcstatus "$AD" status > /tmp/mcs.txt 2>&1; then
+            head -c 400 /tmp/mcs.txt
+            echo "EXTERIOR: JUCABIL - serverul raspunde prin tunel" > /tmp/verdict.txt
+            head -3 /tmp/mcs.txt >> /tmp/verdict.txt
+          else
+            echo "ESUAT:"; head -c 300 /tmp/mcs.txt
+            { echo "EXTERIOR: ESUAT"; head -3 /tmp/mcs.txt; } > /tmp/verdict.txt
+          fi
       - name: Verdict in repo
         if: always()
         run: |
