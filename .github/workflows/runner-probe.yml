@@ -14,9 +14,17 @@ jobs:
       run:
         shell: powershell
     steps:
-      - uses: actions/checkout@v4
-      - name: identitate PC
+      - name: identitate PC (scrie si erorile in fisa)
         run: |
+          New-Item -ItemType Directory -Force analysis | Out-Null
+          "--- PROBE $(Get-Date) ---" | Add-Content analysis/RUNNER-PROBE.md
+          try {
+          "checkout manual: $env:GITHUB_WORKSPACE" | Add-Content analysis/RUNNER-PROBE.md
+          Set-Location $env:GITHUB_WORKSPACE
+          git fetch origin $env:GITHUB_REF_NAME 2>&1 | Add-Content analysis/RUNNER-PROBE.md
+          git checkout -q -B probebr origin/$env:GITHUB_REF_NAME 2>&1 | Add-Content analysis/RUNNER-PROBE.md
+          } catch { "ERR-PRE: $_" | Add-Content analysis/RUNNER-PROBE.md }
+          try {
           $os  = (Get-CimInstance Win32_OperatingSystem).Caption
           $cpu = (Get-CimInstance Win32_Processor | Select-Object -First 1).Name.Trim()
           $ram = [math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory/1GB,1)
@@ -37,5 +45,19 @@ jobs:
           git config user.name "pc-probe"; git config user.email "pc@functity.local"
           git add analysis/RUNNER-PROBE.md
           git commit -qm "probe PC: $env:COMPUTERNAME"
-          git pull -q --no-rebase origin $env:GITHUB_REF_NAME 2>$null
-          git push -q origin HEAD:$env:GITHUB_REF_NAME
+          git push origin HEAD:$env:GITHUB_REF_NAME 2>&1 | Add-Content analysis/RUNNER-PROBE.md
+          } catch { "ERR: $_" | Add-Content analysis/RUNNER-PROBE.md
+            Set-Location $env:RUNNER_TEMP -ErrorAction SilentlyContinue
+            "final eroare prinsa" | Add-Content "$env:GITHUB_WORKSPACE/analysis/RUNNER-PROBE.md" }
+        continue-on-error: true
+      - name: trimite fisa pe GitHub chiar si la esec
+        if: always()
+        shell: cmd
+        run: |
+          cd /d %GITHUB_WORKSPACE%
+          git config user.name pc-probe & git config user.email pc@functity.local
+          git add -f analysis/RUNNER-PROBE.md
+          git commit -m "probe: fisier trimis din PC" 2>nul
+          git pull --no-rebase -q origin %GITHUB_REF_NAME% 2>nul
+          git push origin HEAD:%GITHUB_REF_NAME% 2>nul
+          exit 0
