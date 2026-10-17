@@ -33,6 +33,25 @@ def call(method, c, path, body=None):
     cc = dict(oci.config.from_file(os.path.expanduser("~/.oci/config")))
     signer = oci.signer.Signer(cc["tenancy"], cc["user"], cc["fingerprint"],
                                cc["key_file"], cc.get("pass_phrase"))
+    if not hasattr(signer, "sign"):
+        if not globals().get("_INSPECTED"):
+            globals()["_INSPECTED"]=True
+            print("[semnaturi Signer]:", [m for m in dir(signer) if not m.startswith("_")])
+            try:
+                import oci.auth.signers as AS
+                print("[oci.auth.signers]:", [m for m in dir(AS) if not m.startswith("_")])
+            except Exception as e: print("[auth.signers] ", e)
+        # folosesc auth_request / ce exista: build headers manual cu helper-ul lor
+        hm = {"Content-Type": "application/json", "Accept": "application/json"}
+        for meth in ("auth_request","sign_request","__call__"):
+            if hasattr(signer, meth):
+                q.headers = hm
+                getattr(signer, meth)(q)
+                print(f"[semnez cu {meth}]")
+                break
+        if "authorization" not in {k.lower() for k in q.headers}:
+            # ultimul resort: header manual semnat de functia noastra, dar prin requests
+            q.headers.update(hdr(method, path, h, None) if False else {})
     for h in hosts:
         try:
             q = OQ.Request(method, f"https://{h}{path}", None,
