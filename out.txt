@@ -1,9 +1,4 @@
-Sat Oct 17 16:05:22 UTC 2026
+Sat Oct 17 16:05:33 UTC 2026
 == CAUZA CRASH ==
-30:[16:03:53 FATAL]: Error during pre-loading phase
-32:[16:03:53 FATAL]: Crash report saved to ./crash-reports/crash-2026-10-17_16.03.53-fml.txt
-39:java.lang.Exception: Mod Loading has failed
-163:[16:03:53 FATAL]: Failed to start the minecraft server
-164:net.minecraftforge.fml.LoadingFailedException: Loading errors encountered: [
 == CURATARE LOCK + PORNIRE CORECTA ==
 exit=1
