@@ -1,16 +1,27 @@
-Sat Oct 17 16:34:05 UTC 2026
-== DESCARC ==
-marime: 147809645 din 147809645
-== STRUCTURA ==
-x
-x/overrides
-x/overrides/mods
-x/modrinth.index.json
-source mods: x/overrides/mods
-cp: cannot stat 'x/overrides/mods': No such file or directory
-ls: cannot access 'mods': No such file or directory
-mods din pack: 0 (backup: 29)
-ls: cannot access 'mods': No such file or directory
-ATTENTIE: packul tot nu aduce lib
+Sat Oct 17 16:50:39 UTC 2026
+== TUNEL ==
+ADRESA: https://leo-expenditure-respected-download.trycloudflare.com
+== MRPACK pt Prism ==
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+zip warning: Permission denied
+stat: cannot statx 'Freeroam.mrpack': No such file or directory
+marime mrpack: 
+release id: 415929867
+eroare: {"message":"Invalid name for request","request_id":"74DD:19F304:79A6FD:8CBF72:6AD3A760"}
+== SERVER ==
 PORT 25565: DESCHIS
 exit=0
