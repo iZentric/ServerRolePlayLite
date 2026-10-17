@@ -1,0 +1,40 @@
+name: OCI-PROBE
+on:
+  push:
+    branches: ['arena/*']
+    paths: ['.github/workflows/oci-probe.yml']
+permissions:
+  contents: write
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ce secrets OCI exista (prezenta, nu valori)
+        id: inv
+        env:
+          S1: ${{ secrets.OCI_TENANCY }}
+          S2: ${{ secrets.OCI_TENANCY_OCID }}
+          S3: ${{ secrets.OCI_USER }}
+          S4: ${{ secrets.OCI_USER_ID }}
+          S5: ${{ secrets.OCI_FINGERPRINT }}
+          S6: ${{ secrets.OCI_KEY }}
+          S7: ${{ secrets.OCI_PRIVATE_KEY }}
+          S8: ${{ secrets.OCI_REGION }}
+          S9: ${{ secrets.OCI_COMPARTMENT }}
+          SA: ${{ secrets.OCI_CFG }}
+          SB: ${{ secrets.OCI_CONFIG }}
+        run: |
+          : > /tmp/inv.txt
+          for v in S1 S2 S3 S4 S5 S6 S7 S8 S9 SA SB; do
+            if [ -n "${!v}" ]; then echo "$v PRESENT" >> /tmp/inv.txt; else echo "$v absent" >> /tmp/inv.txt; fi
+          done
+          cat /tmp/inv.txt
+      - name: Pune inventarul pe packdiag
+        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+        run: |
+          git config user.email b@b && git config user.name p
+          git fetch -q origin +refs/heads/packdiag:refs/remotes/origin/packdiag 2>/dev/null
+          git checkout -q -B packdiag "origin/packdiag" 2>/dev/null || git checkout -q --orphan packdiag
+          mkdir -p diag && cp /tmp/inv.txt diag/oci-secrets.txt
+          git add -f diag && git commit -qm "oci inventory $(date +%s)" && git push -qf "https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY" packdiag
