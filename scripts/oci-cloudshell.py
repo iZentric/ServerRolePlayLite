@@ -40,8 +40,21 @@ def call(method, c, path, body=None):
     except Exception as e:
         return -1, str(e)[:200]
 def home_region(c):
-    # Identity GET /regions e semnat: 200 = cheie+signare OK; primul din lista = HOME region
-    for probe in (c.get("region"), "us-ashburn-1", "eu-frankfurt-1"):
+    # GET /regions e PUBLIC (fara auth) — NU testeaza semnatura. Testul real: GetCompartmentById(tenancy).
+    import urllib.parse
+    probe = c.get("region") or "eu-frankfurt-1"
+    host = f"identity.{probe}.oci.oraclecloud.com"
+    path = f"/20160918/compartment/{c['tenancy']}"
+    req = urllib.request.Request(f"https://{host}{path}", method="GET", headers=hdr("GET", path, host, c))
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            d = json.loads(r.read(50000).decode())
+            nm = d.get("name", "?")
+            print(f"[AUTH-TEST compartment] 200 OK, tenancy='{nm}' => SEMNATURA CORECTA in {probe}")
+    except urllib.error.HTTPError as e:
+        print(f"[AUTH-TEST compartment] HTTP {e.code} {e.read(200).decode()[:160]}")
+    # home region din lista publica (merge si fara auth)
+    for probe in (c.get("region"), "us-ashburn-1"):
         if not probe: continue
         host = f"identity.{probe}.oci.oraclecloud.com"
         path = "/20160918/regions"
