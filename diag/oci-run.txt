@@ -1,4 +1,4 @@
-== run 39058502676 Sat Oct 17 18:31:58 UTC 2026 ==
+== run 39058662083 Sat Oct 17 18:34:07 UTC 2026 ==
 TEN=ocid1.tenancy.oc1..aaaaaa
 USR=ocid1.user.oc1..aaaaaaaaf
 FPR=f3:28:70:dc:e8:a1:26:de:78:13:69:60:b5:9f:f2:4d:5b:e5:53:41
@@ -9,3 +9,10 @@ STEP1 DONE
 FP_sha256=10:6b:21:1b:a9:ca:b7:36:87:0d:e7:74:25:ab:bd:56:41:b4:d0:b6:06:ce:c5:f7:62:d0:cd:a6:2c:e2:d0:2d
 FP_sha1=f3:28:70:dc:e8:a1:26:de:78:13:69:60:b5:9f:f2:4d:5b:e5:53:41
 FP_md5=fe:34:11:b7:f9:33:dd:bd:5c:f0:ca:aa:89:9f:f7:cb
+PAS: rq
+PAS: sig sh5my0KVw29G
+PAS: curl
+{
+  "code" : "NotAuthorizedOrNotFound",
+  "message" : "Authorization failed or requested resource not found."
+}
