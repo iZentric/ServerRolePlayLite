@@ -1,17 +1,8 @@
-Sat Oct 17 17:48:39 UTC 2026
-CRON: indisponibil in sesiune (bashrc+profile acopera)
-watchdog: 97758
-daemon: 97715
-=== CLAIE VIE v4: ascult comenzile. Nu inchide fereastra. ===
->> rulez 3c3b109
-== MONTAJ SERVER v34 ==+
-== MONTARE RETETA VALIDATA (v6) ==
-mods: 0 jar-uri
-FML cere liburi lipsa - elimin exact modurile problematice si retrag un singur restart:
-(nimic de eliminat - alte erori:)
-[17:49:13 WARN]: The exception was: java.net.BindException: Address already in use
-[17:49:13 ERROR]: Exception stopping the server
-PORT 25565: DESCHIS
-== TUNEL ==
-https://leo-expenditure-respected-download.trycloudflare.com
+Sat Oct 17 17:59:03 UTC 2026
+== EXPORT SERVER COMPLET ==
+tar: 443607403 bytes
+release: 415974474
+asset: {"message":"Invalid name for request","request_id":"D435:FDA5C:2B1C435:2C82127:6AD3B789"}
+== SI STATUT V36 ==
+PORT: DESCHIS
 exit=0
