@@ -45,16 +45,14 @@ jobs:
           FM=$(openssl rsa -in oci.key -pubout -outform DER 2>/dev/null | openssl dgst -md5 -binary | od -An -tx1 | tr -d ' \n' | sed 's/../&:/g;s/:$//')
           { echo "FP_sha256=$F256"; echo "FP_sha1=$F1"; echo "FP_md5=$FM"; } > out2.txt
           P="/20160918/availabilityDomains?compartmentId=$TEN"
-          for FP in "$F256" "$F1" "$FM"; do
-            D=$(date -u +"%a, %d %b %Y %H:%M:%S UTC")
-            printf 'GET %s\ndate: %s' "$P" "$D" > rq.txt
-            SIG=$(openssl dgst -sha256 -sign oci.key < rq.txt | openssl base64 -A)
-            RESP=$(curl -s "https://iaas.$REG.oraclecloud.com$P" -H "date: $D" -H "Authorization: Signature headers=\"date (request-target)\",keyId=\"$TEN/$USR/$FP\",algorithm=\"rsa-sha256\",signature=\"$SIG\"")
-            AD=$(echo "$RESP" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d[0]['name'])" 2>/dev/null)
-            if [ -n "$AD" ]; then echo "AUTH_OK fp=$FP AD=$AD" >> out2.txt; echo "$FP" > fp.good; echo "$AD" > ad.txt; break; fi
-            echo "fp=$FP -> $(echo $RESP | head -c 90)" >> out2.txt
-          done
-          test -f fp.good && echo "AUTENTIFICARE OCI: REUSITA" >> out2.txt || echo "OCI_KEY_NEINREGISTRATA in tenancy - miscarea la VM necesita key nou (se face din consola OCI, 2 min)" >> out2.txt
+          D=$(date -u +"%a, %d %b %Y %H:%M:%S UTC")
+          printf 'GET %s\ndate: %s' "$P" "$D" > rq.txt
+          echo "PAS: rq" >> out2.txt
+          SIG=$(openssl dgst -sha256 -sign oci.key < rq.txt | openssl base64 -A)
+          echo "PAS: sig ${SIG:0:12}" >> out2.txt
+          curl -s "https://iaas.$REG.oraclecloud.com$P" -H "date: $D" -H "Authorization: Signature headers=\"date (request-target)\",keyId=\"$TEN/$USR/$F1\",algorithm=\"rsa-sha256\",signature=\"$SIG\"" -o resp.json
+          echo "PAS: curl" >> out2.txt
+          head -c 300 resp.json >> out2.txt
           cat out2.txt
       - name: "STEP3: raport"
         if: always()
