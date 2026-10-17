@@ -1,5 +1,9 @@
-Sat Oct 17 15:14:17 UTC 2026
+Sat Oct 17 15:14:43 UTC 2026
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AttributeError: 'NoneType' object has no attribute 'group'
+[15:12:10 INFO]: iZentric issued server command: /version
+[15:12:10 INFO]: [Cuantic/version] iZentric: » Cuantic 1.7.7 (build propriu, Java 11.0.32.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor Mohist | Cuantic based on / adapted from: 1.16.5-754b578e (MC: 1.16.5)
+[15:14:01 INFO]: iZentric issued server command: /tps
 exit=0
-ADRESA: https://leo-expenditure-respected-download.trycloudflare.com
-0
 exit=0
