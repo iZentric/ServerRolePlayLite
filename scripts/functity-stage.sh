@@ -958,6 +958,7 @@ EO
     say "== OCIGEN: cheia publica a boxei (criptez cu ea cheia OCI) =="
     if [ -s "$D/keep.key" ]; then
       openssl rsa -in "$D/keep.key" -pubout 2>/dev/null | tee "$D/keep.pub"
+      say "B64PUB:$(base64 -w0 "$D/keep.pub" 2>/dev/null)"
       say "PUBKEY-BEGIN"
       say "$(cat "$D/keep.pub")"
       say "PUBKEY-END"
@@ -977,7 +978,8 @@ EO
     E=$(awk '/^==AES==/{f=1;next}/^==RSA==/{f=0}f' "$B" | tr -d ' \n')
     say "== OCISET: decriptez si instalez paznicul =="
     rm -rf /tmp/ociset; mkdir -p /tmp/ociset
-    printf '%s' "$K" | openssl pkeyutl -decrypt -inkey "$D/keep.key" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 2>/dev/null > /tmp/ociset/ka || { say "  esuat: decrypt key (cheie gresita pe boxa?)"; exit 1; }
+    printf '%s' "$K" | openssl base64 -d 2>/dev/null | openssl pkeyutl -decrypt -inkey "$D/keep.key" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 > /tmp/ociset/ka 2>/tmp/ociset/err
+    [ -s /tmp/ociset/ka ] || { say "  eroare exacta: $(head -c 140 /tmp/ociset/err | tr '\n' ' ')"; rm -rf /tmp/ociset; exit 1; } || { say "  esuat: decrypt key (cheie gresita pe boxa?)"; exit 1; }
     IV=$(cut -d: -f1 /tmp/ociset/ka); KEYS=$(cut -d: -f2 /tmp/ociset/ka); rm -f /tmp/ociset/ka
     printf '%s' "$E" | openssl base64 -d 2>/dev/null | openssl enc -d -aes-256-cbc -K "$KEYS" -iv "$IV" 2>/dev/null > /tmp/ociset/k.tgz || { say "  esuat: decriptare blob"; exit 1; }
     tar xzf /tmp/ociset/k.tgz -C /tmp/ociset || { say "  esuat: tar"; exit 1; }
