@@ -1,0 +1,62 @@
+name: curate-client
+on:
+  push:
+    paths:
+      - .github/workflows/curate-client.yml
+jobs:
+  curate:
+    timeout-minutes: 15
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: FunCity 1.1.0 = 1.0.0 fara gunoi cosmetic
+        run: |
+          set -e
+          exec > >(tee /tmp/curate.log) 2>&1
+          gh release download funcity -R "$GITHUB_REPOSITORY" -p FunCity-1.0.0.mrpack -D /tmp
+          python3 - <<'PY'
+import json, zipfile, shutil, os
+SRC = "/tmp/FunCity-1.0.0.mrpack"
+DST = "/tmp/FunCity-1.1.0.mrpack"
+BLACKLIST = ["dynamicsurroundings", "ctm-mc", "notenoughanimations", "transliterationlib", "lightfallclient", "ingameaccountswitcher"]
+zin = zipfile.ZipFile(SRC)
+idx = json.load(zin.open("modrinth.index.json"))
+keep, drop = [], []
+for e in idx.get("files", []):
+    name = (e.get("filename") or (e.get("downloads") or ["?"])[0].rsplit("/", 1)[-1]).lower()
+    (drop if any(b in name for b in BLACKLIST) else keep).append(e)
+idx["files"] = keep
+idx.setdefault("dependencies", {})
+zout = zipfile.ZipFile(DST, "w", zipfile.ZIP_DEFLATED)
+for n in zin.namelist():
+    if n == "modrinth.index.json":
+        zout.writestr(n, json.dumps(idx, ensure_ascii=False, indent=2))
+    elif any(b in n.lower() for b in BLACKLIST):
+        continue
+    else:
+        zout.writestr(n, zin.read(n))
+zout.close()
+print("STAOS:", [e.get("filename", "?") for e in drop])
+print("RAMAS:", len(keep), "moduri index")
+PY
+          ls -la /tmp/FunCity-1.1.0.mrpack
+          echo "== verificare repack =="
+          python3 -c "import json,zipfile; z=zipfile.ZipFile('/tmp/FunCity-1.1.0.mrpack'); d=json.load(z.open('modrinth.index.json')); print('zip OK, fisiere zip:', len(z.namelist()), '| index files:', len(d['files']))"
+          mv /tmp/FunCity-1.1.0.mrpack "$GITHUB_WORKSPACE/"
+          gh release upload funcity "$GITHUB_WORKSPACE/FunCity-1.1.0.mrpack" -R "$GITHUB_REPOSITORY" --clobber
+          gh release edit funcity -R "$GITHUB_REPOSITORY" --notes "## 🏙️ FUNCTITY 1.7.7 FINAL — client 1.1.0 (100% strategic)
+          **🎮 CLIENT (RECOMANDAT):** [FunCity-1.1.0.mrpack](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.1.0.mrpack) — toate modurile de content + doar artefactele de FPS; **tăiate: DynamicSurroundings (sunete ambientale), CTM (texturi decorative), NotEnoughAnimations, LightfallClient, AccountSwitcher + lib**
+          Vechiul 1.0.0 plin rămâne: FunCity-1.0.0.mrpack (aceeași pagină)
+          **🖥️ SERVER:** [FUNCTITY-SERVER.zip](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FUNCTITY-SERVER.zip) — 486 MB, world live + 31 moduri (toate content/perf, verificat one-by-one) + Java portabil + Start/Actualizare bat
+          Motor: FunCity b1.0827 (CatServer-based, fără Paper). Bază: [release lite](https://github.com/iZentric/ServerRolePlayLite/releases/tag/lite). Adresa: [diag/addr.txt](https://github.com/iZentric/ServerRolePlayLite/blob/arena/9bbcb24f-serverroleplaylite/diag/addr.txt)"
+          echo CURATE-DONE
+      - name: Trimite logul
+        if: always()
+        run: |
+          git config user.email b@b && git config user.name chk
+          mkdir -p diag && cp /tmp/curate.log diag/curate.log 2>/dev/null || true
+          git add -f diag/curate.log && git commit -qm "curate log $(date +%s)" && git push -q "https://x-access-token:${GH_TOKEN}@github.com/$GITHUB_REPOSITORY" HEAD:"$GITHUB_REF_NAME" || true
