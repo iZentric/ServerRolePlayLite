@@ -1,21 +1,19 @@
-Sat Oct 17 16:17:04 UTC 2026
-== CAUT LIBURILE LIPSA PE DISC ==
-== RESTAURARE DIN backup (daca exista)
-== PORNIRE ==
-TOT CRASHEAZA:
-net.minecraftforge.fml.LoadingFailedException: Loading errors encountered: [
-	Mod §eemotecraft§r requires §6playeranimator§r §o0.2.0 or above§r
-§7Currently, §6playeranimator§r§7 is §o§nnot installed,
-	Mod §evehicle§r requires §6obfuscate§r §o0.4.0 or above§r
-§7Currently, §6obfuscate§r§7 is §o§nnot installed,
-	Mod §eadditionalguns§r requires §6obfuscate§r §o0.6.3 or above§r
-§7Currently, §6obfuscate§r§7 is §o§nnot installed,
-	Mod §esupplementaries§r requires §6selene§r §o1.16.5-1.0 or above§r
-§7Currently, §6selene§r§7 is §o§nnot installed,
-	Mod §ecgm§r requires §6obfuscate§r §o0.6.2 or above§r
-§7Currently, §6obfuscate§r§7 is §o§nnot installed
-]
-	at net.minecraftforge.fml.ModLoader.gatherAndInitializeMods(ModLoader.java:165) ~[forge:?]
-	at net.minecraftforge.fml.server.ServerModLoader.load(ServerModLoader.java:30) ~[forge:?]
-	at net.minecraft.server.Main.main(Main.java:136) ~[?:?]
+Sat Oct 17 16:22:14 UTC 2026
+OK obfuscate <- obfuscate-0.6.2-1.16.3.jar (151170 B)
+NUGASIT selene
+NUGASIT playeranimator
+removed 'mods/emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar'
+CRASH:
+[16:22:41 FATAL]: Error during pre-loading phase
+[16:22:41 INFO]: [net.minecraft.crash.CrashReport:func_85057_a:202]: Negative index in crash report handler (15/17)
+[16:22:41 FATAL]: Crash report saved to ./crash-reports/crash-2026-10-17_16.22.41-fml.txt
+---- Minecraft Crash Report ----
+// Everything's going to plan. No, really, that was supposed to happen.
+
+Time: 10/17/26, 4:22 PM
+Description: Mod loading error has occurred
+
+java.lang.Exception: Mod Loading has failed
+	at net.minecraftforge.fml.CrashReportExtender.dumpModLoadingCrashReport(CrashReportExtender.java:72) ~[forge:?] {re:classloading}
+	at net.minecraftforge.fml.server.ServerModLoader.load(ServerModLoader.java:37) ~[forge:?] {re:classloading}
 exit=0
