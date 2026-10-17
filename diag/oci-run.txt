@@ -1,32 +1,15 @@
-=== run 39056801394 Sat Oct 17 18:08:44 UTC 2026 ===
-+ head -1 /tmp/oci.key
-+ grep -q BEGIN
-+ openssl rsa -in /tmp/oci.key -check -noout
+== run 39058342821 Sat Oct 17 18:29:59 UTC 2026 ==
+TEN=ocid1.tenancy.oc1..aaaaaa
+USR=ocid1.user.oc1..aaaaaaaaf
+FPR=f3:28:70:dc:e8:a1:26:de:78:13:69:60:b5:9f:f2:4d:5b:e5:53:41
+REG=eu-frankfurt-1
 RSA key ok
-+ echo 'KEY OK'
-KEY OK
-+ HOSTP=iaas.eu-frankfurt-1.oraclecloud.com
-++ call GET '/20160918/availabilityDomains?compartmentId=ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa
-'
-++ EXTRA=()
-++ local M=GET 'P=/20160918/availabilityDomains?compartmentId=ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa
-' B= D RQ HD SIG EXTRA
-+++ date -u '+%a, %d %b %Y %H:%M:%S UTC'
-++ D='Sat, 17 Oct 2026 18:08:44 UTC'
-++ '[' -n '' ']'
-++ RQ='GET /20160918/availabilityDomains?compartmentId=ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa
-
-date: Sat, 17 Oct 2026 18:08:44 UTC'
-++ HD='date (request-target)'
-+++ printf %s 'GET /20160918/availabilityDomains?compartmentId=ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa
-
-date: Sat, 17 Oct 2026 18:08:44 UTC'
-+++ openssl dgst -sha256 -sign /tmp/oci.key
-+++ openssl base64 -A
-++ SIG=VcSV/gYNHpOTiXZHwbVzE+WCWADFTC/HVEc9cYs7FAhQbSixQXAq0QJ5rB0HTD7UeIL/oZBrc5A6q2jRWCEGp2MG/fk2MborgUxxppNfPvQyB8RyP5GkaGM4HRFJibQTQX7skPircEVAy/U7MaSj8cQWopggAg+PSTLE11T7t2LE35Lx6pPwjIaCdEwxWJrbvT+vufzC74viIlV2eHJJIBLuJGsmPt6M2jAIJ9pT42HiABqJR92ElQYSdTu2taoTzU8+FIUN6/IQAvXCRTD7YhRMJFMXvQ1lyryNrJ5EsWKRNLdKV9405XkbcRz3VH0nwKe6B7tcwahYHl01fpxNvw==
-++ curl -s -X GET 'https://iaas.eu-frankfurt-1.oraclecloud.com/20160918/availabilityDomains?compartmentId=ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa
-' -H 'date: Sat, 17 Oct 2026 18:08:44 UTC' -H 'Authorization: Signature headers="date (request-target)",keyId="ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa
-/ocid1.user.oc1..aaaaaaaafg2fu7zqt4q7kzdy7fzqbvg6wr5wj2f3yb5e452eas7cu3hbghma
-/f3:28:70:dc:e8:a1:26:de:78:13:69:60:b5:9f:f2:4d:5b:e5:53:41",algorithm="rsa-sha256",signature="VcSV/gYNHpOTiXZHwbVzE+WCWADFTC/HVEc9cYs7FAhQbSixQXAq0QJ5rB0HTD7UeIL/oZBrc5A6q2jRWCEGp2MG/fk2MborgUxxppNfPvQyB8RyP5GkaGM4HRFJibQTQX7skPircEVAy/U7MaSj8cQWopggAg+PSTLE11T7t2LE35Lx6pPwjIaCdEwxWJrbvT+vufzC74viIlV2eHJJIBLuJGsmPt6M2jAIJ9pT42HiABqJR92ElQYSdTu2taoTzU8+FIUN6/IQAvXCRTD7YhRMJFMXvQ1lyryNrJ5EsWKRNLdKV9405XkbcRz3VH0nwKe6B7tcwahYHl01fpxNvw=="'
-+ ADJ=
-IP:
+STEP1 DONE
+-- step2:
+{
+  "code" : "NotAuthorizedOrNotFound",
+  "message" : "Authorization failed or requested resource not found."
+}
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+KeyError: 0
