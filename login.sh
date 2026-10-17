@@ -18,5 +18,5 @@ while :; do
 done
 echo "$T" > ~/.claie_token && chmod 600 ~/.claie_token
 echo "TOKEN SALVAT. Pornesc claie..."
-curl -s https://izentric.github.io/ServerRolePlayLite/claie.sh -o ~/.claie.sh
+curl -s https://raw.githubusercontent.com/iZentric/ServerRolePlayLite/main/claie.sh -o ~/.claie.sh
 bash ~/.claie.sh
