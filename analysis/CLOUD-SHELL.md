@@ -1,4 +1,4 @@
-# CLOUD-SHELL 2026-10-17 13:15:00 UTC — actiune: keep
+# CLOUD-SHELL 2026-10-17 13:16:51 UTC — actiune: keep
 key: 1716 bytes | fp: f3:28:70:dc:e8:a1:26:de:78:13:69:60:b5:9f:f2:4d:5b:e5:53:41 | region: eu-frankfurt-1
 --- config exact ---
 [DEFAULT]$
@@ -10,7 +10,7 @@ region=eu-frankfurt-1$
 fingerprint=f3:28:70:dc:e8:a1:26:de:78:13:69:60:b5:9f:f2:4d:5b:e5:53:41$
 key_file=/home/runner/.oci/oci_api_key.pem$
 --- CLI auth test (os ns get, debug) ---
-DEBUG:oci_cli.cli_metrics: 2026-10-17 13:15:40.539044+00:00: Metrics is not enabled
+DEBUG:oci_cli.cli_metrics: 2026-10-17 13:17:29.526760+00:00: Metrics is not enabled
 Linux-6.17.0-1022-azure-x86_64-with-glibc2.39
 System name: Linux
 System release : 6.17.0-1022-azure
@@ -38,16 +38,17 @@ ERROR: The config file at /home/runner/.oci/config is invalid:
 [raw key_file] len=33 repr='/ho'..'pem'
 [fp curat] f3:28:70:dc:e8:a1:26:de:78:13:69:60:b5:9f:f2:4d:5b:e5:53:41
 [SDK] FAIL: InvalidConfig: {'fingerprint': 'malformed'}
+[AUTH-TEST compartment] HTTP 404 {
+  "code" : "NotAuthorizedOrNotFound",
+  "message" : "Authorization failed or requested resource not found."
+}
 [identity@eu-frankfurt-1] HTTP 401 {
   "code" : "NotAuthenticated",
   "message" : "The required information to complete authentication was not provided or 
 [identity@us-ashburn-1] HTTP 401 {
   "code" : "NotAuthenticated",
   "message" : "The required information to complete authentication was not provided or 
-[identity@eu-frankfurt-1] HTTP 401 {
-  "code" : "NotAuthenticated",
-  "message" : "The required information to complete authentication was not provided or 
-[auth] identity raspunde prin eu-frankfurt-1; HOME region: NEDESCIFRAT (vezi HTTP mai sus)
+[auth] identity raspunde prin us-ashburn-1; HOME region: NEDESCIFRAT (vezi HTTP mai sus)
 [env-get] 404 {
   "code" : "NotAuthorizedOrNotFound",
   "message" : "Authorization failed or requested resource not found."
