@@ -757,6 +757,33 @@ EO
   fi
   finish 0
   ;;
+  bootcheck) # porneste staging cu jarul LIVE din productie + configul tunat din $D; opreste singur; nu atinge productia
+  say "== BOOTCHECK — jar de productie pe staging tunat — $(date -u '+%T') =="
+  JARF=$(ls "$P"/FunCity-*.jar 2>/dev/null | head -1)
+  [ -f "$JARF" ] || { say "  nu gasesc jar FunCity in $P"; finish 1; }
+  cp "$JARF" "$D/FunCity.jar" 2>/dev/null || { say "  nu pot scrie in staging"; finish 1; }
+  JB="$D/jdk11/bin/java"; [ -x "$JB" ] || JB=$(java11_gaseste || echo java)
+  pkill -f "java.*[/]funcity-live" 2>/dev/null; sleep 2
+  cd "$D" && nohup "$JB" -Xms1G -Xmx"$XMX" -XX:MaxGCPauseMillis=200 -jar FunCity.jar nogui > "$D/stage.log" 2>&1 &
+  BPID=$!
+  RES=ESUAT; T0=$(date +%s)
+  for t in $(seq 1 200); do sleep 1; grep -qE "Done \([0-9.]+s\)!" "$D/stage.log" 2>/dev/null && { RES=OK; break; }; kill -0 $BPID 2>/dev/null || { RES=CRASH; break; }; done
+  WALL=$(( $(date +%s) - T0 ))
+  DONE=$(grep -m1 -oE "Done \([0-9.]+s\)!" "$D/stage.log" 2>/dev/null | tr -dc "0-9.")
+  if [ "$RES" = OK ]; then
+    sleep 60
+    say "  boot: $DONE s (world+moduri+plugini, 2 fire ARM) | zid pana la Done: ${WALL}s"
+    say "  plugini Enabling: $(grep -c "Enabling " "$D/stage.log") din asteptati 14 | moduri activi: $(grep -cE "MOD | Loading mod" "$D/stage.log" | head -1)"
+    say "  keep-up in primele 60s IDLE: $(grep -c "Can't keep up" "$D/stage.log") | ERROR: $(grep -cE ' ERROR ' "$D/stage.log")"
+    say "  config activ verify: $(grep -E "simulation-distance" "$D/server.properties" | head -1) | $(grep -m1 "tick-inactive-villagers" "$D/spigot.yml" | tr -d ' ')"
+  else
+    say "  $RES dupa ${WALL}s — log:"
+    tail -14 "$D/stage.log" 2>/dev/null | cut -c1-170 | sed "s/^/    | /" | tee -a "$REPORT"
+  fi
+  kill $BPID 2>/dev/null; sleep 3; pkill -f "java.*[/]funcity-live" 2>/dev/null
+  rm -f "$D/FunCity.jar"
+  [ "$RES" = OK ] && finish 0 || finish 1
+  ;;
   down)
     opreste_server || true
     # maturam orice JVM de staging ramas din cicluri anterioare (pid vechi suprasris)
