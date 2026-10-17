@@ -3,7 +3,7 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-17 00:13:06 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-17 00:14:40 UTC — gazda → artefact → relay
 
 ```
 mod automat din marker: stats port=x jar=x
@@ -15,10 +15,10 @@ mod automat din marker: stats port=x jar=x
 — ERA CATSERVER (arhiva de dinaintea instalarii, aceeasi masina/lume):
     (fara arhiva veche in $P/logs — logurile cuantic nu au supravietuit reinstall-ului)
 — ACUM:
-    java RSS: indisponibil
-    RAM libera OS: 4783 MiB din 11884
+    java RSS: 3174 MiB
+    RAM libera OS: 4819 MiB din 11884
     disc liber: 179 MiB | lume: 150 MiB
-    uptime server: SUS?
+    uptime server: 02:03:50
 (sfarsit rc=0)
 RC=0
 ```
