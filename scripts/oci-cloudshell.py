@@ -34,8 +34,33 @@ def call(method, c, path, body=None):
         return e.code, e.read(400).decode()
     except Exception as e:
         return -1, str(e)[:200]
+def home_region(c):
+    # Identity GET /regions e semnat: 200 = cheie+signare OK; primul din lista = HOME region
+    for probe in (c.get("region"), "us-ashburn-1", "eu-frankfurt-1"):
+        if not probe: continue
+        host = f"identity.{probe}.oci.oraclecloud.com"
+        path = "/20160918/regions"
+        req = urllib.request.Request(f"https://{host}{path}", method="GET", headers=hdr("GET", path, host, c))
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                data = json.loads(r.read(200000).decode())
+                names = [x["name"] for x in data.get("data", [])]
+                if names:
+                    return probe, names[0]
+        except urllib.error.HTTPError as e:
+            body = e.read(200).decode()
+            print(f"[identity@{probe}] HTTP {e.code} {body[:120]}")
+            if e.code in (401, 404) and "sign" in body.lower(): return probe, None
+        except Exception as e:
+            print(f"[identity@{probe}] {e}")
+    return probe, None
 def main():
     c = cfg(); mode = sys.argv[1] if len(sys.argv) > 1 else "keep"
+    tried, home = home_region(c)
+    print(f"[auth] identity raspunde prin {tried}; HOME region: {home or 'NEDESCIFRAT (vezi HTTP mai sus)'}")
+    if home and home != c.get("region"):
+        c["region"] = home
+        print(f"[region] schimb in home: {home}")
     st, body = call("GET", c, "/20150802/cloudShell")
     print(f"[env-get] {st} {body[:200]}")
     if st == 404 or "NotFound" in body:

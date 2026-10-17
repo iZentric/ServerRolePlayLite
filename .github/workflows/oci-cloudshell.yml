@@ -1,5 +1,6 @@
 name: OCI-CLOUD-SHELL
-# Porneaza/ține viu Oracle Cloud Shell prin API (fara browser). Buton + ceas la 4 zile.
+# Porneaza/ține viu Oracle Cloud Shell prin API (fara browser).
+# (v2: detecteaza home region prin identity API) Buton + ceas la 4 zile.
 on:
   workflow_dispatch:
     inputs:
