@@ -1,19 +1,19 @@
 == SONDA EXTERNA 25565 ==
-{"version": {"name": "Mohist 1.16.5", "protocol": 754}, "players": {"online": 0, "max": 25}}
+{"version": {"name": "Mohist 1.16.5", "protocol": 754}, "players": {"online": 1, "max": 25}}
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-17 00:24:24 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-17 00:29:56 UTC — gazda → artefact → relay
 
 ```
-mod automat din marker: tune port=x jar=x
-== TUNE pe staging ==
-  aplicat: villagers inactivi opriti, mob-activation 32->24, chunk-gc 600->400, sim-distance 6, compressie 256
-  VERIFY:
-          tick-inactive-villagers: false
-        tick-inactive-villagers: false
-    network-compression-threshold=256
-    simulation-distance=6
-(sfarsit rc=0)
-RC=0
+mod automat din marker: test port=25566 jar=b1.0827
+== FUNCTITY TEST (boot->stop->reboot->persistenta) — 2026-10-17 00:25:30 UTC ==
+  server-port sincronizat cu markerul: 25566 | motd: FunCity RP Lite
+  voicechat: serverconfig/voicechat-server.toml -> port=24455
+--- PROBA 1: boot (include instalarea bibliotecilor Mohist daca lips) ---
+pornesc FunCity pe portul 25566 (heap 3G, java: /home/mndvasi9/funcity-live/jdk11/bin/java)
+  Error: Unable to access jarfile FunCity.jar
+ERORE: nu a vazut 'Done (' in 240s si nu pare instalare
+(sfarsit rc=1)
+RC=1
 ```
