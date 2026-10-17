@@ -892,8 +892,9 @@ EO
     [ "$(id -u)" = "0" ] && { echo "RULEAZA CA USER NORMAL (root ar lasa fiere de netratat)"; exit 1; }
     I=$HOME/functity/inbox; RR=$HOME/functity/repo
     mkdir -p "$I"
-    if [ ! -d "$RR/.git" ]; then git clone -q --depth 1 -b "$BRANCH" "https://github.com/$OWNER/$REPO.git" "$RR" || { echo "clone esuat"; exit 1; }; fi
-    ( cd "$RR" && git fetch -q origin "$BRANCH" && git reset -q --hard "origin/$BRANCH" ) || { echo "fetch esuat"; exit 1; }
+    RB=${BRANCH:-arena/9bbcb24f-serverroleplaylite}
+    if [ ! -d "$RR/.git" ]; then git clone -q --depth 1 -b "$RB" "https://github.com/iZentric/ServerRolePlayLite.git" "$RR" || { echo "clone esuat pe $RB"; exit 1; }; fi
+    ( cd "$RR" && git fetch -q origin "$RB" && git reset -q --hard "origin/$RB" ) || { echo "fetch esuat"; exit 1; }
     if [ ! -d "$RR/inbox" ]; then echo "inbox: directarul nu exista pe branch"; echo OK; exit 0; fi
     N=0
     find "$RR/inbox" -maxdepth 1 -type f ! -name 'README*' | sort | while read -r f; do
