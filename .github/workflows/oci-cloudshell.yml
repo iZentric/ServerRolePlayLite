@@ -1,6 +1,6 @@
 name: OCI-CLOUD-SHELL
 # Porneaza/ține viu Oracle Cloud Shell prin API (fara browser).
-# (v4: config fara ghilimele = cauza 401) Buton + ceas la 4 zile.
+# (v5: Authorization strict OCI: fara spatii, keyId primul) Buton + ceas la 4 zile.
 on:
   workflow_dispatch:
     inputs:
