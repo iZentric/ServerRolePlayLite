@@ -1,16 +1,21 @@
-export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
-cd ~
-sudo -n true 2>/dev/null && echo "SUDO: da" || echo "SUDO: nu"
-mkdir -p /run/playit 2>/dev/null || sudo mkdir -p /run/playit 2>/dev/null
-pkill -f playitd; sleep 1
-(setsid nohup ~/playit playitd --socket-path=/run/playit/playitd.sock --secret-path=$HOME/playit-run/playit.toml > /tmp/playitd.log 2>&1 < /dev/null &) 2>/dev/null
-(setsid nohup ~/playitd --socket-path=/run/playit/playitd.sock --secret-path=$HOME/playit-run/playit.toml > /tmp/playitd.log 2>&1 < /dev/null &) 2>/dev/null
-sleep 6
-pgrep -f playitd >/dev/null && echo "playitd: traieste" || echo "playitd: nu a pornit"
-tail -6 /tmp/playitd.log 2>/dev/null
-if pgrep -f playitd >/dev/null; then
-  (setsid nohup ~/playit start > /dev/null 2>&1 < /dev/null &)
-  for i in $(seq 1 12); do sleep 3; grep -qE "playit\.gg:[0-9]+|https://playit\.gg/\S*account\S*" /tmp/playitd.log && break; done
-  grep -oE "[a-z0-9-]+\.playit\.gg:[0-9]+" /tmp/playitd.log | sort -u | head -3
-  grep -oE "https://playit\.gg/[^\" ]+" /tmp/playitd.log | head -2
+export PATH=$PATH:/usr/bin:/bin:/usr/local/bin:$HOME/oci-cli/bin
+echo "== fisiere oci =="; ls -la ~/.oci/ 2>/dev/null | head -5; cat ~/.oci/config 2>/dev/null | grep -vE "^\s*#|^\s*$" | sed 's/key_file.*/key_file: OK/' | head -8
+echo "== test auth cu cheia de pe disc =="
+K=$(grep -oE "key_file=.*" ~/.oci/config 2>/dev/null | cut -d= -f2 | tr -d ' ')
+[ -f "$K" ] || K=$(ls ~/.oci/*.pem 2>/dev/null | head -1)
+CFG=$(grep -E "tenancy|user|fingerprint|region" ~/.oci/config 2>/dev/null)
+TEN=$(echo "$CFG" | grep tenancy | cut -d= -f2 | tr -d ' ')
+USR=$(echo "$CFG" | grep "^user" | cut -d= -f2 | tr -d ' ')
+FPR=$(echo "$CFG" | grep fingerprint | cut -d= -f2 | tr -d ' ')
+REG=$(echo "$CFG" | grep region | cut -d= -f2 | tr -d ' ')
+if [ -f "$K" ] && [ -n "$TEN" ]; then
+  echo "key gasit: $K | fp: $FPR"
+  D=$(date -u +"%a, %d %b %Y %H:%M:%S UTC")
+  P="/20160918/availabilityDomains?compartmentId=$TEN"
+  SIG=$(printf 'GET %s\ndate: %s' "$P" "$D" | openssl dgst -sha256 -sign "$K" | openssl base64 -A)
+  RESP=$(curl -s "https://iaas.$REG.oraclecloud.com$P" -H "date: $D" -H "Authorization: Signature headers=\"date (request-target)\",keyId=\"$TEN/$USR/$FPR\",algorithm=\"rsa-sha256\",signature=\"$SIG\"")
+  echo "RESP: $(echo $RESP | head -c 150)"
+  echo "$RESP" | grep -q '"name"' && echo "AUTENTIFICARE OCI: FUNCTIONEALA" || echo "AUTENTIFICARE: MOARTA (cheia nu mai e in cont)"
+else
+  echo "fara key/config"
 fi
