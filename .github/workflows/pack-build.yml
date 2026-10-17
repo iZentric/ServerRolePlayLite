@@ -19,7 +19,10 @@ jobs:
           set +e
           chmod +x gradlew
           ./gradlew build -x test --no-daemon > /tmp/kg.log 2>&1
-          echo "BUILD_RC=$?"; tail -6 /tmp/kg.log
+          RC=$?
+          echo "BUILD_RC=$RC"
+          TAIL=$(tail -c 380 /tmp/kg.log | tr '\n' ' ' | tr -d '"')
+          echo "::error::build rc=$RC :: $TAIL"
       - name: Comite jarul pinat pe functity-out
         run: |
           set +e
