@@ -1,27 +1,17 @@
-Sat Oct 17 17:18:41 UTC 2026
-== TUNEL ==
-ADRESA: https://leo-expenditure-respected-download.trycloudflare.com
-== MRPACK pt Prism ==
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-zip warning: Permission denied
-stat: cannot statx 'Freeroam.mrpack': No such file or directory
-marime mrpack: 
-release id: 415929867
-eroare: {"message":"Invalid name for request","request_id":"3B4C:A61D6:2B3BEBC:2C9C050:6AD3ADF1"}
-== SERVER ==
+Sat Oct 17 17:48:39 UTC 2026
+CRON: indisponibil in sesiune (bashrc+profile acopera)
+watchdog: 97758
+daemon: 97715
+=== CLAIE VIE v4: ascult comenzile. Nu inchide fereastra. ===
+>> rulez 3c3b109
+== MONTAJ SERVER v34 ==+
+== MONTARE RETETA VALIDATA (v6) ==
+mods: 0 jar-uri
+FML cere liburi lipsa - elimin exact modurile problematice si retrag un singur restart:
+(nimic de eliminat - alte erori:)
+[17:49:13 WARN]: The exception was: java.net.BindException: Address already in use
+[17:49:13 ERROR]: Exception stopping the server
 PORT 25565: DESCHIS
+== TUNEL ==
+https://leo-expenditure-respected-download.trycloudflare.com
 exit=0
