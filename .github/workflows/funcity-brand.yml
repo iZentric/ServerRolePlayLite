@@ -14,7 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build FunCity mrpack (brand + logo + pachet Lite)
+        continue-on-error: true
         run: |
+          exec >> /tmp/rep.txt 2>&1
+          set -x
           mkdir -p build && cd build
           curl -sL -o in.mrpack "https://github.com/$GITHUB_REPOSITORY/releases/download/freeroam/Freeroam-1.0.0.mrpack"
           python3 - <<'PY'
@@ -43,8 +46,13 @@ jobs:
           convert ../branding/funcity-logo.png -resize 256x256 funcity-icon.png 2>/dev/null || cp ../branding/funcity-logo.png funcity-icon.png
           ls -la
       - name: Release FunCity + asset
+        continue-on-error: true
         run: |
+          exec >> /tmp/rep.txt 2>&1
           gh release create funcity --title "FunCity 1.0.0" --notes "Server de roleplay FunCity pentru orice PC (fara F3+Shift bug - launcher standard Prism). Import: FISIER -> FunCity-1.0.0.mrpack in Prism (Instances/Import). Setari Java recomandate RAM mic: -Xms1G -Xmx2500M -XX:+UseG1GC -XX:+ParallelRefProcEnabled. Continut: masini, tunuri, RP complet, fara surse de lag (sunete spatiale/physics/shadere taiate - vezi lista in Freeroam lite-delta)." --draft=false 2>/dev/null || true
           gh release upload funcity build/FunCity-1.0.0.mrpack --clobber
           gh release upload funcity build/funcity-icon.png --clobber
           gh release view funcity --json assets --jq '.assets[].name'
+      - name: Trace in repo
+        if: always()
+        run: python3 .github/oci-report.py
