@@ -1,32 +1,35 @@
 #!/bin/bash
-# CLAIE v3: comenzi de la Arena prin repo. Nu moara la dedup.
+# CLAIE v4: lock unic, fara ucideri, push cu retry (nu mai ia foc terminalul)
 T=$(cat ~/.claie_token 2>/dev/null)
 R="https://x-access-token:${T:-none}@github.com/iZentric/ServerRolePlayLite"
 BR="arena/9bbcb24f-serverroleplaylite"
 D="$HOME/srpl-claie"
-[ -d "$D/.git" ] || git clone -q "$R" "$D" 2>/dev/null || { echo "clone esuat (ruleaza login)"; exit 1; }
-cd "$D"
+LK="$HOME/.claie.lock"
+if [ -d "$LK" ]; then P=$(cat "$LK/pid" 2>/dev/null); if [ -n "$P" ] && kill -0 "$P" 2>/dev/null; then echo "CLAIE exista deja (pid $P) - ies"; exit 0; fi; fi
+mkdir -p "$LK"; echo $$ > "$LK/pid"; trap 'rm -rf "$LK"' EXIT
+[ -d "$D/.git" ] || git clone -q "$R" "$D" || { echo "clone esuat (ruleaza login)"; exit 1; }
+cd "$D" || exit 1
 git config user.email claie@arena.local && git config user.name claie
-git checkout -q -B "$BR" "origin/$BR" 2>/dev/null
-# dedup: omoram doar ALTII (nu parintele bunicul-pierdut)
-SELF=$$
-for p in $(pgrep -f "bash.*claie" 2>/dev/null); do
-  [ "$p" = "$SELF" ] && continue
-  tr '\0' ' ' < /proc/$p/cmdline 2>/dev/null | grep -q "claie.sh" && { [ "$(ps -o tpgid= -p $p)" = "$(ps -o tpgid= -p $$)" ] && continue; kill "$p" 2>/dev/null; }
-done
-echo "=== CLAIE VIE: comenzile vin singure, eu le execut. Nu inchide fereastra. ==="
+git fetch -q origin "$BR" && git checkout -q -B "$BR" "origin/$BR" 2>/dev/null
+echo "=== CLAIE VIE v4: ascult comenzile. Nu inchide fereastra. ==="
 while true; do
   git fetch -q origin "$BR" 2>/dev/null
-  L=$(git rev-parse "origin/$BR" 2>/dev/null) || { sleep 10; continue; }
-  git reset -q --hard "$L" 2>/dev/null
+  L2=$(git rev-parse "origin/$BR" 2>/dev/null) || { sleep 10; continue; }
+  git merge -q --no-edit -X ours "$L2" 2>/dev/null || git merge --abort 2>/dev/null
   if [ -f cmd.sh ]; then
-    V=$(git log -1 --format=%h "$L" -- cmd.sh 2>/dev/null)
+    V=$(git log -1 --format=%h "$L2" -- cmd.sh 2>/dev/null)
     if [ "$(cat .ver 2>/dev/null)" != "$V" ]; then
       echo ">> rulez $V"
-      ( trap '' TERM HUP INT; date > out.txt; timeout 900 bash cmd.sh >> out.txt 2>&1; echo "exit=$?" >> out.txt; echo "$V" > .ver
-        git add -f out.txt .ver && git commit -qm "raspuns $V" && git push -q origin HEAD:"$BR" ) &
-      WP=$!
-      disown
+      date > out.txt
+      timeout 900 bash cmd.sh >> out.txt 2>&1
+      echo "exit=$?" >> out.txt
+      echo "$V" > .ver
+      git add -f out.txt .ver && git commit -qm "raspuns $V"
+      for a in 1 2 3 4 5; do
+        git push -q origin HEAD:"$BR" && break
+        git pull -q --no-rebase -X ours origin "$BR" 2>/dev/null; sleep 3
+      done
+      echo ">> raspuns impins"
     fi
   fi
   sleep 5
