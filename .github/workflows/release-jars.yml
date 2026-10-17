@@ -1,0 +1,64 @@
+name: RELEASE-JARS
+# Posteaza TOATE jarele (90 build-uri FunCity + pack Cuantic) ca asseturi pe un release,
+# ca sa poti muta totul pe alt GitHub cu un singur download. Raport in analysis/RELEASE-JARS.md
+on:
+  workflow_dispatch:
+  push:
+    paths: [ .github/workflows/release-jars.yml ]
+permissions:
+  contents: write
+jobs:
+  r:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: colecteaza + posteaza
+        run: |
+          set +e
+          LOG=/tmp/rj.log; : > $LOG
+          API=https://api.github.com/repos/$GITHUB_REPOSITORY
+          UP=https://uploads.github.com/repos/$GITHUB_REPOSITORY
+          TOK=$GITHUB_TOKEN
+          mkdir -p rel && cd rel
+          echo "[1] extrag jare din branchul functity-out..." | tee -a $LOG
+          N=0
+          for f in $(git ls-tree -r --name-only origin/fout | grep -E '^builds/.*\.jar$'); do
+            V=$(echo "$f" | cut -d/ -f2)
+            git show "origin/fout:$f" > "FunCity-$V.jar" 2>/dev/null && N=$((N+1))
+          done
+          git fetch -q origin +refs/heads/functity-out:refs/remotes/origin/fout 2>/dev/null
+          [ "$N" = 0 ] && { for f in $(git ls-tree -r --name-only refs/remotes/origin/fout | grep -E '^builds/.*\.jar$'); do V=$(echo "$f" | cut -d/ -f2); git show "refs/remotes/origin/fout:$f" > "FunCity-$V.jar" 2>/dev/null && N=$((N+1)); done; }
+          echo "  extrase: $N jare" | tee -a $LOG
+          git show origin/fout:pack/CUANTIC-Server-CatServer-1.7.7.zip > CUANTIC-Server-CatServer-1.7.7.zip 2>/dev/null || { for r in origin/fout refs/remotes/origin/fout; do git show $r:pack/CUANTIC-Server-CatServer-1.7.7.zip > CUANTIC-Server-CatServer-1.7.7.zip 2>/dev/null && break; done; }
+          tar czf funcity-jare-toate.tar.gz *.jar
+          sha256sum * > SHA256SUMS.txt
+          SIZE=$(du -m funcity-jare-toate.tar.gz | cut -f1); SIZEC=$(du -m CUANTIC-Server-CatServer-1.7.7.zip 2>/dev/null | cut -f1)
+          echo "[2] release + upload (jare $SIZE MB, cuantic ${SIZEC:-0} MB)..." | tee -a $LOG
+          TAG=jars-$(date -u +%Y%m%d)
+          RID=$(curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/json" \
+            -d "{\"tag_name\":\"$TAG\",\"name\":\"FunCity + Cuantic — toate jarele ($N builduri)\",\"target_commitish\":\"main\",\"draft\":false,\"body\":\"Arhiva completa pentru mutarea pe alt GitHub. continut: funcity-jare-toate.tar.gz ($N x FunCity-1.16.5.jar, b1.0600..b1.2326), CUANTIC-Server-CatServer-1.7.7.zip (serverul 1.7.10 complet), SHA256SUMS.txt (verifica cu sha256sum -c). Generat automat de release-jars.yml $(date -u '+%F %T UTC').\"}" \
+            $API/releases | jq -r '.id // empty')
+          [ -z "$RID" ] && RID=$(curl -s -H "Authorization: Bearer $TOK" "$API/releases/tags/$TAG" | jq -r '.id // empty')
+          echo "  release id: ${RID:-ESUEC}" | tee -a $LOG
+          for A in funcity-jare-toate.tar.gz CUANTIC-Server-CatServer-1.7.7.zip SHA256SUMS.txt; do
+            [ -f "$A" ] || continue
+            for try in 1 2 3; do
+              R=$(curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/octet-stream" --data-binary "@$A" "$UP/releases/$RID/assets?name=$A" | jq -r '.size // "ESUEC"')
+              echo "  upload $A: $R" | tee -a $LOG
+              [ "$R" != "ESUEC" ] && [ -n "$R" ] && break; sleep 10
+            done
+          done
+          echo "[3] gata" | tee -a $LOG
+          cd ..
+          {
+            echo "# RELEASE-JARS $(date -u '+%F %T UTC')"
+            echo "tag: $TAG | jare: $N | marimi: jare=${SIZE}MB cuantic=${SIZEC}MB"
+            grep -E "extrase|release id|upload" $LOG
+            echo "URL: https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG"
+          } > analysis/RELEASE-JARS.md
+          git add -f analysis/RELEASE-JARS.md
+          git config user.name rj-bot; git config user.email rj@functity.local
+          git commit -qm "release jars postat: $TAG ($N jare)"
+          for i in 1 2 3; do git pull -q --no-rebase origin ${GITHUB_REF_NAME} 2>/dev/null && break; done
+          git push -q origin HEAD:${GITHUB_REF_NAME}

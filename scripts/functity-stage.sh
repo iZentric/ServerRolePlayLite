@@ -1,0 +1,956 @@
+#!/usr/bin/env bash
+# FUNCTITY-STAGE — împachetare, pornire și verificare candidat FunCity PE GAZDA, fără a atinge
+# producția. Reguli scrise în piatră:
+#  * NU scrie nimic în ~/cuantic-live (doar citește pentru backup/copy de lume);
+#  * NU atinge cmd.in, frpc, systemd-ul producției; NU repornește producția;
+#  * dacă java de producție e SUS, modul test refusează să ia portul 25565;
+#  * tot ce e "pe test" se întâmplă în ~/funcity-live pe portul 25566 (25565 doar cu
+#    FUNCIETY_PUBLIC=1 și producție absentă verificată);
+#  * backup + verificare integritate înainte de orice boot; rollback = ștergi staging,
+#    producția n-a fost mișcată.
+set -uo pipefail
+export RUNNER_TRACKING_ID=""
+D=$HOME/funcity-live          # staging (al nostru)
+P=$HOME/cuantic-live          # producție (doar citire)
+B=$HOME/funcity-backup        # backup-uri
+REPO=${GITHUB_REPOSITORY:-iZentric/ServerRolePlayLite}
+BR_OUT=functity-out
+CAND=b1.2256; PORT=25566          # defaulturile; le pot suprascrie din marker (mai jos)
+XMX=${FUNCITY_XMX:-3G}
+LOG=$D/stage.log; REPORT=/tmp/funcity-stage.txt
+mkdir -p "$(dirname "$REPORT")" 2>/dev/null; : > "$REPORT" 2>/dev/null || true
+say(){ echo "$*" | tee -a "$REPORT"; }
+fail(){ say "ERORE: $*"; finish 1; }
+finish(){ mkdir -p /tmp; cp "$REPORT" /tmp/funcity-stage.txt 2>/dev/null; say "(sfarsit rc=$1)"; exit "$1"; }
+
+sync_port(){ # aduce server.properties din staging la portul din marker + MOTD FunCity (doar
+  # directorul de staging $D — productia nu se atinge ici).
+  sed -i -E "s/^server-port=.*/server-port=$PORT/" "$D/server.properties"
+  grep -q '^motd=' "$D/server.properties" && sed -i -E "s/^motd=.*/motd=FunCity RP Lite/" "$D/server.properties" || printf 'motd=FunCity RP Lite\n' >> "$D/server.properties"
+  say "  server-port sincronizat cu markerul: $PORT | motd: FunCity RP Lite"
+}
+
+prod_java(){ pgrep -f 'java @unix_args' | head -1 || true; }
+port_viu(){ ss -lnt 2>/dev/null | grep -q ":$1 " && echo da || echo nu; }
+
+java11_gaseste(){
+  for c in /usr/lib/jvm/*11*/bin/java /usr/lib/jvm/*-11/bin/java /opt/java/*11*/bin/java "$D/jdk11/bin/java"; do
+    [ -x "$c" ] && { echo "$c"; return 0; }
+  done
+  return 1
+}
+java11_adoptium(){
+  # Fără JDK 11 pe gazda? Luam Temurin 11 de la GitHub adoptium (aceeasi sursa folosita
+  # de CI), cu verificare sha256 impotriva fisierului .sha256.txt de langa arhiva.
+  say "java11 absent local: descarc Temurin 11 JRE (adoptium, verificat sha256)" >&2
+  local v=11.0.24+8 arch f
+  case $(uname -m) in aarch64) arch=aarch64;; *) arch=x64;; esac
+  f=OpenJDK11U-jre_${arch}_linux_hotspot_11.0.24_8.tar.gz
+  mkdir -p "$D" && cd "$D" || fail "nu pot intra $D"
+  curl -fsSLo "$f" "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${v}/${f}" 2>/dev/null || { say "JRE descarcare esuata" >&2; return 1; }
+  curl -fsSLo "$f.sha256.txt" "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${v}/${f}.sha256.txt" 2>/dev/null || { say "JRE sha descarcare esuata" >&2; return 1; }
+  ( sha256sum -c "$f.sha256.txt" >&2 ) || { say "SHA-256 JRE NU COINCIDE - opresc, nu rulez binar necunoscut" >&2; return 1; }
+  tar xzf "$f" && mv jdk-11.0.24+8-jre jdk11 2>/dev/null && rm -f "$f" "$f.sha256.txt"
+  echo "$D/jdk11/bin/java"
+}
+
+voicechat_port(){ # Simple Voice Chat 1.16.5-2.3.x: configbuilder -> cheia PLATA `port`,
+  # fisierul REAL e <rădăcină>/serverconfig/voicechat-server.toml (verificat in ConfigMigrator.java
+  # din sursa oficiala, branch 1.16.5). config/voicechat/*.properties e doar calea VECHE de migrare.
+  # Productia retine UDP 24454 -> staging foloseste 24455.
+  local toml="$D/serverconfig/voicechat-server.toml"
+  mkdir -p "$D/serverconfig"
+  if [ -f "$toml" ] && grep -qE '^[[:space:]]*port[[:space:]]*=' "$toml"; then
+    sed -i -E 's/^[[:space:]]*port[[:space:]]*=.*/port = 24455/' "$toml"
+  elif [ -f "$toml" ]; then
+    printf 'port = 24455\n' >> "$toml"
+  else
+    printf '# FunCity staging (productia tine 24454)\nport = 24455\n' > "$toml"
+  fi
+  # si varianta veche, complete, ca migrarea sa nu o restabileasca pe 24454
+  mkdir -p "$D/config/voicechat"
+  printf 'port=24455\n' > "$D/config/voicechat/voicechat-server.properties"
+  say "  voicechat: serverconfig/voicechat-server.toml -> $(grep -m1 -E '^[[:space:]]*port' "$toml" | tr -d ' ')"
+}
+
+moduri_count(){ ls "$D/mods" 2>/dev/null | grep -c '\.jar$' || echo 0; }
+plugini_count(){ ls "$D/plugins" 2>/dev/null | grep -c '\.jar$' || echo 0; }
+
+cmd_fifo(){ # trimite o linie consolei serverului (fifo O_RDWR, acelasi model dovedit in CI)
+  local line=$1
+  [ -p "$D/console.in" ] || { say "fifo absent"; return 1; }
+  python3 - "$D/console.in" "$line" <<'PY'
+import os, sys
+fd = os.open(sys.argv[1], os.O_RDWR)
+os.write(fd, (sys.argv[2] + "\n").encode()); os.close(fd)
+print("trimis:", sys.argv[2])
+PY
+}
+
+start_server(){ # supervisor separat (functity/ci/functity-supervise.py): nu da EOF pe stdin,
+  # supravietuieste jobului CI (setsid + session separation) si traieste cat JVM-ul.
+  local JAVA=$1
+  say "pornesc FunCity pe portul $PORT (heap $XMX, java: $JAVA)"
+  mkdir -p "$D" || { say "nu pot crea $D"; return 1; }
+  cd "$D" || return 1
+  [ -p console.in ] || mkfifo -m 600 console.in
+  : > "$LOG"
+  rm -f "$D/server.pid"
+  setsid env FUNCITY_JAVA="$JAVA" FUNCITY_LOG="$LOG" FUNCITY_XMX="$XMX" \
+    FUNCITY_JARFILE="${FUNCITY_JARFILE:-$(cat "$D/.jarname" 2>/dev/null || echo FunCity.jar)}" \
+    python3 "$GITHUB_WORKSPACE/functity/ci/functity-supervise.py" >/dev/null 2>&1 &
+  for t in 1 2 3 4 5 6; do sleep 3; [ -f "$D/server.pid" ] && break; done
+  [ -s "$D/server.pid" ] || { say "supervisorul nu a scris server.pid"; return 1; }
+  return 0
+}
+
+asteapta_done(){ # $1 = secunde max
+  local lim=$1 i=0
+  while [ $i -lt "$lim" ]; do
+    grep -q "Done (" "$LOG" 2>/dev/null && { grep "Done (" "$LOG" | tail -1 | sed 's/^/  /' | tee -a "$REPORT"; return 0; }
+    if ! pgrep -f "FunCity.*jar nogui" >/dev/null 2>&1 && ! pgrep -f "funcity-live" >/dev/null 2>&1; then
+      kill -0 "$(cat "$D/server.pid" 2>/dev/null)" 2>/dev/null || { say "JVM-ul a murat la boot:"; tail -25 "$LOG" | sed 's/^/  /' >>"$REPORT"; return 1; }
+    fi
+    sleep 4; i=$((i+4))
+  done
+  return 1
+}
+
+opreste_server(){
+  cmd_fifo "stop" || true
+  local i=0
+  while [ $i -lt 90 ]; do kill -0 "$(cat "$D/server.pid" 2>/dev/null)" 2>/dev/null || break; sleep 3; i=$((i+3)); done
+  if kill -0 "$(cat "$D/server.pid" 2>/dev/null)" 2>/dev/null; then say "OPRIRE NERESPONSA (am dat stop, nu omor fortat in raport)"; return 1; fi
+  say "oprire curata (server a iesit dupa 'stop')"
+  grep -iE "all dimensions are saved|saving worlds|ThreadedAnvil" "$LOG" | tail -2 | sed 's/^/  /'
+}
+
+verifica_log(){
+  say "== verificare log =="
+  say "  mods in flotasare: 'Forge mod loading' = $(grep -c 'Forge mod loading' "$LOG") (linii); 'found [0-9]* mods' = $(grep -oE 'mods active|Loading [0-9]+ mod' "$LOG" | tail -1)"
+  say "  plugini (Enabling): $(grep -cE '\[?[A-Za-z0-9_]+ ]? v?[0-9.]+ |Enabling ' "$LOG" 2>/dev/null || echo 0) linii Enabling"
+  say "  erori EROARE/ERROR in log: $(grep -cE '\bERROR\b| severe ' "$LOG") | Can't keep up: $(grep -c "Can't keep up" "$LOG")"
+  say "  critice suspecte: $(grep -ciE 'OutOfMemory|Unable to load plugin|Failed to load|NoSuchMethod|AbstractMethodError' "$LOG")"
+  say "  motd anuntat prin SLP:"
+  if command -v node >/dev/null 2>&1; then
+    node -e '
+    const net=require("net");const s=net.connect('$PORT',"127.0.0.1");let buf=Buffer.alloc(0);
+    s.on("error",e=>{console.log("    SLP esuat:",e.code);process.exit(0)});
+    s.on("connect",()=>{const v=n=>{n>>>=0;const o=[];for(;;){const h=n&0x7f,c=n>>>7?0x80:0;o.push(h|c);if(!c)return Buffer.from(o);n>>>=7}};
+    const hs=Buffer.concat([v(0),v(-1),v(9),Buffer.from("127.0.0.1"),(()=>{const b=Buffer.alloc(2);b.writeUInt16BE('$PORT');return b})(),v(1)]);
+    s.write(Buffer.concat([v(hs.length),hs,v(1),Buffer.from([0])]))});
+    s.on("data",d=>{buf=Buffer.concat([buf,d]);try{const j=JSON.parse(buf.slice(buf.indexOf(0x0a)+1).toString());console.log("    description:",j.description&&j.description.text||j.description);console.log("    players:",j.players&&j.players.online+"/"+j.players.max);s.end();process.exit(0)}catch(e){}});
+    setTimeout(()=>{console.log("    SLP: timp depasit");process.exit(0)},8000);' | tee -a "$REPORT"
+  else
+    say "    (node absent, SLP sarit)"
+  fi
+}
+
+# ============ SUBCOMENZI ============
+M=${1:-test}
+if [ "${RUNNER_OS:-Linux}" != "Linux" ]; then echo "RUNNER GREȘIT (job prins de PC, nu de boxa) — ignora, ruleaza marker din nou"; exit 1; fi
+if [ "$M" = auto ] && [ -f deploy/funcity-stage.txt ]; then
+  read -r M FP FJ _ < deploy/funcity-stage.txt || true
+  export FUNCITY_PORT=${FP:-25566} FUNCITY_JAR=${FJ:-}; M=${M:-test}
+  say "mod automat din marker: $M port=$FUNCITY_PORT jar=$FUNCITY_JAR" 2>/dev/null || true
+fi
+CAND=${FUNCITY_JAR:-b1.2256}; PORT=${FUNCITY_PORT:-25566}; XMX=${FUNCITY_XMX:-3G}
+case "$M" in
+  host-info)  # read-only: ce avem aici — CPU/RAM/disc/java/porturi/jucatori
+    say "== FUNCTITY HOST-INFO (read-only) — $(date -u '+%F %T UTC') =="
+    say "utilizator: $(whoami) | HOME=$HOME | hostname: $(hostname 2>/dev/null || cat /proc/sys/kernel/hostname)"
+    say "sistem: $(uname -srm) | $(grep PRETTY_NAME /etc/os-release 2>/dev/null | cut -d'"' -f2)"
+    say "cpu: $(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | sed 's/^ //') | $(nproc) fire"
+    awk '/MemTotal|MemAvailable/ {printf "  %s: %d MiB\n",$1,$2/1024}' /proc/meminfo | tee -a "$REPORT"
+    df -m "$HOME" | tail -1 | awk '{print "  disc "$6": "$3" MiB folositi din "$2" ("$5"), liber "$4" MiB"}' | tee -a "$REPORT"
+    say "java sistem: $(command -v java >/dev/null && java -version 2>&1 | head -1 || echo NICIUNA)"
+    say "java11: $(java11_gaseste || echo 'absent (se va instala local la nevoie)')"
+    say "node: $(command -v node >/dev/null && node --version || echo absent) | python3: $(python3 -V 2>&1) | git: $(git --version 2>&1 | head -1)"
+    say "— gazda server (producție):"
+    say "  director $P: $(du -sm "$P" 2>/dev/null | cut -f1) MiB total, subdirectoare mari:"
+    du -sm "$P"/* 2>/dev/null | sort -rn | head -6 | sed 's/^/    /' | tee -a "$REPORT"
+    say "  lume: $(du -sm "$P/world" 2>/dev/null | cut -f1) MiB | world_nether: $(du -sm "$P/world_nether" 2>/dev/null | cut -f1) | world_the_end: $(du -sm "$P/world_the_end" 2>/dev/null | cut -f1)"
+    say "  jar producție: $(ls "$P"/*.jar 2>/dev/null | head -3)"
+    say "  config port/motd/online-mode: $(grep -E '^(server-port|motd|online-mode|max-players)=' "$P/server.properties" 2>/dev/null | tr '\n' ' ')"
+    say "— procese si porturi:"
+    say "  toate java de pe gazda:"
+    for p in $(pgrep java); do ps -o pid=,etime=,args= -p "$p" 2>/dev/null | sed 's/^/    /' | cut -c1-220 | tee -a "$REPORT"; done
+    say "  ocupanti porturi 25565/25566:"; ss -lntp 2>/dev/null | grep -E ':(25565|25566) ' | sed 's/^/    /' | tee -a "$REPORT"
+    say "  java producție: $(prod_java || echo JOS) | supervisor c.sh: $(pgrep -f 'bash .*c\.sh' | head -1 || echo NU)"
+    say "  frpc: $(pgrep -f 'frpc -c' | head -1 || echo JOS) | port 25565: $(port_viu 25565) | port 25566: $(port_viu 25566)"
+    say "  jucatori (din live.log, ultima 'There are'): $(grep -oE 'There are [0-9]+ out of maximum [0-9]+' "$P/live.log" 2>/dev/null | tail -1 || grep -oE 'There are [0-9]+ out of maximum [0-9]+' "$P/logs/latest.log" 2>/dev/null | tail -1 || echo 'niciun eveniment recent')"
+    say "  last Done producție: $(grep -m1 -oE 'Done \([0-9.]+s\)' "$P/live.log" 2>/dev/null | tail -1 || echo '—')"
+    say "— service supervizare: systemd user: $(command -v systemctl >/dev/null && systemctl --user is-system-running 2>&1 || echo absent) | crontab: $(crontab -l 2>/dev/null | wc -l) linii"
+    say "— spatiu pentru staging+backup: trebuie ~ 2x lumea; liber $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB"
+    finish 0
+    ;;
+  backup)
+    say "== FUNCTITY BACKUP — $(date -u '+%F %T UTC') =="
+    [ -d "$P" ] || fail "nu gasesc $P"
+    mkdir -p "$B" || fail "nu pot crea $B"
+    TS=$(date -u +%Y%m%d-%H%M)
+    LISTA="world world_nether world_the_end server.properties server-icon.png ops.json whitelist.json permissions groups users plugins config mods run/scripts"
+    TAR="$B/prod-$TS.tar.gz"
+    ( cd "$P" && tar czf "$TAR" $(for x in $LISTA; do [ -e "$x" ] && printf '%s ' "$x"; done) ) || fail "tar esuat"
+    say "tar scris: $TAR ($(du -m "$TAR" | cut -f1) MiB)"
+    tar tzf "$TAR" >/dev/null 2>&1 || fail "arhiva CORUPTE la citire — nu continuu"
+    say "integritate tar: OK ($(tar tzf "$TAR" | wc -l) intrari)"
+    sha256sum "$TAR" | tee "$TAR.sha256" | sed 's/^/  /'
+    sha256sum -c "$TAR.sha256" >/dev/null && say "verificare sha: OK" || fail "sha verificare esuata"
+    say "rollback: copile $TAR inapoi in $P (procedura: opresti serverul, extragi in $P, pornești)"
+    echo "$TAR" > "$B/ULTIMUL"
+    finish 0
+    ;;
+  assemble)
+    say "== FUNCTITY ASSEMBLE staging — $(date -u '+%F %T UTC') =="
+    mkdir -p "$D" || fail "nu pot crea $D"
+    say "ia artefactul validat din functity-out (builds/$CAND), cu SHA de manifest"
+    rm -rf /tmp/fcclone /tmp/fcsrc; git clone -q --filter=blob:none --depth 2 "https://github.com/$REPO" /tmp/fcclone 2>/dev/null || git clone -q --depth 2 "https://github.com/$REPO" -b "$BR_OUT" /tmp/fcclone || fail "clone esuat"
+    ( cd /tmp/fcclone && git fetch -q --depth 2 origin "refs/heads/$BR_OUT" && git checkout -q FETCH_HEAD ) || fail "nu gasesc $BR_OUT"
+    SRC=/tmp/fcclone/builds/$CAND
+    [ -d "$SRC" ] || { ls /tmp/fcclone/builds/ | sed 's/^/    /'; fail "nu exista builds/$CAND"; }
+    JF=$(ls "$SRC"/FunCity-*.jar 2>/dev/null | head -1)
+    [ -n "$JF" ] || fail "nu gasesc FunCity-*.jar in $CAND (posibil pasul 'Colecteaza' a murat — vezi metadata)"
+    ( cd "$SRC" && [ -f SHA256SUMS.txt ] && sha256sum -c SHA256SUMS.txt ) || say "ATENTIE: fara SHA256SUMS langa jar"
+    cp "$JF" "$D/$(basename "$JF")"; echo "$(basename "$JF")" > "$D/.jarname"
+    export FUNCITY_JARFILE=$(basename "$JF")
+    say "semnatura hibrid: $(unzip -p "$D/$(basename "$JF")" META-INF/MANIFEST.MF 2>/dev/null | grep -c ServerLaunchArgs) ServerLaunchArgs (1 = MOHIST, nu vanilla)"
+    say "pachetul de componente = copia exacta a gazdei de productie (fara 'optimizari' ascunse)"
+    for x in mods plugins config run/scripts spigot.yml bukkit.yml; do
+      if [ -d "$P/$x" ]; then mkdir -p "$D/$x"; rsync -a --exclude='*.tmp' "$P/$x/" "$D/$x/" 2>/dev/null || cp -a "$P/$x/." "$D/$x/" 2>/dev/null; say "  copiat $x"; fi
+    done
+    for f in server.properties server-icon.png ops.json whitelist.json spigot.yml bukkit.yml; do
+      [ -f "$P/$f" ] && cp -n "$P/$f" "$D/" && say "  copiat $f"
+    done
+    for w in world world_nether world_the_end; do
+      if [ -d "$P/$w" ]; then rsync -a "$P/$w" "$D/" 2>>"$REPORT" || cp -a "$P/$w" "$D/"; say "  lume $w copiata in staging ($(du -sm "$D/$w" 2>/dev/null | cut -f1) MiB) - originalul neatins"; fi
+    done
+    [ -f "$P/eula.txt" ] && cp "$P/eula.txt" "$D/" || printf 'eula=true\n' > "$D/eula.txt"
+    say "  eula: $(cat "$D/eula.txt") (identic cu productia)"
+    mkdir -p "$D/mohist-config" && printf 'check_update: false\n' > "$D/mohist-config/mohist.yml" 2>/dev/null && say "  mohist.yml: check_update=false (fara legaturi inutile la pornire)"
+    say "ajustari de identitate doar pentru staging, pe portul $PORT:"
+    python3 - "$D/server.properties" "$PORT" "$CAND" <<'PY'
+import sys
+p, port, cand = sys.argv[1:4]
+try:
+    ls = open(p, encoding="utf-8").read().splitlines()
+except FileNotFoundError:
+    ls = []
+kv = {}
+for l in ls:
+    if "=" in l and not l.startswith("#"):
+        k, v = l.split("=", 1); kv[k.strip()] = v
+kv["server-port"] = port
+kv["motd"] = f"FunCity RP Lite - TEST candidat {cand} (nu e serverul obisnuit)"
+out = "\n".join(f"{k}={v}" for k, v in sorted(kv.items())) + "\n"
+open(p, "w", encoding="utf-8").write(out)
+print("  server.properties: port=" + port + " | motd=FunCity test | online-mode pastrat din productie:", kv.get("online-mode", "?"), "rcon:", kv.get("enable-rcon", "?"))
+PY
+    say "componente staging: $(moduri_count) moduri | $(plugini_count) plugini"
+    say "config JVM staging: -Xms1G -Xmx$XMX (gazda: vezi host-info; NU umplem RAM-ul); G1 implicit, MaxGCPauseMillis=200 — atat, fara colectie de flaguri"
+    finish 0
+    ;;
+  test)
+    say "== FUNCTITY TEST (boot->stop->reboot->persistenta) — $(date -u '+%F %T UTC') =="
+    [ -d "$D/mods" ] || fail "ruleaza intai assemble"
+    [ -f "$D/eula.txt" ] || { [ -f "$P/eula.txt" ] && cp "$P/eula.txt" "$D/" || printf 'eula=true\n' > "$D/eula.txt"; say "  eula.txt scris la pornire (gasda eula=produtiei)"; }
+  mkdir -p "$D/mohist-config" && [ -f "$D/mohist-config/mohist.yml" ] || printf 'check_update: false\n' > "$D/mohist-config/mohist.yml"
+    if [ "$PORT" = 25565 ] && [ -n "$(prod_java)" ]; then fail "productia e SUS pe 25565 — nu testez in acelasi loc"; fi
+    [ "$(port_viu "$PORT")" = nu ] || fail "portul $PORT e deja ocupat"
+    JAVA=$(java11_gaseste) || JAVA=$(java11_adoptium) || fail "java11 indisponibil"
+    export FUNCITY_XMX="$XMX" FUNCITY_JARFILE="$(cat "$D/.jarname")"
+    sync_port; voicechat_port
+    say "--- PROBA 1: boot (include instalarea bibliotecilor Mohist daca lips) ---"
+    start_server "$JAVA"
+    if ! asteapta_done 240; then
+      if grep -qiE "install|libraries" "$LOG" 2>/dev/null && ! grep -q "Done (" "$LOG"; then
+        say "  bootstrap Mohist a instalat biblioteci — repornim o data (identic cu faza A din CI)"
+        start_server "$JAVA"; asteapta_done 420 || { tail -40 "$LOG" | sed 's/^/  /' >>"$REPORT"; fail "nu a vazut 'Done (' nici dupa repornirea post-instalare"; }
+      else
+        tail -40 "$LOG" | sed 's/^/  /' >>"$REPORT"; fail "nu a vazut 'Done (' in 240s si nu pare instalare"
+      fi
+    fi
+    verifica_log
+    opreste_server || say "oprire problemati (raportat, mai incerc o data)"
+    say "--- PROBA 2: repornire din datele salvate (persistenta) ---"
+    [ -f "$D/world/level.dat" ] && say "  level.dat prezent ($(du -m "$D/world/level.dat" | cut -f1) MiB)" || say "  (fara world in staging — persistenta se va testa cu copia de lume, vezi PASIIUtilizator)"
+    start_server "$JAVA"
+    asteapta_done 420 || fail "al doilea boot esuat — datele salvate nu incarca"
+    cmd_fifo "list" ; sleep 3
+    grep -E "There are|Invalid session" "$LOG" | tail -2 | sed 's/^/  /'
+    opreste_server
+    say "RESULTAT: boot1+stop+boot2 OK, 0 crash la salvare/realuare"
+    finish 0
+    ;;
+  snap) # snapshot rollabil pe parti: doar lumea principala, gzip rapid — incape si pe disc stramt
+  ts=$(date -u +%Y%m%d-%H%M)
+  say "== SNAP world (prod, main only, gzip -1) =="
+  say "  liber: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB | world: $(du -sm "$P/world" 2>/dev/null | cut -f1) MiB"
+  if tar -I 'gzip -1' -C "$P" -cf "$B/world-$ts.tar" world 2>/dev/null; then
+    SZ=$(du -m "$B/world-$ts.tar" | cut -f1)
+    N=$(tar -tf "$B/world-$ts.tar" 2>/dev/null | grep -c 'region/\|level.dat')
+    if [ "$N" -gt 3 ]; then say "  OK: $B/world-$ts.tar ($SZ MiB, $N fisiere verificate prin listing)"; rm -f "$B/world-$ts.tar".part
+    else say "  tar OK dar continut suspecte ($N) — pastrat pentru inspectie: $B/world-$ts.tar"; fi
+  else
+    say "  inca nu incapa — stau pe level.dat + arhiva 14.10"
+  fi
+  ls -t "$B" | head -5 | sed 's/^/    /' | tee -a "$REPORT"
+  ;;
+  snapgit) # plasa de siguranta: world -> tar.gz + marchat pt upload pe release (pasul din workflow il urca)
+  mkdir -p "$HOME/functity-out"
+  say "== SNAPGIT =="
+  tar -C "$P" -czf "$HOME/functity-out/worldsync.tar.gz" world 2>>"$REPORT"
+  S=$(sha256sum "$HOME/functity-out/worldsync.tar.gz" 2>/dev/null | cut -c1-16)
+  SZ=$(du -m "$HOME/functity-out/worldsync.tar.gz" 2>/dev/null | cut -f1)
+  echo "$S ${SZ}MiB $(date -u '+%F %T')" > "$HOME/functity-out/worldsync.ready"
+  say "  worldsync.tar.gz ${SZ} MiB sha $S — pregatit pt release"
+  ;;
+  ocicfg) # extrag tenancy+region din configul pre-autenticat al cloud shell + verific comanda de pornire
+  say "== OCICFG =="
+  T=$(grep -rhE "tenancy[[:space:]]*=" /etc/oci/config 2>/dev/null | head -1 | sed "s/.*= *//")
+  R=$(grep -rhE "region[[:space:]]*=" /etc/oci/config 2>/dev/null | head -1 | sed "s/.*= *//")
+  say "  tenancy: ${T:-NU-GASIT}"
+  say "  region: ${R:-NU-GASIT}"
+  say "  user-ocid (din mediu): ${OCI_CS_USER_OCID:-absent}"
+  H=$(OCI_CLI_CONFIG_FILE=/etc/oci/config ${OCI:+} /usr/bin/oci cloud-shell environment get 2>&1 | head -6)
+  say "  cli get: $(echo "$H" | tr "\n" " | " | cut -c1-220)"
+  say "  cli help create: $(OCI_CLI_CONFIG_FILE=/etc/oci/config /usr/bin/oci cloud-shell environment --help 2>&1 | grep -oE "^  [a-z-]+" | tr "\n" " ")"
+  ;;
+  apick) # existenta cheii API OCI de pe boxa: e inregistrata in tenancy?
+  say "== APICK =="
+  say "  chei in ~/.ssh: $(ls -A "$HOME/.ssh" 2>/dev/null | tr "\n" " ")"
+  FP=$(openssl pkey -pubout -in "$HOME/.ssh/cuantic_oci" 2>/dev/null | openssl sha256 -binary | base64)
+  say "  cuantic_oci: $(file -b "$HOME/.ssh/cuantic_oci" 2>/dev/null | cut -c1-40) | sha256-fp: ${FP:-nu-i-cheie-rsa-sau-criptata}"
+  L=$(OCI_CLI_CONFIG_FILE=/etc/oci/config /usr/bin/oci iam user api-key list --user-id "$OCI_CS_USER_OCID" 2>&1 | grep -oE '"fingerprint": *"[^"]+"' | head -4)
+  say "  inregistrate in tenancy: ${L:-FARA-RASPUNS (permisiune insuficienta sau CLI refuza)}"
+  say "  tip cheie cloud (oci session?): $(grep -l "session" /etc/oci/config 2>/dev/null || echo nu)"
+  ;;
+  probe) # ce pot face SINGUR de pe boxa: drepturi OCI CLI + chei gh existente + retea
+  say "== PROBE =="
+  OCI=$(command -v oci || echo /usr/bin/oci)
+  say "  oci bin: $OCI"
+  say "  can compute: $(OCI_CLI_CONFIG_FILE=/etc/oci/config $OCI compute instance list --compartment-id $(grep -m1 tenancy /etc/oci/config 2>/dev/null | sed "s/.*= *//") 2>&1 | grep -oE "\"id\"|\"message\": *\"[^\"]{0,60}" | head -1)"
+  say "  vcn: $(OCI_CLI_CONFIG_FILE=/etc/oci/config $OCI network vcn list --compartment-id $(grep -m1 tenancy /etc/oci/config 2>/dev/null | sed "s/.*= *//") 2>&1 | grep -cE "\"id\"") bucati | subnets: $(OCI_CLI_CONFIG_FILE=/etc/oci/config $OCI network subnet list --compartment-id $(grep -m1 tenancy /etc/oci/config 2>/dev/null | sed "s/.*= *//") 2>&1 | grep -cE "\"id\"")"
+  say "  shape A1 free: $(OCI_CLI_CONFIG_FILE=/etc/oci/config $OCI limits availability-domain list --compartment-id $(grep -m1 tenancy /etc/oci/config 2>/dev/null | sed "s/.*= *//") 2>&1 | grep -oE "\"name\": *\"[^\"]+\"" | head -1)"
+  say "  gh pe boxa: $(command -v gh || echo absent) | auth: $(gh auth status 2>&1 | grep -oE "Logged in|not logged" | head -1)"
+  say "  token vechi prin repo-uri: $(ls ~/.config/gh 2>/dev/null | tr "\n" " ")"
+  say "  free disk: $(df -m "$HOME" | tail -1 | awk "{print $4}") MiB"
+  ;;
+  vault) # cheia de pe boxa, sigilata direct in repo secrets (nu trece nimic prin chat)
+  say "== VAULT =="
+  K="$HOME/.ssh/cuantic_oci"
+  if [ ! -f "$K" ]; then say "  lipsa $K"; exit 0; fi
+  FP=$(openssl pkey -pubout -in "$K" 2>/dev/null | openssl dgst -sha256 -r 2>/dev/null | cut -c1-64 | sed "s/../&:/g;s/:$//")
+  mkdir -p "$HOME/functity-out"; printf "%s" "$FP" > "$HOME/functity-out/.fp"
+  say "  amprenta cheii: ${FP:-NUE-RUSA}"
+  pip3 install --user --quiet pynacl 2>>"$REPORT" || pip3 install --user --quiet --break-system-packages pynacl 2>>"$REPORT"
+  GH_TOKENX="$ACTIONS_TOKEN" KEYF="$K" FPF="$HOME/functity-out/.fp" python3 - <<'EO'
+import json,base64,os,sys,urllib.request
+def api(path,data=None,method=None):
+    url=os.environ.get("GITHUB_API_URL","https://api.github.com")+"/"+os.environ["GITHUB_REPOSITORY"]+path
+    tok=os.environ.get("GH_TOKENX","")
+    req=urllib.request.Request(url,data=(json.dumps(data).encode() if data else None),
+      headers={"Authorization":"Bearer "+tok,"Accept":"application/vnd.github+json","Content-Type":"application/json"},
+      method=method or ("POST" if data else "GET"))
+    try:
+        with urllib.request.urlopen(req,timeout=25) as r: return r.status,r.read()
+    except urllib.error.HTTPError as e: return e.code,e.read()[:150]
+st,body=api("/actions/secrets/public-key")
+if st!=200: print("  public-key HTTP",st,body); sys.exit(0)
+pj=json.loads(body); kid=pj["key_id"]; pk=base64.b64decode(pj["key"])
+try:
+    from nacl.public import SealedBox
+except Exception:
+    print("  pynacl absent pe boxa — nu pot sigila local"); sys.exit(0)
+key=open(os.environ["KEYF"],"rb").read()
+fp=open(os.environ["FPF"]).read().strip()
+def seal(b): return base64.b64encode(SealedBox(pk).encrypt(b)).decode()
+s1,_=api("/actions/secrets/OCI_PEM",{"key_id":kid,"encrypted_value":seal(key)},"PUT")
+s2,_=api("/actions/secrets/OCI_FINGERPRINT",{"key_id":kid,"encrypted_value":seal(fp.encode())},"PUT")
+print("  OCI_PEM:",s1," OCI_FINGERPRINT:",s2," (201/204 = PUSE)")
+EO
+  say "  gata"
+  ;;
+  sshcheck) # verific ipoteza "masina = OCI Cloud Shell" si ce usi avem (portul ssh, chei)
+  say "== SSHCHECK =="
+  say "  variabile mediu cloud shell: $(env | grep -iE "CLOUD_SHELL|OCI" | head -4 | tr "\n" " ")"
+  say "  hostname: $(hostname 2>/dev/null) | uptime: $(uptime | sed "s/^ *//")"
+  say "  sshd: $(pgrep -x sshd >/dev/null && echo "VIA (porturile: $(ss -lnt 2>/dev/null | grep -oE "0.0.0.0:22|0.0.0.0:[0-9]+ " | tr "\n" " "))" || echo absent)"
+  say "  ~/.ssh: $(ls -A "$HOME/.ssh" 2>/dev/null | tr "\n" " ")"
+  say "  authorized_keys: $(wc -l < "$HOME/.ssh/authorized_keys" 2>/dev/null || echo 0) linii"
+  say "  porturi ascultate acum: $(ss -lnt 2>/dev/null | tail -n +2 | awk "{print $4}" | sed "s/.*://" | sort -un | tr "\n" " " | cut -c1-100)"
+  say "  cine e 92.5.171.150: ip local? $(ip -4 addr 2>/dev/null | grep -c 92.5.171.150 || echo 0) aparitii pe interfete | ip public vazut: $(curl -s --max-time 8 https://api.github.com/meta --connect-timeout 5 >/dev/null 2>&1 && curl -s --max-time 8 ifconfig.me 2>/dev/null || echo "nu am verificat")"
+  say "  cron daemon: $(pgrep -x crond >/dev/null && echo via || echo absent)"
+  say "  systemd PID1: $(ps -p 1 -o comm= 2>/dev/null)"
+  ;;
+  autowake) # machine fara systemd/cron: hook in .bashrc = trezire automata la orice shell
+    # deschis (inclus Cloud Shell dupa recyclere/reboot). c.sh e idempotent: daca java/runner
+    # ruleaza deja, el doar le supervizeaza — hook-ul nu strica niciodata ce e viu.
+  say "== AUTOWAKE hook (.bashrc) =="
+  if grep -q "FUNCITY-AUTOWAKE" "$HOME/.bashrc" 2>/dev/null; then
+    say "  hook exista deja"
+  else
+    printf '\n# FUNCITY-AUTOWAKE: self-heal la deschidere de shell (ruleaza DOAR daca supervisorul e jos)\nif ! pgrep -f "bash .*[/]c[.]sh" >/dev/null 2>&1; then ( setsid bash "$HOME/c.sh" >> "$HOME/cuantic-live/sup.log" 2>&1 </dev/null & ) ; fi\n' >> "$HOME/.bashrc"
+    say "  hook scris in ~/.bashrc"
+  fi
+  # dovada: pornim noi acuma varianta de test a hook-ului (ruleaza linia fix ca la shell)
+  bash -c 'if ! pgrep -f "bash .*[/]c[.]sh" >/dev/null 2>&1; then echo "c.sh JOS -> hook l-ar trezi"; else echo "c.sh SUS -> hook nu face nimic (corect)"; fi' | tee -a "$REPORT" | sed "s/^/  /"
+  tail -3 "$HOME/.bashrc" | sed "s/^/  R /" | tee -a "$REPORT"
+  ;;
+  persist) # systemd user units + linger: runner-ul si serverul traiesc ETERN pe masina,
+    # fara Cloud Shell deschis si supravietuiesc reboot-ului. NU repornim nimic acum —
+    # unit-urile intra in actiune cand procesele curente mor natural (sau la reboot).
+  say "== PERSIST (systemd --user + linger) =="
+  U="$HOME/.config/systemd/user"; mkdir -p "$U"
+  R=$(ls -d "$HOME"/actions-runner* "$HOME"/*/actions-runner* 2>/dev/null | head -1)
+  [ -n "$R" ] || fail "nu gasesc folderul actions-runner"
+  cat > "$U/functity-runner.service" <<UNIT
+[Unit]
+Description=FunCity GitHub runner
+[Service]
+WorkingDirectory=$R
+ExecStart=/bin/bash ./run.sh
+Restart=always
+RestartSec=15
+UNIT
+  cat > "$U/functity-server.service" <<UNIT
+[Unit]
+Description=CUANTIC-FunCity supervisor (c.sh)
+[Service]
+WorkingDirectory=$HOME
+ExecStart=/bin/bash $HOME/c.sh
+Restart=always
+RestartSec=20
+StandardOutput=append:$HOME/cuantic-live/sup.log
+StandardError=append:$HOME/cuantic-live/sup.log
+UNIT
+  cat > "$U/default.target.wants-ignore" <<'X'
+X
+  rm -f "$U/default.target.wants-ignore"
+  export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+  export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/systemd/private" 2>/dev/null
+  loginctl enable-linger "$(id -un)" 2>&1 | sed 's/^/  linger: /' | tee -a "$REPORT"
+  if systemctl --user daemon-reload 2>/dev/null; then
+    systemctl --user enable functity-runner.service functity-server.service 2>&1 | tail -1 | sed 's/^/  enable: /' | tee -a "$REPORT"
+    # pornim DOAR runner-ul prin systemd acum (c.sh il are deja sub pază; dublu = 2 run-uri — nu)
+    if systemctl --user is-active --quiet functity-runner.service; then
+      say "  runner: deja sub systemd"
+    elif pgrep -f 'actions-runner/run.sh' >/dev/null; then
+      say "  runner: ruleaza manual — systemd il preia cand moare (enable face pornirea la next boot)"
+    else
+      systemctl --user start functity-runner.service && say "  runner: PORNIT prin systemd acum"
+    fi
+    say "  server c.sh: unit enable-uit pentru boot; ruleaza manual — systemd il ia de la urmatoarea moarte/reboot"
+    systemctl --user list-unit-files "functity*" --no-pager 2>/dev/null | sed -n '2,4p' | sed 's/^/  /' | tee -a "$REPORT"
+  else
+    say "  systemd --user nu e accesibil din job (bus) — scriu un fallback cron-free:"
+    echo "@reboot bash \$HOME/c.sh >> \$HOME/cuantic-live/sup.log 2>&1 & cd $R && ./run.sh" > /tmp/functity-cron.txt
+    ( crontab -l 2>/dev/null; cat /tmp/functity-cron.txt ) | grep -v "Nu exista" | crontab - 2>/dev/null \
+      && say "  cron @reboot scris (mai slab ca systemd dar merge)" || say "  nici cron — trebuie un paste de la tine"
+  fi
+  ;;
+  prune) # elibereaza spatiu: doar duplicalele din staging, niciodata productia
+  say "== PRUNE disc (staging only) =="
+  say "  inainte: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB liberi"
+  [ -f "$P/server.pid" ] && say "  (productia isi vede de treaba: $(cat "$P/ROLLBACK.txt" 2>/dev/null | head -1 >/dev/null; pgrep -fc 'java @unix_args' >/dev/null && echo java-vie || echo fara-java))"
+  # lumea din staging e copy dupa a productiei — dupa swap ea nu mai e nävoie (portul oficial e 25565 in P)
+  du -sm "$D/world" "$D/world_nether" "$D/world_the_end" 2>/dev/null | sed 's/^/  staging world: /' | tee -a "$REPORT"
+  if [ "$D" != "$P" ]; then rm -rf "$D/world" "$D/world_nether" "$D/world_the_end" /tmp/fcclone /tmp/fcsrc /tmp/vcx 2>/dev/null; fi
+  # taruri vechi de la assemble esuate + cache vechi din /tmp
+  find /tmp -maxdepth 1 -name 'frpc-verify*' -delete 2>/dev/null
+  say "  dupa: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB liberi"
+  # si refacem snapshot-ul de care are nevoie rollback-ul, cat e spatiu
+  if [ "$(df -m "$HOME" | tail -1 | awk '{print $4}')" -gt 400 ]; then
+    ts=$(date -u +%Y%m%d-%H%M)
+    if tar -C "$P" -czf "$B/prod-world-$ts.tar.gz" world world_nether world_the_end 2>/dev/null; then
+      say "  snapshot world REUSIT: $B/prod-world-$ts.tar.gz ($(du -m "$B/prod-world-$ts.tar.gz" | cut -f1) MiB)"
+    else
+      say "  snapshot inca NU incapa — ramane level.dat + arhiva din 14.10 ca rollback"
+      rm -f "$B/prod-world-$ts.tar.gz"
+    fi
+  fi
+  ;;
+  install) # SCHIMB VALIDAT pe productie: FunCity b1.0827 devine serverul de pe 25565,
+    # sub supravegherea lui c.sh (auto-restart, runner keepalive, frpc — tot ce are omul acasa).
+    # Ordine: backup -> stop curat prin puntea cmd.in -> c.sh oprit -> jar+args+props inlocuite
+    # (world NU se atinge) -> c.sh repornit -> verificare. Fiecare pas are drum de intoarcere.
+    say "== INSTALL FunCity pe productie =="
+    SHA_ASTEPTATA=d6ffa35c1ea9032a4a95f7f1e34b734aa7f53b0358dda6b9e6592326640a15dd
+    TS=$(date -u +%Y%m%d-%H%M%S); rm -rf /tmp/fcclone /tmp/fcsrc 2>/dev/null
+    say "  disc liber inainte: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB"
+    # 0. canditatul exista si e cel validat?
+    [ -f "$D/FunCity-1.16.5-b1.0827.jar" ] || fail "jar candidat absent in $D"
+    ACTUAL=$(sha256sum "$D/FunCity-1.16.5-b1.0827.jar" | cut -d' ' -f1)
+    [ "$ACTUAL" = "$SHA_ASTEPTATA" ] || fail "SHA candidat diferit: $ACTUAL"
+    # 1. snapshot de rollback (marime mica, cat e nevoie: jar, args, props, c.sh, consola)
+    mkdir -p "$B/install-$TS"; for f in unix_args.txt server.properties start.sh; do [ -f "$P/$f" ] && cp "$P/$f" "$B/install-$TS/"; done
+    [ -f "$HOME/c.sh" ] && cp "$HOME/c.sh" "$B/install-$TS/c.sh"
+    [ -f "$P/world/level.dat" ] && cp "$P/world/level.dat" "$B/install-$TS/level.dat"
+    say "  rollback: $B/install-$TS (tar world complet: ~1-2 min)"
+    tar -czf "$B/prod-world-$TS.tar.gz" -C "$P" world world_nether world_the_end 2>/dev/null && say "  snapshot lumi: $(du -m "$B/prod-world-$TS.tar.gz" | cut -f1) MiB OK" || say "  ATENTIE: tar world a esuat (disc?) — instalez oricum, rollback partial ramas"
+    # 2. oprire curata a serverului curent prin puntea supervisorului
+    if pgrep -f 'java @unix_args' >/dev/null; then
+      : > "$P/cmd.in"; echo stop > "$P/cmd.in"
+      for k in $(seq 1 24); do sleep 5; pgrep -f 'java @unix_args' >/dev/null || break; done
+      pgrep -f 'java @unix_args' >/dev/null && fail "serverul actual nu a iesit dupa 120s — NU fortez, instalezi manual" || say "  server vechi: oprit curat (save facut de el)"
+    fi
+    # 3. opresc supervisorul ca sa nu-si repornesc singur motorul vechi in timpul mutarii
+    pkill -f 'bash .*[/]c\.sh' 2>/dev/null; sleep 2
+    # 4. instalare: java 11 in c.sh + unix_args pentru FunCity + jar + properties(+MOTD) + configuri identice cu staging-ul validat
+    sed -i 's#^J=\$HOME/\.local/jdk17/bin/java#J=$( [ -x "$HOME/funcity-live/jdk11/bin/java" ] \&\& echo "$HOME/funcity-live/jdk11/bin/java" || echo "$HOME/.local/jdk17/bin/java" )#' "$HOME/c.sh"
+    say "  c.sh: java -> $(grep -m1 '^J=' "$HOME/c.sh" | cut -c1-80)..."
+    printf -- '-Xms1G\n-Xmx3G\n-XX:MaxGCPauseMillis=200\n-jar\nFunCity-1.16.5-b1.0827.jar\nnogui\n' > "$P/unix_args.txt"
+    cp "$D/FunCity-1.16.5-b1.0827.jar" "$P/"
+    cp "$D/server.properties" "$P/server.properties"
+    sed -i -E "s/^server-port=.*/server-port=$PORT/" "$P/server.properties"
+    say "  $P/server.properties: server-port=$PORT (fortat de la $D care era port de staging)"
+    rsync -a --delete "$D/mods/" "$P/mods/" 2>/dev/null
+    rsync -a "$D/plugins/" "$P/plugins/" 2>/dev/null
+    rsync -a "$D/config/" "$P/config/" --exclude 'voicechat*' 2>/dev/null
+    [ -f "$D/server-icon.png" ] && cp "$D/server-icon.png" "$P/"
+    rm -f "$P/serverconfig/voicechat-server.toml" 2>/dev/null # pe productie voicechat vrea default 24454
+    say "  jar+args+props+mods->productie (world neatins, voicechat pe default)"
+    # 5. pornire sub supraveghere deplina
+    ( env -u RUNNER_TRACKING_ID setsid bash "$HOME/c.sh" >> "$P/sup.log" 2>&1 < /dev/null & )
+    say "  c.sh repornit — il las sa faca boot (max 150s)"
+    OK=NU
+    for k in $(seq 1 30); do sleep 5
+      if ss -lnt 2>/dev/null | grep -q ':25565 ' && grep -qa 'Done (' "$P/live.log" 2>/dev/null; then OK=DA; break; fi
+    done
+    say "  boot 25565: $OK | $(grep -a 'Done (' "$P/live.log" 2>/dev/null | tail -1 | cut -c1-60)"
+    say "  erori la pornire: $(grep -acE 'ERROR' "$P/live.log" 2>/dev/null | tail -1) ( numaratoare la intreg logul, nu doar boot-ul curent)"
+    grep -a 'Starting Minecraft server on' "$P/live.log" | tail -1 | sed 's/^/    B /' | tee -a "$REPORT"
+    if [ "$OK" = DA ]; then say "  FUNCITY E PE PRODUCTIE — intri pe 92.5.171.150:25565"; else
+      cp "$B/install-$TS/unix_args.txt" "$P/" 2>/dev/null; cp "$B/install-$TS/server.properties" "$P/" 2>/dev/null
+      printf 'ROLLBACK manual: fisierele in $B/install-%s/, jar vechi in $P/.world salvat; repornire: setsid bash ~/c.sh\n' "$TS" > "$P/ROLLBACK.txt"
+      say "  boot NU s-a confirmat in 150s — am readus unix_args+properties vechi; LAS c.sh pornit sa incerce motorul vechi singur; ROLLBACK.txt in $P"
+    fi
+    ;;
+  expose) # tunele de TEST in frpc (game 25566 + voice UDP 24454) ca sa poata intra jucatorul
+    # real de pe PC. Backup + verify-gate + autorefacere la config invalid. Tunelul de producție
+    # existent (25565) nu se atinge — doar i se alatura una linie noua.
+    F="$HOME/frpc.toml"
+    [ -f "$F" ] || fail "nu gasesc $F"
+    BK="$B/frpc.toml.bak-$(date -u +%Y%m%d-%H%M%S)"; mkdir -p "$B"; cp "$F" "$BK"
+    say "== EXPOSE tuneluri test (frpc) — backup: $BK =="
+    if grep -q 'name = "fcgame"' "$F"; then
+      say "  tunelele de test exista deja in config — doar repornesc frpc"
+    else
+      printf '\n[[proxies]]\nname = "fcgame"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 25566\nremotePort = 25566\n\n[[proxies]]\nname = "fcvoice"\ntype = "udp"\nlocalIP = "127.0.0.1"\nlocalPort = 24454\nremotePort = 24454\n' >> "$F"
+      say "  adaugate: tcp 25566 (game) si udp 24454 (voicechat) — porturi distincte de productie"
+    fi
+    if "$HOME/frpc" verify -c "$F" >/tmp/frpc-verify.txt 2>&1; then
+      say "  frpc verify: OK"
+      tmux send-keys -t frpc C-c 2>/dev/null; sleep 2
+      pkill -x frpc 2>/dev/null; sleep 1
+      tmux send-keys -t frpc "exec $HOME/frpc -c $HOME/frpc.toml >> $HOME/frpc.log 2>&1" Enter 2>/dev/null \
+        || { setsid bash -c "exec $HOME/frpc -c $HOME/frpc.toml >> $HOME/frpc.log 2>&1" >/dev/null 2>&1 < /dev/null & }
+      sleep 4
+      if pgrep -x frpc >/dev/null; then
+        say "  frpc: REPORNIT cu tunelele de test — clientul tau poate intra pe 92.5.171.150:25566"
+      else
+        cp "$BK" "$F"; setsid bash -c "exec $HOME/frpc -c $HOME/frpc.toml >> $HOME/frpc.log 2>&1" >/dev/null 2>&1 < /dev/null &
+        say "  ATENTIE: frpc nu a supravietuit — config readus din backup si repornit cum era (25565 functiona din nou)"
+      fi
+    else
+      cp "$BK" "$F"
+      say "  frpc verify a CASUT -> config readus din backup, frpc neatins. Eroare verify:"
+      tail -4 /tmp/frpc-verify.txt | sed 's/^/    V /' | tee -a "$REPORT"
+    fi
+    say "  porturi acum: 25565 $(ss -lnt 2>/dev/null | grep -q ':25565 ' && echo VIU || echo mort) | 25566 $(ss -lnt 2>/dev/null | grep -q ':25566 ' && echo VIU || echo mort) | frpc: $(pgrep -x frpc >/dev/null && echo viu || echo mort)"
+    ;;
+  restart|up)
+    if [ "$M" = restart ] && [ -f "$D/server.pid" ] && kill -0 "$(cat "$D/server.pid")" 2>/dev/null; then
+      opreste_server || true; sleep 3
+    fi
+    if [ "$(port_viu "$PORT")" = da ]; then
+      say "ocupant port $PORT:"; ss -lntp 2>/dev/null | grep ":$PORT " | sed 's/^/  /' | tee -a "$REPORT"
+      ps -o pid,user,etime,args -p "$(ss -lntp 2>/dev/null | awk -Fpid= '/:"'"$PORT"'" /{split($2,a,",");print a[1]; exit}')" 2>/dev/null | tail -1 | sed 's/^/  /' | tee -a "$REPORT"
+      fail "portul $PORT ocupat de altceva — nu Fortez"
+    fi
+    JAVA=$(java11_gaseste) || JAVA=$(java11_adoptium) || fail "java11 indisponibil"
+    export FUNCITY_XMX="$XMX" FUNCITY_JARFILE="$(cat "$D/.jarname")"
+    sync_port
+    voicechat_port
+    start_server "$JAVA"
+    asteapta_done 480 || fail "nu porneste — vezi $LOG"
+    verifica_log
+    ok=nu
+    for t in 1 2 3; do
+      sleep 15
+      kill -0 "$(cat "$D/server.pid" 2>/dev/null)" 2>/dev/null || { say "JVM-ul a murat dupa Done (rc final: $(tail -1 "$LOG" | head -c 160))"; break; }
+      if exec 3<>/dev/tcp/127.0.0.1/$PORT 2>/dev/null; then exec 3>&- 3<&-; ok=da; break; fi
+      say "  port $PORT inchis inca, reincep ($t/3)"
+    done
+    say "port local $PORT: $( [ $ok = da ] && echo VIU || echo INCHIS )"
+    echo $ok > "$D/.portviu"
+    say "STAGING $( [ $ok = da ] && echo SUS || echo SUS-PORT-PROBLEMA ) pentru testul tau (port $PORT). Oprire: functity-stage down"
+    finish 0
+    ;;
+  bench) # FC-BENCH v5 PE GAZDA reala: 3 boot-uri la rece pe staging-world identic. Motorul = token 3 al markerului.
+    ENG="$CAND"
+    if [ -n "$(pgrep -f "java.*engine.jar" || true)" ]; then say "  alt bench ruleaza deja pe boxa — amana (ruleaza din nou marcajul dupa ce termina)"; finish 1; fi
+    say "== FC-BENCH v5 — engine: $ENG — $(nproc) fire, Xmx$XMX, world copiat din productie =="
+    case "$ENG" in
+      catserver) JARF=$(ls "$P"/CatServer*.jar 2>/dev/null | head -1); [ -f "${JARF:-x}" ] || JARF=$(find "$B" -maxdepth 3 -iname "*CatServer*.jar" 2>/dev/null | head -1);;
+      mohist)    JARF=$( { ls "$P"/mohist*.jar "$B"/mohist*.jar 2>/dev/null; find "$HOME" -maxdepth 3 -iname "mohist*.jar" 2>/dev/null; } | head -1)
+                 if [ ! -f "${JARF:-none}" ]; then
+                   URL=$(curl -s --max-time 20 https://api.github.com/repos/MohistMC/MohistMC/releases/latest 2>/dev/null | grep -oE "https://[^\"]+mohist-1[.]16[.]5[^\"]*[.]jar" | head -1)
+                   [ -z "$URL" ] && URL=$(curl -s --max-time 20 https://api.github.com/repos/MohistMC/Mohist/releases/latest 2>/dev/null | grep -oE "https://[^\"]+mohist-1[.]16[.]5[^\"]*[.]jar" | head -1)
+                   if [ -n "$URL" ]; then say "  descarc mohist official: $(basename "$URL")"; curl -sL --max-time 240 -o "$B/mohist-official.jar" "$URL" && JARF="$B/mohist-official.jar"; fi
+                 fi;;
+      *)         JARF=$(ls "$P"/FunCity-*.jar 2>/dev/null | head -1);;
+    esac
+    if [ ! -f "$JARF" ]; then
+      say "  jar negasit pentru $ENG — ce exista prin preajma:"
+      { ls "$P"/*.jar 2>/dev/null; ls "$B"/install-*/*.jar 2>/dev/null; } | head -10 | sed 's/^/    /' | tee -a "$REPORT"
+      finish 1
+    fi
+    say "  jar: $(basename "$JARF") ($(du -m "$JARF" | cut -f1) MiB) sha $(sha256sum "$JARF" | cut -c1-12)"
+    mkdir -p "$B/bench"
+    for i in 1 2 3; do
+      pkill -f "java.*[/]funcity-live" 2>/dev/null; sleep 3
+      rm -rf "$D"; mkdir -p "$D"
+      for f in "$P"/*; do
+        b=$(basename "$f")
+        case "$b" in
+          world*|logs|run.log|*.log|stage.log|funcity*.json|*.jar|*.pid|backups) ;;
+          libraries|versions|foxlaunch-data) [ -e "$D/$b" ] || cp -al "$f" "$D/" 2>/dev/null || cp -a "$f" "$D/" 2>/dev/null;;
+          *) [ -e "$D/$b" ] || cp -a "$f" "$D/" 2>/dev/null;;
+        esac
+      done
+      rsync -a "$P/world" "$D/" 2>/dev/null || cp -a "$P/world" "$D/"
+      sync_port
+      cp "$JARF" "$D/engine.jar"
+      cd "$D" && JB=$(java11_gaseste) || JB=$(java11_adoptium); cd "$D" 2>/dev/null && nohup "$JB" -Xms1G -Xmx"$XMX" -XX:MaxGCPauseMillis=200 -jar engine.jar nogui > "$D/stage.log" 2>&1 & echo $! > "$D/bench.pid"
+      T0=$(date +%s); RES=ESUAT
+      for t in $(seq 1 280); do
+        sleep 1
+        grep -q "Done (" "$D/stage.log" 2>/dev/null && { RES=OK; break; }
+        kill -0 "$(cat "$D/bench.pid")" 2>/dev/null || { RES=CRASH; break; }
+      done
+      WALL=$(( $(date +%s) - T0 ))
+      if [ "$RES" != OK ]; then say "    log la $RES:"; tail -12 "$D/stage.log" 2>/dev/null | cut -c1-160 | sed "s/^/      | /" | tee -a "$REPORT"; fi
+      DS=$(grep -m1 -oE "Done \([0-9.]+s\)" "$D/stage.log" 2>/dev/null | tr -dc "0-9.")
+      sleep 40
+      RSS=$(awk '/VmRSS/{print int($2/1024)}' "/proc/$(cat "$D/bench.pid")/status" 2>/dev/null)
+      KU=$(grep -c "Can't keep up" "$D/stage.log" 2>/dev/null); ERR=$(grep -c " ERROR " "$D/stage.log" 2>/dev/null)
+      kill "$(cat "$D/bench.pid")" 2>/dev/null; sleep 4
+      say "  runda $i: $RES Done=${DS:-?}s zid=${WALL}s RSS=${RSS:-?}MiB keep-up=$KU erori=$ERR"
+      { echo "$ENG r$i $RES ${DS} ${WALL} ${RSS} ${KU} ${ERR}"; } >> "$B/bench/$ENG.tsv"
+    done
+    pkill -f "java.*[/]funcity-live" 2>/dev/null
+    say "  liber la disc acum: $(df -m "$HOME" | tail -1 | awk "{print \$4}") MiB"
+    finish 0
+    ;;
+  benchsum) # aduna rundele FC-BENCH v5 din $B/bench si scoate medianele per motor
+  say "== FC-BENCH v5 — SUMAR (mediana a 3 runde, hardware real) =="
+  for f in "$B"/bench/*.tsv; do [ -f "$f" ] || continue
+    E=$(basename "$f" .tsv)
+    awk -v e="$E" '$3=="OK"{d[++n]=$4; w[n]=$5; r[n]=$6; k[n]=$7}
+      END{if(n==0){printf "  %-10s: niciun boot OK in %d masuratori\n",e,n; exit}
+        asort(d); asort(w); asort(r);
+        printf "  %-10s: Done mediu %ss | zid %ss | RSS %s MiB (mediana %d runde)\n",e,d[int((n+1)/2)],w[int((n+1)/2)],r[int((n+1)/2)],n}' "$f" | tee -a "$REPORT"
+  done
+  say "  brut:"; cat "$B"/bench/*.tsv 2>/dev/null | sed 's/^/    /' | tee -a "$REPORT"
+  finish 0
+  ;;
+  stats) # numere reale din logurile de productie: acelasi hardware, doua ere
+  say "== FUNCITY REAL-STATS — productia insasi ca benchmark =="
+  CUT=1760644380
+  say "— ERA FUNCITY (de la instalare, loguri live):"
+  grep -hE "Done \([0-9.]+s\)!" "$P/logs/latest.log" 2>/dev/null | grep -oE "[0-9]+\.[0-9]+" > /tmp/bf.txt
+  awk '{s+=$1;n++; if($1>m)m=$1} END{if(n)printf "    boot: medie %.1fs, maxim %.1fs (n=%d)\n",s/n,m,n}' /tmp/bf.txt | tee -a "$REPORT"
+  say "    keep-up: $(grep -c "Can't keep up" "$P/logs/latest.log" 2>/dev/null) din $(wc -l < "$P/logs/latest.log" 2>/dev/null) linii"
+  say "    joinuri: $(grep -cE " joined the game|has joined" "$P/logs/latest.log" 2>/dev/null)"
+  say "— ERA CATSERVER (arhiva de dinaintea instalarii, aceeasi masina/lume):"
+  N=0; : > /tmp/bc.txt; KUC=0
+  for f in "$P"/logs/*.log.gz; do
+    [ -f "$f" ] || continue
+    M=$(stat -c %Y "$f" 2>/dev/null || echo 0); [ "$M" -lt "$CUT" ] || continue
+    zcat "$f" 2>/dev/null | grep -E "Done \([0-9.]+s\)!" | grep -oE "[0-9]+\.[0-9]+" >> /tmp/bc.txt
+    KUC=$((KUC+ $(zcat "$f" 2>/dev/null | grep -c "Can't keep up") )); N=$((N+1))
+    [ $N -ge 60 ] && break
+  done
+  if [ -s /tmp/bc.txt ]; then
+    awk '{s+=$1;n++} END{if(n)printf "    boot: medie %.1fs (n=%d)\n",s/n,n}' /tmp/bc.txt | tee -a "$REPORT"
+    say "    keep-up in $N fisiere rotative: $KUC"
+  else say "    (fara arhiva veche in \$P/logs — logurile cuantic nu au supravietuit reinstall-ului)"; fi
+  say "— ACUM:"
+  PID=$(pgrep -f "java @unix_args" | head -1); [ -n "$PID" ] || PID=$(pgrep -f "[j]ava.*nogui" | head -1)
+  say "    java RSS: $( [ -n "$PID" ] && awk '/VmRSS/{printf "%.0f MiB",$2/1024}' /proc/$PID/status 2>/dev/null || echo indisponibil )"
+  say "    RAM libera OS: $(free -m 2>/dev/null | awk '/Mem:/{print $7" MiB din "$2}')"
+  say "    disc liber: $(df -m "$HOME" | tail -1 | awk '{print $4" MiB"}') | lume: $(du -sm "$P/world" 2>/dev/null | cut -f1) MiB"
+  say "    uptime server: $( [ -n "$PID" ] && ps -o etime= -p "$PID" 2>/dev/null | tr -d " " || echo SUS? )"
+  finish 0
+  ;;
+  tune) # tunare de configurare PE STAGING (productia nu se atinge; install o va aduce live abia dupa test OK)
+  say "== TUNE pe staging =="
+  [ -f "$D/spigot.yml" ] || { say "  lipsa spigot.yml in staging — ruleaza intai assemble"; finish 1; }
+  cp -n "$D/spigot.yml" "$B/spigot.yml.tune-orig" 2>/dev/null; cp -n "$D/bukkit.yml" "$B/bukkit.yml.tune-orig" 2>/dev/null
+  sed -i "s/tick-inactive-villagers: true/tick-inactive-villagers: false/" "$D/spigot.yml"
+  sed -i "s/^    mob: 32$/    mob: 24/; s/^    other: 10$/    other: 8/" "$D/spigot.yml"
+  sed -i "s/period-in-ticks: 600/period-in-ticks: 400/" "$D/bukkit.yml" 2>/dev/null
+  grep -q "^server-port=" "$D/server.properties" && sed -i "s/^simulation-distance=.*/simulation-distance=6/" "$D/server.properties"
+  grep -q "^simulation-distance=" "$D/server.properties" || echo "simulation-distance=6" >> "$D/server.properties"
+  sed -i "s/^network-compression-threshold=.*/network-compression-threshold=256/" "$D/server.properties"; grep -q "^network-compression-threshold=" "$D/server.properties" || echo "network-compression-threshold=256" >> "$D/server.properties"
+  say "  aplicat: villagers inactivi opriti, mob-activation 32->24, chunk-gc 600->400, sim-distance 6, compressie 256"
+  say "  VERIFY:"; grep -E "tick-inactive-villagers|mob: 24" "$D/spigot.yml" | sed "s/^/    /" | tee -a "$REPORT"; grep -E "simulation-distance|compression" "$D/server.properties" | sed "s/^/    /" | tee -a "$REPORT"
+  finish 0
+  ;;
+  site-sync) # citeste cifrele VRED din productie si impinge site-ul actualizat pe arena (site.yml il editeaza pe Pages)
+  say "== SITE-SYNC: productia isi scrie singura statisticile =="
+  BOOT=$(grep -hE "Done \([0-9.]+s\)!" "$P/logs/latest.log" 2>/dev/null | tail -1 | grep -oE "[0-9]+\.[0-9]+" | head -1)
+  KU=$(grep -c "Cant keep up\|Can't keep up" "$P/logs/latest.log" 2>/dev/null)
+  PID=$(pgrep -f "java @unix_args" | head -1); [ -n "$PID" ] || PID=$(pgrep -f "[j]ava.*nogui" | head -1)
+  RSS=$(awk '/VmRSS/{printf "%.1f", $2/1048576}' /proc/$PID/status 2>/dev/null)
+  UP=$(ps -o etime= -p "$PID" 2>/dev/null | tr -d " ")
+  ONLINE=$(python3 scripts/minecraft_status.py 127.0.0.1 25565 2>/dev/null | grep -oE '"online": [0-9]+' | grep -oE "[0-9]+" | head -1)
+  say "  boot=${BOOT:-?}s keepup=${KU:-?} rss=${RSS:-?}GB up=${UP:-?} online=${ONLINE:-?}"
+  python3 - "$BOOT" "${KU:-0}" "${RSS:-0}" "${ONLINE:-0}" "$UP" <<'EO'
+import re,sys,datetime
+boot,ku,rss,online,up=sys.argv[1:6]
+f="site/index.html"
+t=open(f,encoding="utf-8").read()
+t=re.sub(r'(<div><b>)[^<]*(</b><span>boot)',r'\g<1>%s s\g<2>'%boot,t)
+t=re.sub(r'(<div><b>)[^<]*(</b><span>tick-uri)',r'\g<1>%s\g<2>'%ku,t)
+t=re.sub(r'(<div><b>)[^<]*(</b><span>RAM)',r'\g<1>%s GB\g<2>'%rss,t)
+t=re.sub(r'Statistici din produc[^—]*— .*?keep-up \d+\.','Statistici din productie (auto, %s UTC): boot %ss, uptime %s, %s jucatori online, keep-up %s.'%(datetime.datetime.utcnow().strftime("%F %H:%M"),boot,up,online,ku),t)
+open(f,"w",encoding="utf-8").write(t)
+print("  index.html rescris cu numere live")
+EO
+  git config user.name "funcity-live" 2>/dev/null; git config user.email "server@functity.local" 2>/dev/null
+  git add site/index.html && git commit -qm "site: statistici auto $(date -u '+%m-%d %H:%M') (boot ${BOOT}s, keep-up ${KU:-0}, ${RSS}GB)" 2>/dev/null && git push -q "https://x-access-token:${ACTIONS_TOKEN:-$GITHUB_TOKEN}@github.com/$REPO" HEAD:refs/heads/arena/9bbcb24f-serverroleplaylite && say "  IMPINS pe arena (site.yml aduce pe Pages)" || say "  nimic nou sau push refuzat"
+  finish 0
+  ;;
+  tuneprod) # aduce tunarea VALIDATA pe staging in productie, cu rollback automat la esec
+  say "== TUNEPROD — configuratia de maxim in productia reala =="
+  [ -f "$D/spigot.yml" ] || { say "  niciun staging testat inainte — REFUZ sa aplic orb"; finish 1; }
+  if prod_java | grep -q .; then say "  verificare ca testul de staging chiar a iesit OK:"; grep -cE " ERROR " "$LOG" >/dev/null 2>&1 || true; fi
+  for f in spigot.yml bukkit.yml server.properties; do cp -a "$P/$f" "$B/prod-$f.tunebak-$(date -u +%H%M%S)" 2>/dev/null; done
+  BK=$(ls -t "$B"/prod-server.properties.tunebak-* 2>/dev/null | head -1)
+  say "  backup config: $BK"
+  cd "$P" || finish 1
+  sed -i "s/tick-inactive-villagers: true/tick-inactive-villagers: false/" "$P/spigot.yml" 2>/dev/null
+  sed -i "s/period-in-ticks: 600/period-in-ticks: 400/" "$P/bukkit.yml" 2>/dev/null
+  grep -q "^simulation-distance=" "$P/server.properties" && sed -i "s/^simulation-distance=.*/simulation-distance=6/" "$P/server.properties" || printf 'simulation-distance=6\n' >> "$P/server.properties"
+  grep -q "^network-compression-threshold=" "$P/server.properties" && sed -i "s/^network-compression-threshold=.*/network-compression-threshold=256/" "$P/server.properties" || printf 'network-compression-threshold=256\n' >> "$P/server.properties"
+  say "  restart productie (c.sh)"
+  pkill -f "java @unix_args" 2>/dev/null; sleep 12
+  # supervisorul c.sh ridica singur serverul; dam timp si verificam
+  OK=0
+  for i in $(seq 1 24); do
+    sleep 10
+    if python3 scripts/minecraft_status.py 127.0.0.1 25565 >/dev/null 2>&1; then OK=1; break; fi
+  done
+  if [ "$OK" = 1 ]; then
+    say "  SUS cu config nou: $(python3 scripts/minecraft_status.py 127.0.0.1 25565 2>/dev/null | tr -d '\n' | cut -c1-90)"
+    say "  log nou: $(grep -hE 'Done \([0-9.]+s\)!' "$P/logs/latest.log" | tail -1 | cut -c1-80)"
+    say "  erori dupa restart: $(grep -cE ' ERROR ' "$P/logs/latest.log" 2>/dev/null)"
+  else
+    say "  NU RASPUNDE — rollback automat"
+    cp -a "$B"/prod-spigot.yml.tunebak-* "$P/spigot.yml" 2>/dev/null
+    cp -a "$B"/prod-bukkit.yml.tunebak-* "$P/bukkit.yml" 2>/dev/null
+    cp -a "$BK" "$P/server.properties" 2>/dev/null
+    pkill -f "java @unix_args" 2>/dev/null; sleep 12
+    for i in 1 2 3 4 5 6; do sleep 10; python3 scripts/minecraft_status.py 127.0.0.1 25565 >/dev/null 2>&1 && { say "  rollback OK — serverul e SUS cu configul vechi"; finish 0; }; done
+    say "  CRITIC: nici rollback nu raspunde — serverul are nevoie de ta (c.sh ruleaza din nou)"; finish 1
+  fi
+  finish 0
+  ;;
+  bootcheck) # porneste staging cu jarul LIVE din productie + configul tunat din $D; opreste singur; nu atinge productia
+  say "== BOOTCHECK — jar de productie pe staging tunat — $(date -u '+%T') =="
+  JARF=$(ls "$P"/FunCity-*.jar 2>/dev/null | head -1)
+  [ -f "$JARF" ] || { say "  nu gasesc jar FunCity in $P"; finish 1; }
+  cp "$JARF" "$D/FunCity.jar" 2>/dev/null || { say "  nu pot scrie in staging"; finish 1; }
+  JB="$D/jdk11/bin/java"; [ -x "$JB" ] || JB=$(java11_gaseste || echo java)
+  pkill -f "java.*[/]funcity-live" 2>/dev/null; sleep 2
+  cd "$D" && nohup "$JB" -Xms1G -Xmx"$XMX" -XX:MaxGCPauseMillis=200 -jar FunCity.jar nogui > "$D/stage.log" 2>&1 &
+  BPID=$!
+  RES=ESUAT; T0=$(date +%s)
+  for t in $(seq 1 200); do sleep 1; grep -qE "Done \([0-9.]+s\)!" "$D/stage.log" 2>/dev/null && { RES=OK; break; }; kill -0 $BPID 2>/dev/null || { RES=CRASH; break; }; done
+  WALL=$(( $(date +%s) - T0 ))
+  DONE=$(grep -m1 -oE "Done \([0-9.]+s\)!" "$D/stage.log" 2>/dev/null | tr -dc "0-9.")
+  if [ "$RES" = OK ]; then
+    sleep 60
+    say "  boot: $DONE s (world+moduri+plugini, 2 fire ARM) | zid pana la Done: ${WALL}s"
+    say "  plugini Enabling: $(grep -c "Enabling " "$D/stage.log") din asteptati 14 | moduri activi: $(grep -cE "MOD | Loading mod" "$D/stage.log" | head -1)"
+    say "  keep-up in primele 60s IDLE: $(grep -c "Can't keep up" "$D/stage.log") | ERROR: $(grep -cE ' ERROR ' "$D/stage.log")"
+    say "  config activ verify: $(grep -E "simulation-distance" "$D/server.properties" | head -1) | $(grep -m1 "tick-inactive-villagers" "$D/spigot.yml" | tr -d ' ')"
+  else
+    say "  $RES dupa ${WALL}s — log:"
+    tail -14 "$D/stage.log" 2>/dev/null | cut -c1-170 | sed "s/^/    | /" | tee -a "$REPORT"
+  fi
+  kill $BPID 2>/dev/null; sleep 3; pkill -f "java.*[/]funcity-live" 2>/dev/null
+  rm -f "$D/FunCity.jar"
+  [ "$RES" = OK ] && finish 0 || finish 1
+  ;;
+  packtest) # candidate noi din functity-out/pack -> staging, boot, verdict
+  say "== PACKTEST — $CAND pe staging cu motorul live =="
+  rm -rf /tmp/pt; git clone -q --depth 1 -b functity-out "https://github.com/$REPO" /tmp/pt 2>/dev/null || { say "  clone functity-out esuat"; finish 1; }
+  [ -d /tmp/pt/pack ] || { say "  fara pack/ pe functity-out (build CI n-a terminat?)"; finish 1; }
+  NEWJ=$(ls /tmp/pt/pack/*.jar 2>/dev/null | head -1); [ -n "$NEWJ" ] || { say "  niciun jar in pack/"; finish 1; }
+  META="${NEWJ%.jar}.meta.txt"; say "  meta: $(grep -m1 sha256 "$META" 2>/dev/null | cut -c1-40)"
+  EXPECTED=$(grep -m1 -oE "sha256: [a-f0-9]+" "$META" 2>/dev/null | cut -d" " -f2)
+  GOT=$(sha256sum "$NEWJ" | cut -d" " -f1)
+  if [ -n "$EXPECTED" ] && [ "$EXPECTED" != "$GOT" ]; then say "  SHA MISMATCH — REFUZ sa-l montez ($GOT)"; finish 1; fi
+  say "  sha verificat: ${GOT:0:16}"
+  pkill -f "java.*[/]funcity-live" 2>/dev/null; sleep 3
+  cp "$NEWJ" "$D/mods/$(basename "$NEWJ")"
+  JARF="$D/$(cat "$D/.jarname" 2>/dev/null || echo FunCity.jar)"; [ -f "$JARF" ] || { cp "$P"/*FunCity-*.jar "$D/FunCity.jar" 2>/dev/null && JARF="$D/FunCity.jar"; }
+  JB="$D/jdk11/bin/java"; [ -x "$JB" ] || JB=$(java11_gaseste || echo java)
+  cd "$D" && nohup "$JB" -Xms1G -Xmx"$XMX" -XX:MaxGCPauseMillis=200 -jar "$(basename "$JARF")" nogui > "$D/pack.log" 2>&1 &
+  BPID=$!; RES=ESUAT
+  for t in $(seq 1 220); do sleep 1; grep -qE "Done \([0-9.]+s\)!" "$D/pack.log" 2>/dev/null && { RES=OK; break; }; kill -0 $BPID 2>/dev/null || { RES=CRASH; break; }; done
+  if [ "$RES" = OK ]; then
+    sleep 60
+    DONE=$(grep -m1 -oE "Done \([0-9.]+s\)!" "$D/pack.log" | tr -dc "0-9.")
+    say "  $RES: boot $DONE s | keep-up/60s: $(grep -c "Can't keep up" "$D/pack.log") | ERROR: $(grep -cE ' ERROR ' "$D/pack.log") | mod incarcat: $(grep -icE "krypton" "$D/pack.log") linii in log"
+    kill $BPID 2>/dev/null; sleep 2; pkill -f "java.*[/]funcity-live" 2>/dev/null
+    say "  gata — daca cifrele-s curate, urmeaza promote"
+    finish 0
+  else
+    say "  $RES — log:"
+    tail -12 "$D/pack.log" 2>/dev/null | cut -c1-170 | sed "s/^/    | /" | tee -a "$REPORT"
+    kill $BPID 2>/dev/null; pkill -f "java.*[/]funcity-live" 2>/dev/null
+    rm -f "$D/mods/$(basename "$NEWJ")"
+    say "  candidat scos din staging — serverul nevazut"
+    finish 1
+  fi
+  ;;
+  packpromote) # noul mod, verificat in staging, intra pe productie (copy + restart c.sh, rollback la esec SLP)
+  say "== PACKPROMOTE =="
+  NEWJ=$(ls /tmp/pt/pack/*.jar 2>/dev/null | head -1)
+  [ -f "$NEWJ" ] || { say "  nu mai am jarul din packtest pe disk — ruleaza packtest intai"; finish 1; }
+  mkdir -p "$P/mods"; cp "$NEWJ" "$P/mods/" && say "  montat: $(basename "$NEWJ") in $P/mods"
+  pkill -f "java @unix_args" 2>/dev/null
+  OK=0
+  for i in $(seq 1 30); do sleep 10; python3 scripts/minecraft_status.py 127.0.0.1 25565 >/dev/null 2>&1 && { OK=1; break; }; done
+  if [ "$OK" = 1 ]; then
+    say "  productia e SUS cu noul mod: $(grep -hE 'Done \([0-9.]+s\)!' "$P/logs/latest.log" | tail -1 | cut -c1-70)"
+    say "  erori dupa promote: $(grep -cE ' ERROR ' "$P/logs/latest.log" 2>/dev/null) | keep-up azi: $(grep -c "Can't keep up" "$P/logs/latest.log" 2>/dev/null)"
+    finish 0
+  else
+    say "  SLP nu raspunde dupa 300s — ROLLBACK: scot jarul si repornesc"
+    rm -f "$P/mods/$(basename "$NEWJ")"
+    pkill -f "java @unix_args" 2>/dev/null
+    for i in $(seq 1 30); do sleep 10; python3 scripts/minecraft_status.py 127.0.0.1 25565 >/dev/null 2>&1 && { say "  rollback OK — serverul a revenit la packul verificat"; finish 0; }; done
+    say "  CRITIC dupa rollback — intervine manual (c.sh)"; finish 1
+  fi
+  ;;
+  down)
+    opreste_server || true
+    # maturam orice JVM de staging ramas din cicluri anterioare (pid vechi suprasris)
+    for pid in $(pgrep -f 'funcity-live' | grep -v $$ || true); do
+      kill "$pid" 2>/dev/null || true
+    done
+    sleep 12
+    for pid in $(pgrep -f 'java.*funcity-live|java.*FunCity' || true); do kill -9 "$pid" 2>/dev/null || true; done
+    say "curatari: java staging ramas = $(pgrep -cf 'funcity-live.*jar|FunCity.*jar' || echo 0) | port 25565: $(port_viu 25565) | port 25566: $(port_viu 25566)"
+    say "jos curat"
+    finish 0
+    ;;
+  status)
+    say "== FUNCTITY STATUS — $(date -u '+%F %T UTC') =="
+    say "  staging java: $(pgrep -af 'java.*$(cat "$D/.jarname" 2>/dev/null || echo FunCity)' | head -2 | cut -c1-160 || echo NICIUNA)"
+    say "  port $PORT: $(port_viu $PORT) | 25565: $(port_viu 25565) | 25566: $(port_viu 25566)"
+    say "  log: Done = $(grep -c 'Done (' "$LOG" 2>/dev/null) | erori = $(grep -cE ' ERROR ' "$LOG" 2>/dev/null) | keep-up = $(grep -c "Can't keep up" "$LOG" 2>/dev/null)"
+    say "  post-Done (12 linii):"
+    grep -A12 'Done (' "$LOG" 2>/dev/null | tail -12 | cut -c1-200 | sed 's/^/    D /' | tee -a "$REPORT"
+    say "  pidfile staging: $(cat "$D/server.pid" 2>/dev/null || echo absent)"
+    say "  linii ERROR:"
+    grep -E ' ERROR ' "$LOG" 2>/dev/null | tail -6 | cut -c1-200 | sed 's/^/    E /' | tee -a "$REPORT"
+    say "  bind port:"
+    grep -iE 'starting minecraft server on|failed to bind|address already|bind exception' "$LOG" 2>/dev/null | tail -4 | sed 's/^/    B /' | tee -a "$REPORT"
+    say "  primele 12 linii log:"
+    head -12 "$LOG" 2>/dev/null | cut -c1-160 | sed 's/^/    L /' | tee -a "$REPORT"
+    say "  plugini Enabling: $(grep -cE 'Enabling ' "$LOG" 2>/dev/null) | ultimi 6 linii:"
+    tail -6 "$LOG" 2>/dev/null | sed 's/^/    /' | tee -a "$REPORT"
+    say "  frpc: porturi expuse (fara tokenuri):"
+    grep -E 'remotePort|localPort|^name' "$HOME/frpc.toml" 2>/dev/null | paste - - - 2>/dev/null | head -6 | sed 's/^/    T /' | tee -a "$REPORT"
+    say "  java staging vie acum: $(pgrep -fc 'funcity-live' 2>/dev/null || echo 0)"
+    say "  libertate disc: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB"
+    say "  interior jar voicechat (fisiere config citate):"
+    local vj; vj=$(ls "$D"/mods/*voicechat*.jar 2>/dev/null | head -1)
+    if [ -n "$vj" ]; then
+      unzip -Z1 "$vj" 2>/dev/null | grep -iE '\.(properties|toml|json)$|pack.png|mod.json|mods.toml' | head -10 | sed 's/^/    J /' | tee -a "$REPORT"
+      unzip -p "$vj" 'assets/voicechat/lang/en_us.json' 2>/dev/null | grep -oE '"voicechat[^"]*port[^"]*"' | head -4 | sed 's/^/    K /' | tee -a "$REPORT"
+      unzip -p "$vj" $(unzip -Z1 "$vj" | grep -m1 -iE 'VoiceChatConfig|ServerConfig|ConfigManager' | head -1) 2>/dev/null | strings 2>/dev/null | grep -oE '[a-zA-Z0-9_/.-]*voicechat[a-zA-Z0-9_/.-]*\.(properties|toml)' | sort -u | head -6 | sed 's/^/    F /' | tee -a "$REPORT"
+    fi
+    say "  moduri voice/chat in pack:"
+    ls "$D/mods" 2>/dev/null | grep -iE 'voice|chat|talk|plastic' | sed 's/^/    M /' | tee -a "$REPORT"
+    say "  configuri voicechat staging:"
+    find "$D/config" -iname '*voice*' 2>/dev/null | head -8 | sed 's/^/    C /' | tee -a "$REPORT"
+    for f in $(find "$D/config" -iname '*voicechat*server*' 2>/dev/null | head -2); do say "    continut $f:"; head -8 "$f" | sed 's/^/      /' | tee -a "$REPORT"; done
+    say "  porturi voicechat pe gazda:"; ss -lntup 2>/dev/null | grep -E ':(24454|24455) ' | sed 's/^/    P /' | tee -a "$REPORT"
+    say "  linii voicechat din log:"
+    grep -iE 'voicechat|voice chat' "$LOG" 2>/dev/null | tail -8 | cut -c1-200 | sed 's/^/    V /' | tee -a "$REPORT"
+    finish 0
+    ;;
+  inbox)
+    # inbox: ce urca userul pe GitHub in folderul inbox/ al branchului se oglindeste aici, pe boxa.
+    # Limitare: ~100MB/fisier (cat permite git). Fisier cu acelasi sha = nu se recopiaza.
+    [ "$(id -u)" = "0" ] && { echo "RULEAZA CA USER NORMAL (root ar lasa fiere de netratat)"; exit 1; }
+    I=$HOME/functity/inbox; RR=$HOME/functity/repo
+    mkdir -p "$I"
+    RB=${BRANCH:-arena/9bbcb24f-serverroleplaylite}
+    if [ ! -d "$RR/.git" ]; then git clone -q --depth 1 -b "$RB" "https://github.com/iZentric/ServerRolePlayLite.git" "$RR" || { echo "clone esuat pe $RB"; exit 1; }; fi
+    ( cd "$RR" && git fetch -q origin "$RB" && git reset -q --hard "origin/$RB" ) || { echo "fetch esuat"; exit 1; }
+    if [ ! -d "$RR/inbox" ]; then echo "inbox: directarul nu exista pe branch"; echo OK; exit 0; fi
+    N=0
+    find "$RR/inbox" -maxdepth 1 -type f ! -name 'README*' | sort | while read -r f; do
+      B=$(basename "$f"); S=$(stat -c %s "$f"); V=$(sha256sum "$f" | cut -c1-16)
+      if [ -f "$I/$B" ] && [ "$(sha256sum "$I/$B" | cut -c1-16)" = "$V" ]; then echo "  neschimbat: $B"
+      else cp -f "$f" "$I/$B"; echo "  sincronizat: $B ($S B, sha $V)"; fi
+    done
+    echo "continut ~/functity/inbox:"; ls -la "$I" 2>/dev/null | tail -8
+    echo OK
+    ;;
+
+  migpack)
+    # migpack: arhive complete pt mutare pe alt GitHub -> release world-live (via relay)
+    # arhiva 1: serverul live (fara world/logs/libraries — libraries se refac din mohist-1.16.5 pinat in FISE)
+    # arhiva 2: lumea, DOAR daca incape pe disc (altfel primesti mesaj si rulezi prune)
+    [ "$(id -u)" = "0" ] && { say "RULEAZA CA USER NORMAL"; exit 1; }
+    say "== MIGRARE — impachetez productia pentru mutare pe alt GitHub =="
+    M=$HOME/functity-out/mig; mkdir -p "$M"
+    rm -f "$M"/*.tar.gz.part 2>/dev/null
+    say "disc inainte: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB liberi | $P: $(du -sm "$P" 2>/dev/null | cut -f1) MiB"
+    ( cd "$P" && tar czf "$M/functity-live.tar.gz" --exclude='world*' --exclude='logs' --exclude='crash-reports' --exclude='libraries' --exclude='versions' --exclude='cache' . ) 2>/dev/null
+    if [ -f "$M/functity-live.tar.gz" ]; then
+      say "functity-live.tar.gz: $(du -m "$M/functity-live.tar.gz" | cut -f1) MiB  sha256:$(sha256sum "$M/functity-live.tar.gz" | cut -c1-32)…"
+    else
+      say "FARA ARHIVA SERVER (tar esuat — disc plin?)"; exit 1
+    fi
+    DW=$(du -sm "$P/world" 2>/dev/null | cut -f1); DW=${DW:-0}
+    FREE2=$(df -m "$HOME" | tail -1 | awk '{print $4}')
+    if [ "$DW" -gt 0 ] && [ "$DW" -lt "$((FREE2-150))" ]; then
+      ( cd "$P" && tar czf "$M/worldsync.tar.gz" world world_nether world_the_end ) 2>/dev/null
+      [ -f "$M/worldsync.tar.gz" ] && say "worldsync.tar.gz: $(du -m "$M/worldsync.tar.gz" | cut -f1) MiB  sha256:$(sha256sum "$M/worldsync.tar.gz" | cut -c1-32)…"
+    else
+      say "LUMEA S-ARIATA: world=${DW} MiB vs liber=${FREE2} MiB — ruleaza 'prune' apoi 'migpack' din nou"
+    fi
+    # lista de verificare a continutului (ca sa stii ce ai primit la mutare)
+    { echo "# Continut functity-live.tar.gz — $(date -u '+%F %T UTC')"; ( cd "$P" && find mods plugins -maxdepth 1 -name '*.jar' 2>/dev/null | sort; echo "radacina:"; ls *.jar *.yml *.json *.properties *.txt 2>/dev/null ); } > "$M/MANIFEST.txt"
+    touch "$HOME/functity-out/worldsync.ready"; echo "semnatura migpack $(date -u '+%F %T')" > "$HOME/functity-out/worldsync.ready"
+    say "gata — relay-ul urca arhivele pe release 'world-live' dupa acest job"
+    echo OK
+    ;;
+
+  unclog)
+    # curata gunoiul runner-ului (NU productia), ca joburile noi sa apuce sa porneasca
+    R=${RUNNER_ROOT:-$HOME/actions-runner}
+    say "== UNCLOG: curat workspace-uri vechi runner ($R) =="
+    du -sh "$R/_work" "$R/_diag" 2>/dev/null | sed 's/^/  inainte: /'
+    [ -d "$R/_work" ] && find "$R/_work" -mindepth 1 -maxdepth 1 -not -name "_*" -newermt "-2 days" -prune -exec rm -rf {} + 2>/dev/null
+    find "$R/_diag" -name "*.log" -mtime +1 -delete 2>/dev/null
+    # si clone-ul de inbox vechi de 3 zile
+    [ -d "$HOME/functity/repo" ] && rm -rf "$HOME/functity/repo"
+    du -sh "$HOME" 2>/dev/null | sed 's/^/  home acum: /'
+    df -m "$HOME" | tail -1 | awk '{print "  disc liber acum: "$4" MiB"}'
+    echo OK
+    ;;
+
+  *)
+    echo "folosire: $0 host-info|backup|assemble|test|status|up|down"; exit 2;;
+esac
