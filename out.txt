@@ -1,7 +1,22 @@
-Sat Oct 17 16:03:46 UTC 2026
-=== V21B RULA CURAT ===
-=== SERVER ===
-server: VIU
-exit=1
-exit=1
-exit=1
+Sat Oct 17 16:04:39 UTC 2026
+== PROCES ==
+== PORT ==
+PORT 25565 INCHIS
+== BOOT LOG (curat, ultimele) ==
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) ~[modlauncher-mohist-8.1.3.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) ~[modlauncher-mohist-8.1.3.jar:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) ~[modlauncher-mohist-8.1.3.jar:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) ~[modlauncher-mohist-8.1.3.jar:?]
+	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:105) ~[FunCity-1.16.5-b1.0827.jar:?]
+	at net.minecraftforge.server.ServerMain.main(ServerMain.java:86) ~[FunCity-1.16.5-b1.0827.jar:?]
+== LATEST.LOG ==
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) ~[modlauncher-mohist-8.1.3.jar:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) ~[modlauncher-mohist-8.1.3.jar:?]
+	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:105) ~[FunCity-1.16.5-b1.0827.jar:?]
+	at net.minecraftforge.server.ServerMain.main(ServerMain.java:86) ~[FunCity-1.16.5-b1.0827.jar:?]
+== ZIP ==
+90802667 bytes
+== TOKEN: gasitgho_C
+asset: ERR:Invalid name for request
+
+exit=0
