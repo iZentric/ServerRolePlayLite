@@ -1,5 +1,9 @@
-Sat Oct 17 20:59:59 UTC 2026
-== cloudflared client (arm64) ==
+Sat Oct 17 21:15:11 UTC 2026
+== gardieni ==
+114691 bash /home/mndvasi9/.claie-watch.sh
+114704 bash /home/mndvasi9/.claie.sh
+== test round-trip cloudflare (direct, fara daemon dependence) ==
 cloudflared version 2026.10.1 (built 2026-10-15-17:08 UTC)
-proxy local: ASCOLTAT pe 15565
+proxy: ASCULTA
+python3: can't open file '/tmp/probe65.py': [Errno 2] No such file or directory
 exit=124
