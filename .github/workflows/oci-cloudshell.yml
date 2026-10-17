@@ -1,6 +1,6 @@
 name: OCI-CLOUD-SHELL
 # Porneaza/ține viu Oracle Cloud Shell prin API (fara browser).
-# (v3: keyId compus tenancy/user/fp + x-content-sha256 la POST) Buton + ceas la 4 zile.
+# (v4: config fara ghilimele = cauza 401) Buton + ceas la 4 zile.
 on:
   workflow_dispatch:
     inputs:
