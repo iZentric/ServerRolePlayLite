@@ -51,22 +51,12 @@ jobs:
           except Exception as e: print('override warn',e)
           print(f'descarcate={ok} sarite={skip} esuate={fail}')
           PY
-      - name: Jar server CatServer/Mohist 1.16.5
+      - name: Jar server CatServer 1.16.5 (GitHub oficial)
         working-directory: run
         run: |
-          curl -s "https://api.github.com/repos/Mohist-Community/Mohist/releases?per_page=50" -H "Authorization: bearer $GITHUB_TOKEN" > rel.json
-          URL=$(python3 -c "
-          import json
-          for r in json.load(open('rel.json')):
-            for a in r.get('assets',[]):
-              n=a['name']
-              if '1.16.5' in n and n.endswith('.jar'):
-                print(a['browser_download_url']); raise SystemExit")
-          echo "jar: $URL"
-          curl -sL -o server.jar "$URL"
+          curl -sL -o server.jar "https://github.com/Luohuayu/CatServer/releases/download/23.05.26-1/CatServer-1.16.5-1d8d6313-server.jar"
           ls -la server.jar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          [ $(stat -c %s server.jar) -gt 1000000 ] && echo "jar ok"
       - name: Boot test
         working-directory: run
         run: |
