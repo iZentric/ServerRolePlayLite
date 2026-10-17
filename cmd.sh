@@ -1,11 +1,8 @@
 export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
-chmod 600 ~/.ssh/cuantic_oci 2>/dev/null
-ssh-keygen -lf ~/.ssh/cuantic_oci.pub 2>/dev/null
-for U in oracle ubuntu cloud-user opc root debian admin; do
-  R=$(timeout 6 ssh -i ~/.ssh/cuantic_oci -o StrictHostKeyChecking=no -o ConnectTimeout=4 -o BatchMode=yes $U@92.5.171.150 "echo TRAIT; whoami; free -m | awk '/Mem/{print \$2}'" 2>&1)
-  if echo "$R" | grep -q TRAIT; then
-    echo ">>> VPS VIU cu $U:"; echo "$R" | head -3
-    echo "$U" > ~/vps-user.txt; break
-  fi
-done
-cat ~/vps-user.txt 2>/dev/null || echo "v62: niciun user cu cuantic_oci"
+pgrep -f cloudflared >/dev/null && echo "cloudflared: ruleaza" || echo "cloudflared: mort"
+URL=$(grep -oE "https://[a-z0-9-]+\.trycloudflare\.com" /tmp/cf.log 2>/dev/null | tail -1)
+[ -z "$URL" ] && URL=$(sudo cat /var/log/cloudflared.log 2>/dev/null | grep -oE "https://[a-z0-9-]+\.trycloudflare\.com" | tail -1)
+[ -z "$URL" ] && URL=$(pgrep -af cloudflared | head -1 | cut -c1-100)
+echo "URL: ${URL:-negasit}"
+HOSTN=$(echo "$URL" | sed 's|https://||;s|\.trycloudflare\.com.*||')
+[ -n "$HOSTN" ] && timeout 10 curl -s -o /dev/null -w "edge probe: %{http_code}\n" "https://$HOSTN.trycloudflare.com/" 2>&1
