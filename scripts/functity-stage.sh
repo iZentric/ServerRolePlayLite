@@ -937,6 +937,20 @@ EO
     echo OK
     ;;
 
+  unclog)
+    # curata gunoiul runner-ului (NU productia), ca joburile noi sa apuce sa porneasca
+    R=${RUNNER_ROOT:-$HOME/actions-runner}
+    say "== UNCLOG: curat workspace-uri vechi runner ($R) =="
+    du -sh "$R/_work" "$R/_diag" 2>/dev/null | sed 's/^/  inainte: /'
+    [ -d "$R/_work" ] && find "$R/_work" -mindepth 1 -maxdepth 1 -not -name "_*" -newermt "-2 days" -prune -exec rm -rf {} + 2>/dev/null
+    find "$R/_diag" -name "*.log" -mtime +1 -delete 2>/dev/null
+    # si clone-ul de inbox vechi de 3 zile
+    [ -d "$HOME/functity/repo" ] && rm -rf "$HOME/functity/repo"
+    du -sh "$HOME" 2>/dev/null | sed 's/^/  home acum: /'
+    df -m "$HOME" | tail -1 | awk '{print "  disc liber acum: "$4" MiB"}'
+    echo OK
+    ;;
+
   *)
     echo "folosire: $0 host-info|backup|assemble|test|status|up|down"; exit 2;;
 esac
