@@ -24,6 +24,11 @@ jobs:
         shell: bash
         run: |
           exec >> /tmp/trace.txt 2>&1
+          TEN=$(printf '%s' "$TEN" | tr -d '\r\n[:space:]')
+          USR=$(printf '%s' "$USR" | tr -d '\r\n[:space:]')
+          FPR=$(printf '%s' "$FPR" | tr -d '\r\n[:space:]')
+          REG=$(printf '%s' "$REG" | tr -d '\r\n[:space:]')
+          echo "TEN=${TEN:0:20}... FPR=$FPR REG=$REG"
           printf '%s\n' "$KEY" > /tmp/oci.key
           head -1 /tmp/oci.key | grep -q BEGIN || printf '%b' "$KEY" > /tmp/oci.key
           openssl rsa -in /tmp/oci.key -check -noout && echo "KEY OK"
