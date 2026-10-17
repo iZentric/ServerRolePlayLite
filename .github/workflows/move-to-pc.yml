@@ -50,9 +50,21 @@ jobs:
             $L += "DISC liber E: $([math]::Round((Get-PSDrive E).Free/1GB,1)) GB"
           } catch { $L += "EROARE: $_" }
           New-Item -ItemType Directory -Force analysis | Out-Null
-          $L | Out-File -Encoding utf8 analysis\SYNC-PC.md
+          $FN="analysis/SYNC-PC-" + (Get-Date).ToUniversalTime().ToString("HHmm") + ".md"
+          $L | Out-File -Encoding utf8 $FN
+          Copy-Item $FN "analysis/SYNC-PC.md" -Force
+          "RAM liberi: $([math]::Round((Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory/1MB,1)) GB" | Add-Content $FN
           git config user.name sync-pc; git config user.email sync@functity.local
-          git add -f analysis/SYNC-PC.md
-          git commit -qm "SYNC PC: motor FunCity pe E:"
-          git pull -q --no-rebase origin $env:GITHUB_REF_NAME
-          git push -q origin HEAD:$env:GITHUB_REF_NAME
+          git add -f "analysis/SYNC-PC.md" $FN
+          git commit -qm "SYNC PC: $FN" | Out-Null
+          git checkout -q -B syncbr
+          for ($i=1; $i -le 4; $i++) {
+            git pull -q --no-rebase -X ours origin $env:GITHUB_REF_NAME 2>&1 | Out-Null
+            git push -q origin syncbr:$env:GITHUB_REF_NAME 2>&1 | Out-Null
+            if ($LASTEXITCODE -eq 0) { break }
+            git fetch -q origin $env:GITHUB_REF_NAME 2>&1 | Out-Null
+            git reset -q --hard origin/$env:GITHUB_REF_NAME 2>&1 | Out-Null
+            git cherry-pick -q syncbr 2>&1 | Out-Null
+            Start-Sleep -Seconds 6
+          }
+          exit 0
