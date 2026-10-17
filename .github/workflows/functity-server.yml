@@ -67,7 +67,7 @@ jobs:
           @echo off
           cd /d "%~dp0"
           echo Update FunCity de pe GitHub...
-          curl -sfLo "%TEMP%\functity.zip" "https://github.com/iZentric/ServerRolePlayLite/releases/download/functity/FUNCTITY-SERVER.zip"
+          curl -sfLo "%TEMP%\functity.zip" "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FUNCTITY-SERVER.zip"
           powershell -NoProfile -Command "Expand-Archive -LiteralPath $env:TEMP\functity.zip -DestinationPath . -Force"
           echo Gata. Lumea ta (folderul world) NU s-a atins.
           pause
@@ -95,11 +95,11 @@ jobs:
           zip -qr9 "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip" . -x "*.log" -x "logs/*"
           ls -la "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip"
           echo "== upload pe release functity =="
-          gh release upload functity "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip" -R "$GITHUB_REPOSITORY" --clobber
+          gh release upload funcity "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip" -R "$GITHUB_REPOSITORY" --clobber
           ADDR=$(cat "$GITHUB_WORKSPACE/diag/addr.txt" 2>/dev/null || echo "in lucru")
-          gh release edit functity -R "$GITHUB_REPOSITORY" --notes "## 🏙️ FUNCTITY 1.7.7 FINAL
+          gh release edit funcity -R "$GITHUB_REPOSITORY" --notes "## 🏙️ FUNCTITY 1.7.7 FINAL
           **Client** (toate modurile, brand FunCity): [FUNCTITY-CLIENT.mrpack](https://github.com/$GITHUB_REPOSITORY/releases/download/funcity/FunCity-1.0.0.mrpack)
-          **Server complet** (world + 33 moduri + java portabil + start/ update): [FUNCTITY-SERVER.zip](https://github.com/$GITHUB_REPOSITORY/releases/download/functity/FUNCTITY-SERVER.zip)
+          **Server complet** (world + 33 moduri + java portabil + start/ update): [FUNCTITY-SERVER.zip](https://github.com/$GITHUB_REPOSITORY/releases/download/funcity/FUNCTITY-SERVER.zip)
           Adresa joasă (se reîmprospătează): \`$ADDR\`
           Bază: release \`lite\` (Cuantic 1.7.7) — engine validat, fără Paper, update automat prin Actualizare FunCity.bat."
           echo "== DONE BUILD =="
