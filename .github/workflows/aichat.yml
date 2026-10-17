@@ -1,0 +1,52 @@
+name: aichat-build
+on:
+  push: { paths: ["aichat/**"] }
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17", cache: maven }
+      - name: Compile (Java 8 target pe API 1.16.5)
+        run: |
+          set +e
+          cd aichat
+          mvn -B -ntp package > /tmp/mvn-out.txt 2>&1
+          RC=$?
+          tail -40 /tmp/mvn-out.txt
+          exit $RC
+      - name: Publica jurnalul (esec sau verde — ca sa-l vad si din sandbox)
+        if: always()
+        run: |
+          set +e
+          git config user.name bot; git config user.email bot@arena.local
+          { echo "# AICHAT-BUILD $(date -u '+%F %T UTC') rc-stat"; echo; echo '```'; tail -70 /tmp/mvn-out.txt; echo '```'; } > analysis/AICHAT-BUILD.md
+          git add -f analysis/AICHAT-BUILD.md
+          git commit -qm "aichat: jurnal build" || exit 0
+          git pull -q --rebase origin "$GITHUB_REF_NAME" || true
+          git push -q origin "HEAD:$GITHUB_REF_NAME" || true
+      - name: Smoke — plugin.yml si clasa in jar
+        run: |
+          cd aichat
+          unzip -l target/FunCityAI-*.jar | grep -q plugin.yml
+          unzip -l target/FunCityAI-*.jar | grep -q FunCityAIPlugin.class
+          echo "jar OK: $(stat -c%s target/FunCityAI-*.jar) B"
+      - name: Comite jarul direct pe bransa noastra (15KB — joburile self-hosted il au la checkout, fara artefacte)
+        run: |
+          set +e
+          cp aichat/target/FunCityAI-*.jar aichat/FunCityAI-1.16.5-1.0.0.jar
+          (cd aichat && sha256sum FunCityAI-1.16.5-1.0.0.jar > SHA256SUMS.txt)
+          git config user.name bot; git config user.email bot@arena.local
+          git add -f aichat/FunCityAI-1.16.5-1.0.0.jar aichat/SHA256SUMS.txt
+          git commit -qm "aichat: jar construit in CI ($(cut -c1-12 aichat/SHA256SUMS.txt))" || { echo "novedatat (identic cu ce era)"; exit 0; }
+          for i in 1 2 3; do git pull -q --rebase origin "$GITHUB_REF_NAME" && git push -q origin "HEAD:$GITHUB_REF_NAME" && echo PUBLICAT && break || sleep 8; done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: functityai-jar
+          path: aichat/target/FunCityAI-*.jar
+          if-no-files-found: error
