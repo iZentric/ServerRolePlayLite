@@ -1,23 +1,7 @@
-Sat Oct 17 16:05:04 UTC 2026
-== PROCES ==
-== PORT ==
-PORT 25565 INCHIS
-== BOOT LOG (curat, ultimele) ==
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) ~[modlauncher-mohist-8.1.3.jar:?]
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) ~[modlauncher-mohist-8.1.3.jar:?]
-	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) ~[modlauncher-mohist-8.1.3.jar:?]
-	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) ~[modlauncher-mohist-8.1.3.jar:?]
-	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:105) ~[FunCity-1.16.5-b1.0827.jar:?]
-	at net.minecraftforge.server.ServerMain.main(ServerMain.java:86) ~[FunCity-1.16.5-b1.0827.jar:?]
-== LATEST.LOG ==
-[16:04:55] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher mohist-8.1.3 starting: java version 17.0.20.1 by Eclipse Ado
-[16:04:55] [main/INFO] [net.minecraftforge.fml.loading.FixSSL/CORE]: Added Lets Encrypt root certificates as additional trust
-[16:04:55] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.4 Source=file:/home/mndvasi9/cuantic-live/libraries/org/spongepow
-[16:04:57] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'fmlserver' with arguments [--gameDir, ., n
-== ZIP ==
-90802667 bytes
-== TOKEN: gasitgho_C
-asset: ERR:Invalid name for request
-
-exit=0
+Sat Oct 17 16:07:09 UTC 2026
+== CAUZA CRASH ==
+== CURATARE LOCK + PORNIRE CORECTA ==
+cmd.sh: line 11: 63380 Killed                  setsid nohup ~/j11/bin/java @unix_args.txt nogui > boot.log 2>&1 < /dev/null
+cmd.sh: line 9: 63506 Killed                  setsid nohup ~/j11/bin/java @unix_args.txt nogui > boot.log 2>&1 < /dev/null
+pid: 
 exit=1
