@@ -1,7 +1,6 @@
-Sat Oct 17 20:31:44 UTC 2026
-/home/mndvasi9/playit
-
-/home/mndvasi9/playit-run:
-playit.toml
-cmd.sh: line 6: /home/mndvasi9/.local/bin/playit: No such file or directory
+Sat Oct 17 20:32:38 UTC 2026
+SUDO: nu
+playitd: nu a pornit
+nohup: failed to run command '/home/mndvasi9/playitd': No such file or directory
+more information, try '--help'.
 exit=0
