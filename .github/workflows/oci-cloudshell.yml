@@ -1,5 +1,6 @@
 name: OCI-CLOUD-SHELL
-# Porneaza/ține viu Oracle Cloud Shell prin API (fara browser). Buton + ceas la 4 zile.
+# r2: semnatura SDK official + policy cloud-shell aplicata
+# VERDICT 2026-10-17: Oracle nu are API public pt Cloud Shell (nu-i in CLI/SDK/docs).# (v6: request-target cu methoda MINUSCULA — cauza 401) Buton + ceas la 4 zile.
 on:
   workflow_dispatch:
     inputs:
@@ -8,9 +9,8 @@ on:
         required: false
         default: "keep"
   push:
-    paths: [ .github/workflows/oci-cloudshell.yml ]
-  schedule:
-    - cron: "15 5 */4 * *"
+    paths: [ .github/workflows/oci-cloudshell.yml, scripts/oci-cloudshell.py ]
+
 permissions:
   contents: write
 jobs:
@@ -32,15 +32,32 @@ jobs:
           printf '%s\n' "$OCI_PRIVATE_KEY" > $D/oci_api_key.pem
           [ -s $D/oci_api_key.pem ] || { echo "FARA CHEIE (secretul OCI_PRIVATE_KEY e gol?)"; exit 0; }
           chmod 600 $D/oci_api_key.pem
-          FP="$OCI_FINGERPRINT"
-          if [ -z "$FP" ] || [ "${#FP}" -lt 20 ]; then
-            FP=$(openssl rsa -in $D/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl sha1 | awk '{print $2}' | sed 's/../&:/g;s/:$//')
-            echo "fingerprint calculat: $FP"
-          fi
-          { echo "[DEFAULT]"; echo "user=$OCI_USER"; echo "tenancy=$OCI_TENANCY"; echo "region=$OCI_REGION"; echo "fingerprint=$FP"; echo "key_file=$D/oci_api_key.pem"; } > $D/config
+          FP=$(openssl rsa -in $D/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl md5 -r | awk '{print $1}' | sed 's/../&:/g;s/:$//')
+          FPG="$OCI_FINGERPRINT"
+          [ "${FPG//:/}" != "${FP//:/}" ] && echo "ATTENTIE: secretul OCI_FINGERPRINT difera de cheia reala; folosoc calculat: $FP" || echo "fingerprint secret = real, OK"
+          trim() { printf "%s" "$1" | tr -d " \r\n"; }
+          CFP=$(openssl rsa -in $D/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl md5 -r | awk "{print \$1}" | sed "s/../&:/g;s/:$//")
+          { echo "[DEFAULT]"; echo "user=$(trim "$OCI_USER")"; echo "tenancy=$(trim "$OCI_TENANCY")"; echo "region=$(trim "$OCI_REGION")"; echo "fingerprint=$CFP"; echo "key_file=$D/oci_api_key.pem"; } > $D/config
+          chmod 600 $D/config $D/oci_api_key.pem
           ACT="${{ inputs.actiune }}"
           [ -z "$ACT" ] && ACT=keep
-          { echo "# CLOUD-SHELL $(date -u '+%F %T UTC') — actiune: $ACT"; python3 scripts/oci-cloudshell.py "$ACT"; } > analysis/CLOUD-SHELL.md 2>&1
+          {
+            echo "# CLOUD-SHELL $(date -u '+%F %T UTC') — actiune: $ACT"
+            echo "key: $(wc -c < $D/oci_api_key.pem) bytes | fp: $FP | region: $OCI_REGION"
+            if [ "$ACT" = "cli" ] || [ "$ACT" = "keep" ]; then
+              pip install -q oci oci-cli >/dev/null 2>&1
+              if command -v oci >/dev/null; then
+                oci setup repair-file-permission --file $D/config >/dev/null 2>&1
+                oci setup repair-file-permission --file $D/oci_api_key.pem >/dev/null 2>&1
+                echo "CLI:"; oci os ns get --auth api_key --config-file $D/config 2>&1 | tail -3
+                export OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING=True
+                oci os ns get --auth api_key --config-file $D/config --debug 2>&1 | grep -v -i "password\|private" | tail -30
+              else
+                echo "pip oci-cli esuat pe hosted"
+              fi
+            fi
+            if [ "$ACT" = "keep" ]; then echo "--- python keepalive ---"; python3 scripts/oci-cloudshell.py keep; fi
+          } > analysis/CLOUD-SHELL.md 2>&1
           cat analysis/CLOUD-SHELL.md
           git add -f analysis/CLOUD-SHELL.md
           git config user.name cs-bot; git config user.email cs@functity.local
