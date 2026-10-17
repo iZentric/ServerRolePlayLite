@@ -51,6 +51,8 @@ jobs:
           try:
             for n in z.namelist():
               if n.startswith('overrides/mods/'):
+                if EXCL.search(n):
+                  print('skip usat-pc (ovr):',n); continue
                 data=z.read(n)
                 if data[:2]==b'PK':
                   fn=os.path.join('mods',n.split('/')[-1]); open(fn,'wb').write(data); ok+=1
