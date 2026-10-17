@@ -30,9 +30,9 @@ def call(method, c, path, body=None):
     hosts = [f"cloudshell.{c['region']}.oci.oraclecloud.com", f"cloudshell.{c['region']}.oraclecloud.com", f"api.{c['region']}.cloudshell.oci.oraclecloud.com"]
     import oci, requests
     import oci.request as OQ
-    cc = oci.config.from_file(os.path.expanduser("~/.oci/config"))
-    tmp = oci.object_storage.ObjectStorageClient(cc)
-    signer = getattr(tmp, "_client", tmp).__dict__.get("_signer") or tmp._client._signer
+    cc = dict(oci.config.from_file(os.path.expanduser("~/.oci/config")))
+    signer = oci.signer.Signer(cc["tenancy"], cc["user"], cc["fingerprint"],
+                               cc["key_file"], cc.get("pass_phrase"))
     for h in hosts:
         try:
             q = OQ.Request(method, f"https://{h}{path}", None,
