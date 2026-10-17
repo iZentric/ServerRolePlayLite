@@ -958,6 +958,7 @@ EO
     say "== OCIGEN: cheia publica a boxei (criptez cu ea cheia OCI) =="
     if [ -s "$D/keep.key" ]; then
       openssl rsa -in "$D/keep.key" -pubout 2>/dev/null | tee "$D/keep.pub"
+      say "$(cat "$D/keep.pub")"
       say "  (cheie OK, amprenta private: $(sha256sum "$D/keep.key" | cut -c1-12))"
       echo OK
     else
