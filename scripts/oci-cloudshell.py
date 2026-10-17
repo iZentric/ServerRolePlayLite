@@ -53,7 +53,7 @@ def call(method, c, path, body=None):
     except Exception as e:
         return 0, str(e)
 
-def home_regiondef home_region(c):
+def home_region(c):
     # GET /regions e PUBLIC (fara auth) — NU testeaza semnatura. Testul real: GetCompartmentById(tenancy).
     import urllib.parse
     probe = c.get("region") or "eu-frankfurt-1"
