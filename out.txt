@@ -1,6 +1,10 @@
-Sat Oct 17 20:32:38 UTC 2026
-SUDO: nu
-playitd: nu a pornit
-nohup: failed to run command '/home/mndvasi9/playitd': No such file or directory
-more information, try '--help'.
+Sat Oct 17 20:34:10 UTC 2026
+== fisiere oci ==
+total 16
+drwx------.  2 mndvasi9 oci   58 Oct 17 12:14 .
+drwxr-xr-x. 24 mndvasi9 oci 4096 Oct 17 20:25 ..
+-rw-------.  1 mndvasi9 oci 2455 Oct 17 12:14 keep.key
+-rw-r--r--.  1 mndvasi9 oci  567 Oct 17 12:14 keep.key.pub
+== test auth cu cheia de pe disc ==
+fara key/config
 exit=0
