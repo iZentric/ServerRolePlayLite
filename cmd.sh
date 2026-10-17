@@ -1,40 +1,28 @@
 export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
-cd ~/cuantic-live
-echo "== PING FIXAT =="
-python3 - <<'PY'
-import socket,json
-def rv(f):
-    n=0;sh=0
-    for _ in range(5):
-        c=f.recv(1)
-        if not c: raise Exception('eof')
-        b=c[0]; n|=(b&0x7f)<<sh; sh+=7
-        if not b&0x80: return n
-    raise Exception('varint')
-try:
-    s=socket.create_connection(('127.0.0.1',25565),8); s.settimeout(8)
-    f=s.makefile('rb')
-    s.sendall(b'\x0b\x00\x00\x09127.0.0.1\x63\xed\x01'); s.sendall(b'\x01\x00')
-    ln=rv(f); data=b''
-    while len(data)<ln: data+=f.read(ln-len(data))
-    i=0
-    while data[i]&0x80: i+=1
-    i+=1
-    n=0;sh=0
-    while data[i]&0x80: n|=(data[i]&0x7f)<<sh; sh+=7; i+=1
-    n|=(data[i]&0x7f)<<sh; i+=1
-    d=json.loads(data[i:i+n].decode('utf8'))
-    print('PING OK |',d.get('version',{}).get('name'),'| online:',d.get('players',{}).get('online'),'/',d.get('players',{}).get('max'))
-    print('DESC:',str(d.get('description'))[:60])
-except Exception as e:
-    print('PING esuat:',str(e)[:90])
-PY
-echo "== TUNEL =="
-pgrep -f "cloudflared tunnel" >/dev/null && echo "tunnel: proces viu" || { setsid nohup ./cloudflared tunnel --no-autoupdate --url tcp://127.0.0.1:25565 > /tmp/cf.log 2>&1 < /dev/null & sleep 30; }
-AD=$(grep -oE "https://[a-z0-9-]+\.trycloudflare\.com" /tmp/cf.log | tail -1)
-echo "ADRESA: $AD"
-echo "== RESURSE =="
-P=$(pgrep -f "j11/bin/java" | head -1)
-[ -n "$P" ] && awk '/VmRSS/{printf "Java RAM: %.1f GB\n",$2/1048576}' /proc/$P/status
-free -m | awk '/Mem/{printf "RAM libera: %dMB din %dMB\n",$4,$2}'
-uptime
+cd ~
+ARCH=$(uname -m)
+URL=$(curl -s https://api.github.com/repos/playit-cloud/playit-agent/releases/latest | grep -oE '"https://[^"]+linux[^"]*"' | tr -d '"' | grep -iE "${ARCH/x86_64/amd64}|${ARCH/aarch64/arm64}" | head -1)
+[ -z "$URL" ] && URL=$(curl -s https://api.github.com/repos/playit-cloud/playit-agent/releases/latest | grep -oE '"browser_download_url": *"[^"]+"' | sed 's/.*"\(http[^"]*\)".*/\1/' | grep -iE "linux" | grep -iE "arm64|aarch64" | head -1)
+echo "URL: $URL"
+if [ -n "$URL" ]; then
+  curl -fsL -o playit "$URL" && chmod +x playit
+fi
+SZ=$(stat -c %s playit 2>/dev/null || echo 0)
+echo "binar: $SZ B"
+if [ "$SZ" -gt 2000000 ]; then
+  mkdir -p ~/.playit
+  cat > ~/.playit/config.toml <<'T'
+[autotunnels.mc]
+dst = "localhost:25565"
+kind = "tcp"
+[autotunnels.mc.port]
+port = 25565
+T
+  pkill -f "./playit" 2>/dev/null; sleep 2
+  setsid nohup ~/playit > /tmp/playit.log 2>&1 < /dev/null &
+  for i in $(seq 1 30); do sleep 3; grep -qE "playit\.gg:[0-9]+" /tmp/playit.log && break; done
+  grep -oE "[A-Za-z0-9._-]+\.playit\.gg:[0-9]+" /tmp/playit.log | sort -u
+  echo "playit: $(pgrep -f 'playit$|/playit ' | head -1)"
+fi
+echo "== MC inca viu? =="
+ss -lnt 2>/dev/null | grep -q ":25565 " && echo "PORT 25565: DESCHIS" || echo "PORT INCHIS"
