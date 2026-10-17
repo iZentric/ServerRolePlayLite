@@ -1,20 +1,31 @@
-Sat Oct 17 15:06:06 UTC 2026
-=== INAINTE ===
-/dev/sdb1       5.0G  5.0G  548K 100% /home/mndvasi9
-=== CE OCCUPA CASA ===
-2.1G	/home/mndvasi9/.local
+Sat Oct 17 15:07:55 UTC 2026
+=== CUANTIC-LIVE: ce e inauntru? ===
+ADRESA
+banned-ips.json
+banned-players.json
+bind.log
+boot.log
+bore.log
+bukkit.yml
+bukkit.yml.bak.1791636852
+bukkit.yml.bak.1791639103
+CatServer-1.16.5-1d8d6313-server.jar
+catserver.yml
+chat.log
+cin
+CITESTE-MA.txt
+WORLD AICI: 150M
+=== STERG DEJEAUNA ===
+=== DUPA ===
+/dev/sdb1       5.0G  1.3G  3.8G  26% /home/mndvasi9
+=== TOP RAMAS ===
+exit=0
 508M	/home/mndvasi9/cuantic-live
-420M	/home/mndvasi9/funcity-backup
-363M	/home/mndvasi9/_work
-361M	/home/mndvasi9/externals
-297M	/home/mndvasi9/funcity-live
-273M	/home/mndvasi9/functity-out
+320M	/home/mndvasi9/.local
 156M	/home/mndvasi9/srpl-claie
-133M	/home/mndvasi9/actions-runner-linux-arm64-2.337.0.tar.gz
 119M	/home/mndvasi9/.theia
 87M	/home/mndvasi9/bin
-58M	/home/mndvasi9/_diag
-=== STERG GUNOI ===
-=== DUPA ===
-/dev/sdb1       5.0G  5.0G   65M  99% /home/mndvasi9
+20M	/home/mndvasi9/.hawtjni
+18M	/home/mndvasi9/frp_0.71.0_linux_arm64
+15M	/home/mndvasi9/frpc
 exit=0
