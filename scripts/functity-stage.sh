@@ -977,7 +977,7 @@ EO
     E=$(awk '/^==AES==/{f=1;next}/^==RSA==/{f=0}f' "$B" | tr -d ' \n')
     say "== OCISET: decriptez si instalez paznicul =="
     rm -rf /tmp/ociset; mkdir -p /tmp/ociset
-    printf '%s' "$K" | openssl pkeyutl -decrypt -inkey "$D/keep.key" -pkeyopt rsa_padding:oaep 2>/dev/null > /tmp/ociset/ka || { say "  esuat: decrypt key (cheie gresita pe boxa?)"; exit 1; }
+    printf '%s' "$K" | openssl pkeyutl -decrypt -inkey "$D/keep.key" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 2>/dev/null > /tmp/ociset/ka || { say "  esuat: decrypt key (cheie gresita pe boxa?)"; exit 1; }
     IV=$(cut -d: -f1 /tmp/ociset/ka); KEYS=$(cut -d: -f2 /tmp/ociset/ka); rm -f /tmp/ociset/ka
     printf '%s' "$E" | openssl base64 -d 2>/dev/null | openssl enc -d -aes-256-cbc -K "$KEYS" -iv "$IV" 2>/dev/null > /tmp/ociset/k.tgz || { say "  esuat: decriptare blob"; exit 1; }
     tar xzf /tmp/ociset/k.tgz -C /tmp/ociset || { say "  esuat: tar"; exit 1; }
