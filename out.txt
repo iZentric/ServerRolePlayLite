@@ -1,5 +1,4 @@
-Sat Oct 17 16:09:55 UTC 2026
+Sat Oct 17 16:10:06 UTC 2026
 == SERVICIU ==
 repornesc serverul...
 exit=0
-cmd.sh: line 9: 67608 Killed                  setsid nohup ~/j11/bin/java @unix_args.txt nogui > boot.log 2>&1 < /dev/null
