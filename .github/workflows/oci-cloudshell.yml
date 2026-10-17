@@ -36,7 +36,10 @@ jobs:
           FP=$(openssl rsa -in $D/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl sha1 -r | awk '{print $1}' | sed 's/../&:/g;s/:$//')
           FPG="$OCI_FINGERPRINT"
           [ "${FPG//:/}" != "${FP//:/}" ] && echo "ATTENTIE: secretul OCI_FINGERPRINT difera de cheia reala; folosoc calculat: $FP" || echo "fingerprint secret = real, OK"
-          { echo "[DEFAULT]"; echo "user=$OCI_USER"; echo "tenancy=$OCI_TENANCY"; echo "region=$OCI_REGION"; echo "fingerprint=$FP"; echo "key_file=$D/oci_api_key.pem"; } > $D/config
+          trim() { printf "%s" "$1" | tr -d " \r\n"; }
+          CFP=$(openssl rsa -in $D/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl sha1 -r | awk "{print \$1}" | sed "s/../&:/g;s/:$//")
+          { echo "[DEFAULT]"; echo "user=$(trim "$OCI_USER")"; echo "tenancy=$(trim "$OCI_TENANCY")"; echo "region=$(trim "$OCI_REGION")"; echo "fingerprint=$CFP"; echo "key_file=$D/oci_api_key.pem"; } > $D/config
+          chmod 600 $D/config $D/oci_api_key.pem
           ACT="${{ inputs.actiune }}"
           [ -z "$ACT" ] && ACT=keep
           {
@@ -47,9 +50,7 @@ jobs:
               if command -v oci >/dev/null; then
                 oci setup repair-file-permission --file $D/config >/dev/null 2>&1
                 oci setup repair-file-permission --file $D/oci_api_key.pem >/dev/null 2>&1
-                echo "--- config exact ---"
-                cat -A $D/config
-                echo "--- CLI auth test (os ns get, debug) ---"
+                echo "CLI:"; oci os ns get --auth api_key --config-file $D/config 2>&1 | tail -3
                 export OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING=True
                 oci os ns get --auth api_key --config-file $D/config --debug 2>&1 | grep -v -i "password\|private" | tail -30
               else
