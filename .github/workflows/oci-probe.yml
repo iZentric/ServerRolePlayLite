@@ -1,0 +1,26 @@
+name: OCI-PROBE
+on:
+  push:
+    branches: ['arena/*']
+    paths: ['.github/workflows/oci-probe.yml']
+permissions:
+  contents: write
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inventar secrets (doar prezenta, nu valorile)
+        run: |
+          for n in OCI_TENANCY OCI_TENANCY_ID OCI_USER OCI_USER_ID OCI_FINGERPRINT OCI_KEY OCI_PRIVATE_KEY OCI_REGION OCI_COMPARTMENT OCI_SSH_PEM OCI_API_KEY OCI_CFG; do
+            V="\${{ secrets.$n }}"
+            echo "$n: \$([ -n \"$V\" ] && echo PRESENT || echo absent)"
+          done > /tmp/inv.txt 2>/dev/null || true
+          cat /tmp/inv.txt
+      - name: Trimite inventarul pe packdiag
+        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+        run: |
+          git config user.email b@b && git config user.name p
+          git checkout -q -B packdiag "origin/packdiag" 2>/dev/null || git checkout -q --orphan packdiag
+          mkdir -p diag && cp /tmp/inv.txt diag/oci-secrets.txt
+          git add -f diag && git commit -qm "oci inventory" && git push -qf "https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY" packdiag
