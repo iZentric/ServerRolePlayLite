@@ -1,5 +1,7 @@
-Sat Oct 17 16:07:03 UTC 2026
+Sat Oct 17 16:07:09 UTC 2026
 == CAUZA CRASH ==
 == CURATARE LOCK + PORNIRE CORECTA ==
-pid: 63380
+cmd.sh: line 11: 63380 Killed                  setsid nohup ~/j11/bin/java @unix_args.txt nogui > boot.log 2>&1 < /dev/null
+cmd.sh: line 9: 63506 Killed                  setsid nohup ~/j11/bin/java @unix_args.txt nogui > boot.log 2>&1 < /dev/null
+pid: 
 exit=1
