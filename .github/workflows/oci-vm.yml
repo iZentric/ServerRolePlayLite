@@ -1,0 +1,78 @@
+name: OCI-VM
+on:
+  workflow_dispatch:
+  push:
+    branches: ['arena/*']
+    paths: ['.github/workflows/oci-vm.yml']
+permissions:
+  contents: write
+jobs:
+  vm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      TEN: ${{ secrets.OCI_TENANCY }}
+      USR: ${{ secrets.OCI_USER }}
+      FPR: ${{ secrets.OCI_FINGERPRINT }}
+      KEY: ${{ secrets.OCI_PRIVATE_KEY }}
+      REG: ${{ secrets.OCI_REGION }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pregatire auth
+        run: |
+          echo "$KEY" > /tmp/oci.key
+          [ -n "$TEN" ] && [ -n "$KEY" ] || { echo "lipsesc secrets"; exit 1; }
+          command -v openssl
+          head -1 /tmp/oci.key
+      - name: Functii OCI API
+        id: oci
+        run: |
+          cat > /tmp/lib.sh <<'LIB'
+          HOST="iaas.$REG.oraclecloud.com"
+          sign() { # METHOD PATH [BODY_FILE]
+            local M="$1" P="$2" BF="${3:-}"
+            local D=$(date -u +"%a, %d %b %Y %H:%M:%S UTC")
+            local RL="$M iaas.$REG.oraclecloud.com$P"
+            local HDRS="date (request-target)"
+            local EXTRA=()
+            if [ -n "$BF" ]; then
+              local H=$(openssl dgst -sha256 -binary "$BF" | openssl base64 -A)
+              local L=$(stat -c %s "$BF")
+              RL="$RL
+          content-type: application/json
+          content-length: $L
+          x-content-sha264: $H"
+              HDRS="date (request-target) content-type content-length x-content-sha264"
+              EXTRA=(-H "content-type: application/json" -H "content-length: $L" -H "x-content-sha264: $H")
+            fi
+            local SIG=$(printf '%s\n' "$RL" "date: $D" | openssl dgst -sha256 -sign /tmp/oci.key | openssl base64 -A)
+            printf '%s' "Authorization: Signature headers=\"$HDRS\",keyId=\"$TEN/$USR/$FPR\",algorithm=\"rsa-sha256\",signature=\"$SIG\"@@$D@@${EXTRA[*]}"
+          }
+          get() { local R=$(sign GET "$1"); local A="${R%%@@*}"; local D="${R#*@@}"; local D2="${D%%@@*}"; local E="${D#*@@}";
+            curl -s "https://$HOST$1" -H "$A" -H "date: $D2" $E; }
+          post() { echo "$2" > /tmp/body.json; local R=$(sign POST "$1" /tmp/body.json); local A="${R%%@@*}"; local D="${R#*@@}"; local D2="${D%%@@*}"; local E="${D#*@@}";
+            curl -s -X POST "https://$HOST$1" -H "$A" -H "date: $D2" $E ${EXTRA:+} --data @/tmp/body.json -H "content-type: application/json" -H "x-content-sha264: $(openssl dgst -sha256 -binary /tmp/body.json | openssl base64 -A)" -H "content-length: $(stat -c %s /tmp/body.json)"; }
+          LIB
+          source /tmp/lib.sh
+          echo "== test auth (region) =="
+          curl -s "https://iaas.$REG.oraclecloud.com/20160918/regions" > /tmp/reg.json
+          python3 -c "import json;d=json.load(open('/tmp/reg.json'));print('AUTH-FAIL:',str(d)[:100]) if isinstance(d,dict) else print('AUTH OK,',len(d),'regiuni')"
+          AD=$(get "/20160918/availabilityDomains?compartmentId=$TEN" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d[0]['name'] if isinstance(d,list) and d else '')")
+          echo "AD=$AD"
+          [ -z "$AD" ] && { echo "nu am AD"; exit 1; }
+          CAP=$(get "/20160918/capacities/instanceShapes?compartmentId=$TEN&availabilityDomain=$AD&shape=VM.Standard.A1.Flex")
+          AV=$(echo "$CAP" | python3 -c "import json,sys;d=json.load(sys.stdin);print('YES' if any(c.get('available') for c in d.get('capacities',[])) else 'NO')")
+          echo "CAPACITATE_ARM=$AV" | tee /tmp/res.txt
+          echo "AD=$AD" >> $GITHUB_ENV
+          if [ "$AV" != "YES" ]; then echo "ARMool e plin azi" ; exit 0; fi
+          exit 0
+        continue-on-error: true
+      - name: REZULTAT pe packdiag
+        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+        run: |
+          git config user.email b@b && git config user.name vm
+          git fetch -q origin +refs/heads/packdiag:refs/remotes/origin/packdiag 2>/dev/null
+          git checkout -q -B packdiag "origin/packdiag" 2>/dev/null || git checkout -q --orphan packdiag
+          mkdir -p diag && { echo "probe initial: $CAT"; date; } > diag/oci-capacity.txt
+          cat /tmp/res.txt >> diag/oci-capacity.txt 2>/dev/null || true
+          git add -f diag && git commit -qm "oci capacity $(date +%s)" && git push -qf "https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY" packdiag
