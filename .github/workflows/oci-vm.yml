@@ -20,134 +20,42 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - name: OCI stack + VM ARM + server
-        shell: bash
+      - name: "STEP1: auth"
+        continue-on-error: true
         run: |
-          exec >> /tmp/trace.txt 2>&1
-          TEN=$(printf '%s' "$TEN" | tr -d '\r\n[:space:]')
-          USR=$(printf '%s' "$USR" | tr -d '\r\n[:space:]')
-          FPR=$(printf '%s' "$FPR" | tr -d '\r\n[:space:]')
-          REG=$(printf '%s' "$REG" | tr -d '\r\n[:space:]')
-          echo "TEN=${TEN:0:20}... FPR=$FPR REG=$REG"
-          printf '%s\n' "$KEY" > /tmp/oci.key
-          head -1 /tmp/oci.key | grep -q BEGIN || printf '%b' "$KEY" > /tmp/oci.key
-          openssl rsa -in /tmp/oci.key -check -noout && echo "KEY OK"
-          HOSTP="iaas.$REG.oraclecloud.com"
-          call() {
-            local M="$1" P="$2" B="${3:-}" D RQ HD SIG EXTRA=()
-            D=$(date -u +"%a, %d %b %Y %H:%M:%S UTC")
-            if [ -n "$B" ]; then
-              SHA=$(printf '%s' "$B" | openssl dgst -sha256 -binary | openssl base64 -A)
-              LEN=${#B}
-              RQ="$M $P
-          date: $D
-          content-type: application/json
-          content-length: $LEN
-          x-content-sha264: $SHA"
-              HD="date (request-target) content-type content-length x-content-sha264"
-              EXTRA=(-H "content-type: application/json" -H "content-length: $LEN" -H "x-content-sha264: $SHA" --data "$B")
-            else
-              RQ="$M $P
-          date: $D"
-              HD="date (request-target)"
-            fi
-            SIG=$(printf '%s' "$RQ" | openssl dgst -sha256 -sign /tmp/oci.key | openssl base64 -A)
-            curl -s -X "$M" "https://$HOSTP$P" -H "date: $D" -H "Authorization: Signature headers=\"$HD\",keyId=\"$TEN/$USR/$FPR\",algorithm=\"rsa-sha256\",signature=\"$SIG\"" "${EXTRA[@]}"
-          }
-          EXIST=$(call GET "/20160918/instances?compartmentId=$TEN&displayName=funcity")
-          EID=$(echo "$EXIST" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d[0]['id'] if isinstance(d,list) and d else '')" 2>/dev/null)
-          ESTATE=$(echo "$EXIST" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d[0].get('lifecycleState','') if d else '')" 2>/dev/null)
-          echo "EXISTA: $EID $ESTATE"
-          if [ -n "$EID" ] && [ "$ESTATE" = "RUNNING" ]; then
-            VID=$(call GET "/20160918/vnicattachments?instanceId=$EID" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d[0]['vnicId'] if d else '')" 2>/dev/null)
-            IP=$(call GET "/20160918/vnics/$VID" | python3 -c "import json,sys;print(json.load(sys.stdin).get('publicIp',''))" 2>/dev/null)
-            echo "MC_IP=$IP (existent)" | tee /tmp/ip.txt
-            [ -n "$IP" ] && exit 0
-          fi
-          ADJ=$(call GET "/20160918/availabilityDomains?compartmentId=$TEN")
-          AD=$(echo "$ADJ" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d[0]['name'])" 2>/dev/null)
-          echo "AD=$AD"
-          [ -z "$AD" ] && { echo "AUTH_FAIL: $(printf '%s' "$ADJ" | tr -d '
-' | head -c 300)"; exit 2; }
-          CAP=$(call GET "/20160918/capacities/instanceShapes?compartmentId=$TEN&availabilityDomain=$AD&shape=VM.Standard.A1.Flex")
-          AV=$(echo "$CAP" | python3 -c "import json,sys;d=json.load(sys.stdin);print('YES' if any(c.get('available') for c in d.get('capacities',[])) else 'NO')" 2>/dev/null)
-          echo "ARM_CAPACITY=$AV"
-          [ "$AV" != "YES" ] && { echo "ARM plin azi"; exit 3; }
-          VCNJ=$(call GET "/20160918/vcns?compartmentId=$TEN")
-          VCN=$(echo "$VCNJ" | python3 -c "import json,sys;d=json.load(sys.stdin);print([v['id'] for v in d if v.get('lifecycleState')=='AVAILABLE'][0] if d else '')" 2>/dev/null)
-          if [ -z "$VCN" ]; then
-            VCNJ=$(call POST "/20160918/vcns" "{\"compartmentId\":\"$TEN\",\"cidrBlock\":\"10.0.0.0/16\",\"displayName\":\"funcity\"}")
-            VCN=$(echo "$VCNJ" | python3 -c "import json,sys;print(json.load(sys.stdin)['id'])")
-            call POST "/20160918/internetGateways" "{\"compartmentId\":\"$TEN\",\"vcnId\":\"$VCN\",\"displayName\":\"funcity-igw\"}" >/dev/null
-            sleep 8
-          fi
-          META=$(call GET "/20160918/vcns/$VCN")
-          RT=$(echo "$META" | python3 -c "import json,sys;print(json.load(sys.stdin)['defaultRouteTableId'])")
-          SL=$(echo "$META" | python3 -c "import json,sys;print(json.load(sys.stdin)['defaultSecurityListId'])")
-          call PUT "/20160918/securityLists/$SL" "{\"id\":\"$SL\",\"compartmentId\":\"$TEN\",\"vcnId\":\"$VCN\",\"ingressSecurityRules\":[{\"protocol\":\"6\",\"source\":\"0.0.0.0/0\",\"description\":\"mc\",\"dstPort\":{\"min\":25565,\"max\":25565}},{\"protocol\":\"6\",\"source\":\"0.0.0.0/0\",\"description\":\"ssh\",\"dstPort\":{\"min\":22,\"max\":22}}],\"egressSecurityRules\":[{\"protocol\":\"all\",\"destination\":\"0.0.0.0/0\"}]}" >/dev/null
-          SUBJ=$(call POST "/20160918/subnets" "{\"compartmentId\":\"$TEN\",\"vcnId\":\"$VCN\",\"cidrBlock\":\"10.0.1.0/24\",\"displayName\":\"funcity-sub\",\"routeTableId\":\"$RT\",\"securityListIds\":[\"$SL\"],\"prohibitPublicIpOnVnic\":false}")
-          SUB=$(echo "$SUBJ" | python3 -c "import json,sys;print(json.load(sys.stdin)['id'])" 2>/dev/null) || { echo "SUB_FAIL $SUBJ"; exit 4; }
-          IMG=$(call GET "/20160918/images?compartmentId=$TEN&operatingSystem=Canonical%20Ubuntu&operatingSystemVersion=22.04&sort=TIMECREATED&sortorder=DESC" | python3 -c "
-          import json,sys
-          for i in json.load(sys.stdin):
-            if i.get('lifecycleState')=='AVAILABLE' and i.get('shape')=='VM.Standard.A1.Flex':
-              print(i['id']); break")
-          echo "IMG=$IMG"
-          cat > /tmp/init.sh <<'INI'
-          #!/bin/bash
-          exec > /var/log/funcity-init.log 2>&1
-          R=https://github.com/iZentric/ServerRolePlayLite/releases/download
-          apt-get update -y
-          apt-get install -y openjdk-11-jre-headless
-          mkdir -p /opt/mc && cd /opt/mc
-          if curl -fL -o srv.tgz $R/server-live/srv-live.tar.gz; then
-            tar xzf srv.tgz && [ -d cuantic-live ] && { cp -a cuantic-live/. . 2>/dev/null; rm -rf cuantic-live; }
-          else
-            curl -fL -o srv.zip $R/lite/CUANTIC-Server-CatServer-1.7.7.zip
-            busybox unzip srv.zip 2>/dev/null || python3 -c "import zipfile;zipfile.ZipFile('srv.zip').extractall('.')"
-            curl -fL -o world.tgz $R/world-live/functity-live.tar.gz && { tar xzf world.tgz; for d in *cuantic-live* functity-live; do [ -d "$d" ] && { cp -a "$d"/. . 2>/dev/null; rm -rf "$d"; break; }; done; }
-          fi
-          echo "eula=true" > eula.txt
-          printf 'online-mode=false\nview-distance=6\nsimulation-distance=4\nmax-players=60\nmotd=FunCity RP\n' > server.properties
-          JAR=$(find . -maxdepth 2 -name "*.jar" -size +5M | head -1)
-          if [ -f unix_args.txt ]; then CMD="/usr/bin/java @unix_args.txt nogui"; else CMD="/usr/bin/java -Xms4G -Xmx12G -jar $JAR nogui"; fi
-          cat > /etc/systemd/system/mc.service <<SVC
-          [Unit]
-          Description=FunCity MC
-          After=network-online.target
-          [Service]
-          WorkingDirectory=/opt/mc
-          ExecStart=$CMD
-          Restart=always
-          RestartSec=15
-          [Install]
-          WantedBy=multi-user.target
-          SVC
-          systemctl daemon-reload && systemctl enable --now mc
-          INI
-          UD=$(base64 -w0 /tmp/init.sh)
-          ssh-keygen -t ed25519 -f /tmp/vmkey -N "" -q
-          PUB=$(cut -d' ' -f1,2 /tmp/vmkey.pub)
-          INST=$(call POST "/20160918/instances" "{\"availabilityDomain\":\"$AD\",\"compartmentId\":\"$TEN\",\"displayName\":\"funcity\",\"shape\":\"VM.Standard.A1.Flex\",\"shapeConfig\":{\"ocpus\":4,\"memoryInGBs\":24,\"bootVolumeSizeInGBs\":200},\"imageId\":\"$IMG\",\"sourceDetails\":{\"sourceType\":\"image\",\"imageId\":\"$IMG\"},\"createVnicDetails\":{\"subnetId\":\"$SUB\",\"assignPublicIp\":true,\"displayName\":\"funcity-vnic\"},\"metadata\":{\"ssh_authorized_keys\":\"$PUB\",\"user_data\":\"$UD\"}}")
-          IID=$(echo "$INST" | python3 -c "import json,sys;print(json.load(sys.stdin).get('id',''))" 2>/dev/null)
-          echo "IID=$IID"
-          [ -z "$IID" ] && { echo "CREATE_FAIL: $(echo $INST | head -c 300)"; exit 5; }
-          IP=""
-          for i in $(seq 1 60); do
-            sleep 15
-            ST=$(call GET "/20160918/instances/$IID" | python3 -c "import json,sys;print(json.load(sys.stdin).get('lifecycleState',''))" 2>/dev/null)
-            if [ "$ST" = "RUNNING" ]; then
-              VA=$(call GET "/20160918/vnicattachments?instanceId=$IID")
-              VID=$(echo "$VA" | python3 -c "import json,sys;print(json.load(sys.stdin)[0]['vnicId'])" 2>/dev/null)
-              IP=$(call GET "/20160918/vnics/$VID" | python3 -c "import json,sys;print(json.load(sys.stdin).get('publicIp',''))" 2>/dev/null)
-              [ -n "$IP" ] && break
-            fi
-            echo "wait $i: $ST"
-          done
-          echo "MC_IP=$IP" | tee /tmp/ip.txt
-          [ -z "$IP" ] && exit 6
-      - name: Report pe packdiag
+          mkdir -p /tmp/oc
+          T=$(printf '%s' "$TEN" | tr -d '[:space:]'); U=$(printf '%s' "$USR" | tr -d '[:space:]'); F=$(printf '%s' "$FPR" | tr -d '[:space:]'); R=$(printf '%s' "$REG" | tr -d '[:space:]')
+          printf 'TEN=%s\nUSR=%s\nFPR=%s\nREG=%s\n' "${T:0:25}" "${U:0:25}" "$F" "$R" > /tmp/oc/env.txt
+          printf '%s\n' "$KEY" > /tmp/oc/oci.key
+          openssl rsa -in /tmp/oc/oci.key -check -noout >> /tmp/oc/env.txt 2>&1
+          cat > /tmp/oc/call.sh <<'EOS'
+          TEN="$1"; shift
+          RQ=$(cat /tmp/oc/rq)
+          SIG=$(printf '%s' "$RQ" | openssl dgst -sha256 -sign /tmp/oc/oci.key | openssl base64 -A)
+          EOS
+          echo "STEP1 DONE" >> /tmp/oc/env.txt
+      - name: "STEP2: API call de test"
+        continue-on-error: true
+        run: |
+          cd /tmp/oc
+          TEN=$(printf '%s' "${{ env.TEN }}" | tr -d '[:space:]')
+          USR=$(printf '%s' "${{ env.USR }}" | tr -d '[:space:]')
+          FPR=$(printf '%s' "${{ env.FPR }}" | tr -d '[:space:]')
+          REG=$(printf '%s' "${{ env.REG }}" | tr -d '[:space:]')
+          D=$(date -u +"%a, %d %b %Y %H:%M:%S UTC")
+          P="/20160918/availabilityDomains?compartmentId=$TEN"
+          printf 'GET %s\ndate: %s' "$P" "$D" > rq.txt
+          SIG=$(openssl dgst -sha256 -sign oci.key < rq.txt | openssl base64 -A)
+          curl -s "https://iaas.$REG.oraclecloud.com$P" -H "date: $D" -H "Authorization: Signature headers=\"date (request-target)\",keyId=\"$TEN/$USR/$FPR\",algorithm=\"rsa-sha256\",signature=\"$SIG\"" -o resp.json
+          head -c 400 resp.json >> out2.txt; echo >> out2.txt
+          python3 -c "import json;d=json.load(open('resp.json'));print('AD:',d[0]['name'])" >> out2.txt 2>&1
+          cat out2.txt
+      - name: "STEP3: raport"
         if: always()
         run: |
-          { echo "=== run $GITHUB_RUN_ID $(date -u) ==="; cat /tmp/trace.txt | grep -aE "AD=|CAPACIT|AUTH|IMG|IID|MC_IP|FAIL|plin|EXISTA|KEY|wait |^[0-9]+ \{" | tail -20; echo "IP:"; cat /tmp/ip.txt 2>/dev/null; } > /tmp/rep.txt || true
-          python3 .github/oci-report.py
+          git config user.email b@b && git config user.name vm
+          git checkout -q -B packdiag origin/packdiag 2>/dev/null || git checkout -q --orphan packdiag
+          mkdir -p diag
+          { echo "== run $GITHUB_RUN_ID $(date -u) =="; cat /tmp/oc/env.txt; echo "-- step2:"; cat /tmp/oc/out2.txt 2>/dev/null; } > diag/oci-run.txt
+          git add -f diag && git commit -qm "oci trace $GITHUB_RUN_ID" --allow-empty
+          git push -qf origin packdiag:packdiag && echo IMPINS || echo IMPINS-ESUAT
