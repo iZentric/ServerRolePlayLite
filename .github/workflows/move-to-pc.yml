@@ -1,0 +1,58 @@
+name: MOVE-TO-PC
+# Ruleaza pe PC-ul userului (KERNELOS-PC). Pune motorul + buildurile + Cuantic in
+# E:\Administrator\Desktop\FunCity si raporteaza in analysis/SYNC-PC.md.
+on:
+  workflow_dispatch:
+  push:
+    paths: [ .github/workflows/move-to-pc.yml ]
+permissions:
+  contents: write
+jobs:
+  m:
+    runs-on: [ self-hosted, Windows ]
+    timeout-minutes: 20
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: mutare pe E - FunCity
+        shell: powershell
+        run: |
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+          $root="E:\Administrator\Desktop\FunCity"
+          $api="https://api.github.com/repos/$env:GITHUB_REPOSITORY"
+          $H=@{Authorization="Bearer $env:GITHUB_TOKEN"; Accept="application/vnd.github+json"; "User-Agent"="sync-pc"}
+          New-Item -ItemType Directory -Force $root,"$root\motor","$root\cuantic","$root\builduri" | Out-Null
+          $L=@("== SYNC-PC $((Get-Date).ToUniversalTime().ToString('yyyy-MM-dd HH:mm')) UTC ==")
+          try {
+            $rel=Invoke-RestMethod "$api/releases/tags/jars-20261017-0952" -Headers $H
+            $a=@{}; foreach($x in $rel.assets){$a[$x.name]=$x.browser_download_url}
+            Invoke-WebRequest $a["functity-jare-toate.tar.gz"] -OutFile "$root\jare.tar.gz" -UseBasicParsing
+            Invoke-WebRequest $a["SHA256SUMS.txt"] -OutFile "$root\SHA256SUMS.txt" -UseBasicParsing
+            New-Item -ItemType Directory -Force "$root\_ex" | Out-Null
+            tar -xjf "$root\jare.tar.gz" -C "$root\_ex"
+            Copy-Item "$root\_ex\mohist-1.16.5-1237-server.jar" "$root\motor\" -Force -ErrorAction SilentlyContinue
+            Copy-Item "$root\_ex\FunCity-b1.0827.jar" "$root\motor\FunCity.jar" -Force
+            Get-ChildItem "$root\_ex\*.jar" | Where-Object {$_.Name -notmatch "b1\.0827|mohist"} | Copy-Item -Destination "$root\builduri\" -Force
+            $L += "motor: $((Get-ChildItem "$root\motor\*.jar" | ForEach-Object { "$($_.Name) $([math]::Round($_.Length/1MB))MB" }) -join ' | ')"
+            $L += "builduri istorice: $((Get-ChildItem "$root\builduri\*.jar" -ErrorAction SilentlyContinue).Count) fisiere"
+            $L += "hash arhiva: $((Get-FileHash "$root\jare.tar.gz" -Algorithm SHA256).Hash.ToLower())"
+            $L += "asteptat   : $((Select-String 'jare-toate' "$root\SHA256SUMS.txt" | ForEach-Object { $_.Line.Split(' ')[0] }))"
+            if ($a["CUANTIC-Server-CatServer-1.7.7.zip"]) {
+              Invoke-WebRequest $a["CUANTIC-Server-CatServer-1.7.7.zip"] -OutFile "$root\cuantic\Cuantic-Server.zip" -UseBasicParsing
+              tar -xf "$root\cuantic\Cuantic-Server.zip" -C "$root\cuantic"
+              $L += "cuantic 1.7.10: $((Get-ChildItem "$root\cuantic" -Recurse -ErrorAction SilentlyContinue).Count) fisiere extrase"
+            }
+            Set-Content "$root\motor\start.bat" -Value "@echo off`r`ncd /d %~dp0`r`njava -Xms2G -Xmx3G -jar FunCity.jar nogui`r`npause"
+            Set-Content "$root\motor\eula.txt" -Value "eula=true"
+            $jv = cmd /c "java -version 2>&1" | Select-Object -First 1
+            $L += "java pe PC: $jv"
+            $L += "DISC liber E: $([math]::Round((Get-PSDrive E).Free/1GB,1)) GB"
+          } catch { $L += "EROARE: $_" }
+          New-Item -ItemType Directory -Force analysis | Out-Null
+          $L | Out-File -Encoding utf8 analysis\SYNC-PC.md
+          git config user.name sync-pc; git config user.email sync@functity.local
+          git add -f analysis/SYNC-PC.md
+          git commit -qm "SYNC PC: motor FunCity pe E:"
+          git pull -q --no-rebase origin $env:GITHUB_REF_NAME
+          git push -q origin HEAD:$env:GITHUB_REF_NAME
