@@ -784,6 +784,59 @@ EO
   rm -f "$D/FunCity.jar"
   [ "$RES" = OK ] && finish 0 || finish 1
   ;;
+  packtest) # candidate noi din functity-out/pack -> staging, boot, verdict
+  say "== PACKTEST — $CAND pe staging cu motorul live =="
+  rm -rf /tmp/pt; git clone -q --depth 1 -b functity-out "https://github.com/$REPO" /tmp/pt 2>/dev/null || { say "  clone functity-out esuat"; finish 1; }
+  [ -d /tmp/pt/pack ] || { say "  fara pack/ pe functity-out (build CI n-a terminat?)"; finish 1; }
+  NEWJ=$(ls /tmp/pt/pack/*.jar 2>/dev/null | head -1); [ -n "$NEWJ" ] || { say "  niciun jar in pack/"; finish 1; }
+  META="${NEWJ%.jar}.meta.txt"; say "  meta: $(grep -m1 sha256 "$META" 2>/dev/null | cut -c1-40)"
+  EXPECTED=$(grep -m1 -oE "sha256: [a-f0-9]+" "$META" 2>/dev/null | cut -d" " -f2)
+  GOT=$(sha256sum "$NEWJ" | cut -d" " -f1)
+  if [ -n "$EXPECTED" ] && [ "$EXPECTED" != "$GOT" ]; then say "  SHA MISMATCH — REFUZ sa-l montez ($GOT)"; finish 1; fi
+  say "  sha verificat: ${GOT:0:16}"
+  pkill -f "java.*[/]funcity-live" 2>/dev/null; sleep 3
+  cp "$NEWJ" "$D/mods/$(basename "$NEWJ")"
+  JARF="$D/$(cat "$D/.jarname" 2>/dev/null || echo FunCity.jar)"; [ -f "$JARF" ] || { cp "$P"/*FunCity-*.jar "$D/FunCity.jar" 2>/dev/null && JARF="$D/FunCity.jar"; }
+  JB="$D/jdk11/bin/java"; [ -x "$JB" ] || JB=$(java11_gaseste || echo java)
+  cd "$D" && nohup "$JB" -Xms1G -Xmx"$XMX" -XX:MaxGCPauseMillis=200 -jar "$(basename "$JARF")" nogui > "$D/pack.log" 2>&1 &
+  BPID=$!; RES=ESUAT
+  for t in $(seq 1 220); do sleep 1; grep -qE "Done \([0-9.]+s\)!" "$D/pack.log" 2>/dev/null && { RES=OK; break; }; kill -0 $BPID 2>/dev/null || { RES=CRASH; break; }; done
+  if [ "$RES" = OK ]; then
+    sleep 60
+    DONE=$(grep -m1 -oE "Done \([0-9.]+s\)!" "$D/pack.log" | tr -dc "0-9.")
+    say "  $RES: boot $DONE s | keep-up/60s: $(grep -c "Can't keep up" "$D/pack.log") | ERROR: $(grep -cE ' ERROR ' "$D/pack.log") | mod incarcat: $(grep -icE "krypton" "$D/pack.log") linii in log"
+    kill $BPID 2>/dev/null; sleep 2; pkill -f "java.*[/]funcity-live" 2>/dev/null
+    say "  gata — daca cifrele-s curate, urmeaza promote"
+    finish 0
+  else
+    say "  $RES — log:"
+    tail -12 "$D/pack.log" 2>/dev/null | cut -c1-170 | sed "s/^/    | /" | tee -a "$REPORT"
+    kill $BPID 2>/dev/null; pkill -f "java.*[/]funcity-live" 2>/dev/null
+    rm -f "$D/mods/$(basename "$NEWJ")"
+    say "  candidat scos din staging — serverul nevazut"
+    finish 1
+  fi
+  ;;
+  packpromote) # noul mod, verificat in staging, intra pe productie (copy + restart c.sh, rollback la esec SLP)
+  say "== PACKPROMOTE =="
+  NEWJ=$(ls /tmp/pt/pack/*.jar 2>/dev/null | head -1)
+  [ -f "$NEWJ" ] || { say "  nu mai am jarul din packtest pe disk — ruleaza packtest intai"; finish 1; }
+  mkdir -p "$P/mods"; cp "$NEWJ" "$P/mods/" && say "  montat: $(basename "$NEWJ") in $P/mods"
+  pkill -f "java @unix_args" 2>/dev/null
+  OK=0
+  for i in $(seq 1 30); do sleep 10; python3 scripts/minecraft_status.py 127.0.0.1 25565 >/dev/null 2>&1 && { OK=1; break; }; done
+  if [ "$OK" = 1 ]; then
+    say "  productia e SUS cu noul mod: $(grep -hE 'Done \([0-9.]+s\)!' "$P/logs/latest.log" | tail -1 | cut -c1-70)"
+    say "  erori dupa promote: $(grep -cE ' ERROR ' "$P/logs/latest.log" 2>/dev/null) | keep-up azi: $(grep -c "Can't keep up" "$P/logs/latest.log" 2>/dev/null)"
+    finish 0
+  else
+    say "  SLP nu raspunde dupa 300s — ROLLBACK: scot jarul si repornesc"
+    rm -f "$P/mods/$(basename "$NEWJ")"
+    pkill -f "java @unix_args" 2>/dev/null
+    for i in $(seq 1 30); do sleep 10; python3 scripts/minecraft_status.py 127.0.0.1 25565 >/dev/null 2>&1 && { say "  rollback OK — serverul a revenit la packul verificat"; finish 0; }; done
+    say "  CRITIC dupa rollback — intervine manual (c.sh)"; finish 1
+  fi
+  ;;
   down)
     opreste_server || true
     # maturam orice JVM de staging ramas din cicluri anterioare (pid vechi suprasris)
