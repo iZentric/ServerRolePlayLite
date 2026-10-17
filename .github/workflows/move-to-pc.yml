@@ -1,3 +1,17 @@
+          $REF=$env:GITHUB_REF_NAME
+          function PushReport {
+            $L | Out-File -Encoding utf8 "$env:GITHUB_WORKSPACE\analysis\PC-BENCH.md"
+            try {
+              $b64=[Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:GITHUB_WORKSPACE\analysis\PC-BENCH.md"))
+              $sha=$null
+              $cur=Invoke-RestMethod "$api/contents/analysis/PC-BENCH.md?ref=$REF" -Headers $H -ErrorAction SilentlyContinue
+              if ($cur) { $sha=$cur.sha }
+              $body=@{ message="lab $((Get-Date).ToUniversalTime().ToString('HHmmss'))"; content=$b64; branch=$REF } 
+              if ($sha) { $body["sha"]=$sha }
+              $r=Invoke-RestMethod -Method Put -Uri "$api/contents/analysis/PC-BENCH.md" -Headers $H -ContentType "application/json; charset=utf-8" -Body ($body | ConvertTo-Json -Compress -Depth 4)
+              "impins $(if($r.commit.sha){$r.commit.sha.Substring(0,7)}else{'?'})." | Out-Null
+            } catch { $L2="PUSH-ESUEC: " + $_.Exception.Message + " | " + $_.ErrorDetails.Message; try { Invoke-RestMethod -Method Post -Uri "$api/issues" -Headers $H -ContentType "application/json" -Body (@{ title="lab eroare push"; body=$L2 } | ConvertTo-Json -Compress) | Out-Null } catch {} }
+          }
 name: MOVE-TO-PC
 # Laborator de motoare pe PC-ul userului: descarca Jdk-uri portable, monteaza 4 motoare
 # in E:\Administrator\Desktop\FunCity, le bench-uieste (boot + RAM) si raporteaza pe branch.
