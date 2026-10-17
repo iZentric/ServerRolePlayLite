@@ -40,7 +40,24 @@ jobs:
           { echo "[DEFAULT]"; echo "user=$OCI_USER"; echo "tenancy=$OCI_TENANCY"; echo "region=$OCI_REGION"; echo "fingerprint=$FP"; echo "key_file=$D/oci_api_key.pem"; } > $D/config
           ACT="${{ inputs.actiune }}"
           [ -z "$ACT" ] && ACT=keep
-          { echo "# CLOUD-SHELL $(date -u '+%F %T UTC') — actiune: $ACT"; python3 scripts/oci-cloudshell.py "$ACT"; } > analysis/CLOUD-SHELL.md 2>&1
+          {
+            echo "# CLOUD-SHELL $(date -u '+%F %T UTC') — actiune: $ACT"
+            echo "key: $(wc -c < $D/oci_api_key.pem) bytes | fp: $FP | region: $OCI_REGION"
+            if [ "$ACT" = "cli" ] || [ "$ACT" = "keep" ]; then
+              pip install -q oci-cli >/dev/null 2>&1
+              if command -v oci >/dev/null; then
+                oci setup repair-file-permission --file $D/config >/dev/null 2>&1
+                oci setup repair-file-permission --file $D/oci_api_key.pem >/dev/null 2>&1
+                echo "--- CLI environment get ---"
+                oci --auth api_key --config-file $D/config cloud-shell get 2>&1 | head -25
+                echo "--- CLI raw create-session (dry: list endpoints) ---"
+                oci --auth api_key --config-file $D/config cloud-shell session list 2>&1 | head -12
+              else
+                echo "pip oci-cli esuat pe hosted"
+              fi
+            fi
+            if [ "$ACT" = "keep" ]; then echo "--- python keepalive ---"; python3 scripts/oci-cloudshell.py keep; fi
+          } > analysis/CLOUD-SHELL.md 2>&1
           cat analysis/CLOUD-SHELL.md
           git add -f analysis/CLOUD-SHELL.md
           git config user.name cs-bot; git config user.email cs@functity.local
