@@ -1,14 +1,18 @@
-Sat Oct 17 19:23:08 UTC 2026
-FAIL obfuscate HTTP Error 404: Not Found
-NUGASIT selene
+Sat Oct 17 19:28:19 UTC 2026
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+PermissionError: [Errno 13] Permission denied: '/home/mndvasi9/freeroam/x/modrinth.index.json'
 obfuscate_lib_compatible-1.3.0.jar
 SeleneChat-0.2.0-all.jar
 == BOOT ==
 BOOT: NU A DAT DONE
-[19:23:27 FATAL]: Error during pre-loading phase
-[19:23:27 FATAL]: Crash report saved to ./crash-reports/crash-2026-10-17_19.23.27-fml.txt
-	Failure message: Mod additionalguns requires obfuscate 0.6.3 or above
 	Failure message: Mod vehicle requires obfuscate 0.4.0 or above
-== PING ==
-PING esuat: [Errno 111] Connection refused
+	Failure message: Mod additionalguns requires obfuscate 0.6.3 or above
+	Failure message: Mod supplementaries requires selene 1.16.5-1.0 or above
+	Failure message: Mod cgm requires obfuscate 0.6.2 or above
+	Mod §evehicle§r requires §6obfuscate§r §o0.4.0 or above§r
+	Mod §eadditionalguns§r requires §6obfuscate§r §o0.6.3 or above§r
+== PLAN B: eliminam exact modurile care cer lib absent si repornim ==
+RETRY: 
+PORT: INCHIS
 exit=0
