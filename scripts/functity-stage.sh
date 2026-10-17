@@ -886,6 +886,25 @@ EO
     grep -iE 'voicechat|voice chat' "$LOG" 2>/dev/null | tail -8 | cut -c1-200 | sed 's/^/    V /' | tee -a "$REPORT"
     finish 0
     ;;
+  inbox)
+    # inbox: ce urca userul pe GitHub in folderul inbox/ al branchului se oglindeste aici, pe boxa.
+    # Limitare: ~100MB/fisier (cat permite git). Fisier cu acelasi sha = nu se recopiaza.
+    [ "$(id -u)" = "0" ] && { echo "RULEAZA CA USER NORMAL (root ar lasa fiere de netratat)"; exit 1; }
+    I=$HOME/functity/inbox; RR=$HOME/functity/repo
+    mkdir -p "$I"
+    if [ ! -d "$RR/.git" ]; then git clone -q --depth 1 -b "$BRANCH" "https://github.com/$OWNER/$REPO.git" "$RR" || { echo "clone esuat"; exit 1; }; fi
+    ( cd "$RR" && git fetch -q origin "$BRANCH" && git reset -q --hard "origin/$BRANCH" ) || { echo "fetch esuat"; exit 1; }
+    if [ ! -d "$RR/inbox" ]; then echo "inbox: directarul nu exista pe branch"; echo OK; exit 0; fi
+    N=0
+    find "$RR/inbox" -maxdepth 1 -type f ! -name 'README*' | sort | while read -r f; do
+      B=$(basename "$f"); S=$(stat -c %s "$f"); V=$(sha256sum "$f" | cut -c1-16)
+      if [ -f "$I/$B" ] && [ "$(sha256sum "$I/$B" | cut -c1-16)" = "$V" ]; then echo "  neschimbat: $B"
+      else cp -f "$f" "$I/$B"; echo "  sincronizat: $B ($S B, sha $V)"; fi
+    done
+    echo "continut ~/functity/inbox:"; ls -la "$I" 2>/dev/null | tail -8
+    echo OK
+    ;;
+
   *)
     echo "folosire: $0 host-info|backup|assemble|test|status|up|down"; exit 2;;
 esac
