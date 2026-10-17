@@ -1,6 +1,6 @@
 name: RELEASE-JARS
-# Posteaza TOATE jarele (90 build-uri FunCity + pack Cuantic) ca asseturi pe un release,
-# ca sa poti muta totul pe alt GitHub cu un singur download. Raport in analysis/RELEASE-JARS.md
+# Posteaza TOATE jarele (build-urile FunCity + pack Cuantic) ca asseturi pe un release
+# pentru mutarea pe alt GitHub. Raport: analysis/RELEASE-JARS.md (hosted, citeste-l de pe branch).
 on:
   workflow_dispatch:
   push:
@@ -11,54 +11,71 @@ jobs:
   r:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    env:
+      TOK: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - name: colecteaza + posteaza
+      - name: colecteaza si posteaza
         run: |
           set +e
           LOG=/tmp/rj.log; : > $LOG
+          say(){ echo "$1" | tee -a $LOG; }
           API=https://api.github.com/repos/$GITHUB_REPOSITORY
           UP=https://uploads.github.com/repos/$GITHUB_REPOSITORY
-          TOK=$GITHUB_TOKEN
+          say "[0] fetch functity-out..."
+          git fetch -q --depth=50 origin +refs/heads/functity-out:refs/remotes/origin/fout
+          say "  rc=$? fisierpefout=$(git ls-tree -r --name-only origin/fout 2>/dev/null | wc -l)"
           mkdir -p rel && cd rel
-          echo "[1] extrag jare din branchul functity-out..." | tee -a $LOG
+          say "[1] extrag jare..."
           N=0
-          for f in $(git ls-tree -r --name-only origin/fout | grep -E '^builds/.*\.jar$'); do
+          for f in $(git ls-tree -r --name-only origin/fout 2>/dev/null | grep -E '^builds/.*\.jar$'); do
             V=$(echo "$f" | cut -d/ -f2)
             git show "origin/fout:$f" > "FunCity-$V.jar" 2>/dev/null && N=$((N+1))
           done
-          git fetch -q origin +refs/heads/functity-out:refs/remotes/origin/fout 2>/dev/null
-          [ "$N" = 0 ] && { for f in $(git ls-tree -r --name-only refs/remotes/origin/fout | grep -E '^builds/.*\.jar$'); do V=$(echo "$f" | cut -d/ -f2); git show "refs/remotes/origin/fout:$f" > "FunCity-$V.jar" 2>/dev/null && N=$((N+1)); done; }
-          echo "  extrase: $N jare" | tee -a $LOG
-          git show origin/fout:pack/CUANTIC-Server-CatServer-1.7.7.zip > CUANTIC-Server-CatServer-1.7.7.zip 2>/dev/null || { for r in origin/fout refs/remotes/origin/fout; do git show $r:pack/CUANTIC-Server-CatServer-1.7.7.zip > CUANTIC-Server-CatServer-1.7.7.zip 2>/dev/null && break; done; }
-          tar czf funcity-jare-toate.tar.gz *.jar
-          sha256sum * > SHA256SUMS.txt
-          SIZE=$(du -m funcity-jare-toate.tar.gz | cut -f1); SIZEC=$(du -m CUANTIC-Server-CatServer-1.7.7.zip 2>/dev/null | cut -f1)
-          echo "[2] release + upload (jare $SIZE MB, cuantic ${SIZEC:-0} MB)..." | tee -a $LOG
-          TAG=jars-$(date -u +%Y%m%d)
-          RID=$(curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/json" \
-            -d "{\"tag_name\":\"$TAG\",\"name\":\"FunCity + Cuantic — toate jarele ($N builduri)\",\"target_commitish\":\"main\",\"draft\":false,\"body\":\"Arhiva completa pentru mutarea pe alt GitHub. continut: funcity-jare-toate.tar.gz ($N x FunCity-1.16.5.jar, b1.0600..b1.2326), CUANTIC-Server-CatServer-1.7.7.zip (serverul 1.7.10 complet), SHA256SUMS.txt (verifica cu sha256sum -c). Generat automat de release-jars.yml $(date -u '+%F %T UTC').\"}" \
-            $API/releases | jq -r '.id // empty')
-          [ -z "$RID" ] && RID=$(curl -s -H "Authorization: Bearer $TOK" "$API/releases/tags/$TAG" | jq -r '.id // empty')
-          echo "  release id: ${RID:-ESUEC}" | tee -a $LOG
-          for A in funcity-jare-toate.tar.gz CUANTIC-Server-CatServer-1.7.7.zip SHA256SUMS.txt; do
-            [ -f "$A" ] || continue
-            for try in 1 2 3; do
-              R=$(curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/octet-stream" --data-binary "@$A" "$UP/releases/$RID/assets?name=$A" | jq -r '.size // "ESUEC"')
-              echo "  upload $A: $R" | tee -a $LOG
-              [ "$R" != "ESUEC" ] && [ -n "$R" ] && break; sleep 10
+          say "  jare extrase: $N"
+          git show origin/fout:pack/CUANTIC-Server-CatServer-1.7.7.zip > CUANTIC-Server-CatServer-1.7.7.zip 2>/dev/null
+          if [ "$N" -gt 0 ]; then tar cf - *.jar | gzip -1 > funcity-jare-toate.tar.gz; fi
+          [ -f CUANTIC-Server-CatServer-1.7.7.zip ] && cp CUANTIC-Server-CatServer-1.7.7.zip . 2>/dev/null
+          sha256sum *.tar.gz *.zip 2>/dev/null > SHA256SUMS.txt
+          SJ=$(du -m funcity-jare-toate.tar.gz 2>/dev/null | cut -f1); SC=$(du -m CUANTIC-Server-CatServer-1.7.7.zip 2>/dev/null | cut -f1)
+          say "[2] creez release..."
+          TAG=jars-$(date -u +%Y%m%d-%H%M)
+          BODY=$(python3 - "$N" "$TAG" <<'EO'
+          import json,sys
+          n,tag=sys.argv[1:3]
+          print(json.dumps({
+            "tag_name": tag,
+            "name": "FunCity + Cuantic — toate jarele (" + n + " builduri)",
+            "target_commitish": "main",
+            "draft": False,
+            "body": "Arhiva completa pentru mutarea pe alt GitHub.\n\n- `funcity-jare-toate.tar.gz` — " + n + " builduri FunCity-1.16.5.jar (b1.0600..b1.2326)\n- `CUANTIC-Server-CatServer-1.7.7.zip` — serverul 1.7.10 complet (jar+mods+configs+launch)\n- `SHA256SUMS.txt` — verificare: `sha256sum -c SHA256SUMS.txt`\n\nGenerat automat de workflow-ul release-jars.yml."
+          }))
+          EO
+          )
+          RESP=$(curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/json" -d "$BODY" $API/releases)
+          RID=$(echo "$RESP" | jq -r '.id // empty' 2>/dev/null)
+          say "  RID=${RID:-ESUEC}"
+          [ -z "$RID" ] && say "  raspuns: $(echo "$RESP" | head -c 220 | tr '\n' ' ')"
+          if [ -n "$RID" ]; then
+            for A in funcity-jare-toate.tar.gz CUANTIC-Server-CatServer-1.7.7.zip SHA256SUMS.txt; do
+              [ -f "$A" ] || continue
+              for tr in 1 2 3; do
+                RC=$(curl -s -w '%{http_code}' -o /tmp/up.resp -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/octet-stream" --data-binary "@$A" "$UP/releases/$RID/assets?name=$A")
+                say "  upload $A (${RC}): $(head -c 70 /tmp/up.resp | tr '\n' ' ')"
+                case "$RC" in 2*) break;; esac
+                sleep 8
+              done
             done
-          done
-          echo "[3] gata" | tee -a $LOG
+          fi
           cd ..
+          say "[3] raport (jare=${SJ:-0}MB cuantic=${SC:-0}MB)"
           {
             echo "# RELEASE-JARS $(date -u '+%F %T UTC')"
-            echo "tag: $TAG | jare: $N | marimi: jare=${SIZE}MB cuantic=${SIZEC}MB"
-            grep -E "extrase|release id|upload" $LOG
+            echo "tag: $TAG | jare: $N | marimi: ${SJ:-0}MB jare + ${SC:-0}MB cuantic"
+            grep -aE "jare extrase|RID|upload|raspuns|raport" $LOG
             echo "URL: https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG"
           } > analysis/RELEASE-JARS.md
           git add -f analysis/RELEASE-JARS.md
           git config user.name rj-bot; git config user.email rj@functity.local
-          git commit -qm "release jars postat: $TAG ($N jare)"
-          for i in 1 2 3; do git pull -q --no-rebase origin ${GITHUB_REF_NAME} 2>/dev/null && break; done
-          git push -q origin HEAD:${GITHUB_REF_NAME}
+          git commit -qm "raport release-jars: $TAG ($N jare)"
+          for i in 1 2 3; do git pull -q --no-rebase origin "${GITHUB_REF_NAME}" 2>/dev/null; git push -q origin HEAD:"${GITHUB_REF_NAME}" && break; sleep 3; done
