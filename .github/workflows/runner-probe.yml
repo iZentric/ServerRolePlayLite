@@ -14,6 +14,7 @@ jobs:
       run:
         shell: powershell
     steps:
+      - uses: actions/checkout@v4
       - name: identitate PC (scrie si erorile in fisa)
         run: |
           New-Item -ItemType Directory -Force analysis | Out-Null
