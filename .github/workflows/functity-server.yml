@@ -7,6 +7,8 @@ jobs:
   build:
     timeout-minutes: 30
     runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
     permissions:
       contents: write
     steps:
@@ -25,16 +27,21 @@ jobs:
           cd "$B/server"
           echo "== structura =="; ls | head -10; echo "jars: $(ls mods/*.jar 2>/dev/null | wc -l)"
           echo "== engine jar root =="
-          ENG=$(ls *.jar 2>/dev/null | grep -viE "world|backup" | head -1)
+          ENG=$(ls FunCity-*.jar 2>/dev/null | head -1)
+          [ -z "$ENG" ] && ENG=$(ls *.jar 2>/dev/null | grep -viE "world|backup|CatServer" | head -1)
+          MODS=$(find . -maxdepth 2 -type d -iname "mods" | head -1)
+          echo "mods: ${MODS:-NICIUN} cu $(find ${MODS:-/dev/null} -name '*.jar' 2>/dev/null | wc -l) jars"
+          if [ -n "$MODS" ] && [ "$MODS" != "./mods" ]; then rm -rf mods; mv "$MODS" mods; fi
           echo "engine: ${ENG:-NU}"
           [ -n "$ENG" ] && mv "$ENG" FunCityEngine.jar
           ENG="FunCityEngine.jar"
           echo "== icon 64x64 de pe release funcity =="
+          sudo apt-get install -y imagemagick >/dev/null 2>&1 || sudo apt-get update -qq >/dev/null 2>&1; sudo apt-get install -y imagemagick >/dev/null 2>&1 && echo "imagick ok" || echo "imagick esuat"
           gh release download funcity -R "$GITHUB_REPOSITORY" -p server-icon.png -D . 2>/dev/null && echo "server-icon: din release" || { gh release download funcity -R "$GITHUB_REPOSITORY" -p funcity-icon.png -D /tmp 2>/dev/null && convert /tmp/funcity-icon.png -resize 64x64! server-icon.png && echo "server-icon: convertit"; } || echo "server-icon: absent"
           echo "== server.properties FunCity =="
           touch server.properties
           sedit() { grep -q "^$1=" server.properties && sed -i "s|^$1=.*|$1=$2|" server.properties || echo "$1=$2" >> server.properties; }
-          sedit motd '§b§lFuncity§r §7RolePlay §8| §aclick ca acasa'
+          grep -q '^motd=' server.properties && sed -i 's|^motd=.*|motd=\\u00a7b\\u00a7lFuncity \\u00a77RolePlay \\u00a7aRomania|' server.properties || echo 'motd=\u00a7b\u00a7lFuncity \u00a77RolePlay \u00a7aRomania' >> server.properties
           sedit server-port 25565
           sedit online-mode false
           sedit view-distance 8
