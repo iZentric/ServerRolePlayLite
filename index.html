@@ -84,6 +84,38 @@
       <tr><td>Interfață</td><td class="engine">FastFurnace, FastWorkbench, LazyDFU</td><td class="dim">rețete instant, menu-uri rapide</td></tr>
     </tbody>
   </table>
+  <h2>Benchmark: Cuantic → FunCity, aceeasi boxa</h2>
+  <p class="note" style="margin-top:0">Ambele proiecte au trait pe aceeasi masina (2 core ARM, HDD, 0 lei/luna). Cuantic = mostenirea 1.7.10; FunCity = motorul 1.16.5 de azi. Cifrele cu „—" nu le-am masurat pe boxa actuala — nu le inventam.</p>
+  <table>
+    <thead><tr><th>Proiect / motor</th><th>Boot (load world)</th><th>Caduri TPS</th><th>RAM live</th><th>Continut</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="engine">FunCity — Mohist 1.16.5<br><span class="dim">forge + sponge, 36 moduri / 14 pluginuri</span></td>
+        <td><b>4.2 s</b> <span class="dim">masurat din log, media ultimelor zeci de booturi</span></td>
+        <td><b>0</b> <span class="dim">„Can't keep up" in logul curent de productie</span></td>
+        <td><b>3.1 GB</b> <span class="dim">RSS live al procesului java</span></td>
+        <td class="dim">modpack verificat la provenienta + plugins RP</td>
+        <td><b style="color:#7ee787">SUS — port 25565</b></td>
+      </tr>
+      <tr>
+        <td class="engine">Cuantic — CatServer 1.7.10<br><span class="dim">forge+cauliflower, arhiva pastrata pe branch (functity-out/pack)</span></td>
+        <td class="dim">— <span class="dim">(retestare pe loc, la cerere)</span></td>
+        <td class="dim">—</td>
+        <td class="dim">~3 GB <span class="dim">(setarea istorica Xmx, nefiind masurata pe aceasta boxa)</span></td>
+        <td class="dim">server complet arhivat: jar + mods + configs + lume</td>
+        <td><b>ARHIVAT</b> <span class="dim">gata de repornita intr-un job</span></td>
+      </tr>
+      <tr>
+        <td class="engine">Teste de familie pe aceeasi boxa<br><span class="dim">Paper 1.21.1 / Purpur 1.21.1 / Fabric 1.21.1 / CatServer 1.12.2</span></td>
+        <td colspan="2" class="dim">Pornite din acelasi kit de testare — Paper/Purpur au refuzat bootloader-ul lipsa de biblioteci (family-Forge), CatServer 1.12.2 a trait 2-4 s fara foxlaunch-data</td>
+        <td class="dim">—</td>
+        <td class="dim">concluzia care a ales Mohist pentru FunCity</td>
+        <td class="dim">rapoare complete in analysis/FUNCTITY-STAGE.md</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">Metoda: acelasi motor de test pentru toti — jar real, acelasi world preset, acelasi prag „Done" din log, aceeasi boxa. Orice cifra de aici poate fi reprodusa cu <code>functity-stage.sh bootcheck</code> / <code>stats</code>.</p>
+
   <h2>De ce exact 36 moduri — și niciunul „la întâmplare"</h2>
   <p class="note" style="margin-top:0">Regula pack-ului: un mod intră pe server DOAR dacă binarul poate fi potrivit cu sursa lui (repo + commit/tag + SHA). Candidați testați și respinși onest:</p>
   <table>
