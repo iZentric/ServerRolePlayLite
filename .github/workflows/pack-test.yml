@@ -60,12 +60,30 @@ jobs:
           except Exception as e: print('override warn',e)
           print(f'descarcate={ok} sarite={skip} esuate={fail}')
           PY
-      - name: Jar server CatServer 1.16.5 (GitHub oficial)
+      - name: Ia motorul VALIDAT din release-ul lite
         working-directory: run
         run: |
-          curl -sL -o server.jar "https://github.com/Luohuayu/CatServer/releases/download/23.05.26-1/CatServer-1.16.5-1d8d6313-server.jar"
-          ls -la server.jar
-          [ $(stat -c %s server.jar) -gt 1000000 ] && echo "jar ok"
+          curl -sL -o srv.zip "https://github.com/${{ github.repository }}/releases/download/lite/CUANTIC-Server-CatServer-1.7.7.zip"
+          unzip -oq srv.zip -d srv || { echo "zip esuat"; ls -la srv.zip; exit 1; }
+          find srv -maxdepth 3 | head -25
+          JAR=$(find srv -name "*.jar" | xargs -r ls -S | head -1)
+          ARGS=$(find srv -name "unix_args.txt" -o -name "user_jvm_args.txt" | head -1)
+          echo "JAR=$JAR" >> $GITHUB_ENV; echo "ARGS=$ARGS" >> $GITHUB_ENV
+          ls -la "$JAR"
+      - name: Boot test cu motor validat
+        working-directory: run
+        run: |
+          echo "eula=true" > eula.txt
+          printf 'online-mode=false\nview-distance=4\nsimulation-distance=4\nmax-players=40\n' > server.properties
+          cd $(dirname "$JAR"); mkdir -p mods; cp -f $OLDPWD/../run/mods/*.jar mods/ 2>/dev/null || true
+          if [ -n "$ARGS" ]; then timeout 900 /tmp/j11/bin/java @$(basename "$ARGS") nogui > $GITHUB_WORKSPACE/boot.log 2>&1 || true; else timeout 900 /tmp/j11/bin/java -Xms1G -Xmx2800M -jar "$(basename "$JAR")" nogui > $GITHUB_WORKSPACE/boot.log 2>&1 || true; fi
+          echo "== REZULTAT =="
+          if grep -q "Done (" $GITHUB_WORKSPACE/boot.log; then
+            grep -oE "Done \([0-9.]+s\)!" $GITHUB_WORKSPACE/boot.log | tail -1
+            echo "BOOT: REUSIT - modpackul + motorul validat merge"
+          else
+            echo "BOOT: ESUAT"; grep -aE "requires|not installed|FATAL|Exception|Unsupported class" $GITHUB_WORKSPACE/boot.log | head -20; exit 1
+          fi
       - name: Boot test
         working-directory: run
         run: |
@@ -87,7 +105,7 @@ jobs:
           git config user.email bot@arena.local && git config user.name "pack-test"
           git checkout -q "$GITHUB_SHA" && git checkout -q -B packdiag
           mkdir -p diag && sed 's/\x1b\[[0-9;]*m//g' run/boot.log | grep -E "Done \(|requires|not installed|FATAL|Exception|modlist|Starting|forge" | tail -60 > diag/boot-summary.txt
-          tail -c 600000 run/boot.log > diag/boot-tail.log
+          tail -c 600000 $GITHUB_WORKSPACE/boot.log > diag/boot-tail.log
           echo "mods: $(ls run/mods | wc -l)" >> diag/boot-summary.txt
           git add -f diag && git commit -qm "diag pack-test $GITHUB_RUN_NUMBER" && git push -qf "https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY" packdiag
         env:
