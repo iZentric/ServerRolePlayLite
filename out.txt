@@ -1,17 +1,5 @@
-Sat Oct 17 20:14:34 UTC 2026
-== SERVEO (zero cont) ==
-Pseudo-terminal will not be allocated because stdin is not a terminal.
-Warning: Permanently added 'serveo.net,37.27.37.254' (RSA) to the list of known hosts.
-Warning: remote port forwarding failed for listen port 25565
-[31mFree public TCP uses a random port. Request port 0 instead (ssh -R 0:localhost:PORT serveo.net), or upgrade to choose a stable port: https://console.serveo.net/settings
-[0mConnection to serveo.net closed by remote host.
-serveo mort - PLAYITD standalone:
-1.0.10
-`playit start` can only start the installed service when run with --systemd or --openrc.
-
-If you are managing playitd yourself, start it in the background and connect with --socket-path:
-  playitd --socket-path=./playit.sock --secret-path=./playit.toml
-  playit --socket-path=./playit.sock
-== MC ==
-PORT 25565: DESCHIS
+Sat Oct 17 20:17:26 UTC 2026
+ADRESA: NEMERS
+[32mForwarding TCP connections from serveousercontent.com:8656
+MC local: DESCHIS
 exit=0
