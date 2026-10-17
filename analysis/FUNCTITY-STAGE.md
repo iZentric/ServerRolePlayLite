@@ -3,11 +3,11 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-17 00:36:18 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-17 00:40:38 UTC — gazda → artefact → relay
 
 ```
 mod automat din marker: test port=25566 jar=b1.0827
-== FUNCTITY TEST (boot->stop->reboot->persistenta) — 2026-10-17 00:31:53 UTC ==
+== FUNCTITY TEST (boot->stop->reboot->persistenta) — 2026-10-17 00:36:14 UTC ==
   server-port sincronizat cu markerul: 25566 | motd: FunCity RP Lite
   voicechat: serverconfig/voicechat-server.toml -> port=24455
 --- PROBA 1: boot (include instalarea bibliotecilor Mohist daca lips) ---
