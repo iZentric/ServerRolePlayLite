@@ -49,10 +49,10 @@ jobs:
               if command -v oci >/dev/null; then
                 oci setup repair-file-permission --file $D/config >/dev/null 2>&1
                 oci setup repair-file-permission --file $D/oci_api_key.pem >/dev/null 2>&1
-                echo "--- CLI environment get ---"
-                oci --auth api_key --config-file $D/config cloud-shell get 2>&1 | head -25
-                echo "--- CLI raw create-session (dry: list endpoints) ---"
-                oci --auth api_key --config-file $D/config cloud-shell session list 2>&1 | head -12
+                echo "--- CLI auth test (os ns get) ---"
+                oci os ns get --auth api_key --config-file $D/config 2>&1 | head -8
+                echo "--- CLI raw identity ---"
+                oci iam region list --auth api_key --config-file $D/config 2>&1 | head -6
               else
                 echo "pip oci-cli esuat pe hosted"
               fi
