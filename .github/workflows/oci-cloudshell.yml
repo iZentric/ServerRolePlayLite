@@ -1,0 +1,65 @@
+name: OCI-CLOUD-SHELL
+# r2: semnatura SDK official + policy cloud-shell aplicata
+# VERDICT 2026-10-17: Oracle nu are API public pt Cloud Shell (nu-i in CLI/SDK/docs).# (v6: request-target cu methoda MINUSCULA — cauza 401) Buton + ceas la 4 zile.
+on:
+  workflow_dispatch:
+    inputs:
+      actiune:
+        description: "keep (pune sesiune) | status (doar verific)"
+        required: false
+        default: "keep"
+  push:
+    paths: [ .github/workflows/oci-cloudshell.yml, scripts/oci-cloudshell.py ]
+
+permissions:
+  contents: write
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      OCI_USER: ${{ secrets.OCI_USER }}
+      OCI_TENANCY: ${{ secrets.OCI_TENANCY }}
+      OCI_REGION: ${{ secrets.OCI_REGION }}
+      OCI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
+      OCI_PRIVATE_KEY: ${{ secrets.OCI_PRIVATE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: config + keepalive
+        run: |
+          set +e
+          D=$HOME/.oci; mkdir -p $D; chmod 700 $D
+          printf '%s\n' "$OCI_PRIVATE_KEY" > $D/oci_api_key.pem
+          [ -s $D/oci_api_key.pem ] || { echo "FARA CHEIE (secretul OCI_PRIVATE_KEY e gol?)"; exit 0; }
+          chmod 600 $D/oci_api_key.pem
+          FP=$(openssl rsa -in $D/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl md5 -r | awk '{print $1}' | sed 's/../&:/g;s/:$//')
+          FPG="$OCI_FINGERPRINT"
+          [ "${FPG//:/}" != "${FP//:/}" ] && echo "ATTENTIE: secretul OCI_FINGERPRINT difera de cheia reala; folosoc calculat: $FP" || echo "fingerprint secret = real, OK"
+          trim() { printf "%s" "$1" | tr -d " \r\n"; }
+          CFP=$(openssl rsa -in $D/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl md5 -r | awk "{print \$1}" | sed "s/../&:/g;s/:$//")
+          { echo "[DEFAULT]"; echo "user=$(trim "$OCI_USER")"; echo "tenancy=$(trim "$OCI_TENANCY")"; echo "region=$(trim "$OCI_REGION")"; echo "fingerprint=$CFP"; echo "key_file=$D/oci_api_key.pem"; } > $D/config
+          chmod 600 $D/config $D/oci_api_key.pem
+          ACT="${{ inputs.actiune }}"
+          [ -z "$ACT" ] && ACT=keep
+          {
+            echo "# CLOUD-SHELL $(date -u '+%F %T UTC') — actiune: $ACT"
+            echo "key: $(wc -c < $D/oci_api_key.pem) bytes | fp: $FP | region: $OCI_REGION"
+            if [ "$ACT" = "cli" ] || [ "$ACT" = "keep" ]; then
+              pip install -q oci oci-cli >/dev/null 2>&1
+              if command -v oci >/dev/null; then
+                oci setup repair-file-permission --file $D/config >/dev/null 2>&1
+                oci setup repair-file-permission --file $D/oci_api_key.pem >/dev/null 2>&1
+                echo "CLI:"; oci os ns get --auth api_key --config-file $D/config 2>&1 | tail -3
+                export OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING=True
+                oci os ns get --auth api_key --config-file $D/config --debug 2>&1 | grep -v -i "password\|private" | tail -30
+              else
+                echo "pip oci-cli esuat pe hosted"
+              fi
+            fi
+            if [ "$ACT" = "keep" ]; then echo "--- python keepalive ---"; python3 scripts/oci-cloudshell.py keep; fi
+          } > analysis/CLOUD-SHELL.md 2>&1
+          cat analysis/CLOUD-SHELL.md
+          git add -f analysis/CLOUD-SHELL.md
+          git config user.name cs-bot; git config user.email cs@functity.local
+          git commit -qm "cloud shell: $ACT"
+          for i in 1 2 3; do git pull -q --no-rebase -X ours origin "${GITHUB_REF_NAME}" 2>/dev/null; git push -q origin HEAD:"${GITHUB_REF_NAME}" && break; sleep 3; done
