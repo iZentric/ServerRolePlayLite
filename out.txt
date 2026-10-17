@@ -1,15 +1,5 @@
-Sat Oct 17 15:09:23 UTC 2026
-=== 1. opresc java bolnav ===
-oprit
-=== 2. Java 11 ===
-openjdk version "11.0.32.1" 2026-08-18
-=== 3. pornesc serverul (lumea existenta, neatinsa) ===
-Done (4.592s)!
-=== 4. tunel nou ===
-cmd.sh: line 18: 30491 Terminated              pkill -f cloudflared 2> /dev/null
-=== memorie/fișier ===
-387
-              total        used        free      shared  buff/cache   available
-Mem:          11884        5268        2546          54        4069        4826
+Sat Oct 17 15:11:20 UTC 2026
+server: VIU
 exit=0
+=== ADRESA PUBLICA ===
 exit=0
