@@ -37,7 +37,7 @@ jobs:
                       buf+=c
               except Exception: pass
               i=buf.find(b'{'); j=buf.rfind(b'}')
-              if i<0 or j<0: raise Exception('fara JSON, primi %d bytes' % len(buf))
+              if i<0 or j<0: raise Exception('fara JSON %dB: %s' % (len(buf), repr(buf[:72])))
               d=json.loads(buf[i:j+1])
               line='EXTERIOR: JUCABIL | %s | online %s/%s' % (d.get('version',{}).get('name'), d.get('players',{}).get('online'), d.get('players',{}).get('max'))
               print(line)
