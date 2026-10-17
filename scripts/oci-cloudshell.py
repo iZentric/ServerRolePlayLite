@@ -32,8 +32,7 @@ def call(method, c, path, body=None):
         import oci, requests
         from oci.signer import Signer
         import oci.request as OQ
-        cc = oci.config.from_file(os.path.expanduser("~/.oci/config"))
-        signer = Signer(cc)
+        signer = Signer.from_config_file(os.path.expanduser("~/.oci/config"))
         q = OQ.Request(method, f"https://{host}{path}", None,
                        {"Content-Type": "application/json", "Accept": "application/json"},
                        json.dumps(body) if body is not None else None)
