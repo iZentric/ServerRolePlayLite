@@ -951,6 +951,48 @@ EO
     echo OK
     ;;
 
+  ocigen)
+    # paznicul Oracle: boxa isi genera cheie; cheia OCI a userului va veni CRIPATA (deploy/oci.blob)
+    D=$HOME/.oci; mkdir -p "$D" 2>/dev/null; chmod 700 "$D"
+    if [ ! -f "$D/keep.key" ]; then ssh-keygen -t rsa -b 3072 -m PEM -N "" -C "functity-keep" -f "$D/keep.key" -q 2>/dev/null; fi
+    say "== OCIGEN: cheia publica a boxei (criptez cu ea cheia OCI) =="
+    if [ -s "$D/keep.key" ]; then
+      openssl rsa -in "$D/keep.key" -pubout 2>/dev/null | tee "$D/keep.pub"
+      say "  (cheie OK, amprenta private: $(sha256sum "$D/keep.key" | cut -c1-12))"
+      echo OK
+    else
+      say "  ESUAC: ssh-keygen/openssl indisponibile pe boxa"; exit 1
+    fi
+    ;;
+  ociset)
+    # decriptez deploy/oci.blob cu cheia boxei si instalez configul OCI + ceasul de keepalive
+    B=deploy/oci.blob; D=$HOME/.oci
+    [ -f "$B" ] || { say "lipsa deploy/oci.blob"; exit 1; }
+    [ -f "$D/keep.key" ] || { say "ruleaza intai ocigen"; exit 1; }
+    K=$(awk '/^==RSA==/{f=1;next}/^==END==/{f=0}f' "$B" | tr -d '\n ')
+    E=$(awk '/^==AES==/{f=1;next}/^==RSA==/{f=0}f' "$B" | tr -d ' \n')
+    say "== OCISET: decriptez si instalez paznicul =="
+    rm -rf /tmp/ociset; mkdir -p /tmp/ociset
+    printf '%s' "$K" | openssl pkeyutl -decrypt -inkey "$D/keep.key" -pkeyopt rsa_padding:oaep 2>/dev/null > /tmp/ociset/ka || { say "  esuat: decrypt key (cheie gresita pe boxa?)"; exit 1; }
+    IV=$(cut -d: -f1 /tmp/ociset/ka); KEYS=$(cut -d: -f2 /tmp/ociset/ka); rm -f /tmp/ociset/ka
+    printf '%s' "$E" | openssl base64 -d 2>/dev/null | openssl enc -d -aes-256-cbc -K "$KEYS" -iv "$IV" 2>/dev/null > /tmp/ociset/k.tgz || { say "  esuat: decriptare blob"; exit 1; }
+    tar xzf /tmp/ociset/k.tgz -C /tmp/ociset || { say "  esuat: tar"; exit 1; }
+    install -m 600 /tmp/ociset/key.pem "$D/oci_api_key.pem"
+    FP=$(openssl rsa -in "$D/oci_api_key.pem" -pubout -outform DER 2>/dev/null | openssl sha1 | awk '{print $2}' | sed 's/../&:/g;s/:$//')
+    { echo "[DEFAULT]"; echo "user=$(cat /tmp/ociset/user)"; echo "tenancy=$(cat /tmp/ociset/tenancy)"; echo "region=$(cat /tmp/ociset/region)"; echo "fingerprint=$FP"; echo "key_file=$D/oci_api_key.pem"; } > "$D/config"
+    rm -rf /tmp/ociset
+    cp "$(dirname "$0")/../scripts/oci-cloudshell.py" "$D/oci-cloudshell.py" 2>/dev/null || cp "$HOME/functity/repo/scripts/oci-cloudshell.py" "$D/" 2>/dev/null || true
+    chmod +x "$D/oci-cloudshell.py" 2>/dev/null
+    say "  config: $D/config (fp $FP)"
+    say "  test live pe Oracle API:"
+    ( cd "$D" && python3 oci-cloudshell.py keep ) 2>&1 | sed 's/^/    /' | tee -a "$REPORT"
+    # ceasul: o data la 2 zile la ora 05:10 + la pornirea sistemului (dupa 10 min boot grace)
+    CR="10 5 */2 * * cd $D && python3 $D/oci-cloudshell.py keep >> $D/keep.log 2>&1"
+    ( crontab -l 2>/dev/null | grep -v "oci-cloudshell" ; echo "$CR" ) | crontab - 2>/dev/null
+    say "  crontab: $(crontab -l 2>/dev/null | grep -c oci-cloudshell) linia(e) instalate"
+    echo OK
+    ;;
+
   *)
     echo "folosire: $0 host-info|backup|assemble|test|status|up|down"; exit 2;;
 esac
