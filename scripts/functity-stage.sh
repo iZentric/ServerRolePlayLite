@@ -676,7 +676,7 @@ X
     say "    keep-up in $N fisiere rotative: $KUC"
   else say "    (fara arhiva veche in \$P/logs — logurile cuantic nu au supravietuit reinstall-ului)"; fi
   say "— ACUM:"
-  PID=$(pgrep -f "java.*cuantic" | head -1)
+  PID=$(pgrep -f "java @unix_args" | head -1); [ -n "$PID" ] || PID=$(pgrep -f "[j]ava.*nogui" | head -1)
   say "    java RSS: $( [ -n "$PID" ] && awk '/VmRSS/{printf "%.0f MiB",$2/1024}' /proc/$PID/status 2>/dev/null || echo indisponibil )"
   say "    RAM libera OS: $(free -m 2>/dev/null | awk '/Mem:/{print $7" MiB din "$2}')"
   say "    disc liber: $(df -m "$HOME" | tail -1 | awk '{print $4" MiB"}') | lume: $(du -sm "$P/world" 2>/dev/null | cut -f1) MiB"
