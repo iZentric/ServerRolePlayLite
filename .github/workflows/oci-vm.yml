@@ -19,6 +19,7 @@ jobs:
       GT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - name: OCI stack + VM ARM + server
         shell: bash
         run: |
@@ -133,11 +134,18 @@ jobs:
       - name: Report pe packdiag
         if: always()
         run: |
-          git config user.email b@b && git config user.name vm
-          true
-          git fetch -q origin +refs/heads/packdiag:refs/remotes/origin/packdiag 2>/dev/null
-          git checkout -q -B packdiag "origin/packdiag" 2>/dev/null || git checkout -q --orphan packdiag
-          mkdir -p diag
-          { echo "=== $(date -u) run $GITHUB_RUN_NUMBER ==="; cat /tmp/trace.txt 2>/dev/null | tail -30; echo "IP:"; cat /tmp/ip.txt 2>/dev/null; } > diag/oci-run.txt
-          git add -f diag && (git commit -qm "oci vm $GITHUB_RUN_NUMBER" || git commit -q --allow-empty -m "oci vm $GITHUB_RUN_NUMBER")
-          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" packdiag || true
+          { echo "=== run $GITHUB_RUN_ID $(date -u) ==="; tail -35 /tmp/trace.txt 2>/dev/null; echo "IP:"; cat /tmp/ip.txt 2>/dev/null; } > /tmp/rep.txt
+          python3 - <<PYEOF
+          import json,base64,urllib.request,os
+          tok=os.environ.get("GT")
+          body={"message":"oci trace run ${{ github.run_number }}","content":base64.b64encode(open("/tmp/rep.txt","rb").read()).decode()}
+          import subprocess
+          cur=subprocess.run(["curl","-s","-H",f"Authorization: bearer {tok}",f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/contents/diag/oci-run.txt?ref=${{ github.ref_name }}"],capture_output=True,text=True).stdout
+          try: body["sha"]=json.loads(cur)["sha"]
+          except Exception: pass
+          req=urllib.request.Request(f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/contents/diag/oci-run.txt",
+            data=json.dumps({**body,"branch":"${{ github.ref_name }}"}).encode(),
+            headers={"Authorization":f"bearer {tok}","Accept":"application/vnd.github+json","User-Agent":"vm"},method="PUT")
+          r=urllib.request.urlopen(req,timeout=30)
+          print("report commit:",r.status)
+          PYEOF
