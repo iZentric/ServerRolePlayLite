@@ -1,13 +1,15 @@
 export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
-echo "== SERVER mods =="; ls ~/cuantic-live/mods/ | head -40; echo "TOTAL: $(ls ~/cuantic-live/mods/*.jar 2>/dev/null | wc -l)"
-echo "== plugins =="; ls ~/cuantic-live/plugins/ 2>/dev/null | head -12
-echo "== CLIENT suspecti din index =="
+cd /tmp
+curl -sfLo fc11.mrpack "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.1.0.mrpack" && echo "desc: $(stat -c%s fc11.mrpack)B"
 python3 - <<'PY'
 import json, zipfile
-z = zipfile.ZipFile("/tmp/fc.mrpack")
+z = zipfile.ZipFile("/tmp/fc11.mrpack")
 d = json.load(z.open("modrinth.index.json"))
-all_names = [e.get("filename") or (e.get("downloads") or ["?"])[0].rsplit("/",1)[-1] for e in d.get("files", [])]
-all_names += [n.split("/")[-1] for n in z.namelist() if n.startswith("overrides/mods/")]
-print("client total:", len(all_names))
-for n in all_names: print(" *", n)
+names = [e.get("filename") or (e.get("downloads") or ["?"])[0].rsplit("/",1)[-1] for e in d.get("files", [])]
+names += [n.split("/")[-1] for n in z.namelist() if n.endswith(".jar")]
+print("TOTAL CLIENT 1.1.0:", len(names))
+bad = [n for n in names if any(k in n.lower() for k in ["dynamic","surround","ctm-mc","notenough","transliter","lightfall","accountswitch"])]
+print("GUNOI RAMAS:", bad if bad else "NICIUN ✔")
+content = [n for n in names if any(k in n.lower() for k in ["gun","vehicle","cfm","pamhc","pizzaland","modernlife","supp","mapperbase","obfuscate","voicechat"])]
+print("CONTENT PREZENT:", len(content), "bucate:", "; ".join(sorted(content)))
 PY
