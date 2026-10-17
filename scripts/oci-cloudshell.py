@@ -108,12 +108,19 @@ def main():
     sdk_probe()
     # sonday objectstorage: acelasi request pe care CLI l-a facut 200
     oshost = f"objectstorage.{c['region']}.oraclecloud.com"
-    osreq = urllib.request.Request(f"https://{oshost}/n", method="GET", headers=hdr("GET", "/n", oshost, c))
+    hh = hdr("GET", "/n", oshost, c)
+    print("[py headers trims] ", {k: (v[:24]+"...") if isinstance(v,str) else v for k,v in hh.items()})
+    osreq = urllib.request.Request(f"https://{oshost}/n", method="GET", headers=hh)
     try:
         with urllib.request.urlopen(osreq, timeout=25) as r:
             print(f"[py-objectstorage] {r.status} {r.read(80).decode()}  => SEMNATURA PY OK")
     except urllib.error.HTTPError as e:
         print(f"[py-objectstorage] {e.code} {e.read(150).decode()}")
+    # aceeasi semnatura prin curl, fara urllib
+    open("/tmp/auth.h","w").write("Authorization: " + hh["Authorization"] + "\n")
+    open("/tmp/date.h","w").write("Date: " + hh["Date"] + "\n")
+    r1 = subprocess.run(["curl","-s","-o","/tmp/os.out","-w","%{http_code}","-H","@/tmp/auth.h","-H","@/tmp/date.h",f"https://{oshost}/n"],capture_output=True)
+    print("[curl-objectstorage]", r1.stdout.decode(), open("/tmp/os.out").read(100).decode() if False else open("/tmp/os.out","rb").read(100))
     tried, home = home_region(c)
     print(f"[auth] identity raspunde prin {tried}; HOME region: {home or 'NEDESCIFRAT (vezi HTTP mai sus)'}")
     if home and home != c.get("region"):
