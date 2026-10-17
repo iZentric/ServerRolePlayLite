@@ -64,8 +64,26 @@ def sdk_probe():
         import oci
     except ImportError:
         print("[SDK] oci nelansat (pip a esuat pe hosted)"); return False
+    c = cfg()
+    for k in ("user","tenancy","fingerprint","region","key_file"):
+        v = c.get(k,"")
+        print(f"[raw {k}] len={len(v)} repr={v[:3]!r}..{v[-3:]!r}")
+    # scriem config curat, valorile taiate de orice caracter invizibil
+    import re as _re
+    clean = {}
+    for k in ("user","tenancy","fingerprint","region","key_file"):
+        v = c.get(k,"")
+        if k == "fingerprint": v = _re.sub(r'[^0-9a-fA-F:]', '', v).lower()
+        elif k == "key_file": v = v.strip()
+        else: v = _re.sub(r'[^a-zA-Z0-9._]', '', v)
+        clean[k] = v
+    with open(os.path.expanduser("~/.oci/config2"), "w") as f:
+        f.write("[DEFAULT]\n" + "\n".join(f"{k}={v}" for k, v in clean.items()) + "\n")
+    print(f"[fp curat] {clean['fingerprint']}")
     try:
-        ic = oci.identity.IdentityClient({k: v for k, v in cfg().items() if k in ("user","tenancy","fingerprint","key_file","region")})
+        cc = oci.config.from_file(os.path.expanduser("~/.oci/config2"))
+        oci.config.validate_config(cc)
+        ic = oci.identity.IdentityClient(cc)
         r = ic.list_regions()
         print(f"[SDK] OK, home region: {r.data[0].name}")
         return True
