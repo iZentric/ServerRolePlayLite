@@ -11,14 +11,14 @@ def cfg():
     return c
 def hdr(method, path, host, c, body=None):
     date = datetime.datetime.now(datetime.timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
-    sign = f'"(request-target)": {method.lower()} {path}\nhost: {host}\ndate: {date}'
+    sign = f'date: {date}\n"(request-target)": {method.lower()} {path}\nhost: {host}'
     sig = subprocess.run(["openssl","dgst","-sha256","-sign",c["key_file"]],
                          input=sign.encode(), capture_output=True)
     if sig.returncode != 0:
         raise RuntimeError("sign: " + sig.stderr.decode()[:150])
     b64 = subprocess.run(["openssl","base64","-A"], input=sig.stdout, capture_output=True).stdout.decode()
     keyid = f'{c.get("tenancy","")}/{c["user"]}/{c["fingerprint"]}'
-    auth = (f'Signature algorithm="rsa-sha256",headers="(request-target) host date",'
+    auth = (f'Signature algorithm="rsa-sha256",headers="date (request-target) host",'
             f'keyId="{keyid}",signature="{b64}",version="1"')
     h = {"Date": date, "Accept": "application/json", "Content-Type": "application/json",
          "Authorization": auth}
@@ -106,6 +106,14 @@ def sdk_probe():
 def main():
     c = cfg(); mode = sys.argv[1] if len(sys.argv) > 1 else "keep"
     sdk_probe()
+    # sonday objectstorage: acelasi request pe care CLI l-a facut 200
+    oshost = f"objectstorage.{c['region']}.oraclecloud.com"
+    osreq = urllib.request.Request(f"https://{oshost}/n", method="GET", headers=hdr("GET", "/n", oshost, c))
+    try:
+        with urllib.request.urlopen(osreq, timeout=25) as r:
+            print(f"[py-objectstorage] {r.status} {r.read(80).decode()}  => SEMNATURA PY OK")
+    except urllib.error.HTTPError as e:
+        print(f"[py-objectstorage] {e.code} {e.read(150).decode()}")
     tried, home = home_region(c)
     print(f"[auth] identity raspunde prin {tried}; HOME region: {home or 'NEDESCIFRAT (vezi HTTP mai sus)'}")
     if home and home != c.get("region"):
