@@ -1,9 +1,16 @@
-Sat Oct 17 20:35:13 UTC 2026
-== test VPS vechi cu keep.key ==
-oracle: Warning: Permanently added '92.5.171.150' (ECDSA) to the list of known hosts. oracle@92.5.171.150: Permission denied (publickey). 
-ubuntu: ubuntu@92.5.171.150: Permission denied (publickey). 
-opc: opc@92.5.171.150: Permission denied (publickey). 
-root: root@92.5.171.150: Permission denied (publickey). 
-centos: centos@92.5.171.150: Permission denied (publickey). 
-ping: niciun raspuns (gazda moarta/filtrata)
+Sat Oct 17 20:36:22 UTC 2026
+== cheia noastra ==
+3072 SHA256:afu71a2ynUNugKCI5l64k+IGESiN4DxVI2TYgj7h4O8 functity-keep (RSA)
+3072 SHA256:afu71a2ynUNugKCI5l64k+IGESiN4DxVI2TYgj7h4O8 functity-keep (RSA)
+== alte chei pe masina ==
+total 16
+drwx------.  2 mndvasi9 oci   67 Oct  9 16:49 .
+drwxr-xr-x. 24 mndvasi9 oci 4096 Oct 17 20:25 ..
+-rw-------.  1 mndvasi9 oci 2602 Oct  9 12:27 cuantic_oci
+-rw-r--r--.  1 mndvasi9 oci  568 Oct  9 12:27 cuantic_oci.pub
+-rw-r--r--.  1 mndvasi9 oci 1167 Oct 17 20:35 known_hosts
+== sshd deschis = gazda viva, mai incerc useri ==
+(niciun user)
+== port 22 verificat ==
+22: DESCHIS (ssd viu)
 exit=0
