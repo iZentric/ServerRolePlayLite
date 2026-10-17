@@ -1,13 +1,28 @@
 name: runner-probe
-on:
-  workflow_dispatch:
+on: workflow_dispatch
+permissions:
+  contents: write
 jobs:
   probe:
     runs-on: [ self-hosted ]
     steps:
-      - run: |
-          echo "HOST=$(hostname)"
-          echo "OS=$(uname -sm)"
-          echo "USER=$(whoami)"
-          echo "HOME=$HOME"
-          echo "LABELS-OK"
+      - uses: actions/checkout@v4
+      - name: cine e runnerul
+        run: |
+          {
+            echo "# RUNNER-PROBE $(date -u '+%F %T UTC')"
+            echo "host: $(hostname)"
+            echo "os:   $(uname -sm)"
+            echo "user: $(whoami)"
+            echo "home: $HOME"
+            echo "cpu:  $(grep -m1 'model name' /proc/cpuinfo 2>/dev/null | cut -d: -f2- | sed 's/^ //' || echo n/a)"
+            echo "nproc: $(nproc 2>/dev/null || echo n/a)"
+            free -h 2>/dev/null | awk 'NR==2{print "ram:  "$2" total, "$7" liber"}'
+            df -h "$HOME" 2>/dev/null | tail -1 | awk '{print "disc: "$4" liberi din "$2}'
+            command -v java >/dev/null && java -version 2>&1 | head -1 | sed 's/^/java: /'
+            echo "functity-box: $([ -d $HOME/functity ] && echo DA || echo NU)"
+          } > analysis/RUNNER-PROBE.md
+          git config user.name "runner-probe" && git config user.email "probe@functity.local"
+          git add analysis/RUNNER-PROBE.md
+          git commit -qm "runner-probe: $(hostname)" 
+          for i in 1 2 3; do git pull -q --no-rebase -X ours origin "${GITHUB_REF_NAME}" 2>/dev/null; git push -q origin HEAD:"${GITHUB_REF_NAME}" && break; sleep 4; done
