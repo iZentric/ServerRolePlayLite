@@ -58,4 +58,4 @@ jobs:
           mkdir -p diag
           { echo "== run $GITHUB_RUN_ID $(date -u) =="; cat /tmp/oc/env.txt; echo "-- step2:"; cat /tmp/oc/out2.txt 2>/dev/null; } > diag/oci-run.txt
           git add -f diag && git commit -qm "oci trace $GITHUB_RUN_ID" --allow-empty
-          git push -qf origin packdiag:packdiag && echo IMPINS || echo IMPINS-ESUAT
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" packdiag:packdiag && echo IMPINS || echo IMPINS-ESUAT
