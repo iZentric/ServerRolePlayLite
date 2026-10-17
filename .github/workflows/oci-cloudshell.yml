@@ -33,11 +33,9 @@ jobs:
           printf '%s\n' "$OCI_PRIVATE_KEY" > $D/oci_api_key.pem
           [ -s $D/oci_api_key.pem ] || { echo "FARA CHEIE (secretul OCI_PRIVATE_KEY e gol?)"; exit 0; }
           chmod 600 $D/oci_api_key.pem
-          FP="$OCI_FINGERPRINT"
-          if [ -z "$FP" ] || [ "${#FP}" -lt 20 ]; then
-            FP=$(openssl rsa -in $D/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl sha1 | awk '{print $2}' | sed 's/../&:/g;s/:$//')
-            echo "fingerprint calculat: $FP"
-          fi
+          FP=$(openssl rsa -in $D/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl sha1 -r | awk '{print $1}' | sed 's/../&:/g;s/:$//')
+          FPG="$OCI_FINGERPRINT"
+          [ "${FPG//:/}" != "${FP//:/}" ] && echo "ATTENTIE: secretul OCI_FINGERPRINT difera de cheia reala; folosoc calculat: $FP" || echo "fingerprint secret = real, OK"
           { echo "[DEFAULT]"; echo "user=$OCI_USER"; echo "tenancy=$OCI_TENANCY"; echo "region=$OCI_REGION"; echo "fingerprint=$FP"; echo "key_file=$D/oci_api_key.pem"; } > $D/config
           ACT="${{ inputs.actiune }}"
           [ -z "$ACT" ] && ACT=keep
