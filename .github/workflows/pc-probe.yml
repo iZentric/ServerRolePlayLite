@@ -5,6 +5,8 @@ on:
       - .github/workflows/pc-probe.yml
 jobs:
   probe:
+    permissions:
+      contents: write
     timeout-minutes: 3
     runs-on: [self-hosted, Windows]
     env:
