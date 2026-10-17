@@ -27,20 +27,27 @@ def hdr(method, path, host, c, body=None):
         h["x-content-sha256"] = base64.b64encode(hashlib.sha256(body.encode()).digest()).decode()
     return h
 def call(method, c, path, body=None):
-    host = f"cloudshell.{c['region']}.oci.oraclecloud.com"
-    try:
-        import oci, requests
-        from oci.signer import Signer
-        import oci.request as OQ
-        signer = Signer.from_config_file(os.path.expanduser("~/.oci/config"))
-        q = OQ.Request(method, f"https://{host}{path}", None,
-                       {"Content-Type": "application/json", "Accept": "application/json"},
-                       json.dumps(body) if body is not None else None)
-        signer.sign(q)
-        r = requests.request(method, q.url, headers=q.headers, data=q.body, timeout=60)
-        return r.status_code, r.text
-    except Exception as e:
-        print(f"[sdk-call esuat: {type(e).__name__} {str(e)[:100]}] -> fallback manual")
+    hosts = [f"cloudshell.{c['region']}.oci.oraclecloud.com", f"cloudshell.{c['region']}.oraclecloud.com", f"api.{c['region']}.cloudshell.oci.oraclecloud.com"]
+    import oci, requests
+    import oci.request as OQ
+    cc = oci.config.from_file(os.path.expanduser("~/.oci/config"))
+    tmp = oci.object_storage.ObjectStorageClient(cc)
+    signer = getattr(tmp, "_client", tmp).__dict__.get("_signer") or tmp._client._signer
+    for h in hosts:
+        try:
+            q = OQ.Request(method, f"https://{h}{path}", None,
+                           {"Content-Type": "application/json", "Accept": "application/json"},
+                           json.dumps(body) if body is not None else None)
+            signer.sign(q)
+            r = requests.request(method, q.url, headers=q.headers, data=q.body, timeout=60)
+            print(f"[{h}] -> {r.status_code}")
+            if r.status_code != 404:
+                return r.status_code, r.text
+            last = (r.status_code, r.text)
+        except Exception as e:
+            print(f"[{h}] ERR {type(e).__name__} {str(e)[:80]}")
+            last = (0, str(e))
+    return last
     req = urllib.request.Request(f"https://{host}{path}", method=method,
                                  headers=hdr(method, path, host, c, body),
                                  data=json.dumps(body).encode() if body is not None else None)
