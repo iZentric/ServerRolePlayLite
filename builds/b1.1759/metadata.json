@@ -1,0 +1,29 @@
+{
+ "produs": "FunCity — motor propriu pe baza Mohist 1.16.5",
+ "build": "b1.1759",
+ "baza_upstream": {
+  "repo": "MohistMC/Mohist",
+  "branch": "1.16.5",
+  "commit": "754b578ef3e4881d854bcd1df5d299ada3fd429f",
+  "licenta": "GPL-3.0 (baza); derivatele publicate raman sub licencia proiectului"
+ },
+ "buildfix_aplicate": [
+  "P0b: ForgeGradle 6.0.16 pin",
+  "P0c/P0d: reparații pipeline (functity/buildfix)"
+ ],
+ "patchuri_proprii": [
+  {
+   "fisier": "0001-dropper-insert-null-guard.patch",
+   "sha256": "97bf32b4cc8ab977"
+  }
+ ],
+ "patchuri_respinse": "",
+ "jar": "FunCity-1.16.5-b1.1759.jar",
+ "jar_sha256": "0a0ea3e7661340670013407fadf0f5097936e9e378ed9da8399cc7500e4cee19",
+ "jar_marime_b": "8704330",
+ "semnatura_manifest": "MOHIST (ServerLaunchArgs prezent)",
+ "gradle_exit": "gradle exit: 0",
+ "data_utc": "2026-10-17 18:05:57",
+ "masina_build": "ubuntu-24.04 hosted (GitHub runner)",
+ "java": "openjdk version \"11.0.32.1\" 2026-08-18"
+}
