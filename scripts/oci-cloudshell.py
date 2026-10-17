@@ -11,7 +11,7 @@ def cfg():
     return c
 def hdr(method, path, host, c, body=None):
     date = datetime.datetime.now(datetime.timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
-    sign = f'"(request-target)": {method} {path}\nhost: {host}\ndate: {date}'
+    sign = f'"(request-target)": {method.lower()} {path}\nhost: {host}\ndate: {date}'
     sig = subprocess.run(["openssl","dgst","-sha256","-sign",c["key_file"]],
                          input=sign.encode(), capture_output=True)
     if sig.returncode != 0:
