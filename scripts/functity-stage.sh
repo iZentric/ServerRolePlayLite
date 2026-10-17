@@ -654,6 +654,35 @@ X
   say "  brut:"; cat "$B"/bench/*.tsv 2>/dev/null | sed 's/^/    /' | tee -a "$REPORT"
   finish 0
   ;;
+  stats) # numere reale din logurile de productie: acelasi hardware, doua ere
+  say "== FUNCITY REAL-STATS — productia insasi ca benchmark =="
+  CUT=1760644380
+  say "— ERA FUNCITY (de la instalare, loguri live):"
+  grep -hE "Done \([0-9.]+s\)!" "$P/logs/latest.log" 2>/dev/null | grep -oE "[0-9]+\.[0-9]+" > /tmp/bf.txt
+  awk '{s+=$1;n++; if($1>m)m=$1} END{if(n)printf "    boot: medie %.1fs, maxim %.1fs (n=%d)\n",s/n,m,n}' /tmp/bf.txt | tee -a "$REPORT"
+  say "    keep-up: $(grep -c "Can't keep up" "$P/logs/latest.log" 2>/dev/null) din $(wc -l < "$P/logs/latest.log" 2>/dev/null) linii"
+  say "    joinuri: $(grep -cE " joined the game|has joined" "$P/logs/latest.log" 2>/dev/null)"
+  say "— ERA CATSERVER (arhiva de dinaintea instalarii, aceeasi masina/lume):"
+  N=0; : > /tmp/bc.txt; KUC=0
+  for f in "$P"/logs/*.log.gz; do
+    [ -f "$f" ] || continue
+    M=$(stat -c %Y "$f" 2>/dev/null || echo 0); [ "$M" -lt "$CUT" ] || continue
+    zcat "$f" 2>/dev/null | grep -E "Done \([0-9.]+s\)!" | grep -oE "[0-9]+\.[0-9]+" >> /tmp/bc.txt
+    KUC=$((KUC+ $(zcat "$f" 2>/dev/null | grep -c "Can't keep up") )); N=$((N+1))
+    [ $N -ge 60 ] && break
+  done
+  if [ -s /tmp/bc.txt ]; then
+    awk '{s+=$1;n++} END{if(n)printf "    boot: medie %.1fs (n=%d)\n",s/n,n}' /tmp/bc.txt | tee -a "$REPORT"
+    say "    keep-up in $N fisiere rotative: $KUC"
+  else say "    (fara arhiva veche in \$P/logs — logurile cuantic nu au supravietuit reinstall-ului)"; fi
+  say "— ACUM:"
+  PID=$(pgrep -f "java.*cuantic" | head -1)
+  say "    java RSS: $( [ -n "$PID" ] && awk '/VmRSS/{printf "%.0f MiB",$2/1024}' /proc/$PID/status 2>/dev/null || echo indisponibil )"
+  say "    RAM libera OS: $(free -m 2>/dev/null | awk '/Mem:/{print $7" MiB din "$2}')"
+  say "    disc liber: $(df -m "$HOME" | tail -1 | awk '{print $4" MiB"}') | lume: $(du -sm "$P/world" 2>/dev/null | cut -f1) MiB"
+  say "    uptime server: $( [ -n "$PID" ] && ps -o etime= -p "$PID" 2>/dev/null | tr -d " " || echo SUS? )"
+  finish 0
+  ;;
   down)
     opreste_server || true
     # maturam orice JVM de staging ramas din cicluri anterioare (pid vechi suprasris)
