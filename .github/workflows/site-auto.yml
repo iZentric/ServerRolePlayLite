@@ -7,7 +7,7 @@ permissions:
   contents: write
 jobs:
   s:
-    runs-on: [ self-hosted ]
+    runs-on: [ self-hosted, Linux, ARM64 ]
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4

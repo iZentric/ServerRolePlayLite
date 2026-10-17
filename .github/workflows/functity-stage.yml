@@ -28,7 +28,7 @@ permissions:
   contents: write
 jobs:
   s:
-    runs-on: [ self-hosted ]
+    runs-on: [ self-hosted, Linux, ARM64 ]
     timeout-minutes: 28
     continue-on-error: true
     env:
