@@ -17,7 +17,6 @@ jobs:
         run: |
           set -e
           exec > >(tee /tmp/build.log) 2>&1
-          export GH_TOKEN="$GITHUB_TOKEN"
           gh --version >/dev/null
           B=$GITHUB_WORKSPACE/build
           mkdir -p "$B/server"
@@ -107,7 +106,6 @@ jobs:
       - name: Trimite logul pe branch
         if: always()
         run: |
-          export GH_TOKEN="$GITHUB_TOKEN"
           git config user.email b@b && git config user.name chk
           mkdir -p diag && cp /tmp/build.log diag/functity-build.log 2>/dev/null || echo "fara log" > diag/functity-build.log
           tail -3 diag/functity-build.log
