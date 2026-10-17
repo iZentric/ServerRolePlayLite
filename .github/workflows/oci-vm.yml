@@ -134,18 +134,5 @@ jobs:
       - name: Report pe packdiag
         if: always()
         run: |
-          { echo "=== run $GITHUB_RUN_ID $(date -u) ==="; tail -35 /tmp/trace.txt 2>/dev/null; echo "IP:"; cat /tmp/ip.txt 2>/dev/null; } > /tmp/rep.txt
-          python3 - <<PYEOF
-          import json,base64,urllib.request,os
-          tok=os.environ.get("GT")
-          body={"message":"oci trace run ${{ github.run_number }}","content":base64.b64encode(open("/tmp/rep.txt","rb").read()).decode()}
-          import subprocess
-          cur=subprocess.run(["curl","-s","-H",f"Authorization: bearer {tok}",f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/contents/diag/oci-run.txt?ref=${{ github.ref_name }}"],capture_output=True,text=True).stdout
-          try: body["sha"]=json.loads(cur)["sha"]
-          except Exception: pass
-          req=urllib.request.Request(f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/contents/diag/oci-run.txt",
-            data=json.dumps({**body,"branch":"${{ github.ref_name }}"}).encode(),
-            headers={"Authorization":f"bearer {tok}","Accept":"application/vnd.github+json","User-Agent":"vm"},method="PUT")
-          r=urllib.request.urlopen(req,timeout=30)
-          print("report commit:",r.status)
-          PYEOF
+          { echo "=== run $GITHUB_RUN_ID $(date -u) ==="; tail -30 /tmp/trace.txt; echo "IP:"; cat /tmp/ip.txt 2>/dev/null; } > /tmp/rep.txt || true
+          python3 .github/oci-report.py
