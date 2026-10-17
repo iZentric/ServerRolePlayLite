@@ -1,0 +1,138 @@
+name: PACK-TEST
+on:
+  workflow_dispatch:
+  push:
+    branches: ['arena/*']
+permissions:
+  contents: write
+jobs:
+  server-boot:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ia mrpack de la release
+        run: |
+          mkdir -p run && cd run
+          curl -sL -o pack.mrpack "https://github.com/${{ github.repository }}/releases/download/freeroam/Freeroam.1.0.0.zip"
+          ls -la pack.mrpack
+      - name: Java 11 (Temurin ARM)
+        run: |
+          wget -q "https://api.adoptium.net/v3/binary/latest/11/ga/linux/aarch64/jre/hotspot/normal/eclipse" -O /tmp/j11.tgz
+          mkdir -p /tmp/j11 && tar xzf /tmp/j11.tgz -C /tmp/j11 --strip-components=1
+          /tmp/j11/bin/java -version
+      - name: Instaureaza modurile din manifest (exact ce zice packul)
+        working-directory: run
+        run: |
+          python3 - <<'PY'
+          import json,os,zipfile,urllib.request
+          os.makedirs('mods',exist_ok=True)
+          z=zipfile.ZipFile('pack.mrpack')
+          idx=json.loads(z.read('modrinth.index.json'))
+          print('modpack:',idx.get('name'),idx.get('versionId'))
+          ok=fail=skip=0
+          import re
+          EXCL=re.compile(r'(sound|audio|music|physics|shader|zoom|dynamiclights|oculus|embeddium|memoryleak)',re.I)
+          for f in idx.get('files',[]):
+            env=f.get('env') or {}
+            if (env.get('server') or 'required')=='unsupported':
+              print('skip client-only:',f['path']); continue
+            if EXCL.search(f['path']):
+              print('skip usat-pc (lite):',f['path']); continue
+            dest=os.path.join('mods',f['path'])
+            os.makedirs(os.path.dirname(dest),exist_ok=True)
+            if os.path.exists(dest): skip+=1; continue
+            try:
+              d=urllib.request.urlopen(f['downloads'][0],timeout=90).read()
+              open(dest,'wb').write(d); ok+=1
+              print('OK',f['path'],len(d))
+            except Exception as e:
+              fail+=1; print('ESUAT',f['path'],str(e)[:80])
+          try:
+            for n in z.namelist():
+              if n.startswith('overrides/mods/'):
+                data=z.read(n)
+                if data[:2]==b'PK':
+                  fn=os.path.join('mods',n.split('/')[-1]); open(fn,'wb').write(data); ok+=1
+                  print('OVR',fn)
+          except Exception as e: print('override warn',e)
+          print(f'descarcate={ok} sarite={skip} esuate={fail}')
+          PY
+      - name: Jar server CatServer 1.16.5 (GitHub oficial)
+        working-directory: run
+        run: |
+          curl -sL -o server.jar "https://github.com/Luohuayu/CatServer/releases/download/23.05.26-1/CatServer-1.16.5-1d8d6313-server.jar"
+          ls -la server.jar
+          [ $(stat -c %s server.jar) -gt 1000000 ] && echo "jar ok"
+      - name: Boot test
+        working-directory: run
+        run: |
+          echo "eula=true" > eula.txt
+          printf 'online-mode=false\nview-distance=4\nsimulation-distance=4\nmax-players=40\nmotd=Freeroam test\n' > server.properties
+          timeout 900 /tmp/j11/bin/java -Xms1G -Xmx2800M -jar server.jar nogui > boot.log 2>&1 || true
+          echo "== REZULTAT =="
+          if grep -q "Done (" boot.log; then
+            grep -oE "Done \([0-9.]+s\)!" boot.log | tail -1
+            echo "BOOT: REUSIT - modpackul se incarca curat"
+          else
+            echo "BOOT: ESUAT - erori:"
+            grep -E "requires|not installed|FATAL|Exception" boot.log | head -20
+            exit 1
+          fi
+      - name: Trimite diagnosticul in repo (branch)
+        if: always()
+        run: |
+          git config user.email bot@arena.local && git config user.name "pack-test"
+          git checkout -q "$GITHUB_SHA" && git checkout -q -B packdiag
+          mkdir -p diag && sed 's/\x1b\[[0-9;]*m//g' run/boot.log | grep -E "Done \(|requires|not installed|FATAL|Exception|modlist|Starting|forge" | tail -60 > diag/boot-summary.txt
+          tail -c 600000 run/boot.log > diag/boot-tail.log
+          echo "mods: $(ls run/mods | wc -l)" >> diag/boot-summary.txt
+          git add -f diag && git commit -qm "diag pack-test $GITHUB_RUN_NUMBER" && git push -qf "https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY" packdiag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  client-pack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: server-boot
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construiesc pachet client gata de Prism + zip OLX
+        run: |
+          mkdir -p out && cd out
+          curl -sL -o Freeroam-1.0.0.mrpack "https://github.com/${{ github.repository }}/releases/download/freeroam/Freeroam.1.0.0.zip"
+          unzip -tq Freeroam-1.0.0.mrpack && echo "mrpack integru"
+          zip -q -j -FS Freeroam-1.0.0-client.zip Freeroam-1.0.0.mrpack || true
+          ls -la
+      - name: Taie modurile grele din mrpack (varianta Lite pentru PC-uri vechi)
+        run: |
+          python3 - <<'PY'
+          import json,os,re,zipfile,shutil
+          src='out/Freeroam-1.0.0.mrpack'; dst='out/Freeroam-1.0.0-lite.mrpack'
+          EXCL=re.compile(r'(sound|audio|music|physics|shader|zoom|dynamiclights|oculus|embeddium)',re.I)
+          zin=zipfile.ZipFile(src)
+          idx=json.loads(zin.read('modrinth.index.json'))
+          drop=[]
+          idx['files']=[f for f in idx['files'] if not (EXCL.search(f['path']) or (drop.append(f['path']) and False))]
+          idx['name']=idx.get('name','Freeroam')+' (Lite)'
+          zout=zipfile.ZipFile(dst,'w',zipfile.ZIP_DEFLATED)
+          for it in zin.infolist():
+            n=it.filename
+            if n=='modrinth.index.json':
+              zout.writestr(n,json.dumps(idx,indent=2)); continue
+            if n.startswith('overrides/mods/') and EXCL.search(n):
+              continue
+            zout.writestr(n,zin.read(n))
+          zout.close()
+          print('taiate din Lite:',len(drop))
+          open('out/lite-delta.txt','w').write('\n'.join(drop))
+          PY
+          ls -la out/
+      - name: Upload la release freeroam
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload freeroam out/Freeroam-1.0.0.mrpack --clobber -R ${{ github.repository }}
+          gh release upload freeroam out/Freeroam-1.0.0-client.zip --clobber -R ${{ github.repository }} || true
+          gh release upload freeroam out/Freeroam-1.0.0-lite.mrpack --clobber -R ${{ github.repository }}
+          gh release upload freeroam out/lite-delta.txt --clobber -R ${{ github.repository }} || true
+          gh release view freeroam -R ${{ github.repository }} --json assets --jq '.assets[].name'
