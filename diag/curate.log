@@ -1,7 +1,5 @@
-STAOS: ['?']
-RAMAS: 12 moduri index
--rw-r--r-- 1 runner runner 135754667 Oct 17 23:40 /tmp/FunCity-1.1.0.mrpack
-== verificare repack ==
-zip OK, fisiere zip: 13 | index files: 12
+GASITE IN LITE: ['entitycollisionfpsfix-1.16-1.0.1.jar', 'out_of_sight-1.16.4-1.0.1.jar']
+ADAUGATE: ['entitycollisionfpsfix-1.16-1.0.1.jar', 'out_of_sight-1.16.4-1.0.1.jar']
+1.2.0: index 12 | jar-uri override: 12 | marime: 135770205
 https://github.com/iZentric/ServerRolePlayLite/releases/tag/funcity
 CURATE-DONE
