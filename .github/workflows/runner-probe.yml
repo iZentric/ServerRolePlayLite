@@ -1,0 +1,13 @@
+name: runner-probe
+on:
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: [ self-hosted ]
+    steps:
+      - run: |
+          echo "HOST=$(hostname)"
+          echo "OS=$(uname -sm)"
+          echo "USER=$(whoami)"
+          echo "HOME=$HOME"
+          echo "LABELS-OK"
