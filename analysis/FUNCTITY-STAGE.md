@@ -3,9 +3,9 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-17 01:21:39 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-17 01:23:29 UTC — gazda → artefact → relay
 
 ```
 mod automat din marker: inbox port=x jar=x
-RC=2
+RC=1
 ```
