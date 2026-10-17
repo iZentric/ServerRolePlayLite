@@ -19,30 +19,30 @@ jobs:
           exec > >(tee /tmp/curate.log) 2>&1
           gh release download funcity -R "$GITHUB_REPOSITORY" -p FunCity-1.0.0.mrpack -D /tmp
           python3 - <<'PY'
-import json, zipfile, shutil, os
-SRC = "/tmp/FunCity-1.0.0.mrpack"
-DST = "/tmp/FunCity-1.1.0.mrpack"
-BLACKLIST = ["dynamicsurroundings", "ctm-mc", "notenoughanimations", "transliterationlib", "lightfallclient", "ingameaccountswitcher"]
-zin = zipfile.ZipFile(SRC)
-idx = json.load(zin.open("modrinth.index.json"))
-keep, drop = [], []
-for e in idx.get("files", []):
-    name = (e.get("filename") or (e.get("downloads") or ["?"])[0].rsplit("/", 1)[-1]).lower()
-    (drop if any(b in name for b in BLACKLIST) else keep).append(e)
-idx["files"] = keep
-idx.setdefault("dependencies", {})
-zout = zipfile.ZipFile(DST, "w", zipfile.ZIP_DEFLATED)
-for n in zin.namelist():
-    if n == "modrinth.index.json":
-        zout.writestr(n, json.dumps(idx, ensure_ascii=False, indent=2))
-    elif any(b in n.lower() for b in BLACKLIST):
-        continue
-    else:
-        zout.writestr(n, zin.read(n))
-zout.close()
-print("STAOS:", [e.get("filename", "?") for e in drop])
-print("RAMAS:", len(keep), "moduri index")
-PY
+          import json, zipfile, shutil, os
+          SRC = "/tmp/FunCity-1.0.0.mrpack"
+          DST = "/tmp/FunCity-1.1.0.mrpack"
+          BLACKLIST = ["dynamicsurroundings", "ctm-mc", "notenoughanimations", "transliterationlib", "lightfallclient", "ingameaccountswitcher"]
+          zin = zipfile.ZipFile(SRC)
+          idx = json.load(zin.open("modrinth.index.json"))
+          keep, drop = [], []
+          for e in idx.get("files", []):
+              name = (e.get("filename") or (e.get("downloads") or ["?"])[0].rsplit("/", 1)[-1]).lower()
+              (drop if any(b in name for b in BLACKLIST) else keep).append(e)
+          idx["files"] = keep
+          idx.setdefault("dependencies", {})
+          zout = zipfile.ZipFile(DST, "w", zipfile.ZIP_DEFLATED)
+          for n in zin.namelist():
+              if n == "modrinth.index.json":
+                  zout.writestr(n, json.dumps(idx, ensure_ascii=False, indent=2))
+              elif any(b in n.lower() for b in BLACKLIST):
+                  continue
+              else:
+                  zout.writestr(n, zin.read(n))
+          zout.close()
+          print("STAOS:", [e.get("filename", "?") for e in drop])
+          print("RAMAS:", len(keep), "moduri index")
+          PY
           ls -la /tmp/FunCity-1.1.0.mrpack
           echo "== verificare repack =="
           python3 -c "import json,zipfile; z=zipfile.ZipFile('/tmp/FunCity-1.1.0.mrpack'); d=json.load(z.open('modrinth.index.json')); print('zip OK, fisiere zip:', len(z.namelist()), '| index files:', len(d['files']))"
