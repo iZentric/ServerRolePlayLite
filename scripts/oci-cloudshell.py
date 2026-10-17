@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Pazonic Oracle Cloud Shell: prin chei API (fara browser) deschide sesiune = activitate
 # -> ceasul de 7 zile se resetaza. Ruleaza pe hosted cu secretele OCI din repo.
-import subprocess, sys, os, json, time, datetime, urllib.request, urllib.error
+import subprocess, sys, os, json, time, datetime, base64, urllib.request, urllib.error
 D = os.path.expanduser("~/.oci")
 def cfg():
     c = {}
@@ -9,7 +9,7 @@ def cfg():
         if "=" in l:
             k, v = l.split("=", 1); c[k.strip()] = v.strip()
     return c
-def hdr(method, path, host, c):
+def hdr(method, path, host, c, body=None):
     date = datetime.datetime.now(datetime.timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
     sign = f'"(request-target)": {method} {path}\nhost: {host}\ndate: {date}'
     sig = subprocess.run(["openssl","dgst","-sha256","-sign",c["key_file"]],
@@ -17,14 +17,19 @@ def hdr(method, path, host, c):
     if sig.returncode != 0:
         raise RuntimeError("sign: " + sig.stderr.decode()[:150])
     b64 = subprocess.run(["openssl","base64","-A"], input=sig.stdout, capture_output=True).stdout.decode()
+    keyid = f'{c.get("tenancy","")}/{c["user"]}/{c["fingerprint"]}'
     auth = ('Signature headers="(request-target) host date", algorithm="rsa-sha256", '
-            f'keyId="{c["user"]}", fingerprint="{c["fingerprint"]}", signature="{b64}"')
-    return {"Date": date, "Accept": "application/json", "Content-Type": "application/json",
-            "Authorization": auth}
+            f'keyId="{keyid}", signature="{b64}"')
+    h = {"Date": date, "Accept": "application/json", "Content-Type": "application/json",
+         "Authorization": auth}
+    if body is not None:
+        import hashlib
+        h["x-content-sha256"] = base64.b64encode(hashlib.sha256(body.encode()).digest()).decode()
+    return h
 def call(method, c, path, body=None):
     host = f"cloudshell.{c['region']}.oci.oraclecloud.com"
     req = urllib.request.Request(f"https://{host}{path}", method=method,
-                                 headers=hdr(method, path, host, c),
+                                 headers=hdr(method, path, host, c, body),
                                  data=body.encode() if body else None)
     try:
         with urllib.request.urlopen(req, timeout=40) as r:
