@@ -3,17 +3,15 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-17 00:44:58 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-17 00:49:27 UTC — gazda → artefact → relay
 
 ```
-mod automat din marker: test port=25566 jar=b1.0827
-== FUNCTITY TEST (boot->stop->reboot->persistenta) — 2026-10-17 00:40:34 UTC ==
-  server-port sincronizat cu markerul: 25566 | motd: FunCity RP Lite
-  voicechat: serverconfig/voicechat-server.toml -> port=24455
---- PROBA 1: boot (include instalarea bibliotecilor Mohist daca lips) ---
-pornesc FunCity pe portul 25566 (heap 3G, java: /home/mndvasi9/funcity-live/jdk11/bin/java)
-  Error: Unable to access jarfile FunCity.jar
-ERORE: nu a vazut 'Done (' in 240s si nu pare instalare
-(sfarsit rc=1)
-RC=1
+mod automat din marker: bootcheck port=25566 jar=x
+== BOOTCHECK — jar de productie pe staging tunat — 00:47:04 ==
+  boot: 4.251 s (world+moduri+plugini, 2 fire ARM) | zid pana la Done: 62s
+  plugini Enabling: 14 din asteptati 14 | moduri activi: 0
+  keep-up in primele 60s IDLE: 0 | ERROR: 0
+  config activ verify: simulation-distance=6 | tick-inactive-villagers:false
+(sfarsit rc=0)
+RC=0
 ```
