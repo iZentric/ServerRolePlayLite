@@ -1,5 +1,20 @@
-Sat Oct 17 20:24:18 UTC 2026
-ADRESA NOUA: NEMERS
-tunnel: up
-exit=0
+Sat Oct 17 20:30:18 UTC 2026
+== procese ==
+126010 /bin/bash /home/mndvasi9/serveo-loop.sh
+126016 ssh -n -o StrictHostKeyChecking=no -o ServerAliveInterval=25 -o ExitOnForwardFailure=yes -R 0
+== log serveo ==
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+Allocated port 43016 for remote forward to localhost:25565
+[32mForwarding TCP connections from serveousercontent.com:43016
+[0m[33mTemporary anonymous TCP policy: one random port; expires after 10m0s; closes after 2m0s without traffic; up to 2 simultaneous connections; 256 KiB/s bandwidth cap. Plain HTTP receives Serveo's browser warning. Upgrade for chosen ports and higher limits: https://console.serveo.net/settings
+[0m== addr fisiere ==
+serveousercontent.com:43016
+
+-rw-r--r--. 1 mndvasi9 oci 28 Oct 17 20:25 /home/mndvasi9/addr-last.txt
+-rw-r--r--. 1 mndvasi9 oci 27 Oct 17 20:21 /home/mndvasi9/addr.txt
+== test local al tunelului prin serveo (edge self-connect) ==
+bash: connect: Connection refused
+bash: /dev/tcp/serveousercontent.com/43016: Connection refused
+EDGE: refuzat si de pe masina
+MC local: VIU
 exit=0
