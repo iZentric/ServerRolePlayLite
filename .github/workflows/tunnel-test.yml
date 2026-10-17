@@ -4,8 +4,10 @@ on:
     paths:
       - .github/workflows/tunnel-test.yml
       - diag/tunnel-host.txt
+timeout-minutes: 5
 jobs:
   t:
+    timeout-minutes: 4
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -17,7 +19,7 @@ jobs:
           H=$(cat diag/tunnel-host.txt 2>/dev/null | tr -d '[:space:]')
           echo "host: $H"
           curl -sfLo /tmp/cfd https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 && chmod +x /tmp/cfd && /tmp/cfd --version
-          (setsid nohup /tmp/cfd access tcp --hostname "$H" --url 127.0.0.1:25565 > /tmp/cfa.log 2>&1 &)
+          (setsid nohup /tmp/cfd access tcp --hostname "$H" --url 127.0.0.1:25565 > /tmp/cfa.log 2>&1 < /dev/null &)
           sleep 12
           python3 - <<'PY' > /tmp/probe.txt 2>&1
           import socket, struct, time
