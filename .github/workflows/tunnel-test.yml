@@ -1,3 +1,9 @@
+name: tunnel-test
+on:
+  push:
+    paths:
+      - .github/workflows/tunnel-test.yml
+      - diag/tunnel-host.txt
 jobs:
   t:
     timeout-minutes: 4
@@ -15,31 +21,30 @@ jobs:
           (setsid nohup /tmp/cfd access tcp --hostname "$H" --url 127.0.0.1:25565 > /tmp/cfa.log 2>&1 < /dev/null &)
           sleep 12
           python3 - <<'PY' > /tmp/probe.txt 2>&1
-          import socket, struct, time
-          try:
-              s = socket.create_connection(("127.0.0.1", 25565), timeout=15)
-              s.settimeout(20)
-              def vs(n):
-                  out = b""
-                  while True:
-                      b = n & 0x7F; n >>= 7
-                      if n: b |= 0x80
-                      out += bytes([b])
-                      if not n: return out
-              hs = vs(0) + vs(-1) + vs(0)
-              s.sendall(vs(len(hs)) + hs)
-              time.sleep(4)
-              data = b""
-              while len(data) < 4:
-                  c = s.recv(4096)
-                  if not c: break
-                  data += c
-              print("RECEIVED:", len(data), data[:120])
-          except Exception as e:
-              print("ERROR:", e)
-          PY
+import socket, time
+try:
+    s = socket.create_connection(("127.0.0.1", 25565), timeout=15)
+    s.settimeout(20)
+    def vs(n):
+        out = b""
+        while True:
+            b = n & 0x7F; n >>= 7
+            if n: b |= 0x80
+            out += bytes([b])
+            if not n: return out
+    hs = vs(0) + vs(-1) + vs(0)
+    s.sendall(vs(len(hs)) + hs)
+    time.sleep(4)
+    data = b""
+    while len(data) < 4:
+        c = s.recv(4096)
+        if not c: break
+        data += c
+    print("RECEIVED:", len(data), data[:120])
+except Exception as e:
+    print("ERROR:", e)
+PY
           cat /tmp/probe.txt
-          echo "== verdict =="
           if grep -q "RECEIVED: [1-9]" /tmp/probe.txt; then
             echo "EXTERIOR-CF: JUCABIL" > diag/tunnel-test.txt
           else
