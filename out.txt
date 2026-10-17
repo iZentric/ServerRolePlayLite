@@ -1,50 +1,15 @@
-Sat Oct 17 15:08:31 UTC 2026
-=== CITESTE-MA ===
-=== FREEROAM LITE - SERVER HIBRID (CatServer 1.16.5 = Forge + pluginuri Bukkit/Spigot (cel mai STABIL hibrid)) ===
-
-MODURI (mods/) + PLUGINURI (plugins/): EssentialsX(+Chat/Spawn), Vault, LuckPerms, Chunky.
-Consum putin mai mare decat varianta MaxLite, dar accepta orice plugin Spigot.
-
-CERINTE: Java 8 sau Java 11 (NU 17+). RAM: porneste de la 1 GB, maxim 4 GB.
-
---- PE HOST (panou cu SFTP sau VM) ---
-1. Urca TOT continutul acestui zip in folderul serverului.
-2. Startup -> JAR: CatServer-1.16.5-1d8d6313-server.jar ; Java version: 11 (sau 8).
-3. Start. Prima pornire: 3-6 minute (isi descarca librariile).
-
---- COMENZI DUPA PORNIRE ---
-/lp user <nume> permission set * true  -> admin total
-/sethome /home /spawn /tpa             -> EssentialsX
-/chunky radius 1000 + /chunky start    -> pre-genereaza lumea
-
-NOTA: CatServer e renumit pentru compatibilitate maxima moduri+pluginuri
-(build mai 2023, cel mai recent hibrid 1.16.5 intretinut). Daca Mist crapa,
-incearca intai varianta asta inainte de Arclight.
-=== ADRESA ===
-92.5.171.150:25565
-=== BIN (java?) ===
-actions.runner.plist.template
-actions.runner.service.template
-Azure.Core.dll
-Azure.Storage.Blobs.dll
-Azure.Storage.Common.dll
-checkScripts
-=== FRP ===
-frpc.toml
-frps
-frps.toml
-LICENSE
-serverAddr = "127.0.0.1"
-serverPort = 7000
-
-[[proxies]]
-name = "test-tcp"
-type = "tcp"
-localIP = "127.0.0.1"
-localPort = 22
-remotePort = 6000
-=== MAI TRASE o data? ===
-609 /home/mndvasi9/.local/jdk17/bin/java @unix_args.txt
-	at foxlaunch.FoxServerLauncher.main(FoxServerLauncher.java:33) [CatServer-1.16.5-1d8d6313-server.jar:?]
-	at catserver.server.CatServerLaunch.main(CatServerLaunch.java:8) [CatServer-1.16.5-1d8d6313-server.jar:1.16.5-1d8d6313]
+Sat Oct 17 15:09:23 UTC 2026
+=== 1. opresc java bolnav ===
+oprit
+=== 2. Java 11 ===
+openjdk version "11.0.32.1" 2026-08-18
+=== 3. pornesc serverul (lumea existenta, neatinsa) ===
+Done (4.592s)!
+=== 4. tunel nou ===
+cmd.sh: line 18: 30491 Terminated              pkill -f cloudflared 2> /dev/null
+=== memorie/fișier ===
+387
+              total        used        free      shared  buff/cache   available
+Mem:          11884        5268        2546          54        4069        4826
+exit=0
 exit=0
