@@ -906,6 +906,36 @@ EO
     echo OK
     ;;
 
+  migpack)
+    # migpack: arhive complete pt mutare pe alt GitHub -> release world-live (via relay)
+    # arhiva 1: serverul live (fara world/logs/libraries — libraries se refac din mohist-1.16.5 pinat in FISE)
+    # arhiva 2: lumea, DOAR daca incape pe disc (altfel primesti mesaj si rulezi prune)
+    [ "$(id -u)" = "0" ] && { say "RULEAZA CA USER NORMAL"; exit 1; }
+    say "== MIGRARE — impachetez productia pentru mutare pe alt GitHub =="
+    M=$HOME/functity-out/mig; mkdir -p "$M"
+    rm -f "$M"/*.tar.gz.part 2>/dev/null
+    say "disc inainte: $(df -m "$HOME" | tail -1 | awk '{print $4}') MiB liberi | $P: $(du -sm "$P" 2>/dev/null | cut -f1) MiB"
+    ( cd "$P" && tar czf "$M/functity-live.tar.gz" --exclude='world*' --exclude='logs' --exclude='crash-reports' --exclude='libraries' --exclude='versions' --exclude='cache' . ) 2>/dev/null
+    if [ -f "$M/functity-live.tar.gz" ]; then
+      say "functity-live.tar.gz: $(du -m "$M/functity-live.tar.gz" | cut -f1) MiB  sha256:$(sha256sum "$M/functity-live.tar.gz" | cut -c1-32)…"
+    else
+      say "FARA ARHIVA SERVER (tar esuat — disc plin?)"; exit 1
+    fi
+    DW=$(du -sm "$P/world" 2>/dev/null | cut -f1); DW=${DW:-0}
+    FREE2=$(df -m "$HOME" | tail -1 | awk '{print $4}')
+    if [ "$DW" -gt 0 ] && [ "$DW" -lt "$((FREE2-150))" ]; then
+      ( cd "$P" && tar czf "$M/worldsync.tar.gz" world world_nether world_the_end ) 2>/dev/null
+      [ -f "$M/worldsync.tar.gz" ] && say "worldsync.tar.gz: $(du -m "$M/worldsync.tar.gz" | cut -f1) MiB  sha256:$(sha256sum "$M/worldsync.tar.gz" | cut -c1-32)…"
+    else
+      say "LUMEA S-ARIATA: world=${DW} MiB vs liber=${FREE2} MiB — ruleaza 'prune' apoi 'migpack' din nou"
+    fi
+    # lista de verificare a continutului (ca sa stii ce ai primit la mutare)
+    { echo "# Continut functity-live.tar.gz — $(date -u '+%F %T UTC')"; ( cd "$P" && find mods plugins -maxdepth 1 -name '*.jar' 2>/dev/null | sort; echo "radacina:"; ls *.jar *.yml *.json *.properties *.txt 2>/dev/null ); } > "$M/MANIFEST.txt"
+    touch "$HOME/functity-out/worldsync.ready"; echo "semnatura migpack $(date -u '+%F %T')" > "$HOME/functity-out/worldsync.ready"
+    say "gata — relay-ul urca arhivele pe release 'world-live' dupa acest job"
+    echo OK
+    ;;
+
   *)
     echo "folosire: $0 host-info|backup|assemble|test|status|up|down"; exit 2;;
 esac
