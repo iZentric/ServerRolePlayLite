@@ -1,0 +1,22 @@
+name: PACK-SRV
+on:
+  push:
+    branches: ['srvparts']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  s:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env: { GT: "${{ secrets.GITHUB_TOKEN }}" }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stitch + upload la release server-live
+        run: |
+          git fetch -q origin srvparts && git checkout -q FETCH_HEAD
+          cat srvpart_* > srv-live.tar.gz
+          echo "stitch: $(stat -c %s srv-live.tar.gz) B"
+          sha256sum srv-live.tar.gz | head -c 64
+          gh release upload server-live srv-live.tar.gz --clobber -R $GITHUB_REPOSITORY
+          gh release view server-live -R $GITHUB_REPOSITORY --json assets --jq '.assets[].name'
