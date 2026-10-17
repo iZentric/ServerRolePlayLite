@@ -52,10 +52,5 @@ jobs:
       - name: "STEP3: raport"
         if: always()
         run: |
-          mkdir -p /tmp/rep && cd /tmp/rep
-          git init -q -b packdiag
-          mkdir -p diag
-          { echo "== run $GITHUB_RUN_ID $(date -u) =="; cat /tmp/oc/env.txt 2>/dev/null; echo "-- step2:"; cat /tmp/oc/out2.txt 2>/dev/null; } > diag/oci-run.txt
-          git config user.email b@b && git config user.name vm
-          git add -A && git commit -qm "oci trace $GITHUB_RUN_ID"
-          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" packdiag:packdiag && echo IMPINS || echo IMPINS-ESUAT
+          { echo "== run $GITHUB_RUN_ID $(date -u) =="; cat /tmp/oc/env.txt 2>/dev/null; echo "-- step2:"; cat /tmp/oc/out2.txt 2>/dev/null; } > /tmp/rep.txt
+          python3 .github/oci-report.py
