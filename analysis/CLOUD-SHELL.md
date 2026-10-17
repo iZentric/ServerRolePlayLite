@@ -1,48 +1,53 @@
-# CLOUD-SHELL 2026-10-17 13:18:17 UTC — actiune: keep
-key: 1716 bytes | fp: f3:28:70:dc:e8:a1:26:de:78:13:69:60:b5:9f:f2:4d:5b:e5:53:41 | region: eu-frankfurt-1
+# CLOUD-SHELL 2026-10-17 13:24:18 UTC — actiune: keep
+key: 1716 bytes | fp: fe:34:11:b7:f9:33:dd:bd:5c:f0:ca:aa:89:9f:f7:cb | region: eu-frankfurt-1
 CLI:
-+-------------+-----------+----------------------------------------------------------------------------------+
-| fingerprint | malformed | openssl rsa -pubout -outform DER -in <path to your private key> | openssl md5 -c |
-+-------------+-----------+----------------------------------------------------------------------------------+
-DEBUG:oci_cli.cli_metrics: 2026-10-17 13:18:57.205522+00:00: Metrics is not enabled
-Linux-6.17.0-1022-azure-x86_64-with-glibc2.39
-System name: Linux
-System release : 6.17.0-1022-azure
-System version: #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026
-
-DEBUG:oci_cli.cli_util:Config File: dict_keys(['log_requests', 'additional_user_agent', 'pass_phrase', 'user', 'tenancy', 'region', 'fingerprint', 'key_file'])
-DEBUG:oci_cli.cli_util:region: Environment Variable or Parameter
+{
+  "data": "frmtdtikdfkz"
+}
+DEBUG:oci.base_client.139877992882464: 2026-10-17 13:25:00.208785+00:00: python SDK time elapsed for deserializing: 5.199000000288834e-06
+DEBUG:oci.base_client.139877992882464: 2026-10-17 13:25:00.208825+00:00: Response returned
+DEBUG:oci.base_client.139877992882464:time elapsed for request: 0.6937836560000079
+DEBUG:oci_cli.cli_util: 2026-10-17 13:25:00.208917+00:00: time elapsed calling to_dict from render: 3.5759999974516177e-06
+DEBUG:oci_cli.cli_util: 2026-10-17 13:25:00.217001+00:00: total memory usage before printing: 73.9KiB (75688)
+DEBUG:oci_cli.cli_util: 2026-10-17 13:25:00.217103+00:00: Time elapsed printing response data: <1ms
+DEBUG:oci_cli.cli_util: 2026-10-17 13:25:00.217148+00:00: total memory usage after printing: 73.9KiB (75688)
 env OCI_TENANCY is set
 env OCI_REGION is set
 env OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING is set
 env OCI_USER is set
 env OCI_FINGERPRINT is set
 env OCI_PYTHON_SDK_NO_SERVICE_IMPORTS is set
-ERROR: The config file at /home/runner/.oci/config is invalid:
-
-+Config Errors+-----------+----------------------------------------------------------------------------------+
-| Key         | Error     | Hint                                                                             |
-+-------------+-----------+----------------------------------------------------------------------------------+
-+-------------+-----------+----------------------------------------------------------------------------------+
+send: b'GET /n HTTP/1.1\r\nuser-agent: Oracle-PythonSDK/2.188.0 (python 3.12.3; x86_64-Linux) Oracle-PythonCLI/3.95.0\r\naccept-encoding: gzip, deflate\r\naccept: application/json\r\nconnection: keep-alive\r\ncontent-type: application/json\r\nopc-client-request-id: B0C8157C4BD34385A0E0293843D8491F\r\nopc-client-retries: true\r\nopc-client-info: Oracle-PythonSDK/2.188.0\r\nopc-request-id: ACEBCC023F0841B19489655E2B9F48C6\r\ndate: Sat, 17 Oct 2026 13:24:59 GMT\r\nhost: objectstorage.eu-frankfurt-1.oraclecloud.com\r\nauthorization: Signature algorithm="rsa-sha256",headers="date (request-target) host",keyId="ocid1.tenancy.oc1..aaaaaaaanlzitmrgwn5f3g3iyapyiuxt2ayh43u6mdq3nszvcswrkcw5eyfa/ocid1.user.oc1..aaaaaaaafg2fu7zqt4q7kzdy7fzqbvg6wr5wj2f3yb5e452eas7cu3hbghma/fe:34:11:b7:f9:33:dd:bd:5c:f0:ca:aa:89:9f:f7:cb",signature="IucoTZ+Nb7ky0+UVQqFaloR8kYbgml4TZvPEYpS0Y3THmb/Ln7yKnYddogzUhOAMjFTXh81BPJ3xUTOaOtOAEy1R8gEL6FO8xDpVyZHJQwt+SypvCnE8jD2//Tn1MqGAiDninnBBORzN+Eg0lgJtkL0bJIceK3Mwjv/nfpZTFB1BGDoo7eENtFITFQKtDjJU3bBskOdgq4wUcSTypjUXhSUyRGohBXBuO+3qTTsTgrl9HLJl8pmTKD2H2hNrjbAl446q7np2/lvdOBTjPxgBO9qHsPNfZrT8C8GHLxFGguSemOHs6L/zGnsleeqT6RrU1H6Lo7XMM8PxxvCPqBo1tg==",version="1"\r\n\r\n'
+reply: 'HTTP/1.1 200 OK\r\n'
+header: Content-Type: application/json
+header: Content-Length: 14
+header: opc-client-request-id: B0C8157C4BD34385A0E0293843D8491F
+header: date: Sat, 17 Oct 2026 13:25:00 GMT
+header: opc-request-id: fra-1:S__j-oF_djo5AX7j7jr3gS87I-c8_tJlyqL26l_mlVKjWAVhGwhKq65wjtb0iTEh
+header: x-api-id: native
+header: x-content-type-options: nosniff
+header: strict-transport-security: max-age=31536000; includeSubDomains
+header: access-control-allow-origin: *
+header: access-control-allow-methods: POST,PUT,GET,HEAD,DELETE,OPTIONS
+header: access-control-allow-credentials: true
+header: access-control-expose-headers: access-control-allow-credentials,access-control-allow-methods,access-control-allow-origin,content-length,content-type,date,opc-client-info,opc-client-request-id,opc-request-id,strict-transport-security,x-api-id,x-content-type-options
+{
+  "data": "frmtdtikdfkz"
+}
 --- python keepalive ---
 [raw user] len=76 repr='oci'..'hma'
 [raw tenancy] len=79 repr='oci'..'yfa'
-[raw fingerprint] len=59 repr='f3:'..':41'
+[raw fingerprint] len=47 repr='fe:'..':cb'
 [raw region] len=14 repr='eu-'..'t-1'
 [raw key_file] len=33 repr='/ho'..'pem'
-[fp curat] f3:28:70:dc:e8:a1:26:de:78:13:69:60:b5:9f:f2:4d:5b:e5:53:41
-[SDK] FAIL: InvalidConfig: {'fingerprint': 'malformed'}
+[fp curat] fe:34:11:b7:f9:33:dd:bd:5c:f0:ca:aa:89:9f:f7:cb
+[SDK] FAIL: RequestException: ('OCIConnectionPool(host=\'identity.eufrankfurt1.oci.oraclecloud.com\', port=443): Max retries exceeded with url: /20160918/regions (Caused by NameResolutionError("OCIConnection(host=\'identity.eufrankfurt1.oci.oraclecloud.com\', port=443): Failed to resolve \
 [AUTH-TEST compartment] HTTP 404 {
   "code" : "NotAuthorizedOrNotFound",
   "message" : "Authorization failed or requested resource not found."
 }
-[identity@eu-frankfurt-1] HTTP 401 {
-  "code" : "NotAuthenticated",
-  "message" : "The required information to complete authentication was not provided or 
-[identity@us-ashburn-1] HTTP 401 {
-  "code" : "NotAuthenticated",
-  "message" : "The required information to complete authentication was not provided or 
-[auth] identity raspunde prin us-ashburn-1; HOME region: NEDESCIFRAT (vezi HTTP mai sus)
+[identity@eu-frankfurt-1] HTTP 401 {"code":"NotAuthenticated","message":"Failed to verify the HTTP(S) Signature"}
+[auth] identity raspunde prin eu-frankfurt-1; HOME region: NEDESCIFRAT (vezi HTTP mai sus)
 [env-get] 404 {
   "code" : "NotAuthorizedOrNotFound",
   "message" : "Authorization failed or requested resource not found."
