@@ -3,7 +3,7 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-17 12:24:24 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-17 12:25:33 UTC — gazda → artefact → relay
 
 ```
 mod automat din marker: ociset port=x jar=x
