@@ -44,6 +44,7 @@ jobs:
           print('ZIP OK')
           PY
           convert ../branding/funcity-logo.png -resize 256x256 funcity-icon.png 2>/dev/null || cp ../branding/funcity-logo.png funcity-icon.png
+          convert ../branding/funcity-logo.png -resize 64x64! server-icon.png
           ls -la
       - name: Release FunCity + asset
         continue-on-error: true
@@ -52,6 +53,7 @@ jobs:
           gh release create funcity --title "FunCity 1.0.0" --notes "Server de roleplay FunCity pentru orice PC (fara F3+Shift bug - launcher standard Prism). Import: FISIER -> FunCity-1.0.0.mrpack in Prism (Instances/Import). Setari Java recomandate RAM mic: -Xms1G -Xmx2500M -XX:+UseG1GC -XX:+ParallelRefProcEnabled. Continut: masini, tunuri, RP complet, fara surse de lag (sunete spatiale/physics/shadere taiate - vezi lista in Freeroam lite-delta)." --draft=false 2>/dev/null || true
           gh release upload funcity build/FunCity-1.0.0.mrpack --clobber
           gh release upload funcity build/funcity-icon.png --clobber
+          gh release upload funcity build/server-icon.png --clobber
           gh release view funcity --json assets --jq '.assets[].name'
       - name: Trace in repo
         if: always()
