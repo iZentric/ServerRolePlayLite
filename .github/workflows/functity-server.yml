@@ -14,6 +14,7 @@ jobs:
       - name: Construieste FUNCTITY-SERVER.zip
         run: |
           set -e
+          export GH_TOKEN="$GITHUB_TOKEN"
           gh --version >/dev/null
           B=$GITHUB_WORKSPACE/build
           mkdir -p "$B/server"
