@@ -3,22 +3,17 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-17 00:14:40 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-17 00:24:24 UTC — gazda → artefact → relay
 
 ```
-mod automat din marker: stats port=x jar=x
-== FUNCITY REAL-STATS — productia insasi ca benchmark ==
-— ERA FUNCITY (de la instalare, loguri live):
-    boot: medie 4.2s, maxim 4.2s (n=1)
-    keep-up: 0 din 336 linii
-    joinuri: 0
-— ERA CATSERVER (arhiva de dinaintea instalarii, aceeasi masina/lume):
-    (fara arhiva veche in $P/logs — logurile cuantic nu au supravietuit reinstall-ului)
-— ACUM:
-    java RSS: 3174 MiB
-    RAM libera OS: 4819 MiB din 11884
-    disc liber: 179 MiB | lume: 150 MiB
-    uptime server: 02:03:50
+mod automat din marker: tune port=x jar=x
+== TUNE pe staging ==
+  aplicat: villagers inactivi opriti, mob-activation 32->24, chunk-gc 600->400, sim-distance 6, compressie 256
+  VERIFY:
+          tick-inactive-villagers: false
+        tick-inactive-villagers: false
+    network-compression-threshold=256
+    simulation-distance=6
 (sfarsit rc=0)
 RC=0
 ```
