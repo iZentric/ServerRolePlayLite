@@ -39,15 +39,22 @@ jobs:
           cd /tmp/oc
           TEN=$(printf '%s' "${{ env.TEN }}" | tr -d '[:space:]')
           USR=$(printf '%s' "${{ env.USR }}" | tr -d '[:space:]')
-          FPR=$(printf '%s' "${{ env.FPR }}" | tr -d '[:space:]')
           REG=$(printf '%s' "${{ env.REG }}" | tr -d '[:space:]')
-          D=$(date -u +"%a, %d %b %Y %H:%M:%S UTC")
+          F256=$(openssl rsa -in oci.key -pubout -outform DER 2>/dev/null | openssl dgst -sha256 -binary | od -An -tx1 | tr -d ' \n' | sed 's/../&:/g;s/:$//')
+          F1=$(openssl rsa -in oci.key -pubout -outform DER 2>/dev/null | openssl dgst -sha1 -binary | od -An -tx1 | tr -d ' \n' | sed 's/../&:/g;s/:$//')
+          FM=$(openssl rsa -in oci.key -pubout -outform DER 2>/dev/null | openssl dgst -md5 -binary | od -An -tx1 | tr -d ' \n' | sed 's/../&:/g;s/:$//')
+          { echo "FP_sha256=$F256"; echo "FP_sha1=$F1"; echo "FP_md5=$FM"; } > out2.txt
           P="/20160918/availabilityDomains?compartmentId=$TEN"
-          printf 'GET %s\ndate: %s' "$P" "$D" > rq.txt
-          SIG=$(openssl dgst -sha256 -sign oci.key < rq.txt | openssl base64 -A)
-          curl -s "https://iaas.$REG.oraclecloud.com$P" -H "date: $D" -H "Authorization: Signature headers=\"date (request-target)\",keyId=\"$TEN/$USR/$FPR\",algorithm=\"rsa-sha256\",signature=\"$SIG\"" -o resp.json
-          head -c 400 resp.json >> out2.txt; echo >> out2.txt
-          python3 -c "import json;d=json.load(open('resp.json'));print('AD:',d[0]['name'])" >> out2.txt 2>&1
+          for FP in "$F256" "$F1" "$FM"; do
+            D=$(date -u +"%a, %d %b %Y %H:%M:%S UTC")
+            printf 'GET %s\ndate: %s' "$P" "$D" > rq.txt
+            SIG=$(openssl dgst -sha256 -sign oci.key < rq.txt | openssl base64 -A)
+            RESP=$(curl -s "https://iaas.$REG.oraclecloud.com$P" -H "date: $D" -H "Authorization: Signature headers=\"date (request-target)\",keyId=\"$TEN/$USR/$FP\",algorithm=\"rsa-sha256\",signature=\"$SIG\"")
+            AD=$(echo "$RESP" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d[0]['name'])" 2>/dev/null)
+            if [ -n "$AD" ]; then echo "AUTH_OK fp=$FP AD=$AD" >> out2.txt; echo "$FP" > fp.good; echo "$AD" > ad.txt; break; fi
+            echo "fp=$FP -> $(echo $RESP | head -c 90)" >> out2.txt
+          done
+          test -f fp.good && echo "AUTENTIFICARE OCI: REUSITA" >> out2.txt || echo "OCI_KEY_NEINREGISTRATA in tenancy - miscarea la VM necesita key nou (se face din consola OCI, 2 min)" >> out2.txt
           cat out2.txt
       - name: "STEP3: raport"
         if: always()
