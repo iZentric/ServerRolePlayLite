@@ -19,7 +19,6 @@ jobs:
       GT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
       - name: "STEP1: auth"
         continue-on-error: true
         run: |
