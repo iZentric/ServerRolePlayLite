@@ -1,7 +1,6 @@
 name: OCI-CLOUD-SHELL
 # r2: semnatura SDK official + policy cloud-shell aplicata
-# Porneaza/ține viu Oracle Cloud Shell prin API (fara browser).
-# (v6: request-target cu methoda MINUSCULA — cauza 401) Buton + ceas la 4 zile.
+# VERDICT 2026-10-17: Oracle nu are API public pt Cloud Shell (nu-i in CLI/SDK/docs).# (v6: request-target cu methoda MINUSCULA — cauza 401) Buton + ceas la 4 zile.
 on:
   workflow_dispatch:
     inputs:
@@ -11,8 +10,7 @@ on:
         default: "keep"
   push:
     paths: [ .github/workflows/oci-cloudshell.yml, scripts/oci-cloudshell.py ]
-  schedule:
-    - cron: "15 5 */4 * *"
+
 permissions:
   contents: write
 jobs:
