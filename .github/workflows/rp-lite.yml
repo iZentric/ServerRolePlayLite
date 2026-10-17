@@ -1,4 +1,4 @@
-name: RP-LITE
+## name: RP-LITE
 # Ruleaza EXCLUSIV pe runnerul self-hosted ARM64: identifica masina si, daca e Cloud Shell, executa cmd.sh (curatenie+server).
 on:
   push:
