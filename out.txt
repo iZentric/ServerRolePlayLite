@@ -1,22 +1,5 @@
-Sat Oct 17 15:13:41 UTC 2026
-== CINE SUNT ==
-31167 ./cloudflared tunnel --no-autoupdate --url tcp://127.0.0.1:25565
-server MC: VIU
-== FISIER CF ==
-37651992 bytes
-== LOG CF ==
-2026-10-17T15:13:08Z INF |  Cloudflare API    api.cloudflare.com:443     PASS    API is reachable              |
-2026-10-17T15:13:08Z INF |                                                                                     |
-2026-10-17T15:13:08Z INF |  SUMMARY: Environment is healthy. cloudflared will use 'quic' as primary protocol.  |
-2026-10-17T15:13:08Z INF +-------------------------------------------------------------------------------------+
-2026-10-17T15:13:08Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=15ddf127-4a7f-4f4f-9f5a-b96b9c9993ff status=pass target=region1.v2.argotunnel.com
-2026-10-17T15:13:08Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=15ddf127-4a7f-4f4f-9f5a-b96b9c9993ff status=pass target=region2.v2.argotunnel.com
-2026-10-17T15:13:08Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=15ddf127-4a7f-4f4f-9f5a-b96b9c9993ff status=pass target=region1.v2.argotunnel.com
-2026-10-17T15:13:08Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=15ddf127-4a7f-4f4f-9f5a-b96b9c9993ff status=pass target=region2.v2.argotunnel.com
-2026-10-17T15:13:08Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=15ddf127-4a7f-4f4f-9f5a-b96b9c9993ff status=pass target=region1.v2.argotunnel.com
-2026-10-17T15:13:08Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=15ddf127-4a7f-4f4f-9f5a-b96b9c9993ff status=pass target=region2.v2.argotunnel.com
-2026-10-17T15:13:08Z INF precheck component="Cloudflare API" details="API is reachable" run_id=15ddf127-4a7f-4f4f-9f5a-b96b9c9993ff status=pass target=api.cloudflare.com:443
-2026-10-17T15:13:08Z INF precheck complete hard_fail=false run_id=15ddf127-4a7f-4f4f-9f5a-b96b9c9993ff suggested_protocol=quic
-== PORT ==
-LISTEN 0      4096               *:25565            *:*          
+Sat Oct 17 15:14:17 UTC 2026
+exit=0
+ADRESA: https://leo-expenditure-respected-download.trycloudflare.com
+0
 exit=0
