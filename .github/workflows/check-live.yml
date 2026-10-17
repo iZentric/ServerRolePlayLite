@@ -10,19 +10,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: MC ping extern (mcstatus)
+      - name: MC ping extern
         run: |
           AD=$(cat diag/addr.txt 2>/dev/null | tr -d '\n[:space:]')
           echo "adresa: $AD"
-          pip install -q mcstatus 2>&1 | tail -1
-          if mcstatus "$AD" status > /tmp/mcs.txt 2>&1; then
-            head -c 400 /tmp/mcs.txt
-            echo "EXTERIOR: JUCABIL - serverul raspunde prin tunel" > /tmp/verdict.txt
-            head -3 /tmp/mcs.txt >> /tmp/verdict.txt
-          else
-            echo "ESUAT:"; head -c 300 /tmp/mcs.txt
-            { echo "EXTERIOR: ESUAT"; head -3 /tmp/mcs.txt; } > /tmp/verdict.txt
-          fi
+          python3 - "$AD" <<'PY'
+          import socket,json,struct,sys
+          ad=sys.argv[1]
+          host=ad.split(':')[0]; port=int(ad.split(':')[1]) if ':' in ad else 443
+          def wv(n):
+              o=b''; n&=0xFFFFFFFFFFFFFFFF
+              while True:
+                  if (n&~0x7F)==0: return o+bytes([n])
+                  o+=bytes([(n&0x7F)|0x80]); n>>=7
+          try:
+              s=socket.create_connection((host,port),10); s.settimeout(6)
+              h=wv(0)+wv(-1)+wv(len(host))+host.encode()+struct.pack('>H',port)+wv(1)+wv(0)
+              s.sendall(wv(len(h))+h)
+              q=wv(0)+wv(0)
+              s.sendall(wv(len(q))+q)
+              buf=b''
+              try:
+                  while True:
+                      c=s.recv(4096)
+                      if not c: break
+                      buf+=c
+              except Exception: pass
+              i=buf.find(b'{'); j=buf.rfind(b'}')
+              if i<0 or j<0: raise Exception('fara JSON, primi %d bytes' % len(buf))
+              d=json.loads(buf[i:j+1])
+              line='EXTERIOR: JUCABIL | %s | online %s/%s' % (d.get('version',{}).get('name'), d.get('players',{}).get('online'), d.get('players',{}).get('max'))
+              print(line)
+              open('/tmp/verdict.txt','w').write(line+'\n')
+          except Exception as e:
+              line='EXTERIOR: ESUAT: '+str(e)[:80]
+              print(line)
+              open('/tmp/verdict.txt','w').write(line+'\n')
+          PY
       - name: Verdict in repo
         if: always()
         run: |
