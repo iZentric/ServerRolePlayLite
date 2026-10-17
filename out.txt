@@ -1,14 +1,7 @@
-Sat Oct 17 21:28:02 UTC 2026
-If you get a permission denied error check the faq for how to connect with a key or^M
-create a free tunnel without a key at [http://localhost:3000/docs/faq#generating-an-ssh-key].^M
-^M
-To explore using localhost.run visit the documentation site:^M
-https://localhost.run/docs/^M
-^M
-===============================================================================^M
-^M
-^M
-** your connection id is 132.145.236.16:42856, please mention it if you send me a message about an issue. **^M
-^M
-mndvasi9@localhost.run: Permission denied (publickey,hostbased,keyboard-interactive).^M
-exit=0
+Sat Oct 17 23:22:16 UTC 2026
+mrpack: 151649242 B
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+  File "<stdin>", line 4, in <listcomp>
+KeyError: 'filename'
+exit=1
