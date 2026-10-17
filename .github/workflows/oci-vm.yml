@@ -24,7 +24,6 @@ jobs:
         shell: bash
         run: |
           exec >> /tmp/trace.txt 2>&1
-          set -x
           printf '%s\n' "$KEY" > /tmp/oci.key
           head -1 /tmp/oci.key | grep -q BEGIN || printf '%b' "$KEY" > /tmp/oci.key
           openssl rsa -in /tmp/oci.key -check -noout && echo "KEY OK"
@@ -50,10 +49,21 @@ jobs:
             SIG=$(printf '%s' "$RQ" | openssl dgst -sha256 -sign /tmp/oci.key | openssl base64 -A)
             curl -s -X "$M" "https://$HOSTP$P" -H "date: $D" -H "Authorization: Signature headers=\"$HD\",keyId=\"$TEN/$USR/$FPR\",algorithm=\"rsa-sha256\",signature=\"$SIG\"" "${EXTRA[@]}"
           }
+          EXIST=$(call GET "/20160918/instances?compartmentId=$TEN&displayName=funcity")
+          EID=$(echo "$EXIST" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d[0]['id'] if isinstance(d,list) and d else '')" 2>/dev/null)
+          ESTATE=$(echo "$EXIST" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d[0].get('lifecycleState','') if d else '')" 2>/dev/null)
+          echo "EXISTA: $EID $ESTATE"
+          if [ -n "$EID" ] && [ "$ESTATE" = "RUNNING" ]; then
+            VID=$(call GET "/20160918/vnicattachments?instanceId=$EID" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d[0]['vnicId'] if d else '')" 2>/dev/null)
+            IP=$(call GET "/20160918/vnics/$VID" | python3 -c "import json,sys;print(json.load(sys.stdin).get('publicIp',''))" 2>/dev/null)
+            echo "MC_IP=$IP (existent)" | tee /tmp/ip.txt
+            [ -n "$IP" ] && exit 0
+          fi
           ADJ=$(call GET "/20160918/availabilityDomains?compartmentId=$TEN")
           AD=$(echo "$ADJ" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d[0]['name'])" 2>/dev/null)
           echo "AD=$AD"
-          [ -z "$AD" ] && { echo "AUTH_FAIL: $(echo $ADJ | head -c 200)"; exit 2; }
+          [ -z "$AD" ] && { echo "AUTH_FAIL: $(printf '%s' "$ADJ" | tr -d '
+' | head -c 300)"; exit 2; }
           CAP=$(call GET "/20160918/capacities/instanceShapes?compartmentId=$TEN&availabilityDomain=$AD&shape=VM.Standard.A1.Flex")
           AV=$(echo "$CAP" | python3 -c "import json,sys;d=json.load(sys.stdin);print('YES' if any(c.get('available') for c in d.get('capacities',[])) else 'NO')" 2>/dev/null)
           echo "ARM_CAPACITY=$AV"
@@ -134,5 +144,5 @@ jobs:
       - name: Report pe packdiag
         if: always()
         run: |
-          { echo "=== run $GITHUB_RUN_ID $(date -u) ==="; tail -30 /tmp/trace.txt; echo "IP:"; cat /tmp/ip.txt 2>/dev/null; } > /tmp/rep.txt || true
+          { echo "=== run $GITHUB_RUN_ID $(date -u) ==="; cat /tmp/trace.txt | grep -aE "AD=|CAPACIT|AUTH|IMG|IID|MC_IP|FAIL|plin|EXISTA|KEY|wait |^[0-9]+ \{" | tail -20; echo "IP:"; cat /tmp/ip.txt 2>/dev/null; } > /tmp/rep.txt || true
           python3 .github/oci-report.py
