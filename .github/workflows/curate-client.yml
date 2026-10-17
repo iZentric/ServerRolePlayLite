@@ -19,18 +19,25 @@ jobs:
           exec > >(tee /tmp/curate.log) 2>&1
           gh release download funcity -R "$GITHUB_REPOSITORY" -p FunCity-1.1.0.mrpack -D /tmp
           gh release download lite -R "$GITHUB_REPOSITORY" -p CUANTIC-Client-1.7.7.mrpack -D /tmp
+          gh release download jars-20261017-0952 -R "$GITHUB_REPOSITORY" -p functity-jare-toate.tar.gz -D /tmp
+          mkdir -p /tmp/jare && tar xzf /tmp/functity-jare-toate.tar.gz -C /tmp/jare
           python3 - <<'PY'
           import json, zipfile
           SRC = "/tmp/FunCity-1.1.0.mrpack"
           LITE = "/tmp/CUANTIC-Client-1.7.7.mrpack"
           DST = "/tmp/FunCity-1.2.0.mrpack"
           WANT = ["radon", "entityculling", "out_of_sight", "entitycollisionfpsfix"]
-          lite = zipfile.ZipFile(LITE)
+          import os, glob
           picks = {}
+          lite = zipfile.ZipFile(LITE)
           for n in lite.namelist():
               low = n.lower()
               if low.endswith(".jar") and any(w in low for w in WANT):
                   picks[n.split("/")[-1]] = lite.read(n)
+          for fpath in glob.glob("/tmp/jare/**/*.jar", recursive=True):
+              low = os.path.basename(fpath).lower()
+              if any(w in low for w in WANT) and os.path.basename(fpath) not in picks:
+                  picks[os.path.basename(fpath)] = open(fpath, "rb").read()
           print("GASITE IN LITE:", list(picks.keys()))
           zin = zipfile.ZipFile(SRC)
           zout = zipfile.ZipFile(DST, "w", zipfile.ZIP_DEFLATED)
@@ -50,6 +57,7 @@ jobs:
           zn = zipfile.ZipFile(DST).namelist()
           print("1.2.0: index", len(d["files"]), "| jar-uri override:", len([x for x in zn if x.endswith('.jar')]), "| marime:", __import__("os").path.getsize(DST))
           PY
+          cp /tmp/FunCity-1.2.0.mrpack "$GITHUB_WORKSPACE/FunCity-1.2.1.mrpack"
           mv /tmp/FunCity-1.2.0.mrpack "$GITHUB_WORKSPACE/"
           python3 - <<'PY'
           bat = '\n'.join([ln[10:] if ln.startswith(' '*10) else ln for ln in r'''
@@ -86,7 +94,7 @@ jobs:
           with open("FunCity-Update.bat", "wb") as f:
               f.write(bat.replace(chr(10), chr(13)+chr(10)).encode("ascii", "ignore"))
           PY
-          gh release upload funcity "$GITHUB_WORKSPACE/FunCity-1.2.0.mrpack" "$GITHUB_WORKSPACE/FunCity-Update.bat" -R "$GITHUB_REPOSITORY" --clobber
+          gh release upload funcity "$GITHUB_WORKSPACE/FunCity-1.2.0.mrpack" "$GITHUB_WORKSPACE/FunCity-1.2.1.mrpack" "$GITHUB_WORKSPACE/FunCity-Update.bat" -R "$GITHUB_REPOSITORY" --clobber
           gh release edit funcity -R "$GITHUB_REPOSITORY" --notes "## 🏙️ FUNCTITY 1.7.7 — client 1.2.0 maxim strategic
           **🎮 CLIENT:** [FunCity-1.2.0.mrpack](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.0.mrpack) = tot contentul + DOAR performanta care lucreaza in joc (Rubidium/Oculus/ModernFix/Ferrite/LazyDFU/ModernXL + EntityCulling/Radon/OutOfSight/CollisionFix), zero decoratiuni (16MB de gunoi taiati la 1.1.0)
           **⚡ INSTALARE AUTOMATA pe PC-ul tau:** [FunCity-Update.bat](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-Update.bat) — dublu-click, gata: Isi pune singur in instanta CUANTIC-Client-1.7.7, face backup data trecuta, seteaza RAM/GC. Ruleaza-l oricand = la zi.
