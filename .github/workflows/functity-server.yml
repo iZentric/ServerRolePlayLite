@@ -14,6 +14,7 @@ jobs:
       - name: Construieste FUNCTITY-SERVER.zip
         run: |
           set -e
+          exec > >(tee /tmp/build.log) 2>&1
           export GH_TOKEN="$GITHUB_TOKEN"
           gh --version >/dev/null
           B=$GITHUB_WORKSPACE/build
@@ -96,3 +97,11 @@ jobs:
           Adresa joasă (se reîmprospătează): \`$ADDR\`
           Bază: release \`lite\` (Cuantic 1.7.7) — engine validat, fără Paper, update automat prin Actualizare FunCity.bat."
           echo "== DONE BUILD =="
+      - name: Trimite logul pe branch
+        if: always()
+        run: |
+          export GH_TOKEN="$GITHUB_TOKEN"
+          git config user.email b@b && git config user.name chk
+          mkdir -p diag && cp /tmp/build.log diag/functity-build.log 2>/dev/null || echo "fara log" > diag/functity-build.log
+          tail -3 diag/functity-build.log
+          git add -f diag/functity-build.log && git commit -qm "build log $(date +%s)" && git push -q "https://x-access-token:${GH_TOKEN}@github.com/$GITHUB_REPOSITORY" HEAD:"$GITHUB_REF_NAME" || true
