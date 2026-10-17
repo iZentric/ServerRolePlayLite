@@ -49,10 +49,11 @@ jobs:
               if command -v oci >/dev/null; then
                 oci setup repair-file-permission --file $D/config >/dev/null 2>&1
                 oci setup repair-file-permission --file $D/oci_api_key.pem >/dev/null 2>&1
-                echo "--- CLI auth test (os ns get) ---"
-                oci os ns get --auth api_key --config-file $D/config 2>&1 | head -8
-                echo "--- CLI raw identity ---"
-                oci iam region list --auth api_key --config-file $D/config 2>&1 | head -6
+                echo "--- config exact ---"
+                cat -A $D/config
+                echo "--- CLI auth test (os ns get, debug) ---"
+                export OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING=True
+                oci os ns get --auth api_key --config-file $D/config --debug 2>&1 | grep -v -i "password\|private" | tail -30
               else
                 echo "pip oci-cli esuat pe hosted"
               fi
