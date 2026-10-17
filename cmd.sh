@@ -1,16 +1,17 @@
 export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
-echo "=== DE CE 422 ==="; head -c 300 /tmp/up.out 2>/dev/null; echo
-T=$(git -C ~/srpl-claie remote get-url origin | sed 's|.*://x-access-token:\([^@]*\)@.*|\1|')
-AID=$(curl -s -H "Authorization: token $T" "https://api.github.com/repos/iZentric/ServerRolePlayLite/releases/415883660/assets" | python3 -c "import json,sys;a=json.load(sys.stdin);print(a[0]['id'] if a else '')" 2>/dev/null)
-[ -n "$AID" ] && { echo "sterg asset vechi $AID"; curl -s -X DELETE -H "Authorization: token $T" "https://api.github.com/repos/iZentric/ServerRolePlayLite/releases/assets/$AID" > /dev/null; }
-C=$(curl -s -o /tmp/up2.out -w "%{http_code}" -X POST -H "Authorization: token $T" -H "Content-Type: application/zip" --data-binary @~/FunCity-Client-Lite.zip "https://uploads.github.com/repos/iZentric/ServerRolePlayLite/releases/415883660/assets?name=FunCity-Client-Lite.zip")
-echo "re-upload: HTTP $C"; grep -oE '"browser_download_url": *"[^"]*"' /tmp/up2.out 2>/dev/null | head -1
-echo "=== CAPACITATE: view-distance ==="
+echo "=== SERVER ==="
 cd ~/cuantic-live
-sed -i 's/^view-distance=.*/view-distance=6/; s/^simulation-distance=.*/simulation-distance=4/' server.properties
-grep -E "^view-distance" server.properties || echo "view-distance=6" >> server.properties
-grep -q "view-distance=6" server.properties && { pkill -f unix_args; sleep 3; nohup ~/j11/bin/java @unix_args.txt nogui > boot.log 2>&1 &
-  for i in $(seq 1 60); do sleep 5; grep -q "Done (" boot.log && break; done
-  grep -oE "Done \([0-9.]*s\)!" boot.log | tail -1; }
-pgrep -f unix_args >/dev/null && echo "server: VIU" || echo "server: JOS(!)"
-grep -oE "https://[a-z0-9-]+\.trycloudflare\.com" /tmp/cf.log | head -1
+pgrep -f unix_args >/dev/null && echo "server: VIU" || { echo "repornesc"; nohup ~/j11/bin/java @unix_args.txt nogui > boot.log 2>&1 & }
+for i in $(seq 1 40); do sleep 5; grep -q "Done (" boot.log && break; done
+grep -oE "Done \([0-9.]*s\)!" boot.log | tail -1
+grep -cE "Can't keep up" boot.log | sed 's/^/keepup-uri la 6: /'
+echo "=== RELEASE via S3 (doi pasi) ==="
+T=$(git -C ~/srpl-claie remote get-url origin | sed 's|.*://x-access-token:\([^@]*\)@.*|\1|')
+Z=~/FunCity-Client-Lite.zip
+SZ=$(stat -c %s $Z)
+J=$(curl -s -X POST -H "Authorization: token $T" -H "Content-Type: application/json" -d "{\"name\":\"FunCity-Client-Lite.zip\",\"size\":$SZ,\"content_type\":\"application/zip\"}" "https://uploads.github.com/repos/iZentric/ServerRolePlayLite/releases/415883660/assets")
+S3=$(echo "$J" | python3 -c "import json,sys;print(json.load(sys.stdin).get('upload_url',''))" 2>/dev/null)
+echo "asset inregistrat: ${S3:+OK}"
+C=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -H "Content-Type: application/zip" --data-binary @$Z "$S3")
+echo "PUT S3: HTTP $C"
+[ "$C" = 200 ] && echo "LINK: https://github.com/iZentric/ServerRolePlayLite/releases/download/client-lite/FunCity-Client-Lite.zip"
