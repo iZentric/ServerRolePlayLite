@@ -1,4 +1,4 @@
-# CLOUD-SHELL 2026-10-17 13:04:31 UTC — actiune: keep
+# CLOUD-SHELL 2026-10-17 13:05:52 UTC — actiune: keep
 key: 1716 bytes | fp: f3:28:70:dc:e8:a1:26:de:78:13:69:60:b5:9f:f2:4d:5b:e5:53:41 | region: eu-frankfurt-1
 --- config exact ---
 [DEFAULT]$
@@ -10,7 +10,7 @@ region=eu-frankfurt-1$
 fingerprint=f3:28:70:dc:e8:a1:26:de:78:13:69:60:b5:9f:f2:4d:5b:e5:53:41$
 key_file=/home/runner/.oci/oci_api_key.pem$
 --- CLI auth test (os ns get, debug) ---
-DEBUG:oci_cli.cli_metrics: 2026-10-17 13:04:58.812126+00:00: Metrics is not enabled
+DEBUG:oci_cli.cli_metrics: 2026-10-17 13:06:31.335790+00:00: Metrics is not enabled
 Linux-6.17.0-1022-azure-x86_64-with-glibc2.39
 System name: Linux
 System release : 6.17.0-1022-azure
