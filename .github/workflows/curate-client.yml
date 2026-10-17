@@ -82,12 +82,9 @@ jobs:
           :err
           echo ESUAT: n-am putut descarca de pe GitHub. Verifica netul si ruleaza din nou.
           pause
-          '''.strip('
-')
-          open("/home/user/ServerRolePlayLite/FunCity-Update.bat", "wb").write(bat.replace("
-", "
-").encode("utf-8", "ascii", "ignore"))
-          print("bat scris", len(bat))
+          '''.split(chr(10))])
+          with open("FunCity-Update.bat", "wb") as f:
+              f.write(bat.replace(chr(10), chr(13)+chr(10)).encode("ascii", "ignore"))
           PY
           gh release upload funcity "$GITHUB_WORKSPACE/FunCity-1.2.0.mrpack" "$GITHUB_WORKSPACE/FunCity-Update.bat" -R "$GITHUB_REPOSITORY" --clobber
           gh release edit funcity -R "$GITHUB_REPOSITORY" --notes "## 🏙️ FUNCTITY 1.7.7 — client 1.2.0 maxim strategic
