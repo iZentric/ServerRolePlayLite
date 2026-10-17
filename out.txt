@@ -1,24 +1,17 @@
-Sat Oct 17 20:13:31 UTC 2026
-== PLAYIT LOG ==
-Could not connect to the playit service. playit also tried to start it first, but startup failed: The playit daemon is not reachable at /run/playit/playitd.sock.
-playitd must be running in the background before playit can connect to it.
+Sat Oct 17 20:14:34 UTC 2026
+== SERVEO (zero cont) ==
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+Warning: Permanently added 'serveo.net,37.27.37.254' (RSA) to the list of known hosts.
+Warning: remote port forwarding failed for listen port 25565
+[31mFree public TCP uses a random port. Request port 0 instead (ssh -R 0:localhost:PORT serveo.net), or upgrade to choose a stable port: https://console.serveo.net/settings
+[0mConnection to serveo.net closed by remote host.
+serveo mort - PLAYITD standalone:
+1.0.10
+`playit start` can only start the installed service when run with --systemd or --openrc.
 
-Run with --systemd or --openrc to let playit start the installed service, or start playitd manually and connect with --socket-path:
+If you are managing playitd yourself, start it in the background and connect with --socket-path:
   playitd --socket-path=./playit.sock --secret-path=./playit.toml
   playit --socket-path=./playit.sock
-== help ==
-Usage: playit [OPTIONS] [COMMAND]
-
-Commands:
-  version      Print version information
-  attach       Attach to a running playitd service
-  start        Start the installed playitd service
-  stop         Stop the installed playitd service
-  status       Show the status of the installed playitd service
-== cfg location ==
-/home/mndvasi9/.playit/:
-total 8
-drwxr-xr-x.  2 mndvasi9 oci   25 Oct 17 20:10 .
-drwxr-xr-x. 23 mndvasi9 oci 4096 Oct 17 20:10 ..
--rw-r--r--.  1 mndvasi9 oci   89 Oct 17 20:10 config.toml
+== MC ==
+PORT 25565: DESCHIS
 exit=0
