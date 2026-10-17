@@ -1,4 +1,5 @@
 export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
+echo "=== V21B RULA CURAT ==="
 echo "=== SERVER ==="
 cd ~/cuantic-live
 pgrep -f unix_args >/dev/null && echo "server: VIU" || { echo "repornesc"; nohup ~/j11/bin/java @unix_args.txt nogui > boot.log 2>&1 & }
