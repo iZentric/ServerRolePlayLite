@@ -52,4 +52,5 @@ jobs:
         run: |
           git config user.email b@b && git config user.name chk
           mkdir -p diag && { date -u; cat /tmp/verdict.txt; } > diag/live-check.txt
+          git pull -q --rebase origin "$GITHUB_REF_NAME" 2>/dev/null || true
           git add -f diag/live-check.txt && git commit -qm "live check $(date +%s)" && git push -q "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" HEAD:$GITHUB_REF_NAME
