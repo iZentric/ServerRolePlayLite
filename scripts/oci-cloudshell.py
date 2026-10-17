@@ -59,8 +59,22 @@ def home_region(c):
         except Exception as e:
             print(f"[identity@{probe}] {e}")
     return probe, None
+def sdk_probe():
+    try:
+        import oci
+    except ImportError:
+        print("[SDK] oci nelansat (pip a esuat pe hosted)"); return False
+    try:
+        ic = oci.identity.IdentityClient({k: v for k, v in cfg().items() if k in ("user","tenancy","fingerprint","key_file","region")})
+        r = ic.list_regions()
+        print(f"[SDK] OK, home region: {r.data[0].name}")
+        return True
+    except Exception as e:
+        print(f"[SDK] FAIL: {type(e).__name__}: {str(e)[:260]}")
+        return False
 def main():
     c = cfg(); mode = sys.argv[1] if len(sys.argv) > 1 else "keep"
+    sdk_probe()
     tried, home = home_region(c)
     print(f"[auth] identity raspunde prin {tried}; HOME region: {home or 'NEDESCIFRAT (vezi HTTP mai sus)'}")
     if home and home != c.get("region"):
