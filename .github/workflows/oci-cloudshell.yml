@@ -1,0 +1,48 @@
+name: OCI-CLOUD-SHELL
+# Porneaza/ține viu Oracle Cloud Shell prin API (fara browser). Buton + ceas la 4 zile.
+on:
+  workflow_dispatch:
+    inputs:
+      actiune:
+        description: "keep (pune sesiune) | status (doar verific)"
+        required: false
+        default: "keep"
+  push:
+    paths: [ .github/workflows/oci-cloudshell.yml ]
+  schedule:
+    - cron: "15 5 */4 * *"
+permissions:
+  contents: write
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      OCI_USER: ${{ secrets.OCI_USER }}
+      OCI_TENANCY: ${{ secrets.OCI_TENANCY }}
+      OCI_REGION: ${{ secrets.OCI_REGION }}
+      OCI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
+      OCI_PRIVATE_KEY: ${{ secrets.OCI_PRIVATE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: config + keepalive
+        run: |
+          set +e
+          D=$HOME/.oci; mkdir -p $D; chmod 700 $D
+          printf '%s\n' "$OCI_PRIVATE_KEY" > $D/oci_api_key.pem
+          [ -s $D/oci_api_key.pem ] || { echo "FARA CHEIE (secretul OCI_PRIVATE_KEY e gol?)"; exit 0; }
+          chmod 600 $D/oci_api_key.pem
+          FP="$OCI_FINGERPRINT"
+          if [ -z "$FP" ] || [ "${#FP}" -lt 20 ]; then
+            FP=$(openssl rsa -in $D/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl sha1 | awk '{print $2}' | sed 's/../&:/g;s/:$//')
+            echo "fingerprint calculat: $FP"
+          fi
+          { echo "[DEFAULT]"; echo "user=$OCI_USER"; echo "tenancy=$OCI_TENANCY"; echo "region=$OCI_REGION"; echo "fingerprint=$FP"; echo "key_file=$D/oci_api_key.pem"; } > $D/config
+          ACT="${{ inputs.actiune }}"
+          [ -z "$ACT" ] && ACT=keep
+          { echo "# CLOUD-SHELL $(date -u '+%F %T UTC') — actiune: $ACT"; python3 scripts/oci-cloudshell.py "$ACT"; } > analysis/CLOUD-SHELL.md 2>&1
+          cat analysis/CLOUD-SHELL.md
+          git add -f analysis/CLOUD-SHELL.md
+          git config user.name cs-bot; git config user.email cs@functity.local
+          git commit -qm "cloud shell: $ACT"
+          for i in 1 2 3; do git pull -q --no-rebase -X ours origin "${GITHUB_REF_NAME}" 2>/dev/null; git push -q origin HEAD:"${GITHUB_REF_NAME}" && break; sleep 3; done
