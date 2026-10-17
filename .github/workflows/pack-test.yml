@@ -70,6 +70,7 @@ jobs:
           else
             echo "BOOT: ESUAT - erori:"
             grep -E "requires|not installed|FATAL|Exception" boot.log | head -20
+            exit 1
           fi
       - uses: actions/upload-artifact@v4
         with: { name: boot-log, path: run/boot.log }
