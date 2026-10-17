@@ -1,0 +1,32 @@
+== descarc srv-live (443MB) de pe release server-live ==
+== structura ==
+ADRESA
+CITESTE-MA.txt
+CatServer-1.16.5-1d8d6313-server.jar
+FunCity-1.16.5-b1.0827.jar
+ROLLBACK.txt
+banned-ips.json
+banned-players.json
+bind.log
+boot.clean
+boot.log
+jars: 0
+== engine jar root ==
+engine: CatServer-1.16.5-1d8d6313-server.jar
+== icon 64x64 de pe release funcity ==
+/home/runner/work/_temp/8fb32c68-1568-427b-9414-8ab4f3e5a262.sh: line 18: convert: command not found
+server-icon: absent
+== server.properties FunCity ==
+sed: -e expression #1, char 51: unknown option to `s'
+== start.bat (java portabil + RAM auto) ==
+== Actualizare FunCity.bat ==
+== java portabila Windows x64 (Temurin 11) ==
+== adresa curenta ==
+ADRESA.txt: serveousercontent.com:42241
+== README ==
+== zip final ==
+-rw-r--r-- 1 runner runner 486672767 Oct 17 21:36 /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/FUNCTITY-SERVER.zip
+== upload pe release functity ==
+gh: To use GitHub CLI in a GitHub Actions workflow, set the GH_TOKEN environment variable. Example:
+  env:
+    GH_TOKEN: ${{ github.token }}
