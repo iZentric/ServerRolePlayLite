@@ -1,9 +1,6 @@
-Sat Oct 17 15:14:43 UTC 2026
-Traceback (most recent call last):
-  File "<stdin>", line 20, in <module>
-AttributeError: 'NoneType' object has no attribute 'group'
-[15:12:10 INFO]: iZentric issued server command: /version
-[15:12:10 INFO]: [Cuantic/version] iZentric: » Cuantic 1.7.7 (build propriu, Java 11.0.32.1) | Minecraft 1.16.5 · API 1.16.5-R0.1-SNAPSHOT · motor Mohist | Cuantic based on / adapted from: 1.16.5-754b578e (MC: 1.16.5)
+Sat Oct 17 15:15:19 UTC 2026
 [15:14:01 INFO]: iZentric issued server command: /tps
-exit=0
+[15:10:30 WARN]: Method overwrite conflict for removeIf in modernfix-common.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin, previously written by me.jellysquid.mods.lithium.mixin.world.chunk_tickets.SortedArraySetMixin. Skipping method.
+[15:10:34 INFO]: Done (4.592s)! For help, type "help"
+ 15:15:19 up  7:10,  0 users,  load average: 1.29, 1.25, 0.84
 exit=0
