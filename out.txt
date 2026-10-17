@@ -1,13 +1,13 @@
-Sat Oct 17 19:09:04 UTC 2026
-== MASURA REALA ==
-Java: NU E
-mods: 0
-mods-pre-fr
---- boot.log ultime:
-[18:39:43 INFO]: ModLauncher mohist-8.1.3 starting: java version 11.0.32.1 by Eclipse Adoptium
-[18:40:10 INFO]: Loading properties
-[18:40:11 WARN]: The exception was: java.net.BindException: Address already in use
-[18:40:11 ERROR]: Exception stopping the server
---- MC PING local:
-PING esuat: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Sat Oct 17 19:17:13 UTC 2026
+== CURATARE TOTALA ==
+mods: 29
+BOOT: NU A DAT DONE
+[19:17:36 FATAL]: Error during pre-loading phase
+[19:17:36 FATAL]: Crash report saved to ./crash-reports/crash-2026-10-17_19.17.36-fml.txt
+java.lang.Exception: Mod Loading has failed
+	Failure message: Mod vehicle requires obfuscate 0.4.0 or above
+	Exception message: MISSING EXCEPTION MESSAGE
+== MC PING real ==
+PING esuat: [Errno 111] Connection refused
+== TUNEL ==
 exit=0
