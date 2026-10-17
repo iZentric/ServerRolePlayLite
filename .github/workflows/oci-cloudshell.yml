@@ -9,7 +9,7 @@ on:
         required: false
         default: "keep"
   push:
-    paths: [ .github/workflows/oci-cloudshell.yml ]
+    paths: [ .github/workflows/oci-cloudshell.yml, scripts/oci-cloudshell.py ]
   schedule:
     - cron: "15 5 */4 * *"
 permissions:
