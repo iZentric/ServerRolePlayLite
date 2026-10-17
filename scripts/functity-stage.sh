@@ -683,6 +683,45 @@ X
   say "    uptime server: $( [ -n "$PID" ] && ps -o etime= -p "$PID" 2>/dev/null | tr -d " " || echo SUS? )"
   finish 0
   ;;
+  tune) # tunare de configurare PE STAGING (productia nu se atinge; install o va aduce live abia dupa test OK)
+  say "== TUNE pe staging =="
+  [ -f "$D/spigot.yml" ] || { say "  lipsa spigot.yml in staging — ruleaza intai assemble"; finish 1; }
+  cp -n "$D/spigot.yml" "$B/spigot.yml.tune-orig" 2>/dev/null; cp -n "$D/bukkit.yml" "$B/bukkit.yml.tune-orig" 2>/dev/null
+  sed -i "s/tick-inactive-villagers: true/tick-inactive-villagers: false/" "$D/spigot.yml"
+  sed -i "s/^    mob: 32$/    mob: 24/; s/^    other: 10$/    other: 8/" "$D/spigot.yml"
+  sed -i "s/period-in-ticks: 600/period-in-ticks: 400/" "$D/bukkit.yml" 2>/dev/null
+  grep -q "^server-port=" "$D/server.properties" && sed -i "s/^simulation-distance=.*/simulation-distance=6/" "$D/server.properties"
+  grep -q "^simulation-distance=" "$D/server.properties" || echo "simulation-distance=6" >> "$D/server.properties"
+  sed -i "s/^network-compression-threshold=.*/network-compression-threshold=256/" "$D/server.properties"; grep -q "^network-compression-threshold=" "$D/server.properties" || echo "network-compression-threshold=256" >> "$D/server.properties"
+  say "  aplicat: villagers inactivi opriti, mob-activation 32->24, chunk-gc 600->400, sim-distance 6, compressie 256"
+  say "  VERIFY:"; grep -E "tick-inactive-villagers|mob: 24" "$D/spigot.yml" | sed "s/^/    /" | tee -a "$REPORT"; grep -E "simulation-distance|compression" "$D/server.properties" | sed "s/^/    /" | tee -a "$REPORT"
+  finish 0
+  ;;
+  site-sync) # citeste cifrele VRED din productie si impinge site-ul actualizat pe arena (site.yml il editeaza pe Pages)
+  say "== SITE-SYNC: productia isi scrie singura statisticile =="
+  BOOT=$(grep -hE "Done \([0-9.]+s\)!" "$P/logs/latest.log" 2>/dev/null | tail -1 | grep -oE "[0-9]+\.[0-9]+" | head -1)
+  KU=$(grep -c "Cant keep up\|Can't keep up" "$P/logs/latest.log" 2>/dev/null)
+  PID=$(pgrep -f "java @unix_args" | head -1); [ -n "$PID" ] || PID=$(pgrep -f "[j]ava.*nogui" | head -1)
+  RSS=$(awk '/VmRSS/{printf "%.1f", $2/1048576}' /proc/$PID/status 2>/dev/null)
+  UP=$(ps -o etime= -p "$PID" 2>/dev/null | tr -d " ")
+  ONLINE=$(python3 scripts/minecraft_status.py 127.0.0.1 25565 2>/dev/null | grep -oE '"online": [0-9]+' | grep -oE "[0-9]+" | head -1)
+  say "  boot=${BOOT:-?}s keepup=${KU:-?} rss=${RSS:-?}GB up=${UP:-?} online=${ONLINE:-?}"
+  python3 - "$BOOT" "${KU:-0}" "${RSS:-0}" "${ONLINE:-0}" "$UP" <<'EO'
+import re,sys,datetime
+boot,ku,rss,online,up=sys.argv[1:6]
+f="site/index.html"
+t=open(f,encoding="utf-8").read()
+t=re.sub(r'(<div><b>)[^<]*(</b><span>boot)',r'\g<1>%s s\g<2>'%boot,t)
+t=re.sub(r'(<div><b>)[^<]*(</b><span>tick-uri)',r'\g<1>%s\g<2>'%ku,t)
+t=re.sub(r'(<div><b>)[^<]*(</b><span>RAM)',r'\g<1>%s GB\g<2>'%rss,t)
+t=re.sub(r'Statistici din produc[^—]*— .*?keep-up \d+\.','Statistici din productie (auto, %s UTC): boot %ss, uptime %s, %s jucatori online, keep-up %s.'%(datetime.datetime.utcnow().strftime("%F %H:%M"),boot,up,online,ku),t)
+open(f,"w",encoding="utf-8").write(t)
+print("  index.html rescris cu numere live")
+EO
+  git config user.name "funcity-live" 2>/dev/null; git config user.email "server@functity.local" 2>/dev/null
+  git add site/index.html && git commit -qm "site: statistici auto $(date -u '+%m-%d %H:%M') (boot ${BOOT}s, keep-up ${KU:-0}, ${RSS}GB)" 2>/dev/null && git push -q "https://x-access-token:${ACTIONS_TOKEN:-$GITHUB_TOKEN}@github.com/$REPO" HEAD:refs/heads/arena/9bbcb24f-serverroleplaylite && say "  IMPINS pe arena (site.yml aduce pe Pages)" || say "  nimic nou sau push refuzat"
+  finish 0
+  ;;
   down)
     opreste_server || true
     # maturam orice JVM de staging ramas din cicluri anterioare (pid vechi suprasris)
