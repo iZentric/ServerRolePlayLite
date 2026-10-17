@@ -9,7 +9,7 @@ jobs:
   s:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env: { GT: "${{ secrets.GITHUB_TOKEN }}" }
+    env: { GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
     steps:
       - uses: actions/checkout@v4
       - name: Stitch + upload la release server-live
