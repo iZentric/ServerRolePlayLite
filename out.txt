@@ -1,4 +1,4 @@
-Sat Oct 17 16:04:39 UTC 2026
+Sat Oct 17 16:05:04 UTC 2026
 == PROCES ==
 == PORT ==
 PORT 25565 INCHIS
@@ -10,14 +10,13 @@ PORT 25565 INCHIS
 	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:105) ~[FunCity-1.16.5-b1.0827.jar:?]
 	at net.minecraftforge.server.ServerMain.main(ServerMain.java:86) ~[FunCity-1.16.5-b1.0827.jar:?]
 == LATEST.LOG ==
-	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) ~[modlauncher-mohist-8.1.3.jar:?]
-	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) ~[modlauncher-mohist-8.1.3.jar:?]
-	at net.minecraftforge.server.ServerMain$Runner.runLauncher(ServerMain.java:105) ~[FunCity-1.16.5-b1.0827.jar:?]
-	at net.minecraftforge.server.ServerMain.main(ServerMain.java:86) ~[FunCity-1.16.5-b1.0827.jar:?]
+[16:04:55] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher mohist-8.1.3 starting: java version 17.0.20.1 by Eclipse Ado
+[16:04:55] [main/INFO] [net.minecraftforge.fml.loading.FixSSL/CORE]: Added Lets Encrypt root certificates as additional trust
+[16:04:55] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.4 Source=file:/home/mndvasi9/cuantic-live/libraries/org/spongepow
+[16:04:57] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'fmlserver' with arguments [--gameDir, ., n
 == ZIP ==
 90802667 bytes
 == TOKEN: gasitgho_C
 asset: ERR:Invalid name for request
 
 exit=0
-exit=1
