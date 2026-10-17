@@ -3,9 +3,8 @@
 Repo pe GitHub: ~154 MB (toate branchurile, cu tot cu istorie)
 
 ## Binare pe branchul functity-out (se cloneaza odata cu repo-ul)
-- **90 build-uri FunCity-1.16.5.jar** (252 MB) — versiuni: 0 1.0600 1.0732 1.0827 1.1115 1.2105 1.2118 1.2140 1.2222 1.2223 1.2235 1.2256 1.2258 1.2322 1.2323 1.2326 
+- **90 build-uri FunCity-1.16.5.jar** (252 MB) — versiuni: b.0600 1.0732 1.0827 1.1115 1.2105 1.2118 1.2140 1.2222 1.2223 1.2235 1.2256 1.2258 1.2322 1.2323 1.2326
 - **pack/CUANTIC-Server-CatServer-1.7.7.zip** (48.7 MB) — serverul vechi 1.7.10 complet (jar+mods+configs+launch)
-- $SZ
 
 ```
 fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  CUANTIC-Server-CatServer-1.7.7.zip
