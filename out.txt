@@ -1,8 +1,18 @@
-Sat Oct 17 17:59:03 UTC 2026
-== EXPORT SERVER COMPLET ==
-tar: 443607403 bytes
-release: 415974474
-asset: {"message":"Invalid name for request","request_id":"D435:FDA5C:2B1C435:2C82127:6AD3B789"}
-== SI STATUT V36 ==
-PORT: DESCHIS
+Sat Oct 17 18:36:24 UTC 2026
+== STARE REALA ==
+Java: NU RULEAZA
+mods: 0
+world fiere: 49
+https://leo-expenditure-respected-download.trycloudflare.com
+== PARTI EXPORT ==
+remote: warning: See https://gh.io/lfs for more information.        
+remote: warning: File srvpart_00 is 99.00 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB        
+remote: warning: File srvpart_01 is 99.00 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB        
+remote: warning: File srvpart_02 is 99.00 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB        
+remote: warning: File srvpart_03 is 99.00 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB        
+remote: warning: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.        
+To https://github.com/iZentric/ServerRolePlayLite
+ ! [remote rejected] packdiag -> packdiag (cannot lock ref 'refs/heads/packdiag': is at c7b011149214c6a42ac02a3eb3c60f1b6fc8a4f2 but expected cc263fd35229f1eaae9c0d8eb22c6c967e93845e)
+error: failed to push some refs to 'https://github.com/iZentric/ServerRolePlayLite'
+push parti ESUAT
 exit=0
