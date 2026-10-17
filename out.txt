@@ -1,18 +1,20 @@
-Sat Oct 17 19:28:19 UTC 2026
+Sat Oct 17 19:44:19 UTC 2026
+== BRAND + LIB + BOOT (v45) ==
 Traceback (most recent call last):
   File "<stdin>", line 2, in <module>
 PermissionError: [Errno 13] Permission denied: '/home/mndvasi9/freeroam/x/modrinth.index.json'
 obfuscate_lib_compatible-1.3.0.jar
 SeleneChat-0.2.0-all.jar
-== BOOT ==
+motd=\u00A7b\u00A7lFunCity\u00A7r \u00A77RolePlay 1.16.5
 BOOT: NU A DAT DONE
-	Failure message: Mod vehicle requires obfuscate 0.4.0 or above
 	Failure message: Mod additionalguns requires obfuscate 0.6.3 or above
+	Failure message: Mod vehicle requires obfuscate 0.4.0 or above
 	Failure message: Mod supplementaries requires selene 1.16.5-1.0 or above
 	Failure message: Mod cgm requires obfuscate 0.6.2 or above
-	Mod §evehicle§r requires §6obfuscate§r §o0.4.0 or above§r
 	Mod §eadditionalguns§r requires §6obfuscate§r §o0.6.3 or above§r
-== PLAN B: eliminam exact modurile care cer lib absent si repornim ==
+	Mod §evehicle§r requires §6obfuscate§r §o0.4.0 or above§r
 RETRY: 
 PORT: INCHIS
+== TUNEL ==
+https://browser-definitely-cardiff-room.trycloudflare.com
 exit=0
