@@ -1,35 +1,55 @@
 export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
 cd ~/cuantic-live
-echo "== MASURA REALA =="
-P=$(pgrep -f "j11/bin/java" | head -1)
-[ -n "$P" ] && { ps -o etime=,rss=,args= -p $P | cut -c1-120; echo "RAM: $(( $(awk '/VmRSS/{print $2}' /proc/$P/status 2>/dev/null || echo 0) / 1024 ))MB"; } || echo "Java: NU E"
-echo "mods: $(ls mods/*.jar 2>/dev/null | wc -l)"; ls mods/ 2>/dev/null | head -6
-echo "--- boot.log ultime:"; sed 's/\x1b\[[0-9;]*m//g' boot.log 2>/dev/null | grep -aE "Done|FATAL|Loading|Exception|start" | tail -6 | cut -c1-140
-echo "--- MC PING local:"
+echo "== CURATARE TOTALA =="
+pkill -9 -f java 2>/dev/null; pkill -9 -f cloudflared 2>/dev/null; sleep 6
+fuser -k 25565/tcp 2>/dev/null; sleep 2
+if [ -d mods/mods-pre-fr ]; then mv -f mods/mods-pre-fr/* mods/ 2>/dev/null; rmdir mods/mods-pre-fr; fi
+echo "mods: $(ls mods/*.jar 2>/dev/null | wc -l)"
+rm -f world/session.lock world/DIM-1/session.lock world/DIM1/session.lock
+setsid nohup ~/j11/bin/java @unix_args.txt nogui > boot.log 2>&1 < /dev/null &
+for i in $(seq 1 80); do sleep 5; grep -qaE "Done \(|FATAL|LoadingFailed" boot.log && break; done
+sed 's/\x1b\[[0-9;]*m//g' boot.log > boot.clean
+DONE=$(grep -oE "Done \([0-9.]*s\)!" boot.clean | tail -1)
+echo "BOOT: ${DONE:-NU A DAT DONE}"
+[ -z "$DONE" ] && grep -aE "requires|FATAL|Exception" boot.clean | head -5 | cut -c1-140
+echo "== MC PING real =="
 python3 - <<'PY'
 import socket,struct,json
-def vi(n):
-    b=bytearray();
-    while n>0x7f or n<-0x80: b.append((n&0x7f)|0x80); n>>=7
-    b.append(n); return bytes(b)
-try:
-    s=socket.create_connection(("127.0.0.1",25565),4)
-    p=vi(0)+vi(0)+vi(2)+b'\xff\xff\xff\xff'+b'\x02'+b'\x01'+b'\x02'+vi(0)+vi(0)
-    s.sendall(vi(len(p))+p)
-    d=s.recv(4); n=int.from_bytes(b'','x') if 0 else None
-    import itertools
-    ln=0; sh=0; buf=b''
+def wv(n):
+    o=b''
     while True:
-        c=s.recv(1); ln|=c[0]
-        if not c[0]&0x80: break
-        sh+=7
-    data=s.recv(ln)
-    json.loads(data)
-    print("PING: server raspunde, JSON ok")
-    j=json.loads(data)
-    print("desc:",j.get('description','')[:60])
-    print("players:",j.get('players',{}).get('online'),"/",j.get('players',{}).get('max'))
-    print("version:",j.get('version',{}).get('name'))
+        if (n&~0x7F)==0: return o+bytes([n])
+        o+=bytes([(n&0x7F)|0x80]); n>>=7
+def rv(f):
+    n=0;s=0
+    while True:
+        c=f.read(1)
+        if not c: raise Exception('eof')
+        b=c[0]; n|=(b&0x7f)<<s; s+=7
+        if not b&0x80: return n
+try:
+    s=socket.create_connection(('127.0.0.1',25565),8)
+    body=wv(0)+wv(-1&0xFFFFFFFFFFFFFFFF)
+    host=b'127.0.0.1'
+    body=wv(0)+wv(len(host))+host+struct.pack('>H',25565)+wv(1)+wv(0)
+    s.sendall(wv(len(body))+body)
+    body=wv(0)+wv(0)
+    s.sendall(wv(len(body))+body)
+    ln=rv(s.makefile('rb'))
+    data=s.recv(ln+8)
+    # sari peste varint len + packet id
+    i=0;n=0;sh=0
+    while data[i]&0x80: n|=data[i]&0x7f;sh+=7;i+=1
+    n|=data[i]&0x7f;i+=1
+    d2=n;s2=0
+    while data[i]&0x80: d2|=(data[i]&0x7f)<<s2;s2+=7;i+=1
+    d2|=data[i]&0x7f;i+=1
+    j=json.loads(data[i:i+d2])
+    print('PING OK |', j.get('version',{}).get('name'), '| jucatori:', j.get('players',{}).get('online'),'/',j.get('players',{}).get('max'), '|', str(j.get('description'))[:50])
 except Exception as e:
-    print("PING esuat:",str(e)[:80])
+    print('PING esuat:',str(e)[:100])
 PY
+echo "== TUNEL =="
+cd ~/cuantic-live && setsid nohup ./cloudflared tunnel --no-autoupdate --url tcp://127.0.0.1:25565 > /tmp/cf.log 2>&1 < /dev/null &
+for i in $(seq 1 20); do sleep 3; grep -q trycloudflare /tmp/cf.log 2>/dev/null && break; done
+grep -oE "https://[a-z0-9-]+\.trycloudflare\.com" /tmp/cf.log | head -1
