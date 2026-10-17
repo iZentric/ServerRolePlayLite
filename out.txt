@@ -1,18 +1,32 @@
-Sat Oct 17 23:27:26 UTC 2026
-TOTAL MODURI FIȘIERE: 13
-SUSPECTE: NICIUNA
----LISTA---
- - required
- - required
- - required
- - required
- - required
- - required
- - required
- - required
- - required
- - required
- - required
- - required
- - required
+Sat Oct 17 23:27:56 UTC 2026
+== files[] din index ==
+ - mapperbase-1.16.5-2.4.0.0.jar | env: {"client": "required", "server": "required"}
+ - supplementaries-1.16.5-0.18.4b.jar | env: {"server": "required", "client": "required"}
+ - TextruesRubidiumOptions-1.0.8-mc1.16.5.jar | env: {"server": "required", "client": "required"}
+ - modernfix-forge-5.18.0%2Bmc1.16.5.jar | env: {"client": "required", "server": "required"}
+ - player-animation-lib-forge-0.4.0%2B1.16.5.jar | env: {"client": "required", "server": "required"}
+ - ferritecore-2.1.1-forge.jar | env: {"server": "required", "client": "required"}
+ - emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar | env: {"server": "required", "client": "required"}
+ - InGameAccountSwitcher-Forge-1.16-8.0.1.jar | env: {"client": "required", "server": "required"}
+ - roadstuff-1.16.5-4.3.0.jar | env: {"client": "required", "server": "required"}
+ - rubidium-mc1.16.5-0.2.13.jar | env: {"client": "required", "server": "required"}
+ - oculus-mc1.16.5-1.4.7.jar | env: {"client": "required", "server": "required"}
+ - selene-1.16.5-1.9.0.jar | env: {"client": "required", "server": "required"}
+ - voicechat-forge-1.16.5-2.3.23.jar | env: {"server": "required", "client": "required"}
+== jar-uri in overrides: 15 ==
+ + CTM-MC1.16.1-1.1.2.6.jar
+ + DynamicSurroundings-1.16.5-4.0.5.0.jar
+ + Modernxl 1.16.5.jar
+ + Pizzaland_v68.jar
+ + TRansliterationLib-1.0.4.jar
+ + additional-guns-0.7.1-1.16.5.jar
+ + cfm-7.0.0pre22-1.16.3.jar
+ + cgm-1.2.6-1.16.5.jar
+ + lazydfu-0.1.3.jar
+ + lightfallclient-1.0.0.jar
+ + modernlife-1.16.5-1.15.jar
+ + notenoughanimations-1.2.4.jar
+ + obfuscate-0.6.3-1.16.5.jar
+ + pamhc2foodcore-1.16.3-1.0.2.jar
+ + vehicle-mod-0.45.2-1.16.5 (1).jar
 exit=0
