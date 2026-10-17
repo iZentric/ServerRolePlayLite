@@ -72,7 +72,7 @@ jobs:
           {
             echo "# RELEASE-JARS $(date -u '+%F %T UTC')"
             echo "tag: $TAG | jare: $N | marimi: ${SJ:-0}MB jare + ${SC:-0}MB cuantic"
-            grep -aE "jare extrase|RID|upload|raspuns|raport" $LOG
+            cat $LOG
             echo "URL: https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG"
           } > analysis/RELEASE-JARS.md
           git add -f analysis/RELEASE-JARS.md
