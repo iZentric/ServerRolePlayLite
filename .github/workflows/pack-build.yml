@@ -21,7 +21,8 @@ jobs:
           ./gradlew build -x test --no-daemon > /tmp/kg.log 2>&1
           RC=$?
           echo "BUILD_RC=$RC"
-          TAIL=$(tail -c 380 /tmp/kg.log | tr '\n' ' ' | tr -d '"')
+          TAIL=$(grep -A9 "What went wrong" /tmp/kg.log | head -12 | tr '\n' '|' | tr -d '"' | cut -c1-440)
+          [ -n "$TAIL" ] || TAIL=$(tail -c 420 /tmp/kg.log | tr '\n' '|' | tr -d '"' | cut -c1-440)
           echo "::error::build rc=$RC :: $TAIL"
       - name: Comite jarul pinat pe functity-out
         run: |
