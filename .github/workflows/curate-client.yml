@@ -40,10 +40,25 @@ jobs:
                   picks[os.path.basename(fpath)] = open(fpath, "rb").read()
           print("GASITE IN LITE:", list(picks.keys()))
           zin = zipfile.ZipFile(SRC)
+          idx = json.load(zin.open("modrinth.index.json"))
+          src_names = set()
+          for e in idx.get("files", []):
+              fn = (e.get("filename") or (e.get("downloads") or ["?"])[0].rsplit("/", 1)[-1]).lower()
+              src_names.add(fn.split("/")[-1])
+          lidx = json.load(lite.open("modrinth.index.json"))
+          extra = []
+          for e in lidx.get("files", []):
+              fn = (e.get("filename") or (e.get("downloads") or ["?"])[0].rsplit("/", 1)[-1]).lower()
+              if any(w in fn for w in WANT) and fn not in src_names and fn not in [p.lower() for p in picks]:
+                  extra.append(e)
+          idx["files"] = idx.get("files", []) + extra
           zout = zipfile.ZipFile(DST, "w", zipfile.ZIP_DEFLATED)
           have = set()
           for n in zin.namelist():
-              zout.writestr(n, zin.read(n))
+              if n == "modrinth.index.json":
+                  zout.writestr(n, json.dumps(idx, ensure_ascii=False, indent=2))
+              else:
+                  zout.writestr(n, zin.read(n))
               have.add(n.split("/")[-1].lower())
           added = []
           for name, data in picks.items():
@@ -52,7 +67,7 @@ jobs:
               zout.writestr("overrides/mods/" + name, data)
               added.append(name)
           zout.close()
-          print("ADAUGATE:", added)
+          print("ADAUGATE fizic:", added, "| din index lite:", [e.get("filename") for e in extra])
           d = json.load(zipfile.ZipFile(DST).open("modrinth.index.json"))
           zn = zipfile.ZipFile(DST).namelist()
           print("1.2.0: index", len(d["files"]), "| jar-uri override:", len([x for x in zn if x.endswith('.jar')]), "| marime:", __import__("os").path.getsize(DST))
