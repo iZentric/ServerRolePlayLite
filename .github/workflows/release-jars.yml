@@ -1,0 +1,93 @@
+name: RELEASE-JARS
+# Posteaza TOATE jarele de pe functity-out (FunCity + mohist + Cuantic) ca asseturi pe un release,
+# pentru mutarea pe alt GitHub. Raport: analysis/RELEASE-JARS.md pe branch.
+on:
+  workflow_dispatch:
+  push:
+    paths: [ .github/workflows/release-jars.yml ]
+permissions:
+  contents: write
+jobs:
+  r:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      TOK: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: functity-out
+          path: fout
+      - name: colecteaza si posteaza
+        run: |
+          set +e
+          LOG=/tmp/rj.log; : > $LOG
+          say(){ echo "$1" | tee -a $LOG; }
+          API=https://api.github.com/repos/$GITHUB_REPOSITORY
+          UP=https://uploads.github.com/repos/$GITHUB_REPOSITORY
+          mkdir -p rel && cd rel
+          say "[1] colectez din checkout functity-out..."
+          N=0
+          for f in ../fout/builds/*/FunCity-*.jar; do
+            [ -f "$f" ] || continue
+            V=$(basename "$(dirname "$f")")
+            cp "$f" "FunCity-$V.jar" && N=$((N+1))
+          done
+          MOH=$(ls ../fout/builds/*/mohist-*.jar 2>/dev/null | head -1)
+          [ -n "$MOH" ] && cp "$MOH" "$(basename "$MOH")"
+          CUQ=../fout/pack/CUANTIC-Server-CatServer-1.7.7.zip
+          [ -f "$CUQ" ] && cp "$CUQ" CUANTIC-Server-CatServer-1.7.7.zip
+          say "  FunCity x$N + mohist + cuantic | directoare:"
+          ls -la | tail -n +2 | awk '{printf "    %8s  %s\n",$5,$9}' | head -24 | tee -a $LOG
+          tar cf - *.jar | gzip -1 > functity-jare-toate.tar.gz
+          sha256sum *.tar.gz *.zip 2>/dev/null > SHA256SUMS.txt
+          SJ=$(du -m functity-jare-toate.tar.gz 2>/dev/null | cut -f1); SC=$(du -m CUANTIC-Server-CatServer-1.7.7.zip 2>/dev/null | cut -f1)
+          say "[2] release + upload (jare=${SJ:-0}MB cuantic=${SC:-0}MB)..."
+          TAG=jars-$(date -u +%Y%m%d-%H%M)
+          BODY=$(python3 - "$N" "$TAG" <<'EO'
+          import json,sys
+          n,tag=sys.argv[1:3]
+          print(json.dumps({
+            "tag_name": tag,
+            "name": "FunCity + Cuantic — TOATE jarele",
+            "target_commitish": "main",
+            "draft": False,
+            "body": "Arhiva completa pentru mutarea pe alt GitHub.\n\n- `functity-jare-toate.tar.gz` — " + n + " builduri FunCity-1.16.5.jar (b0..b1.2326) + mohist-1.16.5-1237-server.jar\n- `CUANTIC-Server-CatServer-1.7.7.zip` — serverul 1.7.10 complet (jar+mods+configs+launch)\n- `SHA256SUMS.txt` — verificare: `sha256sum -c SHA256SUMS.txt`\n\nGenerat automat de workflow-ul release-jars.yml."
+          }))
+          EO
+          )
+          RESP=$(curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/json" -d "$BODY" $API/releases)
+          RID=$(echo "$RESP" | jq -r '.id // empty' 2>/dev/null)
+          say "  RID=${RID:-ESUEC}"
+          [ -z "$RID" ] && say "  raspuns: $(echo "$RESP" | head -c 220 | tr '\n' ' ')"
+          if [ -n "$RID" ]; then
+            for A in functity-jare-toate.tar.gz CUANTIC-Server-CatServer-1.7.7.zip SHA256SUMS.txt; do
+              [ -f "$A" ] || continue
+              for tr in 1 2 3; do
+                RC=$(curl -s -w '%{http_code}' -o /tmp/up.resp -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/octet-stream" --data-binary "@$A" "$UP/releases/$RID/assets?name=$A")
+                say "  upload $A (http $RC)"
+                case "$RC" in 2*) break;; esac
+                sleep 8
+              done
+            done
+          fi
+          cd ..
+          say "[3] curat release-urile intermediare (pasterez doar ultimul)..."
+          curl -s -H "Authorization: Bearer $TOK" "$API/releases?per_page=50" | jq -r '.[] | select(.tag_name|startswith("jars-")) | "\(.id) \(.tag_name)"' | sort -k2 | head -n -1 > /tmp/old.txt
+          while read -r OLDID OLDTAG; do
+            [ -n "$OLDID" ] || continue
+            curl -s -X DELETE -H "Authorization: Bearer $TOK" "$API/releases/$OLDID" > /dev/null && say "  sters $OLDTAG"
+            git push -q origin --delete "refs/tags/$OLDTAG" 2>/dev/null
+          done < /tmp/old.txt
+          say "[4] raport"
+          {
+            echo "# RELEASE-JARS $(date -u '+%F %T UTC')"
+            echo "tag: $TAG | FunCity x$N | marimi: ${SJ:-0}MB jare + ${SC:-0}MB cuantic"
+            cat $LOG
+            echo "URL: https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG"
+          } > analysis/RELEASE-JARS.md
+          git add -f analysis/RELEASE-JARS.md
+          git config user.name rj-bot; git config user.email rj@functity.local
+          git commit -qm "raport release-jars: $TAG"
+          for i in 1 2 3; do git pull -q --no-rebase origin "${GITHUB_REF_NAME}" 2>/dev/null; git push -q origin HEAD:"${GITHUB_REF_NAME}" && break; sleep 3; done

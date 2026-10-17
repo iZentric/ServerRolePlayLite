@@ -1,0 +1,22 @@
+name: FunCityAI
+version: 1.16.5-1.0.0
+main: de.functity.ai.FunCityAIPlugin
+api-version: 1.16
+author: FunCity
+description: Agent de chat operational pentru FunCity RP — comenzi curate din chat, cu audit si confirmari. Fara RCON, fara shell.
+commands:
+  ai:
+    description: Interogheaza/controleaza serverul (listă închisă de acțiuni)
+    usage: /ai help
+    permission: functityai.use
+  aiyes:
+    description: Confirma o actiune sensibila propusa de /ai
+    usage: /aiyes <id>
+    permission: functityai.admin
+permissions:
+  functityai.use:
+    default: true
+    description: Poate folosi /ai (doar acțiuni reversibile; sensibile cer grad admin)
+  functityai.admin:
+    default: op
+    description: Execută acțiuni sensibile + /aiyes

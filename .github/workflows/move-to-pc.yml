@@ -1,0 +1,139 @@
+          $REF=$env:GITHUB_REF_NAME
+          function PushReport {
+            $L | Out-File -Encoding utf8 "$env:GITHUB_WORKSPACE\analysis\PC-BENCH.md"
+            try {
+              $b64=[Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:GITHUB_WORKSPACE\analysis\PC-BENCH.md"))
+              $sha=$null
+              $cur=Invoke-RestMethod "$api/contents/analysis/PC-BENCH.md?ref=$REF" -Headers $H -ErrorAction SilentlyContinue
+              if ($cur) { $sha=$cur.sha }
+              $body=@{ message="lab $((Get-Date).ToUniversalTime().ToString('HHmmss'))"; content=$b64; branch=$REF } 
+              if ($sha) { $body["sha"]=$sha }
+              $r=Invoke-RestMethod -Method Put -Uri "$api/contents/analysis/PC-BENCH.md" -Headers $H -ContentType "application/json; charset=utf-8" -Body ($body | ConvertTo-Json -Compress -Depth 4)
+              "impins $(if($r.commit.sha){$r.commit.sha.Substring(0,7)}else{'?'})." | Out-Null
+            } catch { $L2="PUSH-ESUEC: " + $_.Exception.Message + " | " + $_.ErrorDetails.Message; try { Invoke-RestMethod -Method Post -Uri "$api/issues" -Headers $H -ContentType "application/json" -Body (@{ title="lab eroare push"; body=$L2 } | ConvertTo-Json -Compress) | Out-Null } catch {} }
+          }
+name: MOVE-TO-PC
+# Laborator de motoare pe PC-ul userului: descarca Jdk-uri portable, monteaza 4 motoare
+# in E:\Administrator\Desktop\FunCity, le bench-uieste (boot + RAM) si raporteaza pe branch.
+on:
+  workflow_dispatch:
+  push:
+    paths: [ .github/workflows/move-to-pc.yml ]
+permissions:
+  contents: write
+jobs:
+  lab:
+    runs-on: [ self-hosted, Windows ]
+    timeout-minutes: 25
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: lab motoare
+        shell: powershell
+        run: |
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+          $ErrorActionPreference="Continue"
+          $root=$null
+          foreach ($cand in @("E:\Administrator\Desktop\FunCity", "E:\FunCity", "$env:USERPROFILE\Desktop\FunCity", "$env:USERPROFILE\FunCity")) {
+            try { New-Item -ItemType Directory -Force $cand | Out-Null; if (Test-Path "$cand") { $root=$cand; break } } catch {}
+          }
+          $L=@("== PC-ENGINE-LAB $((Get-Date).ToUniversalTime().ToString('MM-dd HH:mm')) UTC ==")
+          if (-not $root) { $L+="FARA DISC UTILIZABIL (E:/Desktop lipsa) - opresc"; $L|Out-File -Encoding utf8 analysis\PC-BENCH.md; exit 0 }
+          $L+="root: $root"
+          $api="https://api.github.com/repos/$env:GITHUB_REPOSITORY"
+          $H=@{Authorization="Bearer $env:GITHUB_TOKEN"; Accept="application/vnd.github+json"; "User-Agent"="lab"}
+          $REF=$env:GITHUB_REF_NAME
+          function PushReport {
+            Set-Location $env:GITHUB_WORKSPACE
+            $L | Out-File -Encoding utf8 "$env:GITHUB_WORKSPACE\analysis\PC-BENCH.md"
+            Copy-Item "analysis\PC-BENCH.md" "$env:RUNNER_TEMP\PC-BENCH.md" -Force
+            for ($i=1; $i -le 4; $i++) {
+              git fetch -q origin $REF 2>&1 | Out-Null
+              git reset -q --hard "origin/$REF" 2>&1 | Out-Null
+              Copy-Item "$env:RUNNER_TEMP\PC-BENCH.md" "analysis\PC-BENCH.md" -Force
+              git config user.name lab; git config user.email lab@functity.local
+              git add -f analysis/PC-BENCH.md 2>&1 | Out-Null
+              git commit -qm "lab: update $(Get-Date -Format HHmmss)" 2>&1 | Out-Null
+              git push -q origin "HEAD:$REF" 2>&1 | Out-Null
+              if ($LASTEXITCODE -eq 0) { break }
+              Start-Sleep -Seconds 5
+            }
+          }
+          try {
+            PushReport
+            New-Item -ItemType Directory -Force "$root\tools","$root\servers","$root\jare" | Out-Null
+            # --- 1) JAVA portable: 8 (pentru 1.7.10/1.12.2/mohist) + 17 (fabric/paper) ---
+            foreach ($pair in @(@("8","temurin%3A8"),@("17","temurin%3A17"))) {
+              $ver=$pair[0]; $ek=$pair[1]
+              if (-not (Test-Path "$root\tools\jdk$ver\bin\java.exe")) {
+                $L+="java$ver : descarc..."
+                $ji=Invoke-RestMethod "https://api.adoptium.net/v3/assets/latest/$ek/hotspot?architecture=x64&image_type=jdk&os=windows"
+                $u=$ji[0].binary.package.link
+                Invoke-WebRequest $u -OutFile "$root\tools\jdk$ver.zip" -UseBasicParsing
+                Expand-Archive "$root\tools\jdk$ver.zip" -DestinationPath "$root\tools\_jdk$ver" -Force
+                $inner=Get-ChildItem "$root\tools\_jdk$ver" -Directory | Select-Object -First 1
+                Move-Item $inner.FullName "$root\tools\jdk$ver" -Force
+                $L+="java$ver : OK $((& "$root\tools\jdk$ver\bin\java.exe" -version 2>&1 | Select-Object -First 1))"
+              } else { $L+="java$ver : exista" }
+              PushReport
+            }
+            # --- 2) motoarele ---
+            $rel=Invoke-RestMethod "$api/releases/tags/jars-20261017-0952" -Headers $H
+            $a=@{}; foreach($x in $rel.assets){$a[$x.name]=$x.browser_download_url}
+            if (-not (Test-Path "$root\servers\mohist165\FunCity.jar")) {
+              New-Item -ItemType Directory -Force "$root\servers\mohist165","$root\servers\cuantic1710" | Out-Null
+              Invoke-WebRequest $a["functity-jare-toate.tar.gz"] -OutFile "$root\jare\toate.tar.gz" -UseBasicParsing
+              tar -xzf "$root\jare\toate.tar.gz" -C "$root\jare"
+              Copy-Item "$root\jare\mohist-1.16.5-1237-server.jar" "$root\servers\mohist165\" -Force
+              Copy-Item "$root\jare\FunCity-b1.0827.jar" "$root\servers\mohist165\FunCity.jar" -Force
+              Invoke-WebRequest $a["CUANTIC-Server-CatServer-1.7.7.zip"] -OutFile "$root\servers\Cuantic.zip" -UseBasicParsing
+              tar -xf "$root\servers\Cuantic.zip" -C "$root\servers\cuantic1710"
+              $L+="mohist165: $((Get-ChildItem "$root\servers\mohist165\*.jar" | ForEach-Object { "$($_.Name) $([math]::Round($_.Length/1MB))MB" }) -join ' + ')"
+              $L+="cuantic1710: $((Get-ChildItem "$root\servers\cuantic1710" -Recurse).Count) fisiere"
+            } else { $L+="mohist/cuantic: exista" }
+            $L12=(Invoke-RestMethod "https://api.papermc.io/v2/projects/paper/versions/1.20.1/builds").builds | Select-Object -Last 1
+            if (-not (Test-Path "$root\servers\paper1201\paper.jar")) {
+              New-Item -ItemType Directory -Force "$root\servers\paper1201" | Out-Null
+              Invoke-WebRequest "https://api.papermc.io/v2/projects/paper/versions/1.20.1/builds/$($L12.build)/downloads/paper-1.20.1-$($L12.build).jar" -OutFile "$root\servers\paper1201\paper.jar" -UseBasicParsing
+              $L+="paper1201: build $($L12.build) OK"
+            } else { $L+="paper1201: exista" }
+            if (-not (Test-Path "$root\servers\fabric1201\fabric.jar")) {
+              New-Item -ItemType Directory -Force "$root\servers\fabric1201" | Out-Null
+              $fl=Invoke-RestMethod "https://meta.fabricmc.net/v2/versions/loader/1.20.1" | Select-Object -First 1
+              $fi=Invoke-RestMethod "https://meta.fabricmc.net/v2/versions/installer" | Select-Object -First 1
+              Invoke-WebRequest "https://meta.fabricmc.net/v2/versions/loader/1.20.1/$($fl.loader.version)/$($fi.version)/server/jar" -OutFile "$root\servers\fabric1201\fabric.jar" -UseBasicParsing
+              $L+="fabric1201: loader $($fl.loader.version) OK"
+            } else { $L+="fabric1201: exista" }
+            PushReport
+            # --- 3) bench: porneste fiecare 45s, masori RAM + Done din log ---
+            $L+=""; $L+="## BENCH (boot + RAM la 40s, fara jucatori)"
+            $plan=@(
+              @{n="mohist165"; d="$root\servers\mohist165";  j="$root\tools\jdk8\bin\java.exe";  args=@("-Xms1G","-Xmx2G","-jar","FunCity.jar","nogui")},
+              @{n="cuantic1710";d="$root\servers\cuantic1710"; j="$root\tools\jdk8\bin\java.exe";  args=@("-Xms512M","-Xmx1536M","-jar","CatServer.jar","nogui")},
+              @{n="paper1201"; d="$root\servers\paper1201";  j="$root\tools\jdk17\bin\java.exe"; args=@("-Xms1G","-Xmx2G","-jar","paper.jar","nogui")},
+              @{n="fabric1201";d="$root\servers\fabric1201"; j="$root\tools\jdk17\bin\java.exe"; args=@("-Xms1G","-Xmx2G","-jar","fabric.jar","nogui")}
+            )
+            foreach ($p in $plan) {
+              if (-not (Test-Path "$($p.d)\$($p.args[3])")) { $L+="$($p.n): SARIT (jar absent)"; continue }
+              "eula=true" | Set-Content "$($p.d)\eula.txt" -Encoding ascii
+              Set-Location $p.d
+              $out="$($p.d)\bench-out.log"; Remove-Item $out -ErrorAction SilentlyContinue
+              $t0=Get-Date
+              $proc=Start-Process -FilePath $p.j -ArgumentList $p.args -RedirectStandardOutput $out -PassThru -WindowStyle Hidden
+              $rss="?"
+              Start-Sleep -Seconds 40
+              if (-not $proc.HasExited) { $rss=[math]::Round(((Get-Process -Id $proc.Id -ErrorAction SilentlyContinue).WorkingSet64)/1MB) }
+              $done=Select-String -Path $out -Pattern "Done \(([\d\.]+)s\)" | Select-Object -Last 1
+              Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+              Start-Sleep -Seconds 3
+              Get-Process -Name java -ErrorAction SilentlyContinue | Where-Object { (Get-Date) - $_.StartTime -lt (New-TimeSpan -Minutes 5) } | Stop-Process -Force -ErrorAction SilentlyContinue
+              $dur=[math]::Round(((Get-Date)-$t0).TotalSeconds)
+              if ($done) { $L+="$($p.n): boot $($done.Matches[0].Groups[1].Value)s  RAM=${rss}MB  (total ${dur}s)" } else { $L+="$($p.n): fara 'Done' in 40s  RAM=${rss}MB  ($dur s) - vezi log la $($p.d)" }
+              PushReport
+            }
+            Set-Location $env:GITHUB_WORKSPACE
+            $L | Out-File -Encoding utf8 analysis\PC-BENCH.md
+            PushReport
+          } catch { $L += "FATAL: $_"; PushReport }
+          exit 0
