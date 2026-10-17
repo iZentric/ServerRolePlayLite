@@ -32,7 +32,7 @@ jobs:
           print('modpack:',idx.get('name'),idx.get('versionId'))
           ok=fail=skip=0
           import re
-          EXCL=re.compile(r'(sound|audio|music|physics|shader|zoom|dynamiclights|oculus|embeddium|memoryleak)',re.I)
+          EXCL=re.compile(r'(sound|audio|music|lightfall|voiceaudio|voice|physics|shader|zoom|dynamiclights|oculus|embeddium)',re.I)
           for f in idx.get('files',[]):
             env=f.get('env') or {}
             if (env.get('server') or 'required')=='unsupported':
@@ -93,7 +93,6 @@ jobs:
   client-pack:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: server-boot
     steps:
       - uses: actions/checkout@v4
       - name: Construiesc pachet client gata de Prism + zip OLX
@@ -108,7 +107,7 @@ jobs:
           python3 - <<'PY'
           import json,os,re,zipfile,shutil
           src='out/Freeroam-1.0.0.mrpack'; dst='out/Freeroam-1.0.0-lite.mrpack'
-          EXCL=re.compile(r'(sound|audio|music|physics|shader|zoom|dynamiclights|oculus|embeddium)',re.I)
+          EXCL=re.compile(r'(sound|audio|music|lightfall|voiceaudio|voice|physics|shader|zoom|dynamiclights|oculus|embeddium)',re.I)
           zin=zipfile.ZipFile(src)
           idx=json.loads(zin.read('modrinth.index.json'))
           drop=[]
