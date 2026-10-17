@@ -3,22 +3,33 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-17 00:07:14 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-17 00:07:28 UTC — gazda → artefact → relay
 
 ```
-mod automat din marker: bench port=25566 jar=functity
-== FC-BENCH v5 — engine: functity — 2 fire, Xmx3G, world copiat din productie ==
-  jar: FunCity-1.16.5-b1.0827.jar (9 MiB) sha d6ffa35c1ea9
-  server-port sincronizat cu markerul: 25566 | motd: FunCity RP Lite
-java11 absent local: descarc Temurin 11 JRE (adoptium, verificat sha256)
-  runda 1: OK Done=3.791s zid=61s RSS=?MiB keep-up=0 erori=0
-  server-port sincronizat cu markerul: 25566 | motd: FunCity RP Lite
-java11 absent local: descarc Temurin 11 JRE (adoptium, verificat sha256)
-  runda 2: OK Done=4.143s zid=64s RSS=?MiB keep-up=0 erori=0
-  server-port sincronizat cu markerul: 25566 | motd: FunCity RP Lite
-java11 absent local: descarc Temurin 11 JRE (adoptium, verificat sha256)
-  runda 3: OK Done=4.511s zid=62s RSS=?MiB keep-up=0 erori=0
-  liber la disc acum: 186 MiB
+mod automat din marker: benchsum port=x jar=x
+== FC-BENCH v5 — SUMAR (mediana a 3 runde, hardware real) ==
+  25565     : niciun boot OK in 0 masuratori
+  catserver : Done mediu 1.761s | zid 33s | RSS 0 MiB (mediana 2 runde)
+  functity  : Done mediu 4.143s | zid 62s | RSS 0 MiB (mediana 3 runde)
+  brut:
+    25565 r1 CRASH  30  0 0
+    25565 r2 CRASH  30  0 0
+    25565 r3 CRASH  32  0 0
+    catserver r1 CRASH  4  0 0
+    catserver r2 CRASH  2  0 0
+    catserver r3 CRASH  3  0 0
+    catserver r1 CRASH  1   
+    catserver r2 CRASH  1  0 0
+    catserver r3 CRASH  1 1 0 0
+    catserver r1 CRASH  18  0 0
+    catserver r2 OK 1.761 33  0 0
+    catserver r3 OK 12.615 67  0 0
+    functity r1 CRASH  30  0 0
+    functity r2 CRASH  31  0 0
+    functity r3 CRASH  32  0 0
+    functity r1 OK 3.791 61  0 0
+    functity r2 OK 4.143 64  0 0
+    functity r3 OK 4.511 62  0 0
 (sfarsit rc=0)
 RC=0
 ```
