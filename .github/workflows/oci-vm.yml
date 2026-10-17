@@ -34,7 +34,7 @@ jobs:
             if [ -n "$B" ]; then
               SHA=$(printf '%s' "$B" | openssl dgst -sha256 -binary | openssl base64 -A)
               LEN=${#B}
-              RQ="$M $HOSTP$P
+              RQ="$M $P
           date: $D
           content-type: application/json
           content-length: $LEN
@@ -42,7 +42,7 @@ jobs:
               HD="date (request-target) content-type content-length x-content-sha264"
               EXTRA=(-H "content-type: application/json" -H "content-length: $LEN" -H "x-content-sha264: $SHA" --data "$B")
             else
-              RQ="$M $HOSTP$P
+              RQ="$M $P
           date: $D"
               HD="date (request-target)"
             fi
@@ -134,8 +134,10 @@ jobs:
         if: always()
         run: |
           git config user.email b@b && git config user.name vm
+          true
           git fetch -q origin +refs/heads/packdiag:refs/remotes/origin/packdiag 2>/dev/null
           git checkout -q -B packdiag "origin/packdiag" 2>/dev/null || git checkout -q --orphan packdiag
           mkdir -p diag
-          { echo "=== $(date -u) ==="; cat /tmp/trace.txt 2>/dev/null | tail -25; echo "IP:"; cat /tmp/ip.txt 2>/dev/null; } > diag/oci-run.txt
-          git add -f diag && git commit -qm "oci vm $(date +%s)" && git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" packdiag
+          { echo "=== $(date -u) run $GITHUB_RUN_NUMBER ==="; cat /tmp/trace.txt 2>/dev/null | tail -30; echo "IP:"; cat /tmp/ip.txt 2>/dev/null; } > diag/oci-run.txt
+          git add -f diag && (git commit -qm "oci vm $GITHUB_RUN_NUMBER" || git commit -q --allow-empty -m "oci vm $GITHUB_RUN_NUMBER")
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" packdiag || true
