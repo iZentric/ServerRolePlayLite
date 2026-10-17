@@ -28,18 +28,32 @@ def hdr(method, path, host, c, body=None):
     return h
 def call(method, c, path, body=None):
     host = f"cloudshell.{c['region']}.oci.oraclecloud.com"
+    try:
+        import oci, requests
+        from oci.signer import Signer
+        import oci.request as OQ
+        cc = oci.config.from_file(os.path.expanduser("~/.oci/config"))
+        signer = Signer(cc)
+        q = OQ.Request(method, f"https://{host}{path}", None,
+                       {"Content-Type": "application/json", "Accept": "application/json"},
+                       json.dumps(body) if body is not None else None)
+        signer.sign(q)
+        r = requests.request(method, q.url, headers=q.headers, data=q.body, timeout=60)
+        return r.status_code, r.text
+    except Exception as e:
+        print(f"[sdk-call esuat: {type(e).__name__} {str(e)[:100]}] -> fallback manual")
     req = urllib.request.Request(f"https://{host}{path}", method=method,
                                  headers=hdr(method, path, host, c, body),
-                                 data=body.encode() if body else None)
+                                 data=json.dumps(body).encode() if body is not None else None)
     try:
-        with urllib.request.urlopen(req, timeout=40) as r:
-            t = r.read(900).decode()
-            return r.status, t
+        with urllib.request.urlopen(req, timeout=45) as r:
+            return r.status, r.read(30000).decode()
     except urllib.error.HTTPError as e:
-        return e.code, e.read(400).decode()
+        return e.code, e.read(3000).decode()
     except Exception as e:
-        return -1, str(e)[:200]
-def home_region(c):
+        return 0, str(e)
+
+def home_regiondef home_region(c):
     # GET /regions e PUBLIC (fara auth) — NU testeaza semnatura. Testul real: GetCompartmentById(tenancy).
     import urllib.parse
     probe = c.get("region") or "eu-frankfurt-1"
