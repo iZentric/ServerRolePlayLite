@@ -116,6 +116,20 @@ def main():
             print(f"[py-objectstorage] {r.status} {r.read(80).decode()}  => SEMNATURA PY OK")
     except urllib.error.HTTPError as e:
         print(f"[py-objectstorage] {e.code} {e.read(150).decode()}")
+    # SEMNATURA OFICIALA OCI (aceeași ca la CLI care a luat 200)
+    try:
+        from oci.signer import Signer
+        import requests
+        cc = oci.config.from_file(os.path.expanduser("~/.oci/config"))
+        signer = Signer(cc)
+        import oci.request as OQ
+        q = OQ.Request("GET", f"https://{oshost}/n", None, {})
+        signer.sign(q)
+        r = requests.get(q.url, headers=q.headers, timeout=25)
+        print(f"[sdk-signer] {r.status_code} {r.text[:90]}")
+        globals()["_SDK_OK"] = (r.status_code == 200)
+    except Exception as e:
+        print(f"[sdk-signer] ESUAT: {type(e).__name__}: {str(e)[:200]}")
     # aceeasi semnatura prin curl, fara urllib
     open("/tmp/auth.h","w").write("Authorization: " + hh["Authorization"] + "\n")
     open("/tmp/date.h","w").write("Date: " + hh["Date"] + "\n")
