@@ -1,13 +1,6 @@
-export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
-echo "=== CUANTIC-LIVE: ce e inauntru? ==="
-ls ~/cuantic-live 2>/dev/null | head -14
-[ -d ~/cuantic-live/world ] && echo "WORLD AICI: $(du -sh ~/cuantic-live/world | cut -f1)" || echo "fara world aici"
-echo "=== STERG DEJEAUNA ==="
-rm -rf ~/.cache ~/.local/share/Trash ~/.local/lib/python3.*/site-packages 2>/dev/null
-rm -rf ~/externals ~/_work ~/_diag ~/functity-out ~/funcity-backup ~/funcity-live 2>/dev/null
-rm -f ~/actions-runner-linux-arm64-*.tar.gz 2>/dev/null
-sync
-echo "=== DUPA ==="
-df -h ~ | tail -1
-echo "=== TOP RAMAS ==="
-du -sh ~/* ~/.[a-z]* 2>/dev/null | sort -rh | head -8
+export PATH=$PATH:/usr/bin:/bin:/usr/local/bin:~/bin
+echo "=== CITESTE-MA ==="; head -25 ~/cuantic-live/CITESTE-MA.txt 2>/dev/null
+echo "=== ADRESA ==="; cat ~/cuantic-live/ADRESA 2>/dev/null
+echo "=== BIN (java?) ==="; ls ~/bin 2>/dev/null | head -6; find ~/bin -maxdepth 3 -name java -type f 2>/dev/null | head -2
+echo "=== FRP ==="; ls ~/frp_0.71.0_linux_arm64 2>/dev/null | head -5; cat ~/frp*/frpc.toml ~/frp*/frpc.ini 2>/dev/null | head -12
+echo "=== MAI TRASE o data? ==="; pgrep -fa java | head -3; tail -2 ~/cuantic-live/boot.log 2>/dev/null
