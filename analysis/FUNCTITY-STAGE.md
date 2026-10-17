@@ -3,13 +3,11 @@
 == SONDA EXTERNA 25566 ==
 STATUS FAILED: timed out
 
-# FUNCTITY-STAGE 2026-10-17 11:59:47 UTC — gazda → artefact → relay
+# FUNCTITY-STAGE 2026-10-17 12:14:27 UTC — gazda → artefact → relay
 
 ```
-mod automat din marker: prune port=x jar=x
-== PRUNE disc (staging only) ==
-  inainte: 103 MiB liberi
-  staging world: 150	/home/mndvasi9/funcity-live/world
-  dupa: 252 MiB liberi
+mod automat din marker: ocigen port=x jar=x
+== OCIGEN: cheia publica a boxei (criptez cu ea cheia OCI) ==
+  (cheie OK, amprenta private: 9770a0a2978a)
 RC=0
 ```
