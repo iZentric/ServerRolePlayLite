@@ -1,4 +1,6 @@
 name: CHECK-LIVE
+permissions:
+  contents: write
 on:
   push:
     branches: ['arena/*']
@@ -25,10 +27,7 @@ jobs:
                   if not b&0x80: return n
               raise Exception('varint')
           try:
-              s=socket.create_connection((host,port),10); s.settimeout(10)
-              f=s.makefile('rb')
-              s.sendall(b'\x09\x00\x00\x07' + b'\x00\x00\x00\x00')
-              # handshake corect: id=0, prot=-1(varint 0xff..), host, port, next=1
+              # handshake corect: id=0, prot=-1(varint), host, port, next=1
               import struct
               def wv(n):
                   o=b''
