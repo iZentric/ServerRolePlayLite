@@ -61,3 +61,29 @@ jobs:
               break
             } catch { Write-Host "Raport nereusit: $($_.Exception.Message)"; if ($attempt -eq 1) { exit 1 } }
           }
+      - name: Diagnostic server local dupa ultimul boot
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $root = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
+          $report = @("Diagnostic server $(Get-Date -Format s)")
+          foreach ($file in @('logs\latest.log', 'logs\console.err', 'logs\console.log')) {
+            $path = Join-Path $root $file
+            $lines = @(Get-Content -LiteralPath $path -ErrorAction SilentlyContinue)
+            $report += "$file : $($lines.Count) linii"
+            $hits = @($lines | Where-Object { $_ -match '(?i)error|exception|caused by|failed|missing|mixin|duplicate|requires|not found|fatal|invalid' } | Select-Object -Last 55)
+            foreach ($hit in $hits) {
+              $safe = $hit -replace '(?i)(password|token|secret)[= :]+\S+', '$1=<redacted>'
+              $safe = $safe -replace 'C:\\Users\\[^\\]+', 'C:\Users\<user>'
+              $report += ($safe.Substring(0, [Math]::Min($safe.Length, 350)))
+            }
+          }
+          $report += "mods: $(@(Get-ChildItem (Join-Path $root 'mods') -Filter '*.jar' -ErrorAction SilentlyContinue).Count)"
+          $text = ($report -join "`n")
+          Write-Host $text
+          $base = 'https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt'
+          $headers = @{ Authorization = ('Bearer ' + $env:GH_TOKEN); Accept = 'application/vnd.github+json'; 'User-Agent' = 'FunCity' }
+          $body = @{ message = 'server boot diagnosis'; branch = $env:GITHUB_REF_NAME; content = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($text)) }
+          $body.sha = (Invoke-RestMethod -Uri ($base + '?ref=' + [uri]::EscapeDataString($env:GITHUB_REF_NAME)) -Headers $headers).sha
+          Invoke-RestMethod -Method Put -Uri $base -Headers $headers -ContentType 'application/json' -Body ($body | ConvertTo-Json -Compress) | Out-Null
