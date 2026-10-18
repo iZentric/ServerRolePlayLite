@@ -10,8 +10,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 55
+    timeout-minutes: 110
     env:
+      GH_TOKEN: ${{ github.token }}
       MOHIST_PIN: 754b578ef3e4881d854bcd1df5d299ada3fd429f
     steps:
       - uses: actions/checkout@v4
@@ -98,7 +99,40 @@ jobs:
           unzip -p "$JAR" META-INF/MANIFEST.MF | grep -q ServerLaunchArgs
           grep -q 'NAME = "FunCity"' src/src/main/java/com/mohistmc/MohistMC.java
           echo "CANDIDAT_VERIFICAT_STATIC: $BUILD_ID sha=$(sha256sum "$JAR" | cut -d' ' -f1)"
-          echo 'Nu este testat cu jucatori, nu este release si nu se instaleaza pe PC.'
+          echo 'Verificare statica doar; urmeaza boot si boți pe copie izolata.'
+
+      - name: Preflight cu pack-ul original, fara client Forge
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/fc-smoke/preflight
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O /tmp/fc-smoke/pack.zip
+          echo 'fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  /tmp/fc-smoke/pack.zip' | sha256sum -c -
+          python3 - <<'PY'
+          import json
+          c = {"arm": "funcity-candidate", "pack_zip": "/tmp/fc-smoke/pack.zip",
+               "pack_sha256": "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15",
+               "boot_jar": "FunCity.jar", "install_timeout": 480, "boot_timeout": 360,
+               "java_args": ["-Xms1G", "-Xmx3G"],
+               "props": {"server-ip": "127.0.0.1", "server-port": "25565", "online-mode": "false", "view-distance": "5"}}
+          with open('/tmp/fc-smoke/arm.json', 'w') as f: json.dump(c, f)
+          PY
+          FC_JAR="/tmp/fc/FunCity-1.16.5-${BUILD_ID}.jar" \
+          FC_STAGE=/tmp/fc-smoke/stage FC_OUT=/tmp/fc-smoke/preflight \
+          FC_TRIALS=1 FC_RUN_SECONDS=20 python3 scripts/fc_bench.py --arm-conf /tmp/fc-smoke/arm.json
+          python3 - <<'PY'
+          import json
+          r = json.load(open('/tmp/fc-smoke/preflight/funcity-candidate.json'))
+          assert r['status'] == 'MASURAT' and r['pack_mods'] == 36 and r['pack_plugins'] == 14, r
+          print('PRE-FLIGHT: pack 36 moduri / 14 pluginuri; boot reusit; nu este benchmark de capacitate')
+          PY
+
+      - name: Proba cu 3 boți server-side (fail-closed)
+        run: |
+          set -euo pipefail
+          gh release download 1.3.2 --repo Gu-ZT/Curtain -p 'curtain-mc1.16.5-1.3.2.jar' -O /tmp/fc-smoke/curtain.jar
+          echo 'c9234d2c5ca43c337abac25a05022fe2f226c884855aa6941b6130c60777819d  /tmp/fc-smoke/curtain.jar' | sha256sum -c -
+          python3 scripts/fc_fakeplayer_smoke.py /tmp/fc-smoke/stage FunCity.jar /tmp/fc-smoke/curtain.jar /tmp/fc-smoke/bots
+          echo 'Boții sint entitati server-side, NU handshake-uri Forge reale. JAR-ul ramine nepublicat.'
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -109,6 +143,10 @@ jobs:
             /tmp/fc/BUILD-LOG.txt
             /tmp/fc/metadata.json
             /tmp/fc/ESUARE.txt
+            /tmp/fc-smoke/preflight/*.json
+            /tmp/fc-smoke/preflight/*.log
+            /tmp/fc-smoke/bots/result.json
+            /tmp/fc-smoke/bots/fakeplayers.log
           if-no-files-found: warn
           retention-days: 7
 
