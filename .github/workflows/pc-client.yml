@@ -114,3 +114,52 @@ jobs:
           $body = @{ message = 'server boot diagnosis'; branch = $env:GITHUB_REF_NAME; content = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($text)) }
           $body.sha = (Invoke-RestMethod -Uri ($base + '?ref=' + [uri]::EscapeDataString($env:GITHUB_REF_NAME)) -Headers $headers).sha
           Invoke-RestMethod -Method Put -Uri $base -Headers $headers -ContentType 'application/json' -Body ($body | ConvertTo-Json -Compress) | Out-Null
+      - name: Compara serverul actual cu PRIMUL modpack si serverul original
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $server = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
+          $originalPack = Join-Path $env:TEMP 'FunCity-first-pack.zip'
+          $originalServer = Join-Path $env:TEMP 'FunCity-first-server.tar.gz'
+          curl.exe -fLso $originalPack 'https://github.com/iZentric/ServerRolePlayLite/releases/download/freeroam/Freeroam.1.0.0.zip'
+          if ($LASTEXITCODE -ne 0 -or (Get-Item $originalPack).Length -lt 100000000) { throw 'Lipseste primul modpack original' }
+          curl.exe -fLso $originalServer 'https://github.com/iZentric/ServerRolePlayLite/releases/download/world-live/functity-live.tar.gz'
+          if ($LASTEXITCODE -ne 0 -or (Get-Item $originalServer).Length -lt 100000000) { throw 'Lipseste serverul original cu toate modurile' }
+          $pack = [IO.Compression.ZipFile]::OpenRead($originalPack)
+          try {
+            $entry = $pack.GetEntry('modrinth.index.json')
+            if (-not $entry) { throw 'Primul modpack nu are index Modrinth' }
+            $reader = New-Object IO.StreamReader($entry.Open())
+            try { $idx = $reader.ReadToEnd() | ConvertFrom-Json } finally { $reader.Dispose() }
+            $packMods = @($idx.files | Where-Object { $_.path -match '(?i)^mods/[^/]+\.jar$' } | ForEach-Object { [IO.Path]::GetFileName($_.path) })
+            $packMods += @($pack.Entries | Where-Object { $_.FullName -match '(?i)^overrides/mods/[^/]+\.jar$' } | ForEach-Object { $_.Name })
+            $clientOnly = @($idx.files | Where-Object { $_.path -match '(?i)^mods/[^/]+\.jar$' -and $_.env.server -eq 'unsupported' } | ForEach-Object { [IO.Path]::GetFileName($_.path) })
+          } finally { $pack.Dispose() }
+          $tarNames = @(tar -tzf $originalServer)
+          if ($LASTEXITCODE -ne 0) { throw 'Arhiva serverului original e corupta' }
+          $oldMods = @($tarNames | Where-Object { $_ -match '(?i)^(\./)?mods/[^/]+\.jar$' } | ForEach-Object { [IO.Path]::GetFileName($_) })
+          $oldPlugins = @($tarNames | Where-Object { $_ -match '(?i)^(\./)?plugins/[^/]+\.jar$' } | ForEach-Object { [IO.Path]::GetFileName($_) })
+          $nowMods = @(Get-ChildItem (Join-Path $server 'mods') -File -Filter '*.jar' | ForEach-Object { $_.Name })
+          $nowPlugins = @(Get-ChildItem (Join-Path $server 'plugins') -File -Filter '*.jar' | ForEach-Object { $_.Name })
+          $report = @(
+            "BAZA ORIGINALA vs server PC $(Get-Date -Format s)",
+            'Sursa originala Freeroam.1.0.0.zip (rebrand FunCity 1.0.0), NU zip-ul nou FUNCTITY-SERVER.zip',
+            "Client original: $($packMods.Count) jar-uri; explicit client-only: $($clientOnly -join ', ')",
+            "Client original absent ca nume pe server: $((@($packMods | Where-Object { $_ -notin $nowMods }) | Sort-Object -Unique) -join ', ')",
+            "Server original live: mods=$($oldMods.Count) plugins=$($oldPlugins.Count)",
+            "Server PC acum: mods=$($nowMods.Count) plugins=$($nowPlugins.Count)",
+            "Lipsesc din serverul original: $((@($oldMods | Where-Object { $_ -notin $nowMods }) | Sort-Object -Unique) -join ', ')",
+            "In plus fata de serverul original: $((@($nowMods | Where-Object { $_ -notin $oldMods }) | Sort-Object -Unique) -join ', ')",
+            "Pluginuri lipsa: $((@($oldPlugins | Where-Object { $_ -notin $nowPlugins }) | Sort-Object -Unique) -join ', ')",
+            "Pluginuri in plus: $((@($nowPlugins | Where-Object { $_ -notin $oldPlugins }) | Sort-Object -Unique) -join ', ')"
+          )
+          $text = $report -join "`n"
+          Write-Host $text
+          $base = 'https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt'
+          $headers = @{ Authorization = ('Bearer ' + $env:GH_TOKEN); Accept = 'application/vnd.github+json'; 'User-Agent' = 'FunCity' }
+          $body = @{ message = 'compare first modpack'; branch = $env:GITHUB_REF_NAME; content = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($text)) }
+          $body.sha = (Invoke-RestMethod -Uri ($base + '?ref=' + [uri]::EscapeDataString($env:GITHUB_REF_NAME)) -Headers $headers).sha
+          Invoke-RestMethod -Method Put -Uri $base -Headers $headers -ContentType 'application/json' -Body ($body | ConvertTo-Json -Compress) | Out-Null
