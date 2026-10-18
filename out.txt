@@ -1,12 +1,11 @@
-Sun Oct 18 10:16:59 UTC 2026
-[10:17:07 WARN]: Error loading class: io/github/kosmx/emotes/server/network/AbstractServerEmotePlay (java.lang.ClassNotFoundException: null)
-[10:17:58 INFO]: Done (4.284s)! For help, type "help"
+Sun Oct 18 10:19:05 UTC 2026
+[10:20:08 INFO]: Done (4.940s)! For help, type "help"
 PORT-OK
-Traceback (most recent call last):
-Traceback (most recent call last):
-Traceback (most recent call last):
-Traceback (most recent call last):
-  File "/tmp/rcon.py", line 17, in <module>
-java rss: 2649 MB
-libera: 5782M
+=== chunky ===
+[10:20:33 INFO]: [Chunky] Task running for world. Processed: 936 chunks (5.80%), ETA: 0:09:39, Rate: 26.2 cps, Current: -10, 15
+[10:20:34 INFO]: [Chunky] Task running for world. Processed: 945 chunks (5.86%), ETA: 0:10:21, Rate: 24.4 cps, Current: -1, 15
+[10:20:35 INFO]: [Chunky] Task running for world. Processed: 952 chunks (5.90%), ETA: 0:12:55, Rate: 19.6 cps, Current: 6, 15
+[10:20:36 INFO]: [Chunky] Task running for world. Processed: 960 chunks (5.95%), ETA: 0:13:45, Rate: 18.4 cps, Current: 14, 15
+=== jucatori ===
+[10:20:09 INFO]: There are 0 out of maximum 40 players online.
 exit=0
