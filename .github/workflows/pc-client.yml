@@ -23,7 +23,7 @@ jobs:
             if (-not (Test-Path $mods)) { $report += "$name : fara mods"; continue }
             $changed = @()
             foreach ($file in @(Get-ChildItem -LiteralPath $mods -Filter '*.jar' -File)) {
-              if ($file.Name -notmatch '^(dynamic[-_]?fps|TextruesRubidiumOptions)') { continue }
+              if ($file.Name -notmatch '^(dynamic[-_]?fps|TextruesRubidiumOptions)|sound|audio|music|ambient|voice[-_]?chat') { continue }
               try {
                 Rename-Item -LiteralPath $file.FullName -NewName ($file.Name + '.disabled') -ErrorAction Stop
                 $changed += $file.Name
@@ -70,6 +70,13 @@ jobs:
           $server = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
           $client = Join-Path $env:APPDATA 'PrismLauncher\instances\FunCity\minecraft\mods'
           New-Item -ItemType Directory -Force (Join-Path $server 'mods') | Out-Null
+          # Fara audio/voice sau optimizari AFK pe server; doar gameplay si performanta activa.
+          foreach ($file in @(Get-ChildItem (Join-Path $server 'mods') -File -Filter '*.jar')) {
+            if ($file.Name -match '(?i)sound|audio|music|ambient|voice[-_]?chat|dynamic[-_]?fps') {
+              Rename-Item -LiteralPath $file.FullName -NewName ($file.Name + '.disabled') -ErrorAction Stop
+              Write-Host "audio/AFK dezactivat: $($file.Name)"
+            }
+          }
           foreach ($name in @('selene', 'obfuscate')) {
             $source = @(Get-ChildItem -LiteralPath $client -File -Filter ($name + '*.jar') | Sort-Object Length -Descending | Select-Object -First 1)
             if (-not $source.Count -or $source[0].Length -lt 10000) { throw "Dependinta lipseste din client: $name" }
