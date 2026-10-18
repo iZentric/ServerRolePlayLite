@@ -1,16 +1,48 @@
-Sun Oct 18 09:43:26 UTC 2026
-ora: 09:43:26
-CP.jar: 815372 B Oct 18 01:12
-java: mort
-[01:13:27 INFO]: [CoreProtect] Discord: www.coreprotect.net/discord/
-[01:13:28 INFO]: Done (4.362s)! For help, type "help"
-[01:13:28 INFO]: [CoreProtect] WorldEdit logging successfully initialized.
-[01:13:29 INFO]: [CoreProtect] Version 24.1 is now available.
-[01:13:29 INFO]: [CoreProtect] Download: www.coreprotect.net/download/
-PORT: inchis
-total 228
-drwxr-xr-x.  2 mndvasi9 oci     79 Oct 18 01:52 .
-drwxr-xr-x. 14 mndvasi9 oci   4096 Oct 18 01:13 ..
--rw-r--r--.  1 mndvasi9 oci   4314 Oct 18 01:13 config.yml
--rw-r--r--.  1 mndvasi9 oci 208896 Oct 18 01:52 database.db
+Sun Oct 18 09:54:58 UTC 2026
+== PLUGINI complete ==
+Chunky-1.2.217.jar
+claimchunk-0.0.22.jar
+CoreProtect.jar
+Cuantic-Brand-1.7.7.jar
+EssentialsX-2.19.7.jar
+EssentialsXAntiBuild-2.19.7.jar
+EssentialsXChat-2.19.7.jar
+EssentialsXProtect-2.19.7.jar
+EssentialsXSpawn-2.19.7.jar
+LuckPerms-Bukkit-5.5.71.jar
+ProtocolLib.jar
+SkinsRestorer.jar
+Vault.jar
+worldedit-bukkit-7.2.5-dist.jar
+worldguard-bukkit-7.0.5-dist.jar
+== directoare plugini ==
+bStats Chunky ClaimChunk CoreProtect Essentials LuckPerms ProtocolLib SkinsRestorer update Vault WorldEdit WorldGuard 
+== suspecti: cine sunt ==
+--- mods/bwncr-1.16.5-3.10.16.jar
+loaderVersion="[36,)"
+modId="bwncr"
+displayName="Bad Wither No Cookie Reloaded"
+modId="minecraft"
+--- mods/mapperbase-1.16.5-2.4.0.0.jar
+loaderVersion="[36,)"
+modId="mapperbase"
+displayName="Mapper Base"
+    modId="forge"
+    modId="minecraft"
+--- mods/Modernxl 1.16.5.jar
+loaderVersion="[36,)"
+modId="minecraftmodernxl"
+displayName="Modernxl"
+    modId="minecraft"
+--- mods/SeleneChat-0.2.0-all.jar
+--- mods/Pizzaland_v68.jar
+loaderVersion="[36,)"
+modId="pizzamod"
+displayName="Pizzaland Roleplay"
+    modId="minecraft"
+== cine cere lib-urile (modId referentiit in dependencies) ==
+lib 'bwncr': cerut de 1: bwncr-1.16.5-3.10.16.jar
+lib 'mapperbase': cerut de 1: mapperbase-1.16.5-2.4.0.0.jar
+lib 'obfuscate': cerut de 5: additional-guns-0.7.1-1.16.5.jar cgm-1.2.6-1.16.5.jar obfuscate-0.6.3-1.16.5.jar obfuscate_lib_compatible-1.3.0.jar vehicle-mod-0.45.2-1.16.5 (1).jar
+lib 'selene': cerut de 2: selene-1.16.5-1.9.0.jar supplementaries-1.16.5-0.18.4b.jar
 exit=0
