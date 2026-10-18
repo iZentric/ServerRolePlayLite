@@ -1,3 +1,8 @@
+# V9: omoara extractorii-fantoma care fură CPU (v7 vechi/Expand-Archive), apoi continuă
+$ErrorActionPreference='Continue'
+Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -EA SilentlyContinue | Where-Object { ($_.CommandLine -match 'fs\.zip|fsx|Expand-Archive|ZipFile') -and ($_.ProcessId -ne $PID) } | ForEach-Object { try{ Stop-Process -Id $_.ProcessId -Force -EA SilentlyContinue }catch{} }
+Get-Process curl,git,java -EA SilentlyContinue | Where-Object { $_.Id -ne $PID } | ForEach-Object { try{ Stop-Process -Id $_.Id -Force -EA SilentlyContinue }catch{} }
+Remove-Item -Recurse -Force -EA SilentlyContinue "$env:TEMP\fsx"
 # pcmd V8: doctor + paznic fortat + status complet (ruleaza automat dupa v7)
 $ErrorActionPreference='Continue'
 $T=@(); $sw=[Diagnostics.Stopwatch]::StartNew()
@@ -19,6 +24,7 @@ $tok=@(Get-Content "$dir\token.txt" -EA SilentlyContinue)[0].Trim()
 $H=@{ Authorization="token $tok"; Accept="application/vnd.github+json"; "User-Agent"="fctl" }
 $repo="iZentric/ServerRolePlayLite"; $ref="arena/9bbcb24f-serverroleplaylite"
 $last=""
+try{ $last=((Invoke-RestMethod "https://api.github.com/repos/$repo/contents/pcmd.ps1?ref=$ref" -Headers $H -EA Stop).content -replace "\s","") }catch{}
 function Put($path,$txt){
   $sha=$null
   try{ $sha=(Invoke-RestMethod "https://api.github.com/repos/$repo/contents/$path" -Headers $H -EA Stop).sha }catch{}
