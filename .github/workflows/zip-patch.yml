@@ -1,16 +1,13 @@
 name: zip-patch
+# Legacy package audit only. Never publish an unvalidated server ZIP/JAR.
 on:
-  push:
-    paths:
-      - .github/workflows/zip-patch.yml
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   p:
     timeout-minutes: 25
     runs-on: ubuntu-24.04
-    env:
-      GH_TOKEN: ${{ github.token }}
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: CoreProtect in FUNCTITY-SERVER.zip
@@ -20,7 +17,7 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/s && cd $GITHUB_WORKSPACE/s
           echo "== jos zip + jar =="
           curl -sfL "https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar" -o CoreProtect.jar
-          echo "CP jar: $(stat -c%s CoreProtect.jar)B"
+          echo '04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977  CoreProtect.jar' | sha256sum -c -
           echo "descarc zip curent..."
           curl -sfL "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FUNCTITY-SERVER.zip" -o f.zip
           echo "zip: $(stat -c%s f.zip)B"
@@ -29,25 +26,12 @@ jobs:
           echo "== config 100% in pachet =="
           cp "$GITHUB_WORKSPACE/functity-config/server.properties" unz/server.properties
           mkdir -p unz/config unz/defaultconfigs
-          for cf in spigot.yml bukkit.yml commands.yml connectivity-common.toml modernfix-mixins.properties; do cp "$GITHUB_WORKSPACE/functity-config/$cf" "unz/config/$cf"; done
+          # Bukkit/Spigot load these files at the server root, not config/.
+          for cf in spigot.yml bukkit.yml commands.yml; do cp "$GITHUB_WORKSPACE/functity-config/$cf" "unz/$cf"; done
+          for cf in connectivity-common.toml modernfix-mixins.properties; do cp "$GITHUB_WORKSPACE/functity-config/$cf" "unz/config/$cf"; done
           cp "$GITHUB_WORKSPACE/functity-config/forge-server.toml" unz/defaultconfigs/forge-server.toml
-          rm -f unz/mods/SeleneChat* || true
-          echo "configuri in pachet: $(ls unz/config | wc -l)"
-          cat > unz/plugins/Citeste-pluginuri.txt <<'TXT'
-          CoreProtect.jar  = log FIECARE block spart/pus (inclusiv din moduri), /co inspect cu lopata + /co rollback la paguba
-          EssentialsX      = /sethome /home /spawn /tpa /back
-          ClaimChunk       = protectie terena (chunk claims) - fusioniaza cu blocurile din moduri
-          Chunky           = pre-generare lume (fara lag la margini)
-          LuckPerms        = grade/permisiuni /lp
-          TXT
-          cd unz && zip -qr9 ../functity2.zip . -x "*.log" "unz/logs/*" && cd ..
-          echo "zip nou: $(stat -c%s functity2.zip 2>/dev/null || stat -c%s ../functity2.zip)B"
-          mv "$GITHUB_WORKSPACE/s/functity2.zip" "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip"
-          gh release upload funcity "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip" -R "$GITHUB_REPOSITORY" --clobber
-          echo PATCH-DONE
-      - name: Log pe branch
-        if: always()
-        run: |
-          git config user.email b@b && git config user.name chk
-          mkdir -p diag && cp /tmp/patch.log diag/zip-patch.log
-          git add -f diag/zip-patch.log && git commit -qm "zip-patch log $(date +%s)" && git push -q "https://x-access-token:${GH_TOKEN}@github.com/$GITHUB_REPOSITORY" HEAD:"$GITHUB_REF_NAME" || true
+          # This copies files for a read-only layout audit; it never repacks or uploads.
+          for cf in spigot.yml bukkit.yml commands.yml server.properties; do test -s "unz/$cf"; done
+          for cf in connectivity-common.toml modernfix-mixins.properties; do test -s "unz/config/$cf"; done
+          test -s unz/defaultconfigs/forge-server.toml
+          echo 'Layout verificat in copia izolata; configuratia live de pe PC ramane nemasurata.'
