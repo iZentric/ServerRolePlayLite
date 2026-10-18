@@ -57,3 +57,4 @@ jobs:
           # re-inarmare: dispecerizez o noua runda inainte sa moara jobul
           try { Invoke-RestMethod -Method Post -Uri "$api/repos/$repo/actions/workflows/pc-serverd.yml/dispatches" -Headers $H -ContentType "application/json" -Body ("{""ref"":""$ref""}") -EA Stop } catch {}
           PutFile "diag/pcd.txt" ("RE-ARM bucla la " + (Get-Date -Format s)) "pcd rearm"
+# rearm 426
