@@ -39,6 +39,15 @@ jobs:
                 $restored += $original
               } catch { $report += "EROARE restabilire $name : $($file.Name) : $($_.Exception.Message)" }
             }
+            # Clumps este in serverul original si inregistreaza clumps:xp_orb_big;
+            # fara acelasi jar clientul este respins la sincronizarea registrului Forge.
+            $clumps = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server\mods\Clumps-6.0.0.28.jar'
+            if (-not (Test-Path $clumps) -or (Get-Item $clumps).Length -lt 10000) { throw 'Clumps lipseste din serverul original' }
+            $target = Join-Path $mods 'Clumps-6.0.0.28.jar'
+            if (-not (Test-Path $target) -or (Get-FileHash $target).Hash -ne (Get-FileHash $clumps).Hash) {
+              Copy-Item -LiteralPath $clumps -Destination $target -Force -ErrorAction Stop
+              $report += "$name : Clumps pus din serverul original; reporneste jocul ca sa fie incarcat"
+            }
             $left = @(Get-ChildItem -LiteralPath $mods -Filter '*.jar' -File)
             $report += "$name : active=$($left.Count) restabilite=[$($restored -join ', ')] dezactivate=[$($changed -join ', ')]"
             $report += "lista: $(($left | ForEach-Object { $_.Name } | Sort-Object) -join ', ')"
