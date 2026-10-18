@@ -4,7 +4,7 @@ setlocal
 cd /d "%TEMP%"
 set "PRISM=%APPDATA%\PrismLauncher\instances"
 echo [1/4] Descarc FunCity de pe GitHub...
-curl -fLso functity.zip "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.4.mrpack" || goto err
+curl -fLso functity.zip "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.5.mrpack" || goto err
 if exist unpack rmdir /s /q unpack
 powershell -NoProfile -Command "Expand-Archive functity.zip unpack" || goto err
 set DONE=0
