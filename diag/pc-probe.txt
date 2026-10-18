@@ -1,10 +1,9 @@
-PC probe 2026-10-18T16:11:21
+PC probe 2026-10-18T17:02:15
 PC runner: KERNELOS-PC; cont: Administrator
 Server b1.0827: True
 Prism FunCity: True; Clumps: True
 RAM fizic PC: 15.9 GB
 FunCity : jar-uri=25
-FunCity : Xms 1G -> 256M (Xmx 2500M pastrat)
 FunCity : argumente heap=[-Xms256M, -Xmx2500M]
 FunCity : renderDistance:4
 FunCity : particles:2
@@ -12,10 +11,8 @@ FunCity : graphicsMode:0
 FunCity : renderDistance:5
 FunCity : graphicsMode:0
 FunCity : particles:2
-FunCity : shaders dezactivati; Oculus pastrat
 FunCity : shaders activati=False
 CUANTIC-Client-1.7.7 : jar-uri=25
-CUANTIC-Client-1.7.7 : Xms 1G -> 256M (Xmx 2500M pastrat)
 CUANTIC-Client-1.7.7 : argumente heap=[-Xms256M, -Xmx2500M]
 CUANTIC-Client-1.7.7 : renderDistance:4
 CUANTIC-Client-1.7.7 : particles:2
@@ -23,7 +20,10 @@ CUANTIC-Client-1.7.7 : graphicsMode:0
 CUANTIC-Client-1.7.7 : renderDistance:5
 CUANTIC-Client-1.7.7 : graphicsMode:0
 CUANTIC-Client-1.7.7 : particles:2
-CUANTIC-Client-1.7.7 : shaders dezactivati; Oculus pastrat
 CUANTIC-Client-1.7.7 : shaders activati=False
+clienti Minecraft din Prism porniti: 1
+client Minecraft: RAM privat=4335 MB, RAM fizic in uz=3148 MB, CPU in 5s=0 sec/s
+Procesul activ nu dovedeste ca cineva joaca in lume; FPS nu este masurat.
+conexiuni TCP active spre server=1
 127.0.0.1:25565 deschis: True
 127.0.0.1:25575 deschis: True
