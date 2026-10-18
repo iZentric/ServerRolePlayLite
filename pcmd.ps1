@@ -165,4 +165,14 @@ if(Test-Path $pi){
   $m=[regex]::Match($po,'https://playit\.gg/claim\s+(\S+)')
   if($m.Success){ L ("PLAYIT CLAIM: " + $m.Value) } else { L ("playit a zis: " + $po.Substring(0,[Math]::Min(180,$po.Length))) }
 }
+# runner autostart (ca sa nu mai fie nevoie de click manual niciodata)
+$runner=$null
+foreach($c in @("$env:USERPROFILE\actions-runner","C:\actions-runner","D:\actions-runner","$env:LOCALAPPDATA\actions-runner","$env:USERPROFILE\Desktop\actions-runner")){ if(Test-Path "$c\run.cmd"){ $runner=$c; break } }
+if(-not $runner){ $f=@(Get-ChildItem C:\ -Directory -Filter "*actions-runner*" -EA SilentlyContinue); if($f.Count){ $runner=$f[0].FullName } }
+if(-not $runner){ $f=@(Get-ChildItem D:\ -Directory -Filter "*actions-runner*" -EA SilentlyContinue); if($f.Count){ $runner=$f[0].FullName } }
+if($runner){
+  "CreateObject(\"WScript.Shell\").Run \"cmd /c cd /d $runner && run.cmd\", 0, False" | Set-Content -Encoding ascii "$dir\runrunner.vbs"
+  schtasks /Create /TN FunCityRunner /TR "\"wscript.exe \\"$dir\runrunner.vbs\\"\"" /SC ONLOGON /RL LIMITED /F 2>&1 | Out-Null
+  L "runner gasit la $runner : autostart inregistrat (task FunCityRunner)"
+} else { L "runner: nu l-am gasit singur - lasa fereastra aia deschisa si gata" }
 $T -join "`n"
