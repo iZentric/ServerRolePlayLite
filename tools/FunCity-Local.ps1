@@ -115,12 +115,32 @@ if(-not (Test-Path "$srv\java11\bin\java.exe")){
   Remove-Item -Recurse -Force -EA SilentlyContinue "$srv\jt","$env:TEMP\j11.zip"
 }
 Rep "java: $(Test-Path "$srv\java11\bin\java.exe")"
-# 5) configurile 100% + rcon
+# 5) configurile + rcon. Bukkit/Spigot citesc YAML-urile din radacina serverului,
+# nu din config/. Un server deja pornit le va incarca doar dupa repornire.
 $raw='https://raw.githubusercontent.com/iZentric/ServerRolePlayLite/arena/9bbcb24f-serverroleplaylite/functity-config'
 New-Item -ItemType Directory -Force "$srv\config","$srv\defaultconfigs" | Out-Null
-foreach($f in @('spigot.yml','bukkit.yml','commands.yml','connectivity-common.toml','modernfix-mixins.properties')){ try{ Invoke-WebRequest "$raw/$f" -OutFile "$srv\config\$f" -EA Stop }catch{} }
-try{ Invoke-WebRequest "$raw/server.properties" -OutFile "$srv\server.properties" -EA Stop }catch{}
-try{ Invoke-WebRequest "$raw/forge-server.toml" -OutFile "$srv\defaultconfigs\forge-server.toml" -EA Stop }catch{}
+foreach($f in @('spigot.yml','bukkit.yml','commands.yml')){
+  $dest=Join-Path $srv $f
+  $download="$dest.download"
+  try{
+    Invoke-WebRequest "$raw/$f" -OutFile $download -EA Stop
+    if((Get-Item $download -EA Stop).Length -lt 30){ throw 'config descarcata incompleta' }
+    if(Test-Path $dest){ Copy-Item $dest "$dest.funcity-prev" -Force -EA Stop }
+    Move-Item $download $dest -Force -EA Stop
+  }
+  catch{
+    Remove-Item $download -Force -EA SilentlyContinue
+    Rep "config ${f}: aplicare esuata; fisierul vechi a ramas"
+  }
+}
+foreach($f in @('connectivity-common.toml','modernfix-mixins.properties')){
+  try{ Invoke-WebRequest "$raw/$f" -OutFile "$srv\config\$f" -EA Stop }
+  catch{ Rep "config ${f}: descarcare esuata; nu pretind ca s-a aplicat" }
+}
+try{ Invoke-WebRequest "$raw/server.properties" -OutFile "$srv\server.properties" -EA Stop }
+catch{ Rep "server.properties: descarcare esuata; verificati fisierul existent" }
+try{ Invoke-WebRequest "$raw/forge-server.toml" -OutFile "$srv\defaultconfigs\forge-server.toml" -EA Stop }
+catch{ Rep "forge-server.toml: descarcare esuata; nu pretind ca s-a aplicat" }
 Set-Content -Encoding ascii "$srv\eula.txt" "eula=true"
 if(Test-Path "$srv\server.properties"){
   $t=@(Get-Content "$srv\server.properties")
