@@ -91,8 +91,8 @@ def main(stage, engine, curtain, output):
             raise RuntimeError(f"server did not finish boot (exit={getattr(server, 'exit_early', 'timeout')})")
         report["boot_wall_s"] = server.done_wall_s
         boot_log = log.read_text(errors="replace")
-        report["plugins_enabled"] = len(re.findall(r"\bEnabling ([A-Za-z0-9_.-]+) v", boot_log))
-        if report["plugins_enabled"] < 14:
+        report["plugins_enabled"] = sorted(set(re.findall(r"\bEnabling ([A-Za-z0-9_.-]+) v", boot_log)))
+        if len(report["plugins_enabled"]) < 14:
             raise RuntimeError("not all 14 original plugins enabled")
         # A line announcing a player is not proof the player is still connected.
         for i, name in enumerate(BOTS):
