@@ -17,13 +17,10 @@ jobs:
           Set-Location $env:RUNNER_TEMP
           $H = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json"; "User-Agent" = "fc" }
           $api = "https://api.github.com"
-          $rel = Invoke-RestMethod "$api/repos/Zrips/CoreProtect/releases?per_page=100" -Headers $H
-          $cands = $rel | ForEach-Object { $_.assets | Where-Object { $_.name -match '\.jar$' } | Select-Object -First 1 -Expand browser_download_url }
-          "candidate:"; $cands | Select-Object -First 8
-          $pick = $cands | Where-Object { $_ -match '21\.2|21_2|latest' } | Select-Object -First 1
-          if (-not $pick) { $pick = $cands | Select-Object -First 1 }
+          $urls = @("https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar","https://github.com/PlayPro/CoreProtect/releases/download/v21.1/CoreProtect-21.1.jar")
+          $pick = $null
+          foreach ($u in $urls) { try { Invoke-WebRequest -UseBasicParsing $u -OutFile cp.jar -TimeoutSec 120; if ((Get-Item cp.jar).Length -gt 500000) { $pick = $u; break } } catch { Write-Host "esec $u" } }
           "pick: $pick"
-          Invoke-WebRequest -UseBasicParsing $pick -OutFile cp.jar -TimeoutSec 120
           Add-Type -A System.IO.Compression.FileSystem
           $z=[IO.Compression.ZipFile]::OpenRead("$pwd\cp.jar"); $has=($z.Entries.FullName -contains 'config.yml'); $z.Dispose()
           $res = "CP-OK size=$((Get-Item cp.jar).Length) valid=$has url=$pick"
