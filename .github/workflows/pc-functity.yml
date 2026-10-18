@@ -1,0 +1,61 @@
+name: pc-functity
+on:
+  push:
+    paths:
+      - .github/workflows/pc-functity.yml
+jobs:
+  mk:
+    permissions:
+      contents: write
+    timeout-minutes: 10
+    runs-on: [self-hosted, Windows]
+    steps:
+      - name: Creez instanta FunCity pe PC
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Continue'
+          $L = @()
+          $base = Join-Path $env:APPDATA "PrismLauncher\instances"
+          $src = Join-Path $base "CUANTIC-Client-1.7.7"
+          $dst = Join-Path $base "FunCity"
+          $L += "src exista: " + (Test-Path $src)
+          if (-not (Test-Path $src)) { $L += "FARA SURSA"; $L += (Get-ChildItem $base | Select-Object -Expand Name) -join ", "; throw "nu gasesc instanta" }
+          $L += "structura src: " + ((Get-ChildItem $src | Select-Object -Expand Name) -join ", ")
+          if (Test-Path $dst) { $L += "FunCity exista deja -> o reimprospatez" } else {
+            robocopy $src $dst /E /XD logs crash-reports .minecraft-backup "minecraft\logs" "minecraft\crash-reports" "minecraft\versions" /NFL /NDL /NJH /NJS /NP | Out-Null
+            $L += "copy facut (robocopy)"
+          }
+          $icfg = Join-Path $dst "instance.cfg"
+          $c = Get-Content $icfg
+          $c = $c | Where-Object { $_ -notmatch '^(LastLaunch=|ManagedPackName=)' }
+          $c = $c | ForEach-Object { $_ -replace '^Name=.*','Name=FunCity' }
+          if (-not ($c -match '^Name=')) { $c += "Name=FunCity" }
+          Set-Content $icfg $c -Encoding UTF8
+          $L += "instance.cfg: " + (($c | Select-Object -First 12) -join " | ")
+          try {
+            Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/funcity-icon.png" -OutFile "$env:RUNNER_TEMP\icon.png"
+            Add-Type -AssemblyName System.Drawing
+            $img = [System.Drawing.Image]::FromFile("$env:RUNNER_TEMP\icon.png")
+            $bmp = New-Object System.Drawing.Bitmap 64,64
+            $g = [System.Drawing.Graphics]::FromImage($bmp)
+            $g.InterpolationMode = 'HighQualityBicubic'
+            $g.DrawImage($img, 0, 0, 64, 64)
+            $bmp.Save((Join-Path $dst ".pack.png"), [System.Drawing.Imaging.ImageFormat]::Png)
+            $g.Dispose(); $bmp.Dispose(); $img.Dispose()
+            $L += "icon FunCity: PUS"
+          } catch { $L += ("icon: esuat " + $_.Exception.Message) }
+          $n = (Get-ChildItem (Join-Path $dst "minecraft\mods") -Filter *.jar).Count
+          $L += "moduri in FunCity: $n"
+          $L += "version json global: " + ((Test-Path (Join-Path $env:APPDATA "PrismLauncher\versions")))
+          $txt = $L -join "`r`n"
+          $api = "https://api.github.com"
+          $H = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json" }
+          $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($txt))
+          $sha = $null
+          try { $cur = Invoke-RestMethod "$api/repos/iZentric/ServerRolePlayLite/contents/diag/pc-functity.txt?ref=$env:GITHUB_REF_NAME" -Headers $H -EA SilentlyContinue; if ($cur) { $sha = $cur.sha } } catch {}
+          $body = @{ message = "pc functity $(Get-Random)"; content = $b64; branch = "$env:GITHUB_REF_NAME" }
+          if ($sha) { $body["sha"] = $sha }
+          Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/diag/pc-functity.txt" -Headers $H -ContentType "application/json; charset=utf-8" -Body ($body | ConvertTo-Json -Compress) | Out-Null
+          Write-Host $txt
+        env:
+          GH_TOKEN: ${{ github.token }}

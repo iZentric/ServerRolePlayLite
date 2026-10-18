@@ -1,0 +1,26 @@
+name: pc-probe
+on:
+  push:
+    paths:
+      - .github/workflows/pc-probe.yml
+jobs:
+  probe:
+    permissions:
+      contents: write
+    timeout-minutes: 3
+    runs-on: [self-hosted, Windows]
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Viu?
+        shell: powershell
+        run: |
+          $L = "PC RUNER VIU | host: $env:COMPUTERNAME | user: $env:USERNAME"
+          $inst = "$env:APPDATA\PrismLauncher\instances\CUANTIC-Client-1.7.7"
+          $L += "`ninstanta: " + (Test-Path $inst)
+          if (Test-Path "$inst\minecraft\mods") { $n = (Get-ChildItem "$inst\minecraft\mods\*.jar" -ErrorAction SilentlyContinue).Count; $L += "`nmoduri in instanta: $n" }
+          $api = "https://api.github.com"
+          $H = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json" }
+          $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($L))
+          $body = @{ message = "pc probe $(Get-Random)"; content = $b64; branch = "$env:GITHUB_REF_NAME" } | ConvertTo-Json -Compress
+          try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/diag/pc-probe.txt" -Headers $H -ContentType "application/json" -Body $body | Out-Null } catch { "push fail: $($_.Exception.Message)" }
