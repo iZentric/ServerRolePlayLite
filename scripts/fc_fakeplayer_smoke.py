@@ -171,6 +171,9 @@ def main(stage, engine, curtain, output):
             if report["critical_lines"]:
                 report["valid"] = False
         (output / "result.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
+        if not report["valid"] and os.environ.get("GITHUB_ACTIONS") == "true":
+            reason = report.get("error", "critical server log: " + "; ".join(report.get("critical_lines", [])[:2]))
+            print("::error::fake-player gate failed: " + reason.replace("\n", " ")[:1200], flush=True)
         print(json.dumps({k: v for k, v in report.items() if k != "log_tail"}, ensure_ascii=False, indent=2), flush=True)
     return 0 if report["valid"] else 1
 
