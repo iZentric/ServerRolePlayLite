@@ -47,6 +47,14 @@ jobs:
           $n = (Get-ChildItem (Join-Path $dst "minecraft\mods") -Filter *.jar).Count
           $L += "moduri in FunCity: $n"
           $L += "version json global: " + ((Test-Path (Join-Path $env:APPDATA "PrismLauncher\versions")))
+          try {
+            $icfg2 = Join-Path $dst "instance.cfg"
+            $cc = Get-Content $icfg2 | ForEach-Object { $_ -replace '^uuid=.*', ('uuid=' + [guid]::NewGuid().ToString('N').Insert(8,'-').Insert(13,'-').Insert(18,'-').Insert(23,'-')) }
+            Set-Content $icfg2 $cc -Encoding UTF8
+            $L += "uuid: reinnoit"
+            $L += "Functity-Icon exista: " + (Test-Path (Join-Path $dst ".pack.png"))
+            $L += "TOT-GATA"
+          } catch { $L += ("uuid fix esuat: " + $_.Exception.Message) }
           $txt = $L -join "`r`n"
           $api = "https://api.github.com"
           $H = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json" }
