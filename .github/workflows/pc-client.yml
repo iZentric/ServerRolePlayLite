@@ -7,7 +7,7 @@ on:
 jobs:
   ck:
     runs-on: [self-hosted, Windows]
-    timeout-minutes: 5
+    timeout-minutes: 15
     permissions:
       contents: write
     steps:
@@ -61,6 +61,28 @@ jobs:
               break
             } catch { Write-Host "Raport nereusit: $($_.Exception.Message)"; if ($attempt -eq 1) { exit 1 } }
           }
+      - name: Restabileste dependintele serverului si porneste local
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $server = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
+          $client = Join-Path $env:APPDATA 'PrismLauncher\instances\FunCity\minecraft\mods'
+          New-Item -ItemType Directory -Force (Join-Path $server 'mods') | Out-Null
+          foreach ($name in @('selene', 'obfuscate')) {
+            $source = @(Get-ChildItem -LiteralPath $client -File -Filter ($name + '*.jar') | Sort-Object Length -Descending | Select-Object -First 1)
+            if (-not $source.Count -or $source[0].Length -lt 10000) { throw "Dependinta lipseste din client: $name" }
+            $target = Join-Path (Join-Path $server 'mods') $source[0].Name
+            if (-not (Test-Path $target)) { Copy-Item -LiteralPath $source[0].FullName -Destination $target -ErrorAction Stop }
+            Write-Host "dependinta $name : $($source[0].Name)"
+          }
+          $url = 'https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/tools/FunCity-Local.ps1?ref=arena/9bbcb24f-serverroleplaylite'
+          $h = @{Authorization=('Bearer '+$env:GH_TOKEN); Accept='application/vnd.github+json'; 'User-Agent'='FunCity'}
+          $data = Invoke-RestMethod -Uri $url -Headers $h -ErrorAction Stop
+          $script = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(($data.content -replace '\s','')))
+          & ([ScriptBlock]::Create($script))
+
       - name: Diagnostic server local dupa ultimul boot
         shell: powershell
         env:
@@ -68,6 +90,11 @@ jobs:
         run: |
           $root = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
           $report = @("Diagnostic server $(Get-Date -Format s)")
+          $latest = @(Get-Content (Join-Path $root 'logs\latest.log') -ErrorAction SilentlyContinue)
+          $ready = @($latest | Where-Object { $_ -match 'Done \(' }).Count -gt 0
+          $socket = New-Object Net.Sockets.TcpClient
+          try { $ar = $socket.BeginConnect('127.0.0.1', 25565, $null, $null); $port = $ar.AsyncWaitHandle.WaitOne(2000); if($port){ $socket.EndConnect($ar) } } catch { $port = $false } finally { $socket.Close() }
+          $report += "SERVER LIVE=$($ready -and $port) Done=$ready localhost:25565=$port"
           foreach ($file in @('logs\latest.log', 'logs\console.err', 'logs\console.log')) {
             $path = Join-Path $root $file
             $lines = @(Get-Content -LiteralPath $path -ErrorAction SilentlyContinue)

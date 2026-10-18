@@ -127,7 +127,7 @@ if(Test-Path "$srv\server.properties"){
   if(-not (Test-Path "$dir\rcon.pass")){ -join((48..57+97..122|Get-Random -Count 14|%{[char]$_})) | Set-Content -Encoding ascii "$dir\rcon.pass" }
   $rp=@(Get-Content "$dir\rcon.pass")[0].Trim()
   $t=$t|?{$_ -notmatch '^(enable-rcon|rcon\.)'}
-  $t=@($t)+'enable-rcon=true'+'rcon.port=25575'+"rcon.password=$rp"
+  $t=@($t|Where-Object{$_ -notmatch '^server-ip='})+'server-ip=127.0.0.1'+'enable-rcon=true'+'rcon.port=25575'+"rcon.password=$rp"
   Set-Content "$srv\server.properties" $t -Encoding ascii
   Rep "config+eula+rcon: puse"
 }
