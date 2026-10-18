@@ -1,0 +1,25 @@
+name: bat-v2
+on:
+  push:
+    paths:
+      - .github/workflows/bat-v2.yml
+      - tools/FunCity-Update.bat
+jobs:
+  b:
+    timeout-minutes: 6
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publica bat-ul pe release
+        run: |
+          set -e
+          cd "$GITHUB_WORKSPACE"
+          cp tools/FunCity-Update.bat "$RUNNER_TEMP/FunCity-Update.bat"
+          sed -i 's/\r*$/\r/' "$RUNNER_TEMP/FunCity-Update.bat"
+          wc -c "$RUNNER_TEMP/FunCity-Update.bat"
+          gh release upload funcity "$RUNNER_TEMP/FunCity-Update.bat" -R "$GITHUB_REPOSITORY" --clobber
+          echo BAT-PUBLISHED
