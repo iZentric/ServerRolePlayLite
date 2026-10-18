@@ -1,37 +1,16 @@
-Sun Oct 18 10:07:43 UTC 2026
-ram libera: 5419 MB -> heap 6G
-props: view-distance=6 max-players=40 animals=4 rcon=on
-Traceback (most recent call last):
-  File "/tmp/rcon.py", line 10, in <module>
-    s=socket.create_connection(('127.0.0.1',25575),15); s.settimeout(60)
-  File "/usr/lib64/python3.9/socket.py", line 856, in create_connection
-    raise err
-  File "/usr/lib64/python3.9/socket.py", line 844, in create_connection
-    sock.connect(sa)
-ConnectionRefusedError: [Errno 111] Connection refused
-Traceback (most recent call last):
-  File "/tmp/rcon.py", line 10, in <module>
-    s=socket.create_connection(('127.0.0.1',25575),15); s.settimeout(60)
-  File "/usr/lib64/python3.9/socket.py", line 856, in create_connection
-    raise err
-  File "/usr/lib64/python3.9/socket.py", line 844, in create_connection
-    sock.connect(sa)
-ConnectionRefusedError: [Errno 111] Connection refused
-Traceback (most recent call last):
-  File "/tmp/rcon.py", line 10, in <module>
-    s=socket.create_connection(('127.0.0.1',25575),15); s.settimeout(60)
-  File "/usr/lib64/python3.9/socket.py", line 856, in create_connection
-    raise err
-  File "/usr/lib64/python3.9/socket.py", line 844, in create_connection
-    sock.connect(sa)
-ConnectionRefusedError: [Errno 111] Connection refused
-Traceback (most recent call last):
-  File "/tmp/rcon.py", line 10, in <module>
-    s=socket.create_connection(('127.0.0.1',25575),15); s.settimeout(60)
-  File "/usr/lib64/python3.9/socket.py", line 856, in create_connection
-    raise err
-  File "/usr/lib64/python3.9/socket.py", line 844, in create_connection
-    sock.connect(sa)
-ConnectionRefusedError: [Errno 111] Connection refused
+Sun Oct 18 10:11:12 UTC 2026
+total 11884M libera 8372M
+core: 2
 PORT-NOK
+Traceback (most recent call last):
+  File "/tmp/rcon.py", line 10, in <module>
+Traceback (most recent call last):
+  File "/tmp/rcon.py", line 10, in <module>
+Traceback (most recent call last):
+  File "/tmp/rcon.py", line 10, in <module>
+Traceback (most recent call last):
+  File "/tmp/rcon.py", line 10, in <module>
+    s=socket.create_connection(('127.0.0.1',25575),15); s.settimeout(60)
+java rss: 0 MB
+libera dupa boot: 8426M
 exit=0
