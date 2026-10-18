@@ -33,24 +33,31 @@ jobs:
           try {
             Set-Location $env:GITHUB_WORKSPACE
             $t = Join-Path $env:RUNNER_TEMP "cp.jar"
-            $ok = $false
-            foreach ($u in @("https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar","https://github.com/PlayPro/CoreProtect/releases/download/v21.1/CoreProtect-21.1.jar")) {
-              try { Invoke-WebRequest -UseBasicParsing $u -OutFile $t -TimeoutSec 120; if ((Get-Item $t).Length -gt 500000) { $ok = $true; $steps += "dl-ok"; break } } catch { $steps += "dl-esec" }
-            }
-            if ($ok) {
-              [IO.File]::WriteAllBytes("$env:GITHUB_WORKSPACE\diag\CoreProtect.jar", [IO.File]::ReadAllBytes($t))
-              $steps += "jar-pus $((Get-Item diag\CoreProtect.jar).Length)B"
-            }
-            "PC: $($steps -join ', ') la $(Get-Date -Format HH:mm:ss)" | Set-Content diag\pc-cp.txt -Encoding ascii
+            Remove-Item -Force -EA SilentlyContinue $t
+            $u = "https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar"
+            curl.exe -fLso $t $u
+            $steps += "curl=$LASTEXITCODE size=$((Get-Item $t -EA SilentlyContinue).Length)"
+            if ((Get-Item $t -EA SilentlyContinue).Length -gt 500000) {
+              Copy-Item $t "diag\CoreProtect.jar" -Force
+              $steps += "copiat"
+            } else { $steps += "NU-E-JAR" }
+          } catch { $steps += "EX:$($_.Exception.Message)" }
+          try {
+            "PC $(Get-Date -Format HH:mm:ss): $($steps -join ' | ')" | Set-Content diag\pc-cp.txt -Encoding ascii
             git config user.email pc@functity.local
             git config user.name functity-pc
             git add -f diag/CoreProtect.jar diag/pc-cp.txt
+            $pre = git status --porcelain
             git commit -qm "cp $(Get-Random)"
-            $steps += "commit"
-            git push "https://x-access-token:$env:GH_TOKEN@github.com/iZentric/ServerRolePlayLite" "HEAD:$env:GITHUB_REF_NAME" > pushout.txt 2>&1
-            $steps += "push=$LASTEXITCODE"
-          } catch { $steps += "EX:$($_.Exception.Message)" }
-          $steps -join " " | Out-File "$env:RUNNER_TEMP\stepsum.txt"
+            git push "https://x-access-token:$env:GH_TOKEN@github.com/iZentric/ServerRolePlayLite" "HEAD:$env:GITHUB_REF_NAME" > "$env:RUNNER_TEMP\pushout.txt" 2>&1
+            $steps += "push=$LASTEXITCODE dirtyBefore=[$pre]"
+            $steps -join ' | ' | Set-Content "$env:RUNNER_TEMP\stepsum.txt" -Encoding ascii
+            "PC $(Get-Date -Format HH:mm:ss): $($steps -join ' | ')" | Set-Content diag\pc-cp.txt -Encoding ascii
+            git add -f diag/pc-cp.txt
+            git commit -qm "cp-report $(Get-Random)"
+            git push "https://x-access-token:$env:GH_TOKEN@github.com/iZentric/ServerRolePlayLite" "HEAD:$env:GITHUB_REF_NAME" 2>$null
+            $steps | Out-File "$env:RUNNER_TEMP\stepsum.txt"
+          } catch { "EX2:$($_.Exception.Message)" | Out-File "$env:RUNNER_TEMP\stepsum.txt" }
           exit 0
       - name: Raport final
         shell: powershell
