@@ -208,13 +208,16 @@ jobs:
           $oldPlugins = @($tarNames | Where-Object { $_ -match '(?i)^(\./)?plugins/[^/]+\.jar$' } | ForEach-Object { [IO.Path]::GetFileName($_) })
           $nowMods = @(Get-ChildItem (Join-Path $server 'mods') -File -Filter '*.jar' | ForEach-Object { $_.Name })
           $nowPlugins = @(Get-ChildItem (Join-Path $server 'plugins') -File -Filter '*.jar' | ForEach-Object { $_.Name })
+          $processes = @(Get-CimInstance Win32_Process -Filter "Name='java.exe' OR Name='javaw.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -like '*FunCityEngine.jar*' })
+          $probe = New-Object Net.Sockets.TcpClient
+          try { $wait=$probe.BeginConnect('127.0.0.1',25565,$null,$null); $listen=$wait.AsyncWaitHandle.WaitOne(1500); if($listen){$probe.EndConnect($wait)} } catch { $listen=$false } finally { $probe.Close() }
           $report = @(
             "BAZA ORIGINALA vs server PC $(Get-Date -Format s)",
             'Sursa originala Freeroam.1.0.0.zip (rebrand FunCity 1.0.0), NU zip-ul nou FUNCTITY-SERVER.zip',
             "Client original: $($packMods.Count) jar-uri; explicit client-only: $($clientOnly -join ', ')",
             "Client original absent ca nume pe server: $((@($packMods | Where-Object { $_ -notin $nowMods }) | Sort-Object -Unique) -join ', ')",
             "Server original live: mods=$($oldMods.Count) plugins=$($oldPlugins.Count)",
-            "Server PC acum: mods=$($nowMods.Count) plugins=$($nowPlugins.Count)",
+            "Server PC acum: mods=$($nowMods.Count) plugins=$($nowPlugins.Count); proces=$($processes.Count) port-local=$listen",
             "Excluse intentionat: moduri audio/voice, Dynamic FPS (AFK) si spark (profiler, nu optimizeaza normal)",
             "Lipsesc din serverul original, inclusiv exceptiile de mai sus: $((@($oldMods | Where-Object { $_ -notin $nowMods }) | Sort-Object -Unique) -join ', ')",
             "In plus fata de serverul original: $((@($nowMods | Where-Object { $_ -notin $oldMods }) | Sort-Object -Unique) -join ', ')",
