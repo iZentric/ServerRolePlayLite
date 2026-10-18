@@ -1,52 +1,10 @@
-Diagnostic server 2026-10-18T14:46:43
-SERVER LIVE=False Done=True localhost:25565=False
-logs\latest.log : 334 linii
-[14:45:39] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.4 Source=file:/C:/Users/Administrator/Desktop/FunCityLocal/server/libraries/org/spongepowered/mixin/0.8.4/mixin-0.8.4.jar Service=ModLauncher Env=SERVER
-[14:45:41] [main/WARN] [ModernFixConfig/]: No configuration key exists with name 'mixin.perf.dedup_location', ignoring
-[14:45:41] [main/WARN] [ModernFixConfig/]: No configuration key exists with name 'mixin.perf.compact_bit_storage', ignoring
-[14:45:41] [main/WARN] [ModernFix/]: Option 'mixin.perf.dynamic_resources' overriden (by user configuration) to 'true'
-[14:45:44] [main/WARN] [mixin/]: Error loading class: io/github/kosmx/emotes/server/network/AbstractServerEmotePlay (java.lang.ClassNotFoundException: null)
-[14:45:44] [main/WARN] [mixin/]: @Mixin target io.github.kosmx.emotes.server.network.AbstractServerEmotePlay was not found pizzamod.mixin.json:EmoteLogMixin
-[14:45:44] [main/WARN] [mixin/]: Error loading class: de/maxhenkel/voicechat/voice/common/NetworkMessage (java.lang.ClassNotFoundException: null)
-[14:45:44] [main/WARN] [mixin/]: @Mixin target de.maxhenkel.voicechat.voice.common.NetworkMessage was not found pizzamod.mixin.json:voicechat.NetworkMessageMixin
-[14:45:44] [main/WARN] [mixin/]: Error loading class: de/maxhenkel/voicechat/voice/server/Server (java.lang.ClassNotFoundException: null)
-[14:45:44] [main/WARN] [mixin/]: @Mixin target de.maxhenkel.voicechat.voice.server.Server was not found pizzamod.mixin.json:voicechat.VoicechatServerMixin
-[14:45:44] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via org.embeddedt.modernfix.forge.shadow.mixinextras.service.MixinExtrasServiceImpl(version=0.3.2).
-[14:45:45] [main/INFO] [ModernFix/]: Injecting BlockStateBase cache population hook into func_204519_t from me.jellysquid.mods.lithium.mixin.block.flatten_states.AbstractBlockStateMixin
-[14:45:49] [modloading-worker-0/INFO] [Ksyxis/KForge/]: Ksyxis: Ready to remove unneeded chunks. (platform: forge, version: 1.4.6, mixin: 0.8.4)
-[14:45:50] [modloading-worker-3/FATAL] [net.minecraftforge.fml.loading.RuntimeDistCleaner/DISTXFORM]: Attempted to load class hl for invalid dist DEDICATED_SERVER
-[14:45:50] [modloading-worker-3/INFO] [STDERR/]: [cq:<init>:53]: java.lang.reflect.InvocationTargetException
-[14:45:50] [modloading-worker-3/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:-1]: Caused by: java.lang.RuntimeException: Attempted to load class hl for invalid dist DEDICATED_SERVER
-[14:45:55] [main/WARN] [mixin/]: Method overwrite conflict for func_225532_a_ in modernfix-common.mixins.json:perf.biome_zoomer.FuzzyOffsetBiomeZoomerMixin, previously written by me.jellysquid.mods.lithium.mixin.gen.voronoi_biomes.VoronoiBiomeAccessTypeMixin. Skipping method.
-[14:45:56] [main/WARN] [net.minecraft.server.MinecraftServer/]: Missing data pack mod:voicechat
-[14:45:57] [main/INFO] [ModernFix/]: Invalidating pack caches
-[14:45:59] [main/ERROR] [net.minecraftforge.fml.FMLWorldPersistenceHook/WP]: This world was saved with mod voicechat which appears to be missing, things may not work well
-[14:46:27] [Server thread/INFO] [Ksyxis/MinecraftServerMixin/]: Ksyxis: Speeding up the world loading... Delete the mod, if it got stuck after this message. (net.minecraft.server.dedicated.DedicatedServer func_213186_a)
-[14:46:27] [Server thread/WARN] [mixin/]: Method overwrite conflict for removeIf in modernfix-common.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin, previously written by me.jellysquid.mods.lithium.mixin.world.chunk_tickets.SortedArraySetMixin. Skipping method.
-[14:46:27] [Server thread/INFO] [Ksyxis/MinecraftServerMixin/]: Ksyxis: Speeding up the world loading... Delete the mod, if it got stuck after this message. (net.minecraft.server.dedicated.DedicatedServer func_213186_a)
-[14:46:30] [Server thread/INFO] [Minecraft/]: [ClaimChunk] PlaceholderAPI not found, not loading API.
-logs\console.err : 5 linii
-logs\console.log : 350 linii
-[14:45:39 INFO]: SpongePowered MIXIN Subsystem Version=0.8.4 Source=file:/C:/Users/Administrator/Desktop/FunCityLocal/server/libraries/org/spongepowered/mixin/0.8.4/mixin-0.8.4.jar Service=ModLauncher Env=SERVER
-[14:45:41 WARN]: No configuration key exists with name 'mixin.perf.dedup_location', ignoring
-[14:45:41 WARN]: No configuration key exists with name 'mixin.perf.compact_bit_storage', ignoring
-[14:45:41 WARN]: Option 'mixin.perf.dynamic_resources' overriden (by user configuration) to 'true'
-[14:45:44 WARN]: Error loading class: io/github/kosmx/emotes/server/network/AbstractServerEmotePlay (java.lang.ClassNotFoundException: null)
-[14:45:44 WARN]: @Mixin target io.github.kosmx.emotes.server.network.AbstractServerEmotePlay was not found pizzamod.mixin.json:EmoteLogMixin
-[14:45:44 WARN]: Error loading class: de/maxhenkel/voicechat/voice/common/NetworkMessage (java.lang.ClassNotFoundException: null)
-[14:45:44 WARN]: @Mixin target de.maxhenkel.voicechat.voice.common.NetworkMessage was not found pizzamod.mixin.json:voicechat.NetworkMessageMixin
-[14:45:44 WARN]: Error loading class: de/maxhenkel/voicechat/voice/server/Server (java.lang.ClassNotFoundException: null)
-[14:45:44 WARN]: @Mixin target de.maxhenkel.voicechat.voice.server.Server was not found pizzamod.mixin.json:voicechat.VoicechatServerMixin
-[14:45:44 INFO]: Initializing MixinExtras via org.embeddedt.modernfix.forge.shadow.mixinextras.service.MixinExtrasServiceImpl(version=0.3.2).
-[14:45:45 INFO]: Injecting BlockStateBase cache population hook into func_204519_t from me.jellysquid.mods.lithium.mixin.block.flatten_states.AbstractBlockStateMixin
-[14:45:49 INFO]: Ksyxis: Ready to remove unneeded chunks. (platform: forge, version: 1.4.6, mixin: 0.8.4)
-[14:45:50 FATAL]: Attempted to load class hl for invalid dist DEDICATED_SERVER
-[14:45:50 INFO]: [cq:<init>:53]: java.lang.reflect.InvocationTargetException
-[14:45:50 INFO]: [java.lang.Throwable:printStackTrace:-1]: Caused by: java.lang.RuntimeException: Attempted to load class hl for invalid dist DEDICATED_SERVER
-[14:45:55 WARN]: Method overwrite conflict for func_225532_a_ in modernfix-common.mixins.json:perf.biome_zoomer.FuzzyOffsetBiomeZoomerMixin, previously written by me.jellysquid.mods.lithium.mixin.gen.voronoi_biomes.VoronoiBiomeAccessTypeMixin. Skipping method.
-[14:45:56 WARN]: Missing data pack mod:voicechat
-[14:45:57 INFO]: Invalidating pack caches
-[14:45:59 ERROR]: This world was saved with mod voicechat which appears to be missing, things may not work well
-[14:46:27 WARN]: Method overwrite conflict for removeIf in modernfix-common.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin, previously written by me.jellysquid.mods.lithium.mixin.world.chunk_tickets.SortedArraySetMixin. Skipping method.
-[14:46:30 INFO]: [ClaimChunk] PlaceholderAPI not found, not loading API.
-mods: 29
+BAZA ORIGINALA vs server PC 2026-10-18T14:47:04
+Sursa originala Freeroam.1.0.0.zip (rebrand FunCity 1.0.0), NU zip-ul nou FUNCTITY-SERVER.zip
+Client original: 28 jar-uri; explicit client-only: 
+Client original absent ca nume pe server: CTM-MC1.16.1-1.1.2.6.jar, DynamicSurroundings-1.16.5-4.0.5.0.jar, emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar, InGameAccountSwitcher-Forge-1.16-8.0.1.jar, lightfallclient-1.0.0.jar, modernlife-1.16.5-1.15.jar, notenoughanimations-1.2.4.jar, oculus-mc1.16.5-1.4.7.jar, pamhc2foodcore-1.16.3-1.0.2.jar, player-animation-lib-forge-0.4.0+1.16.5.jar, roadstuff-1.16.5-4.3.0.jar, rubidium-mc1.16.5-0.2.13.jar, TextruesRubidiumOptions-1.0.8-mc1.16.5.jar, TRansliterationLib-1.0.4.jar, voicechat-forge-1.16.5-2.3.23.jar
+Server original live: mods=36 plugins=12
+Server PC acum: mods=29 plugins=15
+Lipsesc din serverul original: emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar, modernlife-1.16.5-1.15.jar, pamhc2foodcore-1.16.3-1.0.2.jar, player-animation-lib-forge-0.4.0+1.16.5.jar, roadstuff-1.16.5-4.3.0.jar, smoothchunk1.16.5-2.0.jar, spark-1.9.1-forge.jar, voicechat-forge-1.16.5-2.3.23.jar
+In plus fata de serverul original: obfuscate_lib_compatible-1.3.0.jar
+Pluginuri lipsa: 
+Pluginuri in plus: CoreProtect.jar, worldedit-bukkit-7.2.5-dist.jar, worldguard-bukkit-7.0.5-dist.jar
