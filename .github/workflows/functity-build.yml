@@ -28,13 +28,17 @@ jobs:
 
       - name: Adu sursa la commit fixat
         run: |
-          set -euo pipefail
+          set -Eeuo pipefail
+          trap 'rc=$?; echo "::error::source failed rc=$rc line=$LINENO cmd=$BASH_COMMAND" | tee -a /tmp/fc-source-debug.txt; exit "$rc"' ERR
+          echo "source: clone" | tee -a /tmp/fc-source-debug.txt
           # Repository-ul Mohist 1.16.5 este acum TiangongCraft/Tenet; commitul si GPL raman fixate.
           git clone -q https://github.com/TiangongCraft/Tenet -b 1.16.5 src
+          echo "source: checkout pin $MOHIST_PIN" | tee -a /tmp/fc-source-debug.txt
           git -C src checkout -q --detach "$MOHIST_PIN"
           test "$(git -C src rev-parse HEAD)" = "$MOHIST_PIN"
           git -C src log -1 --format='pin: %H %ci %s' | head -1
           for bf in "$GITHUB_WORKSPACE"/functity/buildfix/*.patch; do
+            echo "source: buildfix $(basename "$bf")" | tee -a /tmp/fc-source-debug.txt
             git -C src apply --check "$bf"
             git -C src apply "$bf"
             echo "buildfix aplicat: $(basename "$bf")"
@@ -42,6 +46,7 @@ jobs:
           shopt -s nullglob
           APPLIED=()
           for pt in functity/patches/*.patch; do
+            echo "source: patch $(basename "$pt")" | tee -a /tmp/fc-source-debug.txt
             ABS="$GITHUB_WORKSPACE/$pt"
             if ! git -C src apply --check "$ABS" 2>/tmp/applycheck.txt; then
               { echo "PATCH respins: $(basename "$pt")"; cat /tmp/applycheck.txt; } >&2
@@ -252,6 +257,7 @@ jobs:
         with:
           name: funcity-build-diagnostics
           path: |
+            /tmp/fc-source-debug.txt
             build-out.log
             /tmp/fc/BUILD-LOG.txt
             /tmp/fc/metadata.json
