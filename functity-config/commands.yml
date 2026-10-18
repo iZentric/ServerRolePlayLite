@@ -1,0 +1,9 @@
+# commands.yml - brand + aliasuri (tehnica CUANTIC)
+name: FunCity
+filter: "\u00a7"
+commands: {}
+alias:
+  fctps:
+  - tps
+  fcv:
+  - version
