@@ -1,14 +1,43 @@
-Sun Oct 18 10:48:31 UTC 2026
-props OK
-3 fisiere config scrise
-[10:49:32 INFO]: Done (4.108s)! For help, type "help"
-PORT-OK
-=== VERIFICARE valori ===
-entity-broadcast-range-percentage=60 max-players=40 max-tick-time=-1 network-compression-threshold=512 view-distance=4 
-entity-activation-range: animals:12 monsters:16 raiders:16 misc:6 water:12 villagers:12 tick-inactive-villagers:False entity-tracking-range: players:48 
-mob-spawn-range:3 item-despawn-rate:2400 max-entity-collisions:2 
-spawn-limits: monsters:20 animals:6 water-animals:2 water-ambient:2 ambient:0 chunk-gc: period-in-ticks:400 
-[10:49:05 INFO]: [Chunky] Loading Chunky v1.2.217
-[10:49:28 INFO]: [Chunky] Enabling Chunky v1.2.217
-libera: 5835M
+Sun Oct 18 10:52:28 UTC 2026
+cat: ./oc_part0.txt: No such file or directory
+cat: ./oc_part1.txt: No such file or directory
+cat: ./oc_part2.txt: No such file or directory
+cat: ./oc_part3.txt: No such file or directory
+cat: ./oc_part4.txt: No such file or directory
+cat: ./oc_part5.txt: No such file or directory
+cat: ./oc_part6.txt: No such file or directory
+cat: ./oc_part7.txt: No such file or directory
+cat: ./oc_part8.txt: No such file or directory
+cat: ./oc_part9.txt: No such file or directory
+cat: ./oc_part10.txt: No such file or directory
+cat: ./oc_part11.txt: No such file or directory
+cat: ./oc_part12.txt: No such file or directory
+cat: ./oc_part13.txt: No such file or directory
+cat: ./oc_part14.txt: No such file or directory
+cat: ./oc_part15.txt: No such file or directory
+cat: ./oc_part16.txt: No such file or directory
+cat: ./oc_part17.txt: No such file or directory
+cat: ./oc_part18.txt: No such file or directory
+cat: ./oc_part19.txt: No such file or directory
+cat: ./oc_part20.txt: No such file or directory
+cat: ./oc_part21.txt: No such file or directory
+cat: ./oc_part22.txt: No such file or directory
+cat: ./oc_part23.txt: No such file or directory
+cat: ./oc_part24.txt: No such file or directory
+cat: ./oc_part25.txt: No such file or directory
+cat: ./oc_part26.txt: No such file or directory
+cat: ./oc_part27.txt: No such file or directory
+cat: ./oc_part28.txt: No such file or directory
+cat: ./oc_part29.txt: No such file or directory
+cat: ./oc_part30.txt: No such file or directory
+cat: ./oc_part31.txt: No such file or directory
+cat: ./oc_part32.txt: No such file or directory
+cat: ./oc_part33.txt: No such file or directory
+cat: ./oc_part34.txt: No such file or directory
+zip: 0 B (asteptat 9032359)
+ZIP CORPUT: File is not a zip file
+0
+########## *server ##########
+########## SPIGOT *spigot.yml ##########
+grep: /tmp/oc/*spigot.yml: No such file or directory
 exit=0
