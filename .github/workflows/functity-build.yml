@@ -103,6 +103,7 @@ jobs:
           echo 'Verificare statica doar; urmeaza boot si boți pe copie izolata.'
 
       - name: Preflight cu pack-ul original, fara client Forge
+        id: preflight
         run: |
           set -euo pipefail
           mkdir -p /tmp/fc-smoke/preflight
@@ -179,6 +180,7 @@ jobs:
           echo 'Boții sint entitati server-side, NU handshake-uri Forge reale. JAR-ul ramine nepublicat.'
 
       - name: Compara cu motorul FunCity b1.0827 deja folosit (aceeasi masina si pack)
+        if: ${{ always() && steps.preflight.outcome == 'success' }}
         run: |
           set -euo pipefail
           gh release download jars-20261017-0952 --repo "$GITHUB_REPOSITORY" -p 'functity-jare-toate.tar.gz' -O /tmp/fc-smoke/current.tar.gz
@@ -221,9 +223,10 @@ jobs:
           b = json.loads((root / 'current/current-b1.0827.json').read_text())
           ab = json.loads((root / 'bots/result.json').read_text())
           bb = json.loads((root / 'bots-current/result.json').read_text())
-          if not (ab['valid'] and bb['valid']): raise SystemExit('both bot arms must remain in /list')
+          both_valid = bool(ab['valid'] and bb['valid'])
           fields = ('boot_medie_s', 'rss_medie_mb', 'cpu_medie_pct', 'gc_pauza_max_ms')
-          result = {'candidate_sha256': ab['engine_sha256'], 'current_sha256': bb['engine_sha256'],
+          result = {'candidate_sha256': ab.get('engine_sha256'), 'current_sha256': bb.get('engine_sha256'),
+                    'both_bot_arms_valid': both_valid,
                     'method': 'matched runner, pack sha pinned, Java 11, two 90s idle trials/arm + three fake players moving for 40s/arm; order not randomized',
                     'limits': 'NOT human capacity, client Forge handshake, PC measurement or 10-year reliability proof',
                     'candidate_idle': {k: a.get(k) for k in fields}, 'current_idle': {k: b.get(k) for k in fields},
@@ -231,6 +234,8 @@ jobs:
                     'current_bots': {k: bb.get(k) for k in ('active_40s_cpu_seconds', 'active_40s_rss_max_mib')}}
           (root / 'comparison.json').write_text(json.dumps(result, indent=2) + '\n')
           print(json.dumps(result, indent=2))
+          if not both_valid:
+              raise SystemExit('at least one bot arm failed; no performance winner')
           PY
 
       - uses: actions/upload-artifact@v4
