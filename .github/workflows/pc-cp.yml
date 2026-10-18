@@ -10,70 +10,41 @@ jobs:
     timeout-minutes: 8
     runs-on: [self-hosted, Windows]
     steps:
-      - name: Curata workdir
+      - name: CoreProtect parts via API
         shell: powershell
         run: |
           $ErrorActionPreference='Continue'
-          try { Set-Location "$env:GITHUB_WORKSPACE" } catch { exit 0 }
-          Remove-Item -Force -ErrorAction SilentlyContinue "diag\CoreProtect.jar.b64","diag\pc-cp.txt"
-          git checkout -- . 2>$null
-          git clean -fdx diag 2>$null
-          exit 0
-      - uses: actions/checkout@v4
-        with:
-          clean: false
-      - name: CoreProtect via PC
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: powershell
-        run: |
-          $ErrorActionPreference='Continue'
-          $steps = @()
+          $rep = @()
+          $api = "https://api.github.com"
+          $H = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json"; "User-Agent" = "fc" }
+          function PutFile($path, $contentB64, $msg) {
+            $sha = $null
+            try { $cur = Invoke-RestMethod "$api/repos/iZentric/ServerRolePlayLite/contents/$path`?ref=$env:GITHUB_REF_NAME" -Headers $H -EA SilentlyContinue; if ($cur) { $sha = $cur.sha } } catch {}
+            $b = @{ message = $msg; content = $contentB64; branch = "$env:GITHUB_REF_NAME"; encoding = "base64" }
+            if ($sha) { $b["sha"] = $sha }
+            Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/$path" -Headers $H -ContentType "application/json" -Body ($b | ConvertTo-Json -Compress -Depth 4) -EA Stop | Out-Null
+          }
           try {
-            Set-Location $env:GITHUB_WORKSPACE
             $t = Join-Path $env:RUNNER_TEMP "cp.jar"
             Remove-Item -Force -EA SilentlyContinue $t
-            $u = "https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar"
-            curl.exe -fLso $t $u
-            $steps += "curl=$LASTEXITCODE size=$((Get-Item $t -EA SilentlyContinue).Length)"
-            if ((Get-Item $t -EA SilentlyContinue).Length -gt 500000) {
-              Copy-Item $t "diag\CoreProtect.jar" -Force
-              $steps += "copiat"
-            } else { $steps += "NU-E-JAR" }
-          } catch { $steps += "EX:$($_.Exception.Message)" }
-          try {
-            "PC $(Get-Date -Format HH:mm:ss): $($steps -join ' | ')" | Set-Content diag\pc-cp.txt -Encoding ascii
-            git config user.email pc@functity.local
-            git config user.name functity-pc
-            git add -f diag/CoreProtect.jar diag/pc-cp.txt
-            $pre = git status --porcelain
-            git commit -qm "cp $(Get-Random)"
-            foreach ($try in 1..4) {
-              git fetch "https://x-access-token:$env:GH_TOKEN@github.com/iZentric/ServerRolePlayLite" "$env:GITHUB_REF_NAME" 2>$null
-              git rebase "FETCH_HEAD" > "$env:RUNNER_TEMP\pushout.txt" 2>&1
-              git push "https://x-access-token:$env:GH_TOKEN@github.com/iZentric/ServerRolePlayLite" "HEAD:$env:GITHUB_REF_NAME" >> "$env:RUNNER_TEMP\pushout.txt" 2>&1
-              if ($LASTEXITCODE -eq 0) { break }
-              Start-Sleep -Seconds (5*$try)
+            curl.exe -fLso $t "https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar"
+            $sz = (Get-Item $t).Length
+            $rep += "jar=$sz"
+            if ($sz -gt 500000) {
+              $b64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($t))
+              $per = 350000
+              $n = [Math]::Ceiling($b64.Length / $per)
+              $rep += "parts=$n b64len=$($b64.Length)"
+              for ($i = 0; $i -lt $n; $i++) {
+                $chunk = $b64.Substring($i * $per, [Math]::Min($per, $b64.Length - $i * $per))
+                $cb = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($chunk))
+                PutFile "diag/cp_part$i.txt" $cb "cp part $i"
+                $rep += "p$i ok"
+              }
             }
-            $steps += "push=$LASTEXITCODE dirtyBefore=[$pre]"
-            $steps -join ' | ' | Set-Content "$env:RUNNER_TEMP\stepsum.txt" -Encoding ascii
-            "PC $(Get-Date -Format HH:mm:ss): $($steps -join ' | ')" | Set-Content diag\pc-cp.txt -Encoding ascii
-            git add -f diag/pc-cp.txt
-            git commit -qm "cp-report $(Get-Random)"
-            git push "https://x-access-token:$env:GH_TOKEN@github.com/iZentric/ServerRolePlayLite" "HEAD:$env:GITHUB_REF_NAME" 2>$null
-            $steps | Out-File "$env:RUNNER_TEMP\stepsum.txt"
-          } catch { "EX2:$($_.Exception.Message)" | Out-File "$env:RUNNER_TEMP\stepsum.txt" }
-          exit 0
-      - name: Raport final
-        shell: powershell
-        run: |
-          $s = Get-Content "$env:RUNNER_TEMP\stepsum.txt" -Raw -ErrorAction SilentlyContinue
-          "FINAL: $s"
-          exit 0
-        continue-on-error: true
+          } catch { $rep += "EX: $($_.Exception.Message)" }
+          $rr = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(($rep -join " | ")))
+          try { PutFile "diag/pc-cp.txt" $rr "cp report" } catch { Write-Host "report fail" }
+          $rep -join " | "
         env:
           GH_TOKEN: ${{ github.token }}
-      - name: Sanseaza token pe push
-        shell: powershell
-        run: exit 0
