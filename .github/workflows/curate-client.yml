@@ -13,7 +13,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: FunCity 1.2.2 = gameplay + optimizari active; fara fps-in-background, shaders, lazyDFU
+      - name: FunCity 1.2.3 = gameplay + optimizari active, cu LazyDFU si Oculus
         run: |
           set -e
           exec > >(tee /tmp/curate.log) 2>&1
@@ -74,8 +74,8 @@ jobs:
           PY
           python3 - <<'PY'
           import zipfile,json,re,os
-          SRC="/tmp/FunCity-1.2.0.mrpack"; DST="/tmp/FunCity-1.2.2.mrpack"
-          REMOVE=re.compile(r'dynamic[-_]?fps|lazydfu|oculus|textruesrubidiumoptions',re.I)
+          SRC="/tmp/FunCity-1.2.0.mrpack"; DST="/tmp/FunCity-1.2.3.mrpack"
+          REMOVE=re.compile(r'dynamic[-_]?fps|textruesrubidiumoptions',re.I)
           zin=zipfile.ZipFile(SRC); idx=json.load(zin.open("modrinth.index.json"))
           allm=[]
           for e in idx.get("files",[]):
@@ -98,49 +98,12 @@ jobs:
           zout.close()
           print("SCOS din client:",cut,"| fisiere jar eliminate:",nrem,"| marime:",os.path.getsize(DST))
           PY
-          cp /tmp/FunCity-1.2.2.mrpack /tmp/FunCity-1.2.0.mrpack
-          cp /tmp/FunCity-1.2.0.mrpack "$GITHUB_WORKSPACE/FunCity-1.2.1.mrpack"
-          cp /tmp/FunCity-1.2.2.mrpack "$GITHUB_WORKSPACE/FunCity-1.2.2.mrpack"
-          mv /tmp/FunCity-1.2.0.mrpack "$GITHUB_WORKSPACE/"
-          python3 - <<'PY'
-          bat = '\n'.join([ln[10:] if ln.startswith(' '*10) else ln for ln in r'''
-          @echo off
-          title FunCity Update
-          cd /d "%TEMP%"
-          set "INST=%APPDATA%\PrismLauncher\instances\CUANTIC-Client-1.7.7\minecraft"
-          if not exist "%INST%\mods" mkdir "%INST%\mods"
-          echo [1/6] Descarc FunCity 1.2.0 de pe GitHub...
-          curl -fLso functity.zip "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.2.mrpack" || goto err
-          if exist unpack rmdir /s /q unpack
-          powershell -NoProfile -Command "Expand-Archive functity.zip unpack" || goto err
-          echo [2/6] Backup la ce ai acum (o data, in mods-backup)...
-          if not exist "%INST%\mods-backup" xcopy /iy /q "%INST%\mods\*.jar" "%INST%\mods-backup\" >nul
-          echo [3/6] Curat modurile vechi...
-          del /q "%INST%\mods\*.jar" 2>nul
-          echo [4/6] Instalez modurile din pachet...
-          if exist unpack\overrides\mods xcopy /iy /q unpack\overrides\mods\*.jar "%INST%\mods\" >nul
-          echo [5/6] Descarc restul de pe Modrinth (merge ~1 min)...
-          powershell -NoProfile -Command "$i=Join-Path $env:APPDATA 'PrismLauncher\instances\CUANTIC-Client-1.7.7\minecraft\mods'; $d=Get-Content unpack\modrinth.index.json|ConvertFrom-Json; foreach($f in $d.files){ $u=$f.downloads[0]; $n=$f.filename; if(-not $n){$n=($u -split '/')[-1]}; $n=[uri]::UnescapeDataString($n); if(-not (Test-Path (Join-Path $i $n))){ curl.exe -fLso (Join-Path $i $n) $u; Write-Host ('  + '+$n) } }"
-          if exist unpack\overrides\config xcopy /diy /q unpack\overrides\config\* "%INST%\config\" >nul
-          echo [6/6] Setari RAM/GC pentru laptopuri vechi...
-          powershell -NoProfile -Command "$p=Join-Path $env:APPDATA 'PrismLauncher\instances\CUANTIC-Client-1.7.7\instance.cfg'; $a='JavaArguments=-Xms1G -Xmx2500M -XX:+UseG1GC -XX:+ParallelRefProcEnabled'; if(Test-Path $p){ $c=@(Get-Content $p); $c=@($c|Where-Object{$_ -notmatch '^JavaArguments='}); ($c+$a)|Set-Content $p; Write-Host '  args: OK' } else { Write-Host '  args: instance.cfg lipseste, sarit' }
-          for /f %%M in ('dir /b "%INST%\mods\*.jar" 2^>nul ^| find /c /v ""') do set N=%%M
-          echo.
-          echo GATA: %N% moduri FunCity active. Deschide Prism si canta-l pe FunCity CUANTIC.
-          echo (Regleaza bat-ul asta oricand = la zi cu ultimele schimbari.)
-          pause
-          exit /b 0
-          :err
-          echo ESUAT: n-am putut descarca de pe GitHub. Verifica netul si ruleaza din nou.
-          pause
-          '''.split(chr(10))])
-          with open("FunCity-Update.bat", "wb") as f:
-              f.write(bat.replace(chr(10), chr(13)+chr(10)).encode("ascii", "ignore"))
-          PY
-          gh release upload funcity "$GITHUB_WORKSPACE/FunCity-1.2.0.mrpack" "$GITHUB_WORKSPACE/FunCity-1.2.1.mrpack" "$GITHUB_WORKSPACE/FunCity-1.2.2.mrpack" "$GITHUB_WORKSPACE/FunCity-Update.bat" -R "$GITHUB_REPOSITORY" --clobber
-          gh release edit funcity -R "$GITHUB_REPOSITORY" --notes "## 🏙️ FUNCTITY 1.7.7 — client 1.2.2 gameplay + performanta in joc
-          **🎮 CLIENT:** [FunCity-1.2.2.mrpack](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.2.mrpack) = content gameplay + optimizari active (Rubidium/ModernFix/Ferrite/EntityCulling/Radon/OutOfSight/CollisionFix); fara Dynamic FPS, LazyDFU, Oculus si meniul TextruesRubidiumOptions
-          **⚡ INSTALARE AUTOMATA pe PC-ul tau:** [FunCity-Update.bat](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-Update.bat) — dublu-click, gata: Isi pune singur in instanta CUANTIC-Client-1.7.7, face backup data trecuta, seteaza RAM/GC. Ruleaza-l oricand = la zi.
+          cp /tmp/FunCity-1.2.3.mrpack "$GITHUB_WORKSPACE/FunCity-1.2.3.mrpack"
+          cp "$GITHUB_WORKSPACE/tools/FunCity-Update.bat" "$GITHUB_WORKSPACE/FunCity-Update.bat"
+          gh release upload funcity "$GITHUB_WORKSPACE/FunCity-1.2.3.mrpack" "$GITHUB_WORKSPACE/FunCity-Update.bat" -R "$GITHUB_REPOSITORY" --clobber
+          gh release edit funcity -R "$GITHUB_REPOSITORY" --notes "## 🏙️ FUNCTITY 1.7.7 — client 1.2.3 gameplay + performanta in joc
+          **🎮 CLIENT:** [FunCity-1.2.3.mrpack](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.3.mrpack) = content gameplay + optimizari active (Rubidium/ModernFix/Ferrite/EntityCulling/Radon/OutOfSight/CollisionFix); cu LazyDFU si Oculus pastrate; fara Dynamic FPS si meniul TextruesRubidiumOptions
+          **⚡ INSTALARE AUTOMATA pe PC-ul tau:** [FunCity-Update.bat](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-Update.bat) — dublu-click, gata: Isi pune singur in instantele FunCity si CUANTIC-Client-1.7.7, face backup data trecuta, seteaza RAM/GC. Ruleaza-l oricand = la zi.
           **🖥️ SERVER:** [FUNCTITY-SERVER.zip](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FUNCTITY-SERVER.zip) 486MB, Java inclus, Start/Actualizare bat
           Motor FunCity b1.0827 (fara Paper). Baza: [release lite](https://github.com/iZentric/ServerRolePlayLite/releases/tag/lite)."
           echo CURATE-DONE

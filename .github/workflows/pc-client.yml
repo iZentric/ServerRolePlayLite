@@ -7,7 +7,7 @@ on:
 jobs:
   ck:
     runs-on: [self-hosted, Windows]
-    timeout-minutes: 18
+    timeout-minutes: 5
     permissions:
       contents: write
     steps:
@@ -23,14 +23,24 @@ jobs:
             if (-not (Test-Path $mods)) { $report += "$name : fara mods"; continue }
             $changed = @()
             foreach ($file in @(Get-ChildItem -LiteralPath $mods -Filter '*.jar' -File)) {
-              if ($file.Name -notmatch '^(dynamic[-_]?fps|lazydfu|oculus|TextruesRubidiumOptions)') { continue }
+              if ($file.Name -notmatch '^(dynamic[-_]?fps|TextruesRubidiumOptions)') { continue }
               try {
                 Rename-Item -LiteralPath $file.FullName -NewName ($file.Name + '.disabled') -ErrorAction Stop
                 $changed += $file.Name
               } catch { $report += "EROARE $name : $($file.Name) : $($_.Exception.Message)" }
             }
+            $restored = @()
+            foreach ($file in @(Get-ChildItem -LiteralPath $mods -Filter '*.jar.disabled' -File)) {
+              if ($file.Name -notmatch '^(lazydfu|oculus)') { continue }
+              $original = $file.Name -replace '\.disabled$', ''
+              if (Test-Path (Join-Path $mods $original)) { continue }
+              try {
+                Rename-Item -LiteralPath $file.FullName -NewName $original -ErrorAction Stop
+                $restored += $original
+              } catch { $report += "EROARE restabilire $name : $($file.Name) : $($_.Exception.Message)" }
+            }
             $left = @(Get-ChildItem -LiteralPath $mods -Filter '*.jar' -File)
-            $report += "$name : active=$($left.Count) dezactivate=[$($changed -join ', ')]"
+            $report += "$name : active=$($left.Count) restabilite=[$($restored -join ', ')] dezactivate=[$($changed -join ', ')]"
             $report += "lista: $(($left | ForEach-Object { $_.Name } | Sort-Object) -join ', ')"
           }
           $server = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
@@ -51,14 +61,3 @@ jobs:
               break
             } catch { Write-Host "Raport nereusit: $($_.Exception.Message)"; if ($attempt -eq 1) { exit 1 } }
           }
-      - name: Completeaza modurile si porneste serverul local
-        shell: powershell
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $url = 'https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/tools/FunCity-Local.ps1?ref=arena/9bbcb24f-serverroleplaylite'
-          $h = @{Authorization=('Bearer '+$env:GH_TOKEN); Accept='application/vnd.github+json'; 'User-Agent'='FunCity'}
-          $data = Invoke-RestMethod -Uri $url -Headers $h -ErrorAction Stop
-          $text = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(($data.content -replace '\s','')))
-          & ([ScriptBlock]::Create($text))
