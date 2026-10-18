@@ -1,5 +1,90 @@
-Sun Oct 18 10:54:03 UTC 2026
-Traceback (most recent call last):
-  File "<stdin>", line 13, in <module>
-ValueError: [digital envelope routines: EVP_DigestInit_ex] disabled for FIPS
-exit=1
+Sun Oct 18 10:55:51 UTC 2026
+unice: 11
+=== bannedcommands.yml (69B) ===
+  
+=== bukkit.yml (380B) ===
+  allow-end: false
+  monsters: 20
+  animals: 6
+  water-animals: 2
+  ambient: 0
+  period-in-ticks: 400
+  animal-spawns: 400
+  monster-spawns: 10
+  autosave: 6000
+=== catserver.yml (459B) ===
+  keepSpawnInMemory: false
+  forceSaveOnWatchdog: true
+  eventPass: false
+  disableAsyncCatchWarn: true
+=== commands.yml (186B) ===
+  name: CUANTIC
+  filter: §
+=== forge-server.toml (183B) ===
+  
+=== mohist.yml (1500B) ===
+  max-bees-in-hive: 3
+  optimize_explosions: true
+  prevent_from_entering_unloaded_chunks: true
+  ignore_empty_time: all_worlds
+  chunk_unload_delay: 5
+=== server.properties (1094B) ===
+  allow-flight=true
+  entity-broadcast-range-percentage=100
+  max-players=200
+  max-tick-time=60000
+  motd=A Minecraft Server
+  network-compression-threshold=256
+  player-idle-timeout=0
+  spawn-protection=0
+  use-native-transport=true
+  view-distance=6
+=== server.properties (1297B) ===
+  allow-flight=true
+  entity-broadcast-range-percentage=100
+  max-players=150
+  max-tick-time=60000
+  motd=\u00A7r\u00A76\u00A7lVibe \u00A7r\u00A7e\u00A7lRoleplay  \u00A7r\n \u00A7r\u00A7f \u00A7r\u00A76\u00E2\u0099\u00AB \u00A7r\u00A7f\u00A7oEnjoy your summer with us and your friends \u00A7r\u00A76\u00E2\u0099\u00AB\u00A7r
+  network-compression-threshold=256
+  player-idle-timeout=0
+  spawn-protection=0
+  use-native-transport=true
+  view-distance=12
+=== server.properties (1099B) ===
+  allow-flight=true
+  entity-broadcast-range-percentage=100
+  max-players=140
+  max-tick-time=60000
+  motd=Serverul se porneste \!
+  network-compression-threshold=-1
+  player-idle-timeout=0
+  spawn-protection=0
+  use-native-transport=true
+  view-distance=5
+=== server.properties (647B) ===
+  motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7o1.7.7 \u00A7f| \u00A7aorice PC, zero lag \u00A7f| \u00A7dOras+Survival+Claims \u00A7f| \u00A7ecost 0
+  max-players=25
+  view-distance=4
+  player-idle-timeout=0
+  use-native-transport=true
+  network-compression-threshold=512
+  spawn-protection=0
+  allow-flight=true
+  max-tick-time=-1
+  entity-broadcast-range-percentage=60
+=== spigot.yml (1449B) ===
+  save-user-cache-on-stop-only: true
+  netty-threads: 2
+  mob-spawn-range: 3
+  animals: 12
+  monsters: 16
+  raiders: 16
+  misc: 6
+  tick-inactive-villagers: false
+  players: 48
+  animals: 24
+  monsters: 24
+  misc: 12
+  other: 32
+  merge-radius:
+exit=0
