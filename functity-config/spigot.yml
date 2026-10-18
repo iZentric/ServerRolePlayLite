@@ -26,9 +26,9 @@ world-settings:
       item: 4.0
       exp: 6.0
     max-tnt-per-tick: 10
-    item-despawn-rate: 2400
+    item-despawn-rate: 6000
     max-entity-collisions: 2
-    nerf-spawner-mobs: true
+    nerf-spawner-mobs: false
     zombie-aggressive-towards-villager: false
     arrow-despawn-rate: 200
     trident-despawn-rate: 200
