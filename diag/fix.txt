@@ -12,3 +12,4 @@
 [13:09:06] NU LIVE. log tail:
 [13:09:07]   	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:?]
 [13:09:09]   	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:?]
+[13:09:10]   	at net.minecraftforge.fml.loading.FMLServerLaunchProvider.lambda$launchService$0(FMLServerLaunchProvider.java:37) ~[FunCityEngine.jar:36.2]
