@@ -1,20 +1,10 @@
 export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
 cd ~/cuantic-live
-echo "== PLUGINI complete =="; ls plugins/*.jar 2>/dev/null | xargs -n1 basename 2>/dev/null
-echo "== directoare plugini =="; ls -d plugins/*/ 2>/dev/null | xargs -n1 basename 2>/dev/null | tr '\n' ' '; echo
-echo "== suspecti: cine sunt =="
-for j in "mods/bwncr-1.16.5-3.10.16.jar" "mods/mapperbase-1.16.5-2.4.0.0.jar" "mods/Modernxl 1.16.5.jar" "mods/SeleneChat-0.2.0-all.jar" "mods/Pizzaland_v68.jar"; do
-  [ -f "$j" ] || { echo "LIPSA: $j"; continue; }
-  echo "--- $j"
-  unzip -p "$j" META-INF/mods.toml 2>/dev/null | grep -aE "modId|displayName|loader" | head -5
-done
-echo "== cine cere lib-urile (modId referentiit in dependencies) =="
-for lib in bwncr mapperbase obfuscate selene; do
-  who=""; cnt=0
-  for f in mods/*.jar; do
-    base=$(basename "$f")
-    [ "$base" = "$lib"* ] && continue
-    if unzip -p "$f" META-INF/mods.toml 2>/dev/null | grep -aqE "modId *= *\"$lib\""; then who="$who $base"; cnt=$((cnt+1)); fi
-  done
-  echo "lib '$lib': cerut de $cnt:$who"
-done
+mkdir -p /tmp/gunoi && mv "mods/SeleneChat-0.2.0-all.jar" /tmp/gunoi/ 2>/dev/null && echo "SeleneChat: scos (era fisier mort, fara mods.toml)"
+echo "mods acum: $(ls mods/*.jar | wc -l)"
+pgrep -f "java.*-jar" | while read p; do kill $p; done; sleep 5
+setsid nohup bash -c 'cd ~/cuantic-live && ~/j11/bin/java -Xms2G -Xmx6G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -jar FunCity-1.16.5-b1.0827.jar nogui > boot.log 2>&1' </dev/null >/dev/null 2>&1 &
+for i in $(seq 1 40); do sleep 3; grep -aqE "Done \(" boot.log && break; done
+grep -aE "Done \(|ERROR.*(mod|Selene)" boot.log | head -4
+ss -lnt 2>/dev/null | grep -q ":25565 " && echo "PORT 25565: DESCHIS" || echo "PORT: inchis"
+grep -aci "warning" boot.log | awk '{print "linii warning: "$1}'
