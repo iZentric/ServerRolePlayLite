@@ -1,11 +1,28 @@
-Sun Oct 18 10:19:05 UTC 2026
-[10:20:08 INFO]: Done (4.940s)! For help, type "help"
+Sun Oct 18 10:43:23 UTC 2026
+patchat config/spigot.yml
+patchat config/spigot.yml
+patchat config/spigot.yml
+patchat config/spigot.yml
+patchat config/spigot.yml
+patchat config/bukkit.yml
+patchat config/bukkit.yml
+patchat config/bukkit.yml
+patchat config/bukkit.yml
+Traceback (most recent call last):
+  File "<stdin>", line 51, in <module>
+  File "/usr/lib64/python3.9/re.py", line 201, in search
+    return _compile(pattern, flags).search(string)
+  File "/usr/lib64/python3.9/re.py", line 304, in _compile
+    p = sre_compile.compile(pattern, flags)
+  File "/usr/lib64/python3.9/sre_compile.py", line 788, in compile
+    p = sre_parse.parse(p, flags)
+  File "/usr/lib64/python3.9/sre_parse.py", line 955, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+TypeError: unsupported operand type(s) for &: 'str' and 'int'
+[10:44:25 INFO]: Done (5.297s)! For help, type "help"
 PORT-OK
-=== chunky ===
-[10:20:33 INFO]: [Chunky] Task running for world. Processed: 936 chunks (5.80%), ETA: 0:09:39, Rate: 26.2 cps, Current: -10, 15
-[10:20:34 INFO]: [Chunky] Task running for world. Processed: 945 chunks (5.86%), ETA: 0:10:21, Rate: 24.4 cps, Current: -1, 15
-[10:20:35 INFO]: [Chunky] Task running for world. Processed: 952 chunks (5.90%), ETA: 0:12:55, Rate: 19.6 cps, Current: 6, 15
-[10:20:36 INFO]: [Chunky] Task running for world. Processed: 960 chunks (5.95%), ETA: 0:13:45, Rate: 18.4 cps, Current: 14, 15
-=== jucatori ===
-[10:20:09 INFO]: There are 0 out of maximum 40 players online.
+[10:38:12 INFO]: [Chunky] Task finished for world. Processed: 16129 chunks (100.00%), Total time: 0:14:53
+[10:43:57 INFO]: [Chunky] Loading Chunky v1.2.217
+[10:44:20 INFO]: [Chunky] Enabling Chunky v1.2.217
+libera: 5690M
 exit=0
