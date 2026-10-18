@@ -7,7 +7,7 @@ on:
 jobs:
   ck:
     runs-on: [self-hosted, Windows]
-    timeout-minutes: 15
+    timeout-minutes: 18
     permissions:
       contents: write
     steps:
@@ -61,6 +61,59 @@ jobs:
               break
             } catch { Write-Host "Raport nereusit: $($_.Exception.Message)"; if ($attempt -eq 1) { exit 1 } }
           }
+      - name: Pune gameplay-ul original si optimizarea de chunkuri pe server
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $server = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
+          $archive = Join-Path $env:TEMP 'FunCity-first-server.tar.gz'
+          if (-not (Test-Path $archive) -or (Get-Item $archive).Length -lt 100000000) {
+            curl.exe -fLso $archive 'https://github.com/iZentric/ServerRolePlayLite/releases/download/world-live/functity-live.tar.gz'
+            if ($LASTEXITCODE -ne 0) { throw 'Serverul original nu poate fi descarcat' }
+          }
+          $expectedSHA='1fab5e7c683456d67572cd04586d227ad2a96750f88f5fe6898ed624d29032ae'
+          if ((Get-FileHash $archive -Algorithm SHA256).Hash -ine $expectedSHA) { throw 'Sursa originala nu trece SHA256' }
+          $needed=@('emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar',
+                    'modernlife-1.16.5-1.15.jar',
+                    'pamhc2foodcore-1.16.3-1.0.2.jar',
+                    'player-animation-lib-forge-0.4.0+1.16.5.jar',
+                    'roadstuff-1.16.5-4.3.0.jar',
+                    'smoothchunk1.16.5-2.0.jar')
+          $names=@(tar -tzf $archive)
+          if ($LASTEXITCODE -ne 0) { throw 'Arhiva originala nu se poate citi' }
+          $paths=@()
+          foreach ($name in $needed) {
+            $matches=@($names | Where-Object { $_ -match ('(?i)^(\./)?mods/' + [regex]::Escape($name) + '$') })
+            if ($matches.Count -ne 1) { throw "Modul $name nu exista o singura data in sursa originala" }
+            $paths += $matches[0]
+          }
+          $tmp=Join-Path $env:TEMP 'FunCity-first-extracted'
+          New-Item -ItemType Directory -Force $tmp | Out-Null
+          & tar -xzf $archive -C $tmp @paths
+          if ($LASTEXITCODE -ne 0) { throw 'Extragerea modurilor originale a esuat' }
+          $installed=@()
+          foreach ($name in $needed) {
+            $source=Join-Path (Join-Path $tmp 'mods') $name
+            $target=Join-Path (Join-Path $server 'mods') $name
+            if (-not (Test-Path $source)) { throw "Nu a fost extras $name" }
+            if (-not (Test-Path $target)) { Copy-Item -LiteralPath $source -Destination $target -ErrorAction Stop; $installed += $name }
+            if ((Get-FileHash $source -Algorithm SHA256).Hash -ne (Get-FileHash $target -Algorithm SHA256).Hash) { throw "Hash diferit pentru $name" }
+          }
+          $disabled=@()
+          foreach($folder in @('mods','plugins')) {
+            $dir=Join-Path $server $folder
+            foreach($file in @(Get-ChildItem $dir -File -Filter '*.jar')) {
+              if (($folder -eq 'mods' -and $file.Name -eq 'obfuscate_lib_compatible-1.3.0.jar') -or
+                  ($folder -eq 'plugins' -and $file.Name -match '^(worldedit-bukkit|worldguard-bukkit)')) {
+                Rename-Item -LiteralPath $file.FullName -NewName ($file.Name+'.disabled') -ErrorAction Stop
+                $disabled += $file.Name
+              }
+            }
+          }
+          Write-Host "Din original: $($installed -join ', '); extras dezactivat: $($disabled -join ', ')"
+
       - name: Restabileste dependintele serverului si porneste local
         shell: powershell
         env:
@@ -131,10 +184,14 @@ jobs:
           $server = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
           $originalPack = Join-Path $env:TEMP 'FunCity-first-pack.zip'
           $originalServer = Join-Path $env:TEMP 'FunCity-first-server.tar.gz'
-          curl.exe -fLso $originalPack 'https://github.com/iZentric/ServerRolePlayLite/releases/download/freeroam/Freeroam.1.0.0.zip'
-          if ($LASTEXITCODE -ne 0 -or (Get-Item $originalPack).Length -lt 100000000) { throw 'Lipseste primul modpack original' }
-          curl.exe -fLso $originalServer 'https://github.com/iZentric/ServerRolePlayLite/releases/download/world-live/functity-live.tar.gz'
-          if ($LASTEXITCODE -ne 0 -or (Get-Item $originalServer).Length -lt 100000000) { throw 'Lipseste serverul original cu toate modurile' }
+          if (-not (Test-Path $originalPack) -or (Get-Item $originalPack).Length -lt 100000000) {
+            curl.exe -fLso $originalPack 'https://github.com/iZentric/ServerRolePlayLite/releases/download/freeroam/Freeroam.1.0.0.zip'
+            if ($LASTEXITCODE -ne 0) { throw 'Lipseste primul modpack original' }
+          }
+          if (-not (Test-Path $originalServer) -or (Get-Item $originalServer).Length -lt 100000000) {
+            curl.exe -fLso $originalServer 'https://github.com/iZentric/ServerRolePlayLite/releases/download/world-live/functity-live.tar.gz'
+            if ($LASTEXITCODE -ne 0) { throw 'Lipseste serverul original cu toate modurile' }
+          }
           $pack = [IO.Compression.ZipFile]::OpenRead($originalPack)
           try {
             $entry = $pack.GetEntry('modrinth.index.json')
@@ -158,7 +215,8 @@ jobs:
             "Client original absent ca nume pe server: $((@($packMods | Where-Object { $_ -notin $nowMods }) | Sort-Object -Unique) -join ', ')",
             "Server original live: mods=$($oldMods.Count) plugins=$($oldPlugins.Count)",
             "Server PC acum: mods=$($nowMods.Count) plugins=$($nowPlugins.Count)",
-            "Lipsesc din serverul original: $((@($oldMods | Where-Object { $_ -notin $nowMods }) | Sort-Object -Unique) -join ', ')",
+            "Excluse intentionat: moduri audio/voice, Dynamic FPS (AFK) si spark (profiler, nu optimizeaza normal)",
+            "Lipsesc din serverul original, inclusiv exceptiile de mai sus: $((@($oldMods | Where-Object { $_ -notin $nowMods }) | Sort-Object -Unique) -join ', ')",
             "In plus fata de serverul original: $((@($nowMods | Where-Object { $_ -notin $oldMods }) | Sort-Object -Unique) -join ', ')",
             "Pluginuri lipsa: $((@($oldPlugins | Where-Object { $_ -notin $nowPlugins }) | Sort-Object -Unique) -join ', ')",
             "Pluginuri in plus: $((@($nowPlugins | Where-Object { $_ -notin $oldPlugins }) | Sort-Object -Unique) -join ', ')"
