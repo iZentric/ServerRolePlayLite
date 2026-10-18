@@ -29,8 +29,11 @@ jobs:
           $root="E:\Administrator\Desktop\FunCity"
           $rep=@()
           if(-not (Test-Path $root)){ PutFile "diag/oldcfg-report.txt" "RADACINA LIPSA: $root" "oldcfg"; exit 0 }
-          $ext=@("*.yml","*.toml","*.properties","*.conf","*.cfg")
-          $fs=@(Get-ChildItem $root -Recurse -File -Include $ext -EA SilentlyContinue | Where-Object { $_.Length -lt 300000 } | Sort-Object FullName)
+          $want=@("^server\.properties$","^spigot\.yml$","^bukkit\.yml$","^commands\.yml$","^mohist\.yml$","^mohist\.toml$","^purpur\.yml$","^paper.*\.yml$","^server\.toml$","^eula\.txt$","^forge-server\.toml$","^incontrol\.xml$","^Spigot\.yml$")
+          $all=@(Get-ChildItem $root -Recurse -File -EA SilentlyContinue | Where-Object { $_.Length -lt 300000 })
+          $fs=@($all | Where-Object { $n=$_.Name; ($want | Where-Object { $n -match $_ }).Count -gt 0 } | Sort-Object FullName)
+          if($fs.Count -lt 3){ $fs=@($all | Where-Object { $_.Name -match '^(server\.properties|spigot\.yml|bukkit\.yml)$' } | Sort-Object FullName) }
+          $rep += "albite: $($fs.Count) din $($all.Count)"
           $rep += "fisiere-config gasite: $($fs.Count)"
           $big=@(Get-ChildItem $root -Recurse -Directory -EA SilentlyContinue | Select-Object -First 40)
           $rep += "subdirectoare: " + (($big | ForEach-Object { $_.FullName -replace [regex]::Escape($root+'\'),'' }) -join ' | ')
