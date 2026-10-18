@@ -4,14 +4,14 @@ setlocal
 cd /d "%TEMP%"
 set "PRISM=%APPDATA%\PrismLauncher\instances"
 echo [1/4] Descarc FunCity de pe GitHub...
-curl -fLso functity.zip "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.0.mrpack" || goto err
+curl -fLso functity.zip "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.2.mrpack" || goto err
 if exist unpack rmdir /s /q unpack
 powershell -NoProfile -Command "Expand-Archive functity.zip unpack" || goto err
 set DONE=0
 for %%I in (FunCity CUANTIC-Client-1.7.7) do call :UP "%%I"
 if "%DONE%"=="0" echo NU AM GASIT nici o instanta FunCity/CUANTIC in %PRISM% & goto endf
 echo.
-echo GATA: instante la zi cu FunCity 1.2.1 (26 moduri, args RAM/GC).
+echo GATA: gameplay + optimizari active, fara Dynamic FPS/LazyDFU/Oculus.
 goto endf
 :UP
 set "INST=%PRISM%\%~1\minecraft"

