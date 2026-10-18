@@ -5,78 +5,48 @@ on:
       - .github/workflows/pc-client.yml
 jobs:
   ck:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 5
     permissions:
       contents: write
-    timeout-minutes: 10
-    runs-on: [self-hosted, Windows]
     steps:
-      - name: Verifica si adu JRE la zi
+      - name: Client gameplay plus performanta activa
         shell: powershell
-        run: |
-          $ErrorActionPreference='Continue'
-          $rep=@()
-          $api="https://api.github.com"
-          $H=@{ Authorization="token $env:GH_TOKEN"; Accept="application/vnd.github+json"; "User-Agent"="fc" }
-          function PutFile($path,$txt,$msg){
-            $b=@{ message=$msg; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($txt)); branch="$env:GITHUB_REF_NAME" }
-            try { $b.sha=(Invoke-RestMethod -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/$path?ref=$env:GITHUB_REF_NAME" -Headers $H -EA Stop).sha } catch {}
-            try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/$path" -Headers $H -ContentType "application/json" -Body ($b|ConvertTo-Json -Compress -Depth 4) -EA Stop | Out-Null } catch { Write-Host "push fail $path : $($_.Exception.Message)" }
-          }
-          $inst="$env:APPDATA\PrismLauncher\instances"
-          $dstJ="$env:APPDATA\PrismLauncher\java\jdk8u-functity"
-          try {
-            $jp=(Get-Content "$inst\CUANTIC-Client-1.7.7\instance.cfg" | Where-Object {$_ -match '^JavaPath='} | Select-Object -First 1) -replace '^JavaPath=',''
-            $jexe=$jp -replace 'javaw.exe','java.exe'
-            $ver = if (Test-Path $jexe) { (& $jexe -version 2>&1 | Select-Object -First 1) } else { "JavaPath lipsa: $jp" }
-            $rep += "java-client: $ver"
-            foreach($n in @("FunCity","CUANTIC-Client-1.7.7")){
-              $m=Join-Path $inst "$n\minecraft\mods"
-              if(Test-Path $m){
-                # Doar optimizari active in joc; restul nu se mai incarca.
-                $disabled=@()
-                foreach($f in @(Get-ChildItem $m -File -Filter *.jar)){
-                  if($f.Name -match '(?i)^(dynamic[-_]?fps|lazydfu|oculus|TextruesRubidiumOptions)'){
-                    try { Rename-Item -LiteralPath $f.FullName -NewName ($f.Name+'.disabled') -ErrorAction Stop; $disabled+= $f.Name }
-                    catch { $rep += "NU POT dezactiva $($f.Name): $($_.Exception.Message)" }
-                  }
-                }
-                $rep += "$n : dezactivate=[$($disabled -join ', ')]"
-                $all=@(Get-ChildItem $m -Filter *.jar)
-                $junk=@($all | Where-Object {$_.Name -match 'dynamic|surroundings|^CTM|notenoughanim|lightfall|AccountSwitch'})
-                $rep += "$n : mods=$($all.Count) gunoi=$($junk.Count)"
-                if($n -eq "FunCity"){ $rep += "lista: " + (($all | ForEach-Object {$_.Name} | Sort-Object) -join ',') }
-              } else { $rep += "$n : FARA mods dir" }
-            }
-            if("$($rep -join ' ')" -notmatch '1\.8\.0_(2[6-9][0-9]|[3-9][0-9][0-9])'){
-              "aduc JRE 8 la zi..."
-              $zip="$env:RUNNER_TEMP\jre8.zip"
-              Remove-Item -Force -EA SilentlyContinue $zip
-              curl.exe -fLso $zip "https://api.adoptium.net/v3/binary/latest/8/ga/windows/x64/jre/hotspot/normal/eclipse"
-              $sz=(Get-Item $zip -EA SilentlyContinue).Length
-              if($sz -gt 20000000){
-                Remove-Item -Recurse -Force -EA SilentlyContinue $dstJ,"$dstJ-tmp"
-                Expand-Archive $zip -DestinationPath "$dstJ-tmp" -Force
-                $inner=@(Get-ChildItem "$dstJ-tmp") | Select-Object -First 1
-                Move-Item $inner.FullName $dstJ -Force
-                Remove-Item -Recurse -Force -EA SilentlyContinue "$dstJ-tmp"
-                $newv = (& "$dstJ\bin\java.exe" -version 2>&1 | Select-Object -First 1)
-                $rep += "JRE nou: $newv"
-                foreach($n in @("FunCity","CUANTIC-Client-1.7.7")){
-                  $cfg=Join-Path $inst "$n\instance.cfg"
-                  if(Test-Path $cfg){
-                    $c=@(Get-Content $cfg)
-                    $c=@($c | Where-Object {$_ -notmatch '^(JavaPath=|OverrideJava=)'})
-                    $c += "JavaPath=$dstJ\bin\javaw.exe"
-                    $c += "OverrideJava=true"
-                    Set-Content $cfg $c -Encoding ascii
-                  }
-                }
-                $rep += "ambele instante: JavaPath updatat"
-              } else { $rep += "adoptium esuat size=$sz" }
-            } else { $rep += "java ok deja, nu-mi trebuie" }
-          } catch { $rep += "EX: $($_.Exception.Message)" }
-          $r=$rep -join "`n"
-          PutFile "diag/pc-client.txt" $r "pc client check"
-          $r
         env:
           GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $report = @("PC client $(Get-Date -Format s)")
+          foreach ($name in @('FunCity', 'CUANTIC-Client-1.7.7')) {
+            $mods = Join-Path $env:APPDATA ('PrismLauncher\instances\' + $name + '\minecraft\mods')
+            if (-not (Test-Path $mods)) { $report += "$name : fara mods"; continue }
+            $changed = @()
+            foreach ($file in @(Get-ChildItem -LiteralPath $mods -Filter '*.jar' -File)) {
+              if ($file.Name -notmatch '^(dynamic[-_]?fps|lazydfu|oculus|TextruesRubidiumOptions)') { continue }
+              try {
+                Rename-Item -LiteralPath $file.FullName -NewName ($file.Name + '.disabled') -ErrorAction Stop
+                $changed += $file.Name
+              } catch { $report += "EROARE $name : $($file.Name) : $($_.Exception.Message)" }
+            }
+            $left = @(Get-ChildItem -LiteralPath $mods -Filter '*.jar' -File)
+            $report += "$name : active=$($left.Count) dezactivate=[$($changed -join ', ')]"
+            $report += "lista: $(($left | ForEach-Object { $_.Name } | Sort-Object) -join ', ')"
+          }
+          $server = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
+          $jar = Test-Path (Join-Path $server 'FunCityEngine.jar')
+          $serverMods = @(Get-ChildItem -Path (Join-Path $server 'mods') -Filter '*.jar' -ErrorAction SilentlyContinue).Count
+          $report += "server: jar=$jar mods=$serverMods"
+          $text = $report -join "`n"
+          Write-Host $text
+          $base = 'https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/pc-client.txt'
+          $headers = @{ Authorization = ('Bearer ' + $env:GH_TOKEN); Accept = 'application/vnd.github+json'; 'User-Agent' = 'FunCity' }
+          $body = @{ message = 'pc client cleanup'; branch = $env:GITHUB_REF_NAME; content = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($text)) }
+          $url = $base + '?ref=' + [uri]::EscapeDataString($env:GITHUB_REF_NAME)
+          for ($attempt = 0; $attempt -lt 2; $attempt++) {
+            try {
+              $body.sha = (Invoke-RestMethod -Uri $url -Headers $headers -ErrorAction Stop).sha
+              Invoke-RestMethod -Method Put -Uri $base -Headers $headers -ContentType 'application/json' -Body ($body | ConvertTo-Json -Compress) -ErrorAction Stop | Out-Null
+              Write-Host 'Raport PC incarcat'
+              break
+            } catch { Write-Host "Raport nereusit: $($_.Exception.Message)"; if ($attempt -eq 1) { exit 1 } }
+          }
