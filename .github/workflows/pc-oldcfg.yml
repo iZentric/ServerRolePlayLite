@@ -62,3 +62,4 @@ jobs:
             PutFile "diag/oldcfg-done.txt" "parts=$n ok ts=$(Get-Date -Format s)" "oldcfg done"
           } else { PutFile "diag/oldcfg-done.txt" "zero fisiere" "oldcfg done" }
           "gata: $($fs.Count) fisiere, raport $tot caractere"
+# r3
