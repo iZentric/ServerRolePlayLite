@@ -20,7 +20,8 @@ jobs:
       - name: Adu sursa la commit fixat
         run: |
           set -euo pipefail
-          git clone -q https://github.com/MohistMC/Mohist -b 1.16.5 src
+          # Repository-ul Mohist 1.16.5 este acum TiangongCraft/Tenet; commitul si GPL raman fixate.
+          git clone -q https://github.com/TiangongCraft/Tenet -b 1.16.5 src
           git -C src checkout -q --detach "$MOHIST_PIN"
           test "$(git -C src rev-parse HEAD)" = "$MOHIST_PIN"
           git -C src log -1 --format='pin: %H %ci %s' | head -1
@@ -124,6 +125,23 @@ jobs:
           r = json.load(open('/tmp/fc-smoke/preflight/funcity-candidate.json'))
           assert r['status'] == 'MASURAT' and r['pack_mods'] == 36 and r['pack_plugins'] == 14, r
           print('PRE-FLIGHT: pack 36 moduri / 14 pluginuri; boot reusit; nu este benchmark de capacitate')
+          PY
+
+      - name: CoreProtect verificat din proiectul original (doar copia de test)
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3 https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar -o /tmp/fc-smoke/CoreProtect.jar
+          echo '04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977  /tmp/fc-smoke/CoreProtect.jar' | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib, shutil
+          from pathlib import Path
+          plugins = Path('/tmp/fc-smoke/stage/plugins')
+          matches = [p for p in plugins.glob('*.jar') if p.name.lower().startswith('coreprotect')]
+          if len(matches) > 1 or any(hashlib.sha256(p.read_bytes()).hexdigest() != '04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977' for p in matches):
+              raise SystemExit('CoreProtect in pack is duplicated or not the pinned upstream release')
+          if not matches:
+              shutil.copyfile('/tmp/fc-smoke/CoreProtect.jar', plugins / 'CoreProtect.jar')
+          print('CoreProtect v21.2 pregatit doar in stage; nicio schimbare pe PC/release')
           PY
 
       - name: Proba cu 3 boți server-side (fail-closed)

@@ -18,6 +18,7 @@ import zipfile
 from fc_bench import JvmRun
 
 CURTAIN_SHA = "c9234d2c5ca43c337abac25a05022fe2f226c884855aa6941b6130c60777819d"
+COREPROTECT_SHA = "04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977"
 BOTS = ("benchA01", "benchA02", "benchA03")
 LIST = re.compile(r"There are (\d+) (?:of a max of|out of maximum) (\d+) players online[^\n]*", re.I)
 
@@ -63,7 +64,7 @@ def wait_reply(path, offset, pattern, process, timeout=40):
 
 def main(stage, engine, curtain, output):
     output.mkdir(parents=True, exist_ok=True)
-    report = {"valid": False, "names": list(BOTS), "method": "3 server-side Curtain fake players on isolated GitHub runner; /list at spawn and after 40 seconds", "limitations": "Not a Forge client login or gameplay/capacity benchmark. Test-only derived Curtain removes NaturalSpawnerMixin. Never publish this JAR.", "production_changes": False}
+    report = {"valid": False, "names": list(BOTS), "method": "3 server-side Curtain fake players, pinned CoreProtect and no ClaimChunk on disposable runner; /list at spawn and after 40 seconds", "limitations": "Not a Forge client login, a modded-event audit or a gameplay/capacity benchmark. Test-only derived Curtain removes NaturalSpawnerMixin. Never publish this JAR.", "production_changes": False}
     jar = stage / engine
     log = output / "fakeplayers.log"
     server = None
@@ -76,6 +77,17 @@ def main(stage, engine, curtain, output):
             raise ValueError("server must bind only to 127.0.0.1")
         if not jar.is_file() or not (stage / "libraries").is_dir():
             raise ValueError("engine/bootstrap missing; cannot start isolated smoke")
+        plugins = stage / "plugins"
+        cp = [p for p in plugins.glob("*.jar") if p.name.lower().startswith("coreprotect")]
+        if len(cp) != 1 or hashlib.sha256(cp[0].read_bytes()).hexdigest() != COREPROTECT_SHA:
+            raise ValueError("pinned CoreProtect v21.2 missing or duplicated")
+        # Open city: disable territorial claims ONLY in this temporary copy.
+        claim_jars = [p for p in plugins.glob("*.jar") if p.name.lower().startswith("claimchunk")]
+        report["claims_disabled_in_test"] = [p.name for p in claim_jars]
+        disabled = stage / "plugins-disabled-test-only"
+        for p in claim_jars:
+            disabled.mkdir(exist_ok=True)
+            p.rename(disabled / (p.name + ".disabled"))
         mods = stage / "mods"
         if len(list(mods.glob("*.jar"))) != 36:
             raise ValueError("reference pack mods changed (expected 36)")
@@ -92,8 +104,11 @@ def main(stage, engine, curtain, output):
         report["boot_wall_s"] = server.done_wall_s
         boot_log = log.read_text(errors="replace")
         report["plugins_enabled"] = sorted(set(re.findall(r"\bEnabling ([A-Za-z0-9_.-]+) v", boot_log)))
-        if len(report["plugins_enabled"]) < 14:
-            raise RuntimeError("not all 14 original plugins enabled")
+        enabled = {p.lower() for p in report["plugins_enabled"]}
+        if "coreprotect" not in enabled or "claimchunk" in enabled:
+            raise RuntimeError("expected CoreProtect enabled, ClaimChunk disabled (open-city test)")
+        if len(enabled) < 14:
+            raise RuntimeError("fewer than 14 plugins enabled in open-city + CoreProtect test")
         # A line announcing a player is not proof the player is still connected.
         for i, name in enumerate(BOTS):
             offset = log.stat().st_size
