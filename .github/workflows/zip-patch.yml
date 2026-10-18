@@ -26,7 +26,13 @@ jobs:
           echo "zip: $(stat -c%s f.zip)B"
           unzip -q f.zip -d unz
           mkdir -p unz/plugins && cp CoreProtect.jar unz/plugins/CoreProtect.jar
-          grep -q "^motd=" unz/server.properties && sed -i 's|^motd=.*|motd=\\u00a7b\\u00a7lFuncity \\u00a77RolePlay \\u00a7aRomania - loguri CoreProtect active|' unz/server.properties
+          echo "== config 100% in pachet =="
+          cp "$GITHUB_WORKSPACE/functity-config/server.properties" unz/server.properties
+          mkdir -p unz/config unz/defaultconfigs
+          for cf in spigot.yml bukkit.yml commands.yml connectivity-common.toml modernfix-mixins.properties; do cp "$GITHUB_WORKSPACE/functity-config/$cf" "unz/config/$cf"; done
+          cp "$GITHUB_WORKSPACE/functity-config/forge-server.toml" unz/defaultconfigs/forge-server.toml
+          rm -f unz/mods/SeleneChat* || true
+          echo "configuri in pachet: $(ls unz/config | wc -l)"
           cat > unz/plugins/Citeste-pluginuri.txt <<'TXT'
           CoreProtect.jar  = log FIECARE block spart/pus (inclusiv din moduri), /co inspect cu lopata + /co rollback la paguba
           EssentialsX      = /sethome /home /spawn /tpa /back
