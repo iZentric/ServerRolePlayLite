@@ -1,28 +1,14 @@
-Sun Oct 18 10:43:23 UTC 2026
-patchat config/spigot.yml
-patchat config/spigot.yml
-patchat config/spigot.yml
-patchat config/spigot.yml
-patchat config/spigot.yml
-patchat config/bukkit.yml
-patchat config/bukkit.yml
-patchat config/bukkit.yml
-patchat config/bukkit.yml
-Traceback (most recent call last):
-  File "<stdin>", line 51, in <module>
-  File "/usr/lib64/python3.9/re.py", line 201, in search
-    return _compile(pattern, flags).search(string)
-  File "/usr/lib64/python3.9/re.py", line 304, in _compile
-    p = sre_compile.compile(pattern, flags)
-  File "/usr/lib64/python3.9/sre_compile.py", line 788, in compile
-    p = sre_parse.parse(p, flags)
-  File "/usr/lib64/python3.9/sre_parse.py", line 955, in parse
-    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
-TypeError: unsupported operand type(s) for &: 'str' and 'int'
-[10:44:25 INFO]: Done (5.297s)! For help, type "help"
+Sun Oct 18 10:48:31 UTC 2026
+props OK
+3 fisiere config scrise
+[10:49:32 INFO]: Done (4.108s)! For help, type "help"
 PORT-OK
-[10:38:12 INFO]: [Chunky] Task finished for world. Processed: 16129 chunks (100.00%), Total time: 0:14:53
-[10:43:57 INFO]: [Chunky] Loading Chunky v1.2.217
-[10:44:20 INFO]: [Chunky] Enabling Chunky v1.2.217
-libera: 5690M
+=== VERIFICARE valori ===
+entity-broadcast-range-percentage=60 max-players=40 max-tick-time=-1 network-compression-threshold=512 view-distance=4 
+entity-activation-range: animals:12 monsters:16 raiders:16 misc:6 water:12 villagers:12 tick-inactive-villagers:False entity-tracking-range: players:48 
+mob-spawn-range:3 item-despawn-rate:2400 max-entity-collisions:2 
+spawn-limits: monsters:20 animals:6 water-animals:2 water-ambient:2 ambient:0 chunk-gc: period-in-ticks:400 
+[10:49:05 INFO]: [Chunky] Loading Chunky v1.2.217
+[10:49:28 INFO]: [Chunky] Enabling Chunky v1.2.217
+libera: 5835M
 exit=0
