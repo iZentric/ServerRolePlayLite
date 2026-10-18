@@ -36,6 +36,5 @@ jobs:
           $resb = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($res))
           try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/diag/pc-cp.txt" -Headers $H2 -ContentType "application/json" -Body (@{ message="cpreport $(Get-Random)"; content=$resb; branch="$env:GITHUB_REF_NAME" }|ConvertTo-Json -Compress -Depth 4) | Out-Null } catch {}
           Write-Host $res
-        env:          $res
         env:
           GH_TOKEN: ${{ github.token }}
