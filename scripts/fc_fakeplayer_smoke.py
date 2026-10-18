@@ -173,7 +173,15 @@ def main(stage, engine, curtain, output):
         (output / "result.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
         if not report["valid"] and os.environ.get("GITHUB_ACTIONS") == "true":
             reason = report.get("error", "critical server log: " + "; ".join(report.get("critical_lines", [])[:2]))
-            print("::error::fake-player gate failed: " + reason.replace("\n", " ")[:1200], flush=True)
+            # Actions log archives are not always retrievable; publish a bounded,
+            # sanitized crash excerpt as an annotation (test stage has no secrets).
+            if "server did not finish boot" in reason and log.exists():
+                suspects = [line.strip() for line in text.splitlines() if re.search(
+                    r"Caused by:|Exception|Mixin|FATAL|\bERROR\b|Failed to|Crash report", line, re.I)]
+                reason += " | crash clues: " + " | ".join(suspects[:3] + suspects[-3:])
+                reason += " | log end: " + text[-500:]
+            reason = re.sub(r"\s+", " ", reason)
+            print("::error::fake-player gate failed: " + reason[:1400], flush=True)
         print(json.dumps({k: v for k, v in report.items() if k != "log_tail"}, ensure_ascii=False, indent=2), flush=True)
     return 0 if report["valid"] else 1
 
