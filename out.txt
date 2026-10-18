@@ -1,11 +1,28 @@
-Sun Oct 18 10:31:50 UTC 2026
-lipsa config/spigot.yml
+Sun Oct 18 10:43:23 UTC 2026
+patchat config/spigot.yml
+patchat config/spigot.yml
+patchat config/spigot.yml
+patchat config/spigot.yml
+patchat config/spigot.yml
+patchat config/bukkit.yml
+patchat config/bukkit.yml
+patchat config/bukkit.yml
+patchat config/bukkit.yml
 Traceback (most recent call last):
-  File "<stdin>", line 39, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: 'config/spigot.yml'
-[10:32:53 INFO]: Done (4.154s)! For help, type "help"
+  File "<stdin>", line 51, in <module>
+  File "/usr/lib64/python3.9/re.py", line 201, in search
+    return _compile(pattern, flags).search(string)
+  File "/usr/lib64/python3.9/re.py", line 304, in _compile
+    p = sre_compile.compile(pattern, flags)
+  File "/usr/lib64/python3.9/sre_compile.py", line 788, in compile
+    p = sre_parse.parse(p, flags)
+  File "/usr/lib64/python3.9/sre_parse.py", line 955, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+TypeError: unsupported operand type(s) for &: 'str' and 'int'
+[10:44:25 INFO]: Done (5.297s)! For help, type "help"
 PORT-OK
-[10:35:22 INFO]: [Chunky] Task running for world. Processed: 13168 chunks (81.64%), ETA: 0:03:56, Rate: 12.5 cps, Current: 0, 57
-[10:35:23 INFO]: [Chunky] Task running for world. Processed: 13178 chunks (81.70%), ETA: 0:03:49, Rate: 12.9 cps, Current: 10, 57
-[10:35:24 INFO]: [Chunky] Task running for world. Processed: 13189 chunks (81.77%), ETA: 0:04:16, Rate: 11.5 cps, Current: 21, 57
+[10:38:12 INFO]: [Chunky] Task finished for world. Processed: 16129 chunks (100.00%), Total time: 0:14:53
+[10:43:57 INFO]: [Chunky] Loading Chunky v1.2.217
+[10:44:20 INFO]: [Chunky] Enabling Chunky v1.2.217
+libera: 5690M
 exit=0
