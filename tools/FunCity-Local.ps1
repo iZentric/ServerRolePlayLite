@@ -139,20 +139,51 @@ if(-not (Test-Path $jar)){
 if(-not (Test-Path $jar)){ Rep 'OPRIT: motorul b1.0827 lipseste; nu pornesc alt jar'; return }
 $mcBefore=@(Get-ChildItem "$srv\mods" -File -Filter '*.jar' -EA SilentlyContinue).Count
 if($mcBefore -lt 20){ Rep "OPRIT: doar $mcBefore mods; serverul cu toate modurile NU e gata"; return }
-$run=@(Get-Process java -EA SilentlyContinue | Where-Object { $_.Path -like "*FunCityLocal*" })
-if($run.Count){ Rep "server ruleaza deja (pid $($run[0].Id)) - il las" } else {
+function ServerProc {
+  @(Get-CimInstance Win32_Process -Filter "Name='java.exe' OR Name='javaw.exe'" -EA SilentlyContinue | Where-Object { $_.CommandLine -like '*FunCityEngine.jar*' })
+}
+function LocalPort {
+  $tcp=New-Object Net.Sockets.TcpClient
+  try { $a=$tcp.BeginConnect('127.0.0.1',25565,$null,$null); if(-not $a.AsyncWaitHandle.WaitOne(1500)){ return $false }; $tcp.EndConnect($a); return $true }
+  catch { return $false } finally { $tcp.Close() }
+}
+$run=@(ServerProc)
+if($run.Count){ Rep "proces server gasit (pid $($run[0].ProcessId)); port local=$(LocalPort)" } else {
   Rep "pornesc serverul ascuns..."
   Remove-Item -Force -EA SilentlyContinue "$srv\logs\latest.log"
-  # Nu lasa GitHub Actions sa omoare procesul serverului cand jobul se termina.
-  $env:RUNNER_TRACKING_ID=''
-  $p=Start-Process -FilePath "$srv\java11\bin\java.exe" -ArgumentList '-Xms2G','-Xmx6G','-XX:+UnlockExperimentalVMOptions','-XX:+UseG1GC','-XX:MaxGCPauseMillis=30','-XX:+ParallelRefProcEnabled','-jar','FunCityEngine.jar','nogui' -WorkingDirectory $srv -WindowStyle Hidden -PassThru -RedirectStandardOutput "$srv\logs\console.log" -RedirectStandardError "$srv\logs\console.err"
+  $scheduled=$false; $p=$null
+  if($env:GITHUB_ACTIONS -eq 'true'){
+    try {
+      $uid=[Security.Principal.WindowsIdentity]::GetCurrent().Name
+      $javaw="$srv\java11\bin\javaw.exe"
+      if(-not (Test-Path $javaw)){ $javaw="$srv\java11\bin\java.exe" }
+      $action=New-ScheduledTaskAction -Execute $javaw -Argument '-Xms2G -Xmx6G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:MaxGCPauseMillis=30 -XX:+ParallelRefProcEnabled -jar FunCityEngine.jar nogui' -WorkingDirectory $srv
+      if($uid -eq 'NT AUTHORITY\SYSTEM'){
+        $principal=New-ScheduledTaskPrincipal -UserId 'SYSTEM' -LogonType ServiceAccount
+      }else{
+        $principal=New-ScheduledTaskPrincipal -UserId $uid -LogonType Interactive -RunLevel Limited
+      }
+      $trigger=New-ScheduledTaskTrigger -AtLogOn
+      Register-ScheduledTask -TaskName 'FunCityLocalServer' -Action $action -Principal $principal -Trigger $trigger -Force -EA Stop | Out-Null
+      Start-ScheduledTask -TaskName 'FunCityLocalServer' -EA Stop
+      $scheduled=$true
+      Rep 'server lansat separat prin Task Scheduler (supravietuieste jobului PC)'
+    }catch{ Rep "Task Scheduler esuat: $($_.Exception.Message)" }
+  }
+  if(-not $scheduled){
+    $env:RUNNER_TRACKING_ID=''
+    $p=Start-Process -FilePath "$srv\java11\bin\java.exe" -ArgumentList '-Xms2G','-Xmx6G','-XX:+UnlockExperimentalVMOptions','-XX:+UseG1GC','-XX:MaxGCPauseMillis=30','-XX:+ParallelRefProcEnabled','-jar','FunCityEngine.jar','nogui' -WorkingDirectory $srv -WindowStyle Hidden -PassThru -RedirectStandardOutput "$srv\logs\console.log" -RedirectStandardError "$srv\logs\console.err"
+  }
   $ok=$false;$t0=Get-Date
   for($i=0;$i -lt 72;$i++){
     Start-Sleep 5
-    if(-not (Get-Process -Id $p.Id -EA SilentlyContinue)){ Rep "java a iesit dupa $([int]((Get-Date)-$t0).TotalSeconds)s - trag log"; break }
+    $alive=if($scheduled){ @(ServerProc).Count -gt 0 }else{ [bool](Get-Process -Id $p.Id -EA SilentlyContinue) }
+    if(-not $alive){ Rep "java a iesit dupa $([int]((Get-Date)-$t0).TotalSeconds)s - trag log"; break }
     $lg=@(Get-Content "$srv\logs\latest.log" -EA SilentlyContinue)
-    if(@($lg|?{$_ -match 'Done \('}).Count){ $ok=$true; Rep "SERVER LIVE in $([int]((Get-Date)-$t0).TotalSeconds)s - joaca pe localhost"; break }
-    if($i % 12 -eq 11){ Rep "incarca... $([int]((Get-Date)-$t0).TotalSeconds)s" }
+    if(@($lg|Where-Object {$_ -match 'Done \('}).Count -and (LocalPort)){
+      $ok=$true; Rep "SERVER LIVE pe 127.0.0.1:25565 in $([int]((Get-Date)-$t0).TotalSeconds)s"; break
+    }
+    if($i % 12 -eq 11){ Rep "incarca... $([int]((Get-Date)-$t0).TotalSeconds)s port=$(LocalPort)" }
   }
   if(-not $ok){ $tl=@(Get-Content "$srv\logs\latest.log" -Tail 10 -EA SilentlyContinue); if(-not @($tl).Count){ $tl=@(Get-Content "$srv\logs\console.err" -Tail 10 -EA SilentlyContinue) }; Rep "NU LIVE. log tail:"; $tl|%{ Rep "  $_" } }
 }
