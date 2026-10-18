@@ -10,7 +10,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 110
+    timeout-minutes: 150
     env:
       GH_TOKEN: ${{ github.token }}
       MOHIST_PIN: 754b578ef3e4881d854bcd1df5d299ada3fd429f
@@ -119,11 +119,11 @@ jobs:
           PY
           FC_JAR="/tmp/fc/FunCity-1.16.5-${BUILD_ID}.jar" \
           FC_STAGE=/tmp/fc-smoke/stage FC_OUT=/tmp/fc-smoke/preflight \
-          FC_TRIALS=1 FC_RUN_SECONDS=20 python3 scripts/fc_bench.py --arm-conf /tmp/fc-smoke/arm.json
+          FC_TRIALS=2 FC_RUN_SECONDS=90 python3 scripts/fc_bench.py --arm-conf /tmp/fc-smoke/arm.json
           python3 - <<'PY'
           import json
           r = json.load(open('/tmp/fc-smoke/preflight/funcity-candidate.json'))
-          assert r['status'] == 'MASURAT' and r['pack_mods'] == 36 and r['pack_plugins'] == 14, r
+          assert r['status'] == 'MASURAT' and r['probate_reusite'] == 2 and r['pack_mods'] == 36 and r['pack_plugins'] == 14 and r['critice_total'] == 0, r
           print('PRE-FLIGHT: pack 36 moduri / 14 pluginuri; boot reusit; nu este benchmark de capacitate')
           PY
 
@@ -178,6 +178,61 @@ jobs:
           python3 scripts/fc_fakeplayer_smoke.py /tmp/fc-smoke/stage FunCity.jar /tmp/fc-smoke/curtain.jar /tmp/fc-smoke/bots
           echo 'Boții sint entitati server-side, NU handshake-uri Forge reale. JAR-ul ramine nepublicat.'
 
+      - name: Compara cu motorul FunCity b1.0827 deja folosit (aceeasi masina si pack)
+        run: |
+          set -euo pipefail
+          gh release download jars-20261017-0952 --repo "$GITHUB_REPOSITORY" -p 'functity-jare-toate.tar.gz' -O /tmp/fc-smoke/current.tar.gz
+          echo 'f2cb921efbf751fa24534a9a02b57197db46294ca7b71d9711b04996bf6d1784  /tmp/fc-smoke/current.tar.gz' | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib, json, shutil, tarfile
+          from pathlib import Path
+          root = Path('/tmp/fc-smoke')
+          with tarfile.open(root / 'current.tar.gz', 'r:gz') as t:
+              matches = [m for m in t.getmembers() if m.isfile() and Path(m.name).name in ('FunCity-b1.0827.jar', 'FunCity-1.16.5-b1.0827.jar')]
+              if len(matches) != 1: raise SystemExit(f'expected one b1.0827 JAR, found {len(matches)}')
+              with t.extractfile(matches[0]) as src, (root / 'current.jar').open('wb') as dst:
+                  shutil.copyfileobj(src, dst)
+          actual = hashlib.sha256((root / 'current.jar').read_bytes()).hexdigest()
+          if actual != 'd6ffa35c1ea9032a4a95f7f1e34b734aa7f53b0358dda6b9e6592326640a15dd':
+              raise SystemExit(f'current engine sha mismatch: {actual}')
+          c = json.loads((root / 'arm.json').read_text())
+          c['arm'] = 'current-b1.0827'
+          (root / 'current-arm.json').write_text(json.dumps(c))
+          print('Pinned current engine extracted; world/pack unchanged for comparator')
+          PY
+          FC_JAR=/tmp/fc-smoke/current.jar \
+          FC_STAGE=/tmp/fc-smoke/stage-current FC_OUT=/tmp/fc-smoke/current \
+          FC_TRIALS=2 FC_RUN_SECONDS=90 python3 scripts/fc_bench.py --arm-conf /tmp/fc-smoke/current-arm.json
+          python3 - <<'PY'
+          import json, shutil
+          from pathlib import Path
+          root = Path('/tmp/fc-smoke')
+          report = json.loads((root / 'current/current-b1.0827.json').read_text())
+          if report['status'] != 'MASURAT' or report['probate_reusite'] != 2 or report['pack_mods'] != 36 or report['pack_plugins'] != 14 or report['critice_total'] != 0:
+              raise SystemExit('current engine did not complete matched 36/14 baseline')
+          shutil.copyfile(root / 'CoreProtect.jar', root / 'stage-current/plugins/CoreProtect.jar')
+          PY
+          python3 scripts/fc_fakeplayer_smoke.py /tmp/fc-smoke/stage-current FunCity.jar /tmp/fc-smoke/curtain.jar /tmp/fc-smoke/bots-current
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('/tmp/fc-smoke')
+          a = json.loads((root / 'preflight/funcity-candidate.json').read_text())
+          b = json.loads((root / 'current/current-b1.0827.json').read_text())
+          ab = json.loads((root / 'bots/result.json').read_text())
+          bb = json.loads((root / 'bots-current/result.json').read_text())
+          if not (ab['valid'] and bb['valid']): raise SystemExit('both bot arms must remain in /list')
+          fields = ('boot_medie_s', 'rss_medie_mb', 'cpu_medie_pct', 'gc_pauza_max_ms')
+          result = {'candidate_sha256': ab['engine_sha256'], 'current_sha256': bb['engine_sha256'],
+                    'method': 'matched runner, pack sha pinned, Java 11, two 90s idle trials/arm + three fake players moving for 40s/arm; order not randomized',
+                    'limits': 'NOT human capacity, client Forge handshake, PC measurement or 10-year reliability proof',
+                    'candidate_idle': {k: a.get(k) for k in fields}, 'current_idle': {k: b.get(k) for k in fields},
+                    'candidate_bots': {k: ab.get(k) for k in ('active_40s_cpu_seconds', 'active_40s_rss_max_mib')},
+                    'current_bots': {k: bb.get(k) for k in ('active_40s_cpu_seconds', 'active_40s_rss_max_mib')}}
+          (root / 'comparison.json').write_text(json.dumps(result, indent=2) + '\n')
+          print(json.dumps(result, indent=2))
+          PY
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -191,6 +246,11 @@ jobs:
             /tmp/fc-smoke/preflight/*.log
             /tmp/fc-smoke/bots/result.json
             /tmp/fc-smoke/bots/fakeplayers.log
+            /tmp/fc-smoke/current/*.json
+            /tmp/fc-smoke/current/*.log
+            /tmp/fc-smoke/bots-current/result.json
+            /tmp/fc-smoke/bots-current/fakeplayers.log
+            /tmp/fc-smoke/comparison.json
           if-no-files-found: warn
           retention-days: 7
 

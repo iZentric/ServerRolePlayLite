@@ -62,6 +62,15 @@ def wait_reply(path, offset, pattern, process, timeout=40):
     raise RuntimeError(f"timeout waiting for {pattern.pattern}; log tail: {text[-650:]}")
 
 
+def proc_sample(pid):
+    """Linux runner: RSS in MiB and accumulated JVM CPU seconds (not client FPS)."""
+    stat = Path(f"/proc/{pid}/stat").read_text().rsplit(")", 1)[1].split()
+    ticks = int(stat[11]) + int(stat[12])  # utime + stime; field 3 starts at index 0
+    status = Path(f"/proc/{pid}/status").read_text()
+    rss = re.search(r"^VmRSS:\s*(\d+) kB", status, re.M)
+    return round(int(rss.group(1)) / 1024, 1) if rss else None, ticks / os.sysconf("SC_CLK_TCK")
+
+
 def main(stage, engine, curtain, output):
     output.mkdir(parents=True, exist_ok=True)
     report = {"valid": False, "names": list(BOTS), "method": "3 server-side Curtain fake players, pinned CoreProtect and no ClaimChunk on disposable runner; /list at spawn and after 40 seconds", "limitations": "Not a Forge client login, a modded-event audit or a gameplay/capacity benchmark. Test-only derived Curtain removes NaturalSpawnerMixin. Never publish this JAR.", "production_changes": False}
@@ -115,15 +124,31 @@ def main(stage, engine, curtain, output):
             server.send(f"player {name} spawn at {i * 8} 90 0")
             wait_reply(log, offset, re.compile(rf"\b{re.escape(name)}\b.*joined the game|joined the game.*\b{re.escape(name)}\b", re.I), server.p)
             server.send(f"player {name} move forward")
-        for label in ("initial", "after_40s"):
-            if label == "after_40s":
-                time.sleep(40)
-            offset = log.stat().st_size
-            server.send("list")
-            line = wait_reply(log, offset, LIST, server.p)
-            report[label + "_list"] = line
-            if int(LIST.search(line).group(1)) < 3 or any(name not in line for name in BOTS):
-                raise RuntimeError(f"fake players absent from fresh {label} /list: {line}")
+        offset = log.stat().st_size
+        server.send("list")
+        line = wait_reply(log, offset, LIST, server.p)
+        report["initial_list"] = line
+        if int(LIST.search(line).group(1)) < 3 or any(name not in line for name in BOTS):
+            raise RuntimeError(f"fake players absent from fresh initial /list: {line}")
+        rss0, cpu0 = proc_sample(server.p.pid)
+        t0 = time.monotonic()
+        rss_samples = [rss0]
+        while time.monotonic() - t0 < 40 and server.p.poll() is None:
+            time.sleep(5)
+            if server.p.poll() is None:
+                rss_samples.append(proc_sample(server.p.pid)[0])
+        rss1, cpu1 = proc_sample(server.p.pid) if server.p.poll() is None else (None, None)
+        report["active_40s_rss_max_mib"] = max((r for r in rss_samples if r is not None), default=None)
+        report["active_40s_cpu_seconds"] = round(cpu1 - cpu0, 2) if cpu1 is not None else None
+        report["active_40s_elapsed_s"] = round(time.monotonic() - t0, 1)
+        if server.p.poll() is not None or report["active_40s_elapsed_s"] < 40:
+            raise RuntimeError("server exited before completing 40s with bots")
+        offset = log.stat().st_size
+        server.send("list")
+        line = wait_reply(log, offset, LIST, server.p)
+        report["after_40s_list"] = line
+        if int(LIST.search(line).group(1)) < 3 or any(name not in line for name in BOTS):
+            raise RuntimeError(f"fake players absent from fresh after_40s /list: {line}")
         report["valid"] = server.p.poll() is None
         report["clean_stop"] = server.stop(45) == "CLEAN" and server.p.returncode == 0
         report["valid"] &= report["clean_stop"]
