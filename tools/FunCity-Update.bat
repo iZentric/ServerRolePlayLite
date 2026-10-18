@@ -24,7 +24,8 @@ del /q "%INST%\mods\*.jar" 2>nul
 xcopy /iy /q unpack\overrides\mods\*.jar "%INST%\mods\\" >nul
 powershell -NoProfile -Command "$i='%INST%\mods'; $d=Get-Content unpack\modrinth.index.json|ConvertFrom-Json; foreach($f in $d.files){ $u=$f.downloads[0]; $n=$f.filename; if(-not $n){$n=($u -split '/')[-1]}; $n=[uri]::UnescapeDataString($n); if(-not (Test-Path (Join-Path $i $n))){ curl.exe -fLso (Join-Path $i $n) $u } }" 2>nul
 if exist unpack\overrides\config xcopy /diy /q unpack\overrides\config\* "%INST%\config\\" >nul
-powershell -NoProfile -Command "$p='%PRISM%\%~1\instance.cfg'; if(Test-Path $p){ $c=@(Get-Content $p); $a='JavaArguments=-Xms1G -Xmx2500M -XX:+UseG1GC -XX:+ParallelRefProcEnabled'; $c=@($c|Where-Object{$_ -notmatch '^JavaArguments='}); ($c+$a)|Set-Content $p }"
+powershell -NoProfile -Command "$p='%INST%\config\oculus.properties'; if(Test-Path $p){$x=[IO.File]::ReadAllLines($p); if($x -contains 'enableShaders=true'){$x=@($x|ForEach-Object {if($_ -eq 'enableShaders=true'){'enableShaders=false'}else{$_}}); [IO.File]::WriteAllLines($p,[string[]]$x,[Text.UTF8Encoding]::new($false))}}"
+powershell -NoProfile -Command "$p='%PRISM%\%~1\instance.cfg'; if(Test-Path $p){ $c=@(Get-Content $p); $a='JavaArguments=-Xms256M -Xmx2500M -XX:+UseG1GC -XX:+ParallelRefProcEnabled'; $c=@($c|Where-Object{$_ -notmatch '^JavaArguments='}); ($c+$a)|Set-Content $p }"
 for /f %%M in ('dir /b "%INST%\mods\*.jar" 2^>nul ^| find /c /v ""') do set N=%%M
 echo [%~1] GATA: %N% moduri active.
 exit /b 0
