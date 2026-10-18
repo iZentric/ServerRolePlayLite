@@ -1,0 +1,4 @@
+# Scutul anti-crash (Forge 1.16: [server] traieste in defaultconfigs)
+[server]
+    removeErroringEntities = true
+    removeErroringTileEntities = true

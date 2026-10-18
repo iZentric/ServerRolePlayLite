@@ -1,0 +1,124 @@
+name: curate-client
+on:
+  push:
+    paths:
+      - .github/workflows/curate-client.yml
+jobs:
+  curate:
+    timeout-minutes: 15
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: FunCity 1.2.0 = 1.1.0 + artilleria grea de FPS, si updater de PC
+        run: |
+          set -e
+          exec > >(tee /tmp/curate.log) 2>&1
+          gh release download funcity -R "$GITHUB_REPOSITORY" -p FunCity-1.1.0.mrpack -D /tmp
+          gh release download lite -R "$GITHUB_REPOSITORY" -p CUANTIC-Client-1.7.7.mrpack -D /tmp
+          gh release download jars-20261017-0952 -R "$GITHUB_REPOSITORY" -p functity-jare-toate.tar.gz -D /tmp
+          mkdir -p /tmp/jare && tar xzf /tmp/functity-jare-toate.tar.gz -C /tmp/jare
+          python3 - <<'PY'
+          import json, zipfile
+          SRC = "/tmp/FunCity-1.1.0.mrpack"
+          LITE = "/tmp/CUANTIC-Client-1.7.7.mrpack"
+          DST = "/tmp/FunCity-1.2.0.mrpack"
+          WANT = ["radon", "entityculling", "out_of_sight", "entitycollisionfpsfix"]
+          import os, glob
+          picks = {}
+          lite = zipfile.ZipFile(LITE)
+          for n in lite.namelist():
+              low = n.lower()
+              if low.endswith(".jar") and any(w in low for w in WANT):
+                  picks[n.split("/")[-1]] = lite.read(n)
+          for fpath in glob.glob("/tmp/jare/**/*.jar", recursive=True):
+              low = os.path.basename(fpath).lower()
+              if any(w in low for w in WANT) and os.path.basename(fpath) not in picks:
+                  picks[os.path.basename(fpath)] = open(fpath, "rb").read()
+          print("GASITE IN LITE:", list(picks.keys()))
+          zin = zipfile.ZipFile(SRC)
+          idx = json.load(zin.open("modrinth.index.json"))
+          src_names = set()
+          for e in idx.get("files", []):
+              fn = (e.get("filename") or (e.get("downloads") or ["?"])[0].rsplit("/", 1)[-1]).lower()
+              src_names.add(fn.split("/")[-1])
+          lidx = json.load(lite.open("modrinth.index.json"))
+          extra = []
+          for e in lidx.get("files", []):
+              fn = (e.get("filename") or (e.get("downloads") or ["?"])[0].rsplit("/", 1)[-1]).lower()
+              if any(w in fn for w in WANT) and fn not in src_names and fn not in [p.lower() for p in picks]:
+                  extra.append(e)
+          idx["files"] = idx.get("files", []) + extra
+          zout = zipfile.ZipFile(DST, "w", zipfile.ZIP_DEFLATED)
+          have = set()
+          for n in zin.namelist():
+              if n == "modrinth.index.json":
+                  zout.writestr(n, json.dumps(idx, ensure_ascii=False, indent=2))
+              else:
+                  zout.writestr(n, zin.read(n))
+              have.add(n.split("/")[-1].lower())
+          added = []
+          for name, data in picks.items():
+              if name.lower() in have:
+                  continue
+              zout.writestr("overrides/mods/" + name, data)
+              added.append(name)
+          zout.close()
+          print("ADAUGATE fizic:", added, "| din index lite:", [e.get("filename") for e in extra])
+          d = json.load(zipfile.ZipFile(DST).open("modrinth.index.json"))
+          zn = zipfile.ZipFile(DST).namelist()
+          print("1.2.0: index", len(d["files"]), "| jar-uri override:", len([x for x in zn if x.endswith('.jar')]), "| marime:", __import__("os").path.getsize(DST))
+          PY
+          cp /tmp/FunCity-1.2.0.mrpack "$GITHUB_WORKSPACE/FunCity-1.2.1.mrpack"
+          mv /tmp/FunCity-1.2.0.mrpack "$GITHUB_WORKSPACE/"
+          python3 - <<'PY'
+          bat = '\n'.join([ln[10:] if ln.startswith(' '*10) else ln for ln in r'''
+          @echo off
+          title FunCity Update
+          cd /d "%TEMP%"
+          set "INST=%APPDATA%\PrismLauncher\instances\CUANTIC-Client-1.7.7\minecraft"
+          if not exist "%INST%\mods" mkdir "%INST%\mods"
+          echo [1/6] Descarc FunCity 1.2.0 de pe GitHub...
+          curl -fLso functity.zip "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.0.mrpack" || goto err
+          if exist unpack rmdir /s /q unpack
+          powershell -NoProfile -Command "Expand-Archive functity.zip unpack" || goto err
+          echo [2/6] Backup la ce ai acum (o data, in mods-backup)...
+          if not exist "%INST%\mods-backup" xcopy /iy /q "%INST%\mods\*.jar" "%INST%\mods-backup\" >nul
+          echo [3/6] Curat modurile vechi...
+          del /q "%INST%\mods\*.jar" 2>nul
+          echo [4/6] Instalez modurile din pachet...
+          if exist unpack\overrides\mods xcopy /iy /q unpack\overrides\mods\*.jar "%INST%\mods\" >nul
+          echo [5/6] Descarc restul de pe Modrinth (merge ~1 min)...
+          powershell -NoProfile -Command "$i=Join-Path $env:APPDATA 'PrismLauncher\instances\CUANTIC-Client-1.7.7\minecraft\mods'; $d=Get-Content unpack\modrinth.index.json|ConvertFrom-Json; foreach($f in $d.files){ $u=$f.downloads[0]; $n=$f.filename; if(-not $n){$n=($u -split '/')[-1]}; $n=[uri]::UnescapeDataString($n); if(-not (Test-Path (Join-Path $i $n))){ curl.exe -fLso (Join-Path $i $n) $u; Write-Host ('  + '+$n) } }"
+          if exist unpack\overrides\config xcopy /diy /q unpack\overrides\config\* "%INST%\config\" >nul
+          echo [6/6] Setari RAM/GC pentru laptopuri vechi...
+          powershell -NoProfile -Command "$p=Join-Path $env:APPDATA 'PrismLauncher\instances\CUANTIC-Client-1.7.7\instance.cfg'; $a='JavaArguments=-Xms1G -Xmx2500M -XX:+UseG1GC -XX:+ParallelRefProcEnabled'; if(Test-Path $p){ $c=@(Get-Content $p); $c=@($c|Where-Object{$_ -notmatch '^JavaArguments='}); ($c+$a)|Set-Content $p; Write-Host '  args: OK' } else { Write-Host '  args: instance.cfg lipseste, sarit' }
+          for /f %%M in ('dir /b "%INST%\mods\*.jar" 2^>nul ^| find /c /v ""') do set N=%%M
+          echo.
+          echo GATA: %N% moduri FunCity active. Deschide Prism si canta-l pe FunCity CUANTIC.
+          echo (Regleaza bat-ul asta oricand = la zi cu ultimele schimbari.)
+          pause
+          exit /b 0
+          :err
+          echo ESUAT: n-am putut descarca de pe GitHub. Verifica netul si ruleaza din nou.
+          pause
+          '''.split(chr(10))])
+          with open("FunCity-Update.bat", "wb") as f:
+              f.write(bat.replace(chr(10), chr(13)+chr(10)).encode("ascii", "ignore"))
+          PY
+          gh release upload funcity "$GITHUB_WORKSPACE/FunCity-1.2.0.mrpack" "$GITHUB_WORKSPACE/FunCity-1.2.1.mrpack" "$GITHUB_WORKSPACE/FunCity-Update.bat" -R "$GITHUB_REPOSITORY" --clobber
+          gh release edit funcity -R "$GITHUB_REPOSITORY" --notes "## 🏙️ FUNCTITY 1.7.7 — client 1.2.0 maxim strategic
+          **🎮 CLIENT:** [FunCity-1.2.0.mrpack](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-1.2.0.mrpack) = tot contentul + DOAR performanta care lucreaza in joc (Rubidium/Oculus/ModernFix/Ferrite/LazyDFU/ModernXL + EntityCulling/Radon/OutOfSight/CollisionFix), zero decoratiuni (16MB de gunoi taiati la 1.1.0)
+          **⚡ INSTALARE AUTOMATA pe PC-ul tau:** [FunCity-Update.bat](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-Update.bat) — dublu-click, gata: Isi pune singur in instanta CUANTIC-Client-1.7.7, face backup data trecuta, seteaza RAM/GC. Ruleaza-l oricand = la zi.
+          **🖥️ SERVER:** [FUNCTITY-SERVER.zip](https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FUNCTITY-SERVER.zip) 486MB, Java inclus, Start/Actualizare bat
+          Motor FunCity b1.0827 (fara Paper). Baza: [release lite](https://github.com/iZentric/ServerRolePlayLite/releases/tag/lite)."
+          echo CURATE-DONE
+      - name: Trimite logul
+        if: always()
+        run: |
+          git config user.email b@b && git config user.name chk
+          mkdir -p diag && cp /tmp/curate.log diag/curate.log 2>/dev/null || true
+          git add -f diag/curate.log && git commit -qm "curate log $(date +%s)" && git push -q "https://x-access-token:${GH_TOKEN}@github.com/$GITHUB_REPOSITORY" HEAD:"$GITHUB_REF_NAME" || true

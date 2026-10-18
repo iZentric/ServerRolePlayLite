@@ -1,0 +1,50 @@
+name: pc-cp
+on:
+  push:
+    paths:
+      - .github/workflows/pc-cp.yml
+jobs:
+  cp:
+    permissions:
+      contents: write
+    timeout-minutes: 8
+    runs-on: [self-hosted, Windows]
+    steps:
+      - name: CoreProtect parts via API
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Continue'
+          $rep = @()
+          $api = "https://api.github.com"
+          $H = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json"; "User-Agent" = "fc" }
+          function PutFile($path, $contentB64, $msg) {
+            $sha = $null
+            try { $cur = Invoke-RestMethod "$api/repos/iZentric/ServerRolePlayLite/contents/$path`?ref=$env:GITHUB_REF_NAME" -Headers $H -EA SilentlyContinue; if ($cur) { $sha = $cur.sha } } catch {}
+            $b = @{ message = $msg; content = $contentB64; branch = "$env:GITHUB_REF_NAME"; encoding = "base64" }
+            if ($sha) { $b["sha"] = $sha }
+            Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/$path" -Headers $H -ContentType "application/json" -Body ($b | ConvertTo-Json -Compress -Depth 4) -EA Stop | Out-Null
+          }
+          try {
+            $t = Join-Path $env:RUNNER_TEMP "cp.jar"
+            Remove-Item -Force -EA SilentlyContinue $t
+            curl.exe -fLso $t "https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar"
+            $sz = (Get-Item $t).Length
+            $rep += "jar=$sz"
+            if ($sz -gt 500000) {
+              $b64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($t))
+              $per = 350000
+              $n = [Math]::Ceiling($b64.Length / $per)
+              $rep += "parts=$n b64len=$($b64.Length)"
+              for ($i = 0; $i -lt $n; $i++) {
+                $chunk = $b64.Substring($i * $per, [Math]::Min($per, $b64.Length - $i * $per))
+                $cb = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($chunk))
+                PutFile "diag/cp_part$i.txt" $cb "cp part $i"
+                $rep += "p$i ok"
+              }
+            }
+          } catch { $rep += "EX: $($_.Exception.Message)" }
+          $rr = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(($rep -join " | ")))
+          try { PutFile "diag/pc-cp.txt" $rr "cp report" } catch { Write-Host "report fail" }
+          $rep -join " | "
+        env:
+          GH_TOKEN: ${{ github.token }}

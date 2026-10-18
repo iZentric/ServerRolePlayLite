@@ -1,0 +1,36 @@
+name: pc-install
+on:
+  push:
+    paths:
+      - .github/workflows/pc-install.yml
+jobs:
+  inst:
+    permissions:
+      contents: write
+    timeout-minutes: 15
+    runs-on: [self-hosted, Windows]
+    steps:
+      - name: Ruleaza FunCity-Update.bat pe PC
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Continue'
+          $wd = "$env:RUNNER_TEMP\\fcupdate"
+          New-Item -ItemType Directory -Force -Path $wd | Out-Null
+          Set-Location $wd
+          Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FunCity-Update.bat" -OutFile up.bat
+          $c = Get-Content up.bat -Raw
+          $c = $c -replace 'xcopy /diy /q unpack\\overrides\\config','xcopy /diy /q unpack\\overrides\\config'
+          Set-Content up.bat $c -Encoding ASCII
+          cmd /c "up.bat <nul > out.txt 2>&1"
+          $txt = "REPORT PC $(Get-Date -Format 'HH:mm:ss')`r`n" + (Get-Content out.txt -Raw)
+          $api = "https://api.github.com"
+          $H = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json" }
+          $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($txt))
+          $sha = $null
+          try { $cur = Invoke-RestMethod "$api/repos/iZentric/ServerRolePlayLite/contents/diag/pc-install.txt?ref=$env:GITHUB_REF_NAME" -Headers $H -EA SilentlyContinue; if ($cur) { $sha = $cur.sha } } catch {}
+          $body = @{ message = "pc install $(Get-Random)"; content = $b64; branch = "$env:GITHUB_REF_NAME" }
+          if ($sha) { $body["sha"] = $sha }
+          try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/diag/pc-install.txt" -Headers $H -ContentType "application/json; charset=utf-8" -Body ($body | ConvertTo-Json -Compress) | Out-Null } catch { "push fail: $($_.Exception.Message)" }
+        env:
+          GH_TOKEN: ${{ github.token }}
+# test e2e 1792282358

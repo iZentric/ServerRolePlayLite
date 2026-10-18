@@ -1,0 +1,65 @@
+name: pc-oldcfg
+on:
+  push:
+    paths:
+      - .github/workflows/pc-oldcfg.yml
+jobs:
+  oc:
+    permissions:
+      contents: write
+    timeout-minutes: 10
+    runs-on: [self-hosted, Windows]
+    steps:
+      - name: Colecteaza configure vechi FunCity
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $ErrorActionPreference='Continue'
+          $api="https://api.github.com"
+          $H=@{ Authorization="token $env:GH_TOKEN"; Accept="application/vnd.github+json"; "User-Agent"="fc" }
+          function PutFile($path,$txt,$msg){
+            $sha=$null
+            try { $sha=(Invoke-RestMethod "$api/repos/iZentric/ServerRolePlayLite/contents/$path?ref=$env:GITHUB_REF_NAME" -Headers $H -EA Stop).sha } catch {}
+            $b=@{ message=$msg; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($txt)); branch="$env:GITHUB_REF_NAME" }
+            if($sha){ $b.sha=$sha }
+            $b=$b | ConvertTo-Json -Compress -Depth 4
+            try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/$path" -Headers $H -ContentType "application/json" -Body $b -EA Stop | Out-Null; "put ok $path" } catch { "put fail $path : $($_.Exception.Message)" }
+          }
+          $root="E:\Administrator\Desktop\FunCity"
+          $rep=@()
+          if(-not (Test-Path $root)){ PutFile "diag/oldcfg-report.txt" "RADACINA LIPSA: $root" "oldcfg"; exit 0 }
+          $want=@("^server\.properties$","^spigot\.yml$","^bukkit\.yml$","^commands\.yml$","^mohist\.yml$","^mohist\.toml$","^purpur\.yml$","^paper.*\.yml$","^server\.toml$","^eula\.txt$","^forge-server\.toml$","^incontrol\.xml$","^Spigot\.yml$")
+          $all=@(Get-ChildItem $root -Recurse -File -EA SilentlyContinue | Where-Object { $_.Length -lt 300000 })
+          $fs=@($all | Where-Object { $n=$_.Name; ($want | Where-Object { $n -match $_ }).Count -gt 0 } | Sort-Object FullName)
+          if($fs.Count -lt 3){ $fs=@($all | Where-Object { $_.Name -match '^(server\.properties|spigot\.yml|bukkit\.yml)$' } | Sort-Object FullName) }
+          $rep += "albite: $($fs.Count) din $($all.Count)"
+          $rep += "fisiere-config gasite: $($fs.Count)"
+          $big=@(Get-ChildItem $root -Recurse -Directory -EA SilentlyContinue | Select-Object -First 40)
+          $rep += "subdirectoare: " + (($big | ForEach-Object { $_.FullName -replace [regex]::Escape($root+'\'),'' }) -join ' | ')
+          $body=@()
+          $tot=0
+          foreach($f in $fs){
+            $rel=$f.FullName -replace [regex]::Escape($root+'\'),''
+            $t=@(Get-Content $f.FullName -EA SilentlyContinue | Select-Object -First 220) -join "`n"
+            if($t.Length -gt 6000){ $t=$t.Substring(0,6000) }
+            $chunk="==== $rel ($($f.Length) B) ====`n$t`n"
+            if($tot + $chunk.Length -gt 145000){ $rep += "raport trunchiat la $($body.Count) fisiere din $($fs.Count)"; break }
+            $body += $chunk; $tot += $chunk.Length
+          }
+          PutFile "diag/oldcfg-report.txt" (($rep + $body) -join "`n") "oldcfg report"
+          $z="$env:RUNNER_TEMP\oldcfg.zip"
+          Remove-Item -Force -EA SilentlyContinue $z
+          if($fs.Count -gt 0){
+            Compress-Archive -Path ($fs.FullName) -DestinationPath $z -CompressionLevel Optimal -EA Stop
+            $b64=[Convert]::ToBase64String([IO.File]::ReadAllBytes($z))
+            $sz=$b64.Length; $part=350000; $n=[Math]::Ceiling($sz/$part)
+            PutFile "diag/oldcfg-meta.txt" "zip=$((Get-Item $z).Length) b64=$sz parts=$n" "oldcfg meta"
+            for($i=0;$i -lt $n;$i++){
+              $s=$b64.Substring($i*$part,[Math]::Min($part,$sz-$i*$part))
+              PutFile "diag/oc_part$i.txt" $s "oldcfg part $i"
+            }
+            PutFile "diag/oldcfg-done.txt" "parts=$n ok ts=$(Get-Date -Format s)" "oldcfg done"
+          } else { PutFile "diag/oldcfg-done.txt" "zero fisiere" "oldcfg done" }
+          "gata: $($fs.Count) fisiere, raport $tot caractere"
+# r3
