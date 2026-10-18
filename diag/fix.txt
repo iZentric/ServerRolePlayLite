@@ -11,3 +11,4 @@
 [13:09:05] java a iesit dupa 15s - trag log
 [13:09:06] NU LIVE. log tail:
 [13:09:07]   	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) ~[?:?]
+[13:09:09]   	at java.lang.reflect.Method.invoke(Unknown Source) ~[?:?]
