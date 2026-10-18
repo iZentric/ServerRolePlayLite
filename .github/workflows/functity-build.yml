@@ -1,13 +1,8 @@
 name: FUNCITY-BUILD
-# Build 0 = referinta: Mohist 1.16.5 la commit fixat, compilat reproducibil pe runner
-# curat. Fara patch-uri FunCity in acest tur (incă). Arunca JAR-ul + logul + metadata
-# pe bransa functity-out; de acolo le citesc si decidem pasul cu patch-urile.
+# Candidat FunCity: build numai manual pe runner GitHub. Nu publica JAR-uri
+# nevalidate, nu modifica serverul PC si nu scrie pe alta ramura.
 on:
-  push:
-    paths:
-      - deploy/functity-build.txt
-      - .github/workflows/functity-build.yml
-      - functity/**
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -29,30 +24,28 @@ jobs:
           git -C src checkout -q "$MOHIST_PIN" -B 1.16.5
           git -C src log -1 --format='pin: %H %ci %s' | head -1
           for bf in "$GITHUB_WORKSPACE"/functity/buildfix/*.patch; do
-            git -C src apply "$bf" && echo "buildfix aplicat: $(basename "$bf")" || echo "BUILDFIX_ESUAT: $(basename "$bf")"
+            git -C src apply --check "$bf"
+            git -C src apply "$bf"
+            echo "buildfix aplicat: $(basename "$bf")"
           done
           git -C src describe --tags --abbrev=7 || echo "describe ESUAT (semnal ca clone-ul e stramb)"
           shopt -s nullglob
           APPLIED=()
           REJECTED=""
-          if grep -q NOPATCH deploy/functity-build.txt 2>/dev/null; then
-            echo "NOPATCH: build de referinta, fara patch-uri"
-          else
-            for pt in functity/patches/*.patch; do
-              ABS="$GITHUB_WORKSPACE/$pt"
-              if git -C src apply --check "$ABS" 2>/tmp/applycheck.txt; then
-                git -C src apply "$ABS" && APPLIED+=("$(basename "$pt")")
-              else
-                REJECTED="$(basename "$pt")"
-                { echo "PATCH respins de git apply --check: $(basename "$pt")"; cat /tmp/applycheck.txt; } > /tmp/patch-rejected.txt
-              fi
-            done
-          fi
+          for pt in functity/patches/*.patch; do
+            ABS="$GITHUB_WORKSPACE/$pt"
+            if ! git -C src apply --check "$ABS" 2>/tmp/applycheck.txt; then
+              { echo "PATCH respins: $(basename "$pt")"; cat /tmp/applycheck.txt; } >&2
+              exit 1
+            fi
+            git -C src apply "$ABS"
+            APPLIED+=("$(basename "$pt")")
+          done
           if [ ${#APPLIED[@]} -gt 0 ]; then
             echo "aplicate: ${APPLIED[*]}"
             echo "BUILD_ID=b1.$(date -u +%H%M)" >> "$GITHUB_ENV"
           else
-            [ -n "$REJECTED" ] && echo "BUILD_ID=b0-patchrespins" >> "$GITHUB_ENV" || echo "BUILD_ID=b0" >> "$GITHUB_ENV"
+            echo "BUILD_ID=b0" >> "$GITHUB_ENV"
           fi
 
       - uses: actions/setup-java@v4
@@ -60,8 +53,7 @@ jobs:
           distribution: temurin
           java-version: '11'
 
-      - name: Compileaza
-        continue-on-error: true
+      - name: Compileaza (esecul opreste candidatul)
         run: |
           set -uo pipefail
           cd src
@@ -70,6 +62,7 @@ jobs:
           GE=$?
           echo "gradle exit: $GE" | tee -a ../build-out.log
           printf '::warning::gradle exit=%s tail=%s\n' "$GE" "$(tail -c 1400 ../build-out.log | tr '\n' '~')"
+          exit "$GE"
 
       - name: Baseline oficial Mohist 1.16.5-1237 (independent de build-ul nostru)
         if: always()
@@ -119,29 +112,28 @@ jobs:
           cp /tmp/patch-rejected.txt /tmp/fc/ 2>/dev/null || true
           ls -la /tmp/fc
 
-      - name: Publica pe functity-out (model rp-drop cu token in URL)
-        if: always()
+      - name: Valideaza build-ul fara publicare
         run: |
-          set +e
-          cd /tmp; rm -rf fcout
-          git clone -q "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" -b functity-out fcout 2>/tmp/clone.err
-          CL=$?
-          printf '::warning::clone functity-out: exit=%s err=%s\n' "$CL" "$(tr '\n' '~' < /tmp/clone.err | head -c 300)"
-          cd fcout || { echo "fara clone, opresc"; exit 0; }
-          git config user.name 'functity-ci[bot]'
-          git config user.email 'functity-ci@localhost'
-          mkdir -p "builds/$BUILD_ID"
-          cp /tmp/fc/* "builds/$BUILD_ID/" 2>/dev/null
-          git add -A "builds/$BUILD_ID"
-          git commit -qm "functity $BUILD_ID" || echo "nimic de commituit"
-          git push -q origin HEAD:refs/heads/functity-out 2>/tmp/push.err
-          PE=$?
-          printf '::warning::push: exit=%s err=%s fisiere=%s\n' "$PE" "$(tr '\n' '~' < /tmp/push.err | head -c 400)" "$(cd builds/$BUILD_ID && ls | tr '\n' ',' | head -c 200)"
-          if [ $PE -ne 0 ]; then
-            git pull -q --rebase origin functity-out 2>/dev/null
-            git push -q origin HEAD:refs/heads/functity-out 2>/tmp/push2.err
-            printf '::warning::push retry: exit=%s err=%s\n' "$?" "$(tr '\n' '~' < /tmp/push2.err | head -c 400)"
-          fi
+          set -euo pipefail
+          JAR="/tmp/fc/FunCity-1.16.5-${BUILD_ID}.jar"
+          test -s "$JAR"
+          (cd /tmp/fc && sha256sum -c SHA256SUMS.txt)
+          unzip -p "$JAR" META-INF/MANIFEST.MF | grep -q ServerLaunchArgs
+          grep -q 'NAME = "FunCity"' src/src/main/java/com/mohistmc/MohistMC.java
+          echo "CANDIDAT_VERIFICAT_STATIC: $BUILD_ID sha=$(sha256sum "$JAR" | cut -d' ' -f1)"
+          echo 'Nu este testat cu jucatori, nu este release si nu se instaleaza pe PC.'
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: funcity-build-diagnostics
+          path: |
+            /tmp/fc/BUILD-LOG.txt
+            /tmp/fc/metadata.json
+            /tmp/fc/ESUARE.txt
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Verific local (infolare bara de progres)
         if: always()
         run: |
