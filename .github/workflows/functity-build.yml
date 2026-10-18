@@ -135,6 +135,7 @@ jobs:
           PY
           FC_JAR="/tmp/fc/FunCity-1.16.5-${BUILD_ID}.jar" \
           FC_STAGE=/tmp/fc-smoke/stage FC_OUT=/tmp/fc-smoke/preflight \
+          FC_WORLD_MODE=save FC_WORLD_SNAPSHOT=/tmp/fc-smoke/world-reference \
           FC_TRIALS=2 FC_RUN_SECONDS=90 python3 scripts/fc_bench.py --arm-conf /tmp/fc-smoke/arm.json
           python3 - <<'PY'
           import json
@@ -191,6 +192,7 @@ jobs:
           set -euo pipefail
           gh release download 1.3.2 --repo Gu-ZT/Curtain -p 'curtain-mc1.16.5-1.3.2.jar' -O /tmp/fc-smoke/curtain.jar
           echo 'c9234d2c5ca43c337abac25a05022fe2f226c884855aa6941b6130c60777819d  /tmp/fc-smoke/curtain.jar' | sha256sum -c -
+          FC_WORLD_SNAPSHOT=/tmp/fc-smoke/world-reference \
           python3 scripts/fc_fakeplayer_smoke.py /tmp/fc-smoke/stage FunCity.jar /tmp/fc-smoke/curtain.jar /tmp/fc-smoke/bots
           echo 'Boții sint entitati server-side, NU handshake-uri Forge reale. JAR-ul ramine nepublicat.'
 
@@ -220,6 +222,7 @@ jobs:
           PY
           FC_JAR=/tmp/fc-smoke/current.jar \
           FC_STAGE=/tmp/fc-smoke/stage-current FC_OUT=/tmp/fc-smoke/current \
+          FC_WORLD_MODE=restore FC_WORLD_SNAPSHOT=/tmp/fc-smoke/world-reference \
           FC_TRIALS=2 FC_RUN_SECONDS=90 python3 scripts/fc_bench.py --arm-conf /tmp/fc-smoke/current-arm.json
           python3 - <<'PY'
           import json, shutil
@@ -232,6 +235,7 @@ jobs:
               raise SystemExit('current engine did not complete matched 36/14 baseline')
           shutil.copyfile(root / 'CoreProtect.jar', root / 'stage-current/plugins/CoreProtect.jar')
           PY
+          FC_WORLD_SNAPSHOT=/tmp/fc-smoke/world-reference \
           python3 scripts/fc_fakeplayer_smoke.py /tmp/fc-smoke/stage-current FunCity.jar /tmp/fc-smoke/curtain.jar /tmp/fc-smoke/bots-current
           python3 - <<'PY'
           import json
@@ -242,16 +246,21 @@ jobs:
           ab = json.loads((root / 'bots/result.json').read_text())
           bb = json.loads((root / 'bots-current/result.json').read_text())
           both_valid = bool(ab['valid'] and bb['valid'])
+          worlds = [r.get('world_snapshot_sha256') for r in (a, b, ab, bb)]
+          same_world = bool(all(worlds) and len(set(worlds)) == 1)
           fields = ('boot_medie_s', 'rss_medie_mb', 'cpu_medie_pct', 'gc_pauza_max_ms')
           result = {'candidate_sha256': ab.get('engine_sha256'), 'current_sha256': bb.get('engine_sha256'),
-                    'both_bot_arms_valid': both_valid,
-                    'method': 'matched runner, pack sha pinned, fixed seed 20261018, view 5, Java 11, two 90s idle trials/arm + three fake players moving for 40s/arm; order not randomized',
+                    'both_bot_arms_valid': both_valid, 'same_world': same_world,
+                    'world_snapshot_sha256': worlds[0] if same_world else None,
+                    'method': 'matched runner, pack sha pinned, identical hashed world restored before every trial and bot arm, view 5, Java 11, two 90s idle trials/arm + three fake players moving for 40s/arm; order not randomized',
                     'limits': 'NOT human capacity, client Forge handshake, PC measurement or 10-year reliability proof',
                     'candidate_idle': {k: a.get(k) for k in fields}, 'current_idle': {k: b.get(k) for k in fields},
                     'candidate_bots': {k: ab.get(k) for k in ('active_40s_cpu_seconds', 'active_40s_rss_max_mib')},
                     'current_bots': {k: bb.get(k) for k in ('active_40s_cpu_seconds', 'active_40s_rss_max_mib')}}
           (root / 'comparison.json').write_text(json.dumps(result, indent=2) + '\n')
           print(json.dumps(result, indent=2))
+          if not same_world:
+              raise SystemExit('arms/trials did not share the same world; comparison invalid')
           if not both_valid:
               raise SystemExit('at least one bot arm failed; no performance winner')
           PY

@@ -15,7 +15,7 @@ import sys
 import time
 import zipfile
 
-from fc_bench import JvmRun
+from fc_bench import JvmRun, matched_world, read_props
 
 CURTAIN_SHA = "c9234d2c5ca43c337abac25a05022fe2f226c884855aa6941b6130c60777819d"
 COREPROTECT_SHA = "04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977"
@@ -105,6 +105,10 @@ def main(stage, engine, curtain, output):
         report["curtain_test_sha256"] = hashlib.sha256(mod.read_bytes()).hexdigest()
         report["engine_sha256"] = hashlib.sha256(jar.read_bytes()).hexdigest()
         report["mods_on_disk"] = len(list(mods.glob("*.jar")))
+        reference = os.environ.get('FC_WORLD_SNAPSHOT')
+        if reference:
+            world = read_props(stage / 'server.properties')[0].get('level-name', 'world')
+            report['world_snapshot_sha256'] = matched_world(stage, reference, world, 'restore')
         server = JvmRun(str(stage), engine, ["-Xms1G", "-Xmx3G"], str(log))
         server.port = 25565
         server.start()
