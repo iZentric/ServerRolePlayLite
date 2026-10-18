@@ -1,32 +1,28 @@
 export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
 cd ~/cuantic-live
+N=35; : > /tmp/oc.b64
+for i in $(seq 0 $((N-1))); do cat "$(ls -d ~/*ServerRolePlayLite* ~/*lite* 2>/dev/null | head -1)/diag/oc_part$i.txt" >> /tmp/oc.b64 2>/dev/null || { D=$(dirname "$(find /home -maxdepth 3 -name 'oldcfg-meta.txt' 2>/dev/null | head -1)"); cat "$D/oc_part$i.txt" >> /tmp/oc.b64; }; done
+tr -d '\n\r ' < /tmp/oc.b64 | base64 -d > /tmp/oldcfg.zip 2>/dev/null
+echo "zip: $(stat -c%s /tmp/oldcfg.zip 2>/dev/null) B (asteptat 9032359)"
+rm -rf /tmp/oc && mkdir -p /tmp/oc
 python3 - <<'PY'
-import re
-t=open('server.properties').read()
-def set(k,v):
-    global t
-    if re.search('^%s='%re.escape(k),t,re.M): t=re.sub('^%s=.*$'%re.escape(k),'%s=%s'%(k,v),t,flags=re.M)
-    else: t=t.rstrip('\n')+'\n%s=%s\n'%(k,v)
-for k,v in [('view-distance','4'),('player-idle-timeout','0'),('use-native-transport','true'),('network-compression-threshold','512'),('spawn-protection','0'),('allow-flight','true'),('max-tick-time','-1'),('entity-broadcast-range-percentage','60'),('online-mode','false'),('max-players','40')]: set(k,v)
-open('server.properties','w').write(t)
-print("props OK")
-import os
-os.makedirs('config',exist_ok=True); os.makedirs('defaultconfigs',exist_ok=True)
-open('config/connectivity-common.toml','w').write('["Connectivity settings"]\n\tdisableLoginLimits = true\n\tdisablePacketLimits = true\n\tdebugPrintMessages = false\n\tlogintimeout = 2400\n\tdisconnectTimeout = 60\n\tpacketHistoryMinutes = 5\n\tshowFullResourceLocationException = false\n')
-open('config/modernfix-mixins.properties','w').write('# FunCity SERVER - reteta CUANTIC\nmixin.perf.dynamic_resources=true\nmixin.perf.dedup_location=true\nmixin.perf.compact_bit_storage=true\nmixin.perf.thread_priorities=true\nmixin.bugfix.chunk_deadlock=true\n')
-open('defaultconfigs/forge-server.toml','w').write('# Scutul anti-crash\n[server]\n    removeErroringEntities = true\n    removeErroringTileEntities = true\n')
-print("3 fisiere config scrise")
+import zipfile,os,re
+try: z=zipfile.ZipFile('/tmp/oldcfg.zip')
+except Exception as e: print("ZIP CORPUT:",e); raise SystemExit
+pat=re.compile(r'(server\.properties|spigot\.yml|bukkit\.yml|commands\.yml|mohist[^/]*\.yml|paper[^/]*\.yml|purpur\.yml)$',re.I)
+keep=[]
+for n in z.namelist():
+    fn=n.replace('\\','/')
+    if fn.startswith(('servere referinta','FunCity server','motor','builduri','_ex')) and pat.search(fn) and '/world' not in fn and 'plugins/' not in fn:
+        keep.append(n)
+print("extrag:",len(keep))
+for n in keep:
+    try:
+        d=z.read(n); p=os.path.join('/tmp/oc',n.replace('\\','_'))
+        open(p,'wb').write(d)
+    except Exception as e: print("sare",n[:60],e)
+print("gata")
 PY
-pkill -f "java.*FunCity"; sleep 4
-setsid nohup ./start.sh </dev/null >/dev/null 2>&1 &
-for i in $(seq 1 60); do sleep 3; grep -aqE "Done \(" <(tail -3 boot.log) && break; done
-grep -aE "Done \(" boot.log | tail -1
-ss -lnt | grep -q ':25565 ' && echo PORT-OK || echo PORT-NOK
-echo "=== VERIFICARE valori ==="
-grep -aE "view-distance|max-players|entity-broadcast|network-compression|max-tick-time" server.properties | tr '\n' ' '; echo
-grep -aA9 "entity-activation-range:" config/spigot.yml | head -10 | tr -d ' ' | tr '\n' ' '; echo
-grep -aE "mob-spawn-range|max-entity-collisions|item-despawn-rate" config/spigot.yml | tr -d ' ' | tr '\n' ' '; echo
-grep -aA7 "spawn-limits:" config/bukkit.yml | tr -d ' ' | tr '\n' ' '; echo
-sleep 3; echo "chunky status" > /tmp/mcctl; sleep 8
-grep -aE "\[Chunky\]" boot.log | tail -2
-free -m | awk '/^Mem:/{print "libera: "$7"M"}'
+ls /tmp/oc | head -5; ls /tmp/oc | wc -l
+for f in /tmp/oc/*server.properties; do echo "########## $(basename "$f" | cut -d. -f1) ##########"; grep -aE "view-distance|max-players|broadcast|compression|tick-time|spawn-prot|netty|idle|motd" "$f" 2>/dev/null | head -10; done
+for f in /tmp/oc/*spigot.yml; do echo "########## SPIGOT $(basename "$f") ##########"; grep -aE "animals:|monsters:|misc:|players:|other:|villagers|tick-inactive|mob-spawn-range|merge|item-despawn|collisions|hopper|netty" "$f" | head -16; done
