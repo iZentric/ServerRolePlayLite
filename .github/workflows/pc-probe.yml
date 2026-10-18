@@ -32,6 +32,23 @@ jobs:
             $mods = Join-Path $instance 'minecraft\mods'
             $jars = @(Get-ChildItem -LiteralPath $mods -Filter '*.jar' -File -ErrorAction SilentlyContinue)
             $report += "$name : jar-uri=$($jars.Count)"
+            if ($name -eq 'FunCity') {
+              Add-Type -AssemblyName System.IO.Compression.FileSystem
+              foreach ($file in $jars) {
+                $zip = $null
+                try {
+                  $zip = [IO.Compression.ZipFile]::OpenRead($file.FullName)
+                  $entry = $zip.GetEntry('META-INF/mods.toml')
+                  if (-not $entry) { $report += "mod $($file.Name): fara mods.toml"; continue }
+                  $reader = [IO.StreamReader]::new($entry.Open())
+                  try { $meta = $reader.ReadToEnd() } finally { $reader.Dispose() }
+                  $ids = @([regex]::Matches($meta, '(?m)^\s*modId\s*=\s*"([^"]+)"') | ForEach-Object { $_.Groups[1].Value })
+                  $titles = @([regex]::Matches($meta, '(?m)^\s*displayName\s*=\s*"([^"]+)"') | ForEach-Object { $_.Groups[1].Value })
+                  $report += "mod $($file.Name): id=[$($ids -join ', ')] nume=[$($titles -join ', ')]"
+                } catch { $report += "mod $($file.Name): metadata ilizibila" }
+                finally { if ($zip) { $zip.Dispose() } }
+              }
+            }
             if (Test-Path $cfg) {
               $cfgLines = [IO.File]::ReadAllLines($cfg)
               $oldArgs = 'JavaArguments=-Xms1G -Xmx2500M -XX:+UseG1GC -XX:+ParallelRefProcEnabled'
