@@ -1,11 +1,11 @@
-Sun Oct 18 10:19:05 UTC 2026
-[10:20:08 INFO]: Done (4.940s)! For help, type "help"
+Sun Oct 18 10:31:50 UTC 2026
+lipsa config/spigot.yml
+Traceback (most recent call last):
+  File "<stdin>", line 39, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: 'config/spigot.yml'
+[10:32:53 INFO]: Done (4.154s)! For help, type "help"
 PORT-OK
-=== chunky ===
-[10:20:33 INFO]: [Chunky] Task running for world. Processed: 936 chunks (5.80%), ETA: 0:09:39, Rate: 26.2 cps, Current: -10, 15
-[10:20:34 INFO]: [Chunky] Task running for world. Processed: 945 chunks (5.86%), ETA: 0:10:21, Rate: 24.4 cps, Current: -1, 15
-[10:20:35 INFO]: [Chunky] Task running for world. Processed: 952 chunks (5.90%), ETA: 0:12:55, Rate: 19.6 cps, Current: 6, 15
-[10:20:36 INFO]: [Chunky] Task running for world. Processed: 960 chunks (5.95%), ETA: 0:13:45, Rate: 18.4 cps, Current: 14, 15
-=== jucatori ===
-[10:20:09 INFO]: There are 0 out of maximum 40 players online.
+[10:35:22 INFO]: [Chunky] Task running for world. Processed: 13168 chunks (81.64%), ETA: 0:03:56, Rate: 12.5 cps, Current: 0, 57
+[10:35:23 INFO]: [Chunky] Task running for world. Processed: 13178 chunks (81.70%), ETA: 0:03:49, Rate: 12.9 cps, Current: 10, 57
+[10:35:24 INFO]: [Chunky] Task running for world. Processed: 13189 chunks (81.77%), ETA: 0:04:16, Rate: 11.5 cps, Current: 21, 57
 exit=0
