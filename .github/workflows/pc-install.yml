@@ -33,3 +33,4 @@ jobs:
           try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/diag/pc-install.txt" -Headers $H -ContentType "application/json; charset=utf-8" -Body ($body | ConvertTo-Json -Compress) | Out-Null } catch { "push fail: $($_.Exception.Message)" }
         env:
           GH_TOKEN: ${{ github.token }}
+# test e2e 1792282358
