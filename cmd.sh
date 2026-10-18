@@ -1,34 +1,48 @@
 export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
 python3 - <<'PY'
-import zipfile,re,os,collections
+import zipfile,re,hashlib
 z=zipfile.ZipFile('/tmp/oldcfg.zip')
-names=z.namelist()
-print("total intrari:",len(names))
-print("primele:", " | ".join(names[:6]))
-want=re.compile(r'(server\.properties|spigot\.yml|bukkit\.yml|mohist\.yml)$',re.I)
-hits=[n for n in names if want.search(n.replace('\\','/'))]
-print("hits:",len(hits))
-os.makedirs('/tmp/oc',exist_ok=True)
-seen=collections.Counter()
-for n in hits:
-    fn=n.replace('\\','/').lstrip('./')
-    parts=fn.split('/')
-    tag='_'.join(parts[-3:-1]) if len(parts)>=3 else parts[0]
-    leaf=parts[-1]
-    base=(tag+'__'+leaf).replace(' ','')
-    if seen[base]>3: continue
-    seen[base]+=1
-    try: v=z.read(n)[:3500]
-    except Exception as e: print("sare",n[:50],e); continue
-    open('/tmp/oc/'+base,'wb').write(v)
-fs=sorted(os.listdir('/tmp/oc'))
-print("fisierete extrase:",len(fs))
-for f in fs:
-    t=open('/tmp/oc/'+f,'rb').read().decode('utf-8','replace')
-    if 'server.properties' in f:
-        g=[l for l in t.split('\n') if re.match(r'^(view-distance|max-players|entity-broadcast|network-compression|max-tick-time|use-native|player-idle)',l)]
-        print("### PROPS "+f.replace('__','/')); print("  "+" | ".join(x.strip() for x in g[:9]))
-    elif 'spigot' in f:
-        g=[l for l in t.split('\n') if re.search(r'(animals:|monsters:|misc:|other:|players:|tick-inactive|mob-spawn-range|max-entity|item-despawn|netty)',l)]
-        print("### SPIGOT "+f.replace('__','/')); print("  "+" | ".join(x.strip() for x in g[:18]))
+want=re.compile(r'(server\.properties|spigot\.yml|bukkit\.yml|mohist\.yml|catserver\.yml|commands\.yml|paper-world\.yml|paper-global\.yml|forge-server\.toml)$',re.I)
+seen={}
+recs=[]
+for info in z.infolist():
+    n=info.filename.replace('\\','/')
+    base=n.split('/')[-1]
+    if not want.search(base): continue
+    if info.file_size==0 or info.file_size>60000: continue
+    try: d=z.open(info).read()
+    except Exception: continue
+    h=hashlib.md5(d).hexdigest()
+    if h in seen: continue
+    t=d.decode('utf-8','replace')
+    mm=re.search(r'motd=(.*)',t); lm=re.search(r'level-name=(.*)',t); ver=re.search(r'(1\.7\.7|1\.12\.2|1\.16\.5|1\.7\.10|1\.20|1\.18)',t)
+    tag=(mm.group(1)[:38] if mm else (lm.group(1)[:30] if lm else '?'))
+    key=base+"|"+tag
+    if key in seen: continue
+    seen[key]=1
+    recs.append((base,t,len(d)))
+print("unice:",len(recs))
+def g(t,pat):
+    out=[]
+    for l in t.split('\n'):
+        s=l.strip()
+        if re.match(pat,s): out.append(s)
+    return out
+for base,t,sz in sorted(recs):
+    print("=== %s (%dB) ==="%(base,sz))
+    if base=='server.properties':
+        gl=g(t,r'^(motd|max-players|view-distance|entity-broadcast|network-compression|max-tick-time|use-native|player-idle|spawn-protection|allow-flight)')
+    elif 'spigot' in base:
+        gl=g(t,r'^(animals:|monsters:|misc:|other:|players:|water:|raiders:|villagers:|tick-inactive-villagers:|mob-spawn-range:|item-despawn-rate:|max-entity-collisions:|netty-threads:|merge-radius:|save-user-cache)')
+    elif 'bukkit' in base:
+        gl=g(t,r'^(monsters:|animals:|ambient:|water-animals:|period-in-ticks:|animal-spawns:|monster-spawns:|autosave:|allow-end:)')
+    elif 'mohist' in base:
+        gl=g(t,r'^(chunk_unload_delay:|optimize_explosions:|prevent_from_entering|max-bees|ignore_empty_time|.*activation.*|.*tracking.*)')
+    elif 'catserver' in base:
+        gl=g(t,r'^(keepSpawnInMemory|forceSaveOnWatchdog|eventPass|disableAsyncCatchWarn)')
+    elif 'paper' in base:
+        gl=g(t,r'^(max-|keep-spawn|delay-|unload|entity-activation|mob-spawn|tick-)')
+    else:
+        gl=g(t,r'^(name:|filter:)')[:3]
+    print("  "+"\n  ".join(gl[:14]))
 PY
