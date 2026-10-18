@@ -34,13 +34,13 @@ jobs:
               git add -f diag/CoreProtect.jar.b64
               git commit -m "cp via pc $($steps -join ' | ')"
               $steps += "commit $LASTEXITCODE"
-              git push origin "HEAD:$env:GITHUB_REF_NAME" 2> pusherr.txt
+              git push "https://x-access-token:$env:GH_TOKEN@github.com/iZentric/ServerRolePlayLite" "HEAD:$env:GITHUB_REF_NAME" 2> pusherr.txt
               $steps += "push $LASTEXITCODE : $(Get-Content pusherr.txt -Raw)"
             }
           } catch { $steps += "EX: $($_.Exception.Message)" }
           Add-Content -Path "$env:GITHUB_WORKSPACE\diag\pc-cp.txt" -Value ($steps -join " ;; ")
           git add -f diag/pc-cp.txt
           git commit -qm "cp steps $(Get-Random)"
-          git push origin "HEAD:$env:GITHUB_REF_NAME" 2>$null
+          git push "https://x-access-token:$env:GH_TOKEN@github.com/iZentric/ServerRolePlayLite" "HEAD:$env:GITHUB_REF_NAME" 2>$null
         env:
           GH_TOKEN: ${{ github.token }}
