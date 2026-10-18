@@ -69,6 +69,25 @@ jobs:
               $report += "$name : shaders activati=$enabled"
             }
           }
+          # Observatie usoara; nu lansam Minecraft si nu facem benchmark pe PC.
+          $java = @(Get-CimInstance Win32_Process -Filter "Name='java.exe' OR Name='javaw.exe'" |
+            Where-Object { $_.CommandLine -match '(?i)PrismLauncher[\\/]+instances[\\/]+(FunCity|CUANTIC-Client-1\.7\.7)' -and
+                           $_.CommandLine -notmatch 'FunCityEngine\.jar' })
+          $report += "clienti Minecraft din Prism porniti: $($java.Count)"
+          foreach ($process in $java) {
+            $first = Get-Process -Id $process.ProcessId -ErrorAction SilentlyContinue
+            if (-not $first) { continue }
+            Start-Sleep -Seconds 5
+            $last = Get-Process -Id $process.ProcessId -ErrorAction SilentlyContinue
+            if (-not $last) { $report += 'client Minecraft inchis in timpul masurarii'; continue }
+            $private = [math]::Round($last.PrivateMemorySize64 / 1MB)
+            $working = [math]::Round($last.WorkingSet64 / 1MB)
+            $cpu = [math]::Round(($last.CPU - $first.CPU) / 5, 2)
+            $report += "client Minecraft: RAM privat=$private MB, RAM fizic in uz=$working MB, CPU in 5s=$cpu sec/s"
+            $report += 'Procesul activ nu dovedeste ca cineva joaca in lume; FPS nu este masurat.'
+          }
+          $sessions = @(Get-NetTCPConnection -LocalPort 25565 -State Established -ErrorAction SilentlyContinue)
+          $report += "conexiuni TCP active spre server=$($sessions.Count)"
           foreach ($port in @(25565, 25575)) {
             $tcp = New-Object Net.Sockets.TcpClient
             $open = $false
