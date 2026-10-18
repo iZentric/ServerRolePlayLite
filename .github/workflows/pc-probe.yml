@@ -23,6 +23,35 @@ jobs:
           $report += "PC runner: $env:COMPUTERNAME; cont: $env:USERNAME"
           $report += "Server b1.0827: $(Test-Path (Join-Path $server 'FunCityEngine.jar'))"
           $report += "Prism FunCity: $(Test-Path $client); Clumps: $(Test-Path (Join-Path $client 'Clumps-6.0.0.28.jar'))"
+          $ram = [math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB, 1)
+          $report += "RAM fizic PC: $ram GB"
+          foreach ($name in @('FunCity', 'CUANTIC-Client-1.7.7')) {
+            $instance = Join-Path $env:APPDATA ("PrismLauncher\instances\" + $name)
+            $cfg = Join-Path $instance 'instance.cfg'
+            $options = Join-Path $instance 'minecraft\options.txt'
+            $mods = Join-Path $instance 'minecraft\mods'
+            $jars = @(Get-ChildItem -LiteralPath $mods -Filter '*.jar' -File -ErrorAction SilentlyContinue)
+            $report += "$name : jar-uri=$($jars.Count)"
+            if (Test-Path $cfg) {
+              foreach ($line in @(Get-Content -LiteralPath $cfg | Where-Object { $_ -match '^(OverrideMemory|MinMemAlloc|MaxMemAlloc)=' })) {
+                $report += "$name : $line"
+              }
+              foreach ($line in @(Get-Content -LiteralPath $cfg | Where-Object { $_ -match '^JavaArguments=' })) {
+                $sizes = @([regex]::Matches($line, '-Xm[sx]\S+') | ForEach-Object { $_.Value })
+                $report += "$name : argumente heap=[$($sizes -join ', ')]"
+              }
+            }
+            if (Test-Path $options) {
+              foreach ($line in @(Get-Content -LiteralPath $options | Where-Object { $_ -match '^(renderDistance|simulationDistance|graphicsMode|fancyGraphics|particles):' })) {
+                $report += "$name : $line"
+              }
+            }
+            $shaders = Join-Path $instance 'minecraft\config\oculus.properties'
+            if (Test-Path $shaders) {
+              $enabled = @(Get-Content -LiteralPath $shaders | Where-Object { $_ -match '^enableShaders=true$' }).Count -gt 0
+              $report += "$name : shaders activati=$enabled"
+            }
+          }
           foreach ($port in @(25565, 25575)) {
             $tcp = New-Object Net.Sockets.TcpClient
             $open = $false
