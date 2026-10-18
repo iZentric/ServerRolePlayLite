@@ -1,44 +1,34 @@
 export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
-REPO=$(pwd)
-[ -d "$REPO/diag" ] || REPO=$(dirname "$(dirname "$(find /home /root /tmp -maxdepth 4 -name oldcfg-meta.txt 2>/dev/null | head -1)")")
-echo "repo=$REPO parts=$(ls $REPO/diag/oc_part*.txt 2>/dev/null | wc -l)"
-: > /tmp/oc.b64
-for i in $(seq 0 34); do cat "$REPO/diag/oc_part$i.txt" >> /tmp/oc.b64 2>/dev/null; done
-tr -d '\n\r ' < /tmp/oc.b64 | base64 -d > /tmp/oldcfg.zip 2>/dev/null
-echo "zip: $(stat -c%s /tmp/oldcfg.zip) B (asteptat 9032359)"
 python3 - <<'PY'
-import zipfile,os,re
+import zipfile,re,os,collections
 z=zipfile.ZipFile('/tmp/oldcfg.zip')
-pat=re.compile(r'(server\.properties|spigot\.yml|bukkit\.yml|mohist\.yml|mohist-config)$',re.I)
-out={}
-for n in z.namelist():
-    fn=n.replace('\\','/')
-    top=fn.split('/')[0]
-    if top in ('servere referinta','FunCity server','motor','builduri','_ex') and pat.search(fn) and '/world' not in fn and '\\world' not in n and 'plugins' not in fn:
-        try: out[fn]=z.read(n)[:4000]
-        except: pass
+names=z.namelist()
+print("total intrari:",len(names))
+print("primele:", " | ".join(names[:6]))
+want=re.compile(r'(server\.properties|spigot\.yml|bukkit\.yml|mohist\.yml)$',re.I)
+hits=[n for n in names if want.search(n.replace('\\','/'))]
+print("hits:",len(hits))
 os.makedirs('/tmp/oc',exist_ok=True)
-print("extrase:",len(out))
-for k,v in out.items():
-    p='/tmp/oc/'+k.replace('/','__')
-    open(p,'wb').write(v)
-for k,v in sorted(out.items()):
-    short='/'.join(k.split('/')[1:])
-    t=v.decode('utf-8','replace')
-    if 'server.properties' in k:
-        print("### PROPS "+short)
-        for l in t.split('\n'):
-            if re.match(r'^(view-distance|max-players|entity-broadcast|network-compression|max-tick-time|spawn-protection|use-native|player-idle)',l): print("  "+l.strip())
-    elif 'spigot' in k:
-        print("### SPIGOT "+short)
-        keep=[l for l in t.split('\n') if re.search(r'(activation-range|tracking-range|animals:|monsters:|misc:|other:|water:|players:|tick-inactive|mob-spawn-range|max-entity|item-despawn|merge-radius|netty|tick-spa)',l)]
-        print("  "+"\n  ".join(keep[:22]))
-    elif 'bukkit' in k:
-        print("### BUKKIT "+short)
-        keep=[l for l in t.split('\n') if re.search(r'(spawn-limits|monsters:|animals:|ambient|chunk-gc|period-in-ticks|animal-spawns|monster-spawns|autosave)',l)]
-        print("  "+"\n  ".join(keep[:14]))
-    elif 'mohist' in k:
-        print("### MOHIST "+short)
-        keep=[l for l in t.split('\n') if re.search(r'(spawn|track|activat|unload|explos|range|tick)',l,re.I)]
-        print("  "+"\n  ".join(keep[:16]))
+seen=collections.Counter()
+for n in hits:
+    fn=n.replace('\\','/').lstrip('./')
+    parts=fn.split('/')
+    tag='_'.join(parts[-3:-1]) if len(parts)>=3 else parts[0]
+    leaf=parts[-1]
+    base=(tag+'__'+leaf).replace(' ','')
+    if seen[base]>3: continue
+    seen[base]+=1
+    try: v=z.read(n)[:3500]
+    except Exception as e: print("sare",n[:50],e); continue
+    open('/tmp/oc/'+base,'wb').write(v)
+fs=sorted(os.listdir('/tmp/oc'))
+print("fisierete extrase:",len(fs))
+for f in fs:
+    t=open('/tmp/oc/'+f,'rb').read().decode('utf-8','replace')
+    if 'server.properties' in f:
+        g=[l for l in t.split('\n') if re.match(r'^(view-distance|max-players|entity-broadcast|network-compression|max-tick-time|use-native|player-idle)',l)]
+        print("### PROPS "+f.replace('__','/')); print("  "+" | ".join(x.strip() for x in g[:9]))
+    elif 'spigot' in f:
+        g=[l for l in t.split('\n') if re.search(r'(animals:|monsters:|misc:|other:|players:|tick-inactive|mob-spawn-range|max-entity|item-despawn|netty)',l)]
+        print("### SPIGOT "+f.replace('__','/')); print("  "+" | ".join(x.strip() for x in g[:18]))
 PY
