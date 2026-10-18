@@ -35,6 +35,7 @@ if(-not (Test-Path "$srv\FunCity-1.16.5-b1.0827.jar")){
     [IO.Compression.ZipFileExtensions]::ExtractToFile($e,$dest,$true); $done++
   }
   $a.Dispose(); Remove-Item -Force -EA SilentlyContinue "$env:TEMP\fs.zip"
+  if(-not (Test-Path "$srv\FunCity-1.16.5-b1.0827.jar")){ $msg="EROR: dupa extragere jar tot lipseste (scrise $done)" -join ""; try{ $tok=@(Get-Content "$dir\token.txt" -EA SilentlyContinue)[0].Trim(); if($tok -match '^github_pat_'){ $H=@{ Authorization="token $tok"; Accept="application/vnd.github+json"; "User-Agent"="doc" }; $sha=$null; try{ $sha=(Invoke-RestMethod "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H -EA Stop).sha }catch{}; $b=@{ message="bat eroare"; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($msg)); branch="arena/9bbcb24f-serverroleplaylite" }; if($sha){ $b.sha=$sha }; Invoke-RestMethod -Method Put -Uri "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H -ContentType "application/json" -Body ($b|ConvertTo-Json -Compress -Depth 4)|Out-Null } }catch{} }
   Step "server gata: $done fisiere"
 } else { Step "server: deja instalat, sar peste" }
 Remove-Item -Force -EA SilentlyContinue "$srv\mods\SeleneChat*"
