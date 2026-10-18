@@ -43,8 +43,23 @@ if(-not (Test-Path $jar)){
   Remove-Item -Recurse -Force -EA SilentlyContinue "$env:TEMP\jare","$env:TEMP\jare.tar.gz"
 } else { Rep "jar: deja prezent" }
 # 2) mods din zip mare - doar ce lipsesc, cu progres live
-$mc=@(Get-ChildItem "$srv\mods" -Filter *.jar -EA SilentlyContinue).Count
+$mc=@(Get-ChildItem "$srv\mods" -File -Filter *.jar -EA SilentlyContinue).Count
 Rep "mods prezenti: $mc"
+# Arhiva FunCity pune jarele in mods/mods-pre-fr, nu direct in mods.
+if($mc -lt 25){
+  $folders=@(Get-ChildItem "$srv\mods" -Directory -EA SilentlyContinue | ForEach-Object {
+    [pscustomobject]@{ Path=$_.FullName; Name=$_.Name; Count=@(Get-ChildItem $_.FullName -File -Filter '*.jar' -EA SilentlyContinue).Count }
+  } | Sort-Object Count -Descending)
+  Rep ("subfoldere mods: " + (($folders | ForEach-Object { $_.Name+'='+$_.Count }) -join ', '))
+  $source=@($folders | Where-Object { $_.Count -ge 20 -and $_.Name -notmatch '(?i)backup|disabled|old' })
+  if($source.Count){
+    $chosen=$source[0]
+    Rep "mut $($chosen.Count) moduri din $($chosen.Name) in mods/"
+    foreach($mod in @(Get-ChildItem $chosen.Path -File -Filter '*.jar')){ Copy-Item $mod.FullName "$srv\mods\$($mod.Name)" -Force }
+    $mc=@(Get-ChildItem "$srv\mods" -File -Filter '*.jar' -EA SilentlyContinue).Count
+    Rep "mods acum: $mc"
+  }
+}
 if($mc -lt 25){
   Rep "trag FUNCTITY-SERVER.zip (464MB) pentru rest..."
   $z="$env:TEMP\fs.zip"
