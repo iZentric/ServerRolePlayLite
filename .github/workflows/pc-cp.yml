@@ -21,10 +21,8 @@ jobs:
           $pick = $null
           foreach ($u in $urls) { try { Invoke-WebRequest -UseBasicParsing $u -OutFile cp.jar -TimeoutSec 120; if ((Get-Item cp.jar).Length -gt 500000) { $pick = $u; break } } catch { Write-Host "esec $u" } }
           "pick: $pick"
-          Add-Type -A System.IO.Compression.FileSystem
-          $z=[IO.Compression.ZipFile]::OpenRead("$pwd\cp.jar"); $has=($z.Entries.FullName -contains 'config.yml'); $z.Dispose()
-          $res = "CP-OK size=$((Get-Item cp.jar).Length) valid=$has url=$pick"
-          Compress-Archive cp.jar cp.zip -Force
+          $res = "CP-OK size=$((Get-Item cp.jar).Length) url=$pick"
+          Copy-Item cp.jar cp.zip
           $H2 = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json" }
           $zipb = [Convert]::ToBase64String([IO.File]::ReadAllBytes("cp.zip"))
           foreach ($f in @(
