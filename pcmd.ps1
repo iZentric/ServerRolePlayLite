@@ -36,8 +36,8 @@ while($true){
       if($out.Length -gt 90000){ $out=$out.Substring(0,90000)+"...TR" }
       Put "diag/pctl.txt" ($out + "`nGATA " + (Get-Date -Format s))
     }
-  }catch{ Start-Sleep 20 }
-  Start-Sleep 5
+  }catch{ Start-Sleep 10 }
+  Start-Sleep 1
 }
 '@ | Set-Content -Encoding ascii "$dir\fctl.ps1"
   "CreateObject(""WScript.Shell"").Run ""powershell -NoProfile -ExecutionPolicy Bypass -File $dir\fctl.ps1"", 0, False" | Set-Content -Encoding ascii "$dir\fctl.vbs"
