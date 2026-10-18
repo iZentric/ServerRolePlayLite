@@ -36,8 +36,8 @@ jobs:
           TXT
           cd unz && zip -qr9 ../functity2.zip . -x "*.log" "unz/logs/*" && cd ..
           echo "zip nou: $(stat -c%s functity2.zip 2>/dev/null || stat -c%s ../functity2.zip)B"
-          mv ../functity2.zip "$GITHUB_WORKSPACE/" 2>/dev/null || true
-          gh release upload funcity "$GITHUB_WORKSPACE/functity2.zip" -R "$GITHUB_REPOSITORY" --clobber 2>/dev/null || gh release upload funcity "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip" --clobber
+          mv "$GITHUB_WORKSPACE/s/functity2.zip" "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip"
+          gh release upload funcity "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip" -R "$GITHUB_REPOSITORY" --clobber
           echo PATCH-DONE
       - name: Log pe branch
         if: always()
