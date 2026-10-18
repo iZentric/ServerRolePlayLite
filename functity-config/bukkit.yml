@@ -1,12 +1,12 @@
-# bukkit.yml - strat CUANTIC (fara End, zero bati, save rar)
+# FunCity 1.16.5 Lite - spawn-limit din referinta HYPECITY BK; spawn nefortat
 settings:
   allow-end: false
-  keep-spawn-loaded: true
+  keep-spawn-loaded: false
   warn-on-overload: false
 spawn-limits:
-  monsters: 20
-  animals: 6
-  water-animals: 2
+  monsters: 8
+  animals: 5
+  water-animals: 1
   water-ambient: 2
   ambient: 0
 chunk-gc:
