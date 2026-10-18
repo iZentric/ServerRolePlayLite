@@ -1,11 +1,16 @@
-Sun Oct 18 00:25:22 UTC 2026
-incerc: https://github.com/Zrips/CoreProtect/releases/download/21.2/CoreProtect-21.2.jar
-incerc: https://github.com/Zrips/CoreProtect/releases/download/21.2/CoreProtect_21_2.jar
-incerc: https://github.com/Zrips/CoreProtect/releases/download/21.2.jar/CoreProtect.jar
-incerc: https://github.com/playtogether-ig/Docs/releases/download/placeholder/CoreProtect.jar
-ies pe lista de release-uri brut:
-url gasit: 
-ESUAT TOTAL
-exit=1
-exit=0
+Sun Oct 18 01:17:42 UTC 2026
+ora: 01:17:42
+CP.jar: 815372 B Oct 18 01:12
+java: RULEAZA (pid 175136)
+[01:13:27 INFO]: [CoreProtect] Discord: www.coreprotect.net/discord/
+[01:13:28 INFO]: Done (4.362s)! For help, type "help"
+[01:13:28 INFO]: [CoreProtect] WorldEdit logging successfully initialized.
+[01:13:29 INFO]: [CoreProtect] Version 24.1 is now available.
+[01:13:29 INFO]: [CoreProtect] Download: www.coreprotect.net/download/
+PORT 25565: DESCHIS
+total 228
+drwxr-xr-x.  2 mndvasi9 oci     79 Oct 18 01:17 .
+drwxr-xr-x. 14 mndvasi9 oci   4096 Oct 18 01:13 ..
+-rw-r--r--.  1 mndvasi9 oci   4314 Oct 18 01:13 config.yml
+-rw-r--r--.  1 mndvasi9 oci 208896 Oct 18 01:17 database.db
 exit=0
