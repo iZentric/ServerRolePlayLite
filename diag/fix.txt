@@ -1,40 +1,10 @@
-Diagnostic server 2026-10-18T14:44:47
-SERVER LIVE=False Done=True localhost:25565=False
-logs\latest.log : 336 linii
-[14:43:38] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.4 Source=file:/C:/Users/Administrator/Desktop/FunCityLocal/server/libraries/org/spongepowered/mixin/0.8.4/mixin-0.8.4.jar Service=ModLauncher Env=SERVER
-[14:43:42] [main/WARN] [ModernFixConfig/]: No configuration key exists with name 'mixin.perf.dedup_location', ignoring
-[14:43:42] [main/WARN] [ModernFixConfig/]: No configuration key exists with name 'mixin.perf.compact_bit_storage', ignoring
-[14:43:42] [main/WARN] [ModernFix/]: Option 'mixin.perf.dynamic_resources' overriden (by user configuration) to 'true'
-[14:43:45] [main/WARN] [mixin/]: Error loading class: io/github/kosmx/emotes/server/network/AbstractServerEmotePlay (java.lang.ClassNotFoundException: null)
-[14:43:45] [main/WARN] [mixin/]: @Mixin target io.github.kosmx.emotes.server.network.AbstractServerEmotePlay was not found pizzamod.mixin.json:EmoteLogMixin
-[14:43:45] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via org.embeddedt.modernfix.forge.shadow.mixinextras.service.MixinExtrasServiceImpl(version=0.3.2).
-[14:43:48] [main/INFO] [ModernFix/]: Injecting BlockStateBase cache population hook into func_204519_t from me.jellysquid.mods.lithium.mixin.block.flatten_states.AbstractBlockStateMixin
-[14:43:53] [modloading-worker-6/INFO] [Ksyxis/KForge/]: Ksyxis: Ready to remove unneeded chunks. (platform: forge, version: 1.4.6, mixin: 0.8.4)
-[14:43:54] [modloading-worker-6/FATAL] [net.minecraftforge.fml.loading.RuntimeDistCleaner/DISTXFORM]: Attempted to load class hl for invalid dist DEDICATED_SERVER
-[14:43:54] [modloading-worker-6/INFO] [STDERR/]: [cq:<init>:53]: java.lang.reflect.InvocationTargetException
-[14:43:54] [modloading-worker-6/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:-1]: Caused by: java.lang.RuntimeException: Attempted to load class hl for invalid dist DEDICATED_SERVER
-[14:44:00] [main/WARN] [mixin/]: Method overwrite conflict for func_225532_a_ in modernfix-common.mixins.json:perf.biome_zoomer.FuzzyOffsetBiomeZoomerMixin, previously written by me.jellysquid.mods.lithium.mixin.gen.voronoi_biomes.VoronoiBiomeAccessTypeMixin. Skipping method.
-[14:44:01] [main/INFO] [ModernFix/]: Invalidating pack caches
-[14:44:30] [Server thread/INFO] [Ksyxis/MinecraftServerMixin/]: Ksyxis: Speeding up the world loading... Delete the mod, if it got stuck after this message. (net.minecraft.server.dedicated.DedicatedServer func_213186_a)
-[14:44:30] [Server thread/WARN] [mixin/]: Method overwrite conflict for removeIf in modernfix-common.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin, previously written by me.jellysquid.mods.lithium.mixin.world.chunk_tickets.SortedArraySetMixin. Skipping method.
-[14:44:31] [Server thread/INFO] [Ksyxis/MinecraftServerMixin/]: Ksyxis: Speeding up the world loading... Delete the mod, if it got stuck after this message. (net.minecraft.server.dedicated.DedicatedServer func_213186_a)
-[14:44:34] [Server thread/INFO] [Minecraft/]: [ClaimChunk] PlaceholderAPI not found, not loading API.
-logs\console.err : 5 linii
-logs\console.log : 352 linii
-[14:43:38 INFO]: SpongePowered MIXIN Subsystem Version=0.8.4 Source=file:/C:/Users/Administrator/Desktop/FunCityLocal/server/libraries/org/spongepowered/mixin/0.8.4/mixin-0.8.4.jar Service=ModLauncher Env=SERVER
-[14:43:42 WARN]: No configuration key exists with name 'mixin.perf.dedup_location', ignoring
-[14:43:42 WARN]: No configuration key exists with name 'mixin.perf.compact_bit_storage', ignoring
-[14:43:42 WARN]: Option 'mixin.perf.dynamic_resources' overriden (by user configuration) to 'true'
-[14:43:45 WARN]: Error loading class: io/github/kosmx/emotes/server/network/AbstractServerEmotePlay (java.lang.ClassNotFoundException: null)
-[14:43:45 WARN]: @Mixin target io.github.kosmx.emotes.server.network.AbstractServerEmotePlay was not found pizzamod.mixin.json:EmoteLogMixin
-[14:43:45 INFO]: Initializing MixinExtras via org.embeddedt.modernfix.forge.shadow.mixinextras.service.MixinExtrasServiceImpl(version=0.3.2).
-[14:43:48 INFO]: Injecting BlockStateBase cache population hook into func_204519_t from me.jellysquid.mods.lithium.mixin.block.flatten_states.AbstractBlockStateMixin
-[14:43:53 INFO]: Ksyxis: Ready to remove unneeded chunks. (platform: forge, version: 1.4.6, mixin: 0.8.4)
-[14:43:54 FATAL]: Attempted to load class hl for invalid dist DEDICATED_SERVER
-[14:43:54 INFO]: [cq:<init>:53]: java.lang.reflect.InvocationTargetException
-[14:43:54 INFO]: [java.lang.Throwable:printStackTrace:-1]: Caused by: java.lang.RuntimeException: Attempted to load class hl for invalid dist DEDICATED_SERVER
-[14:44:00 WARN]: Method overwrite conflict for func_225532_a_ in modernfix-common.mixins.json:perf.biome_zoomer.FuzzyOffsetBiomeZoomerMixin, previously written by me.jellysquid.mods.lithium.mixin.gen.voronoi_biomes.VoronoiBiomeAccessTypeMixin. Skipping method.
-[14:44:01 INFO]: Invalidating pack caches
-[14:44:30 WARN]: Method overwrite conflict for removeIf in modernfix-common.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin, previously written by me.jellysquid.mods.lithium.mixin.world.chunk_tickets.SortedArraySetMixin. Skipping method.
-[14:44:34 INFO]: [ClaimChunk] PlaceholderAPI not found, not loading API.
-mods: 30
+BAZA ORIGINALA vs server PC 2026-10-18T14:45:10
+Sursa originala Freeroam.1.0.0.zip (rebrand FunCity 1.0.0), NU zip-ul nou FUNCTITY-SERVER.zip
+Client original: 28 jar-uri; explicit client-only: 
+Client original absent ca nume pe server: CTM-MC1.16.1-1.1.2.6.jar, DynamicSurroundings-1.16.5-4.0.5.0.jar, emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar, InGameAccountSwitcher-Forge-1.16-8.0.1.jar, lightfallclient-1.0.0.jar, modernlife-1.16.5-1.15.jar, notenoughanimations-1.2.4.jar, oculus-mc1.16.5-1.4.7.jar, pamhc2foodcore-1.16.3-1.0.2.jar, player-animation-lib-forge-0.4.0+1.16.5.jar, roadstuff-1.16.5-4.3.0.jar, rubidium-mc1.16.5-0.2.13.jar, TextruesRubidiumOptions-1.0.8-mc1.16.5.jar, TRansliterationLib-1.0.4.jar
+Server original live: mods=36 plugins=12
+Server PC acum: mods=30 plugins=15
+Lipsesc din serverul original: emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar, modernlife-1.16.5-1.15.jar, pamhc2foodcore-1.16.3-1.0.2.jar, player-animation-lib-forge-0.4.0+1.16.5.jar, roadstuff-1.16.5-4.3.0.jar, smoothchunk1.16.5-2.0.jar, spark-1.9.1-forge.jar
+In plus fata de serverul original: obfuscate_lib_compatible-1.3.0.jar
+Pluginuri lipsa: 
+Pluginuri in plus: CoreProtect.jar, worldedit-bukkit-7.2.5-dist.jar, worldguard-bukkit-7.0.5-dist.jar
