@@ -1,6 +1,6 @@
 export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
 python3 - <<'PY'
-import zipfile,re,hashlib
+import zipfile,re
 z=zipfile.ZipFile('/tmp/oldcfg.zip')
 want=re.compile(r'(server\.properties|spigot\.yml|bukkit\.yml|mohist\.yml|catserver\.yml|commands\.yml|paper-world\.yml|paper-global\.yml|forge-server\.toml)$',re.I)
 seen={}
@@ -12,7 +12,7 @@ for info in z.infolist():
     if info.file_size==0 or info.file_size>60000: continue
     try: d=z.open(info).read()
     except Exception: continue
-    h=hashlib.md5(d).hexdigest()
+    h=str(len(d))+"_"+str(__import__("zlib").crc32(d)&0xffffff)
     if h in seen: continue
     t=d.decode('utf-8','replace')
     mm=re.search(r'motd=(.*)',t); lm=re.search(r'level-name=(.*)',t); ver=re.search(r'(1\.7\.7|1\.12\.2|1\.16\.5|1\.7\.10|1\.20|1\.18)',t)
