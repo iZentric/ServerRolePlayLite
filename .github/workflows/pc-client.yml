@@ -257,6 +257,28 @@ jobs:
               $r += ($safe.Substring(0,[Math]::Min($safe.Length,250)))
             }
           }
+          $clientRoot=Join-Path $env:APPDATA 'PrismLauncher\instances\FunCity\minecraft\mods'
+          $clientFiles=@(Get-ChildItem $clientRoot -File -Filter '*.jar' -ErrorAction SilentlyContinue)
+          $serverFiles=@(Get-ChildItem (Join-Path $server 'mods') -File -Filter '*.jar' -ErrorAction SilentlyContinue)
+          $r += 'moduri server fara acelasi nume in FunCity: ' + ((@($serverFiles | Where-Object { $_.Name -notin $clientFiles.Name } | ForEach-Object {$_.Name})) -join ', ')
+          $different=@()
+          foreach($file in $clientFiles){
+            $other=Join-Path (Join-Path $server 'mods') $file.Name
+            if(Test-Path $other){ if((Get-FileHash $file.FullName -Algorithm SHA256).Hash -ne (Get-FileHash $other -Algorithm SHA256).Hash){$different += $file.Name} }
+          }
+          $r += 'acelasi nume dar SHA256 diferit: '+($different -join ', ')
+          $clientLog=Join-Path (Join-Path $env:APPDATA 'PrismLauncher\instances\FunCity\minecraft') 'logs\latest.log'
+          $all=@(Get-Content -LiteralPath $clientLog -Tail 800 -ErrorAction SilentlyContinue)
+          $events=@(for($i=0;$i -lt $all.Count;$i++){if($all[$i] -match 'Unidentified mapping from registry|Missing registry data for network connection'){ $i }})
+          foreach($at in @($events | Select-Object -Last 2)){
+            $r += "REGISTRY ERROR context:"
+            for($j=$at;$j -le [Math]::Min($at+35,$all.Count-1);$j++){
+              $line=$all[$j]
+              if($line -match '(?i)(registry|mapping|entity|mod|block|unknown|missing|required|^\s+[a-z][a-z0-9_]+:)'){
+                $r += $line.Substring(0,[Math]::Min($line.Length,400))
+              }
+            }
+          }
           $srvLines=@(Get-Content (Join-Path $server 'logs\latest.log') -Tail 250 -ErrorAction SilentlyContinue)
           foreach($line in @($srvLines | Where-Object {$_ -match '(?i)disconnect|refused|failed|incompatib|mismatch|missing required|handshake|registry|channel|timeout' } | Select-Object -Last 15)){
             $r += ('SERVER: '+$line.Substring(0,[Math]::Min($line.Length,250)))
