@@ -1,12 +1,12 @@
-Sun Oct 18 10:15:12 UTC 2026
-java: 
--rw-r--r--. 1 mndvasi9 oci 276 Oct 18 10:11 boot.log
--rwxr-xr-x. 1 mndvasi9 oci 327 Oct 18 10:11 start.sh
-== tail boot.log ==
-Error: VM option 'G1NewSizePercent' is experimental and must be enabled via -XX:+UnlockExperimentalVMOptions.
-Error: The unlock option must precede 'G1NewSizePercent'.
-Error: Could not create the Java Virtual Machine.
-Error: A fatal exception has occurred. Program will exit.
-== teste start ==
-start.sh sintaxa ok
+Sun Oct 18 10:16:59 UTC 2026
+[10:17:07 WARN]: Error loading class: io/github/kosmx/emotes/server/network/AbstractServerEmotePlay (java.lang.ClassNotFoundException: null)
+[10:17:58 INFO]: Done (4.284s)! For help, type "help"
+PORT-OK
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/tmp/rcon.py", line 17, in <module>
+java rss: 2649 MB
+libera: 5782M
 exit=0
