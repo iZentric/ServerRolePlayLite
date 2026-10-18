@@ -6,7 +6,7 @@ on:
 jobs:
   ck:
     runs-on: [self-hosted, Windows]
-    timeout-minutes: 5
+    timeout-minutes: 18
     permissions:
       contents: write
     steps:
@@ -50,3 +50,14 @@ jobs:
               break
             } catch { Write-Host "Raport nereusit: $($_.Exception.Message)"; if ($attempt -eq 1) { exit 1 } }
           }
+      - name: Completeaza modurile si porneste serverul local
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $url = 'https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/tools/FunCity-Local.ps1?ref=arena/9bbcb24f-serverroleplaylite'
+          $h = @{Authorization=('Bearer '+$env:GH_TOKEN); Accept='application/vnd.github+json'; 'User-Agent'='FunCity'}
+          $data = Invoke-RestMethod -Uri $url -Headers $h -ErrorAction Stop
+          $text = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(($data.content -replace '\s','')))
+          & ([ScriptBlock]::Create($text))

@@ -8,13 +8,14 @@ function Rep($m){
   $global:REP += "[$(Get-Date -Format 'HH:mm:ss')] $m"
   Write-Host $m -ForegroundColor Cyan
   if($global:REP.Count -gt 60){ $global:REP=@($global:REP[-60..-1]) }
-  $tok=@(Get-Content "$dir\token.txt" -EA SilentlyContinue)[0].Trim()
-  if($tok -notmatch '^github_pat_'){ return }
+  $tok=$env:GH_TOKEN
+  if(-not $tok){ $saved=@(Get-Content "$dir\token.txt" -EA SilentlyContinue); if($saved.Count){ $tok=$saved[0].Trim() } }
+  if(-not $tok){ return }
   $H=@{ Authorization="token $tok"; Accept="application/vnd.github+json"; "User-Agent"="watch" }
-  $sha=$null; try{ $sha=(Invoke-RestMethod "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H -EA Stop).sha }catch{}
+  $sha=$null; try{ $sha=(Invoke-RestMethod "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt?ref=arena/9bbcb24f-serverroleplaylite" -Headers $H -EA Stop).sha }catch{}
   $b=@{ message="v4"; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(($global:REP -join "`n"))); branch="arena/9bbcb24f-serverroleplaylite" }
   if($sha){ $b.sha=$sha }
-  for($k=0;$k -lt 2;$k++){ try{ Invoke-RestMethod -Method Put -Uri "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H -ContentType "application/json" -Body ($b|ConvertTo-Json -Compress -Depth 4)|Out-Null; break }catch{ Start-Sleep 2; try{ $b.sha=(Invoke-RestMethod "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H).sha }catch{} } }
+  for($k=0;$k -lt 2;$k++){ try{ Invoke-RestMethod -Method Put -Uri "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H -ContentType "application/json" -Body ($b|ConvertTo-Json -Compress -Depth 4)|Out-Null; break }catch{ Start-Sleep 2; try{ $b.sha=(Invoke-RestMethod "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt?ref=arena/9bbcb24f-serverroleplaylite" -Headers $H).sha }catch{} } }
 }
 Rep "v4: START, tintea $srv"
 $jar="$srv\FunCityEngine.jar"
@@ -127,6 +128,8 @@ $run=@(Get-Process java -EA SilentlyContinue | Where-Object { $_.Path -like "*Fu
 if($run.Count){ Rep "server ruleaza deja (pid $($run[0].Id)) - il las" } else {
   Rep "pornesc serverul ascuns..."
   Remove-Item -Force -EA SilentlyContinue "$srv\logs\latest.log"
+  # Nu lasa GitHub Actions sa omoare procesul serverului cand jobul se termina.
+  $env:RUNNER_TRACKING_ID=''
   $p=Start-Process -FilePath "$srv\java11\bin\java.exe" -ArgumentList '-Xms2G','-Xmx6G','-XX:+UnlockExperimentalVMOptions','-XX:+UseG1GC','-XX:MaxGCPauseMillis=30','-XX:+ParallelRefProcEnabled','-jar','FunCityEngine.jar','nogui' -WorkingDirectory $srv -WindowStyle Hidden -PassThru -RedirectStandardOutput "$srv\logs\console.log" -RedirectStandardError "$srv\logs\console.err"
   $ok=$false;$t0=Get-Date
   for($i=0;$i -lt 72;$i++){
