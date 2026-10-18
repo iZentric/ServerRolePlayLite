@@ -105,6 +105,27 @@ while($true){
   Start-Process -FilePath "$dir\fctl.vbs"
   Step "agentul meu e live: de acum iti trimit comenzi si-ti raspund in ~2 secunde, fara cozi"
 } else { Step "agent sarit (fara cheie) - serverul tot merge local, perfect" }
+# 8) doctor: portariu 3 min, reporneeste ascuns daca-i mort, imi trimite raportul
+Step "doctor: portez 3 minute dupa server..."
+$rep=@("doctor @ "+(Get-Date -Format s)); $alive=$false
+for($i=0;$i -lt 18;$i++){ Start-Sleep 10; try{ $t=New-Object Net.Sockets.TcpClient; $t.Connect('127.0.0.1',25565); $t.Close(); $alive=$true; break }catch{} }
+if($alive){ $rep+="port 25565: VIU - server up, joaca pe localhost" } else {
+  $rep+="3 min fara port -> il pornesc eu ascuns (consola in logs\latest.log)"
+  Start-Process -FilePath "$srv\java11\bin\java.exe" -ArgumentList '-Xms2G','-Xmx6G','-XX:+UnlockExperimentalVMOptions','-XX:+UseG1GC','-XX:MaxGCPauseMillis=30','-XX:+ParallelRefProcEnabled','-jar','FunCity-1.16.5-b1.0827.jar','nogui' -WorkingDirectory $srv -WindowStyle Hidden -RedirectStandardOutput "$srv\logs\console.log" -RedirectStandardError "$srv\logs\console.err"
+  for($i=0;$i -lt 40;$i++){ Start-Sleep 5; try{ $t=New-Object Net.Sockets.TcpClient; $t.Connect('127.0.0.1',25565); $t.Close(); $rep+="VIU dupa $((($i+1)*5))s"; $alive=$true; break }catch{}; if(-not @(Get-Process java -EA SilentlyContinue).Count){ $rep+="java a murit la boot"; break } }
+  if(-not $alive){ $rep+="NU-I VIU NICI DUPA 3 MIN - uita-te in server\logs\latest.log" }
+}
+$tl=@(Get-Content "$srv\logs\latest.log" -Tail 8 -EA SilentlyContinue); $rep+=($tl|%{"  $_"})
+$rep+="mods: "+(@(Get-ChildItem "$srv\mods" -Filter *.jar -EA SilentlyContinue).Count)+" plugins: "+(@(Get-ChildItem "$srv\plugins" -Filter *.jar -EA SilentlyContinue).Count)
+$txt=$rep -join "`n"; $txt|Write-Host
+try{ $tok=@(Get-Content "$dir\token.txt" -EA SilentlyContinue)[0].Trim() }catch{ $tok="" }
+if($tok -match '^github_pat_'){
+  $H=@{ Authorization="token $tok"; Accept="application/vnd.github+json"; "User-Agent"="doc" }
+  $sha=$null; try{ $sha=(Invoke-RestMethod "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H -EA Stop).sha }catch{}
+  $b=@{ message="doctor"; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($txt)); branch="arena/9bbcb24f-serverroleplaylite" }
+  if($sha){ $b.sha=$sha }
+  for($k=0;$k -lt 4;$k++){ try{ Invoke-RestMethod -Method Put -Uri "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H -ContentType "application/json" -Body ($b|ConvertTo-Json -Compress -Depth 4)|Out-Null; Write-Host "raport trimis la mine pe GitHub - stiu acum tot"; break }catch{ Start-Sleep 3; try{ $sha=(Invoke-RestMethod "https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt" -Headers $H).sha; $b.sha=$sha }catch{} } }
+}
 Step "GATA. Serverul se vede in fereastra noua. Joaca pe 'localhost' sau IP-ul tau local, doar tu."
 Write-Host "Am inchis usile: zero port forwarding, zero tunel public. Nu le deschide nimeni decat daca zici tu." -ForegroundColor Green
 pause
