@@ -10,40 +10,34 @@ jobs:
     timeout-minutes: 8
     runs-on: [self-hosted, Windows]
     steps:
-      - name: Descarca CoreProtect de pe PC
+      - name: Gaseste si descarca CoreProtect
         shell: powershell
         run: |
           $ErrorActionPreference='Continue'
           Set-Location $env:RUNNER_TEMP
-          $urls = @(
-            "https://github.com/Zrips/CoreProtect/releases/download/21.2/CoreProtect-21.2.jar",
-            "https://github.com/Zrips/CoreProtect/releases/download/21.2/CoreProtect_21_2.jar",
-            "https://download.gameperfex.com/data/LATEST/Builds/CoreProtect/CoreProtect.jar",
-            "https://www.spigotmc.org/resources/coreprotect.8631/download?version=451949"
-          )
-          $ok=$false
-          foreach ($u in $urls) {
-            try {
-              Invoke-WebRequest -UseBasicParsing -Uri $u -OutFile cp.jar -TimeoutSec 60
-              $s = (Get-Item cp.jar).Length
-              if ($s -gt 500000) {
-                try { Add-Type -A System.IO.Compression.FileSystem; $z=[IO.Compression.ZipFile]::OpenRead("$pwd\cp.jar"); $e=@($z.Entries|%{$_.FullName}) -join ','; $z.Dispose(); if ($e -match 'config.yml') { Write-Host "OK $u ($s B, valid)"; $ok=$true; break } } catch {}
-                Write-Host "incerc $u -> $s B (nu-e jar?)"
-              }
-            } catch { Write-Host "esec: $u -> $($_.Exception.Message)" }
-          }
-          if (-not $ok) { "CP-ESUAT" | Set-Content res.txt; } else { Compress-Archive cp.jar cp.zip -Force; "CP-GATA $((Get-Item cp.zip).Length)" | Set-Content res.txt }
-          $H = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json" }
+          $H = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json"; "User-Agent" = "fc" }
           $api = "https://api.github.com"
+          $rel = Invoke-RestMethod "$api/repos/Zrips/CoreProtect/releases?per_page=100" -Headers $H
+          $cands = $rel | ForEach-Object { $_.assets | Where-Object { $_.name -match '\.jar$' } | Select-Object -First 1 -Expand browser_download_url }
+          "candidate:"; $cands | Select-Object -First 8
+          $pick = $cands | Where-Object { $_ -match '21\.2|21_2|latest' } | Select-Object -First 1
+          if (-not $pick) { $pick = $cands | Select-Object -First 1 }
+          "pick: $pick"
+          Invoke-WebRequest -UseBasicParsing $pick -OutFile cp.jar -TimeoutSec 120
+          Add-Type -A System.IO.Compression.FileSystem
+          $z=[IO.Compression.ZipFile]::OpenRead("$pwd\cp.jar"); $has=($z.Entries.FullName -contains 'config.yml'); $z.Dispose()
+          $res = "CP-OK size=$((Get-Item cp.jar).Length) valid=$has url=$pick"
+          Compress-Archive cp.jar cp.zip -Force
+          $H2 = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json" }
           $zipb = [Convert]::ToBase64String([IO.File]::ReadAllBytes("cp.zip"))
-          $repb = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes((Get-Content res.txt -Raw)))
-          foreach ($f in @(@{p="diag/cp.zip.b64";c=$zipb}, @{p="diag/pc-cp.txt";c=$repb})) {
+          foreach ($f in @(
+            @{p="diag/cp.zip.b64"; body=@{ message="cpjar $(Get-Random)"; content=$zipb; branch="$env:GITHUB_REF_NAME"; encoding="base64" }},
+            @{p="diag/pc-cp.txt"; body=@{ message="cpreport $(Get-Random)"; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($res)); branch="$env:GITHUB_REF_NAME" }})) {
             $sha=$null
-            try { $cur=Invoke-RestMethod "$api/repos/iZentric/ServerRolePlayLite/contents/$($f.p)?ref=$env:GITHUB_REF_NAME" -Headers $H -EA SilentlyContinue; if($cur){$sha=$cur.sha} } catch {}
-            $b = @{ message="cp $(Get-Random)"; content=$f.c; branch="$env:GITHUB_REF_NAME" } | ConvertTo-Json -Compress -Depth 4
-            if ($f.p -eq "diag/cp.zip.b64") { $b2 = @{ message="cp $(Get-Random)"; content=$f.c; branch="$env:GITHUB_REF_NAME"; encoding="base64" } | ConvertTo-Json -Compress -Depth 4; $b=$b2 }
-            if ($sha) { $obj = $b | ConvertFrom-Json; $obj | Add-Member sha $sha; $b = $obj | ConvertTo-Json -Compress -Depth 4 }
-            try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/$($f.p)" -Headers $H -ContentType "application/json" -Body $b | Out-Null } catch { Write-Host "push fail $($f.p): $($_.Exception.Message)" }
+            try { $cur=Invoke-RestMethod "$api/repos/iZentric/ServerRolePlayLite/contents/$($f.p)?ref=$env:GITHUB_REF_NAME" -Headers $H2 -EA SilentlyContinue; if($cur){$sha=$cur.sha} } catch {}
+            if ($sha) { $f.body["sha"]=$sha }
+            try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/$($f.p)" -Headers $H2 -ContentType "application/json" -Body ($f.body|ConvertTo-Json -Compress -Depth 4) | Out-Null } catch { Write-Host "push fail: $($_.Exception.Message)" }
           }
+          $res
         env:
           GH_TOKEN: ${{ github.token }}
