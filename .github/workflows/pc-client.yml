@@ -18,8 +18,9 @@ jobs:
           $api="https://api.github.com"
           $H=@{ Authorization="token $env:GH_TOKEN"; Accept="application/vnd.github+json"; "User-Agent"="fc" }
           function PutFile($path,$txt,$msg){
-            $b=@{ message=$msg; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($txt)); branch="$env:GITHUB_REF_NAME" } | ConvertTo-Json -Compress -Depth 4
-            try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/$path" -Headers $H -ContentType "application/json" -Body $b -EA Stop | Out-Null } catch { "push fail $path" }
+            $b=@{ message=$msg; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($txt)); branch="$env:GITHUB_REF_NAME" }
+            try { $b.sha=(Invoke-RestMethod -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/$path?ref=$env:GITHUB_REF_NAME" -Headers $H -EA Stop).sha } catch {}
+            try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/$path" -Headers $H -ContentType "application/json" -Body ($b|ConvertTo-Json -Compress -Depth 4) -EA Stop | Out-Null } catch { Write-Host "push fail $path : $($_.Exception.Message)" }
           }
           $inst="$env:APPDATA\PrismLauncher\instances"
           $dstJ="$env:APPDATA\PrismLauncher\java\jdk8u-functity"
@@ -31,6 +32,15 @@ jobs:
             foreach($n in @("FunCity","CUANTIC-Client-1.7.7")){
               $m=Join-Path $inst "$n\minecraft\mods"
               if(Test-Path $m){
+                # Doar optimizari active in joc; restul nu se mai incarca.
+                $disabled=@()
+                foreach($f in @(Get-ChildItem $m -File -Filter *.jar)){
+                  if($f.Name -match '(?i)^(dynamic[-_]?fps|lazydfu|oculus|TextruesRubidiumOptions)'){
+                    try { Rename-Item -LiteralPath $f.FullName -NewName ($f.Name+'.disabled') -ErrorAction Stop; $disabled+= $f.Name }
+                    catch { $rep += "NU POT dezactiva $($f.Name): $($_.Exception.Message)" }
+                  }
+                }
+                $rep += "$n : dezactivate=[$($disabled -join ', ')]"
                 $all=@(Get-ChildItem $m -Filter *.jar)
                 $junk=@($all | Where-Object {$_.Name -match 'dynamic|surroundings|^CTM|notenoughanim|lightfall|AccountSwitch'})
                 $rep += "$n : mods=$($all.Count) gunoi=$($junk.Count)"
