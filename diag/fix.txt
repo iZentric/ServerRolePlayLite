@@ -1,11 +1,1 @@
-BAZA ORIGINALA vs server PC 2026-10-18T14:49:51
-Sursa originala Freeroam.1.0.0.zip (rebrand FunCity 1.0.0), NU zip-ul nou FUNCTITY-SERVER.zip
-Client original: 28 jar-uri; explicit client-only: 
-Client original absent ca nume pe server: CTM-MC1.16.1-1.1.2.6.jar, DynamicSurroundings-1.16.5-4.0.5.0.jar, InGameAccountSwitcher-Forge-1.16-8.0.1.jar, lightfallclient-1.0.0.jar, notenoughanimations-1.2.4.jar, oculus-mc1.16.5-1.4.7.jar, rubidium-mc1.16.5-0.2.13.jar, TextruesRubidiumOptions-1.0.8-mc1.16.5.jar, TRansliterationLib-1.0.4.jar, voicechat-forge-1.16.5-2.3.23.jar
-Server original live: mods=36 plugins=12
-Server PC acum: mods=34 plugins=13; proces=1 port-local=True
-Excluse intentionat: moduri audio/voice, Dynamic FPS (AFK) si spark (profiler, nu optimizeaza normal)
-Lipsesc din serverul original, inclusiv exceptiile de mai sus: spark-1.9.1-forge.jar, voicechat-forge-1.16.5-2.3.23.jar
-In plus fata de serverul original: 
-Pluginuri lipsa: 
-Pluginuri in plus: CoreProtect.jar
+[15:02:23] v4: START, tintea C:\Users\Administrator\Desktop\FunCityLocal\server
