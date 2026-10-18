@@ -4,7 +4,8 @@ on:
   push:
     paths:
       - .github/workflows/pc-probe.yml
-permissions: {}
+permissions:
+  contents: write
 jobs:
   probe:
     runs-on: [self-hosted, Windows]
@@ -12,13 +13,16 @@ jobs:
     steps:
       - name: Verifica rapid PC-ul si serverul local
         shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           $ErrorActionPreference = 'Stop'
+          $report = @("PC probe $(Get-Date -Format s)")
           $server = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
           $client = Join-Path $env:APPDATA 'PrismLauncher\instances\FunCity\minecraft\mods'
-          Write-Host "PC runner: $env:COMPUTERNAME; cont: $env:USERNAME"
-          Write-Host "Server b1.0827: $(Test-Path (Join-Path $server 'FunCityEngine.jar'))"
-          Write-Host "Prism FunCity: $(Test-Path $client); Clumps: $(Test-Path (Join-Path $client 'Clumps-6.0.0.28.jar'))"
+          $report += "PC runner: $env:COMPUTERNAME; cont: $env:USERNAME"
+          $report += "Server b1.0827: $(Test-Path (Join-Path $server 'FunCityEngine.jar'))"
+          $report += "Prism FunCity: $(Test-Path $client); Clumps: $(Test-Path (Join-Path $client 'Clumps-6.0.0.28.jar'))"
           foreach ($port in @(25565, 25575)) {
             $tcp = New-Object Net.Sockets.TcpClient
             $open = $false
@@ -29,6 +33,21 @@ jobs:
                 $open = $true
               }
             } catch { } finally { $tcp.Close() }
-            Write-Host "127.0.0.1:${port} deschis: $open"
+            $report += "127.0.0.1:${port} deschis: $open"
           }
-          # Portul RCON deschis nu demonstreaza autentificarea; nu citim sau afisam parola.
+          # Raportul nu contine parola RCON sau continutul altor fisiere de pe PC.
+          $text = $report -join "`n"
+          Write-Host $text
+          $base = 'https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/pc-probe.txt'
+          $headers = @{ Authorization = ('Bearer ' + $env:GH_TOKEN); Accept = 'application/vnd.github+json'; 'User-Agent' = 'FunCity' }
+          $uri = $base + '?ref=' + [uri]::EscapeDataString($env:GITHUB_REF_NAME)
+          $existing = Invoke-RestMethod -Uri $uri -Headers $headers -ErrorAction Stop
+          $body = @{
+            message = 'PC quick probe'
+            branch = $env:GITHUB_REF_NAME
+            sha = $existing.sha
+            content = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($text))
+          } | ConvertTo-Json -Compress
+          Invoke-RestMethod -Method Put -Uri $base -Headers $headers -ContentType 'application/json' -Body $body -ErrorAction Stop | Out-Null
+          Write-Host 'Raport PC actualizat'
+          # Portul RCON deschis nu demonstreaza autentificarea.
