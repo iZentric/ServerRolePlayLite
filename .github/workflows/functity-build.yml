@@ -127,6 +127,32 @@ jobs:
           print('PRE-FLIGHT: pack 36 moduri / 14 pluginuri; boot reusit; nu este benchmark de capacitate')
           PY
 
+      - name: Verifica numele FunCity in bytecode-ul instalat, nu doar in sursa
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, subprocess, zipfile
+          stage = Path('/tmp/fc-smoke/stage')
+          candidates = [stage / 'FunCity.jar', *stage.joinpath('libraries').rglob('*.jar')]
+          found = []
+          for jar in candidates:
+              try:
+                  with zipfile.ZipFile(jar) as z:
+                      if 'com/mohistmc/MohistMC.class' not in z.namelist():
+                          continue
+              except zipfile.BadZipFile:
+                  raise SystemExit(f'JAR invalid in bootstrap: {jar}')
+              result = subprocess.run(['javap', '-constants', '-classpath', str(jar),
+                                       'com.mohistmc.MohistMC'], capture_output=True, text=True, timeout=30)
+              if result.returncode or not re.search(r'\bNAME\s*=\s*"FunCity"\s*;', result.stdout):
+                  raise SystemExit(f'bytecode fara constanta FunCity: {jar}: {result.stderr[-300:]}')
+              found.append(str(jar.relative_to(stage)))
+          if not found:
+              raise SystemExit('clasa MohistMC negasita in JAR-ul instalat/biblioteci')
+          print('BRANDING_BYTECODE_VALIDAT:', found)
+          PY
+
       - name: CoreProtect verificat din proiectul original (doar copia de test)
         run: |
           set -euo pipefail
