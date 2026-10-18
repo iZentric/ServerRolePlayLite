@@ -33,7 +33,16 @@ jobs:
             $jars = @(Get-ChildItem -LiteralPath $mods -Filter '*.jar' -File -ErrorAction SilentlyContinue)
             $report += "$name : jar-uri=$($jars.Count)"
             if (Test-Path $cfg) {
-              foreach ($line in @(Get-Content -LiteralPath $cfg | Where-Object { $_ -match '^(OverrideMemory|MinMemAlloc|MaxMemAlloc)=' })) {
+              $cfgLines = [IO.File]::ReadAllLines($cfg)
+              $oldArgs = 'JavaArguments=-Xms1G -Xmx2500M -XX:+UseG1GC -XX:+ParallelRefProcEnabled'
+              if ($cfgLines -ccontains $oldArgs) {
+                $cfgLines = @($cfgLines | ForEach-Object {
+                  if ($_ -ceq $oldArgs) { $_.Replace('-Xms1G', '-Xms256M') } else { $_ }
+                })
+                [IO.File]::WriteAllLines($cfg, [string[]]$cfgLines, [Text.UTF8Encoding]::new($false))
+                $report += "$name : Xms 1G -> 256M (Xmx 2500M pastrat)"
+              }
+              foreach ($line in @($cfgLines | Where-Object { $_ -match '^(OverrideMemory|MinMemAlloc|MaxMemAlloc)=' })) {
                 $report += "$name : $line"
               }
               foreach ($line in @(Get-Content -LiteralPath $cfg | Where-Object { $_ -match '^JavaArguments=' })) {
@@ -48,7 +57,15 @@ jobs:
             }
             $shaders = Join-Path $instance 'minecraft\config\oculus.properties'
             if (Test-Path $shaders) {
-              $enabled = @(Get-Content -LiteralPath $shaders | Where-Object { $_ -match '^enableShaders=true$' }).Count -gt 0
+              $shaderLines = [IO.File]::ReadAllLines($shaders)
+              if ($shaderLines -contains 'enableShaders=true') {
+                $shaderLines = @($shaderLines | ForEach-Object {
+                  if ($_ -eq 'enableShaders=true') { 'enableShaders=false' } else { $_ }
+                })
+                [IO.File]::WriteAllLines($shaders, [string[]]$shaderLines, [Text.UTF8Encoding]::new($false))
+                $report += "$name : shaders dezactivati; Oculus pastrat"
+              }
+              $enabled = @($shaderLines | Where-Object { $_ -match '^enableShaders=true$' }).Count -gt 0
               $report += "$name : shaders activati=$enabled"
             }
           }
