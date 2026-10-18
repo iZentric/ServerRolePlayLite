@@ -1,10 +1,5 @@
-Sun Oct 18 10:53:27 UTC 2026
-total intrari: 15077
-primele: bukkit.yml | catserver.yml | commands.yml | connectivity-common.toml | ferritecore-mixin.toml | forge-common.toml
-hits: 23
-fisierete extrase: 4
-### PROPS server.properties/server.properties
-  entity-broadcast-range-percentage=100 | max-players=150 | max-tick-time=60000 | network-compression-threshold=256 | player-idle-timeout=0 | use-native-transport=true | view-distance=12
-### SPIGOT spigot.yml/spigot.yml
-  netty-threads: 4 | players: | mob-spawn-range: 8 | item-despawn-rate: 4000 | animals: 16 | monsters: 24 | misc: 8 | tick-inactive-villagers: false | players: 48 | animals: 48 | monsters: 48 | misc: 32 | other: 64
-exit=0
+Sun Oct 18 10:54:03 UTC 2026
+Traceback (most recent call last):
+  File "<stdin>", line 13, in <module>
+ValueError: [digital envelope routines: EVP_DigestInit_ex] disabled for FIPS
+exit=1
