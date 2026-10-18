@@ -11,29 +11,36 @@ jobs:
     runs-on: [self-hosted, Windows]
     steps:
       - uses: actions/checkout@v4
-      - name: Descarca CoreProtect si impinge pe branch
+      - name: CoreProtect via PC
         shell: powershell
         run: |
-          $ErrorActionPreference='Continue'
-          Set-Location $env:GITHUB_WORKSPACE
-          $t = Join-Path $env:RUNNER_TEMP "cp.jar"
-          $ok=$false
-          foreach ($u in @("https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar","https://github.com/PlayPro/CoreProtect/releases/download/v21.1/CoreProtect-21.1.jar")) {
-            try { Invoke-WebRequest -UseBasicParsing $u -OutFile $t -TimeoutSec 120; if ((Get-Item $t).Length -gt 500000) { $ok=$true; "ok: $u"; break } } catch { "esec $u" }
-          }
-          if (-not $ok) { "CP-ESUAT" | Set-Content diag/pc-cp.txt; }
-          else {
-            $b64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($t))
-            # felii ca git sa nu crahuiasca de linie lunga
-            $b64 -replace '(.{76})','$1' + "`n" | Out-Null
-            ($b64.ToCharArray() | ForEach-Object { $_ } | Out-String) # noop
-            [IO.File]::WriteAllText("$PWD\diag\CoreProtect.jar.b64", $b64)
-            "CP-OK size=$((Get-Item $t).Length) $(Get-Date -Format HH:mm)" | Set-Content diag/pc-cp.txt
-          }
-          git config user.email pc@functity.local; git config user.name functity-pc
-          git add -f diag/CoreProtect.jar.b64 diag/pc-cp.txt
-          git commit -qm "cp jar through pc $(Get-Random)"
-          git -c "http.https://github.com/.extraheader=Authorization: Bearer $env:GH_TOKEN" push origin "HEAD:$env:GITHUB_REF_NAME" 2>&1 | ForEach-Object { "$_" }
-          "PUSH: $LASTEXITCODE"
+          $steps = @()
+          try {
+            Set-Location $env:GITHUB_WORKSPACE
+            $steps += "cwd ok"
+            $t = Join-Path $env:RUNNER_TEMP "cp.jar"
+            $ok = $false
+            foreach ($u in @("https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar","https://github.com/PlayPro/CoreProtect/releases/download/v21.1/CoreProtect-21.1.jar")) {
+              try { Invoke-WebRequest -UseBasicParsing $u -OutFile $t -TimeoutSec 120; if ((Get-Item $t).Length -gt 500000) { $ok = $true; $steps += "dl ok"; break } } catch { $steps += "dl esec" }
+            }
+            if ($ok) {
+              $b64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($t))
+              Set-Content -Path "diag/CoreProtect.jar.b64" -Value $b64 -NoNewline -Encoding ascii
+              $steps += "wrote $((Get-Item diag/CoreProtect.jar.b64).Length)B"
+              $h = git status --porcelain
+              $steps += "dirty: [$h]"
+              git config user.email pc@functity.local
+              git config user.name functity-pc
+              git add -f diag/CoreProtect.jar.b64
+              git commit -m "cp via pc $($steps -join ' | ')"
+              $steps += "commit $LASTEXITCODE"
+              git push origin "HEAD:$env:GITHUB_REF_NAME" 2> pusherr.txt
+              $steps += "push $LASTEXITCODE : $(Get-Content pusherr.txt -Raw)"
+            }
+          } catch { $steps += "EX: $($_.Exception.Message)" }
+          Add-Content -Path "$env:GITHUB_WORKSPACE\diag\pc-cp.txt" -Value ($steps -join " ;; ")
+          git add -f diag/pc-cp.txt
+          git commit -qm "cp steps $(Get-Random)"
+          git push origin "HEAD:$env:GITHUB_REF_NAME" 2>$null
         env:
           GH_TOKEN: ${{ github.token }}
