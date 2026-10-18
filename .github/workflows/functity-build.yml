@@ -115,7 +115,7 @@ jobs:
                "pack_sha256": "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15",
                "boot_jar": "FunCity.jar", "install_timeout": 480, "boot_timeout": 360,
                "java_args": ["-Xms1G", "-Xmx3G"],
-               "props": {"server-ip": "127.0.0.1", "server-port": "25565", "online-mode": "false", "view-distance": "5"}}
+               "props": {"server-ip": "127.0.0.1", "server-port": "25565", "online-mode": "false", "view-distance": "5", "level-seed": "20261018"}}
           with open('/tmp/fc-smoke/arm.json', 'w') as f: json.dump(c, f)
           PY
           FC_JAR="/tmp/fc/FunCity-1.16.5-${BUILD_ID}.jar" \
@@ -227,7 +227,7 @@ jobs:
           fields = ('boot_medie_s', 'rss_medie_mb', 'cpu_medie_pct', 'gc_pauza_max_ms')
           result = {'candidate_sha256': ab.get('engine_sha256'), 'current_sha256': bb.get('engine_sha256'),
                     'both_bot_arms_valid': both_valid,
-                    'method': 'matched runner, pack sha pinned, Java 11, two 90s idle trials/arm + three fake players moving for 40s/arm; order not randomized',
+                    'method': 'matched runner, pack sha pinned, fixed seed 20261018, view 5, Java 11, two 90s idle trials/arm + three fake players moving for 40s/arm; order not randomized',
                     'limits': 'NOT human capacity, client Forge handshake, PC measurement or 10-year reliability proof',
                     'candidate_idle': {k: a.get(k) for k in fields}, 'current_idle': {k: b.get(k) for k in fields},
                     'candidate_bots': {k: ab.get(k) for k in ('active_40s_cpu_seconds', 'active_40s_rss_max_mib')},
