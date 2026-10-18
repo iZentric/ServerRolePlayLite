@@ -1,11 +1,80 @@
-BAZA ORIGINALA vs server PC 2026-10-18T15:05:11
-Sursa originala Freeroam.1.0.0.zip (rebrand FunCity 1.0.0), NU zip-ul nou FUNCTITY-SERVER.zip
-Client original: 28 jar-uri; explicit client-only: 
-Client original absent ca nume pe server: CTM-MC1.16.1-1.1.2.6.jar, DynamicSurroundings-1.16.5-4.0.5.0.jar, InGameAccountSwitcher-Forge-1.16-8.0.1.jar, lightfallclient-1.0.0.jar, notenoughanimations-1.2.4.jar, oculus-mc1.16.5-1.4.7.jar, rubidium-mc1.16.5-0.2.13.jar, TextruesRubidiumOptions-1.0.8-mc1.16.5.jar, TRansliterationLib-1.0.4.jar, voicechat-forge-1.16.5-2.3.23.jar
-Server original live: mods=36 plugins=12
-Server PC acum: mods=34 plugins=13; proces=1 port-local=True
-Excluse intentionat: moduri audio/voice, Dynamic FPS (AFK) si spark (profiler, nu optimizeaza normal)
-Lipsesc din serverul original, inclusiv exceptiile de mai sus: spark-1.9.1-forge.jar, voicechat-forge-1.16.5-2.3.23.jar
-In plus fata de serverul original: 
-Pluginuri lipsa: 
-Pluginuri in plus: CoreProtect.jar
+Conectare Prism -> FunCity 2026-10-18T15:05:14
+port 127.0.0.1:25565=True
+port ::1:25565=False
+server.bind=server-port=25565;server-ip=127.0.0.1
+FunCity log=600 linii
+[18Oct2026 16:00:30.374] [Netty Client IO #0/ERROR] [net.minecraftforge.fml.network.NetworkRegistry/NETREGISTRY]: Channels [roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecraftmodernxl,cgm:play,pizzamod:mcreator,vehi
+[18Oct2026 16:00:30.374] [Netty Client IO #0/ERROR] [net.minecraftforge.fml.network.NetworkRegistry/NETREGISTRY]: Channels [roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecraftmodernxl,cgm:play,pizzamod:mcreator,vehi
+[18Oct2026 16:00:48.727] [Netty Client IO #2/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@
+[18Oct2026 16:00:48.727] [Netty Client IO #2/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:00:49.536] [main/INFO] [net.minecraft.client.gui.screen.ConnectingScreen/]: Connecting to localhost, 25565
+[18Oct2026 16:00:51.805] [main/ERROR] [net.minecraftforge.registries.GameData/REGISTRIES]: Unidentified mapping from registry minecraft:entity_type
+[18Oct2026 16:00:51.807] [main/ERROR] [net.minecraftforge.fml.network.FMLHandshakeHandler/FMLHANDSHAKE]: Missing registry data for network connection:
+[18Oct2026 16:00:51.807] [Netty Client IO #4/ERROR] [net.minecraftforge.fml.network.FMLHandshakeHandler/FMLHANDSHAKE]: Failed to load registry, closing connection.
+[18Oct2026 16:00:51.807] [Netty Client IO #4/ERROR] [net.minecraftforge.fml.network.FMLHandshakeHandler/FMLHANDSHAKE]: Connection closed, not continuing handshake
+[18Oct2026 16:00:53.023] [Netty Client IO #7/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@
+[18Oct2026 16:00:53.023] [Netty Client IO #7/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:00:53.749] [main/INFO] [net.minecraft.client.gui.screen.ConnectingScreen/]: Connecting to localhost, 25565
+[18Oct2026 16:00:54.758] [main/ERROR] [net.minecraftforge.registries.GameData/REGISTRIES]: Unidentified mapping from registry minecraft:entity_type
+[18Oct2026 16:00:54.758] [main/ERROR] [net.minecraftforge.fml.network.FMLHandshakeHandler/FMLHANDSHAKE]: Missing registry data for network connection:
+[18Oct2026 16:00:54.758] [Netty Client IO #8/ERROR] [net.minecraftforge.fml.network.FMLHandshakeHandler/FMLHANDSHAKE]: Failed to load registry, closing connection.
+[18Oct2026 16:00:54.759] [Netty Client IO #8/ERROR] [net.minecraftforge.fml.network.FMLHandshakeHandler/FMLHANDSHAKE]: Connection closed, not continuing handshake
+[18Oct2026 16:01:05.665] [Netty Client IO #10/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr
+[18Oct2026 16:01:05.666] [Netty Client IO #10/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:01:14.316] [Netty Client IO #13/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr
+[18Oct2026 16:01:14.316] [Netty Client IO #13/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:01:14.712] [Netty Client IO #1/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@
+[18Oct2026 16:01:14.712] [Netty Client IO #1/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:04:39.364] [Netty Client IO #3/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@
+[18Oct2026 16:04:39.364] [Netty Client IO #3/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+CUANTIC-Client-1.7.7 log=600 linii
+[18Oct2026 13:36:17.688] [Netty Client IO #0/ERROR] [net.minecraftforge.fml.network.NetworkRegistry/NETREGISTRY]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecr
+[18Oct2026 13:36:17.688] [Netty Client IO #0/ERROR] [net.minecraftforge.fml.network.NetworkRegistry/NETREGISTRY]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecr
+[18Oct2026 14:34:45.991] [Netty Client IO #6/ERROR] [net.minecraftforge.fml.network.NetworkRegistry/NETREGISTRY]: Channels [pizzamod:mcreator,vehicle:play,cfm:network,roadstuff:roadstuff_channel,pizzamod:custom,selene:network,minecraftmodernxl:minecr
+moduri server fara acelasi nume in FunCity: AI-Improvements-1.16.5-0.5.0.jar, bwncr-1.16.5-3.10.16.jar, connectivity-2.4-1.16.5.jar, FastFurnace-1.16.5-4.5.0.jar, FastSuite-1.16.4-1.1.1.jar, FastWorkbench-1.16.5-4.6.2.jar, getittogetherdrops-1.16.5-v1.2.jar, incontrol-1.16-5.2.12.jar, Ksyxis-1.4.6.jar, letmedespawn-forge-1.16-1.0.2a.jar, memoryleakfix-forge-pre1.17-1.1.5.jar, Placebo-1.16.5-4.7.1.jar, RoadRunner-mc1.16.5-1.5.2.jar, smoothchunk1.16.5-2.0.jar, SpawnerFix-1.16.2-1.0.0.3.jar
+acelasi nume dar SHA256 diferit: additional-guns-0.7.1-1.16.5.jar, cfm-7.0.0pre22-1.16.3.jar, cgm-1.2.6-1.16.5.jar, emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar, ferritecore-2.1.1-forge.jar, mapperbase-1.16.5-2.4.0.0.jar, modernlife-1.16.5-1.15.jar, Modernxl 1.16.5.jar, pamhc2foodcore-1.16.3-1.0.2.jar, Pizzaland_v68.jar, roadstuff-1.16.5-4.3.0.jar, supplementaries-1.16.5-0.18.4b.jar, vehicle-mod-0.45.2-1.16.5 (1).jar
+REGISTRY ERROR context:
+[18Oct2026 16:00:54.758] [main/ERROR] [net.minecraftforge.registries.GameData/REGISTRIES]: Unidentified mapping from registry minecraft:entity_type
+	clumps:xp_orb_big: 113
+[18Oct2026 16:00:54.758] [main/ERROR] [net.minecraftforge.fml.network.FMLHandshakeHandler/FMLHANDSHAKE]: Missing registry data for network connection:
+	minecraft:entity_type: clumps:xp_orb_big
+[18Oct2026 16:00:54.758] [Netty Client IO #8/ERROR] [net.minecraftforge.fml.network.FMLHandshakeHandler/FMLHANDSHAKE]: Failed to load registry, closing connection.
+[18Oct2026 16:01:05.665] [Netty Client IO #10/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@1.16.5-3.10.16, letmedespawn@1.16.5-forge-1.16-1.0.2a, fastfurnace@4.5.0, aiimprovements@0.4.0, fastsuite@1.1.1, clumps@6.0.0.28, fastbench@4.6.2, pl
+[18Oct2026 16:01:05.666] [Netty Client IO #10/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:01:14.316] [Netty Client IO #13/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@1.16.5-3.10.16, letmedespawn@1.16.5-forge-1.16-1.0.2a, fastfurnace@4.5.0, aiimprovements@0.4.0, fastsuite@1.1.1, clumps@6.0.0.28, fastbench@4.6.2, pl
+[18Oct2026 16:01:14.316] [Netty Client IO #13/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:01:14.712] [Netty Client IO #1/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@1.16.5-3.10.16, letmedespawn@1.16.5-forge-1.16-1.0.2a, fastfurnace@4.5.0, aiimprovements@0.4.0, fastsuite@1.1.1, clumps@6.0.0.28, fastbench@4.6.2, pla
+[18Oct2026 16:01:14.712] [Netty Client IO #1/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:04:39.364] [Netty Client IO #3/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@1.16.5-3.10.16, letmedespawn@1.16.5-forge-1.16-1.0.2a, fastfurnace@4.5.0, aiimprovements@0.4.0, fastsuite@1.1.1, clumps@6.0.0.28, fastbench@4.6.2, pla
+[18Oct2026 16:04:39.364] [Netty Client IO #3/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:04:42.563] [CullThread/INFO] [STDOUT/]: [dev.tr7zw.entityculling.CullTask:run:152]: Shutting down culling task!
+[18Oct2026 16:04:42.570] [main/INFO] [com.dairymoose.modernlife.core.ModernLifeClient/]: Client logout
+REGISTRY ERROR context:
+[18Oct2026 16:00:54.758] [main/ERROR] [net.minecraftforge.fml.network.FMLHandshakeHandler/FMLHANDSHAKE]: Missing registry data for network connection:
+	minecraft:entity_type: clumps:xp_orb_big
+[18Oct2026 16:00:54.758] [Netty Client IO #8/ERROR] [net.minecraftforge.fml.network.FMLHandshakeHandler/FMLHANDSHAKE]: Failed to load registry, closing connection.
+[18Oct2026 16:01:05.665] [Netty Client IO #10/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@1.16.5-3.10.16, letmedespawn@1.16.5-forge-1.16-1.0.2a, fastfurnace@4.5.0, aiimprovements@0.4.0, fastsuite@1.1.1, clumps@6.0.0.28, fastbench@4.6.2, pl
+[18Oct2026 16:01:05.666] [Netty Client IO #10/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:01:14.316] [Netty Client IO #13/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@1.16.5-3.10.16, letmedespawn@1.16.5-forge-1.16-1.0.2a, fastfurnace@4.5.0, aiimprovements@0.4.0, fastsuite@1.1.1, clumps@6.0.0.28, fastbench@4.6.2, pl
+[18Oct2026 16:01:14.316] [Netty Client IO #13/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:01:14.712] [Netty Client IO #1/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@1.16.5-3.10.16, letmedespawn@1.16.5-forge-1.16-1.0.2a, fastfurnace@4.5.0, aiimprovements@0.4.0, fastsuite@1.1.1, clumps@6.0.0.28, fastbench@4.6.2, pla
+[18Oct2026 16:01:14.712] [Netty Client IO #1/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:04:39.364] [Netty Client IO #3/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Server has additional mods that may be needed on the client: smoothchunk@2.0, memoryleakfix@1.1.5, ksyxis@1.4.6, incontrol@1.16-5.2.12, bwncr@1.16.5-3.10.16, letmedespawn@1.16.5-forge-1.16-1.0.2a, fastfurnace@4.5.0, aiimprovements@0.4.0, fastsuite@1.1.1, clumps@6.0.0.28, fastbench@4.6.2, pla
+[18Oct2026 16:04:39.364] [Netty Client IO #3/INFO] [net.minecraftforge.fml.client.ClientHooks/CLIENTHOOKS]: Client has mods that are missing on server: [radon, entitycollisionfpsfix, out_of_sight]
+[18Oct2026 16:04:42.563] [CullThread/INFO] [STDOUT/]: [dev.tr7zw.entityculling.CullTask:run:152]: Shutting down culling task!
+[18Oct2026 16:04:42.570] [main/INFO] [com.dairymoose.modernlife.core.ModernLifeClient/]: Client logout
+SERVER: [14:48:00] [main/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:sound_event: Object did not get ID it asked for. Name: modernlife:dist_g_plus_one_octave Expected: 1045 Got: 1205
+SERVER: [14:48:00] [main/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:sound_event: Object did not get ID it asked for. Name: modernlife:dist_b_plus_one_octave Expected: 1046 Got: 1206
+SERVER: [14:48:00] [main/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:sound_event: Object did not get ID it asked for. Name: modernlife:dist_hi_e_plus_one_octave Expected: 1047 Got: 1207
+SERVER: [14:48:00] [main/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:entity_type: Object did not get ID it asked for. Name: modernlife:thrown_seed Expected: 114 Got: 201
+SERVER: [14:48:00] [main/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:entity_type: Object did not get ID it asked for. Name: modernlife:bicycle Expected: 115 Got: 202
+SERVER: [14:48:00] [main/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:entity_type: Object did not get ID it asked for. Name: modernlife:dummy Expected: 116 Got: 203
+SERVER: [14:48:01] [Server thread/INFO] [net.minecraft.network.NetworkSystem/]: Using default channel type
+SERVER: [14:55:26] [Netty Server IO #7/WARN] [com.connectivity.Connectivity/]: Login payload for Registry minecraft:block is using 20.8762% of max allowed vanilla size
+SERVER: [14:55:27] [Server thread/INFO] [net.minecraft.network.login.ServerLoginNetHandler/]: com.mojang.authlib.GameProfile@5b32d01[id=0e2f8d53-21b4-32a4-a498-0967ed108270,name=iZentric,properties={},legacy=false] (/127.0.0.1:57045) lost connection: Disconn
+SERVER: [15:00:49] [Netty Server IO #10/WARN] [com.connectivity.Connectivity/]: Login payload for Registry minecraft:block is using 20.8762% of max allowed vanilla size
+SERVER: [15:00:50] [Netty Server IO #10/INFO] [net.minecraftforge.fml.network.FMLHandshakeHandler/]: Client attempting to join with 26 mods : minecraft, radon, minecraftmodernxl, cgm, playeranimator, entitycollisionfpsfix, rubidium, oculus, pamhc2foodcore, m
+SERVER: [15:00:51] [Server thread/INFO] [net.minecraft.network.login.ServerLoginNetHandler/]: com.mojang.authlib.GameProfile@721ce644[id=0e2f8d53-21b4-32a4-a498-0967ed108270,name=iZentric,properties={},legacy=false] (/127.0.0.1:57189) lost connection: Discon
+SERVER: [15:00:53] [Netty Server IO #12/WARN] [com.connectivity.Connectivity/]: Login payload for Registry minecraft:block is using 20.8762% of max allowed vanilla size
+SERVER: [15:00:53] [Netty Server IO #12/INFO] [net.minecraftforge.fml.network.FMLHandshakeHandler/]: Client attempting to join with 26 mods : minecraft, radon, minecraftmodernxl, cgm, playeranimator, entitycollisionfpsfix, rubidium, oculus, pamhc2foodcore, m
+SERVER: [15:00:54] [Server thread/INFO] [net.minecraft.network.login.ServerLoginNetHandler/]: com.mojang.authlib.GameProfile@7ef69070[id=0e2f8d53-21b4-32a4-a498-0967ed108270,name=iZentric,properties={},legacy=false] (/127.0.0.1:57195) lost connection: Discon
