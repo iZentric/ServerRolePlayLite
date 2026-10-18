@@ -231,3 +231,40 @@ jobs:
           $body = @{ message = 'compare first modpack'; branch = $env:GITHUB_REF_NAME; content = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($text)) }
           $body.sha = (Invoke-RestMethod -Uri ($base + '?ref=' + [uri]::EscapeDataString($env:GITHUB_REF_NAME)) -Headers $headers).sha
           Invoke-RestMethod -Method Put -Uri $base -Headers $headers -ContentType 'application/json' -Body ($body | ConvertTo-Json -Compress) | Out-Null
+      - name: Diagnostic conectare Prism la FunCity local
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference='Stop'
+          $r=@("Conectare Prism -> FunCity $(Get-Date -Format s)")
+          foreach($hostIP in @('127.0.0.1','::1')){
+            $tcp=New-Object Net.Sockets.TcpClient
+            try { $w=$tcp.BeginConnect($hostIP,25565,$null,$null); $ok=$w.AsyncWaitHandle.WaitOne(2000); if($ok){$tcp.EndConnect($w)} }
+            catch { $ok=$false } finally { $tcp.Close() }
+            $r += "port $hostIP`:25565=$ok"
+          }
+          $server=Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
+          $r += 'server.bind=' + ((@(Get-Content (Join-Path $server 'server.properties') -ErrorAction SilentlyContinue) | Where-Object {$_ -match '^server-ip=|^server-port='}) -join ';')
+          foreach($instance in @('FunCity','CUANTIC-Client-1.7.7')){
+            $root=Join-Path $env:APPDATA ('PrismLauncher\instances\'+$instance+'\minecraft')
+            $path=Join-Path $root 'logs\latest.log'
+            $lines=@(Get-Content -LiteralPath $path -Tail 600 -ErrorAction SilentlyContinue)
+            $r += "$instance log=$($lines.Count) linii"
+            foreach($line in @($lines | Where-Object { $_ -match '(?i)connect|disconnect|refused|failed|incompatib|mismatch|missing required|handshake|registry|channel|timeout|network|forge.*server' } | Select-Object -Last 35)){
+              $safe=$line -replace '(?i)(password|token|secret)[= :]+\S+', '$1=<redacted>'
+              $safe=$safe -replace '(?i)([a-z0-9.-]+\.)+[a-z]{2,}:\d{2,5}', '<host:port>'
+              $r += ($safe.Substring(0,[Math]::Min($safe.Length,250)))
+            }
+          }
+          $srvLines=@(Get-Content (Join-Path $server 'logs\latest.log') -Tail 250 -ErrorAction SilentlyContinue)
+          foreach($line in @($srvLines | Where-Object {$_ -match '(?i)disconnect|refused|failed|incompatib|mismatch|missing required|handshake|registry|channel|timeout' } | Select-Object -Last 15)){
+            $r += ('SERVER: '+$line.Substring(0,[Math]::Min($line.Length,250)))
+          }
+          $text=$r -join "`n"
+          Write-Host $text
+          $base='https://api.github.com/repos/iZentric/ServerRolePlayLite/contents/diag/fix.txt'
+          $h=@{Authorization=('Bearer '+$env:GH_TOKEN);Accept='application/vnd.github+json';'User-Agent'='FunCity'}
+          $b=@{message='diagnostic conexiune Prism';branch=$env:GITHUB_REF_NAME;content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($text))}
+          $b.sha=(Invoke-RestMethod -Uri ($base+'?ref='+[uri]::EscapeDataString($env:GITHUB_REF_NAME)) -Headers $h).sha
+          Invoke-RestMethod -Method Put -Uri $base -Headers $h -ContentType 'application/json' -Body ($b|ConvertTo-Json -Compress) | Out-Null
