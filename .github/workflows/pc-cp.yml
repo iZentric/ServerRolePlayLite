@@ -10,31 +10,30 @@ jobs:
     timeout-minutes: 8
     runs-on: [self-hosted, Windows]
     steps:
-      - name: Gaseste si descarca CoreProtect
+      - uses: actions/checkout@v4
+      - name: Descarca CoreProtect si impinge pe branch
         shell: powershell
         run: |
           $ErrorActionPreference='Continue'
-          Set-Location $env:RUNNER_TEMP
-          $H = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json"; "User-Agent" = "fc" }
-          $api = "https://api.github.com"
-          $urls = @("https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar","https://github.com/PlayPro/CoreProtect/releases/download/v21.1/CoreProtect-21.1.jar")
-          $pick = $null
-          foreach ($u in $urls) { try { Invoke-WebRequest -UseBasicParsing $u -OutFile cp.jar -TimeoutSec 120; if ((Get-Item cp.jar).Length -gt 500000) { $pick = $u; break } } catch { Write-Host "esec $u" } }
-          "pick: $pick"
-          $res = "CP-OK size=$((Get-Item cp.jar).Length) url=$pick"
-          Copy-Item cp.jar cp.zip
-          $H2 = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json" }
-          $zipb = [Convert]::ToBase64String([IO.File]::ReadAllBytes("cp.zip"))
-          $errs = @()
-          $apiu = "$api/repos/iZentric/ServerRolePlayLite/contents/diag/CoreProtect.jar.b64"
-          $sha=$null
-          try { $cur=Invoke-RestMethod "$apiu?ref=$env:GITHUB_REF_NAME" -Headers $H2 -EA SilentlyContinue; if($cur){$sha=$cur.sha} } catch {}
-          $b = @{ message="cpjar $(Get-Random)"; content=$zipb; branch="$env:GITHUB_REF_NAME"; encoding="base64" }
-          if ($sha) { $b["sha"]=$sha }
-          try { Invoke-RestMethod -Method Put -Uri $apiu -Headers $H2 -ContentType "application/json" -Body ($b|ConvertTo-Json -Compress -Depth 4) | Out-Null; $res += " PUSH-OK" } catch { $errs += "push fail: $($_.Exception.Message) $($_.ErrorDetails.Message)" }
-          if ($errs.Count) { $res += " || " + ($errs -join "; ") }
-          $resb = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($res))
-          try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/diag/pc-cp.txt" -Headers $H2 -ContentType "application/json" -Body (@{ message="cpreport $(Get-Random)"; content=$resb; branch="$env:GITHUB_REF_NAME" }|ConvertTo-Json -Compress -Depth 4) | Out-Null } catch {}
-          Write-Host $res
+          Set-Location $env:GITHUB_WORKSPACE
+          $t = Join-Path $env:RUNNER_TEMP "cp.jar"
+          $ok=$false
+          foreach ($u in @("https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar","https://github.com/PlayPro/CoreProtect/releases/download/v21.1/CoreProtect-21.1.jar")) {
+            try { Invoke-WebRequest -UseBasicParsing $u -OutFile $t -TimeoutSec 120; if ((Get-Item $t).Length -gt 500000) { $ok=$true; "ok: $u"; break } } catch { "esec $u" }
+          }
+          if (-not $ok) { "CP-ESUAT" | Set-Content diag/pc-cp.txt; }
+          else {
+            $b64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($t))
+            # felii ca git sa nu crahuiasca de linie lunga
+            $b64 -replace '(.{76})','$1' + "`n" | Out-Null
+            ($b64.ToCharArray() | ForEach-Object { $_ } | Out-String) # noop
+            [IO.File]::WriteAllText("$PWD\diag\CoreProtect.jar.b64", $b64)
+            "CP-OK size=$((Get-Item $t).Length) $(Get-Date -Format HH:mm)" | Set-Content diag/pc-cp.txt
+          }
+          git config user.email pc@functity.local; git config user.name functity-pc
+          git add -f diag/CoreProtect.jar.b64 diag/pc-cp.txt
+          git commit -qm "cp jar through pc $(Get-Random)"
+          git -c "http.https://github.com/.extraheader=Authorization: Bearer $env:GH_TOKEN" push origin "HEAD:$env:GITHUB_REF_NAME" 2>&1 | ForEach-Object { "$_" }
+          "PUSH: $LASTEXITCODE"
         env:
           GH_TOKEN: ${{ github.token }}
