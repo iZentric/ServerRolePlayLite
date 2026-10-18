@@ -1,7 +1,37 @@
-Sun Oct 18 09:55:39 UTC 2026
-SeleneChat: scos (era fisier mort, fara mods.toml)
-mods acum: 30
-[09:56:43 INFO]: Done (4.168s)! For help, type "help"
-PORT 25565: DESCHIS
-linii warning: 5
+Sun Oct 18 10:07:43 UTC 2026
+ram libera: 5419 MB -> heap 6G
+props: view-distance=6 max-players=40 animals=4 rcon=on
+Traceback (most recent call last):
+  File "/tmp/rcon.py", line 10, in <module>
+    s=socket.create_connection(('127.0.0.1',25575),15); s.settimeout(60)
+  File "/usr/lib64/python3.9/socket.py", line 856, in create_connection
+    raise err
+  File "/usr/lib64/python3.9/socket.py", line 844, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+Traceback (most recent call last):
+  File "/tmp/rcon.py", line 10, in <module>
+    s=socket.create_connection(('127.0.0.1',25575),15); s.settimeout(60)
+  File "/usr/lib64/python3.9/socket.py", line 856, in create_connection
+    raise err
+  File "/usr/lib64/python3.9/socket.py", line 844, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+Traceback (most recent call last):
+  File "/tmp/rcon.py", line 10, in <module>
+    s=socket.create_connection(('127.0.0.1',25575),15); s.settimeout(60)
+  File "/usr/lib64/python3.9/socket.py", line 856, in create_connection
+    raise err
+  File "/usr/lib64/python3.9/socket.py", line 844, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+Traceback (most recent call last):
+  File "/tmp/rcon.py", line 10, in <module>
+    s=socket.create_connection(('127.0.0.1',25575),15); s.settimeout(60)
+  File "/usr/lib64/python3.9/socket.py", line 856, in create_connection
+    raise err
+  File "/usr/lib64/python3.9/socket.py", line 844, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+PORT-NOK
 exit=0
