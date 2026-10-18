@@ -25,14 +25,17 @@ jobs:
           Copy-Item cp.jar cp.zip
           $H2 = @{ Authorization = "token $env:GH_TOKEN"; Accept = "application/vnd.github+json" }
           $zipb = [Convert]::ToBase64String([IO.File]::ReadAllBytes("cp.zip"))
-          foreach ($f in @(
-            @{p="diag/cp.zip.b64"; body=@{ message="cpjar $(Get-Random)"; content=$zipb; branch="$env:GITHUB_REF_NAME"; encoding="base64" }},
-            @{p="diag/pc-cp.txt"; body=@{ message="cpreport $(Get-Random)"; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($res)); branch="$env:GITHUB_REF_NAME" }})) {
-            $sha=$null
-            try { $cur=Invoke-RestMethod "$api/repos/iZentric/ServerRolePlayLite/contents/$($f.p)?ref=$env:GITHUB_REF_NAME" -Headers $H2 -EA SilentlyContinue; if($cur){$sha=$cur.sha} } catch {}
-            if ($sha) { $f.body["sha"]=$sha }
-            try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/$($f.p)" -Headers $H2 -ContentType "application/json" -Body ($f.body|ConvertTo-Json -Compress -Depth 4) | Out-Null } catch { Write-Host "push fail: $($_.Exception.Message)" }
-          }
-          $res
+          $errs = @()
+          $apiu = "$api/repos/iZentric/ServerRolePlayLite/contents/diag/CoreProtect.jar.b64"
+          $sha=$null
+          try { $cur=Invoke-RestMethod "$apiu?ref=$env:GITHUB_REF_NAME" -Headers $H2 -EA SilentlyContinue; if($cur){$sha=$cur.sha} } catch {}
+          $b = @{ message="cpjar $(Get-Random)"; content=$zipb; branch="$env:GITHUB_REF_NAME"; encoding="base64" }
+          if ($sha) { $b["sha"]=$sha }
+          try { Invoke-RestMethod -Method Put -Uri $apiu -Headers $H2 -ContentType "application/json" -Body ($b|ConvertTo-Json -Compress -Depth 4) | Out-Null; $res += " PUSH-OK" } catch { $errs += "push fail: $($_.Exception.Message) $($_.ErrorDetails.Message)" }
+          if ($errs.Count) { $res += " || " + ($errs -join "; ") }
+          $resb = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($res))
+          try { Invoke-RestMethod -Method Put -Uri "$api/repos/iZentric/ServerRolePlayLite/contents/diag/pc-cp.txt" -Headers $H2 -ContentType "application/json" -Body (@{ message="cpreport $(Get-Random)"; content=$resb; branch="$env:GITHUB_REF_NAME" }|ConvertTo-Json -Compress -Depth 4) | Out-Null } catch {}
+          Write-Host $res
+        env:          $res
         env:
           GH_TOKEN: ${{ github.token }}
