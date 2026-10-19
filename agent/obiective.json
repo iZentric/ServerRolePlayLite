@@ -6,10 +6,10 @@
       "id": "F0",
       "titlu": "Orientare si ritual",
       "criteriu": "AGENTS, jurnal, obiective, laborator si init testate; stare verificat/necunoscut",
-      "status": "blocat",
+      "status": "trecut",
       "dovada": [
-        "agent/init.sh: JSON/Python/Bash PASS; YAML 31 PASS; parser smoke PASS",
-        "Pin source patch dry-run blocked by git TLS then codeload SSL EOF; no source verification claimed"
+        "2026-10-19 ./agent/init.sh exit 0: JSON/Python/Bash, YAML 31, 36/36 server inventory, audit fixtures, four pinned Tenet patch apply --check PASS; no Java/game test",
+        "Workspace restored at origin branch 9804b45 without overwriting diag/pc-probe.txt or out/"
       ]
     },
     {

@@ -1,5 +1,7 @@
 # FunCity Lite — baseline istoric pentru validare, NU pachetul lean final (19.10.2026)
 
+> Actualizare V2: `agent/DECIZII.md` este alegerea în vigoare; ținta client are 23/25 moduri istorice, nu toate cele 25 din acest baseline.
+
 **Corecție:** după comparația cu motoarele/configurile de pe PC și prioritatea explicită „fără moduri degeaba”, cele 25 de JAR-uri de mai jos reprezintă numai copia A pentru A/B, **nu lista aleasă pentru publicare**. Ținta este cea mai mică combinație cu RP funcțional și beneficiu real; `agent/alegere-motor-lean.md` definește motorul și poarta de eliminare. Primul A/B client este Out of Sight, separat de Entity Culling. Niciun pack instalat nu a fost schimbat.
 
 **Ce am comparat:** arhiva publică CUANTIC 1.7.7 avea **36 moduri pe server și 14 pluginuri**, nu un client cu 36 JAR-uri (`git show b1ec20c:docs/ENGINE-PACK-AUDIT.md`). Captura făcută de runner din `E:\Administrator\Desktop\FunCity` (`diag/oldcfg-report.txt`) arată în HYPECITY BK configurații pentru CGM, CFM, FerriteCore, AI Improvements, Performant, PlasmoVoice, Aquaculture, Tough As Nails, UsefulBackpacks, XLFoodMod. Prezența configurațiilor este dovadă despre proiect, **nu** că orice mod era încărcat ori că avea FPS bun. CUANTIC avea view 4, broadcast 60%, compresie 512 (`agent/comparatie-proiecte-vechi.md`). Nu există un clasament verificabil al popularității proiectelor sau FPS comparabil de pe laptopurile lor.
