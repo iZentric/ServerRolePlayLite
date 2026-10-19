@@ -67,6 +67,9 @@ def smoke(stage):
                     token in line for token in ('Could not load plugin', 'Error occurred while enabling',
                                                'Exception in server tick loop', 'Failed to start'))]
                 stopped = run.stop(60)
+                versions = sorted(set(re.findall(r'(?<!\d)36\.2\.\d+(?!\d)', text)))
+                print('::notice title=Forge versions mentioned in boot log::' +
+                      (','.join(versions[:8]) if versions else 'NOT_FOUND'))
                 if missing or critical or stopped != 'CLEAN':
                     details = (f'booted but missing active plugins={missing}; '
                                f'critical_log_lines={len(critical)}; shutdown={stopped}')
