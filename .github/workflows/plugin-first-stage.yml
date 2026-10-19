@@ -74,16 +74,16 @@ jobs:
           gh release download v21.2 --repo PlayPro/CoreProtect \
             -p 'CoreProtect-21.2.jar' -O "$root/CoreProtect.jar"
           echo "04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977  $root/CoreProtect.jar" | sha256sum -c -
-      - name: Diagnose pinned engine bootstrap library incompatibility (read-only)
+      - name: Pin official Guava 21 for isolated engine boot diagnosis
         run: |
           set -Eeuo pipefail
           root="$RUNNER_TEMP/fc-plugin-first"
           gh release download v21.0 --repo google/guava -p 'guava-21.0.jar' -O "$root/guava-21.0.jar"
           test "$(stat -c%s "$root/guava-21.0.jar")" = 2521113
-          sha=$(sha256sum "$root/guava-21.0.jar" | cut -d' ' -f1)
+          echo "972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480  $root/guava-21.0.jar" | sha256sum -c -
           javap -classpath "$root/guava-21.0.jar" com.google.common.collect.ImmutableMap \
             | grep 'toImmutableMap(java.util.function.Function' > /dev/null
-          echo "::notice title=Upstream Guava 21 candidate fingerprint::sha256=$sha bytes=2521113 method=toImmutableMap present; NOT injected into engine"
+          echo '::notice title=Guava21 laboratory input::official v21.0 release pinned and toImmutableMap present; classpath override is lab-only'
       - name: Stage exactly zero mods and six pinned plugins on a new isolated copy
         run: |
           set -Eeuo pipefail
@@ -103,5 +103,6 @@ jobs:
       - name: Boot and clean stop on loopback, no public player or benchmark
         run: |
           set -Eeuo pipefail
-          python3 scripts/fc_plugin_first_smoke.py "$RUNNER_TEMP/fc-plugin-first/stage"
+          python3 scripts/fc_plugin_first_smoke.py \
+            "$RUNNER_TEMP/fc-plugin-first/stage" "$RUNNER_TEMP/fc-plugin-first/guava-21.0.jar"
           echo 'Closed boot only. No client login, RP gameplay, capacity or live changes.'

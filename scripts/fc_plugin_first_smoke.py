@@ -13,6 +13,8 @@ import time
 from fc_bench import JvmRun
 from fc_plugin_first_stage import ENGINE_SHA, sha
 
+GUAVA21_SHA = '972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480'
+
 
 def check_stage(stage):
     stage = Path(stage).resolve()
@@ -36,14 +38,19 @@ def check_stage(stage):
     return stage
 
 
-def smoke(stage):
+def smoke(stage, guava21):
     stage = check_stage(stage)
+    guava21 = Path(guava21).resolve()
+    if (not guava21.is_relative_to(Path(os.environ['RUNNER_TEMP']).resolve()) or
+            guava21.name != 'guava-21.0.jar' or sha(guava21) != GUAVA21_SHA):
+        raise ValueError('Guava21 laboratory override missing or wrong SHA')
     # EULA acceptance is confined to this throwaway hosted runner, never published.
     (stage/'eula.txt').write_text('eula=true\n')
     motor = 'FunCity-1.16.5-b1.0827.jar'
     for attempt in (1, 2):
         log = stage/f'boot-attempt-{attempt}.log'
-        run = JvmRun(str(stage), motor, ['-Xms512M', '-Xmx2G'], str(log))
+        run = JvmRun(str(stage), motor,
+                     ['-Xbootclasspath/a:' + str(guava21), '-Xms512M', '-Xmx2G'], str(log))
         run.port = 25565
         try:
             run.start()
@@ -65,6 +72,7 @@ def smoke(stage):
                 print('::notice title=Plugin-first closed boot::'
                       f'engine=b1.0827 sha256={ENGINE_SHA} mods=0 staged_plugins=6 '
                       f'active_core={",".join(required)} boot_attempt={attempt} '
+                      f'guava21_lab_override_sha256={GUAVA21_SHA} '
                       'loopback_only=true online_mode=true whitelist=true; '
                       'NO player login/auth/voice/RP or capacity claim')
                 return True
@@ -97,7 +105,9 @@ def smoke(stage):
 
 def main():
     try:
-        smoke(sys.argv[1])
+        if len(sys.argv) != 3:
+            raise ValueError('expected isolated stage and pinned Guava21 laboratory path')
+        smoke(sys.argv[1], sys.argv[2])
     except (ValueError, KeyError, OSError, IndexError) as exc:
         print('RESPINS:', exc, file=sys.stderr)
         reason = re.sub(r'[^A-Za-z0-9 ._+/():=,-]', '_', str(exc))[:400]
