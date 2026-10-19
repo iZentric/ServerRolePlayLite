@@ -69,6 +69,22 @@ class LeanRepackTest(unittest.TestCase):
             self.assertEqual(voice[0]['env']['client'], 'required')
         self.assertEqual(audit_pack(self.output)['client_mod_count'], 24)
 
+    def test_isolated_no_pizzaland_comparison(self):
+        with self.assertRaisesRegex(ValueError, 'still includes Pizzaland'):
+            audit_pack(self.source, without_pizzaland_lab=True)
+        pin = hashlib.sha256(self.source.read_bytes()).hexdigest()
+        report = repack(self.source, pin, self.output, self.decisions, self.history,
+                        without_pizzaland=True)
+        self.assertEqual(report['client_mod_count'], 23)
+        self.assertIn('pizzaland_v68.jar', report['removed'])
+        with zipfile.ZipFile(self.output) as z:
+            manifest = json.loads(z.read('modrinth.index.json'))
+            self.assertFalse(any('pizzaland' in f['path'].casefold() for f in manifest['files']))
+            with self.assertRaisesRegex(ValueError, 'Pizzaland_'):
+                audit_pack(self.output)
+            self.assertEqual(audit_pack(self.output, without_pizzaland_lab=True)['client_mod_count'], 23)
+        self.assertEqual(hashlib.sha256(self.source.read_bytes()).hexdigest(), pin)
+
     def test_unpinned_voice_metadata_is_rejected(self):
         fake = self.root / 'fake-voice.json'
         data = json.loads((REPO / 'agent/voicechat-1.16.5-2.3.23.json').read_text())

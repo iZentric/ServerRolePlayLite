@@ -54,13 +54,22 @@ def decisions(path, client_decisions, historical, voice_metadata):
 
 
 def stage(source, expected_sha256, destination, decisions_path, historical,
-          voice_metadata=Path('agent/voicechat-1.16.5-2.3.23.json')):
+          voice_metadata=Path('agent/voicechat-1.16.5-2.3.23.json'),
+          without_pizzaland=False):
     source, destination = Path(source), Path(destination)
     if source.resolve() == destination.resolve() or destination.exists():
         raise ValueError('destination must be new and distinct from source')
     if not re.fullmatch('[a-f0-9]{64}', expected_sha256) or digest(source) != expected_sha256:
         raise ValueError('server source SHA256 mismatch; no output written')
     names, keep, removed = decisions(decisions_path, decisions_path, historical, voice_metadata)
+    keep, removed = set(keep), set(removed)
+    if without_pizzaland:
+        optional = 'pizzaland_v68.jar'
+        if optional not in keep:
+            raise ValueError('Pizzaland missing from baseline selection')
+        keep.remove(optional)
+        removed.add(optional)
+    target_count = 28 if without_pizzaland else 29
     with zipfile.ZipFile(source) as archive:
         matches = []
         for item in archive.infolist():
@@ -96,14 +105,15 @@ def stage(source, expected_sha256, destination, decisions_path, historical,
                     jar_digests[names[name]] = h.hexdigest()
             with zipfile.ZipFile(tmp) as output:
                 if {i.filename for i in output.infolist()} != {
-                        'mods/' + names[n] for n in keep} or len(output.infolist()) != 29:
-                    raise ValueError('output differs from 29 selected mods')
+                        'mods/' + names[n] for n in keep} or len(output.infolist()) != target_count:
+                    raise ValueError('output differs from selected mods')
                 if output.testzip() is not None:
                     raise ValueError('output CRC failure')
             result = {'scope': 'isolated server mods-only ZIP, NOT an installed/booted server',
                       'source_sha256': expected_sha256, 'candidate_sha256': digest(tmp),
-                      'candidate_bytes': tmp.stat().st_size, 'server_mod_count': 29,
-                      'shared_client_server_names': 20, 'server_only': 9, 'client_only': 4,
+                      'candidate_bytes': tmp.stat().st_size, 'server_mod_count': target_count,
+                      'shared_client_server_names': 19 if without_pizzaland else 20,
+                      'server_only': 9, 'client_only': 4,
                       'removed': sorted(names[n] for n in removed),
                       'kept_sha256': jar_digests}
             tmp.rename(destination)
@@ -120,11 +130,14 @@ def main():
     p.add_argument('--source-sha256', default=HISTORICAL_SHA256)
     p.add_argument('--decisions', type=Path, default=Path('agent/DECIZII.md'))
     p.add_argument('--historical-client', type=Path, default=Path('diag/pc-client.txt'))
+    p.add_argument('--without-pizzaland', action='store_true',
+                   help='isolated 28-mod comparison only; never touches a server or world')
     p.add_argument('--voice-metadata', type=Path, default=Path('agent/voicechat-1.16.5-2.3.23.json'))
     a = p.parse_args()
     try:
         report = stage(a.source, a.source_sha256, a.output, a.decisions,
-                       a.historical_client, a.voice_metadata)
+                       a.historical_client, a.voice_metadata,
+                       without_pizzaland=a.without_pizzaland)
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
     except (OSError, ValueError, KeyError, IndexError, TypeError, zipfile.BadZipFile,

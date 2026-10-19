@@ -71,7 +71,8 @@ def mod_name(path):
 
 
 def repack(source, expected_sha256, destination, decisions, historical,
-           voice_metadata=Path('agent/voicechat-1.16.5-2.3.23.json')):
+           voice_metadata=Path('agent/voicechat-1.16.5-2.3.23.json'),
+           without_pizzaland=False):
     source, destination = Path(source), Path(destination)
     if source.resolve() == destination.resolve() or destination.exists():
         raise ValueError('destination must be new and distinct from the source')
@@ -80,6 +81,14 @@ def repack(source, expected_sha256, destination, decisions, historical,
     if sha256_file(source) != expected_sha256.lower():
         raise ValueError('source SHA256 mismatch; no output written')
     keep, remove, voice = selection(decisions, historical, voice_metadata)
+    keep, remove = set(keep), set(remove)
+    if without_pizzaland:
+        optional = 'pizzaland_v68.jar'
+        if optional not in keep:
+            raise ValueError('Pizzaland missing from baseline selection')
+        keep.remove(optional)
+        remove.add(optional)
+    target_count = 23 if without_pizzaland else 24
     baseline = audit_pack(source, historical)
     if len(baseline['client_mod_names']) != 25:
         raise ValueError('source is not the historical 25-mod baseline')
@@ -107,8 +116,8 @@ def repack(source, expected_sha256, destination, decisions, historical,
             'downloads': [voice['download']], 'fileSize': voice['size'],
             'env': {'client': 'required', 'server': 'required'},
         }]
-        changed['versionId'] = str(idx['versionId']) + '-lite-beta'
-        changed['name'] = str(idx['name']) + ' Lite Beta'
+        changed['versionId'] = str(idx['versionId']) + ('-lite-no-pizzaland-lab' if without_pizzaland else '-lite-beta')
+        changed['name'] = str(idx['name']) + (' Lite No Pizzaland Lab' if without_pizzaland else ' Lite Beta')
         destination.parent.mkdir(parents=True, exist_ok=True)
         tmp = None
         try:
@@ -128,10 +137,10 @@ def repack(source, expected_sha256, destination, decisions, historical,
                     else:
                         with src.open(info) as inp, out.open(info, 'w') as dest:
                             shutil.copyfileobj(inp, dest, 1024 * 1024)
-            report = audit_pack(tmp)
+            report = audit_pack(tmp, without_pizzaland_lab=without_pizzaland)
             actual = {n.casefold() for n in report['client_mod_names']}
-            if actual != keep or report['client_mod_count'] != 24:
-                raise ValueError('output does not match the 24 chosen client mods')
+            if actual != keep or report['client_mod_count'] != target_count:
+                raise ValueError('output does not match the chosen client mods')
             if set(manifest_removed + override_removed) != remove:
                 raise ValueError('unaccounted removal')
             digest = sha256_file(tmp)
@@ -139,7 +148,7 @@ def repack(source, expected_sha256, destination, decisions, historical,
             return {'scope': 'structural candidate only; NO launcher import/login/FPS',
                     'source_sha256': expected_sha256.lower(), 'output_sha256': digest,
                     'output_bytes': destination.stat().st_size,
-                    'client_mod_count': 24, 'removed': sorted(remove),
+                    'client_mod_count': target_count, 'removed': sorted(remove),
                     'added_remote': voice['filename'],
                     'remote_download_bytes_declared': report['remote_download_bytes_declared']}
         finally:
@@ -154,12 +163,15 @@ def main():
     p.add_argument('--output', required=True, type=Path)
     p.add_argument('--decisions', type=Path, default=Path('agent/DECIZII.md'))
     p.add_argument('--historical', type=Path, default=Path('diag/pc-client.txt'))
+    p.add_argument('--without-pizzaland', action='store_true',
+                   help='isolated 23-mod comparison only; never touches Prism or a world')
     p.add_argument('--voice-metadata', type=Path,
                    default=Path('agent/voicechat-1.16.5-2.3.23.json'))
     a = p.parse_args()
     try:
         print(json.dumps(repack(a.source, a.source_sha256, a.output,
-                                a.decisions, a.historical, a.voice_metadata),
+                                a.decisions, a.historical, a.voice_metadata,
+                                without_pizzaland=a.without_pizzaland),
                               ensure_ascii=False, indent=2))
     except (OSError, ValueError, KeyError, IndexError, TypeError, zipfile.BadZipFile,
             json.JSONDecodeError) as exc:

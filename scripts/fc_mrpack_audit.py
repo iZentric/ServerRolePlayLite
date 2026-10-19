@@ -26,7 +26,9 @@ def safe_path(path):
     return path
 
 
-def audit_pack(archive, historical=None):
+def audit_pack(archive, historical=None, without_pizzaland_lab=False):
+    if historical and without_pizzaland_lab:
+        raise ValueError('no-Pizzaland lab cannot claim to match historical pack')
     with zipfile.ZipFile(archive) as z:
         infos = z.infolist()
         seen_zip = set()
@@ -107,6 +109,10 @@ def audit_pack(archive, historical=None):
                     if sum(n.casefold().startswith(child.casefold()) for n in names) != 1:
                         raise ValueError(f'client dependency missing/duplicated: {parent} -> {child}')
         required = ESSENTIAL + GAMEPLAY
+        if without_pizzaland_lab:
+            required = [p for p in required if p != 'Pizzaland_']
+            if any(n.casefold().startswith('pizzaland_') for n in names):
+                raise ValueError('no-Pizzaland lab still includes Pizzaland')
         missing_required = [p for p in required if sum(n.casefold().startswith(p.casefold()) for n in names) != 1]
         if missing_required:
             raise ValueError(f'historical RP/compatibility mods absent or duplicated: {missing_required}')
@@ -135,9 +141,12 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('pack', type=Path)
     p.add_argument('--historical', type=Path, help='optional exact filename baseline; blocks unknown client changes')
+    p.add_argument('--without-pizzaland-lab', action='store_true',
+                   help='explicitly audit 23-mod experiment; default still requires Pizzaland')
     a = p.parse_args()
     try:
-        report = audit_pack(a.pack, a.historical)
+        report = audit_pack(a.pack, a.historical,
+                            without_pizzaland_lab=a.without_pizzaland_lab)
     except (OSError, KeyError, TypeError, json.JSONDecodeError, zipfile.BadZipFile, ValueError) as e:
         print(f'RESPINS: {e}', file=sys.stderr)
         return 2

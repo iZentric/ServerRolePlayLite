@@ -160,3 +160,33 @@ jobs:
                 f"remote_bytes={a['remote_download_bytes_declared']} "
                 f"new_sha256={c['output_sha256']} source_sha256={c['source_sha256']}")
           PY
+      - name: Stage isolated no-Pizzaland A/B pair (no install or distribution)
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-asset"
+          python3 scripts/fc_server_lite_candidate.py \
+            "$root/CUANTIC-Server-CatServer-1.7.7.zip" --without-pizzaland \
+            --output "$root/server-no-pizzaland-lab.zip" > "$root/server-no-pizzaland.json"
+          python3 scripts/fc_lite_repack.py "$root/FunCity-1.2.5.mrpack" \
+            --source-sha256 cd9c8ddeaff2e02e009934d7a35eba14b1b5a2bc919797ad7a0ab2a92bc5fb47 \
+            --without-pizzaland --output "$root/client-no-pizzaland-lab.mrpack" \
+            > "$root/client-no-pizzaland.json"
+          python3 scripts/fc_mrpack_audit.py "$root/client-no-pizzaland-lab.mrpack" \
+            --without-pizzaland-lab > "$root/client-no-pizzaland-audit.json"
+          python3 - <<'PY'
+          import json, os, pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'fc-asset'
+          get=lambda n: json.loads((root/n).read_text())
+          a=get('candidate-audit.json'); b=get('client-no-pizzaland-audit.json')
+          server=get('server-no-pizzaland.json'); client=get('client-no-pizzaland.json')
+          assert (a['client_mod_count'], b['client_mod_count'], server['server_mod_count']) == (24,23,28)
+          assert 'pizzaland_v68.jar' in client['removed']
+          assert 'Pizzaland_v68.jar' in server['removed']
+          assert server['shared_client_server_names']==19
+          message=(f"A=24 client/{a['archive_bytes']} bytes; B=23 client/{b['archive_bytes']} bytes; "
+                   f"delta={a['archive_bytes']-b['archive_bytes']} bytes; server B=28 mods. "
+                   'STATIC ZIP ONLY: no Forge login, gameplay or FPS.')
+          print('::notice title=No-Pizzaland isolated comparison::'+message)
+          with pathlib.Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as f:
+              f.write('\nNo-Pizzaland A/B lab only: '+message+'\n')
+          PY

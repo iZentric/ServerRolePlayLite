@@ -62,6 +62,19 @@ class ServerLiteTest(unittest.TestCase):
             self.assertNotIn(b'private-config-fixture', self.dest.read_bytes())
         self.assertEqual(hashlib.sha256(self.source.read_bytes()).hexdigest(), pin)
 
+    def test_isolated_no_pizzaland_comparison(self):
+        pin = hashlib.sha256(self.source.read_bytes()).hexdigest()
+        result = stage(self.source, pin, self.dest, self.decisions, self.client,
+                       self.voice, without_pizzaland=True)
+        self.assertEqual((result['server_mod_count'], result['shared_client_server_names'],
+                          result['server_only'], result['client_only']), (28, 19, 9, 4))
+        self.assertIn('Pizzaland_v68.jar', result['removed'])
+        with zipfile.ZipFile(self.dest) as z:
+            self.assertNotIn('mods/Pizzaland_v68.jar', z.namelist())
+            self.assertEqual(len(z.namelist()), 28)
+            self.assertEqual(z.testzip(), None)
+        self.assertEqual(hashlib.sha256(self.source.read_bytes()).hexdigest(), pin)
+
     def test_wrong_pin_missing_and_duplicate_fail_closed(self):
         with self.assertRaisesRegex(ValueError, 'SHA256 mismatch'):
             self.run_stage('0' * 64)
