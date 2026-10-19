@@ -79,6 +79,17 @@ print('smoke parsers PASS (NU este un boot Minecraft)')
 PY
 python3 scripts/fc_client_audit.py --self-test
 python3 scripts/fc_client_audit.py >/dev/null
+python3 - <<'PY'
+from fc_client_audit import INVENTORY
+from pathlib import Path
+inventories=INVENTORY.findall(Path('diag/pc-client.txt').read_text())
+assert len(inventories)==2 and inventories[0]==inventories[1]
+assert len(inventories[0].split(', '))==25
+selection=Path('agent/selectie-lite.md').read_text()
+assert all(tag in selection for tag in ('Conținut RP (11)', 'Biblioteci ale conținutului (4)',
+                                     'Pornire/RAM/randare (6)', 'Vizibilitate (3)', 'Compatibilitate XP (1)'))
+print('Lite selection 25 historical names / five role groups PASS (names only)')
+PY
 echo 'client inventory + historical handshake audit PASS (static, not Forge login/FPS)'
 python3 scripts/fc_mrpack_audit_test.py
 echo 'Lite mrpack fixture audit PASS (synthetic, not a real release download)'
