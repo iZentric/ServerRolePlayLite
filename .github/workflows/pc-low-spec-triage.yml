@@ -1,6 +1,7 @@
-name: PC Lite warning triage and safe obsolete Lab cleanup
-# Inspects without exposing private logs; removes only two exact untouched lab
-# profiles we created, after Minecraft is closed. Never touches LowSpec or user worlds.
+name: PC Lite LazyDFU and safe obsolete Lab cleanup
+# After Minecraft closes: preserve one LowSpec profile, add verified LazyDFU in
+# place, remove only two exact untouched labs we created. Never touch user worlds
+# or EGK / V RP / Fabuliso profiles. Raw game logs stay on the PC.
 on:
   push:
     branches:
@@ -9,6 +10,8 @@ on:
       - .github/workflows/pc-low-spec-triage.yml
       - scripts/fc_pc_lowspec_cleanup.py
       - scripts/fc_pc_lowspec_cleanup_test.py
+      - scripts/fc_pc_lowspec_lazy.py
+      - scripts/fc_pc_lowspec_lazy_test.py
   workflow_dispatch:
 permissions:
   contents: read
@@ -107,4 +110,9 @@ jobs:
           $root = Join-Path $env:APPDATA 'PrismLauncher\instances'
           python scripts/fc_pc_lowspec_cleanup.py --instances $root --apply
           if ($LASTEXITCODE -ne 0) { throw 'Lab cleanup refused' }
-          Write-Output '::notice title=PC safe cleanup::only pristine generated zero/content LAB profiles removed if eligible; LowSpec preserved; world-containing folders always preserved'
+          Write-Output '::notice title=PC safe cleanup::only pristine generated zero/content LAB profiles removed if eligible; LowSpec and all user profiles preserved'
+          python scripts/fc_pc_lowspec_lazy_test.py
+          if ($LASTEXITCODE -ne 0) { throw 'LazyDFU safety fixture failed; no LowSpec changes' }
+          python scripts/fc_pc_lowspec_lazy.py --instances $root --apply
+          if ($LASTEXITCODE -ne 0) { throw 'LazyDFU LowSpec addition refused; inspect source/manifest, do not create another profile' }
+          Write-Output '::notice title=PC LowSpec LazyDFU::in-place verified from old FunCity source; no new Prism instance; EGK VRP Fabuliso untouched'
