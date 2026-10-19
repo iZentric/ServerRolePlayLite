@@ -53,7 +53,7 @@ jobs:
                   print('::notice file=agent/BETA-LITE.md,line=1,title=Large pack entry::'
                         f'{i.filename} compressed_bytes={i.compress_size}')
           PY
-      - name: Verify old server voice JAR against pinned client metadata
+      - name: Compare archived voice code with pinned official binary
         run: |
           set -Eeuo pipefail
           gh release download lite -R "$GITHUB_REPOSITORY" \
@@ -61,26 +61,33 @@ jobs:
           server="$RUNNER_TEMP/fc-asset/CUANTIC-Server-CatServer-1.7.7.zip"
           printf '%s  %s\n' fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15 "$server" | sha256sum -c -
           python3 - <<'PY'
-          import hashlib, json, os, zipfile
+          import hashlib, io, json, os, urllib.request, zipfile
           from pathlib import Path
           root=Path(os.environ['RUNNER_TEMP'])/'fc-asset'
           meta=json.loads(Path('agent/voicechat-1.16.5-2.3.23.json').read_text())
           with zipfile.ZipFile(root/'CUANTIC-Server-CatServer-1.7.7.zip') as z:
               matches=[i for i in z.infolist() if not i.is_dir() and
                        i.filename.split('/')[-1]==meta['filename']]
-              print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Voice archive count::'
-                    f'{len(matches)} entry/entries with expected filename')
               assert len(matches)==1, 'voice JAR missing or ambiguous in historical server'
-              data=z.read(matches[0])
-          h1=hashlib.sha1(data).hexdigest()
-          h512=hashlib.sha512(data).hexdigest()
-          print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Voice binary comparison::'
-                f'archive_bytes={len(data)} official_bytes={meta["size"]} '
-                f'sha1_matches={h1==meta["sha1"]} sha512_matches={h512==meta["sha512"]} '
-                f'archive_sha1={h1}')
-          assert len(data)==meta['size'] and h1==meta['sha1'] and h512==meta['sha512']
-          print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Verified server voice::'
-                f"name={meta['filename']} bytes={len(data)} hashes_equal_official=true")
+              archive=z.read(matches[0])
+          with urllib.request.urlopen(meta['download'],timeout=40) as res:
+              official=res.read(10_000_000)
+              assert not res.read(1), 'voice download unexpectedly large'
+          assert len(official)==meta['size'] and hashlib.sha1(official).hexdigest()==meta['sha1']
+          assert hashlib.sha512(official).hexdigest()==meta['sha512']
+          def classes(jar):
+              with zipfile.ZipFile(io.BytesIO(jar)) as z:
+                  return {n:hashlib.sha256(z.read(n)).hexdigest() for n in z.namelist()
+                          if n.endswith('.class') and not n.endswith('/')}
+          a,b=classes(archive),classes(official)
+          print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Voice bytecode comparison::'
+                f'archive_bytes={len(archive)} official_bytes={len(official)} '
+                f'archive_classes={len(a)} official_classes={len(b)} '
+                f'classes_missing={len(b.keys()-a.keys())} classes_extra={len(a.keys()-b.keys())} '
+                f'classes_changed={sum(a[k]!=b[k] for k in a.keys()&b.keys())}')
+          assert a==b and len(a)>0, 'same filename/version but voice bytecode differs'
+          print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Voice code verified::'
+                'archive and official class files byte-identical; non-class files differ')
           PY
       - name: Build local, non-distributed candidate and audit 24-mod target
         run: |
