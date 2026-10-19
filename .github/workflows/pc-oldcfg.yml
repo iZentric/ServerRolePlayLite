@@ -1,47 +1,11 @@
-name: PC-OLDCFG-READONLY
-# One manual inventory of E:\Administrator\Desktop\FunCity; no update/install/server/PC writes.
+name: RETIRED-PC-OLDCFG
+# Legacy automation disabled: no PC, cloud, site or live writes from this branch.
 on:
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  inventory:
-    runs-on: [self-hosted, Windows]
-    timeout-minutes: 5
+  archived:
+    runs-on: ubuntu-latest
     steps:
-      - name: Citeste numai lista de moduri si cateva chei publice de configurare
-        shell: powershell
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $root = 'E:\Administrator\Desktop\FunCity'
-          if (-not (Test-Path -LiteralPath $root -PathType Container)) {
-            Write-Output 'ROOT_NOT_FOUND'; exit 2
-          }
-          Write-Output 'ROOT_PRESENT'
-          $projects = @(
-            'cuantic',
-            'servere referinta\hypecity',
-            'servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft',
-            'modpack uri\Vision-mods'
-          )
-          foreach ($rel in $projects) {
-            $dir = Join-Path $root $rel
-            Write-Output "PROJECT: $rel"
-            if (-not (Test-Path -LiteralPath $dir -PathType Container)) { Write-Output 'NOT_FOUND'; continue }
-            foreach ($kind in @('mods','plugins')) {
-              $sub = Join-Path $dir $kind
-              if (-not (Test-Path -LiteralPath $sub -PathType Container)) { continue }
-              $jars = @(Get-ChildItem -LiteralPath $sub -File -Filter '*.jar' -ErrorAction Stop | Sort-Object Name)
-              Write-Output ("{0}: jar_count={1}" -f $kind,$jars.Count)
-              foreach ($j in $jars | Select-Object -First 90) { Write-Output ("JAR: {0} ({1} B)" -f $j.Name,$j.Length) }
-            }
-            $props = Join-Path $dir 'server.properties'
-            if (Test-Path -LiteralPath $props -PathType Leaf) {
-              foreach ($line in Get-Content -LiteralPath $props -ErrorAction Stop) {
-                if ($line -match '^(view-distance|max-players|network-compression-threshold|entity-broadcast-range-percentage)=([0-9-]+)$') {
-                  Write-Output ("CONFIG: {0}" -f $line)
-                }
-              }
-            }
-          }
-          Write-Output 'READ_ONLY_COMPLETE; no client FPS or login measured'
+      - run: echo RETIRED-no-action
