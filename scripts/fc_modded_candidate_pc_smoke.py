@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 import sys
 
-from fc_modded_candidate import CHOSEN
+from fc_modded_candidate import CHOSEN, PERFORMANCE
 from fc_plugin_first_pc_smoke import boot
 from fc_plugin_first_stage import ENGINE_SHA, GUAVA21_SHA, sha
 
@@ -17,9 +17,12 @@ def validate(stage):
         raise ValueError('only new PC runner temp stage allowed')
     report = json.loads((stage/'stage-report.json').read_text(encoding='utf-8'))
     mods = report['server_mods']
+    expected = set(CHOSEN + tuple(report['server_optimizers']))
+    if report['server_optimizers'] not in ([], list(PERFORMANCE)):
+        raise ValueError('unknown performance selection')
     if (report['scope'] != 'UNRELEASED local modded compatibility experiment; ownership unverified' or
-            len(mods) != len(CHOSEN) or {m['jar'] for m in mods} != set(CHOSEN) or
-            {p.name for p in (stage/'mods').iterdir()} != set(CHOSEN) or
+            len(mods) != len(expected) or {m['jar'] for m in mods} != expected or
+            {p.name for p in (stage/'mods').iterdir()} != expected or
             any(sha(stage/'mods'/m['jar']) != m['sha256'] for m in mods) or
             sha(stage/'FunCity-1.16.5-b1.0827.jar') != ENGINE_SHA or
             sha(stage/'runtime/guava-21.0.jar') != GUAVA21_SHA or

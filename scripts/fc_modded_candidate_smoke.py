@@ -8,7 +8,7 @@ import sys
 import time
 
 from fc_bench import JvmRun
-from fc_modded_candidate import CHOSEN
+from fc_modded_candidate import CHOSEN, PERFORMANCE
 from fc_plugin_first_stage import ENGINE_SHA, GUAVA21_SHA, sha
 
 
@@ -19,9 +19,12 @@ def run(stage):
         raise ValueError('only isolated hosted runner temp stage allowed')
     report = json.loads((stage/'stage-report.json').read_text())
     entries = report['server_mods']
+    expected = set(CHOSEN + tuple(report['server_optimizers']))
+    if report['server_optimizers'] not in ([], list(PERFORMANCE)):
+        raise ValueError('unknown performance selection')
     if (report['scope'] != 'UNRELEASED local modded compatibility experiment; ownership unverified' or
-            {m['jar'] for m in entries} != set(CHOSEN) or len(entries) != len(CHOSEN) or
-            {p.name for p in (stage/'mods').iterdir()} != set(CHOSEN) or
+            {m['jar'] for m in entries} != expected or len(entries) != len(expected) or
+            {p.name for p in (stage/'mods').iterdir()} != expected or
             any(sha(stage/'mods'/m['jar']) != m['sha256'] for m in entries) or
             sha(stage/'FunCity-1.16.5-b1.0827.jar') != ENGINE_SHA or
             sha(stage/'runtime/guava-21.0.jar') != GUAVA21_SHA or
@@ -60,9 +63,10 @@ def run(stage):
         if missing or critical or stopped != 'CLEAN':
             raise ValueError(f'missing plugins={missing}, critical_lines={len(critical)}, stop={stopped}')
         print('::notice title=FunCity MODDED closed boot::Done=true server_mods=' +
-              str(len(CHOSEN)) + ' active_plugins=' +
+              str(len(expected)) + ' active_plugins=' +
               ','.join(p['declared_name'] for p in report['plugins']) +
-              ' performance_mods=0 ownership=UNVERIFIED '
+              ' performance_mods=' + str(len(report['server_optimizers'])) +
+              ' ownership=UNVERIFIED '
               'NO client join, RP, auth, voice or performance claim')
     finally:
         if getattr(j, 'p', None) is not None and j.p.poll() is None:

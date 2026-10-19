@@ -32,9 +32,15 @@ LIBRARIES = (
     'player-animation-lib-forge-0.4.0+1.16.5.jar',  # Emotecraft
 )
 CHOSEN = CONTENT + LIBRARIES
+# Only three broad-impact candidates. Boot compatibility is not a TPS/RAM benefit.
+PERFORMANCE = (
+    'RoadRunner-mc1.16.5-1.5.2.jar',  # tick paths / server CPU
+    'ferritecore-2.1.1-forge.jar',      # memory structures
+    'modernfix-forge-5.18.0+mc1.16.5.jar',  # memory and engine fixes
+)
 
 
-def make(engine, archive, core, guava, output):
+def make(engine, archive, core, guava, output, with_optimizers=False):
     output = Path(output)
     archive = Path(archive)
     if output.exists() or sha(archive) != ARCHIVE_SHA:
@@ -47,7 +53,8 @@ def make(engine, archive, core, guava, output):
                 if name in jars or entry.is_dir() or entry.file_size > 300_000_000:
                     raise ValueError('ambiguous/oversized mod source')
                 jars[name] = entry
-        if len(jars) != 36 or not set(CHOSEN) <= jars.keys():
+        selected = CHOSEN + (PERFORMANCE if with_optimizers else ())
+        if len(jars) != 36 or not set(selected) <= jars.keys():
             raise ValueError('historical mod inventory differs or selected JAR absent')
         if any(entry.filename.startswith('/') or '..' in entry.filename.split('/')
                for entry in jars.values()):
@@ -63,8 +70,8 @@ def make(engine, archive, core, guava, output):
                     if mod_id in ids and ids[mod_id] != name:
                         raise ValueError('ambiguous mod id: ' + mod_id)
                     ids[mod_id] = name
-        chosen = set(CHOSEN)
-        for name in CHOSEN:
+        chosen = set(selected)
+        for name in selected:
             if name not in records:
                 raise ValueError('missing parsable mods.toml for selected ' + name)
             deps = records[name]['required_dependencies']
@@ -79,16 +86,18 @@ def make(engine, archive, core, guava, output):
             staged = Path(tmp_dir)/'stage'
             report = stage(engine, archive, core, guava, staged)
             mods = []
-            for name in CHOSEN:
+            for name in selected:
                 target = staged/'mods'/name
                 with source.open(jars[name]) as inp, target.open('xb') as out:
                     shutil.copyfileobj(inp, out, 1 << 20)
                 mods.append({'jar': name, 'sha256': sha(target),
                              'mod_ids': records[name]['mod_ids'],
-                             'role': 'content' if name in CONTENT else 'hard_dependency'})
+                             'role': ('content' if name in CONTENT else
+                                      'hard_dependency' if name in LIBRARIES else 'server_performance_trial')})
             report['scope'] = 'UNRELEASED local modded compatibility experiment; ownership unverified'
             report['server_mods'] = mods
-            report['client_mods'] = 'matching set NOT YET installed/tested'
+            report['server_optimizers'] = list(PERFORMANCE if with_optimizers else ())
+            report['client_mods'] = 'matching content in existing LowSpec; join NOT TESTED'
             report['auth'] = 'NOT INSTALLED; loopback only'
             (staged/'stage-report.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
             staged.rename(output)
@@ -99,12 +108,15 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('engine', 'archive', 'coreprotect', 'guava21', 'output'):
         p.add_argument('--' + name, required=True, type=Path)
+    p.add_argument('--server-optimizer-lab', action='store_true',
+                   help='try three SHA-inventoried historical server optimizers in isolated stage only')
     a = p.parse_args()
     try:
-        report = make(a.engine, a.archive, a.coreprotect, a.guava21, a.output)
+        report = make(a.engine, a.archive, a.coreprotect, a.guava21, a.output, with_optimizers=a.server_optimizer_lab)
         print('::notice title=Unreleased modded lab candidate::server_content=' +
               str(len(CONTENT)) + ' dependencies=' + str(len(LIBRARIES)) +
-              ' performance_mods=0 ownership=UNVERIFIED; no player or client test')
+              ' performance_mods=' + str(len(report['server_optimizers'])) +
+              ' ownership=UNVERIFIED; no player join or measured server benefit')
         print(json.dumps({'server_mod_count': len(report['server_mods']),
                           'plugin_count': len(report['plugins'])}))
     except (ValueError, OSError, KeyError, zipfile.BadZipFile) as exc:

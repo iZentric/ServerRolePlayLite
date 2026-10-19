@@ -1,6 +1,8 @@
 name: FunCity isolated modded compatibility experiment
 # NOT a list of owner-authored mods; historical content tested locally only.
 # No release, artifact, PC/Prism write, login, world copy, public port or benchmark.
+# Trial ONLY: three broad-impact server optimizers on top of ALL original RP content.
+# A boot cannot prove MSPT/RAM improvement; baseline 15-mod boot tested separately.
 on:
   push:
     branches:
@@ -44,13 +46,13 @@ jobs:
           gh release download v21.0 -R google/guava \
             -p guava-21.0.jar -O "$root/guava-21.0.jar"
           echo "972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480  $root/guava-21.0.jar" | sha256sum -c -
-      - name: Stage selected historical content and mandatory libraries only
+      - name: Stage all original RP content plus three trial server optimizers
         run: |
           set -Eeuo pipefail
           root="$RUNNER_TEMP/fc-modded-experiment"
           python3 scripts/fc_modded_candidate.py --engine "$root/motor.jar" \
             --archive "$root/old-plugins.zip" --coreprotect "$root/CoreProtect.jar" \
-            --guava21 "$root/guava-21.0.jar" --output "$root/stage"
+            --guava21 "$root/guava-21.0.jar" --output "$root/stage" --server-optimizer-lab
       - name: Boot and stop modded experiment on hosted loopback only
         run: |
           set -Eeuo pipefail
