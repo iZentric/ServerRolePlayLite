@@ -71,6 +71,18 @@ jobs:
                 Note 'FunCity Prism minecraft' $(if ($mc.Count) { [string]$mc[0].version } else { 'unknown' })
                 Note 'FunCity Prism Forge' $(if ($forge.Count) { [string]$forge[0].version } else { 'unknown' })
               }
+              $cfg = Join-Path $profile.FullName 'instance.cfg'
+              if (Test-Path -LiteralPath $cfg -PathType Leaf) {
+                $javaLine = @(Get-Content -LiteralPath $cfg | Where-Object { $_ -match '^JavaPath=' } | Select-Object -First 1)
+                if ($javaLine.Count) {
+                  $candidate = $javaLine[0].Substring(9).Trim('"') -replace 'javaw\.exe$','java.exe'
+                  Note 'Prism profile Java exists' ([string](Test-Path -LiteralPath $candidate -PathType Leaf))
+                  if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+                    $ver = ((Get-Item -LiteralPath $candidate).VersionInfo.ProductVersion) -replace '[^A-Za-z0-9 ._+\-]','_'
+                    Note 'Prism profile Java version' $ver
+                  }
+                }
+              }
             }
           }
           $live = @(Get-CimInstance Win32_Process -Filter "name = 'java.exe' OR name = 'javaw.exe'")
