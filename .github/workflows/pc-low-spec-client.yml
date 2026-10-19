@@ -63,7 +63,22 @@ jobs:
             }
             if ($source) { break }
           }
-          if (-not $source) { throw 'No original 1.16.5/Forge 36.2.42 profile contains all 14 exact names; no changes' }
+          if (-not $source) {
+            foreach ($profile in @(Get-ChildItem -LiteralPath $root -Directory | Where-Object {
+              $_.Name -like '*FunCity*' -and $_.Name -notlike '*LAB*' })) {
+              foreach ($rel in @('.minecraft\mods', 'minecraft\mods')) {
+                $dir = Join-Path $profile.FullName $rel
+                if (Test-Path -LiteralPath $dir -PathType Container) {
+                  $missing = @($selected | Where-Object { -not (Test-Path -LiteralPath (Join-Path $dir $_) -PathType Leaf) })
+                  $safe = (($missing -join '|') -replace '[^A-Za-z0-9 ._+()|=-]', '_')
+                  Write-Output ('::notice title=Existing FunCity candidate coverage::missing_count=' + $missing.Count + ' missing_names=' + $safe.Substring(0,[Math]::Min(600,$safe.Length)))
+                }
+              }
+            }
+            Write-Output '::error title=LowSpec source::No existing matching original Prism profile has all 14 JARs; no change'
+            throw 'No original 1.16.5/Forge 36.2.42 profile contains all 14 exact names; no changes'
+          }
+          Write-Output '::notice title=LowSpec source::all_14_JAR_names_present=true; begin new temporary profile'
           $packJson = @{ formatVersion = 1; components = @(
             @{ uid = 'net.minecraft'; version = '1.16.5'; important = $true },
             @{ uid = 'net.minecraftforge'; version = '36.2.42' }
@@ -105,10 +120,10 @@ jobs:
                           visual_compatibility=$visualCompatibility; gui_client_test='NOT_TESTED';
                           fps='NOT_MEASURED'; release='BLOCKED'} | ConvertTo-Json -Depth 8
             [IO.File]::WriteAllText((Join-Path $tmp 'LAB-MANIFEST.json'), $manifest, [Text.UTF8Encoding]::new($false))
-            if (@(Get-ChildItem -LiteralPath $mods -File).Count -ne 14 -or
-                (Get-Content -LiteralPath (Join-Path $tmp 'LAB-MANIFEST.json') -Raw | ConvertFrom-Json).jar_sha256.PSObject.Properties.Count -ne 14) {
-              throw 'Client inventory drift'
-            }
+            $copied = @(Get-ChildItem -LiteralPath $mods -File).Count
+            $recorded = @((Get-Content -LiteralPath (Join-Path $tmp 'LAB-MANIFEST.json') -Raw | ConvertFrom-Json).jar_sha256.PSObject.Properties).Count
+            Write-Output ('::notice title=LowSpec client inventory::copied=' + $copied + ' sha_records=' + $recorded)
+            if ($copied -ne 14 -or $recorded -ne 14) { throw 'Client inventory drift' }
             if (Test-Path -LiteralPath $dest) { throw 'Low-spec profile created concurrently; refusal to overwrite' }
             Rename-Item -LiteralPath $tmp -NewName $name -ErrorAction Stop
             Write-Output '::notice title=PC low-spec client LAB::new_prism_profile=true minecraft=1.16.5 forge=36.2.42 client_jars=14 content_and_libraries=9 client_optimizers=4 visual_compatibility=1 render_chunks=5 max_heap_mib=2048 old_profiles_untouched=true GUI_launch=NOT_TESTED FPS=NOT_MEASURED'
