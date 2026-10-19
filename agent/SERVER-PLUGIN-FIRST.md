@@ -8,6 +8,12 @@
 
 **`mods/` gol în copia curentă este exclusiv un control de diagnostic al bootului și pluginurilor**, nu direcția cerută pentru FunCity și nu modpackul de instalat în Prism. Profilul gol de laborator trebuie să rămână separat; **nu este locul în care ștergem ori înlocuim modurile existente**. `agent/PLUGIN-FIRST.json` ține aprobările încă neidentificate goale ca să nu inventeze proprietate, nu ca decizie de a lansa un server fără moduri.
 
+## Candidatul CU moduri făcut după corecția proprietarului
+
+**Aleg pentru experimentul privat un nucleu de conținut din packul FunCity deja existent**, nu „zero moduri”: mobilier (`ModernXL`, `ModernLife`, `CFM`), drumuri (`RoadStuff`), vehicule (`Vehicle Mod`) și arme (`CGM`, `Additional Guns`), plus `MapperBase` și `Obfuscate` ca biblioteci. **7 moduri de conținut + 2 dependențe pe server și în profilul Prism nou; 0 moduri de performanță adăugate preventiv.** Se verifică SHA-ul arhivei vechi, numele și dependențele declarate; nu am adăugat Pizzaland automat, pentru că experimentul fără el nu a găsit dependenți declarați și costul lui în packul client este mare. Nu înseamnă că efectele RP de care ai nevoie din Pizzaland au fost negate. Este o selecție **provizorie pentru compatibilitate**, nu demonstrație că acestea sunt *create de proprietar*, cele mai rapide sau autorizate pentru distribuire; folosim copii private ale JAR-urilor deja existente pe PC, fără release.
+
+[Run hosted 39325182846](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39325182846) a pornit și oprit această copie nouă cu **9 moduri / 6 pluginuri** pe loopback, Guava21 prin override de laborator. [Run PC 39325588088](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39325588088) a repetat **boot `Done` și oprire curată pe PC**, tot cu 9 moduri și 6 pluginuri active, apoi a creat un **alt profil Prism nou**: `FunCity-Lite-Content-LAB-1.16.5`, copiind numai cele nouă JAR-uri client cu hash verificat dintr-un profil FunCity existent. Niciun server vechi, lume, cont sau profil Prism vechi nu a fost schimbat. **Clientul nu a fost pornit/conectat**, modurile încărcate în gameplay, vocea, autentificarea, FPS și capacitatea nu sunt testate. Nici serverul PC de laborator nu a rămas pornit după job.
+
 ## Pluginuri în copia închisă (6 JAR-uri, cu SHA de intrare verificat)
 
 | Plugin | Motiv și limită |
