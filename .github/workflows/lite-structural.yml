@@ -1,0 +1,36 @@
+name: FunCity Lite structural checks
+# No PC runner, no server, no downloaded binaries, no release or deployment.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - 'scripts/fc_client_audit.py'
+      - 'scripts/fc_mrpack_audit*.py'
+      - 'scripts/fc_lite_repack*.py'
+      - 'scripts/fc_pack_stage_test.py'
+      - 'scripts/fc_bench.py'
+      - 'scripts/fc_spawner_ab.py'
+      - 'agent/DECIZII.md'
+      - 'diag/pc-client.txt'
+      - '.github/workflows/lite-structural.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  static-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test archived inventory, Lite packaging and fail-closed staging
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONPATH: scripts
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/fc_client_audit.py --self-test
+          python3 scripts/fc_mrpack_audit_test.py
+          python3 scripts/fc_lite_repack_test.py
+          python3 scripts/fc_pack_stage_test.py
+          git diff --check
