@@ -1,11 +1,14 @@
-name: PC Lite warning and lab cleanup preflight
-# Read only. Reports no player names, addresses, logs, credentials, worlds or paths.
+name: PC Lite warning triage and safe obsolete Lab cleanup
+# Inspects without exposing private logs; removes only two exact untouched lab
+# profiles we created, after Minecraft is closed. Never touches LowSpec or user worlds.
 on:
   push:
     branches:
       - arena/9bbcb24f-serverroleplaylite
     paths:
       - .github/workflows/pc-low-spec-triage.yml
+      - scripts/fc_pc_lowspec_cleanup.py
+      - scripts/fc_pc_lowspec_cleanup_test.py
   workflow_dispatch:
 permissions:
   contents: read
@@ -14,6 +17,10 @@ jobs:
     runs-on: [self-hosted, Windows]
     timeout-minutes: 5
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - name: Inspect only the three Lab profiles and known warning markers
         shell: powershell
         run: |
@@ -85,4 +92,19 @@ jobs:
           $temps = @(Get-ChildItem -LiteralPath $env:RUNNER_TEMP -Directory -ErrorAction SilentlyContinue |
                      Where-Object { $_.Name -match '^fc-(plugin-first|modded)-PC-[0-9]+$' })
           Note 'Runner temporary lab folders' ([string]$temps.Count)
-          Write-Output '::notice title=PC read-only triage::no_world_or_profile_or_server_modified=true'
+          Write-Output '::notice title=PC triage inspection::no_world_or_profile_or_server_modified_by_inspection=true'
+      - name: Remove ONLY untouched obsolete profiles after Minecraft closes
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $live = @(Get-CimInstance Win32_Process -Filter "name = 'java.exe' OR name = 'javaw.exe'")
+          if ($live.Count -gt 0) {
+            Write-Output '::notice title=PC safe cleanup::SKIPPED because Java/Minecraft is running; close the game first'
+            exit 0
+          }
+          python scripts/fc_pc_lowspec_cleanup_test.py
+          if ($LASTEXITCODE -ne 0) { throw 'Cleanup safety fixture failed; no PC profiles changed' }
+          $root = Join-Path $env:APPDATA 'PrismLauncher\instances'
+          python scripts/fc_pc_lowspec_cleanup.py --instances $root --apply
+          if ($LASTEXITCODE -ne 0) { throw 'Lab cleanup refused' }
+          Write-Output '::notice title=PC safe cleanup::only pristine generated zero/content LAB profiles removed if eligible; LowSpec preserved; world-containing folders always preserved'
