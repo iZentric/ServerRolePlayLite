@@ -1,0 +1,143 @@
+name: PC modded FunCity and new Prism content LAB
+# One-shot loopback-only experimental server, then NEW Prism content profile.
+# Existing server, worlds, profiles, accounts and hosting must remain untouched.
+# JARs from user's old pack are NOT certified user-authored or cleared for release.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-modded-candidate.yml
+      - scripts/fc_modded_candidate_pc_smoke.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pc-modded-boot:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: scripts
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download SHA-pinned old inputs and create NEW modded stage
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Join-Path $env:RUNNER_TEMP ('fc-modded-PC-' + $env:GITHUB_RUN_ID)
+          if (Test-Path -LiteralPath $root) { throw 'PC modded lab exists; no overwrite' }
+          $null = New-Item -ItemType Directory -Path $root
+          $inputs = @(
+            @{name='engines.tar.gz'; sha='f2cb921efbf751fa24534a9a02b57197db46294ca7b71d9711b04996bf6d1784'; url='https://github.com/iZentric/ServerRolePlayLite/releases/download/jars-20261017-0952/functity-jare-toate.tar.gz'},
+            @{name='old-plugins.zip'; sha='fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15'; url='https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Server-CatServer-1.7.7.zip'},
+            @{name='CoreProtect.jar'; sha='04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977'; url='https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar'},
+            @{name='guava-21.0.jar'; sha='972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480'; url='https://github.com/google/guava/releases/download/v21.0/guava-21.0.jar'}
+          )
+          foreach ($item in $inputs) {
+            $path = Join-Path $root $item.name
+            try { Invoke-WebRequest -Uri $item.url -OutFile $path -UseBasicParsing -MaximumRedirection 5 }
+            catch { throw ('PC input unavailable: ' + $item.name + '; no server started') }
+            if ((Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -ne $item.sha) {
+              throw ('PC input SHA256 mismatch: ' + $item.name + '; no server started')
+            }
+          }
+          python scripts/fc_plugin_first_extract.py (Join-Path $root 'engines.tar.gz') (Join-Path $root 'motor.jar')
+          if ($LASTEXITCODE -ne 0) { throw 'Motor extraction refused' }
+          python scripts/fc_modded_candidate.py --engine (Join-Path $root 'motor.jar') `
+            --archive (Join-Path $root 'old-plugins.zip') `
+            --coreprotect (Join-Path $root 'CoreProtect.jar') `
+            --guava21 (Join-Path $root 'guava-21.0.jar') `
+            --output (Join-Path $root 'stage')
+          if ($LASTEXITCODE -ne 0) { throw 'Modded stage refused' }
+      - name: Start and stop NEW 9-mod lab server, no player joins
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Join-Path $env:RUNNER_TEMP ('fc-modded-PC-' + $env:GITHUB_RUN_ID)
+          python scripts/fc_modded_candidate_pc_smoke.py (Join-Path $root 'stage')
+          if ($LASTEXITCODE -ne 0) { throw 'Modded PC lab boot failed; no public service' }
+          Write-Output '::notice title=PC modded lab::server_started_and_stopped=true mods=9 performance_mods=0 public=false client_join=NOT_TESTED ownership=UNVERIFIED'
+  new-prism-profile:
+    needs: pc-modded-boot
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 6
+    steps:
+      - name: Copy ONLY matching content JARs into a new Prism profile, no client launch
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if (-not $env:APPDATA) { throw 'Prism account unavailable' }
+          $root = Join-Path $env:APPDATA 'PrismLauncher\instances'
+          if (-not (Test-Path -LiteralPath $root -PathType Container)) { throw 'No visible Prism instances' }
+          $name = 'FunCity-Lite-Content-LAB-1.16.5'
+          $dest = Join-Path $root $name
+          if (Test-Path -LiteralPath $dest) { throw 'Candidate profile exists; no overwrite' }
+          $selected = @(
+            'Modernxl 1.16.5.jar', 'modernlife-1.16.5-1.15.jar',
+            'cfm-7.0.0pre22-1.16.3.jar', 'roadstuff-1.16.5-4.3.0.jar',
+            'vehicle-mod-0.45.2-1.16.5 (1).jar', 'cgm-1.2.6-1.16.5.jar',
+            'additional-guns-0.7.1-1.16.5.jar', 'mapperbase-1.16.5-2.4.0.0.jar',
+            'obfuscate-0.6.3-1.16.5.jar'
+          )
+          $source = $null
+          foreach ($profile in @(Get-ChildItem -LiteralPath $root -Directory | Where-Object {
+            $_.Name -like '*FunCity*' -and $_.Name -notlike '*LAB*' })) {
+            $pack = Join-Path $profile.FullName 'mmc-pack.json'
+            if (-not (Test-Path -LiteralPath $pack -PathType Leaf)) { continue }
+            $components = @((Get-Content -LiteralPath $pack -Raw | ConvertFrom-Json).components)
+            if (-not @($components | Where-Object { $_.uid -eq 'net.minecraft' -and $_.version -eq '1.16.5' }).Count -or
+                -not @($components | Where-Object { $_.uid -eq 'net.minecraftforge' -and $_.version -eq '36.2.42' }).Count) { continue }
+            foreach ($rel in @('.minecraft\mods', 'minecraft\mods')) {
+              $dir = Join-Path $profile.FullName $rel
+              if ((Test-Path -LiteralPath $dir -PathType Container) -and
+                  @($selected | Where-Object { -not (Test-Path -LiteralPath (Join-Path $dir $_) -PathType Leaf) }).Count -eq 0) {
+                $source = $dir
+                break
+              }
+            }
+            if ($source) { break }
+          }
+          if (-not $source) { throw 'No existing Prism profile has all exact 9 paired client JAR names; no change' }
+          $packJson = @{ formatVersion = 1; components = @(
+            @{ uid = 'net.minecraft'; version = '1.16.5'; important = $true },
+            @{ uid = 'net.minecraftforge'; version = '36.2.42' }
+          ) } | ConvertTo-Json -Depth 8
+          $cfg = @"
+          [General]
+          ConfigVersion=1.2
+          InstanceType=OneSix
+          iconKey=default
+          name=FunCity Lite Content LAB 1.16.5
+          "@
+          $tmp = Join-Path $root ('.FunCity-Content-LAB-' + [guid]::NewGuid().ToString('N'))
+          try {
+            $null = New-Item -ItemType Directory -Path $tmp
+            $mods = Join-Path $tmp '.minecraft\mods'
+            $null = New-Item -ItemType Directory -Path $mods -Force
+            foreach ($jar in $selected) {
+              $from = Join-Path $source $jar
+              $to = Join-Path $mods $jar
+              Copy-Item -LiteralPath $from -Destination $to -ErrorAction Stop
+              if ((Get-FileHash -LiteralPath $from -Algorithm SHA256).Hash -ne
+                  (Get-FileHash -LiteralPath $to -Algorithm SHA256).Hash) { throw 'Client JAR copy hash mismatch' }
+            }
+            [IO.File]::WriteAllText((Join-Path $tmp 'mmc-pack.json'), $packJson, [Text.UTF8Encoding]::new($false))
+            [IO.File]::WriteAllText((Join-Path $tmp 'instance.cfg'), $cfg, [Text.UTF8Encoding]::new($false))
+            [IO.File]::WriteAllText((Join-Path $tmp 'LAB-READ-ME.txt'),
+              'Private modded compatibility experiment from existing FunCity pack. Ownership/distribution unverified. Not a final RP pack: no authentication, player join, voice or FPS test. Never replace old Prism profiles.', [Text.UTF8Encoding]::new($false))
+            if (@(Get-ChildItem -LiteralPath $mods -File).Count -ne 9) { throw 'Client inventory drift' }
+            if (Test-Path -LiteralPath $dest) { throw 'Profile created concurrently; refusal to overwrite' }
+            Rename-Item -LiteralPath $tmp -NewName $name -ErrorAction Stop
+            Write-Output '::notice title=PC NEW modded Prism candidate::profile_created=true minecraft=1.16.5 forge=36.2.42 client_content_and_dependencies=9 existing_profiles_untouched=true GUI_launch=NOT_TESTED ownership=UNVERIFIED'
+          }
+          finally {
+            if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Recurse -Force }
+          }

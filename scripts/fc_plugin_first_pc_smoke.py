@@ -11,8 +11,8 @@ import time
 from fc_plugin_first_smoke import check_stage
 
 
-def boot(stage):
-    stage = check_stage(stage)  # requires a new runner-temp stage with verified SHA/JARs
+def boot(stage, verify=check_stage):
+    stage = verify(stage)  # requires a new runner-temp stage with verified SHA/JARs
     # Do not steal an already used port; this process must remain local to the PC.
     import socket
     with socket.socket() as sock:
@@ -56,9 +56,9 @@ def boot(stage):
             if missing or critical:
                 raise ValueError('PC lab booted but plugin failure: missing=' + ','.join(missing) +
                                  ' critical_log_lines=' + str(len(critical)))
-            print('::notice title=FunCity PC CLOSED boot::Done=true mods=0 '
-                  'active_plugins=' + ','.join(names) + ' loopback=true; '
-                  'no client login, auth plugin, voice, RP or capacity tested', flush=True)
+            print('::notice title=FunCity PC CLOSED boot::Done=true mods=' +
+                  str(len(report['server_mods'])) + ' active_plugins=' + ','.join(names) +
+                  ' loopback=true; no client login, auth plugin, voice, RP or capacity tested', flush=True)
             p.stdin.write(b'stop\n')
             p.stdin.flush()
             try:
