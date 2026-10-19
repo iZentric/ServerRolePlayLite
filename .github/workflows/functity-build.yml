@@ -1,17 +1,9 @@
 name: FUNCITY-BUILD
 # Candidat FunCity: build izolat la schimbarea motorului sau manual. Nu publica
 # JAR-uri, nu modifica serverul PC si nu scrie pe alta ramura.
+# Build lung doar la pornire manuală, fără release sau acces la PC/live.
 on:
   workflow_dispatch:
-  push:
-    branches: [arena/9bbcb24f-serverroleplaylite]
-    paths:
-      - .github/workflows/functity-build.yml
-      - functity/patches/**
-      - functity/buildfix/**
-      - functity/ci/meta.py
-      - scripts/fc_bench.py
-      - scripts/fc_fakeplayer_smoke.py
 
 permissions:
   contents: read

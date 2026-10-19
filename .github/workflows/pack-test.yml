@@ -1,109 +1,11 @@
-name: PACK-TEST
-# Manual diagnostic only: never republish client packs or push to another branch.
+name: RETIRED-PACK-TEST
+# Old test mixed server and client mods without validated hashes; no valid login/FPS proof.
 on:
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  server-boot:
-    runs-on: ubuntu-24.04-arm
-    timeout-minutes: 30
+  archived:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Ia mrpack de la release
-        run: |
-          mkdir -p run && cd run
-          curl -sL -o pack.mrpack "https://github.com/${{ github.repository }}/releases/download/freeroam/Freeroam.1.0.0.zip"
-          ls -la pack.mrpack
-      - name: Java 11 (Temurin ARM)
-        run: |
-          wget -q "https://api.adoptium.net/v3/binary/latest/11/ga/linux/aarch64/jre/hotspot/normal/eclipse" -O /tmp/j11.tgz
-          mkdir -p /tmp/j11 && tar xzf /tmp/j11.tgz -C /tmp/j11 --strip-components=1
-          /tmp/j11/bin/java -version
-      - name: Instaureaza modurile din manifest (exact ce zice packul)
-        working-directory: run
-        run: |
-          python3 - <<'PY'
-          import json,os,zipfile,urllib.request
-          os.makedirs('mods',exist_ok=True)
-          z=zipfile.ZipFile('pack.mrpack')
-          idx=json.loads(z.read('modrinth.index.json'))
-          print('modpack:',idx.get('name'),idx.get('versionId'))
-          ok=fail=skip=0
-          import re
-          EXCL=re.compile(r'(sound|audio|music|lightfall|voiceaudio|voice|physics|shader|zoom|dynamiclights|oculus|embeddium)',re.I)
-          for f in idx.get('files',[]):
-            env=f.get('env') or {}
-            if (env.get('server') or 'required')=='unsupported':
-              print('skip client-only:',f['path']); continue
-            if EXCL.search(f['path']):
-              print('skip usat-pc (lite):',f['path']); continue
-            dest=os.path.join('mods',f['path'])
-            os.makedirs(os.path.dirname(dest),exist_ok=True)
-            if os.path.exists(dest): skip+=1; continue
-            try:
-              d=urllib.request.urlopen(f['downloads'][0],timeout=90).read()
-              open(dest,'wb').write(d); ok+=1
-              print('OK',f['path'],len(d))
-            except Exception as e:
-              fail+=1; print('ESUAT',f['path'],str(e)[:80])
-          try:
-            for n in z.namelist():
-              if n.startswith('overrides/mods/'):
-                if EXCL.search(n):
-                  print('skip usat-pc (ovr):',n); continue
-                data=z.read(n)
-                if data[:2]==b'PK':
-                  fn=os.path.join('mods',n.split('/')[-1]); open(fn,'wb').write(data); ok+=1
-                  print('OVR',fn)
-          except Exception as e: print('override warn',e)
-          print(f'descarcate={ok} sarite={skip} esuate={fail}')
-          PY
-      - name: Ia motorul VALIDAT din release-ul lite
-        working-directory: run
-        run: |
-          curl -sL -o srv.zip "https://github.com/${{ github.repository }}/releases/download/lite/CUANTIC-Server-CatServer-1.7.7.zip"
-          unzip -oq srv.zip -d srv || { echo "zip esuat"; ls -la srv.zip; exit 1; }
-          find srv -maxdepth 3 | head -25
-          JAR=$(find srv -name "*.jar" | xargs -r ls -S | head -1)
-          ARGS=$(find srv -name "unix_args.txt" -o -name "user_jvm_args.txt" | head -1)
-          echo "JAR=$JAR" >> $GITHUB_ENV; echo "ARGS=$ARGS" >> $GITHUB_ENV
-          ls -la "$JAR"
-      - name: Boot test cu motor validat
-        working-directory: run
-        run: |
-          echo "eula=true" > eula.txt
-          printf 'online-mode=false\nview-distance=4\nsimulation-distance=4\nmax-players=40\n' > server.properties
-          cd $(dirname "$JAR"); mkdir -p mods; cp -f $OLDPWD/../run/mods/*.jar mods/ 2>/dev/null || true
-          if [ -n "$ARGS" ]; then timeout 900 /tmp/j11/bin/java @$(basename "$ARGS") nogui > $GITHUB_WORKSPACE/boot.log 2>&1 || true; else timeout 900 /tmp/j11/bin/java -Xms1G -Xmx2800M -jar "$(basename "$JAR")" nogui > $GITHUB_WORKSPACE/boot.log 2>&1 || true; fi
-          echo "== REZULTAT =="
-          if grep -q "Done (" $GITHUB_WORKSPACE/boot.log; then
-            grep -oE "Done \([0-9.]+s\)!" $GITHUB_WORKSPACE/boot.log | tail -1
-            echo "BOOT: REUSIT - modpackul + motorul validat merge"
-          else
-            echo "BOOT: ESUAT"; grep -aE "requires|not installed|FATAL|Exception|Unsupported class" $GITHUB_WORKSPACE/boot.log | head -20; exit 1
-          fi
-      - name: Boot test
-        working-directory: run
-        run: |
-          echo "eula=true" > eula.txt
-          printf 'online-mode=false\nview-distance=4\nsimulation-distance=4\nmax-players=40\nmotd=Freeroam test\n' > server.properties
-          timeout 900 /tmp/j11/bin/java -Xms1G -Xmx2800M -jar server.jar nogui > boot.log 2>&1 || true
-          echo "== REZULTAT =="
-          if grep -q "Done (" boot.log; then
-            grep -oE "Done \([0-9.]+s\)!" boot.log | tail -1
-            echo "BOOT: REUSIT - modpackul se incarca curat"
-          else
-            echo "BOOT: ESUAT - erori:"
-            grep -E "requires|not installed|FATAL|Exception" boot.log | head -20
-            exit 1
-          fi
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: original-pack-boot-diagnostics
-          path: |
-            boot.log
-            run/boot.log
-          if-no-files-found: warn
-          retention-days: 7
+      - run: echo RETIRED-no-action

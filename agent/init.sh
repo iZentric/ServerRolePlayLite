@@ -38,7 +38,8 @@ legacy = {'aichat.yml','bat-v2.yml','funcity-brand.yml','functity-server.yml',
           'pc-client.yml','release-jars.yml','rp-lite.yml','tunnel-test.yml',
           'check-live.yml','oci-cloudshell.yml','oci-probe.yml','oci-vm.yml',
           'pc-cp.yml','pc-functity.yml','pc-install.yml','pc-oldcfg.yml',
-          'pc-probe.yml','pc-serverd.yml','runner-probe.yml','site-auto.yml'}
+          'pc-probe.yml','pc-serverd.yml','runner-probe.yml','site-auto.yml',
+          'pack-test.yml'}
 for f in files:
     try:
         data=yaml.load(f.read_text(), Loader=yaml.BaseLoader)
@@ -49,7 +50,9 @@ for f in files:
             assert 'self-hosted' not in f.read_text()
     except (yaml.YAMLError, AssertionError, KeyError) as exc:
         raise SystemExit(f'YAML/SAFETY FAIL {f}: {exc}')
-print(f'YAML PASS: {len(files)} files; retired workflows manual-only/read-only')
+build=yaml.load(Path('.github/workflows/functity-build.yml').read_text(), Loader=yaml.BaseLoader)
+assert list(build['on']) == ['workflow_dispatch'] and build['permissions']['contents'] == 'read'
+print(f'YAML PASS: {len(files)} files; retired workflows manual-only/read-only; build manual/read-only')
 bat=Path('tools/FunCity-Update.bat').read_text()
 front=bat.split(':full\n', 1)[0]
 assert 'if /I "%~1"=="--lean-test" goto blocked' in front
