@@ -49,10 +49,18 @@ jobs:
           from pathlib import Path
           root=Path(os.environ['RUNNER_TEMP'])/'fc-asset'
           a=json.loads((root/'candidate-audit.json').read_text())
-          assert a['client_mod_count']==23
+          b=json.loads((root/'baseline.json').read_text())
+          c=json.loads((root/'candidate.json').read_text())
+          assert b['client_mod_count']==25 and a['client_mod_count']==23
           assert a['remote_files_without_declared_size']==0
           summary=Path(os.environ['GITHUB_STEP_SUMMARY'])
           summary.write_text('## Structural only; NO Prism/Forge login or FPS test\n'
-                             f"Source: {a['archive_bytes']} bytes in candidate; "
-                             f"{a['client_mod_count']} client JAR names.\n")
+                             f"Source: {b['archive_bytes']} bytes / 25 mods; "
+                             f"candidate: {a['archive_bytes']} bytes / 23 mods.\n"
+                             f"Remote downloads declared: {a['remote_download_bytes_declared']} bytes; "
+                             f"candidate SHA256: `{c['output_sha256']}`.\n")
+          print('::notice file=agent/BETA-LITE.md,line=1,title=Lite ZIP metadata::'
+                f"old_bytes={b['archive_bytes']} new_bytes={a['archive_bytes']} "
+                f"remote_bytes={a['remote_download_bytes_declared']} "
+                f"new_sha256={c['output_sha256']} source_sha256={c['source_sha256']}")
           PY
