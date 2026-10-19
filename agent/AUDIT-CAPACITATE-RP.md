@@ -1,0 +1,42 @@
+# Auditul referințelor pentru un oraș RP cu mulți jucători — 19.10.2026
+
+**Verdict:** NU este dovedit că fiecare optimizer păstrat este alegerea corectă, că orice configurație a fiecărui server de pe E: a fost văzută ori că FunCity poate susține un anumit număr de jucători. `max-players` este limită configurată, nu benchmark. Orașul FunCity începe de la zero, construit liber de proprietar și jucători, fără protecții preventive; CoreProtect este doar jurnal și rollback manual admin.
+
+## Ce backup/captură putem inspecta efectiv
+
+1. `diag/oc_part0..34.txt`: ZIP istoric de fișiere selectate, fără căile relative. `python3 scripts/fc_legacy_config_audit.py` verifică CRC-ul **fiecăreia dintre cele 15.077 intrări** și citește numai chei server allowlisted, fără a tipări secrete, UUID-uri sau date de jucători. **1.539 intrări sunt goale**, 7.512 nume distincte, 7.565 duplicate de basename. Nu echivalează cu analizarea semantică a fiecărui config, nici cu un backup complet al lumii, pluginurilor și JAR-urilor.
+2. `diag/oldcfg-report.txt`: numai **424 intrări cu căi**: 12 în `cuantic`, 412 în HYPECITY BK, dintre care 379 fișiere `AutoPickup/PlayerData` și 33 non-profil. Referințele `hypecity`, `minecity`, `nmc`, `viberp` sunt **nume de directoare**, fără configurații atribuibile cert din arhiva fără căi. Ordinea ZIP seamănă cu cea a raportului pentru primele 424 de intrări, dar nu refacem căi lipsă prin presupuneri.
+3. Release-ul istoric CUANTIC 1.7.7 auditat în `docs/ENGINE-PACK-AUDIT.md` la `b1ec20c`: **36 JAR-uri mod și 14 JAR-uri plugin**, nu inventarul actual FunCity. Pluginurile sunt Chunky, Cuantic-Brand, EssentialsX, EssentialsXAntiBuild, EssentialsXChat, EssentialsXProtect, EssentialsXSpawn, LuckPerms, ProtocolLib, SkinsRestorer, Vault, ClaimChunk, WorldEdit și WorldGuard. CoreProtect **nu** este în cele 14. Auditul de metadata `scripts/fc_plugin_audit.py` e pregătit pentru runner hosted, dar încă nu a produs un rezultat real pentru dependențe/comenzi.
+4. `diag/cp_part0..3.txt` **nu este backup de lume**: decodează în memorie JAR-ul CoreProtect 21.2, SHA256 `04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977`; `plugin.yml` declară `softdepend: [WorldEdit]`, **nu** o dependență obligatorie de WorldEdit. Nu demonstrează că pluginul este instalat/activ pe host sau că loghează corect blocuri modate.
+5. `analysis/FUNCTITY-STAGE.md` este o **fotografie a gazdei din 17.10.2026**, nu un benchmark cu jucători: 2 fire CPU, ~11,9 GiB RAM totală, ~250 MiB liberi pe partiția de ~5,1 GiB; `world` ~150 MiB, JAR CatServer și JAR FunCity b1.0827 existente, `max-players=25` în acea captură, 0 jucători la ultima comandă `list`. Nu presupunem că spațiul liber ori serverul activ sunt identice acum. Un backup/restaurare reală și un test de capacitate cer verificarea **spațiului disponibil actual** înainte de orice stage.
+
+## Fiecare exemplar capturat de configurație server comună, fără atribuirea lor forțată
+
+Arhiva are câte **șase** fișiere numite `server.properties`, `bukkit.yml` și `spigot.yml` (nu dovada a exact șase servere distincte). Valorile allowlisted din cele șase `server.properties`:
+
+| Cheie | Distribuția din captură | De ce NU copiem pentru „mulți” |
+|---|---|---|
+| `max-players` | 25×1, 140×2, 150×1, 200×2 | Numărul de sloturi declarate nu măsoară TPS, lag ori jucători activi. |
+| `view-distance` | 4×1, 5×2, 6×2, 12×1 | Crește chunkurile și traficul odată cu jucătorii; FunCity repo rămâne 5 până la A/B cu vizibilitatea RP. |
+| `entity-broadcast-range-percentage` | 60×1, 100×5 | Scăderea poate ascunde jucători/vehicule; FunCity repo are 80, fără benchmark. |
+| `network-compression-threshold` | -1×2, 256×3, 512×1 | Compresie ↔ CPU/rețea: alegerea repo 256 nu e măsurătoare pe 2 nuclee. |
+| `spawn-protection` | 0×6 | Compatibil cu orașul deschis, dar nu probează lipsa altor pluginuri de protecție. |
+| `online-mode` | false×6 | Captura nu dovedește identitatea/autentificarea sigură ori loginul actual. |
+
+Din cele șase `bukkit.yml`: `monsters` 20×1, 8×3, 70×2; `animals` 6×1, 5×3, 10×2; `water-animals` 2×1, 1×3, 15×2. Din cele șase `spigot.yml`: `nerf-spawner-mobs=true` de 4 ori și `false` de 2 ori; `item-despawn-rate` 2400×1, 4000×3, 6000×2. Sunt apariții de chei din fișiere cu același nume, **nu** un A/B sau politici asumate ale unui server identificat. Păstrăm spawn 20/6/2 și spawner AI/loot RP până la comparație controlată.
+
+**Configuri de optimizare văzute numai după basename:** `aiimprovements-common.toml`×2, `ferritecore-mixin.toml`×4, `modernfix-mixins.properties`×1, `performant-common.toml`×4, `smoothchunk-common.toml`×5, `fastbench.cfg`×5, `connectivity-common.toml`×1. Prezența unui config ≠ JAR prezent ≠ mod activ ≠ creștere a capacității. Nu apare nicio configurație In Control! `.json` în această captură, deoarece arhiva nu conține extensia `.json`; **nu concluzionăm că modul nu are reguli**. Plasmo Voice din HYPECITY BK nu e Simple Voice Chat din ținta FunCity.
+
+## Reexaminare a optimizărilor selectate pentru multiplayer RP
+
+| Categorie | Stare justificabilă acum | Dovada care schimbă decizia |
+|---|---|---|
+| Client: Rubidium/Entity Culling/Radon, FerriteCore/ModernFix, LazyDFU; Oculus pentru texturi | **ALES provizoriu**, nu „optimum dovedit”. Au costuri/roluri diferite; GPU-ul client nu se repară prin setări TPS pe server. | 3 probe A/B per mod pe un laptop slab, aceeași scenă RP cu mobilier/vehicule, FPS p5/median, RAM, start/login și corectitudinea vizuală. |
+| Server: AI Improvements, RoadRunner, FerriteCore, ModernFix, Get It Together Drops | **ALES provizoriu** pe clase diferite de hotspot (AI, tick, RAM, drops); niciun câștig MSPT măsurat pe lumea nouă. Nu combinăm Performant din referințe cu RoadRunner doar fiindcă există acolo. | Profil spark și A/B cu aceeași lume/jucători/chunkuri/modpack, CPU/MSPT p95, RSS/GC, erori de login și funcții RP. |
+| Server: FastSuite + FastWorkbench, fără FastFurnace | Funcții de rețete/banc de lucru diferite; survival limitat nu demonstrează nici câștig, nici inutilitate. FastFurnace este SCOS din **țintă**, nu testat pe live. | Scenariu cu crafting/cuptoare inactive și active, o singură schimbare odată; măsurăm tick, CPU și login. |
+| Server: Ksyxis cu keep-spawn-loaded; In Control!; Placebo; Connectivity | **Incerte**: chunkuri păstrate versus eliminate, reguli spawn necitite, dependent Placebo necunoscut, necesitatea Connectivity la login încă netestată. | Configul încărcat, JAR metadata, număr chunkuri/tick, spawn real, login Forge și A/B pe copie. Dacă o regulă/dependență lipsește, modurile sunt candidați de eliminare. |
+| Pluginuri: CoreProtect logging, EssentialsX/LuckPerms/Vault etc. | Șapte pluginuri istorice țintă plus CoreProtect cerut; fără WorldGuard/ClaimChunk/AntiBuild/Protect pentru orașul nou. Nu spunem că șapte sunt „optime” ori că un meniu istoric Jobs este un sistem funcțional. | Pluginuri efectiv încărcate și dependențe, logarea blocurilor și containerelor modate, rate de scriere/storage, rollback administrativ și restaurare completă. |
+
+**Alte riscuri reale din `functity-config/` repo, nu live:** `server.properties` are `max-players=64` (nu capacitate) și `spawn-protection=0`; `functity-config/connectivity-common.toml` are `disableLoginLimits=true` și `disablePacketLimits=true` (de evaluat pentru abuz/stabilitate înainte de acces public); `functity-config/forge-server.toml` (destinat lui `defaultconfigs/` în instalare) are `removeErroringEntities=true` și `removeErroringTileEntities=true` (risc de dispariție tăcută a conținutului modat); `bukkit.yml` are `warn-on-overload=false` (nu înlocuiește monitorizarea). Nu schimbăm aceste setări pe live pe baza unor fotografii istorice.
+
+**Poartă pentru „mulți jucători”:** verifică întâi spațiu actual pentru backup+restaurare, configul efectiv încărcat, baza de date și retenția CoreProtect; apoi testează în copie cu modpack și pluginuri reale, jucători/boți reprezentativi și scenarii de construcție, vehicule, voce, job, grief/log și chunk load. Trei runde la fiecare nivel; consemnează numărul de jucători **care au trecut** pragurile de MSPT p95/TPS, CPU, RAM, GC, disk I/O și rețea, fără regresii RP. Nu numim „capacitate” numărul de sloturi sau boți server-side. Fără acces la backupurile cu căi și la gazda actuală, fiecare alt config de pe E: rămâne **NEVERIFICABIL INDIVIDUAL**, nu „ignorat intenționat”.

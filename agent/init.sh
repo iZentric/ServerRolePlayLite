@@ -110,6 +110,8 @@ python3 scripts/fc_plugin_audit_test.py
 echo 'plugin metadata parser fixtures PASS (synthetic; no live audit)'
 python3 scripts/fc_open_city_test.py
 echo 'open-city policy PASS (static decisions only; no live protection test)'
+python3 scripts/fc_legacy_config_audit_test.py
+echo 'historical config archive reader PASS (synthetic privacy/CRC only)'
 
 echo "F0: patches on exact upstream commit $PIN (disposable source)"
 if [ "${FC_INIT_OFFLINE:-0}" = 1 ]; then
