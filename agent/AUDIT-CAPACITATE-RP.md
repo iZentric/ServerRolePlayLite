@@ -2,6 +2,8 @@
 
 **Verdict:** NU este dovedit că fiecare optimizer păstrat este alegerea corectă, că orice configurație a fiecărui server de pe E: a fost văzută ori că FunCity poate susține un anumit număr de jucători. `max-players` este limită configurată, nu benchmark. Orașul FunCity începe de la zero, construit liber de proprietar și jucători, fără protecții preventive; CoreProtect este doar jurnal și rollback manual admin.
 
+**Reper de lucru adăugat de proprietar:** HYPECITY-ul lui a funcționat cu peste 60 de jucători, posibil spre 100; acceptăm relatarea drept experiență istorică de operare și îl folosim înaintea altor proiecte ca model de abordare. Nu o confundăm cu performanța măsurată a noului FunCity. `servere referinta/hypecity` nu are configurații cu căi păstrate în captura accesibilă, în timp ce `HYPECITY BK` este alt director cu 33 fișiere non-profil vizibile; nu declarăm că valorile din BK au fost exact cele de pe serverul amintit. Vezi [maparea concretă](AUDIT-SERVERE-REFERINTA.md#hypecity-ca-model-de-lucru--ce-putem-prelua-acum).
+
 ## Ce backup/captură putem inspecta efectiv
 
 1. `diag/oc_part0..34.txt`: ZIP istoric de fișiere selectate, fără căile relative. `python3 scripts/fc_legacy_config_audit.py` verifică CRC-ul **fiecăreia dintre cele 15.077 intrări** și citește numai chei server allowlisted, fără a tipări secrete, UUID-uri sau date de jucători. **1.539 intrări sunt goale**, 7.512 nume distincte, 7.565 duplicate de basename. Nu echivalează cu analizarea semantică a fiecărui config, nici cu un backup complet al lumii, pluginurilor și JAR-urilor.

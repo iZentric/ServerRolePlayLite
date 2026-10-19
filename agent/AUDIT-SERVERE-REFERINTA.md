@@ -2,6 +2,8 @@
 
 **Răspuns direct: NU am verificat fiecare server și fiecare configurație din `E:\Administrator\Desktop\FunCity\servere referinta`.** Nu am acces la unitatea E în acest sandbox. Am auditat doar captura istorică din repo, colectată la 18.10.2026. Nu o confund cu serverul live și nu folosesc fișierele de jucători drept feedback.
 
+**Reperul principal este HYPECITY-ul proprietarului, care, conform experienței lui, a avut peste 60 de jucători (posibil spre 100; numărul exact nu este fixat).** Tratăm această experiență operațională drept punct de plecare, nu o respingem fiindcă lipsesc metricile istorice. Totuși, numărul istoric nu măsoară capacitatea noului FunCity modat. Folderul `servere referinta/hypecity` și `HYPECITY BK vechi nostalgic pentru cei de pe mooncraft` sunt directoare diferite; nu atribuim automat backupului vechi setările HYPECITY-ului la care se referă proprietarul.
+
 ## Proveniență și acoperire
 
 - `diag/oldcfg-report.txt` păstrează **424 intrări cu căi** din 15.077 fișiere selectate, apoi se oprește la limita de raport. Dintre cele 424, **12** sunt `cuantic` (în afara `servere referinta`), **412** sunt HYPECITY BK; dintre ultimele, **379** sunt `plugins/AutoPickup/PlayerData/*.yml` (date de jucători, nu configurație de funcționalități) și doar **33** sunt alte fișiere. Căile din raport nu atestă completitudinea acestor proiecte.
@@ -19,6 +21,13 @@
 | `FunCity server` (în afara referințelor) | 0 | Numele apare în index; nu dovedim starea lui curentă. |
 
 Lista folderelor provine din **primele 40 directoare** ale raportului, nu dintr-un inventar exhaustiv. Cele 15.077 fișiere fără căi în ZIP nu trebuie distribuite artificial între aceste proiecte. Șase intrări poartă doar basename-ul `server.properties`; **nu** sunt dovada a șase servere distincte.
+
+## HYPECITY ca model de lucru — ce putem prelua acum
+
+1. **Prioritatea este configurația HYPECITY care a susținut comunitatea**; în FunCity pornim de la autentificarea prin plugin cerută de proprietar și păstrăm economie/joburi/mafii și voce, în loc să optimizăm ignorând RP. Din captura cu căi nu avem însă configurații atribuibile sigur directorului `servere referinta/hypecity`; nu putem lipi valori exacte în FunCity în numele lui.
+2. **HYPECITY BK este un indiciu secundar, nu același server garantat:** configurații cu cale pentru Mohist, AuthMe, Plasmo Voice și AutoPickup, plus `bukkit.yml` cu spawn 8/5/1 și urme de AI Improvements/FerriteCore/Performant. Modelul de roluri și alegerea funcțiilor RP sunt utile; pluginurile și valorile nu sunt încă dovada configurației folosite când proprietarul a avut peste 60 de jucători.
+3. **Transferăm modelul, nu identitățile:** plugin pentru autentificarea contului, permisiuni/roluri RP, voce, funcții de job și ordine a setărilor de performanță. Nu importăm datele AuthMe/AutoPickup ale jucătorilor, parole, baze de date sau regiuni într-un oraș nou fără protecții preventive. FunCity folosește deocamdată alt motor/altă voce și alte moduri; nu forțăm Performant peste RoadRunner sau Plasmo Voice peste Simple Voice Chat.
+4. **Nu schimbăm limitele 20/6/2, view 5 și compresia 256 din ținta repo doar pentru că backupul BK conține 8/5/1.** Dacă obținem o configurație cu proveniență pentru HYPECITY-ul folosit efectiv, comparăm direct fiecare valoare cu FunCity și mutăm doar ce păstrează experiența RP; test pe copie înainte de aplicare pe server.
 
 ## Ce se poate învăța fără a copia orbește
 

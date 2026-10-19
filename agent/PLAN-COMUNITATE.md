@@ -2,6 +2,8 @@
 
 **Produs:** oraș nou construit de proprietar și jucători, RP cu mafii/joburi, vehicule, mobilier, arme și voce; survival limitat. Fără claims/WorldGuard/EssentialsXAntiBuild/EssentialsXProtect în ținta normală; CoreProtect este jurnal și rollback manual administrativ. Nu sunt validate încă conectarea clientului Forge **sau autentificarea prin plugin**, capacitatea, vocea UDP, logarea blocurilor modate, restore-ul sau timpul de instalare. Nu există drept de publicare/live implicit în această pagină.
 
+**Punct de plecare practic — HYPECITY:** proprietarul relatează că serverul său HYPECITY de pe PC a avut peste 60 de jucători, posibil spre 100 (nu a fixat un număr exact). Folosim experiența și schema lui de operare ca referință prioritară pentru FunCity, nu presupunem că sloturile din `server.properties` sunt toată explicația. În captura accesibilă aici, `servere referinta/hypecity` nu are configurații cu căi identificabile; cele disponibile sunt din **HYPECITY BK**, alt director, doar indicii parțiale. Pornim de la ce se poate identifica sigur în [auditul HYPECITY](AUDIT-SERVERE-REFERINTA.md), fără a cere proprietarului să refacă manual captura și fără a pretinde că noul server duce deja același număr.
+
 ## Ordinea de lucru: siguranța comunității înaintea „optimizărilor”
 
 | Etapă | Ce facem concret | Prag observabil pentru a trece mai departe |
