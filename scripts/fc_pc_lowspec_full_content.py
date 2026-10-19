@@ -60,9 +60,12 @@ def restore(root, apply=False):
     if any(not (mods/name).is_file() or is_link(mods/name) or sha(mods/name) != digest
            for name, digest in existing.items()):
         raise ValueError('existing LowSpec SHA mismatch; no changes')
-    archive = root.parent/'Arena-Archived-Instances'/ARCHIVE_RUN/'FunCity'
-    if not archive.is_dir() or is_link(archive):
-        raise ValueError('original FunCity backup missing or linked')
+    archive_batch = root.parent/'Arena-Archived-Instances'/ARCHIVE_RUN
+    archive = archive_batch/'FunCity'
+    if (not archive_batch.is_dir() or is_link(archive_batch) or
+            not (archive_batch/'RESTORE.txt').is_file() or
+            not archive.is_dir() or is_link(archive)):
+        raise ValueError('original FunCity backup/restore marker missing or linked')
     pack = archive/'mmc-pack.json'
     if not pack.is_file() or is_link(pack):
         raise ValueError('original pack metadata missing')

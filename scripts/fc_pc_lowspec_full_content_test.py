@@ -21,9 +21,11 @@ def main():
     with tempfile.TemporaryDirectory() as temp:
         root = Path(temp)/'PrismLauncher'/'instances'
         root.mkdir(parents=True)
-        old = root.parent/'Arena-Archived-Instances'/ARCHIVE_RUN/'FunCity'
+        batch = root.parent/'Arena-Archived-Instances'/ARCHIVE_RUN
+        old = batch/'FunCity'
         source = old/'.minecraft'/'mods'
         source.mkdir(parents=True)
+        (batch/'RESTORE.txt').write_text('synthetic restore marker', encoding='utf-8')
         (old/'mmc-pack.json').write_text(json.dumps({'components': [
             {'uid':'net.minecraft','version':'1.16.5'},
             {'uid':'net.minecraftforge','version':'36.2.42'}]}), encoding='utf-8')
