@@ -1,4 +1,8 @@
-# FunCity — stare verificabilă (18.10.2026)
+# FunCity — stare verificabilă (19.10.2026)
+
+- **Pagina proiectului și instrucțiunile agentului:** `site/template.html` generează o pagină responsivă FunCity cu artwork propriu optimizat (~45 KiB), status ALES/structural/teste lipsă și linkuri către repo; `README.md` are aceeași hartă. `agent/SURSE-AGENT.md` compară 3 surse publice GitHub pentru instrucțiuni de agent, fără a instala prompturi ori a schimba modelul. Preview HTTP local și asset 200; Pages rămâne manual, nepublicată de această editare.
+- **Runner PC, 19.10.2026:** workflow-ul read-only [39285290908](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39285290908) s-a încheiat SUCCESS în ~8 secunde pe jobul Windows self-hosted, fără operații de instalare. Descărcarea logului din sandbox a dat EOF la results-receiver, deci inventarul HYPECITY/Prism/JAR-urilor nu a fost citit și nu afirmăm valori concrete; `diag/pc-probe.txt` și `out/` nu au fost modificate de noi.
+
 
 - **Motor/moduri/client — selecție închisă pentru candidat, nu release (19.10.2026):** FunCity b1.0827 + server 29 moduri + client `.mrpack` 24 moduri. `scripts/fc_server_lite_candidate.py` filtrează doar moduri din arhiva veche pinuită SHA, fără lume/config/pluginuri; `scripts/fc_lite_repack.py` filtrează clientul și adaugă vocea prin URL/hash pinuit. Fixture-urile testează 36→29 și 25→24, selecția comună 20+9+4, SHA/duplicate, păstrarea sursei și neincluderea datelor din lume/pluginuri; push-ul `a91c3c2` a reușit; CI hosted 39276176039 PASS a verificat SHA surselor și a construit **temporar** modurile server 29 și `.mrpack` client 24, fără release, instalare ori PC. CI 39276176141 (statice) și 39276176065 (metadata pluginurilor istorice) PASS. Motorul/combinarea client-server nu au fost testate împreună, iar importul clientului, FPS/vocea/capacitatea rămân nevalidate. Detalii: `agent/SELECTIE-MOTOR-MODURI-CLIENT.md`.
 

@@ -15,7 +15,12 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - run: mkdir _site && cp site/index.html _site/index.html
+      - run: |
+          set -Eeuo pipefail
+          python3 site/build_site.py
+          mkdir -p _site/assets
+          cp site/index.html _site/index.html
+          cp site/assets/funcity-city.webp _site/assets/funcity-city.webp
       - uses: actions/upload-pages-artifact@v3
         with: { path: _site }
       - uses: actions/deploy-pages@v4
