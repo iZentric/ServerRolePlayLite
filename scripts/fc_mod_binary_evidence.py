@@ -35,8 +35,8 @@ def inspect_jar(raw):
         assets = sum(i.filename.startswith('assets/') and not i.is_dir() for i in info)
         toml_name = next((x for x in ('META-INF/mods.toml', 'META-INF/MODS.TOML') if x in names), None)
         result = {'metadata': 'absent', 'mod_ids': [], 'display_names': [],
-                  'declared_dependencies': {}, 'classes': classes, 'asset_files': assets,
-                  'jar_bytes': len(raw)}
+                  'declared_dependencies': {}, 'required_dependencies': {},
+                  'classes': classes, 'asset_files': assets, 'jar_bytes': len(raw)}
         if toml_name:
             metadata = jar.getinfo(toml_name)
             if metadata.file_size > 200_000:
@@ -51,6 +51,11 @@ def inspect_jar(raw):
             result['display_names'] = [safe(m.get('displayName', '')) for m in data.get('mods', [])]
             result['declared_dependencies'] = {
                 safe(mod): [safe(dep.get('modId', '')) for dep in deps]
+                for mod, deps in data.get('dependencies', {}).items()
+            }
+            result['required_dependencies'] = {
+                safe(mod): [safe(dep.get('modId', '')) for dep in deps
+                            if dep.get('mandatory') is True]
                 for mod, deps in data.get('dependencies', {}).items()
             }
         elif 'mcmod.info' in names:

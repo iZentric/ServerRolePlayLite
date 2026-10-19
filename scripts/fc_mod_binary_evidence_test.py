@@ -17,6 +17,7 @@ def main():
     result = inspect_jar(jar_stream.getvalue())
     assert result['mod_ids'] == ['example']
     assert result['declared_dependencies'] == {'example': ['forge']}
+    assert result['required_dependencies'] == {'example': ['forge']}
     assert result['classes'] == result['asset_files'] == 1
     with tempfile.TemporaryDirectory() as tmp:
         path = Path(tmp) / 'server.zip'

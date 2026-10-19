@@ -1,6 +1,6 @@
 # FunCity RP Lite — alegerea concretă pentru motor, moduri și client (19.10.2026)
 
-**Reper:** HYPECITY-ul proprietarului a avut, după relatarea lui, peste 60 de jucători, posibil spre 100. Folosim experiența lui de comunitate RP ca model, nu presupunem că toate configurile HYPECITY sunt în repo: `servere referinta/hypecity` nu are fișiere cu căi identificabile în captura disponibilă; HYPECITY BK este alt director. **Nu reconstruim un server HYPECITY dintr-un ZIP CUANTIC.** Alegem concret ținta FunCity pe baza binarelor/inventarelor care au proveniență verificabilă aici. Nici numărul vechi de jucători, nici `max-players=64` nu măsoară capacitatea noului server.
+**Reper:** HYPECITY-ul proprietarului a dus, după relatarea lui, peste 60 simultan **pe hosting**, inclusiv jucători cu PC-uri slabe. [Inventarul read-only actual de pe PC](COMPARATIE-HYPECITY-PC.md) a confirmat 35 moduri și 61 pluginuri în HYPECITY principal, distinct de HYPECITY BK (40/37). Captura veche de config nu le atribuia căi, dar noile nume de JAR au proveniență; nu sunt probă de FPS/client folosit atunci sau capacitate FunCity. **Nu reconstruim HYPECITY dintr-un ZIP CUANTIC.** Alegerea 24/29 de mai jos este candidat de comparație moștenit din FunCity, nu minimul necesar dovedit; vezi candidații de excludere în auditul PC.
 
 | Componentă | ALES — un singur candidat | APLICAT în repo | VALIDAT / nu încă | LIVE |
 |---|---|---|---|---|

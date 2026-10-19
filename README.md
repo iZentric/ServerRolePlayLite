@@ -31,6 +31,6 @@ FunCity este un proiect de comunitate roleplay cu un **oraș nou, construit de p
 - **Motor, moduri, client:** [rezumatul deciziei](agent/SELECTIE-MOTOR-MODURI-CLIENT.md) · [costul și rostul fiecărui mod](agent/AUDIT-COST-MODURI.md) · [lista celor 24 + 29](agent/LISTA-MODURI-RP-LITE.md) · [poarta beta](agent/BETA-LITE.md).
 - **RP și moderare:** [rolurile pluginurilor](agent/RP-LITE-PLUGINS.md) · [planul comunității](agent/PLAN-COMUNITATE.md).
 - **Vrei să continui cu un alt agent?** [Cerința exactă FunCity, gata de copiat](agent/CERINTA-EXACTA-FUNCITY.md) · [instrucțiunile din repo](AGENTS.md).
-- **Dovezi și limite:** [auditul HYPECITY](agent/AUDIT-SERVERE-REFERINTA.md) · [progresul](agent/PROGRES.md).
+- **Dovezi și limite:** [comparația HYPECITY/FunCity citită de pe PC](agent/COMPARATIE-HYPECITY-PC.md) · [captura istorică parțială de config](agent/AUDIT-SERVERE-REFERINTA.md) · [progresul](agent/PROGRES.md).
 
 Motorul derivă din Mohist/Tenet, sub GPL-3.0; orice distribuție viitoare de JAR derivat cere verificarea licenței, atribuire și sursa corespunzătoare. Nu publicăm binare sau promisiuni de FPS/jucători numai pe baza selecției din repo.

@@ -21,7 +21,7 @@
 | `Modernxl 1.16.5.jar` | RP provizoriu: mobilier modern, ~35,4 MB comprimați în vechiul ZIP. Candidat real de simplificare dacă piesele nu sunt dorite; compară setul de blocuri cu CFM/ModernLife, apoi testează pe ambele părți. |
 | `obfuscate-0.6.3-1.16.5.jar` | DEP: CGM/Vehicle pe 1.16.5. Scoatere doar dacă ambii părinți sunt eliminați/înlocuiți și Forge confirmă compatibilitatea. |
 | `pamhc2foodcore-1.16.3-1.0.2.jar` | RP opțional: hrană/economie cu survival limitat; nu e indispensabil. Poate fi omis înainte de construirea lumii dacă nu există job/rețetă RP care îl cere. |
-| `Pizzaland_v68.jar` | AUDIT prioritar: rolul, licența, registrul și dependențele exactului JAR nu sunt confirmate; ~83,1 MB comprimați în ZIP-ul vechi. **Nu există dovadă că nu poate fi scos.** Prima candidatură pentru un test separat fără el pe ambele părți înainte de generarea lumii noi; nu îl scoatem nevăzut. |
+| `Pizzaland_v68.jar` | AUDIT prioritar: `Pizzaland Roleplay`, ID `pizzamod` confirmat în binarele arhivate; 8.241 asseturi client, ~83,1 MB comprimați în vechiul ZIP. Prezența în FunCityLocal nu e dovadă că e necesar; nu era în inventarele HYPECITY server. **Primul experiment fără el**, în client/server de test, după verificarea dependenților și a funcțiilor RP; fără a-l șterge din lumea/PC existente. |
 | `player-animation-lib-forge-0.4.0+1.16.5.jar` | DEP: animațiile Emotecraft. Scoatere dacă Emotecraft și alți dependenți sunt absenți, confirmat prin metadata/login. |
 | `roadstuff-1.16.5-4.3.0.jar` | RP: blocuri de drum pentru oraș; se poate omite dacă orașul nu le folosește, odată cu Mapper Base și înainte de construire. |
 | `selene-1.16.5-1.9.0.jar` | DEP: Supplementaries. Scoatere numai dacă nu mai există niciun dependent. |
@@ -46,7 +46,7 @@
 | `FastSuite-1.16.4-1.1.1.jar` | OPT: procesare rețete, **nu** substituie integral FastWorkbench/FastFurnace; ultimul e deja scos din țintă. Profil de crafting înainte de a păstra/scoate. |
 | `FastWorkbench-1.16.5-4.6.2.jar` | OPT: bancuri de lucru, distinct de FastSuite; candidat A/B dacă craftingul nu e hotspot. |
 | `Ksyxis-1.4.6.jar` | OPT: politica spawn chunks; păstrat până se verifică împreună cu `keep-spawn-loaded=true` și se măsoară chunkuri/login pe copia nouă. |
-| `Placebo-1.16.5-4.7.1.jar` | DEP posibilă pentru stackul modat; dependentul exact încă trebuie confirmat din metadata binară. Dacă nu există dependent, **se poate scoate** după boot/login. |
+| `Placebo-1.16.5-4.7.1.jar` | DEP dovedită prin metadata binară pentru **FastSuite și FastWorkbench**. Nu este candidat de eliminare separat; dacă se renunță la ambele optimizări, se verifică și alți eventuali dependenți înainte de scoatere. |
 | `RoadRunner-mc1.16.5-1.5.2.jar` | OPT: tick/logică server; nu adăugăm Performant din HYPECITY pe deasupra. A/B MSPT/compatibilitate cu ModernFix înainte de înlocuire. |
 | `connectivity-2.4-1.16.5.jar` | COMP: rețea/handshake Forge; poate fi scos numai după login stabil, aceleași moduri și test trafic/erori. |
 | `getittogetherdrops-1.16.5-v1.2.jar` | OPT: unește drop-uri; fără scenariu cu iteme multe câștigul este necunoscut, deci candidat A/B și verificare loot RP. |
