@@ -9,6 +9,7 @@ on:
       - '.github/workflows/lite-asset-audit.yml'
       - 'scripts/fc_lite_repack.py'
       - 'scripts/fc_mrpack_audit.py'
+      - 'scripts/fc_mod_binary_evidence.py'
       - 'agent/DECIZII.md'
       - 'agent/voicechat-1.16.5-2.3.23.json'
   workflow_dispatch:
@@ -89,6 +90,14 @@ jobs:
           print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Voice code verified::'
                 'archive and official class files byte-identical; non-class files differ')
           PY
+      - name: Inspect selected historical JAR metadata, read-only (not runtime proof)
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/fc_mod_binary_evidence_test.py
+          python3 scripts/fc_mod_binary_evidence.py \
+            "$RUNNER_TEMP/fc-asset/CUANTIC-Server-CatServer-1.7.7.zip" \
+            | tee "$RUNNER_TEMP/fc-asset/mod-evidence.jsonl"
+          cat "$RUNNER_TEMP/fc-asset/mod-evidence.jsonl" >> "$GITHUB_STEP_SUMMARY"
       - name: Stage isolated server 29-mod candidate from pinned archive (no plugins/world/engine)
         run: |
           set -Eeuo pipefail
