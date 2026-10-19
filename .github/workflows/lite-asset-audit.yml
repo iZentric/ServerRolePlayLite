@@ -34,6 +34,19 @@ jobs:
           python3 scripts/fc_mrpack_audit.py "$pack" --historical diag/pc-client.txt \
             > "$RUNNER_TEMP/fc-asset/baseline.json"
           cat "$RUNNER_TEMP/fc-asset/baseline.json"
+          python3 - <<'PY'
+          import os, zipfile
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'fc-asset/FunCity-1.2.5.mrpack'
+          with zipfile.ZipFile(p) as z:
+              big=sorted((i for i in z.infolist() if not i.is_dir()),
+                         key=lambda i:i.compress_size,reverse=True)[:10]
+              for i in big:
+                  if any(c in i.filename for c in ('\\n','\\r','::')):
+                      raise SystemExit('unsafe archive name for annotation')
+                  print('::notice file=agent/BETA-LITE.md,line=1,title=Large pack entry::'
+                        f'{i.filename} compressed_bytes={i.compress_size}')
+          PY
       - name: Build local, non-distributed candidate and audit 23-mod target
         run: |
           set -Eeuo pipefail
