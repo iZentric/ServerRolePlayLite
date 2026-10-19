@@ -1,0 +1,58 @@
+name: FunCity Lite published-asset audit
+# Hosted runner only. Reads the existing release; produces no download artifact,
+# release, JAR, PC action, server action or deployment.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - '.github/workflows/lite-asset-audit.yml'
+      - 'scripts/fc_lite_repack.py'
+      - 'scripts/fc_mrpack_audit.py'
+      - 'agent/DECIZII.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PYTHONPATH: scripts
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify authentic old release and inspect source names
+        run: |
+          set -Eeuo pipefail
+          mkdir -p "$RUNNER_TEMP/fc-asset"
+          gh release download funcity -R "$GITHUB_REPOSITORY" \
+            -p FunCity-1.2.5.mrpack -D "$RUNNER_TEMP/fc-asset"
+          pack="$RUNNER_TEMP/fc-asset/FunCity-1.2.5.mrpack"
+          printf '%s  %s\n' 'cd9c8ddeaff2e02e009934d7a35eba14b1b5a2bc919797ad7a0ab2a92bc5fb47' "$pack" | sha256sum -c -
+          python3 scripts/fc_mrpack_audit.py "$pack" --historical diag/pc-client.txt \
+            > "$RUNNER_TEMP/fc-asset/baseline.json"
+          cat "$RUNNER_TEMP/fc-asset/baseline.json"
+      - name: Build local, non-distributed candidate and audit 23-mod target
+        run: |
+          set -Eeuo pipefail
+          pack="$RUNNER_TEMP/fc-asset/FunCity-1.2.5.mrpack"
+          target="$RUNNER_TEMP/fc-asset/FunCity-Lite-Beta-candidate.mrpack"
+          python3 scripts/fc_lite_repack.py "$pack" \
+            --source-sha256 cd9c8ddeaff2e02e009934d7a35eba14b1b5a2bc919797ad7a0ab2a92bc5fb47 \
+            --output "$target" > "$RUNNER_TEMP/fc-asset/candidate.json"
+          python3 scripts/fc_mrpack_audit.py "$target" > "$RUNNER_TEMP/fc-asset/candidate-audit.json"
+          cat "$RUNNER_TEMP/fc-asset/candidate.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'fc-asset'
+          a=json.loads((root/'candidate-audit.json').read_text())
+          assert a['client_mod_count']==23
+          assert a['remote_files_without_declared_size']==0
+          summary=Path(os.environ['GITHUB_STEP_SUMMARY'])
+          summary.write_text('## Structural only; NO Prism/Forge login or FPS test\n'
+                             f"Source: {a['archive_bytes']} bytes in candidate; "
+                             f"{a['client_mod_count']} client JAR names.\n")
+          PY
