@@ -1,0 +1,41 @@
+name: PC closed-server and clean Prism preflight
+# Read-only preflight for a NEW isolated copy. Never inspect worlds, accounts or credentials.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 5
+    steps:
+      - name: Check lab prerequisites without touching existing server or Prism
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          function Note([string]$key, [string]$value) {
+            $safe = $value -replace '[^A-Za-z0-9 ._+=:-]', '_'
+            Write-Output ('::notice title=' + $key + '::' + $safe.Substring(0, [Math]::Min($safe.Length, 300)))
+          }
+          $os = Get-CimInstance Win32_OperatingSystem
+          Note 'PC available memory MiB' ([string][Math]::Floor($os.FreePhysicalMemory / 1024))
+          $drive = Get-PSDrive -Name C -ErrorAction SilentlyContinue
+          if ($drive) { Note 'PC C free MiB' ([string][Math]::Floor($drive.Free / 1MB)) }
+          $java = Get-Command java -ErrorAction SilentlyContinue
+          Note 'Java on PATH' ([string][bool]$java)
+          if ($java) {
+            $ErrorActionPreference = 'Continue' # java -version prints to stderr on Java 11
+            $version = (& java -version 2>&1 | Select-Object -First 1) -replace '[^A-Za-z0-9 ._+\-]','_'
+            $ErrorActionPreference = 'Stop'
+            Note 'Java version' $version
+          }
+          $prism = @()
+          if ($env:APPDATA) { $prism += Join-Path $env:APPDATA 'PrismLauncher\instances' }
+          $prism += 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances'
+          $present = @($prism | Select-Object -Unique | Where-Object { Test-Path -LiteralPath $_ -PathType Container })
+          Note 'Prism instances root visible' ([string]($present.Count -gt 0))
+          $existing = if ($present.Count) { @(Get-ChildItem -LiteralPath $present[0] -Directory -ErrorAction Stop | Where-Object { $_.Name -like 'FunCity-Lite-PluginFirst-LAB*' }) } else { @() }
+          Note 'Lab instance name collision' ([string]($existing.Count -gt 0))
+          $live = @(Get-CimInstance Win32_Process -Filter "name = 'java.exe' OR name = 'javaw.exe'")
+          Note 'Java processes currently running' ([string]$live.Count)
+          Note 'Preflight' 'READ_ONLY_NO_START_NO_PRISM_CHANGE_NO_WORLD_DATA'
