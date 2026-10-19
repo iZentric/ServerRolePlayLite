@@ -4,7 +4,7 @@ FunCity este un proiect pentru o comunitate Minecraft 1.16.5 modată: oraș cons
 
 ## Ce există deja
 
-- `agent/DECIZII.md` și `agent/LISTA-MODURI-RP-LITE.md`: selecția **provizorie** 24 moduri client / 29 moduri server, nu pack instalat sau demonstrație de performanță.
+- [`agent/SELECTIE-MOTOR-MODURI-CLIENT.md`](agent/SELECTIE-MOTOR-MODURI-CLIENT.md): alegerea **închisă pentru candidatul de test** — FunCity b1.0827, 29 moduri server și 24 client; nu înseamnă pack instalat sau performanță dovedită. Numele exacte sunt în `agent/DECIZII.md` și `agent/LISTA-MODURI-RP-LITE.md`.
 - `agent/RP-LITE-PLUGINS.md`: rolurile pluginurilor și construcția liberă; CoreProtect trebuie verificat în instanța reală.
 - `agent/AUDIT-CAPACITATE-RP.md`: configurații și backupuri istorice inspectate, date lipsă și riscuri pentru un server cu mulți jucători. Valorile `max-players` din capturi nu sunt capacitate măsurată.
 - `agent/BETA-LITE.md`: poarta pentru import, conectare Forge și autentificare prin plugin, voce UDP, funcții RP, backup/restaurare și beta; **nu a fost trecută**.

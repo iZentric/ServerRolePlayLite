@@ -103,7 +103,8 @@ PY
 echo 'client inventory + historical handshake audit PASS (static, not Forge login/FPS)'
 python3 scripts/fc_mrpack_audit_test.py
 python3 scripts/fc_lite_repack_test.py
-echo 'Lite mrpack audit + 24-mod RP voice repack fixtures PASS (synthetic, not a real import)'
+python3 scripts/fc_server_lite_candidate_test.py
+echo 'Lite client 24 / server 29 selection + packaging fixtures PASS (synthetic, not a real import or boot)'
 python3 scripts/fc_pack_stage_test.py
 echo 'server mod A/B stage fixtures PASS (no Java boot or player FPS)'
 python3 scripts/fc_plugin_audit_test.py

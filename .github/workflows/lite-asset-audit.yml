@@ -89,6 +89,23 @@ jobs:
           print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Voice code verified::'
                 'archive and official class files byte-identical; non-class files differ')
           PY
+      - name: Stage isolated server 29-mod candidate from pinned archive (no plugins/world/engine)
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/fc_server_lite_candidate.py \
+            "$RUNNER_TEMP/fc-asset/CUANTIC-Server-CatServer-1.7.7.zip" \
+            --output "$RUNNER_TEMP/fc-asset/FunCity-Server-Mods-29-candidate.zip" \
+            > "$RUNNER_TEMP/fc-asset/server-candidate.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          report=json.loads((Path(os.environ['RUNNER_TEMP'])/'fc-asset/server-candidate.json').read_text())
+          assert report['server_mod_count']==29 and report['shared_client_server_names']==20
+          assert report['server_only']==9 and report['client_only']==4
+          with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as summary:
+              summary.write('Server mod archive (local only): 29 mods, '
+                            f"SHA256 `{report['candidate_sha256']}`. No server boot.\n")
+          PY
       - name: Build local, non-distributed candidate and audit 24-mod target
         run: |
           set -Eeuo pipefail
@@ -109,11 +126,12 @@ jobs:
           assert b['client_mod_count']==25 and a['client_mod_count']==24
           assert a['remote_files_without_declared_size']==0
           summary=Path(os.environ['GITHUB_STEP_SUMMARY'])
-          summary.write_text('## Structural only; NO Prism/Forge login or FPS test\n'
-                             f"Source: {b['archive_bytes']} bytes / 25 mods; "
-                             f"candidate: {a['archive_bytes']} bytes / 24 mods (voice RP).\n"
-                             f"Remote downloads declared: {a['remote_download_bytes_declared']} bytes; "
-                             f"candidate SHA256: `{c['output_sha256']}`.\n")
+          with summary.open('a') as stream:
+              stream.write('Client structural only; NO Prism/client connection or FPS test\n'
+                           f"Source: {b['archive_bytes']} bytes / 25 mods; "
+                           f"candidate: {a['archive_bytes']} bytes / 24 mods (voice RP).\n"
+                           f"Remote downloads declared: {a['remote_download_bytes_declared']} bytes; "
+                           f"candidate SHA256: `{c['output_sha256']}`.\n")
           print('::notice file=agent/BETA-LITE.md,line=1,title=Lite ZIP metadata::'
                 f"old_bytes={b['archive_bytes']} new_bytes={a['archive_bytes']} "
                 f"remote_bytes={a['remote_download_bytes_declared']} "

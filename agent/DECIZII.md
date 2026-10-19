@@ -6,6 +6,8 @@ Planul de operare și gates pentru comunitate: `agent/PLAN-COMUNITATE.md`.
 
 **CORECȚIE MULTIPLAYER:** modurile OPT/COMP păstrate sunt ipoteze de selecție, nu un set dovedit optim pentru mulți jucători. Snapshotul vechi cu 15.077 intrări nu păstrează căile majorității fișierelor, iar valoarea `max-players` nu este capacitate. Auditul diferențelor de config, pluginuri istorice și limitelor gazdei: `agent/AUDIT-CAPACITATE-RP.md`. Niciun optimizer nu devine „imposibil de scos” fără A/B pe scenariu RP încărcat și login client real.
 
+**Selecția pentru un singur candidat de test este închisă:** motor FunCity b1.0827, moduri server 29/36 și client 24 (25 istorice −2 + voce). Nu mai înlocuim motorul și nu mai adăugăm optimizări doar pe reputație. Aceasta este o alegere de **ce construim/testăm**, nu o afirmație despre import, instalare, performanță sau capacitate. Rezumat operațional: [motor + server + client](SELECTIE-MOTOR-MODURI-CLIENT.md). HYPECITY-ul proprietarului (peste 60 de jucători, posibil spre 100 după relatarea lui) este reperul de experiență; arhiva CUANTIC oferă doar binarele istorice accesibile pentru candidat, nu configurația HYPECITY.
+
 ## Motor și valori
 
 | ID | Alegere | Motiv | Sursa | Ce o schimbă |
