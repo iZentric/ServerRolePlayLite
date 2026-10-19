@@ -35,10 +35,15 @@ jobs:
             > "$RUNNER_TEMP/fc-asset/baseline.json"
           cat "$RUNNER_TEMP/fc-asset/baseline.json"
           python3 - <<'PY'
-          import os, zipfile
+          import hashlib, os, zipfile
           from pathlib import Path
           p=Path(os.environ['RUNNER_TEMP'])/'fc-asset/FunCity-1.2.5.mrpack'
           with zipfile.ZipFile(p) as z:
+              files=set(z.namelist())
+              if {'pack.png','overrides/pack.png'} <= files:
+                  match=hashlib.sha256(z.read('pack.png')).digest()==hashlib.sha256(z.read('overrides/pack.png')).digest()
+                  print('::notice file=agent/BETA-LITE.md,line=1,title=Icon duplication::'
+                        f'root_equals_override={str(match).lower()}')
               big=sorted((i for i in z.infolist() if not i.is_dir()),
                          key=lambda i:i.compress_size,reverse=True)[:10]
               for i in big:
