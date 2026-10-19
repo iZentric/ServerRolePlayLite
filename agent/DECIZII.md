@@ -10,13 +10,14 @@ Planul de operare și gates pentru comunitate: `agent/PLAN-COMUNITATE.md`.
 
 | ID | Alegere | Motiv | Sursa | Ce o schimbă |
 |---|---|---|---|---|
-| M | FunCity b1.0827 PĂSTRAT ca motor | Forge+Bukkit compatibil cu conținutul RP; nu e dovedit cel mai rapid | `agent/alegere-motor-lean.md`, CI în `agent/PROGRES.md` | candidat cu 3 runde, login și RP intacte, MSPT/RSS mai bune |
+| M | FunCity b1.0827 PĂSTRAT ca motor | Forge+Bukkit compatibil cu conținutul RP; nu e dovedit cel mai rapid | `agent/alegere-motor-lean.md`, CI în `agent/PROGRES.md` | candidat cu 3 runde, conectare client Forge și autentificare prin plugin intacte, RP intact, MSPT/RSS mai bune |
 | V1 | view-distance=5 | nu tăiem vederea clientului la 5 | `functity-config/server.properties` | vedere RP și A/B justifică altă valoare |
 | V2 | entity-broadcast-range-percentage=80 | păstrăm vederea vehiculelor/jucătorilor | `functity-config/server.properties` | A/B rețea/FPS fără pop-in |
 | V3 | network-compression-threshold=256 | internet slab; -1 dezactivează compresia | `functity-config/server.properties`; `scripts/functity-stage.sh` | CPU/rețea A/B arată regresie |
 | V4 | spawn 20/6/2; nerf-spawner-mobs=false; despawn=6000 | survival RP nu se golește doar pentru TPS | `functity-config/{bukkit,spigot}.yml` | profil + verificare gameplay |
-| V5 | keep-spawn-loaded=true, Ksyxis PĂSTRAT | decizie existentă; efectul combinat necunoscut | `functity-config/bukkit.yml`; S | A/B chunks/tick/login cu o singură schimbare |
+| V5 | keep-spawn-loaded=true, Ksyxis PĂSTRAT | decizie existentă; efectul combinat necunoscut | `functity-config/bukkit.yml`; S | A/B chunks/tick/conectare client cu o singură schimbare |
 | V6 | fără mod nou de performanță | cost și risc de compatibilitate nejustificat | `agent/comparatie-proiecte-vechi.md` | hotspot documentat + A/B |
+| A1 | autentificarea **contului prin plugin**; JAR/versiune încă nealese | alegere explicită a proprietarului; distinctă de handshake-ul Forge care doar verifică modpackul | declarația proprietarului; `agent/RP-LITE-PLUGINS.md` | plugin compatibil, proveniență/SHA, cont nou+reconectare+izolare înainte de auth testate |
 
 ## Client — 25/25 nume istorice plus voce RP, ținta lean 24
 
@@ -92,7 +93,7 @@ Planul de operare și gates pentru comunitate: `agent/PLAN-COMUNITATE.md`.
 
 ## Pluginurile arhivei vechi; nu pretinde că acestea sunt cele live
 
-Oraș nou deschis: **nu există regiuni de protejat**, build-ul jucătorilor este permis; CoreProtect ține numai evidența și rollback-ul manual de admin. Scoaterea pluginurilor preventive este o alegere a țintei pe baza regulii proprietarului, nu dovadă că eliminarea este compatibilă pe serverul live. Rolurile și testele sunt în `agent/RP-LITE-PLUGINS.md`.
+Autentificarea jucătorului se face **prin plugin**, de ales/testat: în cele 14 JAR-uri istorice CUANTIC nu se află un plugin AuthMe; doar HYPECITY BK are fișiere de config AuthMe. Nu considerăm autentificarea implementată în ținta actuală și nu importăm date de cont. Oraș nou deschis: **nu există regiuni de protejat**, build-ul jucătorilor este permis; CoreProtect ține numai evidența și rollback-ul manual de admin. Scoaterea pluginurilor preventive este o alegere a țintei pe baza regulii proprietarului, nu dovadă că eliminarea este compatibilă pe serverul live. Rolurile și testele sunt în `agent/RP-LITE-PLUGINS.md`.
 
 | ID | Plugin | Alegere | Motiv | Sursa · ce o schimbă |
 |---|---|---|---|---|

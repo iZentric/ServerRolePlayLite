@@ -30,7 +30,7 @@ Lista folderelor provine din **primele 40 directoare** ale raportului, nu dintr-
 
 | Funcția țintă | Probă din istoric | Verificare necesară pe o copie FunCity izolată |
 |---|---|---|
-| Acces/identitate/permisiuni | HYPECITY BK are fișiere Mohist și AuthMe, dar fără probă de funcționare. | Login Forge cu modurile și pluginurile alese, permisiuni minime, fără copiere de conturi sau configurații de autentificare. |
+| Acces/identitate/permisiuni | HYPECITY BK are fișiere Mohist și AuthMe, dar fără probă de funcționare. | Conectare client Forge cu modurile compatibile, apoi separat autentificare prin pluginul ales, cont nou/reconectare și permisiuni minime, fără copiere de conturi sau configurații istorice de autentificare. |
 | Voce pentru mafii și joburi | PlasmoVoice era configurat în HYPECITY BK; pentru FunCity alegerea separată este Simple Voice Chat client/server. | Conectare între versiuni, configurare UDP reală și probă audio de proximitate între doi clienți; clasele JAR identice din CI nu țin loc de test. |
 | Joburi și economie | Meniuri `Jobs.yml`/`aJobs.yml` în ZIP fără server identificabil. | Un meniu deschide comanda potrivită; drepturile, angajarea și o recompensă reală se verifică separat, fără a inventa un plugin sau venituri din meniuri. |
 | Mafii/poliție/teritorii | `zonamafie.yml`, `politie.yml` și regiuni istorice fără cale în ZIP. | Pentru orașul FunCity nou nu copiem protecțiile; verificăm construcție liberă, meniuri/comenzi și log CoreProtect + rollback admin după o modificare controlată. |

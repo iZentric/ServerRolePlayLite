@@ -26,6 +26,8 @@ def check(decisions, properties):
     for id, name in REQUIRED.items():
         if not found.get(id, ('', ''))[0] == name or not found[id][1].startswith('PĂSTRAT'):
             raise ValueError(f'{name} unexpectedly absent from target')
+    if not re.search(r'^\| A1 \| autentificarea \*\*contului prin plugin\*\*; JAR/versiune încă nealese \|', decisions, re.M):
+        raise ValueError('player account authentication via a plugin must remain explicit and unverified')
     props = re.findall(r'^spawn-protection=(\S+)$', properties, re.M)
     if props != ['0']:
         raise ValueError('repo spawn-protection must be 0; live still unverified')
@@ -48,12 +50,18 @@ def main():
         else:
             raise AssertionError(f'fail-closed ID fixture {id}')
     try:
+        check(source.replace('| A1 |', '| A1-DELETED |', 1), props)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError('plugin account authentication requirement dropped')
+    try:
         check(source, props.replace('spawn-protection=0', 'spawn-protection=16'))
     except ValueError:
         pass
     else:
         raise AssertionError('spawn protection drift not rejected')
-    print('PASS: open-city target decisions, no preventive plugins, CoreProtect required, spawn-protection=0; static only')
+    print('PASS: open-city target, plugin authentication required but not installed/tested, CoreProtect, spawn-protection=0; static only')
     return report
 
 

@@ -7,12 +7,12 @@ FunCity este un proiect pentru o comunitate Minecraft 1.16.5 modată: oraș cons
 - `agent/DECIZII.md` și `agent/LISTA-MODURI-RP-LITE.md`: selecția **provizorie** 24 moduri client / 29 moduri server, nu pack instalat sau demonstrație de performanță.
 - `agent/RP-LITE-PLUGINS.md`: rolurile pluginurilor și construcția liberă; CoreProtect trebuie verificat în instanța reală.
 - `agent/AUDIT-CAPACITATE-RP.md`: configurații și backupuri istorice inspectate, date lipsă și riscuri pentru un server cu mulți jucători. Valorile `max-players` din capturi nu sunt capacitate măsurată.
-- `agent/BETA-LITE.md`: poarta pentru import, login Forge, voce UDP, funcții RP, backup/restaurare și beta; **nu a fost trecută**.
+- `agent/BETA-LITE.md`: poarta pentru import, conectare Forge și autentificare prin plugin, voce UDP, funcții RP, backup/restaurare și beta; **nu a fost trecută**.
 - `scripts/fc_community_preflight.py`: doar citire, calculează un prag prudent de spațiu pentru un viitor backup/test; **nu face backup și nu dovedește capacitatea**.
 - `functity/`: surse/patchuri ale motorului; `scripts/functity-stage.sh`: script existent de staging care nu trebuie lansat pe live fără confirmare și backup verificat.
 
 ## Stare
 
-Niciun release Lite nou nu a fost publicat, niciun profil client nu a fost importat/verificat în Forge, iar capacitatea cu jucători RP și performanța pe laptopuri vechi nu au fost măsurate. Fotografiile istorice ale gazdei și release-urile CUANTIC nu certifică serverul activ, uptime-ul, spațiul liber actual sau backupuri zilnice. Nu publicăm o adresă ori promisiuni despre „mulți jucători” până la probe actuale.
+Niciun release Lite nou nu a fost publicat, niciun profil client nu a fost importat/verificat în Forge sau autentificat prin plugin, iar capacitatea cu jucători RP și performanța pe laptopuri vechi nu au fost măsurate. Fotografiile istorice ale gazdei și release-urile CUANTIC nu certifică serverul activ, uptime-ul, spațiul liber actual sau backupuri zilnice. Nu publicăm o adresă ori promisiuni despre „mulți jucători” până la probe actuale.
 
 Progres și blocaje: `agent/PROGRES.md`. Orice modificare a lumii/serverului live necesită decizie separată, backup restaurat în test și plan de rollback.
