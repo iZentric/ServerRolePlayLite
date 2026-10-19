@@ -51,7 +51,8 @@
       "dovada": [
         "agent/audit-modpack.md: 25/25 JAR-uri istorice clasificate cu surse; server-only analizate; nu este verdict de FPS",
         "scripts/fc_client_audit.py: 8 legaturi de dependenta validate din nume; Clumps registry failure, 13 same-name SHA differences in diag/fix.txt",
-        "Hosted CI 39257647037: release 1.2.5 SHA verified, source 25/25 -> local-only candidate 23/23, 135786860 -> 135771260 B, remote 24697368 B; no import/Forge login/FPS; PC runners API 403"
+        "Hosted CI 39257647037: release 1.2.5 SHA verified, source 25/25 -> local-only candidate 23/23, 135786860 -> 135771260 B, remote 24697368 B; no import/Forge login/FPS; PC runners API 403",
+        "CI 39266263549 success: voice client/server Forge 2.3.23 code 513/513 classes identical despite resource/hash differences; client candidate 24/24 archive audit; no login/UDP/audio/FPS"
       ]
     },
     {

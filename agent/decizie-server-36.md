@@ -1,6 +1,6 @@
 # FunCity — alegerea serverului de test, mod cu mod (2026-10-19)
 
-> Actualizare V2: `agent/DECIZII.md` are verdictul PĂSTRAT/SCOS pentru toate cele 36; acest tabel descrie baseline-ul istoric, nu lista de instalare.
+> Actualizare V2: `agent/DECIZII.md` are verdictul PĂSTRAT/SCOS pentru toate cele 36; acest tabel descrie baseline-ul istoric, nu lista de instalare. REVIZUIT după clarificarea RP: S03 FastFurnace SCOS din țintă, S36 Voice Chat PĂSTRAT pe server și în clientul nou.
 
 **Bază verificată:** `git show b1ec20c:docs/ENGINE-PACK-AUDIT.md` inventariază **36 JAR-uri de server și 14 pluginuri** într-un ZIP public pinuit. NU dovedește inventarul live sau că un mod reduce TPS. Auditul surselor pentru 25 JAR-uri client și 15 nume suplimentare server este în `agent/audit-modpack.md`; pentru ultimele două moduri din inventarul de 36, vezi [spark 1.9.1](https://modrinth.com/mod/spark/version/9NSIbttL) și [instalarea Simple Voice Chat](https://modrepo.de/minecraft/voicechat/wiki/installation). **Decizia de acum:** motor de comparație FunCity b1.0827, fără JAR nou; `agent/alegere-motor-lean.md` explică de ce. **36 nu este ținta finală!** `P` = păstrăm NUMAI în baseline/copia A, NU că beneficiul lui e demonstrat; orice optimizare P fără hotspot sau A/B pozitiv este candidat pentru copia lean, testat individual. `T` = candidat timpuriu de scoatere/config pe copia B, nu live; `L` = depinde de conținutul RP efectiv folosit, dependențe și client. Alegerea finală pe nume necesită măsurare, nu presupunerea că „mai multe optimizări” ajută.
 

@@ -1,5 +1,7 @@
 # Alegerea motorului și regula „fără moduri degeaba” — 19.10.2026
 
+**REVIZUIT 19.10:** proprietarul a definit RP-ul cu mafii/joburi și survival limitat: `agent/DECIZII.md` păstrează Voice Chat pe ambele părți și scoate FastFurnace din ținta server; restul acestei pagini este raționamentul istoric.
+
 ## Ce am putut vedea din serverele de pe PC-ul vechi
 
 Citire **read-only a capturii istorice**, nu a discului actual: `diag/oldcfg-report.txt`, provenită din workflow-ul vechi `pc-oldcfg.yml` (rădăcină `E:\Administrator\Desktop\FunCity`), este trunchiată la 424 din 15.077 de fișiere de config. **CUANTIC** are `catserver.yml`, view 4, broadcast 60%, compresie 512, spawn 20/6/2, 25 sloturi declarate; arhiva ZIP CUANTIC 1.7.7 inventariată la `b1ec20c:docs/ENGINE-PACK-AUDIT.md` avea în fapt 36 moduri și 14 pluginuri, inclusiv unele de optimizare. **HYPECITY BK** are `mohist-config/mohist.yml`, spawn 8/5/1 și configurații AI Improvements, FerriteCore și Performant — deci nici acesta nu este o dovadă de „zero moduri de performanță”. Config prezent ≠ JAR încărcat ≠ FPS/TPS măsurat. Folderul `FunCity server` există în index, însă extrasul nu-i oferă o comparație completă. Nu relansăm jobul PC: dispatch-ul anterior a dat 403 și nu a pornit.
