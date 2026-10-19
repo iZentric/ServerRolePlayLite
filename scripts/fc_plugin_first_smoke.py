@@ -75,6 +75,17 @@ def smoke(stage):
             if attempt == 1 and exited == 0 and any(marker in text for marker in (
                     'Successfully installed', 'Server installed', 'install complete')):
                 continue  # installer ended cleanly; second run boots server
+            relevant = [line for line in text.splitlines() if any(
+                token in line.lower() for token in ('guava', 'install', 'immutablemap',
+                                                    'nosuchmethoderror', 'classpath', 'fatal'))]
+            excerpt = re.sub(r'[^A-Za-z0-9 ._+/():=,-]', '_',
+                             ' | '.join(relevant[-12:]))[-1400:]
+            print(f'::error title=Closed FunCity boot diagnosis::exit={exited} '
+                  f'attempt={attempt} clues={excerpt}')
+            guava = [p.relative_to(stage).as_posix() for p in (stage/'libraries').rglob('*guava*.jar')]
+            print('::notice title=Installed Guava JAR paths::' +
+                  ','.join(guava[:8])[:550] if guava else
+                  '::notice title=Installed Guava JAR paths::none')
             tail = re.sub(r'[^A-Za-z0-9 ._+/():=,-]', '_',
                           ' | '.join(text.splitlines()[-15:]))[-1600:]
             print(f'::error title=Closed FunCity boot::exit={exited} attempt={attempt} tail={tail}')

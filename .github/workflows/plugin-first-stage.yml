@@ -45,7 +45,11 @@ jobs:
           from pathlib import Path
           root=Path(os.environ['RUNNER_TEMP'])/'fc-plugin-first'
           with tarfile.open(root/'engines.tar.gz','r:gz') as archive:
-              members=[m for m in archive.getmembers() if m.isfile() and Path(m.name).name in
+              entries=archive.getmembers()
+              guava=[m.name for m in entries if m.isfile() and 'guava' in m.name.lower()]
+              print('::notice title=Reference archive Guava::matches=' +
+                    str(len(guava)) + ' names=' + '|'.join(guava[:5])[:450])
+              members=[m for m in entries if m.isfile() and Path(m.name).name in
                        ('FunCity-b1.0827.jar','FunCity-1.16.5-b1.0827.jar')]
               if len(members)!=1 or members[0].size>350_000_000:
                   raise SystemExit('missing/ambiguous/oversized pinned FunCity engine')
@@ -58,6 +62,15 @@ jobs:
           gh release download lite --repo "$GITHUB_REPOSITORY" \
             -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O "$root/old-plugins.zip"
           echo "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  $root/old-plugins.zip" | sha256sum -c -
+          python3 - <<'PY'
+          import os, zipfile
+          from pathlib import Path
+          pack=Path(os.environ['RUNNER_TEMP'])/'fc-plugin-first/old-plugins.zip'
+          with zipfile.ZipFile(pack) as archive:
+              guava=[i.filename for i in archive.infolist() if 'guava' in i.filename.lower()]
+              print('::notice title=Historical server pack Guava::matches=' +
+                    str(len(guava)) + ' names=' + '|'.join(guava[:5])[:450])
+          PY
           gh release download v21.2 --repo PlayPro/CoreProtect \
             -p 'CoreProtect-21.2.jar' -O "$root/CoreProtect.jar"
           echo "04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977  $root/CoreProtect.jar" | sha256sum -c -
