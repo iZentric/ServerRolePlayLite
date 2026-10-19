@@ -12,6 +12,7 @@ on:
       - 'scripts/fc_plugin_audit*.py'
       - 'scripts/fc_open_city_test.py'
       - 'scripts/fc_legacy_config_audit*.py'
+      - 'scripts/fc_community_preflight*.py'
       - 'scripts/fc_bench.py'
       - 'scripts/fc_spawner_ab.py'
       - 'agent/DECIZII.md'
@@ -40,4 +41,5 @@ jobs:
           python3 scripts/fc_plugin_audit_test.py
           python3 scripts/fc_open_city_test.py
           python3 scripts/fc_legacy_config_audit_test.py
+          python3 scripts/fc_community_preflight_test.py
           git diff --check

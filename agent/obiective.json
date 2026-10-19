@@ -82,8 +82,10 @@
       "id": "F9",
       "titlu": "Rezilienta",
       "criteriu": "Backup si restore cronometrate, staging si rollback demonstrate fara atingere live",
-      "status": "nepornit",
-      "dovada": []
+      "status": "in lucru",
+      "dovada": [
+        "scripts/fc_community_preflight.py: read-only free-space/size policy, symlink/secret fixture PASS; no real host audit, world backup or restore tested"
+      ]
     },
     {
       "id": "F10",
