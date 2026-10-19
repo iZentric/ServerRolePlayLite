@@ -25,25 +25,33 @@ def jar_with_metadata(name):
 def main():
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
-        engine, archive, core, output = [root / n for n in ('motor.jar', 'old.zip', 'CoreProtect.jar', 'stage')]
+        engine, archive, core, guava, output = [root / n for n in
+            ('motor.jar', 'old.zip', 'CoreProtect.jar', 'guava-21.0.jar', 'stage')]
         engine.write_bytes(b'FAKE pinned engine')
         core.write_bytes(jar_with_metadata('CoreProtect'))
+        guava.write_bytes(b'FAKE Guava for SHA stage fixture; no JVM execution')
         with zipfile.ZipFile(archive, 'w') as source:
             for index, name in enumerate(sorted(EXPECTED)):
                 source.writestr('old/plugins/' + name, jar_with_metadata('P' + str(index)))
             source.writestr('old/world/level.dat', b'private world fixture')
             source.writestr('old/plugins/AuthMe/accounts.db', b'private accounts fixture')
-        pins = tuple(map(digest, (engine, archive, core)))
-        try:
-            stage(engine, archive, core, output, ('0' * 64, pins[1], pins[2]))
-        except ValueError as exc:
-            assert 'SHA256 mismatch' in str(exc)
-        else:
-            raise AssertionError('unverified engine accepted')
+        pins = tuple(map(digest, (engine, archive, core, guava)))
+        for bad_index in (0, 3):
+            bad_pins = list(pins)
+            bad_pins[bad_index] = '0' * 64
+            try:
+                stage(engine, archive, core, guava, output, bad_pins)
+            except ValueError as exc:
+                assert 'SHA256 mismatch' in str(exc)
+            else:
+                raise AssertionError('unverified engine or Guava accepted')
         assert not output.exists()
-        report = stage(engine, archive, core, output, pins)
+        report = stage(engine, archive, core, guava, output, pins)
         assert report['server_mods'] == [] and len(report['plugins']) == 6
         assert len({p['declared_name'] for p in report['plugins']}) == 6
+        assert report['runtime_lab_dependency']['sha256'] == pins[3]
+        assert digest(output/'runtime/guava-21.0.jar') == pins[3]
+        assert [p.name for p in (output/'runtime').iterdir()] == ['guava-21.0.jar']
         assert set(SELECTED) <= {p.name for p in (output/'plugins').iterdir()}
         assert not list((output/'mods').iterdir())
         assert 'online-mode=true' in (output/'server.properties').read_text()
@@ -52,7 +60,7 @@ def main():
         assert not (output/'world').exists() and not (output/'plugins/AuthMe').exists()
         assert b'private world fixture' not in (output/'stage-report.json').read_bytes()
         try:
-            stage(engine, archive, core, output, pins)
+            stage(engine, archive, core, guava, output, pins)
         except ValueError as exc:
             assert 'destination must be new' in str(exc)
         else:

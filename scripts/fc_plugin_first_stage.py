@@ -19,6 +19,7 @@ from fc_plugin_first_gate import POLICY, validate
 ENGINE_SHA = 'd6ffa35c1ea9032a4a95f7f1e34b734aa7f53b0358dda6b9e6592326640a15dd'
 ARCHIVE_SHA = 'fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15'
 COREPROTECT_SHA = '04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977'
+GUAVA21_SHA = '972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480'
 SELECTED = ('EssentialsX-2.19.7.jar', 'EssentialsXChat-2.19.7.jar',
             'EssentialsXSpawn-2.19.7.jar', 'LuckPerms-Bukkit-5.5.71.jar',
             'Vault.jar')
@@ -44,15 +45,20 @@ def sha(path):
     return h.hexdigest()
 
 
-def stage(engine, archive, coreprotect, output, pins=(ENGINE_SHA, ARCHIVE_SHA, COREPROTECT_SHA)):
-    engine, archive, coreprotect, output = map(Path, (engine, archive, coreprotect, output))
-    if output.exists() or any(output.resolve() == p.resolve() for p in (engine, archive, coreprotect)):
+def stage(engine, archive, coreprotect, guava21, output,
+          pins=(ENGINE_SHA, ARCHIVE_SHA, COREPROTECT_SHA, GUAVA21_SHA)):
+    engine, archive, coreprotect, guava21, output = map(
+        Path, (engine, archive, coreprotect, guava21, output))
+    if output.exists() or any(output.resolve() == p.resolve()
+                              for p in (engine, archive, coreprotect, guava21)):
         raise ValueError('destination must be new, isolated and distinct from sources')
+    if len(pins) != 4:
+        raise ValueError('four SHA256 pins required')
     policy = json.loads(POLICY.read_text(encoding='utf-8'))
     validate(policy)
     if policy['client_jar_selection'] or policy['server_jar_selection']:
         raise ValueError('this plugin-only stage does not allow mod JAR approvals yet')
-    for path, expected in zip((engine, archive, coreprotect), pins):
+    for path, expected in zip((engine, archive, coreprotect, guava21), pins):
         if not path.is_file() or sha(path) != expected:
             raise ValueError(f'SHA256 mismatch: {path.name}; no stage written')
     audit = scan(archive)  # exact 14 historical JAR names, unique plugin.yml identities
@@ -76,6 +82,8 @@ def stage(engine, archive, coreprotect, output, pins=(ENGINE_SHA, ARCHIVE_SHA, C
     try:
         (tmp / 'mods').mkdir()  # deliberate zero; Forge support remains in the engine
         (tmp / 'plugins').mkdir()
+        (tmp / 'runtime').mkdir()
+        shutil.copyfile(guava21, tmp / 'runtime' / 'guava-21.0.jar')
         shutil.copyfile(engine, tmp / 'FunCity-1.16.5-b1.0827.jar')
         with zipfile.ZipFile(archive) as source:
             items = {i.filename.rsplit('/', 1)[-1]: i for i in source.infolist()
@@ -90,6 +98,9 @@ def stage(engine, archive, coreprotect, output, pins=(ENGINE_SHA, ARCHIVE_SHA, C
         report = {
             'scope': 'closed isolated stage, NOT public or booted',
             'engine': {'name': 'FunCity b1.0827 hybrid', 'sha256': pins[0]},
+            'runtime_lab_dependency': {'path': 'runtime/guava-21.0.jar',
+                                       'sha256': pins[3],
+                                       'use': 'JVM -Xbootclasspath/a; NOT an engine bootstrap fix'},
             'server_mods': [], 'client_mods': [],
             'plugins': [
                 {'jar': p.name, 'sha256': sha(p),
@@ -117,10 +128,13 @@ def main():
     parser.add_argument('--engine', type=Path, required=True)
     parser.add_argument('--archive', type=Path, required=True)
     parser.add_argument('--coreprotect', type=Path, required=True)
+    parser.add_argument('--guava21', type=Path, required=True,
+                        help='official SHA-pinned runtime dependency, laboratory only')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     try:
-        print(json.dumps(stage(args.engine, args.archive, args.coreprotect, args.output), indent=2))
+        print(json.dumps(stage(args.engine, args.archive, args.coreprotect,
+                               args.guava21, args.output), indent=2))
     except (ValueError, AssertionError, OSError, zipfile.BadZipFile, KeyError) as exc:
         print('RESPINS:', exc, file=sys.stderr)
         return 2

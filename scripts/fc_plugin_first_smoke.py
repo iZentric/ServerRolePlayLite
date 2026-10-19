@@ -11,9 +11,7 @@ import sys
 import time
 
 from fc_bench import JvmRun
-from fc_plugin_first_stage import ENGINE_SHA, sha
-
-GUAVA21_SHA = '972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480'
+from fc_plugin_first_stage import ENGINE_SHA, GUAVA21_SHA, sha
 
 
 def check_stage(stage):
@@ -23,6 +21,10 @@ def check_stage(stage):
         raise ValueError('boot is allowed only in the hosted runner temp stage')
     report = json.loads((stage/'stage-report.json').read_text())
     if (report['server_mods'] != [] or report['engine']['sha256'] != ENGINE_SHA or
+            report['runtime_lab_dependency']['path'] != 'runtime/guava-21.0.jar' or
+            report['runtime_lab_dependency']['sha256'] != GUAVA21_SHA or
+            sorted(p.name for p in (stage/'runtime').iterdir()) != ['guava-21.0.jar'] or
+            sha(stage/'runtime/guava-21.0.jar') != GUAVA21_SHA or
             sha(stage/'FunCity-1.16.5-b1.0827.jar') != ENGINE_SHA or
             sorted(p.name for p in (stage/'plugins').glob('*.jar')) !=
             sorted(p['jar'] for p in report['plugins']) or len(report['plugins']) != 6 or
@@ -38,12 +40,9 @@ def check_stage(stage):
     return stage
 
 
-def smoke(stage, guava21):
+def smoke(stage):
     stage = check_stage(stage)
-    guava21 = Path(guava21).resolve()
-    if (not guava21.is_relative_to(Path(os.environ['RUNNER_TEMP']).resolve()) or
-            guava21.name != 'guava-21.0.jar' or sha(guava21) != GUAVA21_SHA):
-        raise ValueError('Guava21 laboratory override missing or wrong SHA')
+    guava21 = stage/'runtime/guava-21.0.jar'  # packaged and verified by the stage builder
     # EULA acceptance is confined to this throwaway hosted runner, never published.
     (stage/'eula.txt').write_text('eula=true\n')
     motor = 'FunCity-1.16.5-b1.0827.jar'
@@ -109,9 +108,9 @@ def smoke(stage, guava21):
 
 def main():
     try:
-        if len(sys.argv) != 3:
-            raise ValueError('expected isolated stage and pinned Guava21 laboratory path')
-        smoke(sys.argv[1], sys.argv[2])
+        if len(sys.argv) != 2:
+            raise ValueError('expected isolated stage with bundled pinned Guava21')
+        smoke(sys.argv[1])
     except (ValueError, KeyError, OSError, IndexError) as exc:
         print('RESPINS:', exc, file=sys.stderr)
         reason = re.sub(r'[^A-Za-z0-9 ._+/():=,-]', '_', str(exc))[:400]

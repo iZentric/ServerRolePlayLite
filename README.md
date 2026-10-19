@@ -19,7 +19,7 @@ FunCity este un proiect de comunitate roleplay cu un **oraș nou, construit de p
 | Stare | Ce înseamnă |
 |---|---|
 | **ALES ca direcție nouă** | Motorul hibrid FunCity **b1.0827** rămâne referință, RP **plugin-first**; nicio includere automată de moduri terțe. [Whitelisting-ul actual](agent/PLUGIN-FIRST.md) este încă gol până la confirmarea modurilor proprii și a excepției pentru voce. |
-| **VALIDAT în laborator** | [Stage izolat 0 moduri / 6 pluginuri](agent/SERVER-PLUGIN-FIRST.md): motorul b1.0827 a pornit și s-a oprit curat pe loopback [cu Guava21 ca override temporar](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39312631544). Fără acel override, bootstrapul Guava20 eșuează; **nu** este încă un build/boot de producție sau RP testat. |
+| **VALIDAT în laborator** | [Stage izolat 0 moduri / 6 pluginuri](agent/SERVER-PLUGIN-FIRST.md): motorul b1.0827 a pornit cu [toate cele șase pluginuri active și Guava21 ca override temporar](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39313104955), apoi s-a oprit curat pe loopback. Fără override, bootstrapul Guava20 eșuează; **nu** este încă un build/boot de producție, login ori RP testat. |
 | **DE TESTAT** | Pluginurile și funcțiile RP efective, modurile proprii identificate, soluția de voce, apoi boot pe copie, importul clientului dacă e necesar, autentificare, CoreProtect, backup/restaurare și sarcina cu jucători. |
 | **LIVE** | Nicio instalare Lite nouă sau capacitate a serverului actual nu este confirmată de acest repo. |
 

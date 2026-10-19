@@ -90,6 +90,7 @@ jobs:
           root="$RUNNER_TEMP/fc-plugin-first"
           python3 scripts/fc_plugin_first_stage.py --engine "$root/motor.jar" \
             --archive "$root/old-plugins.zip" --coreprotect "$root/CoreProtect.jar" \
+            --guava21 "$root/guava-21.0.jar" \
             --output "$root/stage" > "$root/stage-result.json"
           python3 - <<'PY'
           import json, os
@@ -103,6 +104,5 @@ jobs:
       - name: Boot and clean stop on loopback, no public player or benchmark
         run: |
           set -Eeuo pipefail
-          python3 scripts/fc_plugin_first_smoke.py \
-            "$RUNNER_TEMP/fc-plugin-first/stage" "$RUNNER_TEMP/fc-plugin-first/guava-21.0.jar"
+          python3 scripts/fc_plugin_first_smoke.py "$RUNNER_TEMP/fc-plugin-first/stage"
           echo 'Closed boot only. No client login, RP gameplay, capacity or live changes.'
