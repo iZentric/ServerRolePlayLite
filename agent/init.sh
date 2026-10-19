@@ -90,6 +90,16 @@ assert all(tag in selection for tag in ('Conținut RP (11)', 'Biblioteci ale con
                                      'Pornire/RAM/randare (6)', 'Vizibilitate (3)', 'Compatibilitate XP (1)'))
 print('Lite selection 25 historical names / five role groups PASS (names only)')
 PY
+python3 - <<'PY'
+from pathlib import Path
+import re, subprocess
+text=subprocess.check_output(['git','show','b1ec20c:docs/ENGINE-PACK-AUDIT.md'], text=True)
+source=text.split('<details><summary>Toate cele 36 de moduri',1)[1].split('</details>',1)[0]
+names=set(re.findall(r'^- `([^`]+\.jar)`$', source, re.M))
+chosen=re.findall(r'^\|\s*\d+\s*\| `([^`]+\.jar)` \|', Path('agent/decizie-server-36.md').read_text(), re.M)
+assert len(names)==len(chosen)==len(set(chosen))==36 and set(chosen)==names
+print('server 36/36 historical JAR names PASS (static archive, not live)')
+PY
 echo 'client inventory + historical handshake audit PASS (static, not Forge login/FPS)'
 python3 scripts/fc_mrpack_audit_test.py
 echo 'Lite mrpack fixture audit PASS (synthetic, not a real release download)'
