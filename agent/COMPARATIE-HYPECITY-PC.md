@@ -18,4 +18,13 @@
 - **Placebo nu e „mod în plus” pe cont propriu:** `mods.toml` al FastSuite **și** FastWorkbench declară `placebo` ca dependență; FastWorkbench este prezent cu același nume în HYPECITY principal și BK. Dacă renunțăm la ambii optimizatori după teste, reevaluăm Placebo împreună cu ceilalți dependenți, nu separat.
 - **Candidați reali de simplificare, nu eliminări aplicate:** Pizzaland dacă nu folosim conținutul său; Pam's Food dacă nu folosim rețetele; In Control! dacă nu sunt reguli active; Ksyxis dacă se suprapune inutil cu keep-spawn; FastSuite + FastWorkbench + Placebo numai ca grup evaluat; alte optimizări server-only după MSPT și cele client-only păstrate conform cerinței. CFM, vehiculele, emotele, armele și mobilierul se decid după funcția RP dorită, nu după asemănarea numelui cu HYPECITY.
 
-**Prag de siguranță:** nu scoatem JAR-uri din `Desktop/FunCityLocal/server`, Prism, serverul găzduit sau lumea existentă pe baza acestui tabel. 24/29 este **candidat moștenit de comparație, nu minimul demonstrat**. Fără test de import/login client+server, registru, scenă RP, voce, backup/restore și A/B, nici un FPS, nici succesul la conectare nu sunt dovedite.
+## Experimentul concret, izolat: fără Pizzaland
+
+[Run hosted 39302649661](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39302649661) **SUCCESS**, din sursele publice cu SHA verificat. Am produs **numai temporar** perechea A (24 client / 29 server) și perechea B **23 client / 28 server**, eliminând exact `Pizzaland_v68.jar` de pe ambele părți; nu am distribuit ZIP-uri/JAR-uri, nu am instalat, nu am pornit Forge sau Prism. Auditul metadatelor obligatorii ale **28 JAR-uri server și 10 JAR-uri incluse fizic în client** nu a găsit niciun dependent declarat de `pizzamod`; metadatele acestora s-au parsat toate. Fișierele client referite remote, dependențele nedeclarate, obiectele folosite în joc și loginul **nu** sunt acoperite de această verificare.
+
+| Candidat temporar client | Număr JAR-uri | Dimensiune `.mrpack` | Ce înseamnă |
+|---|---:|---:|---|
+| A moștenit Pizzaland | 24 | 135.771.416 B | Baseline de comparație, neimportat. |
+| B fără Pizzaland | 23 | **52.677.334 B** | Cu **83.094.082 B mai mic la transferul ZIP** (aprox. 61%), fără a demonstra economii de FPS sau RAM. Descărcările remote rămân separate. |
+
+**Prag de siguranță:** nu scoatem JAR-uri din `Desktop/FunCityLocal/server`, Prism, serverul găzduit sau lumea existentă pe baza acestui tabel. 24/29 este candidatul moștenit, 23/28 este **brațul de laborator**, nu minimul funcțional demonstrat. Fără import/login client+server, registru, scenă RP, voce și backup/restore pe o copie, nici un FPS, nici compatibilitatea în joc nu sunt dovedite. Dacă Pizzaland aduce obiecte RP necesare orașului, păstrăm A; dacă nu, B evită un cost de descărcare mare.
