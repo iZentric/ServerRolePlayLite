@@ -41,6 +41,38 @@ jobs:
           Note 'Prism instances root visible' ([string]($present.Count -gt 0))
           $existing = if ($present.Count) { @(Get-ChildItem -LiteralPath $present[0] -Directory -ErrorAction Stop | Where-Object { $_.Name -like 'FunCity-Lite-PluginFirst-LAB*' }) } else { @() }
           Note 'Lab instance name collision' ([string]($existing.Count -gt 0))
+          # Small allowlist: no recursive search through private folders or world data.
+          $javaRoots = @('C:\Program Files\Eclipse Adoptium', 'C:\Program Files\Java',
+                         'C:\Program Files\Microsoft', 'C:\Program Files\Zulu')
+          $javaBins = @()
+          foreach ($r in $javaRoots) {
+            if (Test-Path -LiteralPath $r -PathType Container) {
+              $javaBins += @(Get-ChildItem -LiteralPath $r -Directory -ErrorAction SilentlyContinue |
+                             ForEach-Object { Join-Path $_.FullName 'bin\java.exe' } |
+                             Where-Object { Test-Path -LiteralPath $_ -PathType Leaf })
+            }
+          }
+          Note 'Known-location Java executables' ([string]$javaBins.Count)
+          foreach ($exe in @($javaBins | Select-Object -First 3)) {
+            $ErrorActionPreference = 'Continue'
+            $ver = (& $exe -version 2>&1 | Select-Object -First 1) -replace '[^A-Za-z0-9 ._+\-]','_'
+            $ErrorActionPreference = 'Stop'
+            Note 'Known-location Java version' $ver
+          }
+          if ($present.Count) {
+            $profiles = @(Get-ChildItem -LiteralPath $present[0] -Directory -ErrorAction Stop |
+                          Where-Object { $_.Name -like '*FunCity*' } | Select-Object -First 3)
+            foreach ($profile in $profiles) {
+              $manifest = Join-Path $profile.FullName 'mmc-pack.json'
+              if (Test-Path -LiteralPath $manifest -PathType Leaf) {
+                $components = @( (Get-Content -LiteralPath $manifest -Raw | ConvertFrom-Json).components )
+                $forge = @($components | Where-Object { $_.uid -eq 'net.minecraftforge' } | Select-Object -First 1)
+                $mc = @($components | Where-Object { $_.uid -eq 'net.minecraft' } | Select-Object -First 1)
+                Note 'FunCity Prism minecraft' $(if ($mc.Count) { [string]$mc[0].version } else { 'unknown' })
+                Note 'FunCity Prism Forge' $(if ($forge.Count) { [string]$forge[0].version } else { 'unknown' })
+              }
+            }
+          }
           $live = @(Get-CimInstance Win32_Process -Filter "name = 'java.exe' OR name = 'javaw.exe'")
           Note 'Java processes currently running' ([string]$live.Count)
           Note 'Preflight' 'READ_ONLY_NO_START_NO_PRISM_CHANGE_NO_WORLD_DATA'
