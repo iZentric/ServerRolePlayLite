@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Make a new, isolated Lite beta candidate from an exact, verified 25-mod mrpack.
 
-Only the two SCOS client mods from agent/DECIZII.md are removed. Source remains
-untouched; destination must not exist. This does NOT download mods, install,
+Two SCOS client mods are removed and pinned RP voice is referenced remotely.
+Source remains untouched; destination must not exist. This does NOT download mods, install,
 launch Forge, benchmark FPS or authorize a release. Fail closed on any drift.
 """
 import argparse
@@ -33,21 +33,32 @@ def sha256_file(path):
     return h.hexdigest()
 
 
-def selection(decisions, historical):
+def selection(decisions, historical, voice_metadata):
     text = Path(decisions).read_text(encoding='utf-8')
     block = text.split('## Client —', 1)[1].split('## Server —', 1)[0]
     rows = re.findall(r'^\| (C\d\d) \| `([^`]+\.jar)` \| (PĂSTRAT|SCOS) \|', block, re.M)
-    if len(rows) != 25 or len({id for id, _, _ in rows}) != 25:
-        raise ValueError('expected 25 unique decisions in client section')
+    if len(rows) != 26 or len({id for id, _, _ in rows}) != 26:
+        raise ValueError('expected 26 unique decisions (25 old + voice)')
     names = {n.casefold() for _, n, _ in rows}
+    meta = json.loads(Path(voice_metadata).read_text(encoding='utf-8'))
+    voice = meta['filename'].casefold()
+    if (voice != 'voicechat-forge-1.16.5-2.3.23.jar' or
+            meta['version_id'] != 'NSBUNV8T' or
+            meta['download'] != ('https://cdn.modrinth.com/data/9eGKb6K1/'
+                                 'versions/NSBUNV8T/voicechat-forge-1.16.5-2.3.23.jar') or
+            not re.fullmatch('[a-f0-9]{128}', meta['sha512']) or
+            not re.fullmatch('[a-f0-9]{40}', meta['sha1']) or
+            type(meta['size']) is not int or meta['size'] <= 0):
+        raise ValueError('unverified or changed Forge voice file metadata')
     inventories = INVENTORY.findall(Path(historical).read_text(encoding='utf-8'))
-    if len(inventories) != 2 or inventories[0] != inventories[1] or names != {
-            n.casefold() for n in inventories[0].split(', ')} or len(names) != 25:
+    if len(inventories) != 2 or inventories[0] != inventories[1] or names - {voice} != {
+            n.casefold() for n in inventories[0].split(', ')} or len(names) != 26:
         raise ValueError('decisions must match the two historical 25-mod inventories')
     removed = {n.casefold() for _, n, state in rows if state == 'SCOS'}
-    if removed != EXPECTED_REMOVALS:
-        raise ValueError('unexpected Lite removals; review code and decision together')
-    return names - removed, removed
+    if removed != EXPECTED_REMOVALS or sum(n.casefold() == voice and state == 'PĂSTRAT'
+                                           for _, n, state in rows) != 1:
+        raise ValueError('unexpected Lite removals/voice choice')
+    return names - removed, removed, meta
 
 
 def mod_name(path):
@@ -59,7 +70,8 @@ def mod_name(path):
     return None
 
 
-def repack(source, expected_sha256, destination, decisions, historical):
+def repack(source, expected_sha256, destination, decisions, historical,
+           voice_metadata=Path('agent/voicechat-1.16.5-2.3.23.json')):
     source, destination = Path(source), Path(destination)
     if source.resolve() == destination.resolve() or destination.exists():
         raise ValueError('destination must be new and distinct from the source')
@@ -67,7 +79,7 @@ def repack(source, expected_sha256, destination, decisions, historical):
         raise ValueError('pin the source with a 64-character SHA256')
     if sha256_file(source) != expected_sha256.lower():
         raise ValueError('source SHA256 mismatch; no output written')
-    keep, remove = selection(decisions, historical)
+    keep, remove, voice = selection(decisions, historical, voice_metadata)
     baseline = audit_pack(source, historical)
     if len(baseline['client_mod_names']) != 25:
         raise ValueError('source is not the historical 25-mod baseline')
@@ -89,7 +101,12 @@ def repack(source, expected_sha256, destination, decisions, historical):
         if sorted(manifest_removed + override_removed) != sorted(remove):
             raise ValueError('expected each removed client JAR exactly once in source')
         changed = copy.deepcopy(idx)
-        changed['files'] = retained
+        changed['files'] = retained + [{
+            'path': 'mods/' + voice['filename'],
+            'hashes': {'sha1': voice['sha1'], 'sha512': voice['sha512']},
+            'downloads': [voice['download']], 'fileSize': voice['size'],
+            'env': {'client': 'required', 'server': 'required'},
+        }]
         changed['versionId'] = str(idx['versionId']) + '-lite-beta'
         changed['name'] = str(idx['name']) + ' Lite Beta'
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -113,8 +130,8 @@ def repack(source, expected_sha256, destination, decisions, historical):
                             shutil.copyfileobj(inp, dest, 1024 * 1024)
             report = audit_pack(tmp)
             actual = {n.casefold() for n in report['client_mod_names']}
-            if actual != keep or report['client_mod_count'] != 23:
-                raise ValueError('output does not match the 23 chosen client mods')
+            if actual != keep or report['client_mod_count'] != 24:
+                raise ValueError('output does not match the 24 chosen client mods')
             if set(manifest_removed + override_removed) != remove:
                 raise ValueError('unaccounted removal')
             digest = sha256_file(tmp)
@@ -122,7 +139,8 @@ def repack(source, expected_sha256, destination, decisions, historical):
             return {'scope': 'structural candidate only; NO launcher import/login/FPS',
                     'source_sha256': expected_sha256.lower(), 'output_sha256': digest,
                     'output_bytes': destination.stat().st_size,
-                    'client_mod_count': 23, 'removed': sorted(remove),
+                    'client_mod_count': 24, 'removed': sorted(remove),
+                    'added_remote': voice['filename'],
                     'remote_download_bytes_declared': report['remote_download_bytes_declared']}
         finally:
             if tmp is not None and tmp.exists():
@@ -136,10 +154,13 @@ def main():
     p.add_argument('--output', required=True, type=Path)
     p.add_argument('--decisions', type=Path, default=Path('agent/DECIZII.md'))
     p.add_argument('--historical', type=Path, default=Path('diag/pc-client.txt'))
+    p.add_argument('--voice-metadata', type=Path,
+                   default=Path('agent/voicechat-1.16.5-2.3.23.json'))
     a = p.parse_args()
     try:
         print(json.dumps(repack(a.source, a.source_sha256, a.output,
-                                a.decisions, a.historical), ensure_ascii=False, indent=2))
+                                a.decisions, a.historical, a.voice_metadata),
+                              ensure_ascii=False, indent=2))
     except (OSError, ValueError, KeyError, IndexError, TypeError, zipfile.BadZipFile,
             json.JSONDecodeError) as exc:
         print(f'RESPINS: {exc}', file=sys.stderr)

@@ -55,14 +55,29 @@ class LeanRepackTest(unittest.TestCase):
         report = repack(self.source, pin, self.output, self.decisions, self.history)
         self.assertEqual(report['removed'], ['entitycollisionfpsfix-1.16-1.0.1.jar',
                                              'out_of_sight-1.16.4-1.0.1.jar'])
-        self.assertEqual(report['client_mod_count'], 23)
+        self.assertEqual(report['client_mod_count'], 24)
+        self.assertEqual(report['added_remote'], 'voicechat-forge-1.16.5-2.3.23.jar')
         self.assertEqual(hashlib.sha256(self.source.read_bytes()).hexdigest(), pin)
         with zipfile.ZipFile(self.output) as z:
             self.assertEqual(z.read('client-overrides/options.txt'), b'renderDistance:5\n')
             self.assertNotIn('overrides/mods/out_of_sight-1.16.4-1.0.1.jar', z.namelist())
             manifest = json.loads(z.read('modrinth.index.json'))
             self.assertNotIn('entitycollisionfpsfix', json.dumps(manifest))
-        self.assertEqual(audit_pack(self.output)['client_mod_count'], 23)
+            voice=[f for f in manifest['files'] if f['path'].startswith('mods/voicechat-')]
+            self.assertEqual(len(voice), 1)
+            self.assertEqual(voice[0]['fileSize'], 7839781)
+            self.assertEqual(voice[0]['env']['client'], 'required')
+        self.assertEqual(audit_pack(self.output)['client_mod_count'], 24)
+
+    def test_unpinned_voice_metadata_is_rejected(self):
+        fake = self.root / 'fake-voice.json'
+        data = json.loads((REPO / 'agent/voicechat-1.16.5-2.3.23.json').read_text())
+        data['download'] = 'https://bad.invalid/unverified.jar'
+        fake.write_text(json.dumps(data))
+        pin = hashlib.sha256(self.source.read_bytes()).hexdigest()
+        with self.assertRaisesRegex(ValueError, 'unverified'):
+            repack(self.source, pin, self.output, self.decisions, self.history, fake)
+        self.assertFalse(self.output.exists())
 
     def test_wrong_pin_or_existing_destination_never_overwrites(self):
         with self.assertRaisesRegex(ValueError, 'SHA256 mismatch'):

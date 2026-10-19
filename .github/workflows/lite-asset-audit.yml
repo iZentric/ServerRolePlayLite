@@ -10,6 +10,7 @@ on:
       - 'scripts/fc_lite_repack.py'
       - 'scripts/fc_mrpack_audit.py'
       - 'agent/DECIZII.md'
+      - 'agent/voicechat-1.16.5-2.3.23.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -52,7 +53,30 @@ jobs:
                   print('::notice file=agent/BETA-LITE.md,line=1,title=Large pack entry::'
                         f'{i.filename} compressed_bytes={i.compress_size}')
           PY
-      - name: Build local, non-distributed candidate and audit 23-mod target
+      - name: Verify old server voice JAR against pinned client metadata
+        run: |
+          set -Eeuo pipefail
+          gh release download lite -R "$GITHUB_REPOSITORY" \
+            -p CUANTIC-Server-CatServer-1.7.7.zip -D "$RUNNER_TEMP/fc-asset"
+          server="$RUNNER_TEMP/fc-asset/CUANTIC-Server-CatServer-1.7.7.zip"
+          printf '%s  %s\n' fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15 "$server" | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib, json, os, zipfile
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'fc-asset'
+          meta=json.loads(Path('agent/voicechat-1.16.5-2.3.23.json').read_text())
+          with zipfile.ZipFile(root/'CUANTIC-Server-CatServer-1.7.7.zip') as z:
+              matches=[i for i in z.infolist() if not i.is_dir() and
+                       i.filename.split('/')[-1]==meta['filename']]
+              assert len(matches)==1, 'voice JAR missing or ambiguous in historical server'
+              data=z.read(matches[0])
+          assert len(data)==meta['size']
+          assert hashlib.sha1(data).hexdigest()==meta['sha1']
+          assert hashlib.sha512(data).hexdigest()==meta['sha512']
+          print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Verified server voice::'
+                f"name={meta['filename']} bytes={len(data)} hashes_equal_official=true")
+          PY
+      - name: Build local, non-distributed candidate and audit 24-mod target
         run: |
           set -Eeuo pipefail
           pack="$RUNNER_TEMP/fc-asset/FunCity-1.2.5.mrpack"
@@ -69,12 +93,12 @@ jobs:
           a=json.loads((root/'candidate-audit.json').read_text())
           b=json.loads((root/'baseline.json').read_text())
           c=json.loads((root/'candidate.json').read_text())
-          assert b['client_mod_count']==25 and a['client_mod_count']==23
+          assert b['client_mod_count']==25 and a['client_mod_count']==24
           assert a['remote_files_without_declared_size']==0
           summary=Path(os.environ['GITHUB_STEP_SUMMARY'])
           summary.write_text('## Structural only; NO Prism/Forge login or FPS test\n'
                              f"Source: {b['archive_bytes']} bytes / 25 mods; "
-                             f"candidate: {a['archive_bytes']} bytes / 23 mods.\n"
+                             f"candidate: {a['archive_bytes']} bytes / 24 mods (voice RP).\n"
                              f"Remote downloads declared: {a['remote_download_bytes_declared']} bytes; "
                              f"candidate SHA256: `{c['output_sha256']}`.\n")
           print('::notice file=agent/BETA-LITE.md,line=1,title=Lite ZIP metadata::'

@@ -1,6 +1,6 @@
 # FunCity Lite — baseline istoric pentru validare, NU pachetul lean final (19.10.2026)
 
-> Actualizare V2: `agent/DECIZII.md` este alegerea în vigoare; ținta client are 23/25 moduri istorice, nu toate cele 25 din acest baseline.
+> Actualizare V2: `agent/DECIZII.md` este alegerea în vigoare; ținta client are 23/25 moduri istorice plus Voice Chat Forge (24 total); acesta este doar baseline-ul vechi.
 
 **Corecție:** după comparația cu motoarele/configurile de pe PC și prioritatea explicită „fără moduri degeaba”, cele 25 de JAR-uri de mai jos reprezintă numai copia A pentru A/B, **nu lista aleasă pentru publicare**. Ținta este cea mai mică combinație cu RP funcțional și beneficiu real; `agent/alegere-motor-lean.md` definește motorul și poarta de eliminare. Primul A/B client este Out of Sight, separat de Entity Culling. Niciun pack instalat nu a fost schimbat.
 

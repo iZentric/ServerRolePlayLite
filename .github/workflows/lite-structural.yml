@@ -12,6 +12,7 @@ on:
       - 'scripts/fc_bench.py'
       - 'scripts/fc_spawner_ab.py'
       - 'agent/DECIZII.md'
+      - 'agent/voicechat-1.16.5-2.3.23.json'
       - 'diag/pc-client.txt'
       - '.github/workflows/lite-structural.yml'
   workflow_dispatch:

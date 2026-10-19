@@ -1,6 +1,6 @@
 # FunCity Lite — registrul alegerilor (2026-10-19)
 
-Alegere **în vigoare în repo**; nu este afirmație că acele JAR-uri sunt instalate acum sau că FPS/TPS au fost măsurate. Sursa inventarelor: `diag/pc-client.txt` (25 JAR client, captură PC) și `git show b1ec20c:docs/ENGINE-PACK-AUDIT.md` (36 moduri / 14 pluginuri, arhivă CUANTIC). Motivarea/legăturile către paginile autorilor: `agent/audit-modpack.md`, `agent/revizie-25-moduri.md`, `agent/decizie-server-36.md`; excepții directe: [SpawnerFix](https://www.curseforge.com/minecraft/mc-mods/spawner-fix), [FastSuite](https://www.curseforge.com/minecraft/mc-mods/fastsuite), [Voice Chat](https://modrepo.de/minecraft/voicechat/wiki/installation), [Out of Sight](https://github.com/Corosauce/OutOfSight/blob/master/src/main/java/com/corosus/out_of_sight/config/Config.java). O schimbare de JAR în client/server instalat sau un release cere binar verificat + import/login Forge + RP/rollback; alegerea **precedă** măsurătoarea, dar nu o înlocuiește. Mai jos „sursa” este prescurtată: C = `diag/pc-client.txt` + `agent/audit-modpack.md`, S = auditul arhivei + `agent/audit-modpack.md`, P = auditul pluginurilor din arhivă; verdictul poate fi revizuit numai cu dovada din ultima coloană.
+REVIZUIT 19.10.2026: proprietarul a confirmat vocea RP și survival limitat; vezi `agent/RP-EVIDENCE.md`. Alegere **în vigoare în repo**; nu este afirmație că acele JAR-uri sunt instalate acum sau că FPS/TPS au fost măsurate. Sursa inventarelor: `diag/pc-client.txt` (25 JAR client, captură PC) și `git show b1ec20c:docs/ENGINE-PACK-AUDIT.md` (36 moduri / 14 pluginuri, arhivă CUANTIC). Motivarea/legăturile către paginile autorilor: `agent/audit-modpack.md`, `agent/revizie-25-moduri.md`, `agent/decizie-server-36.md`; excepții directe: [SpawnerFix](https://www.curseforge.com/minecraft/mc-mods/spawner-fix), [FastSuite](https://www.curseforge.com/minecraft/mc-mods/fastsuite), [Voice Chat](https://modrepo.de/minecraft/voicechat/wiki/installation), [Out of Sight](https://github.com/Corosauce/OutOfSight/blob/master/src/main/java/com/corosus/out_of_sight/config/Config.java). O schimbare de JAR în client/server instalat sau un release cere binar verificat + import/login Forge + RP/rollback; alegerea **precedă** măsurătoarea, dar nu o înlocuiește. Mai jos „sursa” este prescurtată: C = `diag/pc-client.txt` + `agent/audit-modpack.md`, S = auditul arhivei + `agent/audit-modpack.md`, P = auditul pluginurilor din arhivă; verdictul poate fi revizuit numai cu dovada din ultima coloană.
 
 ## Motor și valori
 
@@ -14,7 +14,7 @@ Alegere **în vigoare în repo**; nu este afirmație că acele JAR-uri sunt inst
 | V5 | keep-spawn-loaded=true, Ksyxis PĂSTRAT | decizie existentă; efectul combinat necunoscut | `functity-config/bukkit.yml`; S | A/B chunks/tick/login cu o singură schimbare |
 | V6 | fără mod nou de performanță | cost și risc de compatibilitate nejustificat | `agent/comparatie-proiecte-vechi.md` | hotspot documentat + A/B |
 
-## Client — 25/25 nume istorice, ținta lean 23
+## Client — 25/25 nume istorice plus voce RP, ținta lean 24
 
 | ID | JAR | Alegere | Motiv | Sursa · ce o schimbă |
 |---|---|---|---|---|
@@ -43,6 +43,7 @@ Alegere **în vigoare în repo**; nu este afirmație că acele JAR-uri sunt inst
 | C23 | `selene-1.16.5-1.9.0.jar` | PĂSTRAT | dependență Supplementaries | C · scoatere părinte |
 | C24 | `supplementaries-1.16.5-0.18.4b.jar` | PĂSTRAT | decor RP | C · scan lume + decizie RP |
 | C25 | `vehicle-mod-0.45.2-1.16.5 (1).jar` | PĂSTRAT | vehicule RP | C · decizie RP |
+| C26 | `voicechat-forge-1.16.5-2.3.23.jar` | PĂSTRAT | voce de proximitate pentru mafii și joburi, pereche pentru server | [autor](https://modrepo.de/minecraft/voicechat/wiki/installation) + `agent/voicechat-1.16.5-2.3.23.json` · login/audio/UDP pe copie |
 
 ## Server — 36/36 nume din arhivă (nu inventar live)
 
@@ -50,7 +51,7 @@ Alegere **în vigoare în repo**; nu este afirmație că acele JAR-uri sunt inst
 |---|---|---|---|---|
 | S01 | `AI-Improvements-1.16.5-0.5.0.jar` | PĂSTRAT | AI tick distinct | S · profil fără hotspot |
 | S02 | `Clumps-6.0.0.28.jar` | PĂSTRAT | registry/XP pe ambele părți | S + `diag/fix.txt` · login fără el |
-| S03 | `FastFurnace-1.16.5-4.5.0.jar` | PĂSTRAT | cuptoare, neînlocuit de FastSuite | S + autor FastSuite · profil/A-B |
+| S03 | `FastFurnace-1.16.5-4.5.0.jar` | SCOS | optimizează căutarea rețetelor cuptorului la fiecare tick; în RP cu survival limitat nu există profil de cuptoare active care să justifice încă un mixin | S + [autor](https://www.curseforge.com/minecraft/mc-mods/fastfurnace) · profil cu multe cuptoare + A/B |
 | S04 | `FastSuite-1.16.4-1.1.1.jar` | PĂSTRAT | rețete, funcție distinctă | S + autor · profil/A-B |
 | S05 | `FastWorkbench-1.16.5-4.6.2.jar` | PĂSTRAT | banc de lucru, distinct | S + autor FastSuite · profil/A-B |
 | S06 | `Ksyxis-1.4.6.jar` | PĂSTRAT | decizie curentă spawn chunks | S · măsurare cu keep-spawn |
@@ -83,7 +84,7 @@ Alegere **în vigoare în repo**; nu este afirmație că acele JAR-uri sunt inst
 | S33 | `spark-1.9.1-forge.jar` | SCOS din runtime normal | profiler numai pentru test | S + [autor](https://modrinth.com/mod/spark/version/9NSIbttL) · profilare necesară |
 | S34 | `supplementaries-1.16.5-0.18.4b.jar` | PĂSTRAT | decor RP | S · scan lume |
 | S35 | `vehicle-mod-0.45.2-1.16.5 (1).jar` | PĂSTRAT | vehicule RP | S · decizie RP |
-| S36 | `voicechat-forge-1.16.5-2.3.23.jar` | SCOS | client istoric fără mod vocal compatibil | S + autor Voice Chat · client compatibil + decizie RP |
+| S36 | `voicechat-forge-1.16.5-2.3.23.jar` | PĂSTRAT | voce RP cerută explicit; clientul țintă include aceeași versiune | S + [autor](https://modrepo.de/minecraft/voicechat/wiki/installation) · audio/UDP testat pe copie |
 
 ## Pluginurile arhivei vechi; nu pretinde că acestea sunt cele live
 
