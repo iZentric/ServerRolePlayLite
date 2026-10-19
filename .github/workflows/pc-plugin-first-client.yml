@@ -1,0 +1,64 @@
+name: PC new Prism plugin-first baseline
+# Only creates one NEW 1.16.5 / Forge 36.2.42 instance. No imports from old packs,
+# no edits to existing instances, no client launch, accounts, world or credentials.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-plugin-first-client.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  new-instance:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 5
+    steps:
+      - name: Create empty-mod Prism baseline only if the new name does not exist
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if (-not $env:APPDATA) { throw 'No APPDATA for the runner account; no write' }
+          $root = Join-Path $env:APPDATA 'PrismLauncher\instances'
+          if (-not (Test-Path -LiteralPath $root -PathType Container)) {
+            throw 'Prism instances not visible to runner; no write'
+          }
+          $name = 'FunCity-Lite-PluginFirst-LAB-1.16.5'
+          $dest = Join-Path $root $name
+          if (Test-Path -LiteralPath $dest) { throw 'Lab instance already exists; refusal to overwrite' }
+          $pack = @{ formatVersion = 1; components = @(
+            @{ uid = 'net.minecraft'; version = '1.16.5'; important = $true },
+            @{ uid = 'net.minecraftforge'; version = '36.2.42' }
+          ) } | ConvertTo-Json -Depth 8
+          $cfg = @"
+          [General]
+          ConfigVersion=1.2
+          InstanceType=OneSix
+          iconKey=default
+          name=FunCity Lite PluginFirst LAB 1.16.5
+          "@
+          $note = 'LAB baseline ONLY: Minecraft 1.16.5 + Forge 36.2.42; 0 client mods. No own content mods identified, no login/voice/RP or performance validated. Do not replace an existing profile.'
+          # Avoid partial profiles on a failed write; create under the instances root
+          # with a unique staging name, then atomic rename after structure checks.
+          $tmp = Join-Path $root ('.FunCity-Lite-PluginFirst-LAB-' + [guid]::NewGuid().ToString('N'))
+          try {
+            $null = New-Item -ItemType Directory -Path $tmp -ErrorAction Stop
+            $mc = Join-Path $tmp '.minecraft'
+            $null = New-Item -ItemType Directory -Path (Join-Path $mc 'mods') -Force
+            [System.IO.File]::WriteAllText((Join-Path $tmp 'mmc-pack.json'), $pack, [System.Text.UTF8Encoding]::new($false))
+            [System.IO.File]::WriteAllText((Join-Path $tmp 'instance.cfg'), $cfg, [System.Text.UTF8Encoding]::new($false))
+            [System.IO.File]::WriteAllText((Join-Path $tmp 'LAB-READ-ME.txt'), $note, [System.Text.UTF8Encoding]::new($false))
+            $parsed = Get-Content -LiteralPath (Join-Path $tmp 'mmc-pack.json') -Raw | ConvertFrom-Json
+            if ($parsed.components[0].version -ne '1.16.5' -or
+                $parsed.components[1].version -ne '36.2.42' -or
+                @(Get-ChildItem -LiteralPath (Join-Path $mc 'mods') -Force).Count -ne 0) {
+              throw 'Baseline validation failed'
+            }
+            if (Test-Path -LiteralPath $dest) { throw 'Lab instance created concurrently; refusal to overwrite' }
+            Rename-Item -LiteralPath $tmp -NewName $name -ErrorAction Stop
+            Write-Output '::notice title=PC new Prism baseline::new_instance=true minecraft=1.16.5 forge=36.2.42 client_mods=0 old_profiles_untouched=true GUI_import_and_client_launch=NOT_TESTED'
+          }
+          finally {
+            if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Recurse -Force }
+          }
