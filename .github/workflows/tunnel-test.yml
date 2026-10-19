@@ -1,57 +1,14 @@
-name: tunnel-test
+name: tunnel-test (retired)
+# Old job attempted a public tunnel; policy requires loopback-only testing.
 on:
-  push:
-    paths:
-      - .github/workflows/tunnel-test.yml
-      - diag/tunnel-host.txt
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  t:
-    timeout-minutes: 4
+  retired:
     runs-on: ubuntu-24.04
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
-      - name: MC through cloudflared access
-        continue-on-error: true
+      - name: Refuse public connectivity testing
         run: |
-          H=$(cat diag/tunnel-host.txt 2>/dev/null | tr -d '[:space:]')
-          echo "host: $H"
-          curl -sfLo /tmp/cfd https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 && chmod +x /tmp/cfd && /tmp/cfd --version
-          (setsid nohup /tmp/cfd access tcp --hostname "$H" --url 127.0.0.1:25565 > /tmp/cfa.log 2>&1 < /dev/null &)
-          sleep 12
-          python3 - <<'PY' > /tmp/probe.txt 2>&1
-import socket, time
-try:
-    s = socket.create_connection(("127.0.0.1", 25565), timeout=15)
-    s.settimeout(20)
-    def vs(n):
-        out = b""
-        while True:
-            b = n & 0x7F; n >>= 7
-            if n: b |= 0x80
-            out += bytes([b])
-            if not n: return out
-    hs = vs(0) + vs(-1) + vs(0)
-    s.sendall(vs(len(hs)) + hs)
-    time.sleep(4)
-    data = b""
-    while len(data) < 4:
-        c = s.recv(4096)
-        if not c: break
-        data += c
-    print("RECEIVED:", len(data), data[:120])
-except Exception as e:
-    print("ERROR:", e)
-PY
-          cat /tmp/probe.txt
-          if grep -q "RECEIVED: [1-9]" /tmp/probe.txt; then
-            echo "EXTERIOR-CF: JUCABIL" > diag/tunnel-test.txt
-          else
-            echo "EXTERIOR-CF: NU MERGE" > diag/tunnel-test.txt
-          fi
-          tail -4 /tmp/cfa.log 2>/dev/null >> diag/tunnel-test.txt
-          cat diag/tunnel-test.txt
-          git config user.email b@b && git config user.name chk
-          git add -f diag/tunnel-test.txt && git commit -qm "tunnel test $(date +%s)" && git push -q origin HEAD:"$GITHUB_REF_NAME" || true
-        shell: bash
+          echo '::error::Public tunnel tests are retired; keep Minecraft private.'
+          exit 1

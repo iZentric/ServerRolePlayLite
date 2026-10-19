@@ -1,103 +1,14 @@
-name: FUNCIŢY-STAGE
-# Staging FunCity PE GAZDA: backup, asamblare, boot, oprire, repornire din date salvate.
-# Jobul h ruleaza pe masina (self-hosted); rezultatul se intoarce pe bransa prin artefact
-# + relay hosted (gazda n-are chei de push). Reguli: nu atingem productia, port separat,
-#backup inainte de orice boot. Mod: din inputs (dispatch) sau din markerul deploy/funcity-stage.txt (push).
+name: FUNCIŢY-STAGE (retired)
+# Never start a server on the PC or replace world-live assets from a push/dispatch.
 on:
   workflow_dispatch:
-    inputs:
-      mod:
-        description: "backup | assemble | test | up | down"
-        required: true
-        default: "test"
-      candidat:
-        description: "build din functity-out:builds/ (ex. b1.2256)"
-        required: false
-        default: "b1.2256"
-      port:
-        description: "port test (NU 25565 decat cu productia Jos)"
-        required: false
-        default: "25566"
-      heap:
-        description: "Xmx heap staging"
-        required: false
-        default: "3G"
-  push:
-    paths: [ "deploy/funcity-stage.txt" ]
 permissions:
-  contents: write
+  contents: read
 jobs:
-  s:
-    runs-on: [ self-hosted ]
-    timeout-minutes: 28
-    continue-on-error: true
-    env:
-      FUNCITY_JAR: ${{ inputs.candidat }}
-      FUNCITY_PORT: ${{ inputs.port }}
-      FUNCITY_XMX: ${{ inputs.heap }}
+  retired:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-        with: { ref: '${{ github.ref_name }}' }
-      - name: Ruleaza modul cerut (auto = din marker)
+      - name: Refuse live staging without a rollback test
         run: |
-          set +e
-          MOD="${{ inputs.mod }}"
-          [ -z "$MOD" ] && MOD=auto
-          bash scripts/functity-stage.sh "$MOD"
-          echo "RC=$?" >> /tmp/funcity-stage.txt
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with: { name: stage-raw, path: /tmp/funcity-stage.txt }
-      - name: Plasa de siguranta world -> release (ruleaza DOAR dupa snapgit)
-        if: always()
-        run: |
-          set +e
-          R="$HOME/functity-out/worldsync.ready"
-          [ -f "$R" ] || exit 0
-          API=https://api.github.com/repos/$GITHUB_REPOSITORY
-          UP=https://uploads.github.com/repos/$GITHUB_REPOSITORY
-          TOK="${{ secrets.GITHUB_TOKEN }}"
-          GETID='import sys,json;print(json.load(sys.stdin).get("id","") or "")'
-          RID=$(curl -s -H "Authorization: Bearer $TOK" $API/releases/tags/world-live 2>/dev/null | python3 -c "$GETID" 2>/dev/null)
-          if [ -z "$RID" ] || [ "$RID" = None ]; then
-            RID=$(curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/json" -d '{"tag_name":"world-live","name":"FunCity world snapshots","draft":false,"body":"Plasa de siguranta: lume + server live impachetate pentru mutare. Nu stergeti release-ul."}' $API/releases | python3 -c "$GETID" 2>/dev/null)
-          fi
-          if [ -z "$RID" ] || [ "$RID" = None ]; then echo "ESUEC: nu am putut crea/gasi release world-live"; rm -f "$R"; exit 0; fi
-          for F in functity-live worldsync; do
-            P=""
-            for d in "$HOME/functity-out/mig" "$HOME/functity-out"; do [ -f "$d/$F.tar.gz" ] && P="$d/$F.tar.gz" && break; done
-            [ -n "$P" ] || continue
-            AID=$(curl -s -H "Authorization: Bearer $TOK" $API/releases/$RID/assets | python3 -c "import sys,json;print(next((x['id'] for x in json.load(sys.stdin) if x['name']=='$F.tar.gz'),''))" 2>/dev/null)
-            if [ -n "$AID" ]; then curl -s -X DELETE -H "Authorization: Bearer $TOK" $API/releases/assets/$AID > /dev/null; fi
-            SZ=$(stat -c %s "$P")
-            SHA=$(sha256sum "$P" | cut -c1-16)
-            curl -s -X POST -H "Authorization: Bearer $TOK" -H "Content-Type: application/gzip" --data-binary "@$P" "$UP/releases/$RID/assets?name=$F.tar.gz&label=sha256:$SHA" | python3 -c 'import sys,json;d=json.load(sys.stdin);print("ASSET OK $F bytes:",d.get("size"))' 2>/dev/null || echo "ESUEC UPLOAD $F"
-            echo "uploadat $F ($SZ B, sha $SHA…)"
-          done
-          echo "semnatura: $(cat $R)"
-          rm -f "$R"
-  relay:
-    needs: s
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with: { ref: '${{ github.ref_name }}' }
-      - uses: actions/download-artifact@v4
-        continue-on-error: true
-        with: { name: stage-raw, path: /tmp/relay }
-      - name: Comite raportul de staging adus de pe gazda
-        run: |
-          set -uo pipefail
-          F=/tmp/relay/funcity-stage.txt
-          [ -f "$F" ] || { echo "artefact absent — jobul de pe gazda nu a produs raport"; exit 0; }
-          git config user.name funcity-relay; git config user.email f@localhost
-          mkdir -p analysis
-          { echo "== SONDA EXTERNA 25565 =="; timeout 20 python3 scripts/minecraft_status.py 92.5.171.150 25565 2>&1 || true; echo "== SONDA EXTERNA 25566 =="; timeout 20 python3 scripts/minecraft_status.py 92.5.171.150 25566 2>&1 || true; echo; echo "# FUNCTITY-STAGE $(date -u '+%F %T') UTC — gazda → artefact → relay"; echo; echo '```'; tr -d '\r' < "$F"; echo '```'; } > analysis/FUNCTITY-STAGE.md
-          { echo; echo "== SONDA EXTERNA (de pe runner hosted, nu din gazda) =="; echo "-- 25565 (productie):"; python3 scripts/minecraft_status.py 92.5.171.150 25565 2>&1 || true; echo "-- 25566 (staging FunCity):"; python3 scripts/minecraft_status.py 92.5.171.150 25566 2>&1 | head -3 || true; } >> /tmp/relay/funcity-stage.txt
-          git add -f analysis/FUNCTITY-STAGE.md
-          git commit -qm "FUNCIŢY-STAGE: raport staging $(date -u '+%F %H:%M') UTC (relay)" || true
-          for i in 1 2 3; do
-            git pull --rebase -q origin "$GITHUB_REF_NAME" 2>/dev/null || git rebase --abort 2>/dev/null || true
-            git push -q origin "HEAD:refs/heads/$GITHUB_REF_NAME" && break; sleep 4
-          done
+          echo '::error::Live staging needs repeatable A/B, backup, restore test and explicit approval.'
+          exit 1

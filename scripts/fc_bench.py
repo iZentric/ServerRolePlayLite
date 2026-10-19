@@ -24,7 +24,8 @@ Reguli de onestitate implementate aici:
 Rulare (de CI): python3 fc_bench.py --arm-conf arm.json cu env:
   FC_JAR=cale jar de boot (poate lipsi pt catserver) ; FC_STAGE=director lucru
   FC_OUT=director rezultate ; FC_TRIALS=3 FC_RUN_SECONDS=300 FC_BOOT_TIMEOUT=600
-  FC_INSTALL_TIMEOUT=420 FC_EXCLUDE='libraries/* run/* version.json /*.jar'
+  conf.exclude=["mods/SpawnerFix-1.16.2-1.0.0.3.jar"] doar pe /tmp/fc-smoke;
+  fara exclude: bootstrap-ul omite automat libraries/run/version.json/jar root.
 """
 import argparse, hashlib, json, os, re, shutil, signal, socket, statistics, struct, subprocess, sys, threading, time, uuid, zipfile
 from pathlib import Path
@@ -363,13 +364,44 @@ class JvmRun:
 # ---------------- faza A: stage + instalare bootstrap + setup lume ----------------
 
 def build_stage(conf, jar, stage):
-    os.makedirs(stage, exist_ok=True)
+    """Extract an isolated pack arm; optional exact JAR exclusion is test-only.
+
+    Fail before extraction if the requested JAR is absent, duplicated, or unsafe.
+    This cannot be used to remove mods from a real installed server/profile.
+    """
     zp = conf["pack_zip"]
-    excl = set(conf.get("exclude", []))
+    excluded = conf.get("exclude", [])
+    if not isinstance(excluded, list) or any(
+        not isinstance(name, str) or not re.fullmatch(r"mods/[^/\\]+\.jar", name)
+        for name in excluded
+    ) or len(excluded) != len(set(excluded)):
+        raise ValueError("exclude must be unique exact mods/<filename>.jar paths")
+    root = Path(stage).resolve()
+    if excluded:
+        sandbox = Path("/tmp/fc-smoke").resolve()
+        if root == sandbox or not root.is_relative_to(sandbox):
+            raise ValueError("mod exclusion requires a disposable /tmp/fc-smoke arm")
+        if root.exists() and any(root.iterdir()):
+            raise ValueError("mod exclusion requires an empty stage (no stale JARs)")
     keep_libs = conf.get("keep_pack_libs", False)
     with zipfile.ZipFile(zp) as z:
-        for info in z.infolist():
+        members = z.infolist()
+        for info in members:
             name = info.filename
+            if name.startswith("/") or "\\" in name or any(p in (".", "..", "") for p in name.rstrip("/").split("/")):
+                raise ValueError(f"unsafe pack entry: {name}")
+            if (info.external_attr >> 16) & 0o170000 == 0o120000:
+                raise ValueError(f"symlink entry refused: {name}")
+        for name in excluded:
+            if sum(info.filename == name and not info.is_dir() for info in members) != 1:
+                raise ValueError(f"requested mod absent/duplicated in pack: {name}")
+        os.makedirs(stage, exist_ok=True)
+        skipped = {}
+        for info in members:
+            name = info.filename
+            if name in excluded:
+                skipped[name] = hashlib.sha256(z.read(info)).hexdigest()
+                continue
             top = name.split("/", 1)[0]
             base = name.rsplit("/", 1)[-1]
             if not keep_libs:
@@ -390,6 +422,7 @@ def build_stage(conf, jar, stage):
                     dst.write(chunk)
                 if (info.external_attr >> 16) & 0o111:
                     os.chmod(target, (info.external_attr >> 16) & 0o777)
+    return skipped
 
 def resolve_boot_jar(conf, jar, stage):
     kind = conf.get("boot_jar")
@@ -648,7 +681,7 @@ def main():
         return 2
 
     log(f"=== brat {conf['arm']}: stage ===")
-    build_stage(conf, jar, stage)
+    report["excluded_mods_test_only"] = build_stage(conf, jar, stage)
     bootjar = resolve_boot_jar(conf, os.path.abspath(jar) if jar else "", stage)
     sdir = lambda d: len([f for f in os.listdir(os.path.join(stage, d)) if f.endswith(".jar")]) if os.path.isdir(os.path.join(stage, d)) else 0
     mods, plugins = sdir("mods"), sdir("plugins")

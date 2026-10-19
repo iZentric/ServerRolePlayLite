@@ -1,25 +1,14 @@
-name: bat-v2
+name: bat-v2 (retired)
+# Never publish an untested installer when tools/FunCity-Update.bat changes.
 on:
-  push:
-    paths:
-      - .github/workflows/bat-v2.yml
-      - tools/FunCity-Update.bat
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  b:
-    timeout-minutes: 6
+  retired:
     runs-on: ubuntu-24.04
-    env:
-      GH_TOKEN: ${{ github.token }}
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
-      - name: Publica bat-ul pe release
+      - name: Refuse automatic installer publication
         run: |
-          set -e
-          cd "$GITHUB_WORKSPACE"
-          cp tools/FunCity-Update.bat "$RUNNER_TEMP/FunCity-Update.bat"
-          sed -i 's/\r*$/\r/' "$RUNNER_TEMP/FunCity-Update.bat"
-          wc -c "$RUNNER_TEMP/FunCity-Update.bat"
-          gh release upload funcity "$RUNNER_TEMP/FunCity-Update.bat" -R "$GITHUB_REPOSITORY" --clobber
-          echo BAT-PUBLISHED
+          echo '::error::Installer release requires a Windows test and explicit approval.'
+          exit 1

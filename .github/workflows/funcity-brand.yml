@@ -1,60 +1,14 @@
-name: FUNCITY-BRAND
+name: FUNCITY-BRAND (retired)
+# The old workflow published a client pack without Forge/FPS validation.
 on:
-  push:
-    branches: ['arena/*']
-    paths: ['.github/workflows/funcity-brand.yml', 'branding/**']
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
-  brand:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env: { GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+  retired:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - name: Build FunCity mrpack (brand + logo + pachet Lite)
-        continue-on-error: true
+      - name: Refuse unvalidated client republishing
         run: |
-          exec >> /tmp/rep.txt 2>&1
-          set -x
-          mkdir -p build && cd build
-          curl -sL -o in.mrpack "https://github.com/$GITHUB_REPOSITORY/releases/download/freeroam/Freeroam-1.0.0.mrpack"
-          python3 - <<'PY'
-          import json,zipfile,shutil,os
-          zin=zipfile.ZipFile('in.mrpack')
-          idx=json.loads(zin.read('modrinth.index.json'))
-          idx['name']='FunCity RP'
-          idx['versionId']='1.0.0'
-          idx['version']=idx.get('version','')
-          zout=zipfile.ZipFile('FunCity-1.0.0.mrpack','w',zipfile.ZIP_DEFLATED)
-          logo=open('../branding/funcity-logo.png','rb').read()
-          for it in zin.infolist():
-              n=it.filename
-              data=zin.read(n)
-              if n=='modrinth.index.json':
-                  data=json.dumps(idx,indent=2).encode()
-              zout.writestr(n,data)
-          zout.writestr('overrides/pack.png',logo)
-          zout.writestr('pack.png',logo)
-          zout.close()
-          print('marime:',os.path.getsize('FunCity-1.0.0.mrpack'))
-          # verificare integritate
-          assert zipfile.ZipFile('FunCity-1.0.0.mrpack').testzip() is None
-          print('ZIP OK')
-          PY
-          convert ../branding/funcity-logo.png -resize 256x256 funcity-icon.png 2>/dev/null || cp ../branding/funcity-logo.png funcity-icon.png
-          convert ../branding/funcity-logo.png -resize 64x64! server-icon.png
-          ls -la
-      - name: Release FunCity + asset
-        continue-on-error: true
-        run: |
-          exec >> /tmp/rep.txt 2>&1
-          gh release create funcity --title "FunCity 1.0.0" --notes "Server de roleplay FunCity pentru orice PC (fara F3+Shift bug - launcher standard Prism). Import: FISIER -> FunCity-1.0.0.mrpack in Prism (Instances/Import). Setari Java recomandate RAM mic: -Xms1G -Xmx2500M -XX:+UseG1GC -XX:+ParallelRefProcEnabled. Continut: masini, tunuri, RP complet, fara surse de lag (sunete spatiale/physics/shadere taiate - vezi lista in Freeroam lite-delta)." --draft=false 2>/dev/null || true
-          gh release upload funcity build/FunCity-1.0.0.mrpack --clobber
-          gh release upload funcity build/funcity-icon.png --clobber
-          gh release upload funcity build/server-icon.png --clobber
-          gh release view funcity --json assets --jq '.assets[].name'
-      - name: Trace in repo
-        if: always()
-        run: python3 .github/oci-report.py
+          echo '::error::Brand/client releases need Forge login and source/license checks.'
+          exit 1

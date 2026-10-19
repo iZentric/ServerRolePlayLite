@@ -1,55 +1,14 @@
-name: RP-LITE
+name: RP-LITE (retired)
+# Legacy job tried to add untested mods and restart the live server. Never run it.
 on:
-  push:
-    paths: [ .github/workflows/rp-lite.yml ]
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  lite:
-    runs-on: [self-hosted, Linux, ARM64]
-    timeout-minutes: 12
-    permissions: contents: write
+  retired:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - name: finisaj
+      - name: Refuse unsafe live modifications
         run: |
-          export HOME=/home/mndvasi9
-          {
-          echo "=== RP-LITE runner $(date -u '+%F %T') on $(hostname) as $(whoami) ==="
-          cd ~/cuantic-live
-            # 1) moduri care lipsesc
-          for s in starlight limited-chunkloading datafixerslayer; do
-            ls mods/ 2>/dev/null | grep -qi "$s" && { echo "$s: deja"; continue; }
-            python3 - "$s" <<'PY'
-import json,sys,urllib.request,urllib.parse,hashlib,os
-slug=sys.argv[1]
-try:
-    q=urllib.parse.urlencode({"game_versions":'["1.16.5"]',"loaders":'["forge"]'})
-    v=json.load(urllib.request.urlopen(f"https://api.modrinth.com/v2/project/{slug}/version?{q}",timeout=30))
-    f=v[0]["files"][0]; name=f["filename"]; dst=os.path.join("mods",name)
-    data=urllib.request.urlopen(f["url"],timeout=120).read()
-    if f["hashes"].get("sha512") and hashlib.sha512(data).hexdigest()!=f["hashes"]["sha512"]:
-        print(slug,"HASH ROSIT"); raise SystemExit
-    open(dst,"wb").write(data); print("ADAUGAT:",name)
-except Exception as e: print(slug,"esuat",type(e).__name__,str(e)[:70])
-PY
-          done
-            # 2) restart masurat
-          if ls mods/ 2>/dev/null | grep -qiE "starlight|limited.chunk"; then
-            pkill -f unix_args; sleep 3
-            nohup ~/j11/bin/java @unix_args.txt nogui > boot.log 2>&1 &
-            for i in $(seq 1 48); do sleep 5; grep -q "Done (" boot.log && break; done
-            grep -oE "Done \([0-9.]*s\)!" boot.log | tail -1 | sed 's/^/PORNIRE NOUA: /'
-          fi
-          ps -o rss= -p $(pgrep -f unix_args|head -1) 2>/dev/null | awk '{printf "RAM final: %.0fM\n",$1/1024}'
-            # 3) client zip cu ferritecore + release oficial
-          cp -f ~/cuantic-live/mods/ferritecore*.jar ~/pack/final/mods/ 2>/dev/null
-          cd ~/pack/final && rm -f ~/FunCity-Client-Lite.zip && zip -qr ~/FunCity-Client-Lite.zip . && cd ~
-          ls -l ~/FunCity-Client-Lite.zip | awk '{print "zip:",$5}'
-          } > REPORT.txt 2>&1
-          cat REPORT.txt
-      - name: raport pe branch
-        run: |
-          git config user.email bot@arena && git config user.name arena
-          mkdir -p analysis && cp REPORT.txt analysis/RP-LITE.md
-          git add -A && git commit -qm "RP-LITE runner: ${{ github.sha }}" && git push
-          echo "BRANCH: $(git rev-parse --short HEAD)"
+          echo '::error::RP-LITE retired; test mods only on an isolated stage.'
+          exit 1

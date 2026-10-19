@@ -1,112 +1,14 @@
-name: functity-server
+name: functity-server (retired)
+# The old ZIP republisher could ship unvalidated JARs, world and configurations.
 on:
-  push:
-    paths:
-      - .github/workflows/functity-server.yml
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  build:
-    timeout-minutes: 30
+  retired:
     runs-on: ubuntu-24.04
-    env:
-      GH_TOKEN: ${{ github.token }}
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
-      - name: Construieste FUNCTITY-SERVER.zip
+      - name: Refuse legacy server repackaging
         run: |
-          set -e
-          exec > >(tee /tmp/build.log) 2>&1
-          gh --version >/dev/null
-          B=$GITHUB_WORKSPACE/build
-          mkdir -p "$B/server"
-          echo "== descarc srv-live (443MB) de pe release server-live =="
-          gh release download server-live -R "$GITHUB_REPOSITORY" -p srv-live.tar.gz -D /tmp
-          tar xzf /tmp/srv-live.tar.gz -C "$B/server" --strip-components=1 2>/dev/null || tar xzf /tmp/srv-live.tar.gz -C "$B/server"
-          cd "$B/server"
-          echo "== structura =="; ls | head -10; echo "jars: $(ls mods/*.jar 2>/dev/null | wc -l)"
-          echo "== engine jar root =="
-          ENG=$(ls FunCity-*.jar 2>/dev/null | head -1)
-          [ -z "$ENG" ] && ENG=$(ls *.jar 2>/dev/null | grep -viE "world|backup|CatServer" | head -1)
-          MODS=$(find . -maxdepth 2 -type d -iname "mods" | head -1)
-          echo "mods: ${MODS:-NICIUN} cu $(find ${MODS:-/dev/null} -name '*.jar' 2>/dev/null | wc -l) jars"
-          if [ -n "$MODS" ] && [ "$MODS" != "./mods" ]; then rm -rf mods; mv "$MODS" mods; fi
-          echo "engine: ${ENG:-NU}"
-          [ -n "$ENG" ] && mv "$ENG" FunCityEngine.jar
-          ENG="FunCityEngine.jar"
-          echo "== icon 64x64 de pe release funcity =="
-          sudo apt-get install -y imagemagick >/dev/null 2>&1 || sudo apt-get update -qq >/dev/null 2>&1; sudo apt-get install -y imagemagick >/dev/null 2>&1 && echo "imagick ok" || echo "imagick esuat"
-          gh release download funcity -R "$GITHUB_REPOSITORY" -p server-icon.png -D . 2>/dev/null && echo "server-icon: din release" || { gh release download funcity -R "$GITHUB_REPOSITORY" -p funcity-icon.png -D /tmp 2>/dev/null && convert /tmp/funcity-icon.png -resize 64x64! server-icon.png && echo "server-icon: convertit"; } || echo "server-icon: absent"
-          echo "== server.properties FunCity =="
-          touch server.properties
-          sedit() { grep -q "^$1=" server.properties && sed -i "s|^$1=.*|$1=$2|" server.properties || echo "$1=$2" >> server.properties; }
-          grep -q '^motd=' server.properties && sed -i 's|^motd=.*|motd=\\u00a7b\\u00a7lFuncity \\u00a77RolePlay \\u00a7aRomania|' server.properties || echo 'motd=\u00a7b\u00a7lFuncity \u00a77RolePlay \u00a7aRomania' >> server.properties
-          sedit server-port 25565
-          sedit online-mode false
-          sedit view-distance 8
-          sedit spawn-protection 0
-          sedit max-players 20
-          sedit enable-command-block true
-          echo "eula=true" > eula.txt
-          echo "== start.bat (java portabil + RAM auto) =="
-          cat > 'Start FunCity.bat' <<'BAT'
-          @echo off
-          title FunCity Server
-          cd /d "%~dp0"
-          set JAVA=java
-          if exist jre\bin\java.exe set JAVA=jre\bin\java.exe
-          for /f "usebackq tokens=1 delims=" %%M in (`powershell -NoProfile -Command "[int]((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory/1MB*0.45)"`) do set MAXM=%%M
-          if "%MAXM%" LSS "1600" set MAXM=1200
-          if "%MAXM%" GTR "6000" set MAXM=6000
-          echo Pornesc FunCity cu -Xmx%MAXM%M ...
-          "%JAVA%" -Xms1024M -Xmx%MAXM%M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -jar FunCityEngine.jar nogui
-          pause
-          BAT
-          echo "== Actualizare FunCity.bat =="
-          cat > 'Actualizare FunCity.bat' <<'BAT'
-          @echo off
-          cd /d "%~dp0"
-          echo Update FunCity de pe GitHub...
-          curl -sfLo "%TEMP%\functity.zip" "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FUNCTITY-SERVER.zip"
-          powershell -NoProfile -Command "Expand-Archive -LiteralPath $env:TEMP\functity.zip -DestinationPath . -Force"
-          echo Gata. Lumea ta (folderul world) NU s-a atins.
-          pause
-          BAT
-          echo "== java portabila Windows x64 (Temurin 11) =="
-          curl -sfLo /tmp/jre.zip "https://api.adoptium.net/v3/binary/latest/11/ga/windows/x64/jre/hotspot/normal/eclipse"
-          mkdir -p /tmp/jrex && cd /tmp/jrex && unzip -q /tmp/jre.zip
-          JDIR=$(ls -d */ | head -1)
-          cd "$OLDPWD" 2>/dev/null; cd "$GITHUB_WORKSPACE/build/server"
-          mv "/tmp/jrex/$JDIR" jre
-          echo "== adresa curenta =="
-          cp "$GITHUB_WORKSPACE/diag/addr.txt" ADRESA.txt 2>/dev/null && echo "ADRESA.txt: $(cat ADRESA.txt)" || echo "fara adresa"
-          echo "== README =="
-          cat > "CUM-PORNESC.txt" <<TXT
-          FUNCTITY 1.7.7 — FunCity RolePlay (bază: Cuantic lite + toate modurile)
-          1. Dublu-click: Start FunCity.bat  (java e deja înăuntru, nu instalezi nimic)
-          2. Așteafi "Done (" în fereastră.
-          3. Prietenii: în launcher FunCity, Add Server -> adresa din ADRESA.txt
-             (adresa se reîmprospătează pe pagina Release FunCity, fișierul ăsta e doar instantaneu)
-          4. Update la pack/server: Actualizare FunCity.bat — world/ se păstrează.
-          Serverul e OFFLINE mode: nu cere cont Microsoft.
-          TXT
-          echo "== zip final =="
-          cd "$GITHUB_WORKSPACE/build/server"
-          zip -qr9 "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip" . -x "*.log" -x "logs/*"
-          ls -la "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip"
-          echo "== upload pe release functity =="
-          gh release upload funcity "$GITHUB_WORKSPACE/FUNCTITY-SERVER.zip" -R "$GITHUB_REPOSITORY" --clobber
-          ADDR=$(cat "$GITHUB_WORKSPACE/diag/addr.txt" 2>/dev/null || echo "in lucru")
-          gh release edit funcity -R "$GITHUB_REPOSITORY" --notes "## 🏙️ FUNCTITY 1.7.7 FINAL
-          **Client** (toate modurile, brand FunCity): [FUNCTITY-CLIENT.mrpack](https://github.com/$GITHUB_REPOSITORY/releases/download/funcity/FunCity-1.0.0.mrpack)
-          **Server complet** (world + 33 moduri + java portabil + start/ update): [FUNCTITY-SERVER.zip](https://github.com/$GITHUB_REPOSITORY/releases/download/funcity/FUNCTITY-SERVER.zip)
-          Adresa joasă (se reîmprospătează): \`$ADDR\`
-          Bază: release \`lite\` (Cuantic 1.7.7) — engine validat, fără Paper, update automat prin Actualizare FunCity.bat."
-          echo "== DONE BUILD =="
-      - name: Trimite logul pe branch
-        if: always()
-        run: |
-          git config user.email b@b && git config user.name chk
-          mkdir -p diag && cp /tmp/build.log diag/functity-build.log 2>/dev/null || echo "fara log" > diag/functity-build.log
-          tail -3 diag/functity-build.log
-          git add -f diag/functity-build.log && git commit -qm "build log $(date +%s)" && git push -q "https://x-access-token:${GH_TOKEN}@github.com/$GITHUB_REPOSITORY" HEAD:"$GITHUB_REF_NAME" || true
+          echo '::error::Server packaging needs an isolated test and explicit release approval.'
+          exit 1

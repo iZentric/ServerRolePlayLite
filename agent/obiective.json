@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "branch": "arena/9bbcb24f-serverroleplaylite",
+  "obiective": [
+    {
+      "id": "F0",
+      "titlu": "Orientare si ritual",
+      "criteriu": "AGENTS, jurnal, obiective, laborator si init testate; stare verificat/necunoscut",
+      "status": "blocat",
+      "dovada": [
+        "agent/init.sh: JSON/Python/Bash PASS; YAML 31 PASS; parser smoke PASS",
+        "Pin source patch dry-run blocked by git TLS then codeload SSL EOF; no source verification claimed"
+      ]
+    },
+    {
+      "id": "F1",
+      "titlu": "Configuratia activa",
+      "criteriu": "Tabel repo vs root si world/defaultconfigs incarcate pe instanta izolata; backup inaintea oricarei aplicari",
+      "status": "blocat",
+      "dovada": [
+        "F1 static: root YAML/defaultconfigs path and repo view5, spawn20/6/2, compression=-1 verified via Python assertions",
+        "Effective PC/world config not available; no live writes or backups performed"
+      ]
+    },
+    {
+      "id": "F2",
+      "titlu": "Baseline si incarcare",
+      "criteriu": "Trei repetari b1.0827 si probe 0/5/10/20/40 cu clienti realisti >=10 min, GC, spark si top 5",
+      "status": "nepornit",
+      "dovada": []
+    },
+    {
+      "id": "F3",
+      "titlu": "JVM si GC",
+      "criteriu": "Un singur flag schimbat per A/B, baseline repetat, heap post-GC si GC p95/max",
+      "status": "nepornit",
+      "dovada": []
+    },
+    {
+      "id": "F4",
+      "titlu": "Configuratii server",
+      "criteriu": "O valoare per A/B, fara pierdere de survival-RP sau vizibilitate",
+      "status": "nepornit",
+      "dovada": []
+    },
+    {
+      "id": "F5",
+      "titlu": "Moduri si pluginuri",
+      "criteriu": "Audit online 25 client + server-only, dependente si rol pe PC slab; schimbari doar dupa A/B FPS/RAM, login Forge, compatibilitate RP si rollback",
+      "status": "in lucru",
+      "dovada": [
+        "agent/audit-modpack.md: 25/25 JAR-uri istorice clasificate cu surse; server-only analizate; nu este verdict de FPS",
+        "scripts/fc_client_audit.py: 8 legaturi de dependenta validate din nume; Clumps registry failure, 13 same-name SHA differences in diag/fix.txt"
+      ]
+    },
+    {
+      "id": "F6",
+      "titlu": "Motor si CI",
+      "criteriu": "Core propriu: hotspot server profilat, patch mic cu registry/API intacte, 3 comparatii repetate cu b1.0827, Forge+pluginuri, CI fara publicare",
+      "status": "in lucru",
+      "dovada": [
+        "39178227217: build si doua booturi 36/14 trecute; proba cu Curtain a esuat pe candidat si baseline; nu e verdict"
+      ]
+    },
+    {
+      "id": "F7",
+      "titlu": "Identitate si compatibilitate",
+      "criteriu": "Audit toate suprafetele vizibile + matrice mod-plugin testata, provenienta pastrata",
+      "status": "nepornit",
+      "dovada": []
+    },
+    {
+      "id": "F8",
+      "titlu": "Logare si incidente",
+      "criteriu": "CoreProtect in test: bloc/container/modded, flux politie RP/admin, rollback limitat si snapshot restaurat",
+      "status": "nepornit",
+      "dovada": []
+    },
+    {
+      "id": "F9",
+      "titlu": "Rezilienta",
+      "criteriu": "Backup si restore cronometrate, staging si rollback demonstrate fara atingere live",
+      "status": "nepornit",
+      "dovada": []
+    },
+    {
+      "id": "F10",
+      "titlu": "Raport si pachet final",
+      "criteriu": "Rezumat masurat si limite, o singura intrebare pentru aplicare live; niciun JAR nevalidat publicat",
+      "status": "nepornit",
+      "dovada": []
+    }
+  ]
+}
