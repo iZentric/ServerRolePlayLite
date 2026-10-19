@@ -1,0 +1,48 @@
+name: PC restore original RP content into the only Lite Prism profile
+# No new instance, no world change, no release; same six mods already booted
+# on a throwaway 15-mod server stage. Preserve backup and EGK/V RP/Fabulously.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-lowspec-full-content.yml
+      - scripts/fc_pc_lowspec_full_content.py
+      - scripts/fc_pc_lowspec_full_content_test.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inplace:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Restore all first-pack RP content safely into one existing Lite
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          $java=@(Get-CimInstance Win32_Process -Filter "name = 'java.exe' OR name = 'javaw.exe'")
+          $prism=@(Get-Process -Name 'prismlauncher','PrismLauncher' -ErrorAction SilentlyContinue | Select-Object -Unique Id)
+          if ($java.Count -gt 0 -or $prism.Count -gt 0) {
+            Write-Output ('::error title=LowSpec content restore::REFUSED running_game=' + $java.Count + ' running_prism=' + $prism.Count + '; close both before applying')
+            throw 'Prism or Minecraft still running, no file changed'
+          }
+          python scripts/fc_pc_lowspec_full_content_test.py
+          if ($LASTEXITCODE -ne 0) { throw 'Synthetic safety test failed' }
+          $root=Join-Path $env:APPDATA 'PrismLauncher\instances'
+          python scripts/fc_pc_lowspec_full_content.py --instances $root
+          if ($LASTEXITCODE -ne 0) { throw 'Preflight refused, no new profile created' }
+          python scripts/fc_pc_lowspec_full_content.py --instances $root --apply
+          if ($LASTEXITCODE -ne 0) { throw 'Client restore refused, backup unchanged' }
+          $lite=Join-Path $root 'FunCity-Lite-LowSpec-LAB-1.16.5'
+          $manifest=Get-Content -LiteralPath (Join-Path $lite 'LAB-MANIFEST.json') -Raw | ConvertFrom-Json
+          $count=@(Get-ChildItem -LiteralPath (Join-Path $lite '.minecraft\mods') -File -Filter '*.jar').Count
+          $active=@(Get-ChildItem -LiteralPath $root -Directory).Count
+          if ($count -ne 21 -or $active -ne 4 -or @($manifest.restored_original_content).Count -ne 6) {
+            throw 'Post-restore inventory inconsistent; no unrelated profile touched'
+          }
+          Write-Output '::notice title=PC Lite full content::same_prism_profile=true client_mods=21 restored_first_pack_content=6 active_prism_profiles=4 server_content_mods=15_already_booted client_gameplay_join=NOT_TESTED'
