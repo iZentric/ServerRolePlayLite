@@ -9,6 +9,7 @@ on:
       - 'scripts/fc_mrpack_audit*.py'
       - 'scripts/fc_lite_repack*.py'
       - 'scripts/fc_pack_stage_test.py'
+      - 'scripts/fc_plugin_audit*.py'
       - 'scripts/fc_bench.py'
       - 'scripts/fc_spawner_ab.py'
       - 'agent/DECIZII.md'
@@ -34,4 +35,5 @@ jobs:
           python3 scripts/fc_mrpack_audit_test.py
           python3 scripts/fc_lite_repack_test.py
           python3 scripts/fc_pack_stage_test.py
+          python3 scripts/fc_plugin_audit_test.py
           git diff --check
