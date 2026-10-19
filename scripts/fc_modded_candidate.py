@@ -21,10 +21,15 @@ CONTENT = (
     'cfm-7.0.0pre22-1.16.3.jar', 'roadstuff-1.16.5-4.3.0.jar',
     'vehicle-mod-0.45.2-1.16.5 (1).jar', 'cgm-1.2.6-1.16.5.jar',
     'additional-guns-0.7.1-1.16.5.jar',
+    'Pizzaland_v68.jar', 'pamhc2foodcore-1.16.3-1.0.2.jar',
+    'supplementaries-1.16.5-0.18.4b.jar',
+    'emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar',
 )
 LIBRARIES = (
     'mapperbase-1.16.5-2.4.0.0.jar',  # roads
     'obfuscate-0.6.3-1.16.5.jar',     # guns/vehicles
+    'selene-1.16.5-1.9.0.jar',       # Supplementaries
+    'player-animation-lib-forge-0.4.0+1.16.5.jar',  # Emotecraft
 )
 CHOSEN = CONTENT + LIBRARIES
 
