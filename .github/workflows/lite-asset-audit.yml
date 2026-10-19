@@ -54,6 +54,20 @@ jobs:
                   print('::notice file=agent/BETA-LITE.md,line=1,title=Large pack entry::'
                         f'{i.filename} compressed_bytes={i.compress_size}')
           PY
+      - name: Inspect client Pizzaland and ModernXL (same names need not mean same binaries)
+        run: |
+          set -Eeuo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          from scripts.fc_mod_binary_evidence import inspect_archive
+          pack = Path(os.environ['RUNNER_TEMP']) / 'fc-asset/FunCity-1.2.5.mrpack'
+          names = ('Pizzaland_v68.jar', 'Modernxl 1.16.5.jar')
+          records = inspect_archive(pack, names)
+          for name in names:
+              entry = json.dumps({'jar': name, **records[name]}, ensure_ascii=True, sort_keys=True)
+              print('::notice title=Client JAR metadata::' + entry)
+          PY
       - name: Compare archived voice code with pinned official binary
         run: |
           set -Eeuo pipefail
