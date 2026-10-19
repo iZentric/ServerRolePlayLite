@@ -63,7 +63,7 @@ print('updater all modes fail-closed PASS (static only; no Windows execution)')
 page=Path('site/index.html').read_text(encoding='utf-8')
 from runpy import run_path
 assert page == run_path('site/build_site.py')['HTML']
-assert 'Client Lite în validare' in page and 'TPS susținut' not in page
+assert 'Client Lite în reproiectare plugin-first' in page and 'TPS susținut' not in page
 site=yaml.load(Path('.github/workflows/site.yml').read_text(), Loader=yaml.BaseLoader)
 assert list(site['on']) == ['workflow_dispatch']
 print('public site static claims PASS; publication requires manual dispatch')
@@ -105,7 +105,9 @@ python3 scripts/fc_mrpack_audit_test.py
 python3 scripts/fc_lite_repack_test.py
 python3 scripts/fc_server_lite_candidate_test.py
 python3 scripts/fc_mod_cost_review_test.py
-echo 'Lite client 24 / server 29 selection + packaging fixtures and cost inventory PASS (static, not a real import or boot)'
+echo 'Historical 24 client / 29 server selection and packaging fixtures PASS (comparison only, not current target or boot)'
+python3 scripts/fc_plugin_first_gate_test.py
+echo 'plugin-first policy gate PASS (static whitelist only; no playable pack staged)'
 python3 scripts/fc_pack_stage_test.py
 echo 'server mod A/B stage fixtures PASS (no Java boot or player FPS)'
 python3 scripts/fc_plugin_audit_test.py

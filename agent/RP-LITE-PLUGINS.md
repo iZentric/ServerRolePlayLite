@@ -1,5 +1,7 @@
 # FunCity RP Lite — oraș nou, construit liber, numai loguri
 
+> **Direcție actuală:** [plugin-first](PLUGIN-FIRST.md) pentru funcțiile RP. Tabelul de mai jos este o selecție istorică/parțială de pluginuri, nu implementarea demonstrată a armelor, mobilierului, vehiculelor sau vocii; noile moduri de conținut trebuie să fie ale proprietarului, confirmate explicit.
+
 **Corecție de produs de la proprietar, 19.10.2026:** orașul se construiește **de la zero** de către proprietar și jucători; nu cerem claims, regiuni protejate, interdicții de construit sau anti-grief preventiv în oraș. Păstrăm **CoreProtect ca jurnal** și rollback punctual numai de către admin. Nici logarea, nici drepturile de admin nu opresc automat un incident. Aceasta este o alegere pentru ținta nouă, **NU o schimbare a serverului live ori o autorizație de ștergere a unei lumi existente**.
 
 | Rol în orașul nou | Plugin țintă | Decizie |

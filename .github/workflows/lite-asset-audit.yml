@@ -1,17 +1,7 @@
-name: FunCity Lite published-asset audit
-# Hosted runner only. Reads the existing release; produces no download artifact,
-# release, JAR, PC action, server action or deployment.
+name: FunCity Lite historical-asset audit
+# Manual-only historical 24/29 A vs 23/28 B. NOT the plugin-first target.
+# Hosted runner only. No download artifact, release, PC action or deployment.
 on:
-  push:
-    branches:
-      - arena/9bbcb24f-serverroleplaylite
-    paths:
-      - '.github/workflows/lite-asset-audit.yml'
-      - 'scripts/fc_lite_repack.py'
-      - 'scripts/fc_mrpack_audit.py'
-      - 'scripts/fc_mod_binary_evidence.py'
-      - 'agent/DECIZII.md'
-      - 'agent/voicechat-1.16.5-2.3.23.json'
   workflow_dispatch:
 permissions:
   contents: read

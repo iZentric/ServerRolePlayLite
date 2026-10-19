@@ -1,5 +1,7 @@
 # FunCity Lite beta — poarta de lansare (2026-10-19)
 
+> **Corecție de produs:** selecția „închisă” 24/29 descrisă mai jos este acum **doar candidatul istoric de comparație**. [Politica actuală plugin-first](PLUGIN-FIRST.md) nu include moduri terțe de conținut ori optimizări fără dovadă. Nu există încă un pack plugin-first importat/jucabil sau o soluție de voce confirmată.
+
 **Alegere pentru candidatul de test, închisă:** motor b1.0827, server 29 moduri, client 24 moduri; [rezumat și limite](SELECTIE-MOTOR-MODURI-CLIENT.md). HYPECITY-ul proprietarului este modelul operațional, nu sursa demonstrată a binarelor CUANTIC. Scriptul `scripts/fc_server_lite_candidate.py` selectează doar moduri din arhiva server cu SHA pinuit; nu importă configurații, pluginuri sau lumi. Nu există încă un server complet pornit cu aceste 29.
 
 **Alegere:** oraș NOU, construit de proprietar și jucători, fără protecții preventive; CoreProtect numai jurnal și rollback administrativ (`agent/RP-LITE-PLUGINS.md`). b1.0827, țintă client **24 moduri** (25 istorice fără Out of Sight și Entity Collision FPS Fix, plus Voice Chat Forge 2.3.23 pentru RP), serverul păstrează RP și scoate din țintă JAR-urile notate `SCOS` în `agent/DECIZII.md`. Un singur import `.mrpack`, shaders OFF, render 5; compresie server 256 aleasă în repo. Nu modifica profilurile Prism existente și nu distribui ZIP-ul de lume.

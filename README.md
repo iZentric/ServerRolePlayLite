@@ -2,7 +2,7 @@
   <img src="site/assets/funcity-city.webp" alt="FunCity — oraș în lumini cyan și magenta" width="190" height="190">
   <h1>FunCity RP Lite</h1>
   <p><strong>Un oraș nou. Povestea e a voastră.</strong></p>
-  <p>Minecraft 1.16.5 modat · oraș construit de jucători · joburi, mafii, vehicule și voce</p>
+  <p>Minecraft 1.16.5 · pluginuri pentru RP · moduri proprii numai după confirmare</p>
   <p><a href="site/index.html">Pagina proiectului</a> · <a href="agent/SELECTIE-MOTOR-MODURI-CLIENT.md">Motor &amp; moduri</a> · <a href="agent/PROGRES.md">Progres real</a></p>
 </div>
 
@@ -10,7 +10,7 @@
 
 ## Ce construim
 
-FunCity este un proiect de comunitate roleplay cu un **oraș nou, construit de proprietar și de jucători**. Păstrăm mobilierul, armele, vehiculele, emote și vocea — „Lite” înseamnă un client mai simplu de importat, nu Minecraft gol. În ținta proiectului, orașul nu are claims sau protecții preventive; **CoreProtect** este cerut ca jurnal și rollback punctual administrativ, nu ca blocaj la construit. Conturile se autentifică **prin plugin**, separat de conectarea tehnică a clientului modat.
+FunCity este un proiect de comunitate roleplay cu un **oraș nou, construit de proprietar și de jucători**. **Direcția actuală este plugin-first:** joburile, economia, meniurile și restul RP se proiectează prin pluginuri; conținut modat numai dacă aparține proprietarului și este confirmat exact, optimizări numai dacă probele arată necesitatea. Mobilierul, armele, vehiculele, emotele și vocea sunt **cerințe de evaluat**, nu funcții plugin deja implementate; un resource pack nu garantează mecanicile unui mod. Orașul nu are claims sau protecții preventive; **CoreProtect** este cerut ca jurnal și rollback punctual administrativ, nu ca blocaj la construit. Conturile se autentifică **prin plugin**. [Regula actuală și limitele](agent/PLUGIN-FIRST.md).
 
 [HYPECITY](agent/AUDIT-SERVERE-REFERINTA.md) este reperul practic al proprietarului, care relatează că a avut peste 60 de jucători, posibil spre 100. Este o experiență istorică, nu o măsurătoare a capacității noului FunCity.
 
@@ -18,9 +18,9 @@ FunCity este un proiect de comunitate roleplay cu un **oraș nou, construit de p
 
 | Stare | Ce înseamnă |
 |---|---|
-| **ALES pentru candidat** | Motor FunCity **b1.0827**, **29 moduri server**, **24 moduri client**. [Lista exactă și motivele](agent/LISTA-MODURI-RP-LITE.md). |
-| **VALIDAT structural** | [CI](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39276176039) a verificat hashurile surselor istorice și a construit *temporar* candidații 29/24. Nu este test în joc. |
-| **DE TESTAT** | Pornirea perechii pe o copie, importul curat în Prism, conectarea clientului, pluginul de autentificare, vocea, CoreProtect, backup/restaurare și sarcina cu jucători. |
+| **ALES ca direcție nouă** | Motorul hibrid FunCity **b1.0827** rămâne referință, RP **plugin-first**; nicio includere automată de moduri terțe. [Whitelisting-ul actual](agent/PLUGIN-FIRST.md) este încă gol până la confirmarea modurilor proprii și a excepției pentru voce. |
+| **VALIDAT doar istoric/structural** | [CI](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39302790948) a produs *temporar* perechile vechi 24/29 și 23/28, doar pentru comparație; **nu** sunt noua țintă sau un test în joc. |
+| **DE TESTAT** | Pluginurile și funcțiile RP efective, modurile proprii identificate, soluția de voce, apoi boot pe copie, importul clientului dacă e necesar, autentificare, CoreProtect, backup/restaurare și sarcina cu jucători. |
 | **LIVE** | Nicio instalare Lite nouă sau capacitate a serverului actual nu este confirmată de acest repo. |
 
 > **Pentru jucători:** încă nu publicăm un pachet Lite nou ori o adresă de intrare verificată. Pagina arată stadiul proiectului, nu un server live.
@@ -28,7 +28,7 @@ FunCity este un proiect de comunitate roleplay cu un **oraș nou, construit de p
 ## Găsești rapid ce te interesează
 
 - **Aspectul proiectului:** [site-ul static](site/index.html) și [sursa paginii](site/template.html). Fără reclame, tracking sau statistici live inventate.
-- **Motor, moduri, client:** [rezumatul deciziei](agent/SELECTIE-MOTOR-MODURI-CLIENT.md) · [costul și rostul fiecărui mod](agent/AUDIT-COST-MODURI.md) · [lista celor 24 + 29](agent/LISTA-MODURI-RP-LITE.md) · [poarta beta](agent/BETA-LITE.md).
+- **Motor, moduri, client:** [politica plugin-first actuală](agent/PLUGIN-FIRST.md) · [vechea selecție 24 + 29, numai comparație](agent/LISTA-MODURI-RP-LITE.md) · [costul fiecărui mod istoric](agent/AUDIT-COST-MODURI.md) · [poarta beta](agent/BETA-LITE.md).
 - **RP și moderare:** [rolurile pluginurilor](agent/RP-LITE-PLUGINS.md) · [planul comunității](agent/PLAN-COMUNITATE.md).
 - **Vrei să continui cu un alt agent?** [Cerința exactă FunCity, gata de copiat](agent/CERINTA-EXACTA-FUNCITY.md) · [instrucțiunile din repo](AGENTS.md).
 - **Dovezi și limite:** [comparația HYPECITY/FunCity citită de pe PC](agent/COMPARATIE-HYPECITY-PC.md) · [captura istorică parțială de config](agent/AUDIT-SERVERE-REFERINTA.md) · [progresul](agent/PROGRES.md).

@@ -1,4 +1,6 @@
-# Fiecare mod din FunCity RP Lite: de ce îl ținem și ce poate costa
+# Auditul modurilor din fostul candidat Lite: rost și cost posibil
+
+> **Context istoric.** [Noua regulă plugin-first](PLUGIN-FIRST.md) nu mai păstrează automat niciun mod din tabel: numai conținut propriu confirmat și optimizări demonstrate, după probe. Tabelul explică fostul candidat 24/29, nu o listă nouă de instalare.
 
 **Ținta din repo, nu packul instalat:** 24 moduri client / 29 server = 20 comune, 4 numai client, 9 numai server. Pe PC, [inventarul read-only](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39300017812) a găsit încă 25 moduri într-un profil Prism și 34 în folderul serverului local; nu le-am schimbat. „Cost” mai jos descrie **ce resursă ar putea solicita**, nu o măsurătoare de FPS, RAM sau TPS. Niciun mod nu devine „degeaba” doar pentru că nu optimizează; dacă aduce un obiect RP folosit, are un scop. Deciziile de eliminare se probează pe o copie, cu client/server aliniate.
 

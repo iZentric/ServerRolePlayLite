@@ -1,4 +1,6 @@
-# Cerința exactă FunCity pentru un agent de cod (copiezi mesajul de mai jos)
+# Cerința exactă FunCity pentru un agent de cod (istoric; nu copia nemodificat)
+
+> **Supersedată parțial de [regula plugin-first](PLUGIN-FIRST.md).** Proprietarul vrea RP din pluginuri, numai moduri de conținut proprii confirmate și moduri de performanță doar cu necesitate dovedită. Instrucțiunile vechi de a construi obligatoriu 24 client/29 server, de a păstra un set de optimizări sau un anumit mod de voce **nu mai sunt ținta activă**. Motorul hibrid FunCity rămâne reper, nu schimbăm instalările existente. Rescrie brief-ul înainte să îl refolosești.
 
 > Lucrează în `iZentric/ServerRolePlayLite`, pe branch-ul deja alocat sesiunii. Citește mai întâi `AGENTS.md`, `agent/SELECTIE-MOTOR-MODURI-CLIENT.md`, `agent/DECIZII.md`, `agent/PROGRES.md` și inventarul PC disponibil. Nu îmi cere din nou versiunea de Minecraft, lista de moduri sau să schimb proiectul în Paper: **Minecraft 1.16.5, Forge + pluginuri, FunCity RP Lite** sunt decizii ale proprietarului. HYPECITY este reperul meu real de comunitate, nu dovada că noul server a fost testat la același număr de jucători. Dacă o dovadă nouă contrazice o decizie, spune de ce înainte de a o schimba.
 >

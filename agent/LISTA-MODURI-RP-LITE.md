@@ -1,4 +1,6 @@
-# Lista exactă a modurilor din ținta FunCity RP Lite — 19.10.2026
+# Lista istorică 24 client / 29 server FunCity RP Lite — 19.10.2026
+
+> **Nu mai este selecția implicită.** [Politica plugin-first actuală](PLUGIN-FIRST.md) exclude moduri terțe de conținut până la confirmarea proprietății și optimizări până la dovezi A/B. Lista rămâne numai pentru comparație și pentru analiza dependențelor, nu pentru instalare.
 
 **Țintă de repo, nu pack instalat/live:** **24 JAR-uri client** și **29 JAR-uri server**, conform `agent/DECIZII.md` (20 comune, 4 numai client, 9 numai server). Orașul nou începe de la zero, îl construiesc proprietarul și jucătorii; fără protecții preventive, cu CoreProtect doar ca jurnal/rollback manual admin (CoreProtect este **plugin**, nu mod din tabel). Ținta încă NU a fost importată/testată în Minecraft; nu confundăm inventarul static cu necesitatea sau performanța măsurată.
 

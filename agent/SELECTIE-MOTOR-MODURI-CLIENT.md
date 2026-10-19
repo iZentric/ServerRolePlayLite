@@ -1,4 +1,6 @@
-# FunCity RP Lite — alegerea concretă pentru motor, moduri și client (19.10.2026)
+# FunCity RP Lite — comparația veche pentru motor, moduri și client (19.10.2026)
+
+> **Ținta de moduri de mai jos a fost înlocuită** de [regula plugin-first](PLUGIN-FIRST.md): numai moduri de conținut proprii confirmate, optimizări numai cu necesitate măsurată. Perechile 24/29 și 23/28 sunt brațe istorice de laborator, nu noua recomandare. FunCity b1.0827 rămâne motorul de referință până la teste; nu comutăm automat pe alt motor.
 
 **Reper:** HYPECITY-ul proprietarului a dus, după relatarea lui, peste 60 simultan **pe hosting**, inclusiv jucători cu PC-uri slabe. [Inventarul read-only actual de pe PC](COMPARATIE-HYPECITY-PC.md) a confirmat 35 moduri și 61 pluginuri în HYPECITY principal, distinct de HYPECITY BK (40/37). Captura veche de config nu le atribuia căi, dar noile nume de JAR au proveniență; nu sunt probă de FPS/client folosit atunci sau capacitate FunCity. **Nu reconstruim HYPECITY dintr-un ZIP CUANTIC.** Alegerea 24/29 de mai jos este candidat de comparație moștenit din FunCity, nu minimul necesar dovedit; vezi candidații de excludere în auditul PC.
 
