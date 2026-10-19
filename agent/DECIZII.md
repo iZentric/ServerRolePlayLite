@@ -88,6 +88,8 @@ REVIZUIT 19.10.2026: proprietarul a confirmat vocea RP și survival limitat; vez
 
 ## Pluginurile arhivei vechi; nu pretinde că acestea sunt cele live
 
+Rolurile unice, suprapunerile *de investigat* (EssentialsXAntiBuild/WorldGuard/LuckPerms și EssentialsXProtect/WorldGuard), cerința CoreProtect și auditul binar read-only sunt descrise în `agent/RP-LITE-PLUGINS.md`. Nu elimina pluginuri PĂSTRATE doar pentru că numele funcțiilor seamănă: configul activ și testele de protecție încă lipsesc.
+
 | ID | Plugin | Alegere | Motiv | Sursa · ce o schimbă |
 |---|---|---|---|---|
 | P01 | Chunky | SCOS din runtime normal | pregen e unealtă de laborator | P · pregen autorizat |
