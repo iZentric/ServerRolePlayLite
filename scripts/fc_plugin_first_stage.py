@@ -92,7 +92,10 @@ def stage(engine, archive, coreprotect, output, pins=(ENGINE_SHA, ARCHIVE_SHA, C
             'engine': {'name': 'FunCity b1.0827 hybrid', 'sha256': pins[0]},
             'server_mods': [], 'client_mods': [],
             'plugins': [
-                {'jar': p.name, 'sha256': sha(p)} for p in sorted((tmp / 'plugins').glob('*.jar'))
+                {'jar': p.name, 'sha256': sha(p),
+                 'declared_name': ('CoreProtect' if p.name == 'CoreProtect.jar' else
+                                   by_file[p.name]['declared_name'])}
+                for p in sorted((tmp / 'plugins').glob('*.jar'))
             ],
             'auth': 'NOT INSTALLED: closed to public; online-mode true + whitelist true',
             'voice': 'unresolved', 'rp_jobs_mafias_vehicles': 'NOT IMPLEMENTED',

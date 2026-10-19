@@ -43,6 +43,7 @@ def main():
         assert not output.exists()
         report = stage(engine, archive, core, output, pins)
         assert report['server_mods'] == [] and len(report['plugins']) == 6
+        assert len({p['declared_name'] for p in report['plugins']}) == 6
         assert set(SELECTED) <= {p.name for p in (output/'plugins').iterdir()}
         assert not list((output/'mods').iterdir())
         assert 'online-mode=true' in (output/'server.properties').read_text()

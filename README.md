@@ -19,7 +19,7 @@ FunCity este un proiect de comunitate roleplay cu un **oraș nou, construit de p
 | Stare | Ce înseamnă |
 |---|---|
 | **ALES ca direcție nouă** | Motorul hibrid FunCity **b1.0827** rămâne referință, RP **plugin-first**; nicio includere automată de moduri terțe. [Whitelisting-ul actual](agent/PLUGIN-FIRST.md) este încă gol până la confirmarea modurilor proprii și a excepției pentru voce. |
-| **VALIDAT doar istoric/structural** | [CI](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39302790948) a produs *temporar* perechile vechi 24/29 și 23/28, doar pentru comparație; **nu** sunt noua țintă sau un test în joc. |
+| **VALIDAT în laborator** | [Stage izolat 0 moduri / 6 pluginuri](agent/SERVER-PLUGIN-FIRST.md): motorul b1.0827 a pornit și s-a oprit curat pe loopback [cu Guava21 ca override temporar](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39312631544). Fără acel override, bootstrapul Guava20 eșuează; **nu** este încă un build/boot de producție sau RP testat. |
 | **DE TESTAT** | Pluginurile și funcțiile RP efective, modurile proprii identificate, soluția de voce, apoi boot pe copie, importul clientului dacă e necesar, autentificare, CoreProtect, backup/restaurare și sarcina cu jucători. |
 | **LIVE** | Nicio instalare Lite nouă sau capacitate a serverului actual nu este confirmată de acest repo. |
 
@@ -28,7 +28,7 @@ FunCity este un proiect de comunitate roleplay cu un **oraș nou, construit de p
 ## Găsești rapid ce te interesează
 
 - **Aspectul proiectului:** [site-ul static](site/index.html) și [sursa paginii](site/template.html). Fără reclame, tracking sau statistici live inventate.
-- **Motor, moduri, client:** [politica plugin-first actuală](agent/PLUGIN-FIRST.md) · [vechea selecție 24 + 29, numai comparație](agent/LISTA-MODURI-RP-LITE.md) · [costul fiecărui mod istoric](agent/AUDIT-COST-MODURI.md) · [poarta beta](agent/BETA-LITE.md).
+- **Motor, moduri, client:** [decizia și stage-ul plugin-first](agent/SERVER-PLUGIN-FIRST.md) · [regula de includere](agent/PLUGIN-FIRST.md) · [vechea listă 24 + 29, numai comparație](agent/LISTA-MODURI-RP-LITE.md) · [poarta beta](agent/BETA-LITE.md).
 - **RP și moderare:** [rolurile pluginurilor](agent/RP-LITE-PLUGINS.md) · [planul comunității](agent/PLAN-COMUNITATE.md).
 - **Vrei să continui cu un alt agent?** [Cerința exactă FunCity, gata de copiat](agent/CERINTA-EXACTA-FUNCITY.md) · [instrucțiunile din repo](AGENTS.md).
 - **Dovezi și limite:** [comparația HYPECITY/FunCity citită de pe PC](agent/COMPARATIE-HYPECITY-PC.md) · [captura istorică parțială de config](agent/AUDIT-SERVERE-REFERINTA.md) · [progresul](agent/PROGRES.md).

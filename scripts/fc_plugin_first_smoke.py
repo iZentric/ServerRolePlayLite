@@ -58,20 +58,24 @@ def smoke(stage, guava21):
             if ready:
                 time.sleep(5)
                 text = log.read_text(encoding='utf-8', errors='replace')
-                # Names inside the JAR need not match filenames. Verify essentials
-                # by their declared plugin names in the server log, never by count alone.
-                required = ('CoreProtect', 'Essentials', 'LuckPerms', 'Vault')
+                # Verify ALL six by exact plugin.yml name, not just JAR presence.
+                report = json.loads((stage/'stage-report.json').read_text())
+                required = tuple(p['declared_name'] for p in report['plugins'])
                 missing = [name for name in required if not any(
                     ('Enabling ' + name + ' ') in line or ('Enabling ' + name + ' v') in line
                     for line in text.splitlines())]
+                critical = [line for line in text.splitlines() if any(
+                    token in line for token in ('Could not load plugin', 'Error occurred while enabling',
+                                               'Exception in server tick loop', 'Failed to start'))]
                 stopped = run.stop(60)
-                if missing or stopped != 'CLEAN':
-                    details = f'booted but missing active plugins={missing}; shutdown={stopped}'
+                if missing or critical or stopped != 'CLEAN':
+                    details = (f'booted but missing active plugins={missing}; '
+                               f'critical_log_lines={len(critical)}; shutdown={stopped}')
                     print('::error title=Closed FunCity boot check::' + details)
                     raise ValueError(details)
                 print('::notice title=Plugin-first closed boot::'
                       f'engine=b1.0827 sha256={ENGINE_SHA} mods=0 staged_plugins=6 '
-                      f'active_core={",".join(required)} boot_attempt={attempt} '
+                      f'active_plugins={",".join(required)} boot_attempt={attempt} '
                       f'guava21_lab_override_sha256={GUAVA21_SHA} '
                       'loopback_only=true online_mode=true whitelist=true; '
                       'NO player login/auth/voice/RP or capacity claim')
