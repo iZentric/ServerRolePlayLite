@@ -107,7 +107,8 @@ python3 scripts/fc_server_lite_candidate_test.py
 python3 scripts/fc_mod_cost_review_test.py
 echo 'Historical 24 client / 29 server selection and packaging fixtures PASS (comparison only, not current target or boot)'
 python3 scripts/fc_plugin_first_gate_test.py
-echo 'plugin-first policy gate PASS (static whitelist only; no playable pack staged)'
+python3 scripts/fc_plugin_first_stage_test.py
+echo 'plugin-first policy and isolated 0-mod/6-plugin stage fixtures PASS (static; no Java boot)'
 python3 scripts/fc_pack_stage_test.py
 echo 'server mod A/B stage fixtures PASS (no Java boot or player FPS)'
 python3 scripts/fc_plugin_audit_test.py
