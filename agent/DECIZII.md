@@ -1,6 +1,6 @@
 # FunCity Lite — registrul alegerilor (2026-10-19)
 
-REVIZUIT 19.10.2026: proprietarul a confirmat vocea RP și survival limitat; vezi `agent/RP-EVIDENCE.md`. Alegere **în vigoare în repo**; nu este afirmație că acele JAR-uri sunt instalate acum sau că FPS/TPS au fost măsurate. Sursa inventarelor: `diag/pc-client.txt` (25 JAR client, captură PC) și `git show b1ec20c:docs/ENGINE-PACK-AUDIT.md` (36 moduri / 14 pluginuri, arhivă CUANTIC). Motivarea/legăturile către paginile autorilor: `agent/audit-modpack.md`, `agent/revizie-25-moduri.md`, `agent/decizie-server-36.md`; excepții directe: [SpawnerFix](https://www.curseforge.com/minecraft/mc-mods/spawner-fix), [FastSuite](https://www.curseforge.com/minecraft/mc-mods/fastsuite), [Voice Chat](https://modrepo.de/minecraft/voicechat/wiki/installation), [Out of Sight](https://github.com/Corosauce/OutOfSight/blob/master/src/main/java/com/corosus/out_of_sight/config/Config.java). O schimbare de JAR în client/server instalat sau un release cere binar verificat + import/login Forge + RP/rollback; alegerea **precedă** măsurătoarea, dar nu o înlocuiește. Mai jos „sursa” este prescurtată: C = `diag/pc-client.txt` + `agent/audit-modpack.md`, S = auditul arhivei + `agent/audit-modpack.md`, P = auditul pluginurilor din arhivă; verdictul poate fi revizuit numai cu dovada din ultima coloană.
+REVIZUIT 19.10.2026: proprietarul a confirmat vocea RP, survival limitat și **oraș nou construit de el și de jucători, fără protecții preventive în oraș; numai jurnal CoreProtect**; vezi `agent/RP-EVIDENCE.md`. Alegere **în vigoare în repo**; nu este afirmație că acele JAR-uri sunt instalate acum sau că FPS/TPS au fost măsurate. Sursa inventarelor: `diag/pc-client.txt` (25 JAR client, captură PC) și `git show b1ec20c:docs/ENGINE-PACK-AUDIT.md` (36 moduri / 14 pluginuri, arhivă CUANTIC). Motivarea/legăturile către paginile autorilor: `agent/audit-modpack.md`, `agent/revizie-25-moduri.md`, `agent/decizie-server-36.md`; excepții directe: [SpawnerFix](https://www.curseforge.com/minecraft/mc-mods/spawner-fix), [FastSuite](https://www.curseforge.com/minecraft/mc-mods/fastsuite), [Voice Chat](https://modrepo.de/minecraft/voicechat/wiki/installation), [Out of Sight](https://github.com/Corosauce/OutOfSight/blob/master/src/main/java/com/corosus/out_of_sight/config/Config.java). O schimbare de JAR în client/server instalat sau un release cere binar verificat + import/login Forge + RP/rollback; alegerea **precedă** măsurătoarea, dar nu o înlocuiește. Mai jos „sursa” este prescurtată: C = `diag/pc-client.txt` + `agent/audit-modpack.md`, S = auditul arhivei + `agent/audit-modpack.md`, P = auditul pluginurilor din arhivă; verdictul poate fi revizuit numai cu dovada din ultima coloană.
 
 ## Motor și valori
 
@@ -35,7 +35,7 @@ REVIZUIT 19.10.2026: proprietarul a confirmat vocea RP și survival limitat; vez
 | C15 | `oculus-mc1.16.5-1.4.7.jar` | PĂSTRAT | texturi funcționale cu shaders OFF | C + logul vizual documentat · test vizual fără el |
 | C16 | `out_of_sight-1.16.4-1.0.1.jar` | SCOS | entități deja limitate în repo; prag tile-entity poate ascunde mobilier | C + [config autor](https://github.com/Corosauce/OutOfSight/blob/master/src/main/java/com/corosus/out_of_sight/config/Config.java) · A/B de scenă RP |
 | C17 | `pamhc2foodcore-1.16.3-1.0.2.jar` | PĂSTRAT | hrană/economie | C · scan lume/recipe + decizie RP |
-| C18 | `Pizzaland_v68.jar` | PĂSTRAT | registry neidentificat; risc pentru lume | C · audit binar/lume |
+| C18 | `Pizzaland_v68.jar` | PĂSTRAT | registru/rol neidentificat, dar orașul nou nu conține blocuri istorice; primul candidat la eliminare după auditul dependențelor | C · audit binar + login/RP pe lumea nouă |
 | C19 | `player-animation-lib-forge-0.4.0+1.16.5.jar` | PĂSTRAT | dependență Emotecraft | C · scoatere părinte |
 | C20 | `radon-0.8.0a.jar` | PĂSTRAT | lumină, distinct de renderer | C · A/B fără câștig/compatibilitate |
 | C21 | `roadstuff-1.16.5-4.3.0.jar` | PĂSTRAT | blocuri oraș | C · scan lume + decizie RP |
@@ -56,7 +56,7 @@ REVIZUIT 19.10.2026: proprietarul a confirmat vocea RP și survival limitat; vez
 | S05 | `FastWorkbench-1.16.5-4.6.2.jar` | PĂSTRAT | banc de lucru, distinct | S + autor FastSuite · profil/A-B |
 | S06 | `Ksyxis-1.4.6.jar` | PĂSTRAT | decizie curentă spawn chunks | S · măsurare cu keep-spawn |
 | S07 | `Modernxl 1.16.5.jar` | PĂSTRAT | mobilier RP | S · scan lume fără blocuri |
-| S08 | `Pizzaland_v68.jar` | PĂSTRAT | registry neidentificat | S · audit lume/binar |
+| S08 | `Pizzaland_v68.jar` | PĂSTRAT | rol necunoscut, candidat împreună cu clientul la eliminare înaintea lumii noi, numai după audit binar | S · audit dependințe + boot/login |
 | S09 | `Placebo-1.16.5-4.7.1.jar` | PĂSTRAT | bibliotecă pentru stack | S · audit dependențe binare |
 | S10 | `RoadRunner-mc1.16.5-1.5.2.jar` | PĂSTRAT | optimizare server; fără Performant | S · A/B compatibilitate |
 | S11 | `SpawnerFix-1.16.2-1.0.0.3.jar` | SCOS | fix randare client, nu TPS server | S + autor · boot/login contrazice |
@@ -88,24 +88,24 @@ REVIZUIT 19.10.2026: proprietarul a confirmat vocea RP și survival limitat; vez
 
 ## Pluginurile arhivei vechi; nu pretinde că acestea sunt cele live
 
-Rolurile unice, suprapunerile *de investigat* (EssentialsXAntiBuild/WorldGuard/LuckPerms și EssentialsXProtect/WorldGuard), cerința CoreProtect și auditul binar read-only sunt descrise în `agent/RP-LITE-PLUGINS.md`. Nu elimina pluginuri PĂSTRATE doar pentru că numele funcțiilor seamănă: configul activ și testele de protecție încă lipsesc.
+Oraș nou deschis: **nu există regiuni de protejat**, build-ul jucătorilor este permis; CoreProtect ține numai evidența și rollback-ul manual de admin. Scoaterea pluginurilor preventive este o alegere a țintei pe baza regulii proprietarului, nu dovadă că eliminarea este compatibilă pe serverul live. Rolurile și testele sunt în `agent/RP-LITE-PLUGINS.md`.
 
 | ID | Plugin | Alegere | Motiv | Sursa · ce o schimbă |
 |---|---|---|---|---|
 | P01 | Chunky | SCOS din runtime normal | pregen e unealtă de laborator | P · pregen autorizat |
 | P02 | Cuantic-Brand | SCOS | identitate veche; FunCity în motor | P · dependență funcțională |
 | P03 | EssentialsX | PĂSTRAT | comenzi/economie RP | P · funcție echivalentă validată |
-| P04 | EssentialsXAntiBuild | PĂSTRAT | permisiuni existente necunoscute | P · audit reguli dovedește neutilizare |
+| P04 | EssentialsXAntiBuild | SCOS | restricțiile preventive de plasare/spargere contrazic orașul construit liber de jucători | declarația proprietarului · test build/rollback pe copie |
 | P05 | EssentialsXChat | PĂSTRAT | chat RP | P · funcție echivalentă |
-| P06 | EssentialsXProtect | PĂSTRAT | protecție configurată necunoscută | P · audit funcție/permisiuni |
+| P06 | EssentialsXProtect | SCOS | protecție preventivă nedorită; CoreProtect este jurnal, nu înlocuitor de restricții | declarația proprietarului · test evenimente/backup pe copie |
 | P07 | EssentialsXSpawn | PĂSTRAT | spawn și comenzi | P · funcție echivalentă |
 | P08 | LuckPerms | PĂSTRAT | permisiuni | P · migrare verificată |
 | P09 | ProtocolLib | PĂSTRAT | posibil dependent plugin/protocol | P · audit binar dependențe |
 | P10 | SkinsRestorer | PĂSTRAT | skinuri RP | P · funcție nefolosită |
 | P11 | Vault | PĂSTRAT | interfață economie/pluginuri | P · audit dependent |
-| P12 | claimchunk | SCOS | oraș deschis, fără claims | P + `AGENTS.md` · decizie RP inversată |
-| P13 | WorldEdit | PĂSTRAT | administrare oraș | P · neutilizare/înlocuitor |
-| P14 | WorldGuard | PĂSTRAT | reguli regiuni necunoscute; nu-l confunda cu claims jucători | P · audit regiuni active |
-| P15* | CoreProtect | PĂSTRAT ca cerință | registrul unic de incidente; **nu apare în cele 14** | `AGENTS.md` · soluție alternativă validată |
+| P12 | claimchunk | SCOS | fără claims ori teren privat protejat | declarația proprietarului · decizie RP inversată |
+| P13 | WorldEdit | SCOS din runtime normal | unealtă de construcție admin, nu necesară construcției libere de jucători; separat doar la cerere | P · nevoie de editări admin demonstrată |
+| P14 | WorldGuard | SCOS | nici spawnul, nici zona mafii/poliție nu sunt protejate preventiv | declarația proprietarului · cerință nouă de regiune explicită |
+| P15* | CoreProtect | PĂSTRAT ca cerință | log unic al acțiunilor și rollback manual admin; **nu apare în cele 14 istorice** | declarația proprietarului · compatibilitate modded probată / soluție alternativă validată |
 
 *P15 nu este un JAR găsit în arhiva istorică; înainte de beta cu incidente se verifică existența binarului și permisiunile în packul efectiv.*
