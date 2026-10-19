@@ -1,6 +1,11 @@
 name: PC closed-server and clean Prism preflight
 # Read-only preflight for a NEW isolated copy. Never inspect worlds, accounts or credentials.
 on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-plugin-first-preflight.yml
   workflow_dispatch:
 permissions:
   contents: read
