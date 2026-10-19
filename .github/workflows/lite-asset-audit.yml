@@ -68,11 +68,17 @@ jobs:
           with zipfile.ZipFile(root/'CUANTIC-Server-CatServer-1.7.7.zip') as z:
               matches=[i for i in z.infolist() if not i.is_dir() and
                        i.filename.split('/')[-1]==meta['filename']]
+              print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Voice archive count::'
+                    f'{len(matches)} entry/entries with expected filename')
               assert len(matches)==1, 'voice JAR missing or ambiguous in historical server'
               data=z.read(matches[0])
-          assert len(data)==meta['size']
-          assert hashlib.sha1(data).hexdigest()==meta['sha1']
-          assert hashlib.sha512(data).hexdigest()==meta['sha512']
+          h1=hashlib.sha1(data).hexdigest()
+          h512=hashlib.sha512(data).hexdigest()
+          print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Voice binary comparison::'
+                f'archive_bytes={len(data)} official_bytes={meta["size"]} '
+                f'sha1_matches={h1==meta["sha1"]} sha512_matches={h512==meta["sha512"]} '
+                f'archive_sha1={h1}')
+          assert len(data)==meta['size'] and h1==meta['sha1'] and h512==meta['sha512']
           print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Verified server voice::'
                 f"name={meta['filename']} bytes={len(data)} hashes_equal_official=true")
           PY
