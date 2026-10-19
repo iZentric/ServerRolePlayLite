@@ -113,7 +113,8 @@ jobs:
                      Where-Object { $_.Extension -ieq '.jar' } |
                      ForEach-Object { $_.Name -replace '[^a-zA-Z0-9 ._()+-]','_' } | Sort-Object)
           }
-          $root='E:\Administrator\Desktop\FunCity\FunCity server'
+          # Actual local stage observed in historical PC client report; E: is references only.
+          $root=Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
           if (Test-Path -LiteralPath $root -PathType Container) {
             Note 'FunCity PC' 'PRESENT'
             $mods=@(Names (Join-Path $root 'mods'))
@@ -127,6 +128,9 @@ jobs:
               })
               Note 'FunCity settings' "count=$($values.Count) values=$($values -join '|')"
             }
+            $mainJars=@(Get-ChildItem -LiteralPath $root -File -Filter '*.jar' -ErrorAction Stop |
+                        Select-Object -First 5 | ForEach-Object { $_.Name -replace '[^a-zA-Z0-9 ._()+-]','_' })
+            Note 'FunCity server jars' "count=$($mainJars.Count) names=$($mainJars -join '|')"
             $jars=@(Get-ChildItem -LiteralPath $root -File -Filter '*b1.0827*.jar' -ErrorAction Stop | Select-Object -First 1)
             foreach ($jar in $jars) {
               if ($jar.Length -le 500000000) {
@@ -146,7 +150,7 @@ jobs:
                         Where-Object { $_.Name -match 'FunCity' } | Select-Object -First 2)
             Note 'Prism profiles' "count=$($profiles.Count)"
             foreach ($profile in $profiles) {
-              $mods=@(Names (Join-Path $profile.FullName '.minecraft\mods'))
+              $mods=@(Names (Join-Path $profile.FullName 'minecraft\mods'))
               Note 'Prism profile mods' "count=$($mods.Count) names=$($mods -join '|')"
             }
           }
