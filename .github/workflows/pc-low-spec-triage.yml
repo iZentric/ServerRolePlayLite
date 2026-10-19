@@ -1,0 +1,88 @@
+name: PC Lite warning and lab cleanup preflight
+# Read only. Reports no player names, addresses, logs, credentials, worlds or paths.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-low-spec-triage.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  triage:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 5
+    steps:
+      - name: Inspect only the three Lab profiles and known warning markers
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          function Note([string]$title,[string]$value) {
+            $safe = $value -replace '[^A-Za-z0-9 ._+=:|,-]','_'
+            Write-Output ('::notice title=' + $title + '::' + $safe.Substring(0,[Math]::Min(700,$safe.Length)))
+          }
+          $root = Join-Path $env:APPDATA 'PrismLauncher\instances'
+          if (-not (Test-Path -LiteralPath $root -PathType Container)) { throw 'Prism root not visible; no changes' }
+          $labels = @{
+            zero='FunCity-Lite-PluginFirst-LAB-1.16.5';
+            content='FunCity-Lite-Content-LAB-1.16.5';
+            lowspec='FunCity-Lite-LowSpec-LAB-1.16.5'
+          }
+          foreach ($label in @('zero','content','lowspec')) {
+            $profile = Join-Path $root $labels[$label]
+            if (-not (Test-Path -LiteralPath $profile -PathType Container)) {
+              Note ($label + ' profile') 'ABSENT'
+              continue
+            }
+            $mc = Join-Path $profile '.minecraft'
+            $mods = Join-Path $mc 'mods'
+            $names = if (Test-Path -LiteralPath $mods -PathType Container) {
+              @(Get-ChildItem -LiteralPath $mods -File -Filter '*.jar' | ForEach-Object Name)
+            } else { @() }
+            $worlds = if (Test-Path -LiteralPath (Join-Path $mc 'saves') -PathType Container) {
+              @(Get-ChildItem -LiteralPath (Join-Path $mc 'saves') -Force).Count
+            } else { 0 }
+            $screenshots = if (Test-Path -LiteralPath (Join-Path $mc 'screenshots') -PathType Container) {
+              @(Get-ChildItem -LiteralPath (Join-Path $mc 'screenshots') -Force).Count
+            } else { 0 }
+            $userFiles = @('servers.dat','servers.dat_old','usercache.json') | Where-Object {
+              Test-Path -LiteralPath (Join-Path $mc $_)
+            }
+            Note ($label + ' inventory') ('mods=' + $names.Count + '|world_entries=' + $worlds +
+              '|screenshots=' + $screenshots + '|user_files=' + $userFiles.Count)
+            if ($label -eq 'lowspec') {
+              Note 'LowSpec LazyDFU' ([string]($names -contains 'lazydfu-0.1.3.jar'))
+              $log = Join-Path $mc 'logs\latest.log'
+              if (-not (Test-Path -LiteralPath $log -PathType Leaf)) {
+                Note 'LowSpec latest log' 'ABSENT'
+              } else {
+                # Read locally; expose only fixed marker booleans, NEVER raw log lines.
+                $lines = @(Get-Content -LiteralPath $log -Tail 1800 -ErrorAction Stop)
+                $text = $lines -join "`n"
+                Note 'LowSpec log markers' ('present=true|lazy_warning=' + [bool]($text -match 'LazyDFU is not installed') +
+                  '|fatal=' + [bool]($text -match '(?i)\bFATAL\b|Mod Loading has failed') +
+                  '|mixin_error=' + [bool]($text -match '(?i)Mixin apply failed|MixinTransformerError') +
+                  '|missing_dep=' + [bool]($text -match '(?i)requires.*(not present|missing)|missing mandatory dependencies') +
+                  '|java_exception=' + [bool]($text -match 'Exception in thread|NoSuchMethodError') +
+                  '|main_menu=' + [bool]($text -match '(?i)Sound engine started|OpenAL initialized'))
+              }
+            }
+          }
+          $live = @(Get-CimInstance Win32_Process -Filter "name = 'java.exe' OR name = 'javaw.exe'")
+          Note 'Running Java processes' ([string]$live.Count)
+          $sourceCount = 0
+          foreach ($profile in @(Get-ChildItem -LiteralPath $root -Directory | Where-Object {
+            $_.Name -like '*FunCity*' -and $_.Name -notlike '*LAB*' })) {
+            foreach ($rel in @('.minecraft\mods', 'minecraft\mods')) {
+              $candidate = Join-Path $profile.FullName $rel
+              if (Test-Path -LiteralPath (Join-Path $candidate 'lazydfu-0.1.3.jar') -PathType Leaf) {
+                $sourceCount++
+              }
+            }
+          }
+          Note 'LazyDFU old profile sources' ([string]$sourceCount)
+          $temps = @(Get-ChildItem -LiteralPath $env:RUNNER_TEMP -Directory -ErrorAction SilentlyContinue |
+                     Where-Object { $_.Name -match '^fc-(plugin-first|modded)-PC-[0-9]+$' })
+          Note 'Runner temporary lab folders' ([string]$temps.Count)
+          Write-Output '::notice title=PC read-only triage::no_world_or_profile_or_server_modified=true'
