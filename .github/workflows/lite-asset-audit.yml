@@ -175,6 +175,7 @@ jobs:
             --without-pizzaland-lab > "$root/client-no-pizzaland-audit.json"
           python3 - <<'PY'
           import json, os, pathlib
+          from scripts.fc_mod_binary_evidence import scan_required_dependents
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'fc-asset'
           get=lambda n: json.loads((root/n).read_text())
           a=get('candidate-audit.json'); b=get('client-no-pizzaland-audit.json')
@@ -183,6 +184,15 @@ jobs:
           assert 'pizzaland_v68.jar' in client['removed']
           assert 'Pizzaland_v68.jar' in server['removed']
           assert server['shared_client_server_names']==19
+          scans=[scan_required_dependents(root/'server-no-pizzaland-lab.zip','pizzamod'),
+                 scan_required_dependents(root/'client-no-pizzaland-lab.mrpack','pizzamod')]
+          assert not any(s['mandatory_dependents'] for s in scans), 'mandatory pizzamod dependent remained'
+          print('::notice title=No-Pizzaland declared dependencies::'
+                f"server_embedded={scans[0]['embedded_jars_inspected']} "
+                f"client_embedded={scans[1]['embedded_jars_inspected']} "
+                f"metadata_unparsed_server={len(scans[0]['metadata_not_parsed'])} "
+                f"metadata_unparsed_client={len(scans[1]['metadata_not_parsed'])} "
+                'no mandatory pizzamod declared among inspected embedded JARs; runtime/remote unknown')
           message=(f"A=24 client/{a['archive_bytes']} bytes; B=23 client/{b['archive_bytes']} bytes; "
                    f"delta={a['archive_bytes']-b['archive_bytes']} bytes; server B=28 mods. "
                    'STATIC ZIP ONLY: no Forge login, gameplay or FPS.')

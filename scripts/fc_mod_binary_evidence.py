@@ -79,6 +79,30 @@ def inspect_archive(path, focus=FOCUS):
         return found
 
 
+def scan_required_dependents(path, mod_id):
+    """Inspect embedded JAR declarations, not optional remote files or runtime uses."""
+    dependents, unknown, inspected = [], [], 0
+    with zipfile.ZipFile(path) as archive:
+        jar_entries = [i for i in archive.infolist() if not i.is_dir() and
+                       i.filename.casefold().endswith('.jar') and
+                       ('/mods/' in '/' + i.filename.casefold())]
+        if len(jar_entries) > 64:
+            raise ValueError('too many embedded JARs')
+        for info in jar_entries:
+            if info.file_size > 300_000_000:
+                raise ValueError('oversized source JAR')
+            record = inspect_jar(archive.read(info))
+            inspected += 1
+            name = safe(info.filename.split('/')[-1])
+            if record['metadata'] != 'mods.toml':
+                unknown.append(name)
+            if any(mod_id in deps for deps in record['required_dependencies'].values()):
+                dependents.append(name)
+    return {'embedded_jars_inspected': inspected, 'mandatory_dependents': sorted(dependents),
+            'metadata_not_parsed': sorted(unknown),
+            'limits': 'embedded JAR declarations only, not remote files or runtime uses'}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('server_zip')

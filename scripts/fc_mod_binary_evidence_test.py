@@ -4,7 +4,7 @@ import io
 from pathlib import Path
 import tempfile
 import zipfile
-from fc_mod_binary_evidence import FOCUS, inspect_archive, inspect_jar
+from fc_mod_binary_evidence import FOCUS, inspect_archive, inspect_jar, scan_required_dependents
 
 
 def main():
@@ -25,6 +25,10 @@ def main():
             for name in FOCUS:
                 source.writestr('root/mods/' + name, jar_stream.getvalue())
         assert len(inspect_archive(path)) == len(FOCUS)
+        scan = scan_required_dependents(path, 'forge')
+        assert scan['embedded_jars_inspected'] == len(FOCUS)
+        assert len(scan['mandatory_dependents']) == len(FOCUS)
+        assert not scan['metadata_not_parsed']
         with zipfile.ZipFile(path, 'a') as source:
             source.writestr('other/mods/' + FOCUS[0], jar_stream.getvalue())
         try:
