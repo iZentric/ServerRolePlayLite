@@ -1,0 +1,86 @@
+name: FunCity PC Lite read-only inventory
+# One-shot, branch-only inventory on the owner's existing Windows runner.
+# No install, launch, server/Prism changes, world/player data, upload or repo writes.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-lite-readonly.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 6
+    steps:
+      - name: Read allowlisted FunCity / HYPECITY inventory only
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          $root='E:\Administrator\Desktop\FunCity'
+          Write-Output 'SCOPE=READ_ONLY_METADATA_NO_WORLD_NO_CREDENTIALS_NO_INSTALL'
+          if (-not (Test-Path -LiteralPath $root -PathType Container)) {
+            Write-Output 'ROOT=ABSENT; NO_CHANGE'
+            exit 0
+          }
+          function SafeName([string]$n) { return ($n -replace '[^a-zA-Z0-9 ._()+-]','_') }
+          function JarNames([string]$dir) {
+            if (-not (Test-Path -LiteralPath $dir -PathType Container)) { return @() }
+            return @(Get-ChildItem -LiteralPath $dir -File -ErrorAction Stop |
+                     Where-Object { $_.Extension -ieq '.jar' } |
+                     ForEach-Object { SafeName $_.Name } | Sort-Object)
+          }
+          function Info([string]$label,[string]$rel) {
+            $p=Join-Path $root $rel
+            if (-not (Test-Path -LiteralPath $p -PathType Container)) {
+              Write-Output "$label=ABSENT"
+              return
+            }
+            Write-Output "$label=PRESENT"
+            $mods=@(JarNames (Join-Path $p 'mods'))
+            $plugins=@(JarNames (Join-Path $p 'plugins'))
+            Write-Output "$label MODS_COUNT=$($mods.Count) PLUGINS_COUNT=$($plugins.Count)"
+            Write-Output "$label MODS=$($mods -join ' | ')"
+            Write-Output "$label PLUGINS=$($plugins -join ' | ')"
+            $props=Join-Path $p 'server.properties'
+            if (Test-Path -LiteralPath $props -PathType Leaf) {
+              foreach ($line in Get-Content -LiteralPath $props -ErrorAction Stop) {
+                if ($line -match '^(max-players|view-distance|network-compression-threshold|spawn-protection|online-mode)\s*=\s*(true|false|-?[0-9]{1,6})\s*$') {
+                  Write-Output "$label PROP=$($matches[1])=$($matches[2])"
+                }
+              }
+            }
+            else { Write-Output "$label PROPS=ABSENT" }
+          }
+          Info 'HYPECITY' 'servere referinta\hypecity'
+          Info 'HYPECITY_BK' 'servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft'
+          Info 'FUNCITY_PC' 'FunCity server'
+          $prism=$null
+          if ($env:APPDATA) { $prism=Join-Path $env:APPDATA 'PrismLauncher\instances' }
+          if ($prism -and (Test-Path -LiteralPath $prism -PathType Container)) {
+            $profiles=@(Get-ChildItem -LiteralPath $prism -Directory -ErrorAction Stop |
+                        Where-Object { $_.Name -match 'FunCity' } | Select-Object -First 4)
+            Write-Output "PRISM_FUNCITY_PROFILE_COUNT=$($profiles.Count)"
+            foreach ($profile in $profiles) {
+              Write-Output "PRISM_PROFILE=$(SafeName $profile.Name)"
+              $mods=@(JarNames (Join-Path $profile.FullName '.minecraft\mods'))
+              Write-Output "PRISM_MODS_COUNT=$($mods.Count) NAMES=$($mods -join ' | ')"
+            }
+          }
+          else { Write-Output 'PRISM_INSTANCES=NOT_VISIBLE_TO_RUNNER_ACCOUNT' }
+          foreach ($dir in @($root, (Join-Path $root 'FunCity server'))) {
+            if (Test-Path -LiteralPath $dir -PathType Container) {
+              foreach ($jar in @(Get-ChildItem -LiteralPath $dir -File -Filter '*b1.0827*.jar' -ErrorAction Stop | Select-Object -First 2)) {
+                if ($jar.Length -le 500000000) {
+                  Write-Output "ENGINE_CANDIDATE=$(SafeName $jar.Name) BYTES=$($jar.Length) SHA256=$((Get-FileHash -LiteralPath $jar.FullName -Algorithm SHA256).Hash)"
+                }
+              }
+            }
+          }
+          $drive=Get-PSDrive -Name E -ErrorAction SilentlyContinue
+          if ($drive -and $null -ne $drive.Free) {
+            Write-Output "PC_E_FREE_MIB=$([math]::Floor($drive.Free / 1MB))"
+          }
+          Write-Output 'DONE=READ_ONLY; no file or configuration modified'
