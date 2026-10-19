@@ -1,7 +1,6 @@
 name: site
+# Publicarea paginii necesita decizie separata: nu publicam la push un status nevalidat.
 on:
-  push:
-    paths: [ "site/index.html", ".github/workflows/site.yml" ]
   workflow_dispatch: {}
 permissions:
   contents: read

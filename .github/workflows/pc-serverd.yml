@@ -1,67 +1,11 @@
-name: pc-serverd
+name: RETIRED-PC-SERVERD
+# Legacy automation disabled: no PC, cloud, site or live writes from this branch.
 on:
-  push:
-    paths:
-      - .github/workflows/pc-serverd.yml
   workflow_dispatch:
 permissions:
-  contents: write
-  actions: write
-concurrency:
-  group: pcd
-  cancel-in-progress: true
+  contents: read
 jobs:
-  loop:
-    runs-on: [self-hosted, Windows]
-    timeout-minutes: 355
+  archived:
+    runs-on: ubuntu-latest
     steps:
-      - name: Canal rapid (bucla de 10s)
-        shell: powershell
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          $ErrorActionPreference='Continue'
-          $api="https://api.github.com"
-          $repo="iZentric/ServerRolePlayLite"
-          $ref="$env:GITHUB_REF_NAME"
-          $H=@{ Authorization="token $env:GH_TOKEN"; Accept="application/vnd.github+json"; "User-Agent"="pcd" }
-          $work="$env:LOCALAPPDATA\FunCityCtl"
-          New-Item -ItemType Directory -Force $work | Out-Null
-          function PutFile($path,$txt,$msg){
-            $sha=$null
-            try { $sha=(Invoke-RestMethod "$api/repos/$repo/contents/$path" -Headers $H -EA Stop).sha } catch {}
-            $b=@{ message=$msg; content=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($txt)); branch=$ref }
-            if($sha){ $b.sha=$sha }
-            $b=$b | ConvertTo-Json -Compress -Depth 4
-            try { Invoke-RestMethod -Method Put -Uri "$api/repos/$repo/contents/$path" -Headers $H -ContentType "application/json" -Body $b -EA Stop | Out-Null } catch { "put fail: $($_.Exception.Message)" }
-          }
-          $last="INIT"
-          $t0=[Diagnostics.Stopwatch]::StartNew()
-          while($t0.Elapsed.TotalHours -lt 5.5){
-            $cur=$null
-            try { $cur=(Invoke-RestMethod "$api/repos/$repo/contents/pcmd.ps1?ref=$ref" -Headers $H -EA Stop).content } catch { Start-Sleep 20; continue }
-            if($cur){
-              $dec=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($cur -replace '\s',''))
-              if($dec -ne $last){
-                $last=$dec
-                Set-Content -Path "$work\pcmd.ps1" -Value $dec -Encoding UTF8
-                PutFile "diag/pcd.txt" ("START: comanda a fost luata la " + (Get-Date -Format s)) "pcd start"
-                $out=& powershell -NoProfile -ExecutionPolicy Bypass -File "$work\pcmd.ps1" 2>&1 | Out-String
-                if($out.Length -gt 90000){ $out=$out.Substring(0,90000)+"...TRUNCHIAT" }
-                PutFile "diag/pcd.txt" $out "pcd report"
-                continue
-              }
-            }
-            Start-Sleep 10
-          }
-          # re-inarmare: dispecerizez o noua runda inainte sa moara jobul
-          try { Invoke-RestMethod -Method Post -Uri "$api/repos/$repo/actions/workflows/pc-serverd.yml/dispatches" -Headers $H -ContentType "application/json" -Body ("{""ref"":""$ref""}") -EA Stop } catch {}
-          PutFile "diag/pcd.txt" ("RE-ARM bucla la " + (Get-Date -Format s)) "pcd rearm"
-
-# r6 1792326637
-
-# dispatch-proasp 1792327853
-
-# fortare-1338 1327
-
-# dispatch-v10b 142627
+      - run: echo RETIRED-no-action

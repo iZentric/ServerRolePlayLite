@@ -1,64 +1,11 @@
-name: runner-probe
+name: RETIRED-RUNNER-PROBE
+# Legacy automation disabled: no PC, cloud, site or live writes from this branch.
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - .github/workflows/runner-probe.yml
 permissions:
-  contents: write
+  contents: read
 jobs:
-  probe:
-    runs-on: [ self-hosted, Windows ]
-    timeout-minutes: 5
-    defaults:
-      run:
-        shell: powershell
+  archived:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: identitate PC (scrie si erorile in fisa)
-        run: |
-          New-Item -ItemType Directory -Force analysis | Out-Null
-          "--- PROBE $(Get-Date) ---" | Add-Content analysis/RUNNER-PROBE.md
-          try {
-          "checkout manual: $env:GITHUB_WORKSPACE" | Add-Content analysis/RUNNER-PROBE.md
-          Set-Location $env:GITHUB_WORKSPACE
-          git fetch origin $env:GITHUB_REF_NAME 2>&1 | Add-Content analysis/RUNNER-PROBE.md
-          git checkout -q -B probebr origin/$env:GITHUB_REF_NAME 2>&1 | Add-Content analysis/RUNNER-PROBE.md
-          } catch { "ERR-PRE: $_" | Add-Content analysis/RUNNER-PROBE.md }
-          try {
-          $os  = (Get-CimInstance Win32_OperatingSystem).Caption
-          $cpu = (Get-CimInstance Win32_Processor | Select-Object -First 1).Name.Trim()
-          $ram = [math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory/1GB,1)
-          $free= [math]::Round((Get-PSDrive $env:SystemDrive).Free/1GB,0)
-          $j   = if (Get-Command java -ErrorAction SilentlyContinue) { ((cmd /c "java -version 2>&1") | Select-Object -First 1) } else { "NICE" }
-          $lines = @(
-            "## PROBE PC $((Get-Date).ToUniversalTime().ToString('yyyy-MM-dd HH:mm')) UTC"
-            "host : $env:COMPUTERNAME"
-            "os   : $os"
-            "cpu  : $cpu"
-            "nproc: $env:NUMBER_OF_PROCESSORS"
-            "ram  : $ram GB total"
-            "disc : $free GB liberi pe $env:SystemDrive`:"
-            "java : $j"
-          )
-          New-Item -ItemType Directory -Force analysis | Out-Null
-          ($lines -join "`n") | Add-Content analysis/RUNNER-PROBE.md
-          git config user.name "pc-probe"; git config user.email "pc@functity.local"
-          git add analysis/RUNNER-PROBE.md
-          git commit -qm "probe PC: $env:COMPUTERNAME"
-          git push origin HEAD:$env:GITHUB_REF_NAME 2>&1 | Add-Content analysis/RUNNER-PROBE.md
-          } catch { "ERR: $_" | Add-Content analysis/RUNNER-PROBE.md
-            Set-Location $env:RUNNER_TEMP -ErrorAction SilentlyContinue
-            "final eroare prinsa" | Add-Content "$env:GITHUB_WORKSPACE/analysis/RUNNER-PROBE.md" }
-        continue-on-error: true
-      - name: trimite fisa pe GitHub chiar si la esec
-        if: always()
-        shell: cmd
-        run: |
-          cd /d %GITHUB_WORKSPACE%
-          git config user.name pc-probe & git config user.email pc@functity.local
-          git add -f analysis/RUNNER-PROBE.md
-          git commit -m "probe: fisier trimis din PC" 2>nul
-          git pull --no-rebase -q origin %GITHUB_REF_NAME% 2>nul
-          git push origin HEAD:%GITHUB_REF_NAME% 2>nul
-          exit 0
+      - run: echo RETIRED-no-action

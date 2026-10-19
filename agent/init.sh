@@ -35,7 +35,10 @@ import yaml
 files=list(Path('.github/workflows').glob('*.yml'))+list(Path('functity-config').glob('*.yml'))
 legacy = {'aichat.yml','bat-v2.yml','funcity-brand.yml','functity-server.yml',
           'functity-stage.yml','move-to-pc.yml','pack-build.yml','pack-srv.yml',
-          'pc-client.yml','release-jars.yml','rp-lite.yml','tunnel-test.yml'}
+          'pc-client.yml','release-jars.yml','rp-lite.yml','tunnel-test.yml',
+          'check-live.yml','oci-cloudshell.yml','oci-probe.yml','oci-vm.yml',
+          'pc-cp.yml','pc-functity.yml','pc-install.yml','pc-oldcfg.yml',
+          'pc-probe.yml','pc-serverd.yml','runner-probe.yml','site-auto.yml'}
 for f in files:
     try:
         data=yaml.load(f.read_text(), Loader=yaml.BaseLoader)
@@ -54,6 +57,13 @@ assert 'if /I "%~1"=="--full" goto blocked' in front
 assert front.index(':blocked\n') < front.index('exit /b 2')
 assert 'goto lean' not in front and 'goto full' not in front
 print('updater all modes fail-closed PASS (static only; no Windows execution)')
+page=Path('site/index.html').read_text(encoding='utf-8')
+from runpy import run_path
+assert page == run_path('site/build_site.py')['HTML']
+assert 'Client Lite în validare' in page and 'TPS susținut' not in page
+site=yaml.load(Path('.github/workflows/site.yml').read_text(), Loader=yaml.BaseLoader)
+assert list(site['on']) == ['workflow_dispatch']
+print('public site static claims PASS; publication requires manual dispatch')
 PY
 
 export PYTHONDONTWRITEBYTECODE=1 PYTHONPATH="scripts${PYTHONPATH:+:$PYTHONPATH}"
@@ -67,6 +77,8 @@ PY
 python3 scripts/fc_client_audit.py --self-test
 python3 scripts/fc_client_audit.py >/dev/null
 echo 'client inventory + historical handshake audit PASS (static, not Forge login/FPS)'
+python3 scripts/fc_mrpack_audit_test.py
+echo 'Lite mrpack fixture audit PASS (synthetic, not a real release download)'
 python3 scripts/fc_pack_stage_test.py
 echo 'server mod A/B stage fixtures PASS (no Java boot or player FPS)'
 
