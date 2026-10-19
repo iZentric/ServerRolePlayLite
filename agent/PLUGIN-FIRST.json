@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "purpose": "new isolated FunCity stage only; not a runnable modpack",
+  "purpose": "temporary zero-mod boot control only; final FunCity target is modded with the owner's identified content JARs and required dependencies, plus RP plugins",
   "engine_reference": "FunCity b1.0827 hybrid 1.16.5 (unchanged)",
   "historical_24_29": "comparison only, not authorized for installation",
   "owner_content_jar_approvals": [],

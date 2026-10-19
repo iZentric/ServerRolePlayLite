@@ -1,10 +1,12 @@
-# Decizia executabilă: FunCity 1.16.5, pluginuri întâi
+# FunCity 1.16.5 hibrid: serverul țintă ESTE modat; zero moduri a fost doar controlul de diagnostic
 
 19.10.2026. **Aleg motorul FunCity b1.0827 hibrid** (JAR SHA256 `d6ffa35c1ea9032a4a95f7f1e34b734aa7f53b0358dda6b9e6592326640a15dd`) **pentru copia de laborator**, nu CatServer-ul găsit lângă `FunCityEngine.jar` pe PC, nu un build nou și nu Paper-only. Motiv: motorul ales deja pentru proiect suportă atât pluginuri, cât și posibile moduri de conținut proprii; îi avem binarul istoric cu SHA verificabil, iar schimbarea motorului simultan cu schimbarea conținutului ar distruge comparația. Nu afirmăm că e motorul cu consumul cel mai mic ori că JAR-ul de pe PC este același.
 
-## Modurile rămase *în această etapă nouă*
+## Ținta cu moduri și controlul de diagnostic — NU le confunda
 
-**Zero JAR-uri în `mods/` pe server, zero moduri cerute pe client**, nu pentru că toate optimizările sunt inutile, ci fiindcă proprietarul nu vrea module terțe nedemonstrate. Nici Pizzaland, ModernXL, CFM, armele/vehiculele terțe, bibliotecile lor, nici Clumps/Rubidium/Oculus/FerriteCore/ModernFix/Radon/LazyDFU/RoadRunner/Ksyxis/FastSuite/Placebo nu primesc o derogare din vechiul pack. Un mod de conținut al proprietarului revine numai când este identificat exact și autorizat; o optimizare numai după hotspot și A/B pozitiv pe server sau client. **Aceasta este o copie nouă, nu operație de ștergere pe PC/lumea existentă.** `agent/PLUGIN-FIRST.json` este poarta; numărul zero este selecția inițială de *test de bază*, nu un pack RP gata.
+**Serverul și clientul final vor avea modurile de conținut ale proprietarului**, cu perechi client/server și dependențele necesare, iar funcțiile RP vor fi făcute prin pluginuri. Motorul hibrid este ales tocmai pentru această combinație. Setul de moduri nu poate fi înghețat dintr-o listă de fișiere: inventarul arată nume, nu care JAR-uri sunt create de proprietar ori care pot fi distribuite. Avem nevoie de identificarea exactă a acestora pentru a construi **un nou stage CU moduri**, nu pentru a declara proiectul fără moduri. Pizzaland, ModernXL, CFM și celelalte nume istorice sunt candidați de identificat, nu incluziuni sau excluderi finale după nume. Modurile de performanță intră numai după hotspot și A/B pozitiv pe server sau client.
+
+**`mods/` gol în copia curentă este exclusiv un control de diagnostic al bootului și pluginurilor**, nu direcția cerută pentru FunCity și nu modpackul de instalat în Prism. Profilul gol de laborator trebuie să rămână separat; **nu este locul în care ștergem ori înlocuim modurile existente**. `agent/PLUGIN-FIRST.json` ține aprobările încă neidentificate goale ca să nu inventeze proprietate, nu ca decizie de a lansa un server fără moduri.
 
 ## Pluginuri în copia închisă (6 JAR-uri, cu SHA de intrare verificat)
 

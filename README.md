@@ -18,8 +18,8 @@ FunCity este un proiect de comunitate roleplay cu un **oraș nou, construit de p
 
 | Stare | Ce înseamnă |
 |---|---|
-| **ALES ca direcție nouă** | Motorul hibrid FunCity **b1.0827** rămâne referință, RP **plugin-first**; nicio includere automată de moduri terțe. [Whitelisting-ul actual](agent/PLUGIN-FIRST.md) este încă gol până la confirmarea modurilor proprii și a excepției pentru voce. |
-| **VALIDAT în laborator** | [Stage izolat 0 moduri / 6 pluginuri](agent/SERVER-PLUGIN-FIRST.md): motorul b1.0827 a pornit cu [toate pluginurile active pe PC](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39317136133), apoi s-a oprit curat pe loopback; a fost creat un [profil Prism nou, cu zero moduri](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39316848451), dar fără lansare/login. Guava21 rămâne override temporar; **nu** este build de producție, RP testat ori dovadă de performanță maximă. |
+| **ȚINTA CERUTĂ: MODATĂ** | FunCity **b1.0827 hibrid**, RP prin pluginuri **și modurile de conținut proprii** cu dependențele necesare pe client/server. Lista finală a JAR-urilor proprii necesită identificare și confirmare; [aprobările încă goale](agent/PLUGIN-FIRST.md) **nu înseamnă că proiectul trebuie făcut fără moduri**. Optimizări doar după măsurare. |
+| **DOAR CONTROL DE LABORATOR, nu modpack** | [Copia 0 moduri / 6 pluginuri](agent/SERVER-PLUGIN-FIRST.md) a pornit pe PC cu [toate pluginurile active](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39317136133), apoi s-a oprit; [profilul Prism separat, gol](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39316848451) nu a fost lansat. Acestea **nu sunt serverul și modpackul cerute**. Guava21 rămâne override temporar; nu există RP ori performanță validate. |
 | **DE TESTAT** | Pluginurile și funcțiile RP efective, modurile proprii identificate, soluția de voce, apoi boot pe copie, importul clientului dacă e necesar, autentificare, CoreProtect, backup/restaurare și sarcina cu jucători. |
 | **LIVE** | Nicio instalare Lite nouă sau capacitate a serverului actual nu este confirmată de acest repo. |
 
