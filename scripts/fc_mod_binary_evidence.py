@@ -80,7 +80,11 @@ def main():
     args = parser.parse_args()
     result = inspect_archive(args.server_zip)
     for name in FOCUS:
-        print(json.dumps({'jar': name, **result[name]}, ensure_ascii=True, sort_keys=True))
+        record = json.dumps({'jar': name, **result[name]}, ensure_ascii=True, sort_keys=True)
+        print(record)
+        # Actions logs may be unreachable from the sandbox; check-run notices are
+        # also retrievable through the GitHub API. Values are metadata-only/sanitized.
+        print(f'::notice title=Jar metadata {safe(name)}::{record}')
 
 
 if __name__ == '__main__':
