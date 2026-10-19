@@ -2,6 +2,7 @@ name: PC FunCity full-content closed server boot
 # One-shot loopback-only server compatibility test; NEVER creates a Prism profile.
 # Existing server, worlds, profiles, accounts and hosting must remain untouched.
 # JARs from user's old pack are NOT certified user-authored or cleared for release.
+# Trial ONLY: full RP content plus 3 broad-impact server optimizers; boot != measured benefit.
 on:
   push:
     branches:
@@ -29,6 +30,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Check baseline and optimizer selection without real JARs
+        shell: powershell
+        run: |
+          python scripts/fc_modded_candidate_test.py
+          if ($LASTEXITCODE -ne 0) { throw 'Synthetic selection refused' }
       - name: Download SHA-pinned old inputs and create NEW modded stage
         shell: powershell
         run: |
@@ -56,7 +62,7 @@ jobs:
             --archive (Join-Path $root 'old-plugins.zip') `
             --coreprotect (Join-Path $root 'CoreProtect.jar') `
             --guava21 (Join-Path $root 'guava-21.0.jar') `
-            --output (Join-Path $root 'stage')
+            --output (Join-Path $root 'stage') --server-optimizer-lab
           if ($LASTEXITCODE -ne 0) { throw 'Modded stage refused' }
       - name: Start and stop NEW full-content lab server, no player joins
         shell: powershell
@@ -65,4 +71,4 @@ jobs:
           $root = Join-Path $env:RUNNER_TEMP ('fc-modded-PC-' + $env:GITHUB_RUN_ID)
           python scripts/fc_modded_candidate_pc_smoke.py (Join-Path $root 'stage')
           if ($LASTEXITCODE -ne 0) { throw 'Modded PC lab boot failed; no public service' }
-          Write-Output '::notice title=PC full-content lab::server_started_and_stopped=true content_and_dependencies=15 public=false client_join=NOT_TESTED ownership=UNVERIFIED'
+          Write-Output '::notice title=PC full-content optimizer trial::server_started_and_stopped=true content_and_dependencies=15 trial_optimizers=3 public=false client_join=NOT_TESTED benefit=NOT_MEASURED ownership=UNVERIFIED'
