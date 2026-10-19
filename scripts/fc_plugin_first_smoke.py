@@ -6,6 +6,7 @@ Run only in a new hosted runner temp directory. No player joins or benchmarks.
 import json
 import os
 from pathlib import Path
+import re
 import sys
 import time
 
@@ -58,7 +59,9 @@ def smoke(stage):
                     for line in text.splitlines())]
                 stopped = run.stop(60)
                 if missing or stopped != 'CLEAN':
-                    raise ValueError(f'booted but missing active plugins={missing}; shutdown={stopped}')
+                    details = f'booted but missing active plugins={missing}; shutdown={stopped}'
+                    print('::error title=Closed FunCity boot check::' + details)
+                    raise ValueError(details)
                 print('::notice title=Plugin-first closed boot::'
                       f'engine=b1.0827 sha256={ENGINE_SHA} mods=0 staged_plugins=6 '
                       f'active_core={",".join(required)} boot_attempt={attempt} '
@@ -72,7 +75,9 @@ def smoke(stage):
             if attempt == 1 and exited == 0 and any(marker in text for marker in (
                     'Successfully installed', 'Server installed', 'install complete')):
                 continue  # installer ended cleanly; second run boots server
-            print('BOOT_FAILURE tail:', '\n'.join(text.splitlines()[-18:])[-3000:], file=sys.stderr)
+            tail = re.sub(r'[^A-Za-z0-9 ._+/():=,-]', '_',
+                          ' | '.join(text.splitlines()[-15:]))[-1600:]
+            print(f'::error title=Closed FunCity boot::exit={exited} attempt={attempt} tail={tail}')
             raise ValueError(f'engine did not reach Done marker; exit={exited}, attempt={attempt}')
         finally:
             run.close()
@@ -84,6 +89,8 @@ def main():
         smoke(sys.argv[1])
     except (ValueError, KeyError, OSError, IndexError) as exc:
         print('RESPINS:', exc, file=sys.stderr)
+        reason = re.sub(r'[^A-Za-z0-9 ._+/():=,-]', '_', str(exc))[:400]
+        print('::error title=Closed FunCity smoke rejected::' + reason)
         return 2
     return 0
 
