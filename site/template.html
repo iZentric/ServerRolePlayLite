@@ -65,6 +65,18 @@
     .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     .flow-step{border-top:1px solid #496681;padding:19px 17px 12px 0}
     .flow-step b{color:var(--pink);font:800 .72rem ui-monospace,monospace}.flow-step h3{font-size:1rem;margin:12px 0 5px}.flow-step p{color:var(--muted);font-size:.85rem;line-height:1.6;margin:0}
+    .engines-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:28px 0 34px}
+    .engine-tile{border:1px solid #2c4565;background:linear-gradient(155deg,#132640,#101c31);border-radius:15px;padding:18px;min-height:140px}
+    .engine-tile h3{font-size:.94rem;margin:0 0 8px}.engine-tile p{font-size:.79rem;color:var(--muted);line-height:1.6;margin:0}
+    .engine-tile strong{display:inline-block;font:800 .69rem ui-monospace,monospace;letter-spacing:.04em;color:var(--gold);margin-bottom:12px}
+    .metric-panels{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .metric-panel{background:#111d33;border:1px solid #304768;border-radius:16px;padding:21px;min-width:0}
+    .metric-panel h3{font-size:1rem;margin:0 0 3px}.metric-panel p{color:var(--muted);font-size:.78rem;margin:0}
+    .metric-panel svg{display:block;width:100%;height:auto;margin-top:14px;overflow:visible}
+    .metric-legend{display:flex;flex-wrap:wrap;gap:10px 22px;color:#c4d2e7;font-size:.8rem;margin-top:9px}
+    .metric-legend b{font-weight:750}.metric-legend .cyan{color:var(--cyan)}.metric-legend .pink{color:var(--pink)}
+    .metric-caution{border-left:3px solid var(--gold);padding:9px 0 9px 16px;margin:22px 0 0;color:#d7dfea;font-size:.85rem;line-height:1.6}
+    .metric-caution a{color:var(--cyan);text-decoration:underline;text-underline-offset:3px}
     .status-band{border-block:1px solid #233450;background:linear-gradient(180deg,#101b30,#0c1527)}
     .status-band .section{padding:80px 0 90px}
     .status-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:85px;align-items:start}
@@ -78,8 +90,8 @@
     .closing{text-align:center;padding:102px 20px 112px}.closing .kicker{margin-bottom:18px}.closing h2{max-width:720px;margin:0 auto 15px}.closing p{color:var(--muted);max-width:530px;margin:0 auto 27px}
     footer{border-top:1px solid #233450;color:#95a6c2;font-size:.78rem}
     .foot{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap;padding:26px 0}.foot a:hover{color:var(--cyan)}.foot-links{display:flex;gap:20px;flex-wrap:wrap}
-    @media(max-width:840px){.hero{min-height:auto;padding:75px 0 95px;grid-template-columns:1fr;gap:55px}.hero-copy{max-width:670px}.visual{justify-self:center;max-width:465px}.status-layout{gap:35px}.feature{gap:30px}}
-    @media(max-width:640px){.wrap{width:min(100% - 36px,1120px)}.nav{min-height:70px;flex-wrap:wrap;padding-block:16px;gap:13px}nav{gap:15px;font-size:.78rem;flex-wrap:wrap}nav a:nth-child(2){display:none}.nav-cta{padding:7px 9px}.hero{padding:66px 0 85px;gap:55px}h1{font-size:clamp(3.35rem,12vw,5rem)}.visual{max-width:410px;width:calc(100% - 15px)}.visual-sticker{right:-12px;bottom:25px}.section{padding:68px 0}.cards,.flow,.status-layout,.feature{grid-template-columns:1fr}.cards{gap:10px}.card{min-height:190px}.card .num{margin-bottom:27px}.feature{padding:28px;gap:17px;margin-top:36px}.flow-step{padding:16px 0 12px}.status-band .section{padding:67px 0}.closing{padding:78px 0 85px}}
+    @media(max-width:840px){.hero{min-height:auto;padding:75px 0 95px;grid-template-columns:1fr;gap:55px}.hero-copy{max-width:670px}.visual{justify-self:center;max-width:465px}.status-layout{gap:35px}.feature{gap:30px}.engines-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){.wrap{width:min(100% - 36px,1120px)}.nav{min-height:70px;flex-wrap:wrap;padding-block:16px;gap:13px}nav{gap:15px;font-size:.78rem;flex-wrap:wrap}nav a:nth-child(2){display:none}.nav-cta{padding:7px 9px}.hero{padding:66px 0 85px;gap:55px}h1{font-size:clamp(3.35rem,12vw,5rem)}.visual{max-width:410px;width:calc(100% - 15px)}.visual-sticker{right:-12px;bottom:25px}.section{padding:68px 0}.cards,.flow,.status-layout,.feature,.metric-panels{grid-template-columns:1fr}.engines-grid{grid-template-columns:repeat(2,1fr)}.cards{gap:10px}.card{min-height:190px}.card .num{margin-bottom:27px}.feature{padding:28px;gap:17px;margin-top:36px}.flow-step{padding:16px 0 12px}.status-band .section{padding:67px 0}.closing{padding:78px 0 85px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.button{transition:none}.button:hover{transform:none}}
   </style>
 </head>
@@ -90,7 +102,8 @@
       <a class="brand" href="#top" aria-label="FunCity, înapoi sus"><span class="brand-mark" aria-hidden="true">F</span><span>Fun<span>City</span></span></a>
       <nav aria-label="Navigare principală">
         <a href="#lumea">Lumea</a>
-        <a href="#lite">Ce înseamnă Lite</a>
+        <a href="#lite">Lite</a>
+        <a href="#motoare">Motoare &amp; măsurători</a>
         <a href="#stadiu">Stadiu</a>
         <a class="nav-cta" href="https://github.com/iZentric/ServerRolePlayLite">GitHub ↗</a>
       </nav>
@@ -134,9 +147,39 @@
         <div class="flow-step"><b>03 — JOC</b><h3>Verificăm înainte de lansare</h3><p>Urmează conectarea client–server, autentificarea prin plugin, vocea, scenariile RP și backupul restaurat. Nu numim testul de pornire „server gata”.</p></div>
       </div>
     </section>
+    <section class="wrap section" id="motoare" aria-labelledby="engine-title">
+      <div class="section-head"><p class="kicker">03 / Motoare testate</p><h2 id="engine-title">Mai puține presupuneri. Mai multe probe.</h2><p><a href="https://github.com/iZentric/ServerRolePlayLite/actions/runs/39424486961" style="color:var(--cyan);text-decoration:underline">Cinci probe paralele reale ↗</a> cu binare SHA-pinned, <strong>aceleași 15 moduri RP/dependențe și șase pluginuri</strong>, în servere temporare fără acces public. Java 11 sau 17 după cerințele motorului; nu comparăm timpi între runner-e. Pornirea nu dovedește compatibilitate în joc sau performanță. <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/9bbcb24f-serverroleplaylite/agent/MOTOR-TABEL-VERIFICAT.md" style="color:var(--cyan);text-decoration:underline">Vezi dovezile și limitele fiecărui motor ↗</a></p></div>
+      <div class="engines-grid" aria-label="Candidați de compatibilitate, nu un clasament de viteză">
+        <div class="engine-tile"><strong>01 / BOOT OK</strong><h3>FunCity b1.0827</h3><p>15 moduri + 6 pluginuri OK pe Java 11. Derivat Mohist/Tenet; încă necesită override Guava 21.</p></div>
+        <div class="engine-tile"><strong>02 / BOOT OK</strong><h3>CatServer vechi</h3><p>15 moduri + 6 pluginuri OK pe Java 17. Nu înseamnă gameplay probat sau câștig de performanță.</p></div>
+        <div class="engine-tile"><strong>03 / BOOT OK</strong><h3>CatServer oficial</h3><p>15 moduri + 6 pluginuri OK pe Java 17. Comparația istorică de memorie este separată.</p></div>
+        <div class="engine-tile"><strong>04 / BOOT OK</strong><h3>Arclight</h3><p>15 moduri + 6 pluginuri OK pe Java 17. Cu vechiul pack 36/14 eșuase: compatibilitatea depinde de pack.</p></div>
+        <div class="engine-tile"><strong>05 / BOOT EȘUAT</strong><h3>Mist</h3><p>Nu a ajuns la Done pe Java 11 în noul stage 15/6. Nu îi dăm scor de viteză.</p></div>
+      </div>
+      <div class="section-head"><p class="kicker">Singurele linii numerice comparabile</p><h3>Date istorice, NU benchmark FunCity Lite</h3><p>CUANTIC vs CatServer oficial: aceeași arhivă veche de <strong>36 moduri / 14 pluginuri</strong>, același runner și Java 17, doar două probe pe variantă, fără jucători. Axele pornesc de la zero; fiecare punct reprezintă o măsurătoare, nu un FPS al clientului.</p></div>
+      <div class="metric-panels">
+        <figure class="metric-panel"><h3>MSPT p95 · mai jos e mai bine</h3><p>Milisecunde/tick · 2 probe/variantă</p>
+          <svg viewBox="0 0 460 200" role="img" aria-label="P95 istoric: CUANTIC 1,3 apoi 1,1 milisecunde; CatServer oficial 1,2 și 1,2 milisecunde. Nicio diferență stabilă demonstrată.">
+            <g fill="none" stroke="#3a506e" stroke-width="1"><path d="M54 20V166H430M54 93H430M54 20H430"/></g>
+            <g fill="#a5b4d0" font-family="system-ui" font-size="12"><text x="12" y="24">2</text><text x="12" y="97">1</text><text x="12" y="169">0</text><text x="128" y="190">PROBA 1</text><text x="310" y="190">PROBA 2</text></g>
+            <path d="M155 71L352 86" fill="none" stroke="#60eff3" stroke-width="3" stroke-linecap="round"/><path d="M155 78L352 78" fill="none" stroke="#f786dc" stroke-width="3" stroke-linecap="round"/>
+            <g fill="#60eff3"><circle cx="155" cy="71" r="5"/><circle cx="352" cy="86" r="5"/></g><g fill="#f786dc"><circle cx="155" cy="78" r="5"/><circle cx="352" cy="78" r="5"/></g>
+            <g font-family="system-ui" font-size="12" font-weight="700"><text fill="#60eff3" x="115" y="58">1,3</text><text fill="#60eff3" x="357" y="105">1,1</text><text fill="#f786dc" x="116" y="102">1,2</text><text fill="#f786dc" x="357" y="69">1,2</text></g>
+          </svg><figcaption class="metric-legend"><span><b class="cyan">●</b> CUANTIC istoric</span><span><b class="pink">●</b> CatServer oficial</span></figcaption></figure>
+        <figure class="metric-panel"><h3>RSS · mai jos e mai bine</h3><p>Memorie rezidentă stabilă, MiB · variație mare</p>
+          <svg viewBox="0 0 460 200" role="img" aria-label="RSS istoric: CUANTIC 2205,1 și 2452,0 MiB; CatServer oficial 2185,6 și 2475,6 MiB. Diferența medianelor 2,05 MiB este mai mică decât variația probelor.">
+            <g fill="none" stroke="#3a506e" stroke-width="1"><path d="M54 20V166H430M54 93H430M54 20H430"/></g>
+            <g fill="#a5b4d0" font-family="system-ui" font-size="12"><text x="1" y="24">3000</text><text x="1" y="97">1500</text><text x="12" y="169">0</text><text x="128" y="190">PROBA 1</text><text x="310" y="190">PROBA 2</text></g>
+            <path d="M155 59L352 47" fill="none" stroke="#60eff3" stroke-width="3" stroke-linecap="round"/><path d="M155 60L352 46" fill="none" stroke="#f786dc" stroke-width="3" stroke-linecap="round"/>
+            <g fill="#60eff3"><circle cx="155" cy="59" r="5"/><circle cx="352" cy="47" r="5"/></g><g fill="#f786dc"><circle cx="155" cy="60" r="4"/><circle cx="352" cy="46" r="4"/></g>
+            <g font-family="system-ui" font-size="11" font-weight="700"><text fill="#60eff3" x="110" y="41">2205,1</text><text fill="#60eff3" x="318" y="31">2452,0</text><text fill="#f786dc" x="112" y="82">2185,6</text><text fill="#f786dc" x="318" y="72">2475,6</text></g>
+          </svg><figcaption class="metric-legend"><span><b class="cyan">●</b> CUANTIC istoric</span><span><b class="pink">●</b> CatServer oficial</span></figcaption></figure>
+      </div>
+      <p class="metric-caution"><strong>Verdict: niciun câștigător demonstrat.</strong> Medianele p95 au fost ambele 1,2 ms, iar diferența medianelor RSS doar 2,05 MiB față de variații de sute de MiB. Aceste linii reprezintă <em>doar</em> comparația istorică dintre două CatServer, <strong>nu</strong> noul pack de 15 moduri și nici viteza FunCity b1.0827. <a href="https://github.com/iZentric/ServerRolePlayLite/blob/b1ec20c/docs/ENGINE-NATIVE-RESULT.md">Raportul-sursă ↗</a></p>
+    </section>
     <div class="status-band" id="stadiu">
       <section class="wrap section status-layout" aria-labelledby="status-title">
-        <div class="section-head"><p class="kicker">03 / Stadiul real</p><h2 id="status-title">Lucrăm deschis. Spunem exact ce e gata.</h2><p>Separăm o selecție făcută în repo de un server pe care poți intra. Fără contor fals de jucători, fără promisiuni de performanță.</p></div>
+        <div class="section-head"><p class="kicker">04 / Stadiul real</p><h2 id="status-title">Lucrăm deschis. Spunem exact ce e gata.</h2><p>Separăm o selecție făcută în repo de un server pe care poți intra. Fără contor fals de jucători, fără promisiuni de performanță.</p></div>
         <div class="status-list">
           <div class="status-item"><span class="status-icon" aria-hidden="true">✓</span><div><h3>Ales pentru test</h3><p>FunCity b1.0827 este motorul de laborator. Clientul LowSpec are 21 JAR-uri, iar copia de server cu 15 JAR-uri de conținut/dependențe a pornit și s-a oprit curat. <a href="https://github.com/iZentric/ServerRolePlayLite/blob/arena/9bbcb24f-serverroleplaylite/agent/PLUGIN-FIRST.md">Vezi politica ↗</a></p></div></div>
           <div class="status-item"><span class="status-icon" aria-hidden="true">✓</span><div><h3>Verificat structural</h3><p>Copia cu 18 JAR-uri (15 de bază + 3 optimizări) a pornit/oprit pe PC. Nu am măsurat un câștig de performanță și nu am modificat serverul existent.</p></div></div>

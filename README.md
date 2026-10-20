@@ -32,7 +32,7 @@ FunCity este un proiect de **oraș roleplay construit împreună cu jucătorii**
 | **Optimizări server** | [Trial PC cu 18 JAR-uri](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39336314432) (cele 15 de bază + RoadRunner, FerriteCore, ModernFix), pornit/oprit curat. | A/B repetat pe copie, cu aceeași lume/sarcină și fără regresii; fără cifre MSPT sau capacitate inventate. |
 | **Lansare publică** | Codul și documentația sunt vizibile în repo și în [PR-ul de lucru](https://github.com/iZentric/ServerRolePlayLite/pull/2). | Drepturi/licențe și SHA pentru toate binarele, client+server testate împreună, login prin plugin, voce, backup/restaurare, test RP și aprobare explicită. |
 
-**Niciun test de boot nu dovedește că un jucător poate intra.** Un build de laborator nu este un server live. [Tabelul sincer al motoarelor vechi/noi și problema Guava](agent/MOTOR-TABEL-VERIFICAT.md) · [Selecția fiecărui mod de performanță](agent/SELECTIE-PERFORMANTA-PURA.md) · [Jurnalul detaliat](agent/PROGRES.md).
+**Test nou:** [cinci motoare au rulat în paralel cu același conținut Lite 15/6](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39424486961): FunCity, CatServer vechi, CatServer oficial și Arclight au pornit/oprit cu șase pluginuri; Mist nu a ajuns la `Done`. Niciun test de boot nu dovedește că un jucător poate intra, iar măsurătorile de pe runner-e/JDK-uri diferite nu pot forma un clasament. [Tabelul cu dovezi și limite](agent/MOTOR-TABEL-VERIFICAT.md) · [Liniile de performanță istorică etichetate](site/index.html#motoare) · [Selecția optimizărilor](agent/SELECTIE-PERFORMANTA-PURA.md) · [Jurnal](agent/PROGRES.md).
 
 ## Cum este organizat proiectul
 
