@@ -62,5 +62,21 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $prismActive = @(Get-Process -Name 'prismlauncher' -ErrorAction SilentlyContinue).Count -gt 0
           $javaActive = @(Get-Process -Name 'java','javaw','minecraft' -ErrorAction SilentlyContinue).Count -gt 0
-          $candidateServerVisible = Test-Path -LiteralPath 'C:\Users\Administrator\Desktop\FunCityLocal\server' -PathType Container
-          Write-Output ('::notice title=PC readiness::PRISM_ACTIVE=' + $prismActive + ' JAVA_OR_MINECRAFT_ACTIVE=' + $javaActive + ' KNOWN_FUNCITY_SERVER_FOLDER_VISIBLE=' + $candidateServerVisible + '; READ_ONLY=true')
+          $server = 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+          $candidateServerVisible = Test-Path -LiteralPath $server -PathType Container
+          $serverMods = -1
+          $serverPlugins = -1
+          $rootJars = -1
+          if ($candidateServerVisible) {
+            $serverMods = @(Get-ChildItem -LiteralPath (Join-Path $server 'mods') -File -Filter '*.jar' -ErrorAction SilentlyContinue).Count
+            $serverPlugins = @(Get-ChildItem -LiteralPath (Join-Path $server 'plugins') -File -Filter '*.jar' -ErrorAction SilentlyContinue).Count
+            $rootJars = @(Get-ChildItem -LiteralPath $server -File -Filter '*.jar' -ErrorAction SilentlyContinue).Count
+          }
+          $knownServerProcess = $false
+          try {
+            $candidate = @(Get-CimInstance Win32_Process -Filter "Name = 'java.exe' OR Name = 'javaw.exe'" -ErrorAction Stop)
+            $knownServerProcess = @($candidate | Where-Object {
+              $_.CommandLine -and $_.CommandLine.IndexOf($server, [StringComparison]::OrdinalIgnoreCase) -ge 0
+            }).Count -gt 0
+          } catch { Write-Output '::notice title=PC readiness::SERVER_PROCESS_CLASSIFICATION=UNAVAILABLE; READ_ONLY=true' }
+          Write-Output ('::notice title=PC readiness::PRISM_ACTIVE=' + $prismActive + ' JAVA_OR_MINECRAFT_ACTIVE=' + $javaActive + ' KNOWN_FUNCITY_SERVER_FOLDER_VISIBLE=' + $candidateServerVisible + ' SERVER_MOD_JARS=' + $serverMods + ' SERVER_PLUGIN_JARS=' + $serverPlugins + ' SERVER_ROOT_JARS=' + $rootJars + ' KNOWN_SERVER_JAVA=' + $knownServerProcess + '; READ_ONLY=true')
