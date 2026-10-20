@@ -126,6 +126,8 @@ jobs:
               (Get-FileHash -LiteralPath (Join-Path $liteMods $_) -Algorithm SHA256).Hash
             })
             Write-Output ('::notice title=Forge exact filename hash comparison::COMMON_FILENAMES=' + $shared + ' DIFFERENT_SHA256=' + $differentHash.Count + '; NO_FILE_CHANGED=true')
+            # Names are already in the owner's committed selection; never disclose hash values or paths.
+            Write-Output ('::notice title=Forge differing approved names::' + ($differentHash -join ','))
             $cfg = Join-Path $server 'server.properties'
             $onlineMode = 'UNKNOWN'
             $whitelist = 'UNKNOWN'
