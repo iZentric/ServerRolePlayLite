@@ -95,3 +95,36 @@ jobs:
             }
           } catch { Write-Output '::notice title=PC readiness::SERVER_PROCESS_CLASSIFICATION=UNAVAILABLE; READ_ONLY=true' }
           Write-Output ('::notice title=PC readiness::PRISM_ACTIVE=' + $prismActive + ' JAVA_OR_MINECRAFT_ACTIVE=' + $javaActive + ' KNOWN_FUNCITY_SERVER_FOLDER_VISIBLE=' + $candidateServerVisible + ' SERVER_MOD_JARS=' + $serverMods + ' SERVER_PLUGIN_JARS=' + $serverPlugins + ' SERVER_ROOT_JARS=' + $rootJars + ' KNOWN_SERVER_JAVA=' + $knownServerProcess + ' KNOWN_SERVER_LISTENING=' + $knownServerListening + '; READ_ONLY=true')
+          # Only aggregate/boolean observations; never print addresses, config lines, player names or JAR paths.
+          try {
+            $lite = Get-Content -LiteralPath 'agent/FUNCITY-RP-LITE-SELECTIE.json' -Raw | ConvertFrom-Json
+            $serverJarNames = @(Get-ChildItem -LiteralPath (Join-Path $server 'mods') -File -Filter '*.jar' -ErrorAction Stop | ForEach-Object { $_.Name })
+            $shared = @($serverJarNames | Where-Object { @($lite.retained_in_future_target) -ccontains $_ }).Count
+            $cfg = Join-Path $server 'server.properties'
+            $onlineMode = 'UNKNOWN'
+            $whitelist = 'UNKNOWN'
+            $maxPlayersKnown = $false
+            if (Test-Path -LiteralPath $cfg -PathType Leaf) {
+              $settings = @(Get-Content -LiteralPath $cfg -ErrorAction Stop)
+              foreach ($key in @('online-mode','white-list','max-players')) {
+                $match = @($settings | Where-Object { $_ -match ('^' + $key + '=') } | Select-Object -First 1)
+                if ($match.Count -eq 1) {
+                  $value = ($match[0] -split '=', 2)[1]
+                  if ($key -eq 'online-mode' -and $value -match '^(true|false)$') { $onlineMode = $value.ToUpperInvariant() }
+                  if ($key -eq 'white-list' -and $value -match '^(true|false)$') { $whitelist = $value.ToUpperInvariant() }
+                  if ($key -eq 'max-players' -and $value -match '^\d+$') { $maxPlayersKnown = $true }
+                }
+              }
+            }
+            $localBind = 'UNKNOWN'
+            if ($knownServerListening) {
+              $owned = @($listeners | Where-Object { $pids -contains $_.OwningProcess })
+              if (@($owned | Where-Object { $_.LocalAddress -eq '0.0.0.0' -or $_.LocalAddress -eq '::' }).Count -gt 0) { $localBind = 'ALL_INTERFACES' }
+              elseif (@($owned | Where-Object { $_.LocalAddress -ne '127.0.0.1' -and $_.LocalAddress -ne '::1' }).Count -gt 0) { $localBind = 'NON_LOOPBACK' }
+              else { $localBind = 'LOOPBACK_ONLY' }
+            }
+            $newProfile = Join-Path (Split-Path -Parent $profile) 'FunCity RP Lite'
+            $newProfileExists = Test-Path -LiteralPath $newProfile
+            $prismMetadataReady = (Test-Path -LiteralPath (Join-Path $profile 'instance.cfg') -PathType Leaf) -and (Test-Path -LiteralPath (Join-Path $profile 'mmc-pack.json') -PathType Leaf)
+            Write-Output ('::notice title=RP readiness::SERVER_CLIENT_EXACT_JAR_OVERLAP=' + $shared + '/22 SERVER_ONLINE_MODE=' + $onlineMode + ' SERVER_WHITELIST=' + $whitelist + ' SERVER_MAX_PLAYERS_DEFINED=' + $maxPlayersKnown + ' SERVER_LISTEN_BIND=' + $localBind + ' PRISM_METADATA_READY=' + $prismMetadataReady + ' NEW_PROFILE_EXISTS=' + $newProfileExists + '; PUBLIC_REACHABILITY=NOT_TESTED; READ_ONLY=true')
+          } catch { Write-Output '::notice title=RP readiness::SERVER_OR_PROFILE_AUDIT=UNAVAILABLE; READ_ONLY=true' }
