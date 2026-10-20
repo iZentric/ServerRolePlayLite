@@ -115,8 +115,17 @@ jobs:
           # Only aggregate/boolean observations; never print addresses, config lines, player names or JAR paths.
           try {
             $lite = Get-Content -LiteralPath 'agent/FUNCITY-RP-LITE-SELECTIE.json' -Raw | ConvertFrom-Json
+            $liteProfile = Join-Path (Split-Path -Parent $profile) 'FunCity RP Lite'
+            $liteGame = if (Test-Path -LiteralPath (Join-Path $liteProfile '.minecraft') -PathType Container) { '.minecraft' } else { 'minecraft' }
+            $liteMods = Join-Path (Join-Path $liteProfile $liteGame) 'mods'
             $serverJarNames = @(Get-ChildItem -LiteralPath (Join-Path $server 'mods') -File -Filter '*.jar' -ErrorAction Stop | ForEach-Object { $_.Name })
-            $shared = @($serverJarNames | Where-Object { @($lite.retained_in_future_target) -ccontains $_ }).Count
+            $sharedNames = @($serverJarNames | Where-Object { @($lite.retained_in_future_target) -ccontains $_ })
+            $shared = $sharedNames.Count
+            $differentHash = @($sharedNames | Where-Object {
+              (Get-FileHash -LiteralPath (Join-Path (Join-Path $server 'mods') $_) -Algorithm SHA256).Hash -ne
+              (Get-FileHash -LiteralPath (Join-Path $liteMods $_) -Algorithm SHA256).Hash
+            })
+            Write-Output ('::notice title=Forge exact filename hash comparison::COMMON_FILENAMES=' + $shared + ' DIFFERENT_SHA256=' + $differentHash.Count + '; NO_FILE_CHANGED=true')
             $cfg = Join-Path $server 'server.properties'
             $onlineMode = 'UNKNOWN'
             $whitelist = 'UNKNOWN'
