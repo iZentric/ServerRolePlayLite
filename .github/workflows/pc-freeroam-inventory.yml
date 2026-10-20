@@ -11,6 +11,8 @@ on:
       - scripts/fc_freeroam_apply_test.ps1
       - scripts/fc_freeroam_new_profile.ps1
       - scripts/fc_freeroam_new_profile_test.ps1
+      - scripts/fc_local_status_ping.ps1
+      - scripts/fc_local_status_ping_test.py
 permissions:
   contents: read
 jobs:
@@ -48,6 +50,8 @@ jobs:
       - name: Separate 22-JAR profile and private-data exclusion (hosted fixture only)
         shell: pwsh
         run: ./scripts/fc_freeroam_new_profile_test.ps1
+      - name: Minecraft status protocol with private-data redaction (hosted fixture only)
+        run: python3 scripts/fc_local_status_ping_test.py
   read-only-pc:
     needs: guards
     runs-on: [self-hosted, Windows]
@@ -135,3 +139,25 @@ jobs:
             $authPluginCandidate = @((Get-ChildItem -LiteralPath (Join-Path $server 'plugins') -File -Filter '*.jar' -ErrorAction Stop) | Where-Object { $_.Name -match '(?i)authme|nlogin|authplugin|loginsecurity|fastlogin' }).Count -gt 0
             Write-Output ('::notice title=RP readiness::SERVER_CLIENT_EXACT_JAR_OVERLAP=' + $shared + '/22 SERVER_ONLINE_MODE=' + $onlineMode + ' SERVER_WHITELIST=' + $whitelist + ' SERVER_MAX_PLAYERS_DEFINED=' + $maxPlayersKnown + ' SERVER_LISTEN_BIND=' + $localBind + ' PRISM_METADATA_READY=' + $prismMetadataReady + ' CUSTOM_PATCHES_PRESENT=' + $customPatchesPresent + ' AUTH_PLUGIN_FILENAME_CANDIDATE=' + $authPluginCandidate + ' NEW_PROFILE_EXISTS=' + $newProfileExists + '; PUBLIC_REACHABILITY=NOT_TESTED; READ_ONLY=true')
           } catch { Write-Output '::notice title=RP readiness::SERVER_OR_PROFILE_AUDIT=UNAVAILABLE; READ_ONLY=true' }
+          # Status query only to the already-identified local Java listener; never a login.
+          if ($knownServerListening -and $port -gt 0 -and $port -le 65535) {
+            & ./scripts/fc_local_status_ping.ps1 -Port $port
+            if ($LASTEXITCODE -ne 0) { Write-Output '::notice title=Minecraft local status::PROTOCOL_READINESS=UNVERIFIED; CLIENT_JOIN=NOT_TESTED' }
+          }
+          # Reconfirm the new profile is exactly the approved selection, byte-for-byte from the original.
+          try {
+            $new = Join-Path (Split-Path -Parent $profile) 'FunCity RP Lite'
+            $originalGame = if (Test-Path -LiteralPath (Join-Path $profile '.minecraft') -PathType Container) { '.minecraft' } else { 'minecraft' }
+            $sourceMods = Join-Path (Join-Path $profile $originalGame) 'mods'
+            $liteMods = Join-Path (Join-Path $new $originalGame) 'mods'
+            $approvedNames = @($lite.retained_in_future_target)
+            $actual = @(Get-ChildItem -LiteralPath $liteMods -Force -ErrorAction Stop)
+            $matched = $actual.Count -eq 22 -and (Test-Path -LiteralPath (Join-Path $new 'mmc-pack.json') -PathType Leaf)
+            foreach ($item in $actual) {
+              if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or
+                  $approvedNames -cnotcontains $item.Name -or
+                  (Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash -ne
+                  (Get-FileHash -LiteralPath (Join-Path $sourceMods $item.Name) -Algorithm SHA256).Hash) { $matched = $false }
+            }
+            Write-Output ('::notice title=Lite PC verification::NEW_PROFILE_22_MATCH_ORIGINAL=' + $matched + '; CLIENT_BOOT=NOT_TESTED CLIENT_JOIN=NOT_TESTED')
+          } catch { Write-Output '::notice title=Lite PC verification::NEW_PROFILE_VERIFICATION=UNAVAILABLE; CLIENT_JOIN=NOT_TESTED' }
