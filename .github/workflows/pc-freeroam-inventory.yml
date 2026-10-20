@@ -7,6 +7,8 @@ on:
     paths:
       - .github/workflows/pc-freeroam-inventory.yml
       - scripts/fc_freeroam_target_preflight.ps1
+      - scripts/fc_freeroam_apply.ps1
+      - scripts/fc_freeroam_apply_test.ps1
 permissions:
   contents: read
 jobs:
@@ -38,6 +40,9 @@ jobs:
           } finally {
             if (Test-Path -LiteralPath $root) { Remove-Item -LiteralPath $root -Recurse -Force }
           }
+      - name: Synthetic in-place apply and private rollback (hosted fixture only)
+        shell: pwsh
+        run: ./scripts/fc_freeroam_apply_test.ps1
   read-only-pc:
     needs: guards
     runs-on: [self-hosted, Windows]
