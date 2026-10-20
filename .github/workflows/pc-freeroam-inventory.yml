@@ -13,6 +13,8 @@ on:
       - scripts/fc_freeroam_new_profile_test.ps1
       - scripts/fc_local_status_ping.ps1
       - scripts/fc_local_status_ping_test.py
+      - scripts/fc_forge_modid_audit.ps1
+      - scripts/fc_forge_modid_audit_test.py
 permissions:
   contents: read
 jobs:
@@ -52,6 +54,8 @@ jobs:
         run: ./scripts/fc_freeroam_new_profile_test.ps1
       - name: Minecraft status protocol with private-data redaction (hosted fixture only)
         run: python3 scripts/fc_local_status_ping_test.py
+      - name: Forge JAR metadata comparison safety (hosted fixture only)
+        run: python3 scripts/fc_forge_modid_audit_test.py
   read-only-pc:
     needs: guards
     runs-on: [self-hosted, Windows]
@@ -146,6 +150,7 @@ jobs:
             if ($LASTEXITCODE -ne 0) { Write-Output '::notice title=Minecraft local status::PROTOCOL_READINESS=UNVERIFIED; CLIENT_JOIN=NOT_TESTED' }
           }
           # Reconfirm the new profile is exactly the approved selection, byte-for-byte from the original.
+          $liteMods = $null
           try {
             $new = Join-Path (Split-Path -Parent $profile) 'FunCity RP Lite'
             $originalGame = if (Test-Path -LiteralPath (Join-Path $profile '.minecraft') -PathType Container) { '.minecraft' } else { 'minecraft' }
@@ -162,3 +167,8 @@ jobs:
             }
             Write-Output ('::notice title=Lite PC verification::NEW_PROFILE_22_MATCH_ORIGINAL=' + $matched + '; CLIENT_BOOT=NOT_TESTED CLIENT_JOIN=NOT_TESTED')
           } catch { Write-Output '::notice title=Lite PC verification::NEW_PROFILE_VERIFICATION=UNAVAILABLE; CLIENT_JOIN=NOT_TESTED' }
+          # Read JAR metadata only; do not infer that every server-only ID is client-required.
+          if ($candidateServerVisible -and $liteMods -and (Test-Path -LiteralPath $liteMods -PathType Container)) {
+            & ./scripts/fc_forge_modid_audit.ps1 -ClientMods $liteMods -ServerMods (Join-Path $server 'mods')
+            if ($LASTEXITCODE -ne 0) { Write-Output '::notice title=Forge inventory::MODID_COMPARISON=UNVERIFIED' }
+          }
