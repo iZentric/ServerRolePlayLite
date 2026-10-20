@@ -1,36 +1,61 @@
 <div align="center">
-  <img src="site/assets/funcity-city.webp" alt="FunCity — oraș în lumini cyan și magenta" width="190" height="190">
+  <img src="site/assets/funcity-city.webp" alt="Ilustrație FunCity: oraș în lumini cyan și magenta" width="160" height="160">
   <h1>FunCity RP Lite</h1>
   <p><strong>Un oraș nou. Povestea e a voastră.</strong></p>
-  <p>Minecraft 1.16.5 · pluginuri pentru RP · moduri proprii numai după confirmare</p>
-  <p><a href="site/index.html">Pagina proiectului</a> · <a href="agent/SELECTIE-MOTOR-MODURI-CLIENT.md">Motor &amp; moduri</a> · <a href="agent/PROGRES.md">Progres real</a></p>
+  <p>Minecraft 1.16.5 · conținut modat pentru RP · funcții de comunitate prin pluginuri</p>
+  <p><strong>🧪 În laborator · 📂 Dezvoltare publică · ⛔ Fără release Lite sau server public verificat</strong></p>
+  <p><a href="site/index.html">Descoperă proiectul</a> · <a href="#de-ce-funcity">De ce FunCity?</a> · <a href="#stadiul-real">Stadiul real</a> · <a href="#cum-poti-ajuta">Cum poți ajuta</a></p>
 </div>
 
 ---
 
-## Ce construim
+## De ce FunCity?
 
-FunCity este un proiect de comunitate roleplay cu un **oraș nou, construit de proprietar și de jucători**. **Direcția actuală este plugin-first:** joburile, economia, meniurile și restul RP se proiectează prin pluginuri; conținut modat numai dacă aparține proprietarului și este confirmat exact, optimizări numai dacă probele arată necesitatea. Mobilierul, armele, vehiculele, emotele și vocea sunt **cerințe de evaluat**, nu funcții plugin deja implementate; un resource pack nu garantează mecanicile unui mod. Orașul nu are claims sau protecții preventive; **CoreProtect** este cerut ca jurnal și rollback punctual administrativ, nu ca blocaj la construit. Conturile se autentifică **prin plugin**. [Regula actuală și limitele](agent/PLUGIN-FIRST.md).
+FunCity este un proiect de **oraș roleplay construit împreună cu jucătorii**. Vrem să păstrăm conținutul primului pack — mobilier, drumuri, vehicule, arme, mâncare și emote — fără să sacrificăm elementele RP doar ca să scădem numărul de moduri. Joburile, economia, rolurile și autentificarea sunt direcții pentru **pluginuri**, nu funcții pe care le declarăm deja finalizate.
 
-[HYPECITY](agent/AUDIT-SERVERE-REFERINTA.md) este reperul practic al proprietarului, care relatează că a avut peste 60 de jucători, posibil spre 100. Este o experiență istorică, nu o măsurătoare a capacității noului FunCity.
+| Ce urmărim | De ce contează | Ce este verificat acum |
+|---|---|---|
+| **Conținut RP păstrat** | Nu promitem un „Lite” golit de obiecte și mecanici. | Cele șase JAR-uri RP lipsă au fost restaurate în același profil LowSpec; serverul cu conținut a pornit pe o copie izolată. Gameplay-ul nu este încă testat. |
+| **O cale de intrare pentru PC-uri mai slabe** | Profilul LowSpec este configurat cu 5 chunkuri și maximum 2 GiB heap. | Fișierele sunt verificate pe disc, dar nu există benchmark FPS sau garanție pentru orice laptop. |
+| **Optimizări server alese cu rost** | Nu adăugăm zeci de JAR-uri pentru îmbunătățiri presupuse. | RoadRunner, FerriteCore și ModernFix au trecut doar bootul pe o copie; efectul MSPT/RAM rămâne de măsurat înainte de includerea definitivă. |
+| **Oraș deschis, moderare responsabilă** | CoreProtect este pentru jurnal și rollback administrativ, nu pentru protecție preventivă de teren. | Pluginul s-a activat în bootul izolat; incidentele reale și restaurarea nu sunt încă probate. |
 
-## Unde suntem, fără promisiuni inventate
+> **Important pentru jucători:** acesta este un proiect public **în dezvoltare**, nu o invitație de conectare. Nu descărca vechile release-uri ale repo-ului ca și cum ar fi noul FunCity RP Lite. Nu există încă un pachet Lite sau o adresă de server validate pentru intrarea în joc.
 
-| Stare | Ce înseamnă |
-|---|---|
-| **ȚINTA CERUTĂ: MODATĂ** | FunCity **b1.0827 hibrid**, RP prin pluginuri **și modurile de conținut proprii** cu dependențele necesare pe client/server. Lista finală a JAR-urilor proprii necesită identificare și confirmare; [aprobările încă goale](agent/PLUGIN-FIRST.md) **nu înseamnă că proiectul trebuie făcut fără moduri**. Optimizări doar după măsurare. |
-| **CANDIDAT MODAT LowSpec, laborator privat** | Primul pack de conținut este păstrat: [LowSpec existent are 21 JAR-uri client](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39335419784), inclusiv cele 6 RP restaurate, 5 chunkuri și heap maxim 2 GiB; [stage-ul server cu 15 JAR-uri de conținut/dependențe](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39333730944) a pornit/oprit pe PC cu 6 pluginuri. [Trialul separat cu RoadRunner, FerriteCore și ModernFix (18 JAR-uri)](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39336314432) a pornit/oprit tot pe PC; **nu** există măsurare MSPT/RAM care să justifice păstrarea lor definitivă. [Prism](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39332296211) arată doar Lite, EGK, V RP și Fabulously Optimized; 4 profiluri vechi sunt arhivate reversibil. Nu există client join, FPS, funcții RP sau login testate; serverul existent nu a fost schimbat. Guava21 este încă override de laborator. |
-| **DE TESTAT** | Pluginurile și funcțiile RP efective, modurile proprii identificate, soluția de voce, apoi boot pe copie, importul clientului dacă e necesar, autentificare, CoreProtect, backup/restaurare și sarcina cu jucători. |
-| **LIVE** | Nicio instalare Lite nouă sau capacitate a serverului actual nu este confirmată de acest repo. |
+## Stadiul real
 
-> **Pentru jucători:** încă nu publicăm un pachet Lite nou ori o adresă de intrare verificată. Pagina arată stadiul proiectului, nu un server live.
+| Componentă | Situație verificată | Mai lipsește |
+|---|---|---|
+| **Motor** | FunCity b1.0827 / Minecraft 1.16.5 a pornit în laborator cu Forge și pluginuri, folosind Guava 21 prin override JVM temporar. | Remediu de distribuție verificat pentru motor; nu este un build final. |
+| **Client LowSpec** | [21 JAR-uri](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39335419784) în profilul Prism existent, inclusiv cele șase de conținut/dependențe restaurate. Sunt vizibile numai LowSpec, EGK, V RP și Fabulously Optimized; alte patru profiluri sunt arhivate reversibil. | Lansare client, conectare Forge, verificarea funcțiilor RP și măsurători FPS/RAM. |
+| **Server de bază** | [15 JAR-uri: 11 conținut + 4 dependențe](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39333730944), șase pluginuri nominal active; pornit/oprit pe PC într-un folder temporar, exclusiv loopback. | Instalare numai după validare; serverul existent și lumea sa nu au fost modificate. |
+| **Optimizări server** | [Trial PC cu 18 JAR-uri](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39336314432) (cele 15 de bază + RoadRunner, FerriteCore, ModernFix), pornit/oprit curat. | A/B repetat pe copie, cu aceeași lume/sarcină și fără regresii; fără cifre MSPT sau capacitate inventate. |
+| **Lansare publică** | Codul și documentația sunt vizibile în repo și în [PR-ul de lucru](https://github.com/iZentric/ServerRolePlayLite/pull/2). | Drepturi/licențe și SHA pentru toate binarele, client+server testate împreună, login prin plugin, voce, backup/restaurare, test RP și aprobare explicită. |
 
-## Găsești rapid ce te interesează
+**Niciun test de boot nu dovedește că un jucător poate intra.** Un build de laborator nu este un server live. [Jurnalul detaliat și limitele](agent/PROGRES.md) · [Decizia motor/moduri](agent/SERVER-PLUGIN-FIRST.md).
 
-- **Aspectul proiectului:** [site-ul static](site/index.html) și [sursa paginii](site/template.html). Fără reclame, tracking sau statistici live inventate.
-- **Motor, moduri, client:** [decizia și stage-ul plugin-first](agent/SERVER-PLUGIN-FIRST.md) · [regula de includere](agent/PLUGIN-FIRST.md) · [vechea listă 24 + 29, numai comparație](agent/LISTA-MODURI-RP-LITE.md) · [poarta beta](agent/BETA-LITE.md).
-- **RP și moderare:** [rolurile pluginurilor](agent/RP-LITE-PLUGINS.md) · [planul comunității](agent/PLAN-COMUNITATE.md).
-- **Vrei să continui cu un alt agent?** [Cerința exactă FunCity, gata de copiat](agent/CERINTA-EXACTA-FUNCITY.md) · [instrucțiunile din repo](AGENTS.md).
-- **Dovezi și limite:** [comparația HYPECITY/FunCity citită de pe PC](agent/COMPARATIE-HYPECITY-PC.md) · [captura istorică parțială de config](agent/AUDIT-SERVERE-REFERINTA.md) · [progresul](agent/PROGRES.md).
+## Cum este organizat proiectul
 
-Motorul derivă din Mohist/Tenet, sub GPL-3.0; orice distribuție viitoare de JAR derivat cere verificarea licenței, atribuire și sursa corespunzătoare. Nu publicăm binare sau promisiuni de FPS/jucători numai pe baza selecției din repo.
+```text
+site/                   pagina publică statică (prezentare, nu status live)
+agent/                  decizii, audituri și dovezi; unele documente sunt istorice
+scripts/fc_modded_*     pregătire și boot izolat pentru conținutul serverului
+scripts/fc_pc_lowspec_* modificări controlate ale profilului LowSpec existent
+.github/workflows/      verificări, niciuna nu face release Lite sau pornește live automat
+```
+
+[Politica actuală pentru conținut și pluginuri](agent/PLUGIN-FIRST.md) are prioritate față de listele istorice 24/29 din documentele vechi. Un JAR găsit într-un pack vechi **nu dovedește** cine l-a creat sau dacă îl putem redistribui. Proiectul păstrează tot conținutul RP în candidatul privat, dar nu publică acele binare fără verificarea drepturilor.
+
+## Cum poți ajuta
+
+- Citește [progresul verificabil](agent/PROGRES.md) și raportează o eroare prin [Issues](https://github.com/iZentric/ServerRolePlayLite/issues), cu pașii de reproducere și versiunea folosită. **Nu publica loguri brute, adrese, nume de lumi, date de cont sau tokenuri.**
+- Dacă deții un JAR din pack, ajută la confirmarea **sursei, licenței și SHA-ului**; prezența lui pe un PC nu este o autorizație de release.
+- Pentru contribuții la cod sau documentație, propune o schimbare cu test și explică ce verifică. Nu interpreta succesul unui CI ca pe o probă de FPS, autentificare sau număr de jucători.
+
+**Planul de lansare:** întâi auditul fiecărui binar și al licențelor → import client + conectare la server pe copie → autentificare, voce și scenarii RP → backup și restaurare probate → test A/B pentru optimizările server → abia apoi release și lansare cu acord. [Planul public de lansare](agent/PUBLICARE.md) explică exact ce este public acum și ce blochează pachetul/serverul. [Ghid pentru contribuții](CONTRIBUTING.md).
+
+## Drepturi și siguranță
+
+Motorul derivă din Mohist/Tenet (GPL-3.0); distribuirea unui JAR derivat necesită audit de licență, atribuire și sursă corespunzătoare. Modurile, pluginurile și imaginile pot avea drepturi diferite; **nu există o licență unică declarată pentru tot conținutul din repo**. Nu urcăm lumi, conturi, configurații private, credențiale ori JAR-uri ale altora în noul pack. Release-urile istorice deja existente în GitHub nu sunt certificarea noului Lite.
+
+<sub>FunCity RP Lite · Minecraft 1.16.5 · construit public, testat înainte de a fi promis.</sub>
