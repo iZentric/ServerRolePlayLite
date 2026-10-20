@@ -23,6 +23,7 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $false
           $root = Join-Path $env:RUNNER_TEMP ('fc-freeroam-synthetic-' + $env:GITHUB_RUN_ID)
           $profile = Join-Path $root 'Freeroam 1.0.0'
           $mods = Join-Path $profile '.minecraft/mods'
@@ -36,7 +37,8 @@ jobs:
             if ($LASTEXITCODE -ne 0) { throw ('Fixture baseline failed code=' + $LASTEXITCODE) }
             [IO.File]::WriteAllText((Join-Path $mods 'unexpected.jar'), 'fixture')
             Write-Output '::notice title=Freeroam synthetic gate::PHASE=EXTRA'
-            & ./scripts/fc_freeroam_target_preflight.ps1 -Profile $profile -Quiet -SyntheticDiagnostics
+            # The expected nonzero result runs in a child so it cannot exit this guard step.
+            & pwsh -NoProfile -NonInteractive -File ./scripts/fc_freeroam_target_preflight.ps1 -Profile $profile -Quiet -SyntheticDiagnostics
             if ($LASTEXITCODE -ne 1) { throw ('Fixture extra failed code=' + $LASTEXITCODE) }
             Write-Output 'Synthetic PowerShell inventory PASS: 28 declared, extra JAR rejected, no PC touched'
           } finally {
