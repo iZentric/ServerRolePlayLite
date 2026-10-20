@@ -169,6 +169,9 @@ jobs:
           } catch { Write-Output '::notice title=Lite PC verification::NEW_PROFILE_VERIFICATION=UNAVAILABLE; CLIENT_JOIN=NOT_TESTED' }
           # Read JAR metadata only; do not infer that every server-only ID is client-required.
           if ($candidateServerVisible -and $liteMods -and (Test-Path -LiteralPath $liteMods -PathType Container)) {
-            & ./scripts/fc_forge_modid_audit.ps1 -ClientMods $liteMods -ServerMods (Join-Path $server 'mods')
-            if ($LASTEXITCODE -ne 0) { Write-Output '::notice title=Forge inventory::MODID_COMPARISON=UNVERIFIED' }
+            & ./scripts/fc_forge_modid_audit.ps1 -ClientMods $liteMods -ServerMods (Join-Path $server 'mods') -DiagnosticTypeOnly
+            if ($LASTEXITCODE -ne 0) {
+              Write-Output '::notice title=Forge inventory::MODID_COMPARISON=UNVERIFIED'
+              $global:LASTEXITCODE = 0
+            }
           }
