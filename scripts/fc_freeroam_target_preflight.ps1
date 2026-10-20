@@ -43,7 +43,7 @@ try {
     if (Test-Path -LiteralPath $path) { $choices += $path }
   }
   if ($choices.Count -ne 1) { throw 'Minecraft folder missing or ambiguous' }
-  $game = Get-Item -LiteralPath $choices[0] -ErrorAction Stop
+  $game = Get-Item -LiteralPath ($choices[0]) -ErrorAction Stop
   $mods = Get-Item -LiteralPath (Join-Path $game.FullName 'mods') -ErrorAction Stop
   if (-not $game.PSIsContainer -or -not $mods.PSIsContainer -or
       ($game.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or
