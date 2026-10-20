@@ -51,8 +51,11 @@
     "TRansliterationLib-1.0.4.jar"
   ],
   "requested_prism_destination": "Freeroam 1.0.0",
-  "installation_state": "BLOCKED_NO_PC_INVENTORY_BACKUP_CLIENT_SERVER_TEST",
+  "installation_state": "BLOCKED_ACTIVE_PRISM_AND_JAVA_AT_PC_CHECK_NO_JAR_CHANGED",
   "owner_authorizes_in_place_update_after_safety_gates": true,
   "pc_inventory_verified": false,
-  "profile_backup_restore_verified": false
+  "profile_backup_restore_verified": false,
+  "pc_declared_name_match_verified": true,
+  "pc_apply_attempt_run": "39463725942",
+  "pc_readonly_blocker_run": "39463980133"
 }

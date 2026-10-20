@@ -14,7 +14,7 @@ for name, content in (('site', site), ('README', readme)):
     assert 'Freeroam 1.0.0' in content, f'{name}: original pack not named'
     assert 'agent/CONTROL-MODURI-ORIGINALE.md' in content, f'{name}: missing audit source'
     assert 'Conținutul primului pack este în candidatul Lite' not in content, f'{name}: unsupported original parity'
-assert '28 de JAR-uri' in site and 'neverificate pe PC' in site
+assert '28 de nume JAR' in site and 'confirmate prin inventar PC read-only' in site
 assert 'șase nume sunt excluse numai din planul Lite, 22 rămân' in site
 assert 'biblioteca sa TRansliterationLib sunt scoase împreună' in site
 assert 'Niciun profil nu a fost schimbat' in site

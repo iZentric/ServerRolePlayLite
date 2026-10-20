@@ -1,5 +1,7 @@
 # Control read-only: captura FunCity vs candidatul Lite (20.10.2026)
 
+**Corecție ulterioară:** [runul PC 39462608606](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39462608606) a confirmat exact **28 de nume** declarate în `Freeroam 1.0.0` prin poarta PowerShell read-only. Jobul 39439372232 din relatarea de mai jos rămâne anulat istoric; nu îl folosi ca stare actuală. Niciun SHA de referință, dependență, client join sau instalație nu este dovedit de noul run.
+
 **Corecție de sursă:** proprietarul a identificat drept **modpack original** profilul Prism `Freeroam 1.0.0`, nu captura FunCity din `diag/pc-client.txt` și nici arhiva CUANTIC. Diferențele de mai jos sunt valide numai față de *acele două repere anterioare*, **nu** reprezintă încă o comparație Freeroam → LowSpec. Inventarul Freeroam este de verificat doar read-only, din calea indicată, fără alte profiluri/lumi.
 
 **Față de captura FunCity verificată anterior: nu au rămas toate JAR-urile, iar diferențele nu sunt numai optimizări.** În candidatul Lite testat au fost păstrate după nume cele **11 moduri de conținut RP și cele 4 biblioteci necesare** selectate din vechiul client FunCity. Nu există încă test de conectare Forge/client, funcții RP, autentificare sau voce. Aceasta este o comparație de **inventare și probe din 19–20.10**, nu o citire nouă a profilului Prism sau a serverului live și nici demonstrația egalității tuturor SHA-urilor client/server.

@@ -37,6 +37,9 @@ def main():
     assert not selection['ready_for_release']
     assert selection['requested_prism_destination'] == 'Freeroam 1.0.0'
     assert selection['installation_performed'] is False
+    assert selection['pc_declared_name_match_verified'] is True
+    assert policy['pc_declared_name_match_verified'] is True
+    assert selection['pc_inventory_verified'] is False
     assert policy['installation_state'].startswith('BLOCKED_')
     assert set(policy['deferred_not_installed']) == {
         'entityculling-forge-mc1.16.5-1.5.2.jar', 'embeddium-0.3.18+mc1.16.5.jar'}

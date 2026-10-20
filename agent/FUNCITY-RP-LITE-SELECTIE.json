@@ -52,5 +52,6 @@
   "requested_prism_destination": "Freeroam 1.0.0",
   "installation_performed": false,
   "pc_inventory_verified": false,
-  "backup_restore_verified": false
+  "backup_restore_verified": false,
+  "pc_declared_name_match_verified": true
 }
