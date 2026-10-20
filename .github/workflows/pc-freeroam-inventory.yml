@@ -31,11 +31,13 @@ jobs:
             New-Item -ItemType Directory -Path $mods -Force | Out-Null
             $declared = Get-Content -LiteralPath agent/FREEROAM-LISTA-DECLARATA.json -Raw | ConvertFrom-Json
             foreach ($n in $declared.jar_names) { [IO.File]::WriteAllText((Join-Path $mods $n), ('fixture:' + $n)) }
-            & ./scripts/fc_freeroam_target_preflight.ps1 -Profile $profile -Quiet
-            if ($LASTEXITCODE -ne 0) { throw 'Fixture rejected the declared list' }
+            Write-Output '::notice title=Freeroam synthetic gate::PHASE=BASELINE'
+            & ./scripts/fc_freeroam_target_preflight.ps1 -Profile $profile -Quiet -SyntheticDiagnostics
+            if ($LASTEXITCODE -ne 0) { throw ('Fixture baseline failed code=' + $LASTEXITCODE) }
             [IO.File]::WriteAllText((Join-Path $mods 'unexpected.jar'), 'fixture')
-            & ./scripts/fc_freeroam_target_preflight.ps1 -Profile $profile -Quiet
-            if ($LASTEXITCODE -ne 1) { throw 'Fixture accepted an additional JAR' }
+            Write-Output '::notice title=Freeroam synthetic gate::PHASE=EXTRA'
+            & ./scripts/fc_freeroam_target_preflight.ps1 -Profile $profile -Quiet -SyntheticDiagnostics
+            if ($LASTEXITCODE -ne 1) { throw ('Fixture extra failed code=' + $LASTEXITCODE) }
             Write-Output 'Synthetic PowerShell inventory PASS: 28 declared, extra JAR rejected, no PC touched'
           } finally {
             if (Test-Path -LiteralPath $root) { Remove-Item -LiteralPath $root -Recurse -Force }

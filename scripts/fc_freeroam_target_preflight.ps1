@@ -1,5 +1,5 @@
 # Read-only Freeroam PC gate. No profile write, world access, account access or raw paths in output.
-param([Parameter(Mandatory=$true)][string]$Profile, [switch]$Quiet)
+param([Parameter(Mandatory=$true)][string]$Profile, [switch]$Quiet, [switch]$SyntheticDiagnostics)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
@@ -69,7 +69,10 @@ try {
   if (-not $Quiet) { Write-Output ('::notice title=Freeroam PC gate::INVENTORY_MATCH original=' + $diskNames.Count + ' target_declared=22; READ_ONLY=true INSTALLATION=false') }
   exit 0
 } catch {
-  # Deliberately discard exception details: they can include private Windows paths.
+  # Only synthetic hosted fixtures may publish type and script line; never PC paths or exception text.
+  if ($Quiet -and $SyntheticDiagnostics) {
+    Write-Output ('::error title=Freeroam synthetic gate::LINE=' + $_.InvocationInfo.ScriptLineNumber + ' TYPE=' + $_.Exception.GetType().Name)
+  }
   if (-not $Quiet) { Write-Output '::error title=Freeroam PC gate::PROFILE_UNSAFE_OR_UNREADABLE; READ_ONLY=true INSTALLATION=false' }
   exit 2
 }
