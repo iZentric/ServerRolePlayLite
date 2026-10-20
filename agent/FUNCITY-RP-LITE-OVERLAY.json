@@ -3,8 +3,8 @@
   "project_name": "FunCity RP Lite",
   "source_profile": "Freeroam 1.0.0",
   "minecraft": "1.16.5",
-  "rule": "preserve_all_original_mods_byte_for_byte_no_unapproved_removals_or_additions",
-  "status": "OWNER_DECISIONS_LOGGED_NO_REMOVALS_EXECUTED_NO_NEW_MOD_APPROVED",
+  "rule": "retain_original_bytes_except_exact_owner_approved_target_exclusions",
+  "status": "FOUR_EXCLUSIONS_IN_FUTURE_TARGET_ONLY_DEPENDENCY_BLOCKER_ONE_NO_PROFILE_EDIT",
   "performance_candidates_for_active_game": [
     "rubidium-mc1.16.5-0.2.13.jar",
     "ferritecore-2.1.1-forge.jar",
@@ -35,5 +35,16 @@
     "entityculling-forge-mc1.16.5-1.5.2.jar": "Older 1.16.5 line is unsupported; async culling may need CPU headroom. FPS and RP visibility untested.",
     "embeddium-0.3.18+mc1.16.5.jar": "Forge 1.16.5 renderer alternative, not an add-on to Rubidium; TexTrue Rubidium Options conflict reported. No replacement without owner approval and A/B on isolated copy."
   },
-  "owner_choices": "agent/FREEROAM-RASPUNSURI-28.json"
+  "owner_choices": "agent/FREEROAM-RASPUNSURI-28.json",
+  "approved_exclusions_from_future_lite": [
+    "CTM-MC1.16.1-1.1.2.6.jar",
+    "DynamicSurroundings-1.16.5-4.0.5.0.jar",
+    "InGameAccountSwitcher-Forge-1.16-8.0.1.jar",
+    "lightfallclient-1.0.0.jar"
+  ],
+  "blocked_exclusion_awaiting_owner": {
+    "TRansliterationLib-1.0.4.jar": "Required by kept notenoughanimations-1.2.4.jar; do not remove from target unless owner resolves conflict."
+  },
+  "dependencies_and_server_handshake": "NOT_VERIFIED; especially CTM textures and Lightfall proxy requirement; no release claim",
+  "selection": "agent/FUNCITY-RP-LITE-SELECTIE.json"
 }

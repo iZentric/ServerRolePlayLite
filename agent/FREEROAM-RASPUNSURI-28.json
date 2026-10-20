@@ -2,7 +2,7 @@
   "schema": 1,
   "source": "răspunsurile explicite ale proprietarului la 28 de întrebări separate în conversație",
   "scope": "decizii pentru viitorul FunCity RP Lite; nu autorizează ștergere din Freeroam, modificări Prism sau release",
-  "current_action": "NO_JAR_REMOVED_NO_JAR_ADDED",
+  "current_action": "FOUR_EXCLUSIONS_IN_LITE_TARGET_ONLY_NO_PROFILE_OR_JAR_CHANGED",
   "keep": [
     "additional-guns-0.7.1-1.16.5.jar",
     "cfm-7.0.0pre22-1.16.3.jar",
@@ -40,5 +40,24 @@
   "new_mods_deferred": {
     "entityculling-forge-mc1.16.5-1.5.2.jar": "discuss later; owner suspects short view distance makes it unnecessary; no install now",
     "embeddium-0.3.18+mc1.16.5.jar": "discuss later which renderer performs better on old PC; no replacement now"
+  },
+  "latest_request": {
+    "requested_exclusions_from_future_lite": [
+      "CTM-MC1.16.1-1.1.2.6.jar",
+      "DynamicSurroundings-1.16.5-4.0.5.0.jar",
+      "InGameAccountSwitcher-Forge-1.16-8.0.1.jar",
+      "lightfallclient-1.0.0.jar",
+      "TRansliterationLib-1.0.4.jar"
+    ],
+    "target_exclusions_now": [
+      "CTM-MC1.16.1-1.1.2.6.jar",
+      "DynamicSurroundings-1.16.5-4.0.5.0.jar",
+      "InGameAccountSwitcher-Forge-1.16-8.0.1.jar",
+      "lightfallclient-1.0.0.jar"
+    ],
+    "pending_conflict": {
+      "TRansliterationLib-1.0.4.jar": "Not Enough Animations 1.2.4 is explicitly kept and lists TRansliterationLib as a required dependency; await owner decision for this pair."
+    },
+    "actual_pc_profile_or_original_modified": false
   }
 }

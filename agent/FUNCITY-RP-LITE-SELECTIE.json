@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "description": "Proposed FunCity RP Lite client target by declared filenames ONLY, not an installed/boot-tested modpack.",
+  "declared_source": "agent/FREEROAM-LISTA-DECLARATA.json",
+  "removed_from_future_target": [
+    "CTM-MC1.16.1-1.1.2.6.jar",
+    "DynamicSurroundings-1.16.5-4.0.5.0.jar",
+    "InGameAccountSwitcher-Forge-1.16-8.0.1.jar",
+    "lightfallclient-1.0.0.jar"
+  ],
+  "retained_in_future_target": [
+    "additional-guns-0.7.1-1.16.5.jar",
+    "cfm-7.0.0pre22-1.16.3.jar",
+    "cgm-1.2.6-1.16.5.jar",
+    "emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar",
+    "ferritecore-2.1.1-forge.jar",
+    "lazydfu-0.1.3.jar",
+    "mapperbase-1.16.5-2.4.0.0.jar",
+    "modernfix-forge-5.18.0+mc1.16.5.jar",
+    "modernlife-1.16.5-1.15.jar",
+    "Modernxl 1.16.5.jar",
+    "notenoughanimations-1.2.4.jar",
+    "obfuscate-0.6.3-1.16.5.jar",
+    "oculus-mc1.16.5-1.4.7.jar",
+    "pamhc2foodcore-1.16.3-1.0.2.jar",
+    "Pizzaland_v68.jar",
+    "player-animation-lib-forge-0.4.0+1.16.5.jar",
+    "roadstuff-1.16.5-4.3.0.jar",
+    "rubidium-mc1.16.5-0.2.13.jar",
+    "selene-1.16.5-1.9.0.jar",
+    "supplementaries-1.16.5-0.18.4b.jar",
+    "TextruesRubidiumOptions-1.0.8-mc1.16.5.jar",
+    "TRansliterationLib-1.0.4.jar",
+    "vehicle-mod-0.45.2-1.16.5 (1).jar",
+    "voicechat-forge-1.16.5-2.3.23.jar"
+  ],
+  "pending_owner_choice_for_exclusion": {
+    "TRansliterationLib-1.0.4.jar": "Keep for the retained Not Enough Animations 1.2.4; required dependency per CurseForge file 3296039/dependencies."
+  },
+  "source_original_and_prism_unchanged": true,
+  "ready_for_release": false,
+  "unverified": [
+    "real Freeroam inventory and SHA",
+    "other mod dependencies and CTM resource pack appearance",
+    "Lightfall server proxy handshake",
+    "Forge client start and join",
+    "login, voice, licenses, backup and FPS"
+  ],
+  "dependency_source": "https://www.curseforge.com/minecraft/mc-mods/not-enough-animations/files/3296039/dependencies"
+}

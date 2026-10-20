@@ -14,7 +14,9 @@ for name, content in (('site', site), ('README', readme)):
     assert 'Freeroam 1.0.0' in content, f'{name}: original pack not named'
     assert 'agent/CONTROL-MODURI-ORIGINALE.md' in content, f'{name}: missing audit source'
     assert 'Conținutul primului pack este în candidatul Lite' not in content, f'{name}: unsupported original parity'
-assert '28 de JAR-uri' in site and 'neverificate de pe PC' in site
-assert 'adăugăm numai optimizări compatibile' in site
+assert '28 de JAR-uri' in site and 'neverificate pe PC' in site
+assert 'patru nume sunt excluse numai din planul Lite, 24 rămân' in site
+assert 'TRansliterationLib rămâne necesară' in site
+assert 'Niciun profil nu a fost schimbat' in site
 assert 'Freeroam → LowSpec' in readme
 print('PASS: site generated from template; Freeroam original and unverified parity disclosed')
