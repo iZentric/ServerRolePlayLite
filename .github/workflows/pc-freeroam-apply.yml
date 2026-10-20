@@ -1,0 +1,33 @@
+name: Apply six approved Freeroam client mod exclusions once
+# In-place owner-approved Prism client update. No server/world/account access.
+# The commit-message gate prevents later pushes to this file from reapplying.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-freeroam-apply.yml]
+permissions:
+  contents: read
+jobs:
+  guards:
+    if: github.event.head_commit.message == 'Apply approved Freeroam mods once'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reversible apply and restoration proof on synthetic hosted fixture
+        shell: pwsh
+        run: ./scripts/fc_freeroam_apply_test.ps1
+  pc-client:
+    if: github.event.head_commit.message == 'Apply approved Freeroam mods once'
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - name: Backup and exclude exactly six owner-approved client JARs
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $profile = 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\Freeroam 1.0.0'
+          & ./scripts/fc_freeroam_apply.ps1 -Profile $profile
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
