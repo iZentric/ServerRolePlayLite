@@ -1,0 +1,35 @@
+name: Freeroam original versus LowSpec — read-only JAR inventory
+# Explicitly named profiles only. No Prism launch, server, world, account, raw log,
+# JAR upload, artifact upload, archive movement or modification on the PC.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-freeroam-inventory.yml
+      - scripts/fc_freeroam_inventory.py
+      - scripts/fc_freeroam_inventory_test.py
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthetic safety and inventory tests
+        run: PYTHONPATH=scripts PYTHONDONTWRITEBYTECODE=1 python3 scripts/fc_freeroam_inventory_test.py
+  compare:
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read only the named original and LowSpec mods directories
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $env:PYTHONDONTWRITEBYTECODE = '1'
+          python scripts/fc_freeroam_inventory.py `
+            --original 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\Freeroam 1.0.0' `
+            --lowspec 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\FunCity-Lite-LowSpec-LAB-1.16.5'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

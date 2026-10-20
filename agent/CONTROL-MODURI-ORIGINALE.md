@@ -1,6 +1,8 @@
-# Control read-only: inventarul inițial vs candidatul Lite (20.10.2026)
+# Control read-only: captura FunCity vs candidatul Lite (20.10.2026)
 
-**Răspuns scurt: nu au rămas toate JAR-urile, iar diferențele nu sunt numai optimizări.** În candidatul Lite testat au fost păstrate după nume cele **11 moduri de conținut RP și cele 4 biblioteci necesare** selectate din vechiul client FunCity. Nu există încă test de conectare Forge/client, funcții RP, autentificare sau voce. Aceasta este o comparație de **inventare și probe din 19–20.10**, nu o citire nouă a profilului Prism sau a serverului live și nici demonstrația egalității tuturor SHA-urilor client/server.
+**Corecție de sursă:** proprietarul a identificat drept **modpack original** profilul Prism `Freeroam 1.0.0`, nu captura FunCity din `diag/pc-client.txt` și nici arhiva CUANTIC. Diferențele de mai jos sunt valide numai față de *acele două repere anterioare*, **nu** reprezintă încă o comparație Freeroam → LowSpec. Inventarul Freeroam este de verificat doar read-only, din calea indicată, fără alte profiluri/lumi.
+
+**Față de captura FunCity verificată anterior: nu au rămas toate JAR-urile, iar diferențele nu sunt numai optimizări.** În candidatul Lite testat au fost păstrate după nume cele **11 moduri de conținut RP și cele 4 biblioteci necesare** selectate din vechiul client FunCity. Nu există încă test de conectare Forge/client, funcții RP, autentificare sau voce. Aceasta este o comparație de **inventare și probe din 19–20.10**, nu o citire nouă a profilului Prism sau a serverului live și nici demonstrația egalității tuturor SHA-urilor client/server.
 
 ## Clientul FunCity din captura inițială vs LowSpec
 
