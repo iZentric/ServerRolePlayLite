@@ -18,6 +18,17 @@
 
 **Nu sunt linii de performanță pentru acest test:** joburile rulează pe runner-e diferite și JDK-uri diferite; durata bootstrapului, RSS și tickul nu sunt comparabile. Liniile de pe site sunt exclusiv pentru vechiul benchmark controlat CatServer/CUANTIC 36/14, etichetat ca atare. Un boot reușit nu dovedește că un client Forge se poate conecta sau că modurile și pluginurile interacționează corect.
 
+## A/B nou, pe **aceeași mașină** și noul conținut 15/6
+
+[Run 39425133030](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39425133030) SUCCESS: FunCity b1.0827 (**A**) vs CatServer vechi SHA `96f82479…` (**B**), pe **același runner și Java 11**, aceeași lume **generată** și resetată din snapshot la fiecare probă, aceleași 15 JAR-uri de conținut/dependențe și șase pluginuri. Ordine A/B/B/A/A/B, trei probe valide/braț; 40 de zombie confirmați prin consola serverului în fiecare probă și 30 s fereastră de observație după pornire. Nu au fost jucători, vehicule sau client Forge conectat; nu s-a măsurat MSPT/TPS. Nu este lumea reală.
+
+| Măsură, fereastră 30 s | FunCity A1 / A2 / A3 | CatServer B1 / B2 / B3 | Mediană A / B |
+|---|---|---|---|
+| CPU JVM, secunde | 13,51 / 14,34 / 12,60 | 10,48 / 9,51 / 10,46 | **13,51 / 10,46** |
+| RSS JVM, MiB | 3057,84 / 2979,90 / 3068,69 | 2962,99 / 3051,09 / 2935,07 | **3057,84 / 2962,99** |
+
+**Lectură corectă:** CatServer a folosit mai puțin CPU în **acest** scenariu sintetic repetat. Valorile RSS se suprapun între probe; nu există încă un câștig RAM stabil demonstrat, iar CPU pe 30 s fără MSPT, login modat/vehicule și lumea RP nu stabilește care motor va fi mai bun pentru jucători. Nu promovăm automat CatServer și nu numim FunCity „perfect”; următorul experiment trebuie să includă clientul, funcțiile RP și MSPT cu sarcină reprezentativă. [Pagina cu liniile și axele pornind de la zero](../site/index.html#motoare).
+
 ## Motoarele și fork-urile pentru care există probe
 
 | Candidat | Pe ce pack și ce s-a testat efectiv | Rezultat și ce **nu** dovedește | Decizie pentru noul Lite |
