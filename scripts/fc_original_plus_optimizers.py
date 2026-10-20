@@ -16,13 +16,15 @@ DECLARED = ROOT/'agent'/'FREEROAM-LISTA-DECLARATA.json'
 def assess(original, candidate):
     policy = json.loads(POLICY.read_text(encoding='utf-8'))
     declaration = json.loads(DECLARED.read_text(encoding='utf-8'))
-    allowed = set(policy['performance_candidates_for_active_game'])
+    allowed = set(policy['approved_additions'])
     declared = set(declaration['jar_names'])
+    baseline = set(policy['performance_candidates_for_active_game'])
     if (policy['project_name'] != 'FunCity RP Lite' or
             policy['declared_original_names'] != 'agent/FREEROAM-LISTA-DECLARATA.json' or
-            policy['rule'] != 'copy_all_original_mods_byte_for_byte_then_add_only_compatible_client_optimizers' or
-            len(allowed) != 4 or len(declared) != 28 or
-            any('dynamicfps' in name.casefold().replace(' ', '') for name in allowed)):
+            policy['rule'] != 'preserve_all_original_mods_byte_for_byte_no_unapproved_removals_or_additions' or
+            allowed or len(baseline) != 3 or not baseline <= declared or
+            len(declared) != 28 or
+            any('dynamicfps' in name.casefold().replace(' ', '') for name in allowed | baseline)):
         raise ValueError('invalid overlay policy')
     # inventory() is fail-closed for symlinks, ambiguous folders and unsafe JAR names.
     a, b = inventory(original), inventory(candidate)

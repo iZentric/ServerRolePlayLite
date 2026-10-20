@@ -3,13 +3,12 @@
   "project_name": "FunCity RP Lite",
   "source_profile": "Freeroam 1.0.0",
   "minecraft": "1.16.5",
-  "rule": "copy_all_original_mods_byte_for_byte_then_add_only_compatible_client_optimizers",
-  "status": "USER_DECLARED_28_JARS_NOT_PC_VERIFIED",
+  "rule": "preserve_all_original_mods_byte_for_byte_no_unapproved_removals_or_additions",
+  "status": "OWNER_DECLARED_28_NO_REMOVALS_AUTHORIZED_NO_NEW_MOD_APPROVED",
   "performance_candidates_for_active_game": [
     "rubidium-mc1.16.5-0.2.13.jar",
     "ferritecore-2.1.1-forge.jar",
-    "modernfix-forge-5.18.0+mc1.16.5.jar",
-    "entityculling-forge-mc1.16.5-1.5.2.jar"
+    "modernfix-forge-5.18.0+mc1.16.5.jar"
   ],
   "conditional_non_performance": {
     "lazydfu-0.1.3.jar": "startup only; not FPS",
@@ -23,7 +22,7 @@
     "mipmap_levels": 0,
     "entity_shadows": false
   },
-  "on_conflict": "do_not_replace_or_remove_original; stop_and_test_compatibility_on_a_copy",
+  "on_conflict": "stop; no original JAR removed or replaced unless the owner explicitly names it",
   "distribution": "BLOCKED_UNTIL_SOURCE_LICENSE_SHA_CLIENT_SERVER_LOGIN_BACKUP_VERIFIED",
   "declared_original_names": "agent/FREEROAM-LISTA-DECLARATA.json",
   "already_in_declared_list": [
@@ -31,5 +30,9 @@
     "ferritecore-2.1.1-forge.jar",
     "modernfix-forge-5.18.0+mc1.16.5.jar"
   ],
-  "only_new_performance_candidate_by_name": "entityculling-forge-mc1.16.5-1.5.2.jar"
+  "approved_additions": [],
+  "deferred_not_installed": {
+    "entityculling-forge-mc1.16.5-1.5.2.jar": "Older 1.16.5 line is unsupported; async culling may need CPU headroom. FPS and RP visibility untested.",
+    "embeddium-0.3.18+mc1.16.5.jar": "Forge 1.16.5 renderer alternative, not an add-on to Rubidium; TexTrue Rubidium Options conflict reported. No replacement without owner approval and A/B on isolated copy."
+  }
 }

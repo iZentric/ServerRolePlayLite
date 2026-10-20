@@ -15,9 +15,10 @@ def main():
     assert all(name.endswith('.jar') for name in declared)
     assert 'voicechat-forge-1.16.5-2.3.23.jar' in declared
     assert 'InGameAccountSwitcher-Forge-1.16-8.0.1.jar' in declared
-    assert set(policy['already_in_declared_list']) <= set(declared)
-    assert set(policy['performance_candidates_for_active_game']) - set(declared) == {
-        policy['only_new_performance_candidate_by_name']}
+    assert set(policy['performance_candidates_for_active_game']) == set(policy['already_in_declared_list'])
+    assert not policy['approved_additions']
+    assert set(policy['deferred_not_installed']) == {
+        'entityculling-forge-mc1.16.5-1.5.2.jar', 'embeddium-0.3.18+mc1.16.5.jar'}
     with TemporaryDirectory() as tmp:
         root = Path(tmp)
         original = root/'Freeroam 1.0.0'
@@ -29,17 +30,18 @@ def main():
             # Synthetic bytes only; this does not verify any actual JAR SHA.
             (a/name).write_bytes(('fixture:'+name).encode())
             (b/name).write_bytes(('fixture:'+name).encode())
-        new = policy['only_new_performance_candidate_by_name']
-        (b/new).write_bytes(b'optimizer fixture')
         ok = assess(original, candidate)
-        assert ok['original_jar_count'] == 28 and ok['candidate_jar_count'] == 29
+        assert ok['original_jar_count'] == ok['candidate_jar_count'] == 28
         assert ok['declared_matches_disk_names'] and ok['original_preserved_by_sha']
-        assert ok['optimizers_added_by_name'] == [new]
+        assert ok['optimizers_added_by_name'] == []
         assert ok['eligible_for_compatibility_testing_only']
+        for new in policy['deferred_not_installed']:
+            (b/new).write_bytes(b'not approved for addition')
+            assert assess(original, candidate)['unexpected_additions'] == [new]
+            (b/new).unlink()
         voice = 'voicechat-forge-1.16.5-2.3.23.jar'
         (b/voice).unlink()
         assert assess(original, candidate)['missing_original'] == [voice]
-        (b/voice).write_bytes(('fixture:'+voice).encode())
         (b/voice).write_bytes(b'changed without permission')
         assert assess(original, candidate)['changed_original'] == [voice]
         (b/voice).write_bytes(('fixture:'+voice).encode())
@@ -58,7 +60,7 @@ def main():
         for name in declared:
             (a/name).unlink(missing_ok=True)
         assert not assess(original, candidate)['eligible_for_compatibility_testing_only']
-    print('PASS: 28 declared names, 3 existing optimizers, 1 optional new; only synthetic SHA preservation')
+    print('PASS: 28 declared names, 0 additions approved; reject new mods, removals or SHA changes (synthetic)')
 
 
 if __name__ == '__main__':
