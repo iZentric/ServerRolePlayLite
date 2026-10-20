@@ -131,5 +131,7 @@ jobs:
             $newProfile = Join-Path (Split-Path -Parent $profile) 'FunCity RP Lite'
             $newProfileExists = Test-Path -LiteralPath $newProfile
             $prismMetadataReady = (Test-Path -LiteralPath (Join-Path $profile 'instance.cfg') -PathType Leaf) -and (Test-Path -LiteralPath (Join-Path $profile 'mmc-pack.json') -PathType Leaf)
-            Write-Output ('::notice title=RP readiness::SERVER_CLIENT_EXACT_JAR_OVERLAP=' + $shared + '/22 SERVER_ONLINE_MODE=' + $onlineMode + ' SERVER_WHITELIST=' + $whitelist + ' SERVER_MAX_PLAYERS_DEFINED=' + $maxPlayersKnown + ' SERVER_LISTEN_BIND=' + $localBind + ' PRISM_METADATA_READY=' + $prismMetadataReady + ' NEW_PROFILE_EXISTS=' + $newProfileExists + '; PUBLIC_REACHABILITY=NOT_TESTED; READ_ONLY=true')
+            $customPatchesPresent = Test-Path -LiteralPath (Join-Path $profile 'patches')
+            $authPluginCandidate = @((Get-ChildItem -LiteralPath (Join-Path $server 'plugins') -File -Filter '*.jar' -ErrorAction Stop) | Where-Object { $_.Name -match '(?i)authme|nlogin|authplugin|loginsecurity|fastlogin' }).Count -gt 0
+            Write-Output ('::notice title=RP readiness::SERVER_CLIENT_EXACT_JAR_OVERLAP=' + $shared + '/22 SERVER_ONLINE_MODE=' + $onlineMode + ' SERVER_WHITELIST=' + $whitelist + ' SERVER_MAX_PLAYERS_DEFINED=' + $maxPlayersKnown + ' SERVER_LISTEN_BIND=' + $localBind + ' PRISM_METADATA_READY=' + $prismMetadataReady + ' CUSTOM_PATCHES_PRESENT=' + $customPatchesPresent + ' AUTH_PLUGIN_FILENAME_CANDIDATE=' + $authPluginCandidate + ' NEW_PROFILE_EXISTS=' + $newProfileExists + '; PUBLIC_REACHABILITY=NOT_TESTED; READ_ONLY=true')
           } catch { Write-Output '::notice title=RP readiness::SERVER_OR_PROFILE_AUDIT=UNAVAILABLE; READ_ONLY=true' }
