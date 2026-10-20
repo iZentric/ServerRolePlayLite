@@ -5,12 +5,15 @@ from pathlib import Path
 import tempfile
 from unittest.mock import patch
 
-from fc_engine_ab_full_content import check_env, proc_sample, verify_trial_stop
+from fc_engine_ab_full_content import boot_failure_category, check_env, proc_sample, verify_trial_stop
 
 
 class FakeProcess:
     def __init__(self, code):
         self.returncode = code
+
+    def poll(self):
+        return self.returncode
 
 
 class FakeJvm:
@@ -36,6 +39,12 @@ def main():
                 else:
                     raise AssertionError('unsafe AB root accepted')
         log = root/'private.log'
+        log.write_text('Server stopped normally\n')
+        assert boot_failure_category(FakeJvm('CLEAN', None), log) == 'timeout'
+        log.write_text('Server IP: 127.0.0.1\nException in server tick loop')
+        assert boot_failure_category(FakeJvm('CLEAN', 1), log) == 'early_exit_with_fatal_marker'
+        log.write_text('PRIVATE WORLD OR ACCOUNT DATA, DO NOT PUBLISH')
+        assert boot_failure_category(FakeJvm('CLEAN', -9), log) == 'early_exit_other'
         log.write_text('Server stopped normally\n')
         verify_trial_stop(FakeJvm('CLEAN', 0), log)
         for jvm, lines in ((FakeJvm('CLEAN', 1), 'Server stopped normally'),

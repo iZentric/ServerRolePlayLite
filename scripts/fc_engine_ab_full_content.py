@@ -52,6 +52,17 @@ def verify_trial_stop(jvm, log):
         raise ValueError('critical log marker during or after workload; no metrics published')
 
 
+def boot_failure_category(jvm, log):
+    """Publish only a bounded category; the private JVM log stays on the runner."""
+    if jvm.p.poll() is None:
+        return 'timeout'
+    text = Path(log).read_text(encoding='utf-8', errors='replace')
+    if any(marker in text for marker in ('Exception in server tick loop', 'Failed to start',
+                                       'Could not load plugin', 'Error occurred while enabling')):
+        return 'early_exit_with_fatal_marker'
+    return 'early_exit_other'
+
+
 def boot(stage, report, seed_world=False):
     log = stage/'bench-private.log'  # never uploaded or printed
     (stage/'eula.txt').write_text('eula=true\n')
@@ -61,7 +72,7 @@ def boot(stage, report, seed_world=False):
     try:
         j.start()
         if not j.wait_done(420):
-            raise ValueError('candidate did not reach Done')
+            raise ValueError('candidate did not reach Done; category=' + boot_failure_category(j, log))
         text = log.read_text(encoding='utf-8', errors='replace')
         names = [p['declared_name'] for p in report['plugins']]
         if any(not re.search(r'Enabling ' + re.escape(name) + r' (?:v|\d)', text) for name in names):
