@@ -31,6 +31,18 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $env:PYTHONDONTWRITEBYTECODE = '1'
-          python scripts/fc_freeroam_target_preflight.py `
-            --profile 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\Freeroam 1.0.0'
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $profile = 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\Freeroam 1.0.0'
+          if (-not (Test-Path -LiteralPath $profile -PathType Container)) {
+            Write-Output '::error title=Freeroam PC gate::PROFILE_NOT_VISIBLE_AT_APPROVED_LOCATION; INSTALLATION=false'
+            exit 2
+          }
+          if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
+            Write-Output '::error title=Freeroam PC gate::PYTHON_NOT_AVAILABLE; INSTALLATION=false'
+            exit 2
+          }
+          python scripts/fc_freeroam_target_preflight.py --profile $profile
+          if ($LASTEXITCODE -ne 0) {
+            Write-Output ('::error title=Freeroam PC gate::PREFLIGHT_EXIT=' + $LASTEXITCODE + '; INSTALLATION=false')
+            exit $LASTEXITCODE
+          }
+          Write-Output '::notice title=Freeroam PC gate::DECLARED_INVENTORY_MATCH; INSTALLATION=false'
