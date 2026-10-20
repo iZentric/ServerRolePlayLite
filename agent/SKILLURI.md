@@ -1,5 +1,7 @@
 # Skill-uri cerute — stare reală în acest branch (20.10.2026)
 
+**Actualizare după evaluarea celor [10 depozite AI](AI-REPOS-AUDIT.md):** au fost adăugate local `verification-before-completion`, `systematic-debugging`, `writing-for-agents`, `change-impact`, `frontend-design` și `ponytail-review`, în total **11 directoare skill**. Fișierele noi sunt copiate din commituri fixate și verificate prin SHA-256 în `skills-lock.json`; licențele sunt păstrate. Nu s-a instalat niciun agent, hook, MCP sau plugin Minecraft, nu au fost rulate scripturi și aceste directoare nu devin automat comenzi Arena. Tabelul de mai jos este starea celor 5 cereri mai vechi, înainte de actualizare.
+
 Au fost copiate **local în proiect**, sub `.agents/skills/`, numai pachetele cu sursă identificată și relevante muncii de cod. `skills-lock.json` consemnează repo-ul și hashul la instalare, iar [licențele MIT copiate](SKILLURI-LICENSES.txt) completează licențele incluse în celelalte pachete; niciun script din pachete nu a fost executat. Nu s-a instalat nimic global, nu s-au creat hook-uri, nu s-a adăugat un plugin Minecraft și **Arena Agent Mode nu garantează că înregistrează automat aceste slash-command-uri**. Instrucțiunile externe nu înlocuiesc cererile proprietarului sau regulile sesiunii.
 
 | Nume cerut | Stare | Sursa / motiv |
@@ -13,4 +15,4 @@ Au fost copiate **local în proiect**, sub `.agents/skills/`, numai pachetele cu
 | `/morning` | Neinstalat | Numele corespunde unor pachete diferite, inclusiv briefuri personale/financiare. Nu există un furnizor exact confirmat pentru acest proiect; nu accesăm corespondență/calendar doar pentru a „porni” un skill. |
 | `/import-memory` | Neinstalat | Nume ambiguu; nu importăm automat date private sau conversații. Corecția verificabilă „Freeroam 1.0.0 este originalul declarat” este deja păstrată în `AGENTS.md` și `agent/CONTROL-MODURI-ORIGINALE.md`. |
 
-**Rezultat practic:** este instalată documentația proiect-scoped pentru 5 skill-uri, **nu 8 comenzi funcționale în Arena**. Dacă se cere o rutină de dimineață sau importul unei memorii anume, sunt necesare sursa/ținta precisă și verificarea confidențialității, nu instalare în orb.
+**Rezultat practic:** sunt copiate local 11 skill-uri (5 vechi + 6 noi), **nu comenzi funcționale garantate în Arena**. Dacă se cere o rutină de dimineață sau importul unei memorii anume, sunt necesare sursa/ținta precisă și verificarea confidențialității, nu instalare în orb.
