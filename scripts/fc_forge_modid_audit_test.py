@@ -24,10 +24,12 @@ with tempfile.TemporaryDirectory(prefix='fc-forge-fixture-') as temp:
     jar(client, 'client.jar', 'visualonly')
     jar(server, 'shared.jar', 'rpcontent')
     jar(server, 'server.jar', 'requiredcandidate')
+    jar(server, 'Clumps-6.0.0.28.jar', 'clumps')
     result = subprocess.run(['pwsh', '-File', str(Path(__file__).with_name('fc_forge_modid_audit.ps1')),
                              '-ClientMods', str(client), '-ServerMods', str(server), '-SyntheticDiagnostics'],
                             capture_output=True, text=True)
-    if result.returncode or 'COMMON_IDS=1 SERVER_ONLY_IDS=1 CLIENT_ONLY_IDS=1' not in result.stdout:
+    if result.returncode or 'COMMON_IDS=1 SERVER_ONLY_IDS=2 CLIENT_ONLY_IDS=1' not in result.stdout or \
+       'CLUMPS_SERVER_JAR=Clumps-6.0.0.28.jar CLUMPS_CLIENT_PRESENT=False' not in result.stdout:
         for line in result.stdout.splitlines():
             if line.startswith('::'):
                 print(line.replace(str(temp), '<synthetic>'))

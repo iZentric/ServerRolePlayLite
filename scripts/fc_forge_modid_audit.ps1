@@ -15,6 +15,7 @@ function Inspect-Mods([string]$Folder) {
   if ($jars.Count -gt 80) { throw 'Too many files' }
   $ids = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
   $unknown = 0
+  $clumpsFile = $null
   foreach ($jar in $jars) {
     if ($jar.PSIsContainer -or ($jar.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or
         $jar.Length -gt 300000000 -or $jar.Extension -ine '.jar') { throw 'Unsafe JAR' }
@@ -28,12 +29,19 @@ function Inspect-Mods([string]$Folder) {
       $found = $false
       foreach ($section in $sections) {
         $id = [regex]::Match($section.Groups[1].Value, '(?m)^\s*modId\s*=\s*["'']([A-Za-z0-9_.-]{2,80})["'']')
-        if ($id.Success) { $null = $ids.Add($id.Groups[1].Value.ToLowerInvariant()); $found = $true }
+        if ($id.Success) {
+          $null = $ids.Add($id.Groups[1].Value.ToLowerInvariant())
+          $found = $true
+          if ($id.Groups[1].Value -ieq 'clumps') {
+            if ($clumpsFile -or $jar.Name -notmatch '^[A-Za-z0-9 _.()+-]{1,160}\.jar$') { throw 'Ambiguous Clumps file' }
+            $clumpsFile = $jar.Name
+          }
+        }
       }
       if (-not $found) { $unknown++ }
     } finally { $zip.Dispose() }
   }
-  return @{ ids=$ids; jars=$jars.Count; unknown=$unknown }
+  return @{ ids=$ids; jars=$jars.Count; unknown=$unknown; clumpsFile=$clumpsFile }
 }
 try {
   $client = Inspect-Mods $ClientMods
@@ -44,7 +52,7 @@ try {
   # Mod IDs are public identifiers; never mistake set difference for required dependencies.
   $serverText = if ($onlyServer.Count) { $onlyServer -join ',' } else { 'none' }
   $clientText = if ($onlyClient.Count) { $onlyClient -join ',' } else { 'none' }
-  Write-Output ('::notice title=Forge metadata mismatch candidates::CLIENT_JARS=' + $client.jars + ' SERVER_JARS=' + $server.jars + ' COMMON_IDS=' + $common.Count + ' SERVER_ONLY_IDS=' + $onlyServer.Count + ' CLIENT_ONLY_IDS=' + $onlyClient.Count + ' CLIENT_UNREADABLE_JARS=' + $client.unknown + ' SERVER_UNREADABLE_JARS=' + $server.unknown + '; READ_ONLY=true; NOT_A_HANDSHAKE_PROOF=true')
+  Write-Output ('::notice title=Forge metadata mismatch candidates::CLIENT_JARS=' + $client.jars + ' SERVER_JARS=' + $server.jars + ' COMMON_IDS=' + $common.Count + ' SERVER_ONLY_IDS=' + $onlyServer.Count + ' CLIENT_ONLY_IDS=' + $onlyClient.Count + ' CLIENT_UNREADABLE_JARS=' + $client.unknown + ' SERVER_UNREADABLE_JARS=' + $server.unknown + ' CLUMPS_SERVER_JAR=' + $server.clumpsFile + ' CLUMPS_CLIENT_PRESENT=' + [bool]$client.clumpsFile + '; READ_ONLY=true; NOT_A_HANDSHAKE_PROOF=true')
   Write-Output ('::notice title=Forge server-only mod IDs::' + $serverText)
   Write-Output ('::notice title=Forge client-only mod IDs::' + $clientText)
   exit 0
