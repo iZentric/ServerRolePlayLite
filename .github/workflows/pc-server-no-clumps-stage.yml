@@ -1,0 +1,33 @@
+name: Stage Clumps-free server mods without changing the running server
+# One-time owner-selected compatibility candidate only. World/config/plugins not copied;
+# server process is never stopped/restarted and no second server is launched.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-server-no-clumps-stage.yml]
+permissions:
+  contents: read
+jobs:
+  guards:
+    if: startsWith(github.event.head_commit.message, 'Stage Clumps-free server mods locally once')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Source untouched, stage 33, private excluded JAR and no world copied
+        shell: pwsh
+        run: ./scripts/fc_server_no_clumps_stage_test.ps1
+  pc-stage:
+    if: startsWith(github.event.head_commit.message, 'Stage Clumps-free server mods locally once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy JAR metadata candidate only; no boot or live mutation
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $server = 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+          & ./scripts/fc_server_no_clumps_stage.ps1 -Server $server
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
