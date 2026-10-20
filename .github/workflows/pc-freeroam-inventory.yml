@@ -15,6 +15,8 @@ on:
       - scripts/fc_local_status_ping_test.py
       - scripts/fc_forge_modid_audit.ps1
       - scripts/fc_forge_modid_audit_test.py
+      - scripts/fc_lite_join_log_diagnostic.ps1
+      - scripts/fc_lite_join_log_diagnostic_test.py
 permissions:
   contents: read
 jobs:
@@ -56,6 +58,8 @@ jobs:
         run: python3 scripts/fc_local_status_ping_test.py
       - name: Forge JAR metadata comparison safety (hosted fixture only)
         run: python3 scripts/fc_forge_modid_audit_test.py
+      - name: Recent client join error classification (hosted fixture only)
+        run: python3 scripts/fc_lite_join_log_diagnostic_test.py
   read-only-pc:
     needs: guards
     runs-on: [self-hosted, Windows]
@@ -175,3 +179,6 @@ jobs:
               $global:LASTEXITCODE = 0
             }
           }
+          # User-supplied error image warrants local diagnosis, not exposing any log text.
+          & ./scripts/fc_lite_join_log_diagnostic.ps1 -Profile (Join-Path (Split-Path -Parent $profile) 'FunCity RP Lite')
+          if ($LASTEXITCODE -ne 0) { $global:LASTEXITCODE = 0 }
