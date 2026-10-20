@@ -63,11 +63,12 @@ print('updater all modes fail-closed PASS (static only; no Windows execution)')
 page=Path('site/index.html').read_text(encoding='utf-8')
 from runpy import run_path
 assert page == run_path('site/build_site.py')['HTML']
-assert 'Client Lite în reproiectare plugin-first' in page and 'TPS susținut' not in page
+assert 'Freeroam 1.0.0' in page and 'TPS susținut' not in page
 site=yaml.load(Path('.github/workflows/site.yml').read_text(), Loader=yaml.BaseLoader)
 assert list(site['on']) == ['workflow_dispatch']
 print('public site static claims PASS; publication requires manual dispatch')
 PY
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/fc_site_claims_test.py
 
 export PYTHONDONTWRITEBYTECODE=1 PYTHONPATH="scripts${PYTHONPATH:+:$PYTHONPATH}"
 python3 - <<'PY'

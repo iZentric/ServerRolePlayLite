@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+"""Guard public copy against claiming unverified Freeroam → LowSpec parity.
+
+This checks wording in repository files; it is not a Minecraft or PC inventory test.
+"""
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+site = (ROOT / 'site' / 'template.html').read_text(encoding='utf-8')
+generated = (ROOT / 'site' / 'index.html').read_text(encoding='utf-8')
+readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+assert site == generated, 'regenerate site/index.html from site/template.html'
+for name, content in (('site', site), ('README', readme)):
+    assert 'Freeroam 1.0.0' in content, f'{name}: original pack not named'
+    assert 'agent/CONTROL-MODURI-ORIGINALE.md' in content, f'{name}: missing audit source'
+    assert 'Conținutul primului pack este în candidatul Lite' not in content, f'{name}: unsupported original parity'
+assert 'inventarul original nu a fost încă comparat' in site
+assert 'Freeroam → LowSpec' in readme
+print('PASS: site generated from template; Freeroam original and unverified parity disclosed')

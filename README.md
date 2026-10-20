@@ -15,19 +15,21 @@ FunCity este un proiect de **oraș roleplay construit împreună cu jucătorii**
 
 | Ce urmărim | De ce contează | Ce este verificat acum |
 |---|---|---|
-| **Conținut RP păstrat** | Nu promitem un „Lite” golit de obiecte și mecanici. | Cele șase JAR-uri RP lipsă au fost restaurate în același profil LowSpec; serverul cu conținut a pornit pe o copie izolată. Gameplay-ul nu este încă testat. |
+| **Conținut RP: obiectivul** | Nu promitem un „Lite” golit de obiecte și mecanici. | Șase JAR-uri RP/dependențe identificate din vechiul reper FunCity au fost restaurate în LowSpec; copia de server a pornit. Inventarul originalului Freeroam 1.0.0 și gameplay-ul nu sunt încă verificate. |
 | **O cale de intrare pentru PC-uri mai slabe** | Profilul LowSpec este configurat cu 5 chunkuri și maximum 2 GiB heap. | Fișierele sunt verificate pe disc, dar nu există benchmark FPS sau garanție pentru orice laptop. |
 | **Optimizări server alese cu rost** | Nu adăugăm zeci de JAR-uri pentru îmbunătățiri presupuse. | RoadRunner, FerriteCore și ModernFix au trecut doar bootul pe o copie; efectul MSPT/RAM rămâne de măsurat înainte de includerea definitivă. |
 | **Oraș deschis, moderare responsabilă** | CoreProtect este pentru jurnal și rollback administrativ, nu pentru protecție preventivă de teren. | Pluginul s-a activat în bootul izolat; incidentele reale și restaurarea nu sunt încă probate. |
 
 > **Important pentru jucători:** acesta este un proiect public **în dezvoltare**, nu o invitație de conectare. Nu descărca vechile release-uri ale repo-ului ca și cum ar fi noul FunCity RP Lite. Nu există încă un pachet Lite sau o adresă de server validate pentru intrarea în joc.
 
+**Originalul declarat este Freeroam 1.0.0.** Comparația read-only Freeroam → LowSpec [nu a produs inventar pe PC](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39439372232): jobul a fost anulat înainte de orice pas raportat pe runnerul Windows. [Ce știm și ce nu știm](agent/CONTROL-MODURI-ORIGINALE.md). Nu echivalăm Freeroam cu captura FunCity sau arhiva CUANTIC.
+
 ## Stadiul real
 
 | Componentă | Situație verificată | Mai lipsește |
 |---|---|---|
 | **Motor** | FunCity b1.0827 / Minecraft 1.16.5 a pornit în laborator cu Forge și pluginuri, folosind Guava 21 prin override JVM temporar. | Remediu de distribuție verificat pentru motor; nu este un build final. |
-| **Client LowSpec** | [21 JAR-uri](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39335419784) în profilul Prism existent, inclusiv cele șase de conținut/dependențe restaurate. Sunt vizibile numai LowSpec, EGK, V RP și Fabulously Optimized; alte patru profiluri sunt arhivate reversibil. | Lansare client, conectare Forge, verificarea funcțiilor RP și măsurători FPS/RAM. |
+| **Client LowSpec** | [21 JAR-uri la ultima probă PC](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39335419784), inclusiv șase restaurate față de vechiul reper FunCity. Sunt vizibile numai LowSpec, EGK, V RP și Fabulously Optimized; alte patru profiluri sunt arhivate reversibil. | Comparația Freeroam → LowSpec, lansare client, conectare Forge, RP și FPS/RAM. |
 | **Server de bază** | [15 JAR-uri: 11 conținut + 4 dependențe](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39333730944), șase pluginuri nominal active; pornit/oprit pe PC într-un folder temporar, exclusiv loopback. | Instalare numai după validare; serverul existent și lumea sa nu au fost modificate. |
 | **Optimizări server** | [Trial PC cu 18 JAR-uri](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39336314432) (cele 15 de bază + RoadRunner, FerriteCore, ModernFix), pornit/oprit curat. | A/B repetat pe copie, cu aceeași lume/sarcină și fără regresii; fără cifre MSPT sau capacitate inventate. |
 | **Lansare publică** | Codul și documentația sunt vizibile în repo și în [PR-ul de lucru](https://github.com/iZentric/ServerRolePlayLite/pull/2). | Drepturi/licențe și SHA pentru toate binarele, client+server testate împreună, login prin plugin, voce, backup/restaurare, test RP și aprobare explicită. |
@@ -44,7 +46,7 @@ scripts/fc_pc_lowspec_* modificări controlate ale profilului LowSpec existent
 .github/workflows/      verificări, niciuna nu face release Lite sau pornește live automat
 ```
 
-[Politica actuală pentru conținut și pluginuri](agent/PLUGIN-FIRST.md) are prioritate față de listele istorice 24/29 din documentele vechi. Un JAR găsit într-un pack vechi **nu dovedește** cine l-a creat sau dacă îl putem redistribui. Proiectul păstrează tot conținutul RP în candidatul privat, dar nu publică acele binare fără verificarea drepturilor.
+[Politica actuală pentru conținut și pluginuri](agent/PLUGIN-FIRST.md) are prioritate față de listele istorice 24/29 din documentele vechi. Un JAR găsit într-un pack vechi **nu dovedește** cine l-a creat sau dacă îl putem redistribui. Candidatul privat conține conținut RP din vechiul reper FunCity, dar păstrarea integrală a originalului Freeroam 1.0.0 nu este demonstrată; nu publicăm acele binare fără verificarea drepturilor.
 
 ## Cum poți ajuta
 
@@ -52,7 +54,7 @@ scripts/fc_pc_lowspec_* modificări controlate ale profilului LowSpec existent
 - Dacă deții un JAR din pack, ajută la confirmarea **sursei, licenței și SHA-ului**; prezența lui pe un PC nu este o autorizație de release.
 - Pentru contribuții la cod sau documentație, propune o schimbare cu test și explică ce verifică. Nu interpreta succesul unui CI ca pe o probă de FPS, autentificare sau număr de jucători.
 
-**Planul de lansare:** întâi auditul fiecărui binar și al licențelor → import client + conectare la server pe copie → autentificare, voce și scenarii RP → backup și restaurare probate → test A/B pentru optimizările server → abia apoi release și lansare cu acord. [Planul public de lansare](agent/PUBLICARE.md) explică exact ce este public acum și ce blochează pachetul/serverul. [Ghid pentru contribuții](CONTRIBUTING.md).
+**Planul de lansare:** întâi comparația Freeroam → LowSpec și auditul fiecărui binar/licențe → import client + conectare la server pe copie → autentificare, voce și scenarii RP → backup și restaurare probate → test A/B pentru optimizările server → abia apoi release și lansare cu acord. [Planul public de lansare](agent/PUBLICARE.md) explică exact ce este public acum și ce blochează pachetul/serverul. [Ghid pentru contribuții](CONTRIBUTING.md).
 
 ## Drepturi și siguranță
 
