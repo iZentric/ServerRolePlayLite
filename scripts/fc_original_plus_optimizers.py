@@ -21,7 +21,7 @@ def assess(original, candidate):
     selection = json.loads(SELECTION.read_text(encoding='utf-8'))
     allowed = set(policy['approved_additions'])
     excluded = set(policy['approved_exclusions_from_future_lite'])
-    blocked = set(policy['blocked_exclusion_awaiting_owner'])
+    pair = {'notenoughanimations-1.2.4.jar', 'TRansliterationLib-1.0.4.jar'}
     declared = set(declaration['jar_names'])
     baseline = set(policy['performance_candidates_for_active_game'])
     if (policy['project_name'] != 'FunCity RP Lite' or
@@ -29,13 +29,14 @@ def assess(original, candidate):
             policy['rule'] != 'retain_original_bytes_except_exact_owner_approved_target_exclusions' or
             allowed or len(baseline) != 3 or not baseline <= declared or
             len(declared) != 28 or len(declaration['jar_names']) != 28 or
-            len(excluded) != 4 or len(policy['approved_exclusions_from_future_lite']) != 4 or
-            blocked != {'TRansliterationLib-1.0.4.jar'} or
-            not excluded <= declared or excluded & blocked or
+            len(excluded) != 6 or len(policy['approved_exclusions_from_future_lite']) != 6 or
+            set(policy['dependency_pair_excluded_by_owner']) != pair or
+            not excluded <= declared or not pair <= excluded or
             set(selection['removed_from_future_target']) != excluded or
             set(selection['retained_in_future_target']) != declared - excluded or
-            len(selection['retained_in_future_target']) != 24 or
-            not {'notenoughanimations-1.2.4.jar', *blocked} <= set(selection['retained_in_future_target']) or
+            len(selection['retained_in_future_target']) != 22 or
+            set(selection['excluded_dependency_pair_by_owner']) != pair or
+            'voicechat-forge-1.16.5-2.3.23.jar' not in selection['retained_in_future_target'] or
             any('dynamicfps' in name.casefold().replace(' ', '') for name in allowed | baseline)):
         raise ValueError('invalid overlay policy/selection')
     # inventory() rejects symlinks, ambiguous folders and unsafe JAR names.
@@ -63,7 +64,7 @@ def assess(original, candidate):
         'unexpected_additions': unexpected,
         'optimizers_added_by_name': sorted(added & allowed),
         'retained_original_sha_unchanged': retained_unchanged,
-        'exactly_four_approved_exclusions': exactly_excluded,
+        'exactly_six_approved_exclusions': exactly_excluded,
         'eligible_for_compatibility_testing_only': matched and retained_unchanged and exactly_excluded and not unexpected,
         'ready_for_release': False,
     }

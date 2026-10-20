@@ -15,8 +15,8 @@ for name, content in (('site', site), ('README', readme)):
     assert 'agent/CONTROL-MODURI-ORIGINALE.md' in content, f'{name}: missing audit source'
     assert 'Conținutul primului pack este în candidatul Lite' not in content, f'{name}: unsupported original parity'
 assert '28 de JAR-uri' in site and 'neverificate pe PC' in site
-assert 'patru nume sunt excluse numai din planul Lite, 24 rămân' in site
-assert 'TRansliterationLib rămâne necesară' in site
+assert 'șase nume sunt excluse numai din planul Lite, 22 rămân' in site
+assert 'biblioteca sa TRansliterationLib sunt scoase împreună' in site
 assert 'Niciun profil nu a fost schimbat' in site
 assert 'Freeroam → LowSpec' in readme
 print('PASS: site generated from template; Freeroam original and unverified parity disclosed')

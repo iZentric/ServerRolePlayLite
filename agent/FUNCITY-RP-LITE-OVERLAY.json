@@ -4,7 +4,7 @@
   "source_profile": "Freeroam 1.0.0",
   "minecraft": "1.16.5",
   "rule": "retain_original_bytes_except_exact_owner_approved_target_exclusions",
-  "status": "FOUR_EXCLUSIONS_IN_FUTURE_TARGET_ONLY_DEPENDENCY_BLOCKER_ONE_NO_PROFILE_EDIT",
+  "status": "SIX_EXCLUSIONS_IN_FUTURE_TARGET_ONLY_NO_PROFILE_EDIT_NOT_RELEASE_READY",
   "performance_candidates_for_active_game": [
     "rubidium-mc1.16.5-0.2.13.jar",
     "ferritecore-2.1.1-forge.jar",
@@ -40,11 +40,14 @@
     "CTM-MC1.16.1-1.1.2.6.jar",
     "DynamicSurroundings-1.16.5-4.0.5.0.jar",
     "InGameAccountSwitcher-Forge-1.16-8.0.1.jar",
-    "lightfallclient-1.0.0.jar"
+    "TRansliterationLib-1.0.4.jar",
+    "lightfallclient-1.0.0.jar",
+    "notenoughanimations-1.2.4.jar"
   ],
-  "blocked_exclusion_awaiting_owner": {
-    "TRansliterationLib-1.0.4.jar": "Required by kept notenoughanimations-1.2.4.jar; do not remove from target unless owner resolves conflict."
-  },
   "dependencies_and_server_handshake": "NOT_VERIFIED; especially CTM textures and Lightfall proxy requirement; no release claim",
-  "selection": "agent/FUNCITY-RP-LITE-SELECTIE.json"
+  "selection": "agent/FUNCITY-RP-LITE-SELECTIE.json",
+  "dependency_pair_excluded_by_owner": [
+    "notenoughanimations-1.2.4.jar",
+    "TRansliterationLib-1.0.4.jar"
+  ]
 }

@@ -11,6 +11,8 @@ EXPECTED_EXCLUSIONS = {
     'DynamicSurroundings-1.16.5-4.0.5.0.jar',
     'InGameAccountSwitcher-Forge-1.16-8.0.1.jar',
     'lightfallclient-1.0.0.jar',
+    'TRansliterationLib-1.0.4.jar',
+    'notenoughanimations-1.2.4.jar',
 }
 LIBRARY = 'TRansliterationLib-1.0.4.jar'
 ANIMATIONS = 'notenoughanimations-1.2.4.jar'
@@ -27,9 +29,11 @@ def main():
     assert not policy['approved_additions']
     assert set(policy['approved_exclusions_from_future_lite']) == EXPECTED_EXCLUSIONS
     assert set(selection['removed_from_future_target']) == EXPECTED_EXCLUSIONS
-    assert len(selection['retained_in_future_target']) == 24
+    assert len(selection['retained_in_future_target']) == 22
     assert set(selection['retained_in_future_target']) == set(declared) - EXPECTED_EXCLUSIONS
-    assert {LIBRARY, ANIMATIONS, 'voicechat-forge-1.16.5-2.3.23.jar'} <= set(selection['retained_in_future_target'])
+    assert {LIBRARY, ANIMATIONS}.isdisjoint(selection['retained_in_future_target'])
+    assert {LIBRARY, ANIMATIONS} <= set(selection['removed_from_future_target'])
+    assert 'voicechat-forge-1.16.5-2.3.23.jar' in selection['retained_in_future_target']
     assert not selection['ready_for_release']
     assert set(policy['deferred_not_installed']) == {
         'entityculling-forge-mc1.16.5-1.5.2.jar', 'embeddium-0.3.18+mc1.16.5.jar'}
@@ -46,9 +50,9 @@ def main():
             if name not in EXPECTED_EXCLUSIONS:
                 (b/name).write_bytes(('fixture:'+name).encode())
         ok = assess(original, candidate)
-        assert ok['original_jar_count'] == 28 and ok['candidate_jar_count'] == 24
+        assert ok['original_jar_count'] == 28 and ok['candidate_jar_count'] == 22
         assert ok['declared_matches_disk_names'] and ok['retained_original_sha_unchanged']
-        assert ok['exactly_four_approved_exclusions'] and ok['eligible_for_compatibility_testing_only']
+        assert ok['exactly_six_approved_exclusions'] and ok['eligible_for_compatibility_testing_only']
         assert not ok['ready_for_release'] and not ok['unapproved_missing_original']
         assert ok['missing_original'] == sorted(EXPECTED_EXCLUSIONS)
         for new in policy['deferred_not_installed']:
@@ -56,7 +60,7 @@ def main():
             assert assess(original, candidate)['unexpected_additions'] == [new]
             assert not assess(original, candidate)['eligible_for_compatibility_testing_only']
             (b/new).unlink()
-        for kept in (LIBRARY, ANIMATIONS, 'voicechat-forge-1.16.5-2.3.23.jar'):
+        for kept in ('voicechat-forge-1.16.5-2.3.23.jar', 'mapperbase-1.16.5-2.4.0.0.jar'):
             (b/kept).unlink()
             result = assess(original, candidate)
             assert result['unapproved_missing_original'] == [kept]
@@ -86,7 +90,7 @@ def main():
         for name in declared:
             (a/name).unlink(missing_ok=True)
         assert not assess(original, candidate)['eligible_for_compatibility_testing_only']
-    print('PASS: 28 declared / 24 target, four authorized exclusions only; library and animation retained (synthetic)')
+    print('PASS: 28 declared / 22 target, six authorized exclusions incl. dependency pair (synthetic)')
 
 
 if __name__ == '__main__':
