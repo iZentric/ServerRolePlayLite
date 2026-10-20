@@ -71,6 +71,7 @@ PY
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/fc_site_claims_test.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/fc_lowspec_target_test.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/fc_original_plus_optimizers_test.py
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/fc_freeroam_answers_test.py
 
 export PYTHONDONTWRITEBYTECODE=1 PYTHONPATH="scripts${PYTHONPATH:+:$PYTHONPATH}"
 python3 - <<'PY'

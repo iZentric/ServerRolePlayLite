@@ -1,5 +1,7 @@
 # FunCity — stare verificabilă (20.10.2026)
 
+- **Răspunsuri individuale pentru toate cele 28 JAR-uri:** [18 păstrate, 5 pot fi evaluate pentru eliminare după probe, 5 performanță delegate](FREEROAM-RASPUNSURI-28.json). Entity Culling/Embeddium discutate mai târziu. Nicio eliminare/adiție executată; nu deducem „inutil” din nume. Control static `scripts/fc_freeroam_answers_test.py`.
+
 - **Alegerea conservatoare de performanță client:** cele 28 nume declarate rămân; proprietarul a spus că numai el indică JAR-urile ce pot fi scoase. [Sursele și alternativele](RESEARCH-PERFORMANTA-CLIENT.md): Rubidium, FerriteCore și ModernFix sunt deja declarate; Embeddium 1.16.5 este alternativă, nu adaos (TexTrue Rubidium Options din original are incompatibilitate raportată); Entity Culling vechi nu intră automat pe CPU slab. **0 adiții aprobate, 0 eliminări**, niciun FPS/client PC nou testat. Testul de siguranță sintetic respinge chiar și adițiile Entity Culling/Embeddium.
 
 - **Ținta de produs corectată:** **FunCity RP Lite = fiecare JAR al originalului Freeroam 1.0.0 păstrat byte-for-byte, plus doar optimizările client compatibile care se justifică.** Vechea listă LowSpec de 21 JAR-uri rămâne reper FunCity istoric, nu final. [Politică și poartă read-only](MODPACK-TINTA-LOWSPEC.md), teste sintetice PASS; proprietarul a furnizat ulterior [28 de nume JAR declarate](FREEROAM-LISTA-DECLARATA.json) — 3 optimizări propuse deja pe listă, Entity Culling numai candidat nou. Originalul Freeroam încă necitit de pe PC; niciun ZIP/client/server live schimbat.
