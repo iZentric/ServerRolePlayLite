@@ -73,10 +73,25 @@ jobs:
             $rootJars = @(Get-ChildItem -LiteralPath $server -File -Filter '*.jar' -ErrorAction SilentlyContinue).Count
           }
           $knownServerProcess = $false
+          $knownServerListening = $false
           try {
             $candidate = @(Get-CimInstance Win32_Process -Filter "Name = 'java.exe' OR Name = 'javaw.exe'" -ErrorAction Stop)
-            $knownServerProcess = @($candidate | Where-Object {
+            $serverProcesses = @($candidate | Where-Object {
               $_.CommandLine -and $_.CommandLine.IndexOf($server, [StringComparison]::OrdinalIgnoreCase) -ge 0
-            }).Count -gt 0
+            })
+            $knownServerProcess = $serverProcesses.Count -gt 0
+            if ($knownServerProcess -and $candidateServerVisible) {
+              $port = 25565
+              $properties = Join-Path $server 'server.properties'
+              if (Test-Path -LiteralPath $properties -PathType Leaf) {
+                $entry = @(Get-Content -LiteralPath $properties | Where-Object { $_ -match '^server-port=\d+$' } | Select-Object -First 1)
+                if ($entry.Count -eq 1) { $port = [int]($entry[0] -replace '^server-port=', '') }
+              }
+              if ($port -gt 0 -and $port -le 65535) {
+                $listeners = @(Get-NetTCPConnection -State Listen -LocalPort $port -ErrorAction SilentlyContinue)
+                $pids = @($serverProcesses | ForEach-Object { $_.ProcessId })
+                $knownServerListening = @($listeners | Where-Object { $pids -contains $_.OwningProcess }).Count -gt 0
+              }
+            }
           } catch { Write-Output '::notice title=PC readiness::SERVER_PROCESS_CLASSIFICATION=UNAVAILABLE; READ_ONLY=true' }
-          Write-Output ('::notice title=PC readiness::PRISM_ACTIVE=' + $prismActive + ' JAVA_OR_MINECRAFT_ACTIVE=' + $javaActive + ' KNOWN_FUNCITY_SERVER_FOLDER_VISIBLE=' + $candidateServerVisible + ' SERVER_MOD_JARS=' + $serverMods + ' SERVER_PLUGIN_JARS=' + $serverPlugins + ' SERVER_ROOT_JARS=' + $rootJars + ' KNOWN_SERVER_JAVA=' + $knownServerProcess + '; READ_ONLY=true')
+          Write-Output ('::notice title=PC readiness::PRISM_ACTIVE=' + $prismActive + ' JAVA_OR_MINECRAFT_ACTIVE=' + $javaActive + ' KNOWN_FUNCITY_SERVER_FOLDER_VISIBLE=' + $candidateServerVisible + ' SERVER_MOD_JARS=' + $serverMods + ' SERVER_PLUGIN_JARS=' + $serverPlugins + ' SERVER_ROOT_JARS=' + $rootJars + ' KNOWN_SERVER_JAVA=' + $knownServerProcess + ' KNOWN_SERVER_LISTENING=' + $knownServerListening + '; READ_ONLY=true')
