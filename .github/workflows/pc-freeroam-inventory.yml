@@ -60,3 +60,7 @@ jobs:
           }
           & ./scripts/fc_freeroam_target_preflight.ps1 -Profile $profile
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $prismActive = @(Get-Process -Name 'prismlauncher' -ErrorAction SilentlyContinue).Count -gt 0
+          $javaActive = @(Get-Process -Name 'java','javaw','minecraft' -ErrorAction SilentlyContinue).Count -gt 0
+          $candidateServerVisible = Test-Path -LiteralPath 'C:\Users\Administrator\Desktop\FunCityLocal\server' -PathType Container
+          Write-Output ('::notice title=PC readiness::PRISM_ACTIVE=' + $prismActive + ' JAVA_OR_MINECRAFT_ACTIVE=' + $javaActive + ' KNOWN_FUNCITY_SERVER_FOLDER_VISIBLE=' + $candidateServerVisible + '; READ_ONLY=true')
