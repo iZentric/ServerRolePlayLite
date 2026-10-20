@@ -24,13 +24,16 @@ with tempfile.TemporaryDirectory(prefix='fc-forge-fixture-') as temp:
     jar(client, 'client.jar', 'visualonly')
     jar(server, 'shared.jar', 'rpcontent')
     jar(server, 'server.jar', 'requiredcandidate')
-    result = subprocess.run(['pwsh', '-File', str(Path(__file__).with_suffix('.ps1')),
+    result = subprocess.run(['pwsh', '-File', str(Path(__file__).with_name('fc_forge_modid_audit.ps1')),
                              '-ClientMods', str(client), '-ServerMods', str(server), '-SyntheticDiagnostics'],
                             capture_output=True, text=True)
     if result.returncode or 'COMMON_IDS=1 SERVER_ONLY_IDS=1 CLIENT_ONLY_IDS=1' not in result.stdout:
         for line in result.stdout.splitlines():
-            if line.startswith('::') and str(temp) not in line:
-                print(line)
+            if line.startswith('::'):
+                print(line.replace(str(temp), '<synthetic>'))
+        if result.stderr:
+            diagnostic = result.stderr.replace(str(temp), '<synthetic>').replace('\n', ' ')[:800]
+            print('::error title=Forge synthetic stderr::' + diagnostic)
         raise AssertionError('audit fixture failed or wrong counts')
     assert 'requiredcandidate' in result.stdout and 'visualonly' in result.stdout
     assert '::forge' not in result.stdout.lower() and ',forge' not in result.stdout.lower(), 'dependency mistakenly parsed as a mod ID'
