@@ -10,7 +10,8 @@ try { Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction Stop 
 function Inspect-Mods([string]$Folder) {
   $dir = [IO.DirectoryInfo]::new($Folder)
   if (-not $dir.Exists -or ($dir.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw 'Unsafe folder' }
-  $jars = @(Get-ChildItem -LiteralPath $Folder -Force -ErrorAction Stop)
+  # Non-JAR notes/subfolders in server/mods are unrelated to the Forge mod list.
+  $jars = @(Get-ChildItem -LiteralPath $Folder -File -Filter '*.jar' -Force -ErrorAction Stop)
   if ($jars.Count -gt 80) { throw 'Too many files' }
   $ids = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
   $unknown = 0
