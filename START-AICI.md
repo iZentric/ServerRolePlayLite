@@ -6,6 +6,10 @@
 
 Un oraș Minecraft 1.16.5 construit de comunitate. Păstrăm conținutul RP din primul pack (mobilier, vehicule, arme, hrană, emote). Joburile, economia, rolurile și autentificarea sunt gândite prin pluginuri. LowSpec este profilul pentru PC-uri mai slabe, **nu** o garanție de FPS.
 
+## Ce motor folosim?
+
+**FunCity b1.0827 rămâne motorul pentru copia de test**, fiindcă a pornit cu modurile RP și pluginurile noastre. Este însă **derivat Mohist/Tenet**, nu un motor 100% independent sau fără probleme: fără corecția temporară Guava 21 a eșuat la boot. [Tabelul motoarelor: ce am testat, ce a eșuat și ce nu am testat](agent/MOTOR-TABEL-VERIFICAT.md). Nu schimbăm motorul existent până nu avem client conectat, login, backup și un build corectat.
+
 ## Ce am făcut deja
 
 1. Am completat **același profil LowSpec** din Prism: 21 JAR-uri client; cele șase piese RP lipsă sunt puse la loc. Au rămas patru profiluri vizibile, iar celelalte sunt arhivate, nu șterse. [Testul de inventar](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39335419784).
