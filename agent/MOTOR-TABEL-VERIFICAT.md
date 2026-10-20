@@ -20,16 +20,25 @@
 
 ## A/B Lite, pe **aceeași mașină** și noul conținut 15/6
 
-**Runda 1, arhivă:** [run 39425133030](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39425133030) SUCCESS cu verificarea de oprire din acea versiune (fără cod de ieșire și fără căutarea erorilor critice de după sarcină): FunCity b1.0827 (**A**) vs CatServer vechi SHA `96f82479…` (**B**), pe **același runner și Java 11**, aceeași lume **generată** și resetată din snapshot la fiecare probă, aceleași 15 JAR-uri de conținut/dependențe și șase pluginuri. Ordine A/B/B/A/A/B, trei probe valide/braț; 40 de zombie confirmați prin consola serverului în fiecare probă și 30 s fereastră de observație după pornire. Nu au fost jucători, vehicule sau client Forge conectat; nu s-a măsurat MSPT/TPS. Nu este lumea reală.
+**Runda 3, cea curentă și verificată mai strict:** [run 39434450455](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39434450455) SUCCESS, același protocol A/B/B/A/A/B, pe runner unic / Java 11 / lume generată resetată / 15 JAR-uri + 6 pluginuri / 40 zombie confirmați. De această dată toate cele șase probe au trecut și poarta de **cod de ieșire JVM = 0 și lipsa marcatorilor critici până după oprire**. Măsurile de mai jos sunt publicate abia după validarea întregii serii.
 
-**Rerulare cu verificare mai strictă:** [run 39431729723](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39431729723) FAILED: primele cinci probe (A/B/B/A/A) au trecut, ultimul B **nu a ajuns la `Done`**; nu au fost publicate metrici și nu a fost confirmat un nou A/B complet. Cauza exactă nu este încă identificată. Valorile de mai jos rămân **istoricul rundei 1, nu un rezultat reconfirmat**. Nu pretindem că rerularea confirmă un avantaj sau stabilitatea CatServer.
+| Măsură, fereastră 30 s | FunCity A1 / A2 / A3 | CatServer B1 / B2 / B3 | Mediană A / B |
+|---|---|---|---|
+| CPU JVM, secunde | 10,51 / 10,82 / 10,54 | 7,64 / 8,03 / 7,85 | **10,54 / 7,85** |
+| RSS JVM, MiB | 3317,99 / 3184,38 / 3254,81 | 3226,41 / 3281,08 / 3346,91 | **3254,81 / 3281,08** |
+
+În ambele runde complete CatServer a consumat mai puțin CPU **numai** în fereastra sintetică de 30 s; RSS-ul se suprapune între motoare și diferențele dintre runde sunt mari. Runda intermediară nu a fost completă. Aceste observații **nu** măsoară MSPT, FPS sau compatibilitatea cu clientul RP și nu aleg un motor de live.
+
+**Istoric: runda 1 și rerularea eșuată:**  [run 39425133030](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39425133030) SUCCESS cu verificarea de oprire din acea versiune (fără cod de ieșire și fără căutarea erorilor critice de după sarcină): FunCity b1.0827 (**A**) vs CatServer vechi SHA `96f82479…` (**B**), pe **același runner și Java 11**, aceeași lume **generată** și resetată din snapshot la fiecare probă, aceleași 15 JAR-uri de conținut/dependențe și șase pluginuri. Ordine A/B/B/A/A/B, trei probe valide/braț; 40 de zombie confirmați prin consola serverului în fiecare probă și 30 s fereastră de observație după pornire. Nu au fost jucători, vehicule sau client Forge conectat; nu s-a măsurat MSPT/TPS. Nu este lumea reală.
+
+**Runda 2, rerulare cu verificare mai strictă:** [run 39431729723](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39431729723) FAILED: primele cinci probe (A/B/B/A/A) au trecut, ultimul B **nu a ajuns la `Done`**; nu au fost publicate metrici și nu a fost confirmat un nou A/B complet. Cauza exactă nu este încă identificată. Valorile de mai jos rămân **istoricul rundei 1**; runda 2 nu le reconfirmă, iar runda 3 a încheiat o serie nouă cu valori diferite. Nu pretindem stabilitatea CatServer sau un avantaj live.
 
 | Măsură, fereastră 30 s | FunCity A1 / A2 / A3 | CatServer B1 / B2 / B3 | Mediană A / B |
 |---|---|---|---|
 | CPU JVM, secunde | 13,51 / 14,34 / 12,60 | 10,48 / 9,51 / 10,46 | **13,51 / 10,46** |
 | RSS JVM, MiB | 3057,84 / 2979,90 / 3068,69 | 2962,99 / 3051,09 / 2935,07 | **3057,84 / 2962,99** |
 
-**Lectură corectă:** CatServer a folosit mai puțin CPU în **acest** scenariu sintetic repetat. Valorile RSS se suprapun între probe; nu există încă un câștig RAM stabil demonstrat, iar CPU pe 30 s fără MSPT, login modat/vehicule și lumea RP nu stabilește care motor va fi mai bun pentru jucători. Nu promovăm automat CatServer și nu numim FunCity „perfect”; următorul experiment trebuie să includă clientul, funcțiile RP și MSPT cu sarcină reprezentativă. [Pagina cu liniile și axele pornind de la zero](../site/index.html#motoare).
+**Lectură corectă pentru runda 1:** CatServer a folosit mai puțin CPU în **acest** scenariu sintetic repetat. Valorile RSS se suprapun între probe; nu există încă un câștig RAM stabil demonstrat, iar CPU pe 30 s fără MSPT, login modat/vehicule și lumea RP nu stabilește care motor va fi mai bun pentru jucători. Nu promovăm automat CatServer și nu numim FunCity „perfect”; următorul experiment trebuie să includă clientul, funcțiile RP și MSPT cu sarcină reprezentativă. [Pagina cu liniile și axele pornind de la zero](../site/index.html#motoare).
 
 ## Motoarele și fork-urile pentru care există probe
 
