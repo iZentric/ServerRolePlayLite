@@ -33,8 +33,9 @@ function Assert-SafeFile([string]$Path) {
   }
 }
 function Assert-SafeDirectory([string]$Path) {
-  $item = Get-Item -LiteralPath $Path -ErrorAction Stop
-  if (-not $item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+  # DirectoryInfo handles dot-prefixed .minecraft consistently on hosted pwsh.
+  $item = [IO.DirectoryInfo]::new($Path)
+  if (-not $item.Exists -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
     throw 'Unsafe source directory'
   }
 }
