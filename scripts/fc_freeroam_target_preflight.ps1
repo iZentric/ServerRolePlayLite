@@ -43,9 +43,9 @@ try {
     if (Test-Path -LiteralPath $path) { $choices += $path }
   }
   if ($choices.Count -ne 1) { throw 'Minecraft folder missing or ambiguous' }
-  $game = Get-Item -LiteralPath ($choices[0]) -ErrorAction Stop
-  $mods = Get-Item -LiteralPath (Join-Path $game.FullName 'mods') -ErrorAction Stop
-  if (-not $game.PSIsContainer -or -not $mods.PSIsContainer -or
+  $game = [IO.DirectoryInfo]::new([string]($choices[0]))
+  $mods = [IO.DirectoryInfo]::new((Join-Path $game.FullName 'mods'))
+  if (-not $game.Exists -or -not $mods.Exists -or
       ($game.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or
       ($mods.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw 'Unsafe mods folder' }
   $jars = @(Get-ChildItem -LiteralPath $mods.FullName -Force | Where-Object { $_.Name -match '\.jar$' })
