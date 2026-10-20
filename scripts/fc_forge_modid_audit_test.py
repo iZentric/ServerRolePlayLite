@@ -25,10 +25,13 @@ with tempfile.TemporaryDirectory(prefix='fc-forge-fixture-') as temp:
     jar(server, 'shared.jar', 'rpcontent')
     jar(server, 'server.jar', 'requiredcandidate')
     result = subprocess.run(['pwsh', '-File', str(Path(__file__).with_suffix('.ps1')),
-                             '-ClientMods', str(client), '-ServerMods', str(server)],
+                             '-ClientMods', str(client), '-ServerMods', str(server), '-SyntheticDiagnostics'],
                             capture_output=True, text=True)
-    assert result.returncode == 0, 'audit fixture failed'
-    assert 'COMMON_IDS=1 SERVER_ONLY_IDS=1 CLIENT_ONLY_IDS=1' in result.stdout
+    if result.returncode or 'COMMON_IDS=1 SERVER_ONLY_IDS=1 CLIENT_ONLY_IDS=1' not in result.stdout:
+        for line in result.stdout.splitlines():
+            if line.startswith('::') and str(temp) not in line:
+                print(line)
+        raise AssertionError('audit fixture failed or wrong counts')
     assert 'requiredcandidate' in result.stdout and 'visualonly' in result.stdout
     assert '::forge' not in result.stdout.lower() and ',forge' not in result.stdout.lower(), 'dependency mistakenly parsed as a mod ID'
     assert str(temp) not in result.stdout + result.stderr, 'private fixture path leaked'

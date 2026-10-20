@@ -1,7 +1,8 @@
 # Read-only Forge JAR metadata comparison. Never opens worlds, account data or logs.
 # Reports sanitized mod IDs, not paths, filenames, user data or raw TOML contents.
 param([Parameter(Mandatory=$true)][string]$ClientMods,
-      [Parameter(Mandatory=$true)][string]$ServerMods)
+      [Parameter(Mandatory=$true)][string]$ServerMods,
+      [switch]$SyntheticDiagnostics)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 try { Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction Stop } catch { }
@@ -47,6 +48,9 @@ try {
   exit 0
 } catch {
   # An exception can carry private paths or JAR metadata; never print it on a PC runner.
+  if ($SyntheticDiagnostics -and [Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
+    Write-Output ('::error title=Forge fixture::LINE=' + $_.InvocationInfo.ScriptLineNumber + ' TYPE=' + $_.Exception.GetType().Name)
+  }
   Write-Output '::notice title=Forge metadata mismatch candidates::AUDIT_UNAVAILABLE; READ_ONLY=true'
   exit 2
 }
