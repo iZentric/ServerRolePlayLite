@@ -69,6 +69,7 @@ assert list(site['on']) == ['workflow_dispatch']
 print('public site static claims PASS; publication requires manual dispatch')
 PY
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/fc_site_claims_test.py
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/fc_lowspec_target_test.py
 
 export PYTHONDONTWRITEBYTECODE=1 PYTHONPATH="scripts${PYTHONPATH:+:$PYTHONPATH}"
 python3 - <<'PY'

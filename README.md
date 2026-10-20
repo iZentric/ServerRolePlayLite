@@ -22,6 +22,8 @@ FunCity este un proiect de **oraș roleplay construit împreună cu jucătorii**
 
 > **Important pentru jucători:** acesta este un proiect public **în dezvoltare**, nu o invitație de conectare. Nu descărca vechile release-uri ale repo-ului ca și cum ar fi noul FunCity RP Lite. Nu există încă un pachet Lite sau o adresă de server validate pentru intrarea în joc.
 
+**Ținta de test este fixată:** [FunCity Lite LowSpec 1.16.5 — lista celor 21 de JAR-uri și setările](agent/MODPACK-TINTA-LOWSPEC.md). Aceasta nu este încă o versiune finală publicabilă ori o măsurătoare de FPS.
+
 **Originalul declarat este Freeroam 1.0.0.** Comparația read-only Freeroam → LowSpec [nu a produs inventar pe PC](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39439372232): jobul a fost anulat înainte de orice pas raportat pe runnerul Windows. [Ce știm și ce nu știm](agent/CONTROL-MODURI-ORIGINALE.md). Nu echivalăm Freeroam cu captura FunCity sau arhiva CUANTIC.
 
 ## Stadiul real

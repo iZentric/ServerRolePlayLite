@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "name": "FunCity Lite LowSpec 1.16.5 — tinta de test",
+  "status": "FIXAT_PENTRU_TEST_NU_RELEASE",
+  "minecraft": "1.16.5",
+  "forge": "36.2.42",
+  "profile": "FunCity-Lite-LowSpec-LAB-1.16.5",
+  "source_scope": "21 nume in LowSpec la ultima verificare PC; baza de comparatie anterioara este captura FunCity, NU originalul Freeroam 1.0.0",
+  "client_content_and_dependencies": [
+    "Modernxl 1.16.5.jar",
+    "Pizzaland_v68.jar",
+    "additional-guns-0.7.1-1.16.5.jar",
+    "cfm-7.0.0pre22-1.16.3.jar",
+    "cgm-1.2.6-1.16.5.jar",
+    "emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar",
+    "mapperbase-1.16.5-2.4.0.0.jar",
+    "modernlife-1.16.5-1.15.jar",
+    "obfuscate-0.6.3-1.16.5.jar",
+    "pamhc2foodcore-1.16.3-1.0.2.jar",
+    "player-animation-lib-forge-0.4.0+1.16.5.jar",
+    "roadstuff-1.16.5-4.3.0.jar",
+    "selene-1.16.5-1.9.0.jar",
+    "supplementaries-1.16.5-0.18.4b.jar",
+    "vehicle-mod-0.45.2-1.16.5 (1).jar"
+  ],
+  "client_optimization_and_compatibility": [
+    "entityculling-forge-mc1.16.5-1.5.2.jar",
+    "ferritecore-2.1.1-forge.jar",
+    "lazydfu-0.1.3.jar",
+    "modernfix-forge-5.18.0+mc1.16.5.jar",
+    "oculus-mc1.16.5-1.4.7.jar",
+    "rubidium-mc1.16.5-0.2.13.jar"
+  ],
+  "absent_versus_historical_funcity_only": [
+    "Clumps-6.0.0.28.jar",
+    "entitycollisionfpsfix-1.16-1.0.1.jar",
+    "out_of_sight-1.16.4-1.0.1.jar",
+    "radon-0.8.0a.jar"
+  ],
+  "settings_for_test": {
+    "render_distance_chunks": 5,
+    "max_heap_mib": 2048,
+    "graphics": "Fast",
+    "shaders": false,
+    "particles": "Minimal",
+    "mipmap_levels": 0,
+    "entity_shadows": false
+  },
+  "constraints": [
+    "Nu scoatem continut RP din originalul Freeroam 1.0.0: inventarul lui nu a fost citit.",
+    "Nu includem Dynamic FPS ca optimizare de joc activ.",
+    "Clumps poate afecta registrul Forge/handshake: se verifica perechea client-server inainte de release.",
+    "Nume si setari, nu manifest SHA verificat pentru toate fisierele si nu dovada FPS, login sau drept de redistribuire."
+  ]
+}
