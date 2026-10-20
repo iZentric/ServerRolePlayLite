@@ -7,6 +7,16 @@ from unittest.mock import patch
 import zipfile
 
 import fc_engine_family_lab as lab
+from fc_engine_family_lab import successful_stop
+
+
+class FakeJvm:
+    def __init__(self, status, code):
+        self.status = status
+        self.p = type('Process', (), {'returncode': code})()
+
+    def stop(self, _grace):
+        return self.status
 
 
 def rejected(fn):
@@ -43,7 +53,13 @@ def main():
         with patch.dict('os.environ', {'RUNNER_TEMP': str(root)}):
             rejected(lambda: lab.validate_stage(root/'an-old-server'))
         assert len(lab.ENGINES) == 5
-        print('PASS: 5 known engines only; archive/JAR SHA, missing source and stage guards')
+        assert successful_stop(FakeJvm('CLEAN', 0))
+        assert not successful_stop(FakeJvm('CLEAN', 1))
+        assert not successful_stop(FakeJvm('KILLED_DUPA_GRACE', -9))
+        late_log = root/'late.log'
+        late_log.write_text('Exception in server tick loop')
+        assert not successful_stop(FakeJvm('CLEAN', 0), late_log)
+        print('PASS: 5 known engines, SHA/source/stage guards, JVM exit and late crash')
 
 
 if __name__ == '__main__':

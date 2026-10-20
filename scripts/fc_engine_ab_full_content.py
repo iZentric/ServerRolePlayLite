@@ -40,6 +40,18 @@ def check_env(root, stage):
     return root
 
 
+def verify_trial_stop(jvm, log):
+    """A completed stop is not enough: require exit 0 and no late tick/plugin crash."""
+    status = jvm.stop(70)
+    if status != 'CLEAN' or jvm.p.returncode != 0:
+        raise ValueError('trial did not exit successfully; no metrics published')
+    text = Path(log).read_text(encoding='utf-8', errors='replace')
+    if any(marker in text for marker in ('Exception in server tick loop',
+                                       'Could not load plugin', 'Error occurred while enabling',
+                                       'Failed to start')):
+        raise ValueError('critical log marker during or after workload; no metrics published')
+
+
 def boot(stage, report, seed_world=False):
     log = stage/'bench-private.log'  # never uploaded or printed
     (stage/'eula.txt').write_text('eula=true\n')
@@ -60,6 +72,7 @@ def boot(stage, report, seed_world=False):
         if seed_world:
             # Create a disposable common source world once. Never read/copy user's world.
             time.sleep(5)
+            verify_trial_stop(j, log)
             return None
         j.send('forceload add 0 0 3 3')
         for _ in range(40):
@@ -76,8 +89,7 @@ def boot(stage, report, seed_world=False):
             if j.p.poll() is not None:
                 raise ValueError('JVM exited in observation window')
             samples.append(proc_sample(j.p.pid))
-        if j.stop(70) != 'CLEAN':
-            raise ValueError('server did not stop cleanly')
+        verify_trial_stop(j, log)
         return {'rss_mib': round(statistics.median(x[0] for x in samples), 2),
                 'cpu_s_30s': round(samples[-1][1] - start[1], 2),
                 'window_s': 30, 'summons_confirmed': True, 'mods': 15, 'plugins': 6}

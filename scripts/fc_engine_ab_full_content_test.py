@@ -5,7 +5,21 @@ from pathlib import Path
 import tempfile
 from unittest.mock import patch
 
-from fc_engine_ab_full_content import check_env, proc_sample
+from fc_engine_ab_full_content import check_env, proc_sample, verify_trial_stop
+
+
+class FakeProcess:
+    def __init__(self, code):
+        self.returncode = code
+
+
+class FakeJvm:
+    def __init__(self, stop_result, code):
+        self.stop_result = stop_result
+        self.p = FakeProcess(code)
+
+    def stop(self, _grace):
+        return self.stop_result
 
 
 def main():
@@ -21,7 +35,20 @@ def main():
                     pass
                 else:
                     raise AssertionError('unsafe AB root accepted')
-    print('PASS: PID-scoped RSS/CPU and new runner-temp AB root guards')
+        log = root/'private.log'
+        log.write_text('Server stopped normally\n')
+        verify_trial_stop(FakeJvm('CLEAN', 0), log)
+        for jvm, lines in ((FakeJvm('CLEAN', 1), 'Server stopped normally'),
+                           (FakeJvm('KILLED_DUPA_GRACE', -9), 'Server stopped normally'),
+                           (FakeJvm('CLEAN', 0), 'Exception in server tick loop')):
+            log.write_text(lines)
+            try:
+                verify_trial_stop(jvm, log)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError('invalid trial was reported clean')
+    print('PASS: PID-scoped metrics, new runner-temp path, JVM exit code and post-workload critical checks')
 
 
 if __name__ == '__main__':

@@ -83,6 +83,20 @@ def validate_stage(stage):
     return report
 
 
+def successful_stop(jvm, log=None):
+    """JvmRun's CLEAN means exited; also check code and late fatal log lines."""
+    status = jvm.stop(70)
+    if status != 'CLEAN' or jvm.p.returncode != 0:
+        return False
+    if log is not None:
+        text = Path(log).read_text(encoding='utf-8', errors='replace')
+        if any(marker in text for marker in ('Exception in server tick loop',
+                                           'Could not load plugin', 'Error occurred while enabling',
+                                           'Failed to start')):
+            return False
+    return True
+
+
 def run(stage, name, source):
     stage = Path(stage).resolve()
     if name not in ENGINES:
@@ -114,10 +128,10 @@ def run(stage, name, source):
             critical = any(token in text for token in
                            ('Exception in server tick loop', 'Could not load plugin',
                             'Error occurred while enabling', 'Failed to start'))
-            clean = j.stop(70) == 'CLEAN'
+            clean = successful_stop(j, log)
             status = 'BOOT_AND_PLUGINS_OK' if plugins_ok and not critical and clean else 'BOOT_WITH_REGRESSIONS'
         else:
-            clean = j.stop(15) == 'CLEAN' if j.p.poll() is None else False
+            clean = successful_stop(j) if j.p.poll() is None else False
         # Only categorical evidence is public; bootstrap/install time is NOT a TPS measurement.
         print(f'::notice title=Engine 15-mod isolated test::{name} status={status} '
               f'plugins_ok={str(plugins_ok).lower()} clean_stop={str(clean).lower()} '
