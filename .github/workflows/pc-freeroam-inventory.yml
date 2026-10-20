@@ -17,6 +17,8 @@ on:
       - scripts/fc_forge_modid_audit_test.py
       - scripts/fc_lite_join_log_diagnostic.ps1
       - scripts/fc_lite_join_log_diagnostic_test.py
+      - scripts/fc_lite_add_clumps.ps1
+      - scripts/fc_lite_add_clumps_test.ps1
 permissions:
   contents: read
 jobs:
@@ -60,6 +62,9 @@ jobs:
         run: python3 scripts/fc_forge_modid_audit_test.py
       - name: Recent client join error classification (hosted fixture only)
         run: python3 scripts/fc_lite_join_log_diagnostic_test.py
+      - name: Reversible Clumps compatibility fixture, no real Prism write
+        shell: pwsh
+        run: ./scripts/fc_lite_add_clumps_test.ps1
   read-only-pc:
     needs: guards
     runs-on: [self-hosted, Windows]
