@@ -4,7 +4,7 @@
   <p><strong>Un oraș nou. Povestea e a voastră.</strong></p>
   <p>Minecraft 1.16.5 · conținut modat pentru RP · funcții de comunitate prin pluginuri</p>
   <p><strong>🧪 În laborator · 📂 Dezvoltare publică · ⛔ Fără release Lite sau server public verificat</strong></p>
-  <p><a href="site/index.html">Descoperă proiectul</a> · <a href="#de-ce-funcity">De ce FunCity?</a> · <a href="#stadiul-real">Stadiul real</a> · <a href="#cum-poti-ajuta">Cum poți ajuta</a></p>
+  <p><a href="START-AICI.md"><strong>START AICI — explicația simplă</strong></a> · <a href="site/index.html">Pagina proiectului</a> · <a href="#stadiul-real">Dovezi și stadiu</a></p>
 </div>
 
 ---
