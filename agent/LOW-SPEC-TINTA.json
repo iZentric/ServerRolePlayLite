@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "name": "FunCity Lite LowSpec 1.16.5 — tinta de test",
-  "status": "FIXAT_PENTRU_TEST_NU_RELEASE",
+  "name": "LowSpec LAB 1.16.5 — reper istoric FunCity, nu FunCity RP Lite final",
+  "status": "REFERINTA_ISTORICA_NU_TINTA_FINALA",
   "minecraft": "1.16.5",
   "forge": "36.2.42",
   "profile": "FunCity-Lite-LowSpec-LAB-1.16.5",
-  "source_scope": "21 nume in LowSpec la ultima verificare PC; baza de comparatie anterioara este captura FunCity, NU originalul Freeroam 1.0.0",
+  "source_scope": "21 nume in vechiul LowSpec la ultima verificare PC; comparate doar cu captura istorica FunCity, NU cu originalul Freeroam 1.0.0",
   "client_content_and_dependencies": [
     "Modernxl 1.16.5.jar",
     "Pizzaland_v68.jar",
@@ -47,7 +47,7 @@
     "entity_shadows": false
   },
   "constraints": [
-    "Nu scoatem continut RP din originalul Freeroam 1.0.0: inventarul lui nu a fost citit.",
+    "Originalul Freeroam 1.0.0 nu a fost inventariat; 21 JAR-uri NU sunt tinta finala a proiectului FunCity RP Lite.",
     "Nu includem Dynamic FPS ca optimizare de joc activ.",
     "Clumps poate afecta registrul Forge/handshake: se verifica perechea client-server inainte de release.",
     "Nume si setari, nu manifest SHA verificat pentru toate fisierele si nu dovada FPS, login sau drept de redistribuire."

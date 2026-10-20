@@ -1,5 +1,7 @@
 # FunCity Lite — optimizări alese pentru joc activ pe PC Windows 10 vechi
 
+**Actualizare de produs:** [FunCity RP Lite păstrează integral originalul Freeroam și adaugă doar optimizări compatibile](MODPACK-TINTA-LOWSPEC.md). Inventarul de 21 de JAR-uri de mai jos este vechiul LowSpec bazat pe captura FunCity, **nu** lista finală a originalului.
+
 **Decizie pentru candidatul de test, 20.10.2026.** Păstrăm toate cele **11 moduri de conținut RP + 4 dependențe** pe perechea client/server. Optimizările nu înlocuiesc conținutul. Cifrele de FPS, MSPT și RAM pe laptopul vizat sunt **nemăsurate**; o alegere pe baza rolului tehnic nu este dovadă de câștig. Înainte de orice schimbare în Prism, închide Minecraft/Prism și verifică backupul. Nu schimbăm serverul existent.
 
 ## Clientul LowSpec deja instalat: 21 JAR-uri în același profil

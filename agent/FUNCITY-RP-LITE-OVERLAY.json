@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "project_name": "FunCity RP Lite",
+  "source_profile": "Freeroam 1.0.0",
+  "minecraft": "1.16.5",
+  "rule": "copy_all_original_mods_byte_for_byte_then_add_only_compatible_client_optimizers",
+  "status": "POLICY_ONLY_ORIGINAL_NOT_INVENTORIED",
+  "performance_candidates_for_active_game": [
+    "rubidium-mc1.16.5-0.2.13.jar",
+    "ferritecore-2.1.1-forge.jar",
+    "modernfix-forge-5.18.0+mc1.16.5.jar",
+    "entityculling-forge-mc1.16.5-1.5.2.jar"
+  ],
+  "conditional_non_performance": {
+    "lazydfu-0.1.3.jar": "startup only; not FPS",
+    "oculus-mc1.16.5-1.4.7.jar": "visual compatibility only; shaders off"
+  },
+  "test_settings": {
+    "render_distance_chunks": 5,
+    "graphics": "Fast",
+    "shaders": false,
+    "particles": "Minimal",
+    "mipmap_levels": 0,
+    "entity_shadows": false
+  },
+  "on_conflict": "do_not_replace_or_remove_original; stop_and_test_compatibility_on_a_copy",
+  "distribution": "BLOCKED_UNTIL_SOURCE_LICENSE_SHA_CLIENT_SERVER_LOGIN_BACKUP_VERIFIED"
+}
