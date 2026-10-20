@@ -1,35 +1,13 @@
-name: One-time Clumps compatibility addition to separate Lite profile
-# Owner selected performance-preserving server path. Requires closed Prism/client.
-# The only PC write is one locally copied, hash-verified JAR in the NEW profile.
-# Source Freeroam, server, worlds and accounts are never changed or uploaded.
+name: Retired Clumps client addition — read-only
+# Owner changed course: keep Lite at 22; no XP optimization JAR added to client.
+# This retired workflow cannot write to Prism or the server.
 on:
-  push:
-    branches: [arena/9bbcb24f-serverroleplaylite]
-    paths: [.github/workflows/pc-lite-clumps-apply.yml]
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  guards:
-    if: startsWith(github.event.head_commit.message, 'Apply one Clumps compatibility test once')
+  retired:
     runs-on: ubuntu-24.04
-    timeout-minutes: 3
+    timeout-minutes: 1
     steps:
-      - uses: actions/checkout@v4
-      - name: Reversible isolated Lite 22 to 23 copy fixture
-        shell: pwsh
-        run: ./scripts/fc_lite_add_clumps_test.ps1
-  pc-client:
-    if: startsWith(github.event.head_commit.message, 'Apply one Clumps compatibility test once')
-    needs: guards
-    runs-on: [self-hosted, Windows]
-    timeout-minutes: 7
-    steps:
-      - uses: actions/checkout@v4
-      - name: Add exactly Clumps to separate Prism Lite only if launcher and game closed
-        shell: powershell
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $profile = 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\FunCity RP Lite'
-          $server = 'C:\Users\Administrator\Desktop\FunCityLocal\server'
-          & ./scripts/fc_lite_add_clumps.ps1 -Profile $profile -Server $server
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - run: echo 'RETIRED_CLIENT_CLUMPS_APPLY; NO_PC_WRITE=true; NO_SERVER_WRITE=true'
