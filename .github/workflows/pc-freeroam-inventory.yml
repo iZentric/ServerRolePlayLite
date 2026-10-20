@@ -141,6 +141,7 @@ jobs:
           } catch { Write-Output '::notice title=RP readiness::SERVER_OR_PROFILE_AUDIT=UNAVAILABLE; READ_ONLY=true' }
           # Status query only to the already-identified local Java listener; never a login.
           if ($knownServerListening -and $port -gt 0 -and $port -le 65535) {
+            Write-Output ('::notice title=Local join address::LOOPBACK_DEFAULT_PORT=' + ($port -eq 25565) + '; PORT_NUMBER_NOT_PUBLISHED=true')
             & ./scripts/fc_local_status_ping.ps1 -Port $port
             if ($LASTEXITCODE -ne 0) { Write-Output '::notice title=Minecraft local status::PROTOCOL_READINESS=UNVERIFIED; CLIENT_JOIN=NOT_TESTED' }
           }
