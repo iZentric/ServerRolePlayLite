@@ -32,7 +32,7 @@ FunCity este un proiect de **oraș roleplay construit împreună cu jucătorii**
 | **Optimizări server** | [Trial PC cu 18 JAR-uri](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39336314432) (cele 15 de bază + RoadRunner, FerriteCore, ModernFix), pornit/oprit curat. | A/B repetat pe copie, cu aceeași lume/sarcină și fără regresii; fără cifre MSPT sau capacitate inventate. |
 | **Lansare publică** | Codul și documentația sunt vizibile în repo și în [PR-ul de lucru](https://github.com/iZentric/ServerRolePlayLite/pull/2). | Drepturi/licențe și SHA pentru toate binarele, client+server testate împreună, login prin plugin, voce, backup/restaurare, test RP și aprobare explicită. |
 
-**Niciun test de boot nu dovedește că un jucător poate intra.** Un build de laborator nu este un server live. [Jurnalul detaliat și limitele](agent/PROGRES.md) · [Decizia motor/moduri](agent/SERVER-PLUGIN-FIRST.md).
+**Niciun test de boot nu dovedește că un jucător poate intra.** Un build de laborator nu este un server live. [Selecția fiecărui mod de performanță pentru PC vechi și server](agent/SELECTIE-PERFORMANTA-PURA.md) · [Jurnalul detaliat](agent/PROGRES.md) · [Decizia motor/moduri](agent/SERVER-PLUGIN-FIRST.md).
 
 ## Cum este organizat proiectul
 
