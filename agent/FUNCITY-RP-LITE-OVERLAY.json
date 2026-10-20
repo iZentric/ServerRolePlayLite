@@ -49,5 +49,10 @@
   "dependency_pair_excluded_by_owner": [
     "notenoughanimations-1.2.4.jar",
     "TRansliterationLib-1.0.4.jar"
-  ]
+  ],
+  "requested_prism_destination": "Freeroam 1.0.0",
+  "installation_state": "BLOCKED_NO_PC_INVENTORY_BACKUP_CLIENT_SERVER_TEST",
+  "owner_authorizes_in_place_update_after_safety_gates": true,
+  "pc_inventory_verified": false,
+  "profile_backup_restore_verified": false
 }

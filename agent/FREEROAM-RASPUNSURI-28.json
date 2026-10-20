@@ -55,7 +55,9 @@
     "resolved_dependency_pair_removal": [
       "notenoughanimations-1.2.4.jar",
       "TRansliterationLib-1.0.4.jar"
-    ]
+    ],
+    "requested_prism_destination": "Freeroam 1.0.0",
+    "installation_performed": false
   },
   "initially_kept_now_excluded_from_lite": {
     "notenoughanimations-1.2.4.jar": "Owner explicitly chose removal of both Not Enough Animations and its required library from future Lite; original untouched."

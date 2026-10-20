@@ -35,6 +35,9 @@ def main():
     assert {LIBRARY, ANIMATIONS} <= set(selection['removed_from_future_target'])
     assert 'voicechat-forge-1.16.5-2.3.23.jar' in selection['retained_in_future_target']
     assert not selection['ready_for_release']
+    assert selection['requested_prism_destination'] == 'Freeroam 1.0.0'
+    assert selection['installation_performed'] is False
+    assert policy['installation_state'].startswith('BLOCKED_')
     assert set(policy['deferred_not_installed']) == {
         'entityculling-forge-mc1.16.5-1.5.2.jar', 'embeddium-0.3.18+mc1.16.5.jar'}
     with TemporaryDirectory() as tmp:

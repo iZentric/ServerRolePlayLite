@@ -22,6 +22,8 @@ assert answers['latest_request']['pending_conflict'] == {}
 assert set(answers['latest_request']['resolved_dependency_pair_removal']) == {'TRansliterationLib-1.0.4.jar', 'notenoughanimations-1.2.4.jar'}
 assert set(policy['approved_exclusions_from_future_lite']) == review | newly_excluded
 assert answers['latest_request']['actual_pc_profile_or_original_modified'] is False
+assert answers['latest_request']['requested_prism_destination'] == policy['requested_prism_destination'] == 'Freeroam 1.0.0'
+assert answers['latest_request']['installation_performed'] is False
 assert not policy['approved_additions']
 assert policy['owner_choices'] == 'agent/FREEROAM-RASPUNSURI-28.json'
 assert set(answers['new_mods_deferred']) == set(policy['deferred_not_installed'])

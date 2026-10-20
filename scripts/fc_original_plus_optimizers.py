@@ -27,6 +27,10 @@ def assess(original, candidate):
     if (policy['project_name'] != 'FunCity RP Lite' or
             policy['declared_original_names'] != 'agent/FREEROAM-LISTA-DECLARATA.json' or
             policy['rule'] != 'retain_original_bytes_except_exact_owner_approved_target_exclusions' or
+            policy['requested_prism_destination'] != 'Freeroam 1.0.0' or
+            selection['requested_prism_destination'] != 'Freeroam 1.0.0' or
+            policy['pc_inventory_verified'] is not False or
+            selection['installation_performed'] is not False or
             allowed or len(baseline) != 3 or not baseline <= declared or
             len(declared) != 28 or len(declaration['jar_names']) != 28 or
             len(excluded) != 6 or len(policy['approved_exclusions_from_future_lite']) != 6 or

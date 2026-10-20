@@ -24,6 +24,8 @@ FunCity este un proiect de **oraș roleplay construit împreună cu jucătorii**
 
 **Numele și ținta noului pack: FunCity RP Lite.** [Din 28 de JAR-uri declarate](agent/FREEROAM-LISTA-DECLARATA.json), [ținta de repository](agent/FUNCITY-RP-LITE-SELECTIE.json) exclude 6 numite explicit de proprietar (CTM, DynamicSurroundings, InGameAccountSwitcher, Lightfall Client, Not Enough Animations și TRansliterationLib); celelalte 22 rămân. [Not Enough Animations 1.2.4 cere biblioteca](https://www.curseforge.com/minecraft/mc-mods/not-enough-animations/files/3296039/dependencies), așa că proprietarul a decis scoaterea ambelor din Lite. [Detalii/limite](agent/MODPACK-TINTA-LOWSPEC.md). **Nu am scos vreun JAR de pe PC, nu am schimbat Prism/Freeroam și nu există pack/FPS verificat.** Lista 28 nu este inventar/SHA de pe PC; vechiul LowSpec de 21 este alt reper.
 
+**Destinația Prism cerută acum este profilul Freeroam 1.0.0 existent**, nu LowSpec ori un profil nou. [Reevaluarea întregului traseu de la CUANTIC](agent/REANALIZA-CUANTIC-FREEROAM.md) păstrează cele șase excluderi aprobate și blochează orice instalare fără inventar real, backup/restaurare și test client–server. Nu există acces direct la PC în sandbox și nu am schimbat profilul.
+
 **Originalul declarat este Freeroam 1.0.0.** Avem acum 28 de nume oferite de proprietar, dar comparația read-only Freeroam → LowSpec [nu a produs inventar pe PC](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39439372232): jobul a fost anulat înainte de orice pas raportat pe runnerul Windows. [Ce știm și ce nu știm](agent/CONTROL-MODURI-ORIGINALE.md). Nu echivalăm Freeroam cu captura FunCity sau arhiva CUANTIC.
 
 ## Stadiul real
