@@ -1,33 +1,50 @@
 #!/usr/bin/env python3
-"""Read-only gate for FunCity RP Lite: Freeroam bytes retained, no surprise mods.
+"""Read-only gate: declared Freeroam names and actual bytes must be preserved.
 
-Synthetic tests only until the owner's Freeroam profile is actually accessible.
-Never walks Prism worlds, logs, config, accounts, or reads/modifies the server.
+No Prism, world, accounts, server, installation, archive or release writes.
 """
 import json
 from pathlib import Path
 
-from fc_freeroam_inventory import compare
+from fc_freeroam_inventory import inventory
 
-POLICY = Path(__file__).resolve().parent.parent/'agent'/'FUNCITY-RP-LITE-OVERLAY.json'
+ROOT = Path(__file__).resolve().parent.parent
+POLICY = ROOT/'agent'/'FUNCITY-RP-LITE-OVERLAY.json'
+DECLARED = ROOT/'agent'/'FREEROAM-LISTA-DECLARATA.json'
 
 
 def assess(original, candidate):
     policy = json.loads(POLICY.read_text(encoding='utf-8'))
+    declaration = json.loads(DECLARED.read_text(encoding='utf-8'))
     allowed = set(policy['performance_candidates_for_active_game'])
+    declared = set(declaration['jar_names'])
     if (policy['project_name'] != 'FunCity RP Lite' or
+            policy['declared_original_names'] != 'agent/FREEROAM-LISTA-DECLARATA.json' or
             policy['rule'] != 'copy_all_original_mods_byte_for_byte_then_add_only_compatible_client_optimizers' or
-            len(allowed) != 4 or 'Dynamic FPS' in ' '.join(allowed)):
+            len(allowed) != 4 or len(declared) != 28 or
+            any('dynamicfps' in name.casefold().replace(' ', '') for name in allowed)):
         raise ValueError('invalid overlay policy')
-    result = compare(original, candidate)  # original and candidate are read-only
-    unexpected = set(result['lowspec_only']) - allowed
+    # inventory() is fail-closed for symlinks, ambiguous folders and unsafe JAR names.
+    a, b = inventory(original), inventory(candidate)
+    original_names, candidate_names = set(a), set(b)
+    missing = sorted(original_names - candidate_names)
+    changed = sorted(name for name in original_names & candidate_names if a[name] != b[name])
+    added = candidate_names - original_names
+    unexpected = sorted(added - allowed)
+    declared_missing = sorted(declared - original_names)
+    unlisted_original = sorted(original_names - declared)
+    matched = not (declared_missing or unlisted_original)
+    preserved = bool(a) and not (missing or changed)
     return {
-        'original_jar_count': result['original_count'],
-        'candidate_jar_count': result['lowspec_count'],
-        'missing_original': result['original_only'],
-        'changed_original': result['changed_sha'],
-        'unexpected_additions': sorted(unexpected),
-        'compatible_optimizers_added_by_name': sorted(set(result['lowspec_only']) & allowed),
-        'original_preserved_by_sha': result['original_count'] > 0 and not (result['original_only'] or result['changed_sha']),
-        'eligible_for_compatibility_testing_only': result['original_count'] > 0 and not (result['original_only'] or result['changed_sha'] or unexpected),
+        'original_jar_count': len(a),
+        'candidate_jar_count': len(b),
+        'declared_missing_in_original': declared_missing,
+        'unlisted_original': unlisted_original,
+        'declared_matches_disk_names': matched,
+        'missing_original': missing,
+        'changed_original': changed,
+        'unexpected_additions': unexpected,
+        'optimizers_added_by_name': sorted(added & allowed),
+        'original_preserved_by_sha': preserved,
+        'eligible_for_compatibility_testing_only': matched and preserved and not unexpected,
     }

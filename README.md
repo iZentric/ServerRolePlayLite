@@ -22,9 +22,9 @@ FunCity este un proiect de **oraș roleplay construit împreună cu jucătorii**
 
 > **Important pentru jucători:** acesta este un proiect public **în dezvoltare**, nu o invitație de conectare. Nu descărca vechile release-uri ale repo-ului ca și cum ar fi noul FunCity RP Lite. Nu există încă un pachet Lite sau o adresă de server validate pentru intrarea în joc.
 
-**Numele și ținta noului pack: FunCity RP Lite.** Pornim de la [întregul Freeroam original și adăugăm doar optimizări de client compatibile](agent/MODPACK-TINTA-LOWSPEC.md), fără a scoate conținut RP. Cele 21 de JAR-uri ale profilului LowSpec anterior sunt un reper istoric, **nu** lista finală a originalului. Încă nu există un pack publicabil sau FPS măsurat.
+**Numele și ținta noului pack: FunCity RP Lite.** [Păstrăm toate cele 28 de JAR-uri enumerate acum de proprietar](agent/FREEROAM-LISTA-DECLARATA.json) pentru Freeroam; nu scoatem conținut și [adăugăm doar optimizări compatibile](agent/MODPACK-TINTA-LOWSPEC.md). Rubidium, FerriteCore și ModernFix sunt deja pe listă; doar Entity Culling rămâne propunere de adăugare, condiționată de test. Vechiul LowSpec de 21 de JAR-uri este alt reper. Lista 28 încă nu e verificată de pe PC, iar un pack publicabil sau FPS măsurat nu există.
 
-**Originalul declarat este Freeroam 1.0.0.** Comparația read-only Freeroam → LowSpec [nu a produs inventar pe PC](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39439372232): jobul a fost anulat înainte de orice pas raportat pe runnerul Windows. [Ce știm și ce nu știm](agent/CONTROL-MODURI-ORIGINALE.md). Nu echivalăm Freeroam cu captura FunCity sau arhiva CUANTIC.
+**Originalul declarat este Freeroam 1.0.0.** Avem acum 28 de nume oferite de proprietar, dar comparația read-only Freeroam → LowSpec [nu a produs inventar pe PC](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39439372232): jobul a fost anulat înainte de orice pas raportat pe runnerul Windows. [Ce știm și ce nu știm](agent/CONTROL-MODURI-ORIGINALE.md). Nu echivalăm Freeroam cu captura FunCity sau arhiva CUANTIC.
 
 ## Stadiul real
 

@@ -4,7 +4,7 @@
   "source_profile": "Freeroam 1.0.0",
   "minecraft": "1.16.5",
   "rule": "copy_all_original_mods_byte_for_byte_then_add_only_compatible_client_optimizers",
-  "status": "POLICY_ONLY_ORIGINAL_NOT_INVENTORIED",
+  "status": "USER_DECLARED_28_JARS_NOT_PC_VERIFIED",
   "performance_candidates_for_active_game": [
     "rubidium-mc1.16.5-0.2.13.jar",
     "ferritecore-2.1.1-forge.jar",
@@ -24,5 +24,12 @@
     "entity_shadows": false
   },
   "on_conflict": "do_not_replace_or_remove_original; stop_and_test_compatibility_on_a_copy",
-  "distribution": "BLOCKED_UNTIL_SOURCE_LICENSE_SHA_CLIENT_SERVER_LOGIN_BACKUP_VERIFIED"
+  "distribution": "BLOCKED_UNTIL_SOURCE_LICENSE_SHA_CLIENT_SERVER_LOGIN_BACKUP_VERIFIED",
+  "declared_original_names": "agent/FREEROAM-LISTA-DECLARATA.json",
+  "already_in_declared_list": [
+    "rubidium-mc1.16.5-0.2.13.jar",
+    "ferritecore-2.1.1-forge.jar",
+    "modernfix-forge-5.18.0+mc1.16.5.jar"
+  ],
+  "only_new_performance_candidate_by_name": "entityculling-forge-mc1.16.5-1.5.2.jar"
 }
