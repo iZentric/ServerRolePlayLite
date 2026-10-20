@@ -15,8 +15,10 @@ for name, content in (('site', site), ('README', readme)):
     assert 'agent/CONTROL-MODURI-ORIGINALE.md' in content, f'{name}: missing audit source'
     assert 'Conținutul primului pack este în candidatul Lite' not in content, f'{name}: unsupported original parity'
 assert '28 de nume JAR' in site and 'confirmate prin inventar PC read-only' in site
-assert 'șase nume sunt excluse numai din planul Lite, 22 rămân' in site
-assert 'biblioteca sa TRansliterationLib sunt scoase împreună' in site
-assert 'Niciun profil nu a fost schimbat' in site
+assert 'șase nume aprobate au fost excluse numai din profilul NOU FunCity RP Lite (22 JAR-uri)' in site
+assert 'biblioteca sa TRansliterationLib au fost excluse împreună' in site
+assert 'originalul cu 28 este intact' in site
+assert 'conectarea sunt neverificate' in site
+assert 'un server public verificat încă nu sunt disponibile' in site
 assert 'Freeroam → LowSpec' in readme
 print('PASS: site generated from template; Freeroam original and unverified parity disclosed')
