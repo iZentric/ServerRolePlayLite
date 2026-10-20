@@ -17,7 +17,7 @@ try {
   $declared = Get-Content -LiteralPath agent/FREEROAM-LISTA-DECLARATA.json -Raw | ConvertFrom-Json
   $selection = Get-Content -LiteralPath agent/FUNCITY-RP-LITE-SELECTIE.json -Raw | ConvertFrom-Json
   foreach ($name in $declared.jar_names) { [IO.File]::WriteAllText((Join-Path $mods $name), ('fixture:' + $name)) }
-  & ./scripts/fc_freeroam_new_profile.ps1 -Source $source
+  & ./scripts/fc_freeroam_new_profile.ps1 -Source $source -SyntheticDiagnostics
   if ($LASTEXITCODE -ne 0) { throw 'Profile creation failed on fixture' }
   if (@(Get-ChildItem -LiteralPath (Join-Path $target '.minecraft/mods') -File -Filter '*.jar').Count -ne 22 -or
       @(Get-ChildItem -LiteralPath $mods -File -Filter '*.jar').Count -ne 28) { throw 'Wrong original or new inventory' }

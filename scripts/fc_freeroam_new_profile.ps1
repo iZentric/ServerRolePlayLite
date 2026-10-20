@@ -1,7 +1,7 @@
 # Create a SEPARATE Prism instance from the verified original; never edit the original.
 # Copy only Prism version metadata and 22 approved JARs. No saves, accounts, logs,
 # config, resourcepacks or server files are read/copied/uploaded.
-param([Parameter(Mandatory=$true)][string]$Source)
+param([Parameter(Mandatory=$true)][string]$Source, [switch]$SyntheticDiagnostics)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $destination = $null
@@ -99,6 +99,9 @@ try {
   Write-Output '::notice title=Prism new profile::SEPARATE_LITE_PROFILE_CREATED=true; TARGET_JARS=22; SOURCE_JARS=28; SOURCE_UNCHANGED=true; WORLDS_ACCOUNTS_UNTOUCHED=true; CLIENT_JOIN=NOT_TESTED'
   exit 0
 } catch {
+  if ($SyntheticDiagnostics -and [Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
+    Write-Output ('::error title=Prism fixture::LINE=' + $_.InvocationInfo.ScriptLineNumber + ' TYPE=' + $_.Exception.GetType().Name)
+  }
   Write-Output '::error title=Prism new profile::CREATION_BLOCKED_OR_FAILED; SOURCE_UNCHANGED=true; NO_SERVER_CHANGED=true'
   exit 2
 } finally {
