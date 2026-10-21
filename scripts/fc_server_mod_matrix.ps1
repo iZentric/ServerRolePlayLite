@@ -1,7 +1,7 @@
 # Read-only exact-name comparison. Never opens any JAR, world, config or account.
 param(
     [Parameter(Mandatory=$true)][string]$Server,
-    [string]$Decisions = (Join-Path (Split-Path $PSScriptRoot -Parent) 'agent/DECIZII.md')
+    [string]$Manifest = (Join-Path (Split-Path $PSScriptRoot -Parent) 'agent/FUNCITY-SERVER-TARGET-28.json')
 )
 $ErrorActionPreference='Stop'
 function Is-PlainDirectory([string]$p) {
@@ -15,22 +15,21 @@ try {
     $plugins=Join-Path $Server 'plugins'
     Is-PlainDirectory $mods
     Is-PlainDirectory $plugins
-    $text=Get-Content -LiteralPath $Decisions -Raw -Encoding UTF8
-    $section=$text.Split(@('## Server —'),[StringSplitOptions]::None)
-    if ($section.Count -ne 2) { throw 'SERVER_MANIFEST_NOT_UNIQUE' }
-    $table=$section[1].Split(@('## Pluginurile'),[StringSplitOptions]::None)[0]
-    $rows=@([regex]::Matches($table, '(?m)^\| S\d\d \| \x60([^\x60]+\.jar)\x60 \| (PĂSTRAT|SCOS(?: din runtime normal)?) \|'))
-    $historicalTarget=@($rows | Where-Object { $_.Groups[2].Value -eq 'PĂSTRAT' } | ForEach-Object { $_.Groups[1].Value })
-    # Historical 29 includes Clumps; current Lite/client and server excluded it.
-    $target=@($historicalTarget | Where-Object { $_ -ne 'Clumps-6.0.0.28.jar' })
-    $archive=@($rows | ForEach-Object { $_.Groups[1].Value })
-    if ($archive.Count -ne 36 -or $historicalTarget.Count -ne 29 -or $target.Count -ne 28 -or @($archive | Sort-Object -Unique).Count -ne 36) {
+    $plan=Get-Content -LiteralPath $Manifest -Raw -Encoding UTF8 | ConvertFrom-Json
+    $target=@($plan.mods)
+    $archive=@($plan.historical_names)
+    $uniqueTarget=@($target | Sort-Object -Unique)
+    if ($plan.schema -ne 1 -or $plan.status -ne 'PROPOSED_CLIENT_ALIGNED_SERVER_TEST_ONLY_NOT_LIVE' -or
+        $target.Count -ne 28 -or $archive.Count -ne 36 -or
+        $plan.explicitly_excluded_from_historical_29 -in $target -or
+        $uniqueTarget.Count -ne 28) {
         throw 'MANIFEST_INVENTORY_CHANGED'
     }
     $modFiles=@(Get-ChildItem -LiteralPath $mods -File -Filter '*.jar' -ErrorAction Stop)
     $pluginFiles=@(Get-ChildItem -LiteralPath $plugins -File -Filter '*.jar' -ErrorAction Stop)
-    if (@($modFiles | Where-Object { ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 }).Count -gt 0 -or
-        @($pluginFiles | Where-Object { ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 }).Count -gt 0) {
+    $modReparse=@($modFiles | Where-Object { ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 })
+    $pluginReparse=@($pluginFiles | Where-Object { ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 })
+    if ($modReparse.Count -gt 0 -or $pluginReparse.Count -gt 0) {
         throw 'REPARSE_POINT_JAR_REJECTED'
     }
     $actual=@($modFiles | ForEach-Object Name)
@@ -38,7 +37,8 @@ try {
     $extras=@($actual | Where-Object { $_ -notin $target })
     $known=@($actual | Where-Object { $_ -in $archive })
     $road='RoadRunner-mc1.16.5-1.5.2.jar' -in $actual
-    $perf=@($actual | Where-Object { $_ -like 'performant-*.jar' }).Count -gt 0
+    $perfMatches=@($actual | Where-Object { $_ -like 'performant-*.jar' })
+    $perf=$perfMatches.Count -gt 0
     if ($road -and $perf) { throw 'INCOMPATIBLE_OPTIMIZERS_PRESENT' }
     $voice='voicechat-forge-1.16.5-2.3.23.jar' -in $actual
     Write-Output ('::notice title=PC server mod inventory READ ONLY::SERVER_JARS=' + $actual.Count +

@@ -5,13 +5,9 @@ try {
     $mods=Join-Path $srv 'mods'
     $plugins=Join-Path $srv 'plugins'
     $null=New-Item -ItemType Directory -Path $mods,$plugins -Force
-    $source=Get-Content -LiteralPath (Join-Path $PSScriptRoot '../agent/DECIZII.md') -Raw -Encoding UTF8
-    $section=$source.Split(@('## Server —'),[StringSplitOptions]::None)[1].Split(@('## Pluginurile'),[StringSplitOptions]::None)[0]
-    $rows=@([regex]::Matches($section, '(?m)^\| S\d\d \| \x60([^\x60]+\.jar)\x60 \| (PĂSTRAT|SCOS(?: din runtime normal)?) \|'))
-    foreach ($m in $rows) {
-        if ($m.Groups[2].Value -eq 'PĂSTRAT' -and $m.Groups[1].Value -ne 'Clumps-6.0.0.28.jar') {
-            [IO.File]::WriteAllBytes((Join-Path $mods $m.Groups[1].Value),[byte[]]@(0))
-        }
+    $plan=Get-Content -LiteralPath (Join-Path $PSScriptRoot '../agent/FUNCITY-SERVER-TARGET-28.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    foreach ($name in @($plan.mods)) {
+        [IO.File]::WriteAllBytes((Join-Path $mods $name),[byte[]]@(0))
     }
     [IO.File]::WriteAllBytes((Join-Path $plugins 'Fake-plugin.jar'),[byte[]]@(0))
     $run=@(& pwsh -NoProfile -File (Join-Path $PSScriptRoot 'fc_server_mod_matrix.ps1') -Server $srv)
