@@ -23,16 +23,38 @@ CATEGORIES = {
 
 
 def classify(text):
-    low = text.lower()[-600_000:]
+    # Prioritize the final failure, not benign download/progress text at the start.
+    low = text.lower()[-30_000:]
     hits = [name for name, patterns in CATEGORIES.items()
             if any(re.search(pattern, low) for pattern in patterns)]
-    # Categories only; logs may carry secret URLs, so NEVER echo source lines.
     return ','.join(hits) if hits else 'UNCLASSIFIED'
+
+
+def details(text):
+    tail = text[-30_000:]
+    failed = re.findall(r'(?m)^> Task (:[A-Za-z0-9_:.-]+) FAILED', tail)
+    task = failed[-1] if failed else 'UNKNOWN'
+    markers = {
+        'JVM_OPTION': 'Unrecognized VM option',
+        'NO_TOOLCHAIN': 'No matching toolchains found',
+        'MISSING_SYMBOL': 'cannot find symbol',
+        'INVALID_SOURCE': 'invalid source release',
+        'MISSING_PACKAGE': 'does not exist',
+        'INCOMPATIBLE_TYPE': 'incompatible types',
+        'UNSUPPORTED_CLASS': 'UnsupportedClassVersionError',
+        'RESOLVE_DEPENDENCY': 'Could not resolve all files',
+        'NOT_ENOUGH_MEMORY': 'OutOfMemoryError',
+    }
+    flags = [name for name, needle in markers.items() if needle.lower() in tail.lower()]
+    # Task is public upstream source identifier only. No raw lines or URLs.
+    return task, ','.join(flags) if flags else 'NONE'
 
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         sys.exit(2)
     text = Path(sys.argv[1]).read_text(encoding='utf-8', errors='replace')
+    task, flags = details(text)
     print('::error title=FunCity source build safe diagnosis::CATEGORIES=' + classify(text) +
+          ' FAILED_TASK=' + task + ' FLAGS=' + flags +
           '; no raw CI log, download URL or credentials published')
