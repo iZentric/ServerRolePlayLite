@@ -1,5 +1,7 @@
 # FunCity Lite — registrul alegerilor (2026-10-19)
 
+**VERDICT DUPĂ FEEDBACK 21.10.2026:** proprietarul spune că performanța Embeddium TEST este „cam la fel”. Nu avem probă A/B cu setări egale, așa că nu îl promovăm; Lite-ul funcțional rămâne Rubidium. TEST se păstrează separat, fără alte schimbări de moduri. [Detalii](RESEARCH-PERFORMANTA-CLIENT.md).
+
 **APLICARE LIMITATĂ 21.10.2026:** candidatul decis a fost creat ca profil Prism separat `FunCity RP Lite Embeddium TEST` în [run 39673731817](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39673731817); nu a fost pornit, deci nu a trecut încă login/RP/FPS. Lite-ul existent, originalul și serverul nu au fost schimbate. [Configurația/criteriile](RESEARCH-PERFORMANTA-CLIENT.md).
 
 **DECIZIA CURENTĂ 21.10.2026:** proprietarul deleagă agentului *numai performanța*, păstrând același conținut RP. [Decizia consolidată](RESEARCH-PERFORMANTA-CLIENT.md): Rubidium + TexTrue Rubidium Options rămân baseline-ul funcțional; Embeddium 0.3.18 + TexTrue Embeddium Options 0.1.1 sunt perechea alternativă aleasă pentru un A/B pe copie, fără modificări în conținut/server/original Prism. Nu o promova până când loginul, grafica RP și câștigul FPS/1% low repetabil sunt dovedite pe PC-ul proprietarului; nu deduce din surse FPS garantat. Serverul avea încă view 6 și clientul Lite render 12 la audit; presetul 5/Fast a fost blocat în siguranță de Prism activ.
