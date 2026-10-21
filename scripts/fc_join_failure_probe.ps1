@@ -22,6 +22,18 @@ try {
   $serverLog = Recent-Lines (Join-Path (Join-Path $Server 'logs') 'latest.log')
   $clientLines = @($client.lines)
   $serverLines = @($serverLog.lines)
+  $debugPath = Join-Path (Join-Path (Join-Path $Profile $games[0]) 'logs') 'debug.log'
+  $debugExists = Test-Path -LiteralPath $debugPath -PathType Leaf
+  $debugAge = -1
+  $debugLines = @()
+  if ($debugExists) {
+    $debug = Recent-Lines $debugPath
+    $debugAge = $debug.ageHours
+    $debugLines = @($debug.lines)
+  }
+  $debugRelevant = @($debugLines | Where-Object { $_ -match '(?i)(missing|failed|mismatch|registr|handshake|disconnect|fml)' })
+  $debugRegistries = @($debugRelevant | Where-Object { $_ -match '(?i)(missing registr|registry mismatch|registry remapping|failed to synchronize registr|unbound registr)' }).Count
+  $debugChannels = @($debugRelevant | Where-Object { $_ -match '(?i)(channel.*(reject|missing|mismatch)|mod list mismatch|incomplete mod data)' }).Count
   $disconnects = @($serverLines | Where-Object { $_ -match '(?i)(lost connection|disconnected|disconnecting)' })
   $lastDisconnect = if ($disconnects.Count) { [string]$disconnects[-1] } else { '' }
   $reasonFlags = @{
@@ -50,6 +62,13 @@ try {
     $id=$_
     @($hints | Where-Object { $_ -match ('(?i)(?<![A-Za-z0-9_.-])' + [regex]::Escape($id) + '(?![A-Za-z0-9_.-])') }).Count -gt 0
   })
+  $debugMissing = @($ids | Where-Object {
+    $id=$_
+    @($debugRelevant | Where-Object {
+      $_ -match '(?i)(missing|failed|mismatch|registr)' -and
+      $_ -match ('(?i)(?<![A-Za-z0-9_.-])' + [regex]::Escape($id) + '(?![A-Za-z0-9_.-])')
+    }).Count -gt 0
+  })
   Write-Output ('::notice title=Latest Forge join evidence::CLIENT_LOG_AGE_H=' + $client.ageHours + ' SERVER_LOG_AGE_H=' + $serverLog.ageHours +
     ' CLIENT_CONNECT_HINTS=' + $signals.attempted + ' CLIENT_INCOMPLETE_HINTS=' + $signals.incomplete +
     ' CLIENT_REGISTRY_HINTS=' + $signals.registry + ' CLIENT_MODLIST_HINTS=' + $signals.modlist +
@@ -58,6 +77,9 @@ try {
     ' LAST_DISCONNECT_MOD=' + $reasonFlags.mod + ' LAST_DISCONNECT_REGISTRY=' + $reasonFlags.registry +
     ' LAST_DISCONNECT_TIMEOUT=' + $reasonFlags.timeout + ' LAST_DISCONNECT_AUTH=' + $reasonFlags.authentication +
     ' LAST_DISCONNECT_NETWORK=' + $reasonFlags.network + ' ALLOWLIST_MOD_IDS=' + ($mentioned -join ',') +
+    ' DEBUG_LOG_EXISTS=' + $debugExists + ' DEBUG_LOG_AGE_H=' + $debugAge +
+    ' DEBUG_REGISTRY_HINTS=' + $debugRegistries + ' DEBUG_CHANNEL_HINTS=' + $debugChannels +
+    ' DEBUG_ALLOWED_IDS_IN_ERROR_CONTEXT=' + ($debugMissing -join ',') +
     '; RECENT_LOG_TAIL_ONLY=true RAW_LOG_NOT_UPLOADED=true JOIN_NOT_PROVEN=true')
   exit 0
 } catch {
