@@ -8,12 +8,12 @@ try {
     $logDir=Join-Path (Join-Path $instances $profile) '.minecraft/logs'
     New-Item -ItemType Directory -Path $logDir -Force | Out-Null
     $rows=@(
-      '[10:00:00] [main/INFO]: ModLauncher running PRIVATE_NAME PRIVATE_IP',
-      '[10:00:35] [Render thread/INFO]: Sound engine started',
-      '[10:00:45] [Render thread/WARN]: PRIVATE_PASSWORD warning',
-      '[10:01:00] [Render thread/INFO]: Connecting to PRIVATE_IP'
+      '[22Oct2026 10:00:00.100] [main/INFO]: ModLauncher running PRIVATE_NAME PRIVATE_IP',
+      '[22Oct2026 10:00:35.010] [Render thread/INFO]: Sound engine started',
+      '[22Oct2026 10:00:45.100] [Render thread/WARN]: PRIVATE_PASSWORD warning',
+      '[22Oct2026 10:01:00.020] [Render thread/INFO]: Connecting to PRIVATE_IP'
     )
-    if ($profile -match 'TEST$') { $rows+= '[10:01:10] [Render thread/ERROR]: Embeddium PRIVATE_NAME' }
+    if ($profile -match 'TEST$') { $rows+= '[22Oct2026 10:01:10.000] [Render thread/ERROR]: Embeddium PRIVATE_NAME' }
     [IO.File]::WriteAllLines((Join-Path $logDir 'latest.log'),$rows)
   }
   $result=@(& ./scripts/fc_client_log_comparison.ps1 -Instances $instances)

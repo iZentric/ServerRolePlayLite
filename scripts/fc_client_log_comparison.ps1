@@ -23,10 +23,11 @@ function Audit([string]$Root,[string]$Label) {
   if ($lines.Count -gt 400000) { throw 'Too many log lines' }
   $errorCount=0; $fatalCount=0; $warningCount=0
   $crashHints=0; $rendererErrors=0; $rendererWarnings=0
-  $joinHints=0; $disconnectHints=0; $startupHints=0; $soundHints=0
-  $first=$null; $last=$null; $day=0; $prev=$null
+  $joinHints=0; $disconnectHints=0; $startupHints=0; $soundHints=0; $stopHints=0
+  $first=$null; $last=$null; $firstSound=$null; $firstJoin=$null; $day=0; $prev=$null; $timedLines=0
   foreach ($line in $lines) {
-    $match=[regex]::Match($line,'^\[(\d\d):(\d\d):(\d\d)\]')
+    # Forge 1.16 can prefix the timestamp with 22Oct2026 and include milliseconds.
+    $match=[regex]::Match($line,'^\[(?:(?:\d{1,2}[A-Za-z]{3}\d{4}|\d{4}-\d{2}-\d{2})\s+)?(\d\d):(\d\d):(\d\d)(?:[.,]\d{1,6})?\]')
     if ($match.Success) {
       $hh=[int]$match.Groups[1].Value; $mm=[int]$match.Groups[2].Value; $ss=[int]$match.Groups[3].Value
       if ($hh -lt 24 -and $mm -lt 60 -and $ss -lt 60) {
@@ -36,6 +37,7 @@ function Audit([string]$Root,[string]$Label) {
         if ($first -eq $null) { $first=$sec }
         $last=$sec
         $prev=$seconds
+        $timedLines++
       }
     }
     $isError=$line -match '\[[^\]]+/(ERROR|FATAL)\]'
@@ -47,16 +49,27 @@ function Audit([string]$Root,[string]$Label) {
     if ($line -match '(?i)(embeddium|rubidium|oculus)' -and $isError) { $rendererErrors++ }
     if ($line -match '(?i)(embeddium|rubidium|oculus)' -and $isWarn) { $rendererWarnings++ }
     if ($line -match '(?i)ModLauncher running|Launching target .fmlclient.|Launching minecraft|Starting Minecraft') { $startupHints++ }
-    if ($line -match '(?i)OpenAL initialized|Sound engine started') { $soundHints++ }
-    if ($line -match '(?i)connecting to |logged in with entity id|join(?:ed|ing) world|connected to server') { $joinHints++ }
+    if ($line -match '(?i)OpenAL initialized|Sound engine started') {
+      $soundHints++
+      if ($firstSound -eq $null -and $last -ne $null) { $firstSound=$last }
+    }
+    if ($line -match '(?i)connecting to |logged in with entity id|join(?:ed|ing) world|connected to server') {
+      $joinHints++
+      if ($firstJoin -eq $null -and $last -ne $null) { $firstJoin=$last }
+    }
     if ($line -match '(?i)disconnected|lost connection|connection closed') { $disconnectHints++ }
+    if ($line -match '(?i)Stopping!|Shutting down') { $stopHints++ }
   }
-  $span='UNKNOWN'
+  $span='UNKNOWN'; $toSound='UNKNOWN'; $toJoin='UNKNOWN'
   if ($first -ne $null -and $last -ne $null -and $last -ge $first) { $span="$($last-$first)" }
+  if ($first -ne $null -and $firstSound -ne $null -and $firstSound -ge $first) { $toSound="$($firstSound-$first)" }
+  if ($first -ne $null -and $firstJoin -ne $null -and $firstJoin -ge $first) { $toJoin="$($firstJoin-$first)" }
   $rotated=@(Get-ChildItem -LiteralPath $logs -File -Filter '*.log.gz' -ErrorAction Stop).Count
-  # File modification time and count only. No raw log content or private timestamps released.
+  # These intervals are log milestones, NOT game menu load time or comparable FPS.
   Write-Output ('::notice title=Client sanitized log ' + $Label + '::LOG_PRESENT=true BYTES=' + $file.Length +
-    ' LINE_COUNT=' + $lines.Count + ' LOG_SPAN_SECONDS=' + $span + ' STARTUP_HINTS=' + $startupHints +
+    ' LINE_COUNT=' + $lines.Count + ' TIMED_LINES=' + $timedLines + ' LOG_SPAN_SECONDS=' + $span +
+    ' TO_FIRST_SOUND_SECONDS=' + $toSound + ' TO_FIRST_CONNECT_HINT_SECONDS=' + $toJoin +
+    ' STARTUP_HINTS=' + $startupHints + ' STOP_HINTS=' + $stopHints +
     ' SOUND_HINTS=' + $soundHints + ' JOIN_HINTS=' + $joinHints + ' DISCONNECT_HINTS=' + $disconnectHints +
     ' WARN_LINES=' + $warningCount + ' ERROR_LINES=' + $errorCount + ' FATAL_LINES=' + $fatalCount +
     ' CRASH_HINTS=' + $crashHints + ' RENDERER_ERROR_LINES=' + $rendererErrors +
