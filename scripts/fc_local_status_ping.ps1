@@ -74,7 +74,16 @@ try {
     $protocol = [int]$json.version.protocol
     $players = [int]$json.players.online
     if ($protocol -lt 1 -or $players -lt 0) { throw 'Invalid status values' }
-    Write-Output ('::notice title=Minecraft local status::STATUS_PING=READY PROTOCOL=' + $protocol + ' PLAYERS_ONLINE=' + $players + '; LOOPBACK_ONLY=true CLIENT_JOIN=NOT_TESTED')
+    $forgeData = $json.PSObject.Properties['forgeData']
+    $modinfo = $json.PSObject.Properties['modinfo']
+    $forgeAdvertised = ($null -ne $forgeData) -or ($null -ne $modinfo)
+    $forgeMods = -1
+    if ($forgeData -and $forgeData.Value -and $forgeData.Value.PSObject.Properties['mods']) {
+      $forgeMods = @($forgeData.Value.mods).Count
+    } elseif ($modinfo -and $modinfo.Value -and $modinfo.Value.PSObject.Properties['modList']) {
+      $forgeMods = @($modinfo.Value.modList).Count
+    }
+    Write-Output ('::notice title=Minecraft local status::STATUS_PING=READY PROTOCOL=' + $protocol + ' PLAYERS_ONLINE=' + $players + ' FORGE_DATA_ADVERTISED=' + $forgeAdvertised + ' ADVERTISED_MODS=' + $forgeMods + '; LOOPBACK_ONLY=true CLIENT_JOIN=NOT_TESTED')
   } finally { $socket.Close() }
   exit 0
 } catch {

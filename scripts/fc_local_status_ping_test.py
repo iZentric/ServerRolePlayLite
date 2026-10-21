@@ -58,7 +58,8 @@ def main():
                         raise RuntimeError('not status request')
                     response = json.dumps({'version': {'name': '1.16.5', 'protocol': 754},
                         'players': {'online': 0, 'max': 20, 'sample': [{'name': 'SECRET_PLAYER'}]},
-                        'description': {'text': 'SECRET_MOTD'}}).encode()
+                        'description': {'text': 'SECRET_MOTD'},
+                        'forgeData': {'mods': [{'modId': 'SECRET_MOD'}]}}).encode()
                     payload = b'\x00' + varint(len(response)) + response
                     conn.sendall(varint(len(payload)) + payload)
             except Exception as exc:
@@ -70,7 +71,7 @@ def main():
                                 capture_output=True, text=True, timeout=8)
         worker.join(timeout=2)
         if failures or worker.is_alive() or result.returncode or \
-           'STATUS_PING=READY PROTOCOL=754 PLAYERS_ONLINE=0' not in result.stdout or \
+           'STATUS_PING=READY PROTOCOL=754 PLAYERS_ONLINE=0 FORGE_DATA_ADVERTISED=True ADVERTISED_MODS=1' not in result.stdout or \
            'SECRET' in result.stdout or 'SECRET' in result.stderr:
             raise AssertionError('Synthetic status ping failed or leaked private payload')
     print('PASS: local protocol status responds; only version/player count reported, no names/MOTD')
