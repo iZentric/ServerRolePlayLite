@@ -19,6 +19,10 @@
 
 **Context local uitat în rezumatul anterior:** [inventarul read-only HYPECITY](COMPARATIE-HYPECITY-PC.md) a găsit Performant într-un **alt** server RP (și 35 mods/61 plugins în folder), în timp ce ținta istorică FunCity avea RoadRunner. Utilizatorul a raportat mulți jucători pe un hosting HYPECITY, dar aceasta **nu** izolează efectul Performant sau FPS-ul PC-urilor de acolo. Era greșit să răspundem ca și cum Performant nu ar exista; îl aveam deja consemnat drept alternativă incompatibilă cu RoadRunner, dar nu l-am pus suficient de clar în catalog sau în explicația modpackurilor.
 
+## Rezultatul de laborator GitHub (executat)
+
+[Runda **39690162286**](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39690162286) a comparat efectiv RoadRunner 1.5.2 cu Performant 4.1m (nu combinate), aceeași lume generată, 15 moduri RP istorice, 6 pluginuri, FerriteCore și ModernFix, Java 11, 80 zombie, două probe/braț R/P/P/R. Performant a avut mean tick time mai mic în ambele perechi (1,57/2,26 ms vs 3,22/2,71 ms), dar CPU Java mai mare (~7,5 s vs ~5,9 s per fereastră de 30 s). Booturile și opririle au reușit; lipsesc jucătorii, NPC/vehiculele reale, vocea, FPS client și MSPT p95/p99 în lumea FunCity. [Metodă, rezultate și decizie](REZULTAT-AB-ROADRUNNER-PERFORMANT-GITHUB.md). Este un argument pentru proba pe copie, **nu** aprobare de instalare live.
+
 ## Probă corectă dacă serverul laghează, fără client nou
 
 1. Profiler [spark Forge 1.16.5](https://modrinth.com/mod/spark/version/9NSIbttL) pe un mediu aprobat, pentru MSPT/tick/entity pathfinding, cu scenă și număr de jucători definite. **Nu** extrapola din FPS client sau din lagul conexiunii.
