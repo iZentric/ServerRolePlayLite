@@ -41,7 +41,18 @@ jobs:
             }
           }
           # Only two exact public filenames, not a recursive inventory of personal downloads.
-          $searchFolders+=@('C:\Users\Administrator\Downloads')
+          $downloads='C:\Users\Administrator\Downloads'
+          $searchFolders+=@($downloads)
+          $downloadsPresent=Test-Path -LiteralPath $downloads -PathType Container
+          $nearNames=@()
+          if ($downloadsPresent) {
+            $nearNames=@(Get-ChildItem -LiteralPath $downloads -File -ErrorAction Stop | Where-Object {
+              $_.Name -match '(?i)embeddium' -and $_.Name -match '\.jar$' -and
+              $_.Name -match '^[a-zA-Z0-9_+(). -]+$'
+            } | Select-Object -First 12 -ExpandProperty Name)
+          }
+          Write-Output ('::notice title=Downloads targeted check::DOWNLOADS_VISIBLE=' + $downloadsPresent +
+            ' NEAR_MATCH_COUNT=' + $nearNames.Count + ' SAFE_NAMES=' + ($nearNames -join ',') + '; READ_ONLY=true')
           foreach ($mods in $searchFolders) {
             if (-not (Test-Path -LiteralPath $mods -PathType Container)) { continue }
             $modsInfo=Get-Item -LiteralPath $mods -ErrorAction Stop
