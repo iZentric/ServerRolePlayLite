@@ -1,4 +1,6 @@
-# FunCity RP Lite — decizia de performanță (Forge 1.16.5, 21.10.2026)
+# FunCity RP Lite — decizia de performanță (Forge 1.16.5, actualizată 22.10.2026)
+
+**Controlul logurilor:** [comparația read-only 39676077697](COMPARATIE-LOGURI-RUBIDIUM-EMBEDDIUM.md) a găsit câte 19 linii ERROR, 432 indicii de resurse și zero FATAL/crash-marker în ultimele loguri ale ambelor profile. Intervalele logului (35 s Rubidium, 52 s Embeddium TEST) nu sunt timpi de încărcare comparabili: doar ultimul log TEST conține un indiciu de conectare, iar FPS-ul nu este în loguri. Nu schimba verdictul doar pentru diferența 35/52.
 
 **Feedback după test (proprietarul: „e cam la fel”):** performanța percepută a profilului Embeddium TEST nu arată un avantaj clar. Nu avem cifre FPS/1% low, scena, setările efective curente din ambele profile sau o confirmare separată a aspectului RP/voce. În special TEST a fost creat cu 5 chunkuri/Fast, în timp ce ultima citire a Lite-ului Rubidium era 12/Fancy; **nu atribuim diferența sau egalitatea de FPS exclusiv rendererului** fără setări egale. Decizia mea de acum: **nu promovăm Embeddium peste Lite-ul funcțional; Rubidium rămâne baza**. TEST rămâne separat, fără ștergere, pentru o comparație controlată dacă proprietarul dorește. Nu adăugăm alte moduri la întâmplare pentru a forța un câștig.
 

@@ -1,4 +1,6 @@
-# FunCity — stare verificabilă (21.10.2026)
+# FunCity — stare verificabilă (22.10.2026)
+
+- **Audit loguri read-only 22.10.2026:** [PC 39676077697](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39676077697) a citit doar `latest.log` din Lite Rubidium și Embeddium TEST, fără publicarea datelor private: intervalul acoperit de log 35 s / 52 s (**nu timp de startup**), audio 25 s / 11 s, un indiciu de conectare doar în TEST la 43 s, WARN 625 / 619, ERROR 19 / 19, FATAL 0 / 0, crash marker 0 / 0, eroare cu renderer în linie 0 / 0, mesaje resurse clasificate 432 / 432. Ultimele sesiuni au activități diferite și nu conțin FPS; nu deduce viteză mai bună sau login reușit. [Tabelul cu limite](COMPARATIE-LOGURI-RUBIDIUM-EMBEDDIUM.md). Rubidium rămâne alegerea de bază, TEST păstrat separat.
 
 - **Feedback utilizator după profilul TEST:** „e cam la fel”. Fără FPS/1% low numeric, scenă și dovada că setările sunt identice; TEST a fost creat 5/Fast, Lite funcțional era 12/Fancy la ultima citire, posibil schimbat între timp. **Nu promovăm Embeddium ca upgrade dovedit**; Rubidium rămâne rendererul profilului Lite funcțional, iar TEST rămâne separat. Nu deduce login, voce sau verificarea tuturor obiectelor din expresia „cam la fel”. [Limitări](RESEARCH-PERFORMANTA-CLIENT.md).
 
