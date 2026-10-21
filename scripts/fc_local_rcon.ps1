@@ -91,7 +91,12 @@ try {
       $count = [regex]::Match($packet.text,'(?i)there are\s+(\d+)\s+of a max of\s+\d+\s+players online')
       $playerState = if ($count.Success -and [int]$count.Groups[1].Value -eq 0) { 'ZERO' }
                      elseif ($count.Success) { 'ACTIVE' } else { 'UNKNOWN' }
-      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
+      # Print length/whitelisted grammar signals only, never the response or player names.
+      $shape = if ($packet.text.Length -eq 0) { 'EMPTY' }
+               elseif ($packet.text -match '(?i)there are') { 'VANILLA_PHRASE' }
+               elseif ($packet.text -match '(?i)online players|players online') { 'ONLINE_PHRASE' }
+               else { 'OTHER' }
+      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + ' RESPONSE_SHAPE=' + $shape + ' RESPONSE_LENGTH=' + $packet.text.Length + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
     } else { Write-Output '::notice title=FunCity local RCON::AUTH_OK=true SAVE_ALL_RESPONSE_RECEIVED=true; WORLD_NOT_MODIFIED_BY_AGENT=true' }
   } finally { $socket.Close() }
   exit 0
