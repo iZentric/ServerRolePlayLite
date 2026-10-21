@@ -94,6 +94,13 @@ try {
     $bytes+=$jar.Length
   }
   $replacements=@($embeddium,$embeddiumOptions)
+  # Pin the exact binaries seen in the owner's read-only E: inventory run 39673301267.
+  # This protects against files changing between inspection and creation; it is not
+  # an independent author signature or proof of performance.
+  $observed=@{
+    'embeddium-0.3.18+mc1.16.5.jar'='5B5E25B96BD8ACEDE00882F2DC32DCCF9E21841778DA8BF88D3E3955440A3A52'
+    'textrue_embeddium_options-0.1.1+mc1.16.5.jar'='77F58855FF2E48DA559D0B9E14D65662E5F564066A3B1D418DCD96C4ADDED461'
+  }
   foreach ($name in $replacements) {
     $jar=Safe-File (Join-Path $Downloads $name)
     if ((-not $Synthetic -and $jar.Length -lt 20000) -or $jar.Length -gt 5000000) { throw 'Candidate JAR size outside bound' }
@@ -101,6 +108,7 @@ try {
       throw 'TexTrue size differs from author GitHub release'
     }
     $hashes[$name]=(Get-FileHash -LiteralPath $jar.FullName -Algorithm SHA256).Hash
+    if (-not $Synthetic -and $hashes[$name] -cne $observed[$name]) { throw 'Candidate changed since E drive read-only audit' }
     $bytes+=$jar.Length
     if ($name -ceq $embeddium) { Assert-ModJar $jar.FullName 'embeddium' }
     if ($name -ceq $embeddiumOptions) { Assert-ModJar $jar.FullName 'textrues_embeddium_options' }
