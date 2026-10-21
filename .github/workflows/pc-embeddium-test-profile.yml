@@ -16,9 +16,26 @@ jobs:
     timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
+      - name: Parse PowerShell installer and fixture
+        shell: pwsh
+        run: |
+          foreach ($name in @('scripts/fc_embeddium_test_profile.ps1','scripts/fc_embeddium_test_profile_test.ps1')) {
+            $tokens=$null; $errors=$null
+            $null=[System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $name),[ref]$tokens,[ref]$errors)
+            foreach ($problem in $errors) {
+              Write-Output ('::error file=' + $name + ',line=' + $problem.Extent.StartLineNumber + '::' + $problem.Message)
+            }
+            if (@($errors).Count -gt 0) { exit 2 }
+          }
+          Write-Output 'PowerShell profile scripts syntax PASS'
       - name: Synthetic separate-profile copy/rollback and privacy checks
         shell: pwsh
-        run: ./scripts/fc_embeddium_test_profile_test.ps1
+        run: |
+          try { ./scripts/fc_embeddium_test_profile_test.ps1 }
+          catch {
+            Write-Output ('::error file=scripts/fc_embeddium_test_profile_test.ps1,line=1::HOSTED_FIXTURE_FAILED TYPE=' + $_.Exception.GetType().Name + ' MESSAGE=' + $_.Exception.Message)
+            exit 2
+          }
   pc-create:
     if: startsWith(github.event.head_commit.message, 'Create Embeddium Prism test profile once')
     needs: guards
