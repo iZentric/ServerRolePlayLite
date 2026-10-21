@@ -20,8 +20,10 @@ with tempfile.TemporaryDirectory(prefix='fc-metadata-') as temp:
     p=subprocess.run(['pwsh','-NoProfile','-File',str(script),'-ClientMods',str(client),
                       '-ServerMods',str(server),'-Manifest',str(repo/'agent/FUNCITY-RP-LITE-SELECTIE.json')],
                      capture_output=True,text=True,timeout=15)
-    assert p.returncode==0, p.returncode
-    assert 'MODS_TOML_DIFFERENT=1' in p.stdout and 'MANIFEST_DIFFERENT=1' in p.stdout
+    if p.returncode or 'MODS_TOML_DIFFERENT=1' not in p.stdout or 'MANIFEST_DIFFERENT=1' not in p.stdout:
+        # The PowerShell script returns only counts or exception class/line; fixture-only paths are not printed.
+        print('::error title=Synthetic Forge metadata fixture::' + p.stdout.strip().replace('\n', ' ')[:450])
+        raise AssertionError('synthetic metadata comparison failed')
     for private in ('secret config','private BBB',temp):
         assert private not in p.stdout+p.stderr
     print('PASS: metadata parity isolates mods.toml/manifest differences without printing private bytes')
