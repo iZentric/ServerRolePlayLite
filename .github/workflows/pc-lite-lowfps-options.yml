@@ -1,5 +1,6 @@
 name: Apply reversible five-chunk Lite graphics preset when Prism is closed
 # Never closes Prism/game; private options backup; no mod/world/server writes.
+# Synthetic settings/restore rehearsal passed in hosted run 39655688937.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
