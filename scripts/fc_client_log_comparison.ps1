@@ -23,6 +23,7 @@ function Audit([string]$Root,[string]$Label) {
   if ($lines.Count -gt 400000) { throw 'Too many log lines' }
   $errorCount=0; $fatalCount=0; $warningCount=0
   $crashHints=0; $rendererErrors=0; $rendererWarnings=0
+  $resourceHints=0; $graphicsHints=0; $voiceHints=0; $networkErrorHints=0
   $joinHints=0; $disconnectHints=0; $startupHints=0; $soundHints=0; $stopHints=0
   $first=$null; $last=$null; $firstSound=$null; $firstJoin=$null; $day=0; $prev=$null; $timedLines=0
   foreach ($line in $lines) {
@@ -48,6 +49,12 @@ function Audit([string]$Root,[string]$Label) {
     if ($line -match '(?i)uncaught exception|crash report saved|mixin apply failed|noclassdeffounderror|exception in thread') { $crashHints++ }
     if ($line -match '(?i)(embeddium|rubidium|oculus)' -and $isError) { $rendererErrors++ }
     if ($line -match '(?i)(embeddium|rubidium|oculus)' -and $isWarn) { $rendererWarnings++ }
+    if ($isError -or $isWarn) {
+      if ($line -match '(?i)missing (?:texture|model)|unable to load model|unresolved texture|file not found|resource pack|model variant') { $resourceHints++ }
+      if ($line -match '(?i)\bOpenGL\b|\bGL_INVALID_\w+|render pipeline|shader(?:pack)?') { $graphicsHints++ }
+      if ($line -match '(?i)voicechat|voice chat|\bOpenAL\b') { $voiceHints++ }
+      if ($line -match '(?i)channel.*(mismatch|reject)|failed to connect|network.*mismatch|connection timed out') { $networkErrorHints++ }
+    }
     if ($line -match '(?i)ModLauncher running|Launching target .fmlclient.|Launching minecraft|Starting Minecraft') { $startupHints++ }
     if ($line -match '(?i)OpenAL initialized|Sound engine started') {
       $soundHints++
@@ -73,7 +80,9 @@ function Audit([string]$Root,[string]$Label) {
     ' SOUND_HINTS=' + $soundHints + ' JOIN_HINTS=' + $joinHints + ' DISCONNECT_HINTS=' + $disconnectHints +
     ' WARN_LINES=' + $warningCount + ' ERROR_LINES=' + $errorCount + ' FATAL_LINES=' + $fatalCount +
     ' CRASH_HINTS=' + $crashHints + ' RENDERER_ERROR_LINES=' + $rendererErrors +
-    ' RENDERER_WARN_LINES=' + $rendererWarnings + ' ROTATED_LOGS=' + $rotated +
+    ' RENDERER_WARN_LINES=' + $rendererWarnings + ' RESOURCE_HINT_LINES=' + $resourceHints +
+    ' GRAPHICS_HINT_LINES=' + $graphicsHints + ' VOICE_HINT_LINES=' + $voiceHints +
+    ' NETWORK_ERROR_HINT_LINES=' + $networkErrorHints + ' ROTATED_LOGS=' + $rotated +
     '; LOG_SPAN_IS_NOT_LOAD_TIME=true; FPS_NOT_IN_LOG=true; NO_RAW_DATA=true')
 }
 try {
