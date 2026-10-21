@@ -1,3 +1,4 @@
+try {
 # Hosted-only syntax and synthetic byte-preservation/rollback fixture.
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -46,4 +47,9 @@ try {
   Write-Output 'VIEW_FIVE_SYNTAX_OK=true GUARD_ORDER_OK=true SYNTHETIC_BYTE_PRESERVATION=true ROLLBACK_OK=true LIVE_SERVER_UNTOUCHED=true'
 } finally {
   if (Test-Path -LiteralPath $root) { Remove-Item -LiteralPath $root -Recurse -Force }
+}
+
+} catch {
+  Write-Output ("::error title=Five-chunk fixture::TYPE=" + $_.Exception.GetType().Name + " LINE=" + $_.InvocationInfo.ScriptLineNumber + " MESSAGE=" + $_.Exception.Message)
+  exit 2
 }

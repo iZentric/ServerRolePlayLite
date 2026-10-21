@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   fixture:
-    if: startsWith(github.event.head_commit.message, 'Apply guarded view-distance five once')
+    if: startsWith(github.event.head_commit.message, 'Test server view-five fixture') || startsWith(github.event.head_commit.message, 'Apply guarded view-distance five once')
     runs-on: ubuntu-24.04
     timeout-minutes: 4
     steps:
