@@ -1,5 +1,21 @@
 # Performanță client Forge 1.16.5 — alegere, alternative și limite
 
+## Corecție după cercetare suplimentară, 21.10.2026 — există alternative reale
+
+**Nu este dovedit că Rubidium este cea mai rapidă alegere.** Cea mai serioasă alternativă de **test A/B pe un profil COPIE** este: `Embeddium 0.3.18+mc1.16.5` **în loc de** `Rubidium 0.2.13` și `TexTrue's Embeddium Options 0.1.1+mc1.16.5` **în loc de** `TexTrue's Rubidium Options 1.0.8`; `Oculus 1.4.7` poate rămâne pentru test. Originalul Prism (28) și Lite-ul funcțional (22) nu se modifică pentru experiment. Surse primare: [changelogul Embeddium](https://github.com/FiniteReality/embeddium/wiki/Changelog#0214) spune explicit că 1.16.5 a primit optimizări de chunk meshing și cere Oculus ≥1.4.7; [0.3.18 este ultima versiune cu suport 1.16.5](https://github.com/FiniteReality/embeddium/wiki/Changelog#0318), disponibilă în [fișier Forge 1.16.5](https://modrinth.com/mod/embeddium/version/0.3.18+mc1.16.5). [Autorul TexTrue a publicat versiunea 0.1.1 pentru 1.16.5](https://github.com/ThinkingStudios/textrues-embeddium-options/releases/tag/0.1.1%2Bmc1.16.5), iar [declarația de dependență](https://github.com/ThinkingStudios/textrues-embeddium-options/blob/0.1.1%2Bmc1.16.5/src/main/resources/META-INF/mods.toml) acceptă Embeddium ≥0.1, Forge ≥36. **Aceasta este compatibilitate declarată, nu probă că perechea exactă 0.3.18/0.1.1 bootează, afișează corect Pizzaland/mobilierul sau câștigă FPS pe PC-ul nostru.** Vechiul TexTrue's Rubidium Options rămâne incompatibil cu Embeddium, dar există deci un *înlocuitor*, lucru omis în explicația precedentă.
+
+Alte piste, **nu câștigători dovediți**:
+
+| Candidat pentru Forge 1.16.5 | Ce poate schimba | Prioritate pentru RP la 5 chunkuri |
+| --- | --- | --- |
+| [Embeddium 0.3.18](https://github.com/FiniteReality/embeddium/wiki/Changelog#0214) + [TexTrue Embeddium Options 0.1.1](https://github.com/ThinkingStudios/textrues-embeddium-options/releases/tag/0.1.1%2Bmc1.16.5), înlocuind *ambele* JAR-uri Rubidium/TexTrue originale | Chunk meshing, corecții de randare; FPS stabil nu este garantat. | **Primul A/B pe copie**, după presetul grafic, cu aceleași setări în ambele profile. |
+| [Rubidium Extra 0.4.18 pentru 1.16.5](https://modrinth.com/mod/rubidium-extra/version/rRTcH5A6) | Oferă reglaje fine pentru animații/particule/detalii; nu garantează FPS suplimentar cu setări implicite. | Al doilea candidat, numai dacă presetul standard nu ajunge și verificăm exact dependențele/GUI TexTrue pe copie. |
+| [Better FPS – Render Distance 1.1/Forge 1.16.5](https://www.curseforge.com/minecraft/mc-mods/better-fps-render-distance/files/3543461) | Poate reduce secțiunile randate prin distanță sferică; poate ascunde etaje/elemente RP. | Numai dacă în oraș există bottleneck demonstrat de randare a chunkurilor, *nu* în paralel cu altă modificare. |
+| [MemoryLeakFix Forge 1.16.5](https://modrinth.com/mod/memoryleakfix/version/xYL9nIiR) | Țintește degradarea din sesiuni lungi, nu FPS instant. | Numai dacă există probă de creștere de RAM/stutter în timp; ModernFix este deja prezent. |
+| ImmediatelyFast/Exordium/CullLessLeaves Reforged | Versiunile populare nu oferă un build **oficial Forge 1.16.5 confirmat** pentru această combinație; nu preluăm benchmarkuri 1.19+ ca dovadă pentru 1.16.5. | Nu instalăm porturi aleatorii. |
+
+**Decizie pentru live:** cele 22 de JAR-uri funcționale rămân neschimbate acum, nu pentru că nu ar exista moduri mai bune, ci fiindcă performanța alternativelor nu a fost comparată pe același PC. Închiderea normală a Prism/jocului este poarta pentru presetul Lite; abia după aceea se poate testa o singură înlocuire pe o copie, cu boot/login, vehicule/mobilier/voce și FPS/1% lows în aceleași scene. Nici serverul/world, nici profilul original nu sunt cobai. Nu folosi CPU-thread-count agresiv pentru Embeddium pe PC slab fără măsurătoare.
+
 ## Decizie actuală, 21.10.2026 — profilul cu login reușit rămâne baza
 
 **Alegere:** păstrăm cele 22 JAR-uri ale `FunCity RP Lite` și serverul joinabil; **nu adăugăm Entity Culling**, nu suprapunem/înlocuim Rubidium cu Embeddium, nu instalăm Dynamic FPS sau Clumps. Pentru PC slab alegem întâi setări grafice reversibile, nu încă un mod. Acest lucru este o alegere de compatibilitate/risc, **nu o afirmație că pachetul are maximul posibil de FPS**.
