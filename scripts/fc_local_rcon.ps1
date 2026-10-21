@@ -2,7 +2,8 @@
 # Never prints password, RCON response, names, address, command lines or paths.
 param([Parameter(Mandatory=$true)][string]$Server,
       [ValidateSet('list','save-all flush','stop')][string]$Command = 'list',
-      [switch]$Synthetic)
+      [switch]$Synthetic,
+      [switch]$PrivateCopy)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $phase = 'CONFIG'
@@ -37,8 +38,18 @@ function Read-Packet([IO.Stream]$Stream) {
             text=[Text.Encoding]::UTF8.GetString($body,8,$size-10) }
 }
 try {
-  if ((Split-Path -Leaf $Server) -cne 'server' -or
-      (Split-Path -Leaf (Split-Path -Parent $Server)) -cne 'FunCityLocal') { throw 'Wrong server' }
+  if ((Split-Path -Leaf $Server) -cne 'server') { throw 'Wrong server' }
+  if ($PrivateCopy) {
+    $stage = Split-Path -Parent $Server
+    if ((Split-Path -Leaf $stage) -cne 'bootable-no-clumps-39598696934' -or
+        (Split-Path -Leaf (Split-Path -Parent $stage)) -cne 'Arena-CompatStages' -or
+        (Split-Path -Leaf (Split-Path -Parent (Split-Path -Parent $stage))) -cne 'FunCityLocal' -or
+        -not (Test-Path -LiteralPath (Join-Path $stage 'private-voicechat-trial.json') -PathType Leaf)) {
+      throw 'Wrong private copy'
+    }
+  } elseif ((Split-Path -Leaf (Split-Path -Parent $Server)) -cne 'FunCityLocal') {
+    throw 'Wrong original server'
+  }
   $cfg = Join-Path $Server 'server.properties'
   $item = Get-Item -LiteralPath $cfg -ErrorAction Stop
   if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw 'Unsafe config' }

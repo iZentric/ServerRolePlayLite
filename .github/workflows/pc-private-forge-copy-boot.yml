@@ -1,0 +1,40 @@
+name: Bounded private Forge copy boot with original restart
+# Only owner's already-stopped original; no live JAR/world edits, no forced kills.
+# PC stage requires exact commit message prefix. Raw logs never leave PC.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-private-forge-copy-boot.yml]
+permissions:
+  contents: read
+concurrency:
+  group: funcity-maintenance-one-at-a-time
+  cancel-in-progress: false
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthetic original/copy RCON framing and privacy
+        run: python3 scripts/fc_local_rcon_test.py
+      - name: Parse bounded Windows maintenance script without executing it
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'scripts/fc_test_private_server_copy.ps1'),[ref]$tokens,[ref]$errors)
+          if ($errors.Count -ne 0) { throw 'Unsafe maintenance parser failure' }
+  pc-copy-test:
+    if: startsWith(github.event.head_commit.message, 'Boot private Forge copy once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm original offline, boot private copy, stop normally and restart original task
+        shell: powershell
+        run: |
+          $server='C:\Users\Administrator\Desktop\FunCityLocal\server'
+          $copy='C:\Users\Administrator\Desktop\FunCityLocal\Arena-CompatStages\bootable-no-clumps-39598696934\server'
+          & ./scripts/fc_test_private_server_copy.ps1 -Server $server -Copy $copy
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

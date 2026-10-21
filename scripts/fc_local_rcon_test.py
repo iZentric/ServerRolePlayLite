@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Synthetic RCON auth/list service; never contacts a real server."""
+"""Synthetic RCON auth/list for both original and private copy; no real server."""
 import socket
 import struct
 import subprocess
@@ -31,41 +31,51 @@ def reply(sock, request_id, typ, text):
     sock.sendall(struct.pack('<i', len(body)) + body)
 
 
-with tempfile.TemporaryDirectory(prefix='fc-rcon-fixture-') as temp:
-    server = Path(temp) / 'FunCityLocal' / 'server'
-    server.mkdir(parents=True)
-    password = 'NEVER_PRINT_SECRET'
-    with socket.socket() as listener:
-        listener.bind(('127.0.0.1', 0))
-        listener.listen(1)
-        listener.settimeout(10)
-        port = listener.getsockname()[1]
-        (server / 'server.properties').write_text(
-            f'enable-rcon=true\nrcon.port={port}\nrcon.password={password}\n')
-        errors = []
+for private in (False, True):
+    with tempfile.TemporaryDirectory(prefix='fc-rcon-fixture-') as temp:
+        project = Path(temp) / 'FunCityLocal'
+        if private:
+            stage = project / 'Arena-CompatStages' / 'bootable-no-clumps-39598696934'
+            stage.mkdir(parents=True)
+            (stage / 'private-voicechat-trial.json').write_text('{}')
+            server = stage / 'server'
+        else:
+            server = project / 'server'
+        server.mkdir(parents=True)
+        password = 'NEVER_PRINT_SECRET'
+        with socket.socket() as listener:
+            listener.bind(('127.0.0.1', 0))
+            listener.listen(1)
+            listener.settimeout(10)
+            port = listener.getsockname()[1]
+            (server / 'server.properties').write_text(
+                f'enable-rcon=true\nrcon.port={port}\nrcon.password={password}\n')
+            errors = []
 
-        def serve():
-            try:
-                with listener.accept()[0] as conn:
-                    conn.settimeout(8)
-                    rid, typ, value = packet(conn)
-                    assert typ == 3 and value == password
-                    reply(conn, rid, 0, '')
-                    reply(conn, rid, 2, '')
-                    rid, typ, value = packet(conn)
-                    assert typ == 2 and value == 'list'
-                    reply(conn, rid, 0, '§0There are §a0§7 of a max of §a20§7 players online: SECRET_PLAYER')
-            except Exception as exc:
-                errors.append(str(exc))
+            def serve():
+                try:
+                    with listener.accept()[0] as conn:
+                        conn.settimeout(8)
+                        rid, typ, value = packet(conn)
+                        assert typ == 3 and value == password
+                        reply(conn, rid, 0, '')
+                        reply(conn, rid, 2, '')
+                        rid, typ, value = packet(conn)
+                        assert typ == 2 and value == 'list'
+                        reply(conn, rid, 0, '§0There are §a0§7 of a max of §a20§7 players online: SECRET_PLAYER')
+                except Exception as exc:
+                    errors.append(str(exc))
 
-        worker = threading.Thread(target=serve, daemon=True)
-        worker.start()
-        script = str(Path(__file__).with_name('fc_local_rcon.ps1'))
-        result = subprocess.run(['pwsh', '-File', script, '-Server', str(server), '-Synthetic'],
-                                capture_output=True, text=True, timeout=12)
-        worker.join(timeout=2)
-        if result.returncode or errors or worker.is_alive() or 'AUTH_OK=true PLAYER_STATE=ZERO' not in result.stdout:
-            raise AssertionError('Synthetic RCON protocol/list gate failed')
-        for secret in (password, 'SECRET_PLAYER', temp):
-            assert secret not in result.stdout + result.stderr, 'Private RCON data leaked'
-    print('PASS: synthetic local RCON auth/list; no secret or player output')
+            worker = threading.Thread(target=serve, daemon=True)
+            worker.start()
+            script = str(Path(__file__).with_name('fc_local_rcon.ps1'))
+            args = ['pwsh', '-File', script, '-Server', str(server), '-Synthetic']
+            if private:
+                args.append('-PrivateCopy')
+            result = subprocess.run(args, capture_output=True, text=True, timeout=12)
+            worker.join(timeout=2)
+            if result.returncode or errors or worker.is_alive() or 'AUTH_OK=true PLAYER_STATE=ZERO' not in result.stdout:
+                raise AssertionError('Synthetic RCON protocol/list gate failed')
+            for secret in (password, 'SECRET_PLAYER', temp):
+                assert secret not in result.stdout + result.stderr, 'Private RCON data leaked'
+print('PASS: original and private-copy RCON auth/list; no secret or player output')
