@@ -33,7 +33,12 @@ try {
   }
   $debugRelevant = @($debugLines | Where-Object { $_ -match '(?i)(missing|failed|mismatch|registr|handshake|disconnect|fml)' })
   $debugRegistries = @($debugRelevant | Where-Object { $_ -match '(?i)(missing registr|registry mismatch|registry remapping|failed to synchronize registr|unbound registr)' }).Count
-  $debugChannels = @($debugRelevant | Where-Object { $_ -match '(?i)(channel.*(reject|missing|mismatch)|mod list mismatch|incomplete mod data)' }).Count
+  $debugChannelReject = @($debugRelevant | Where-Object { $_ -match '(?i)channel.*reject' })
+  $debugChannelMissing = @($debugRelevant | Where-Object { $_ -match '(?i)channel.*missing' })
+  $debugChannelMismatch = @($debugRelevant | Where-Object { $_ -match '(?i)channel.*mismatch' })
+  $debugModListMismatch = @($debugRelevant | Where-Object { $_ -match '(?i)mod list mismatch' })
+  $debugIncomplete = @($debugRelevant | Where-Object { $_ -match '(?i)incomplete mod data' })
+  $debugChannels = @($debugChannelReject + $debugChannelMissing + $debugChannelMismatch + $debugModListMismatch + $debugIncomplete).Count
   $disconnects = @($serverLines | Where-Object { $_ -match '(?i)(lost connection|disconnected|disconnecting)' })
   $lastDisconnect = if ($disconnects.Count) { [string]$disconnects[-1] } else { '' }
   $reasonFlags = @{
@@ -79,7 +84,9 @@ try {
     ' LAST_DISCONNECT_NETWORK=' + $reasonFlags.network + ' ALLOWLIST_MOD_IDS=' + ($mentioned -join ',') +
     ' DEBUG_LOG_EXISTS=' + $debugExists + ' DEBUG_LOG_AGE_H=' + $debugAge +
     ' DEBUG_REGISTRY_HINTS=' + $debugRegistries + ' DEBUG_CHANNEL_HINTS=' + $debugChannels +
-    ' DEBUG_ALLOWED_IDS_IN_ERROR_CONTEXT=' + ($debugMissing -join ',') +
+    ' CHANNEL_REJECT=' + $debugChannelReject.Count + ' CHANNEL_MISSING=' + $debugChannelMissing.Count +
+    ' CHANNEL_MISMATCH=' + $debugChannelMismatch.Count + ' MODLIST_MISMATCH=' + $debugModListMismatch.Count +
+    ' INCOMPLETE_DATA=' + $debugIncomplete.Count + ' DEBUG_ALLOWED_IDS_IN_ERROR_CONTEXT=' + ($debugMissing -join ',') +
     '; RECENT_LOG_TAIL_ONLY=true RAW_LOG_NOT_UPLOADED=true JOIN_NOT_PROVEN=true')
   exit 0
 } catch {
