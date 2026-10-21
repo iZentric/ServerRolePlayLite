@@ -6,6 +6,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $staging = $null
 $owned = $false
+$phase = 'VALIDATE'
 try {
   if ((Split-Path -Leaf $Server) -cne 'server' -or
       (Split-Path -Leaf (Split-Path -Parent $Server)) -cne 'FunCityLocal' -or
@@ -15,6 +16,7 @@ try {
     $item = [IO.DirectoryInfo]::new($dir)
     if (-not $item.Exists -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw 'Unsafe source' }
   }
+  $phase = 'ENUMERATE'
   $queue = [System.Collections.Generic.Queue[string]]::new()
   $queue.Enqueue($Server)
   $entries = New-Object 'System.Collections.Generic.List[object]'
@@ -46,6 +48,7 @@ try {
   if ((Test-Path -LiteralPath $dest) -or (Test-Path -LiteralPath $staging)) { throw 'Existing backup' }
   $drive = [IO.DriveInfo]::new([IO.Path]::GetPathRoot($project))
   if (-not $drive.IsReady -or $drive.AvailableFreeSpace -lt ($bytes * 2 + 1073741824L)) { throw 'Insufficient backup space' }
+  $phase = 'COPY_HASH_VERIFY'
   New-Item -ItemType Directory -Path $staging -Force -ErrorAction Stop | Out-Null
   $owned = $true
   $hashes = @{}
@@ -62,16 +65,19 @@ try {
         (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash -ne $hash) { throw 'Backup digest mismatch' }
     $hashes[$entry.relative] = $hash
   }
+  $phase = 'PRIVATE_MANIFEST'
   # Private local manifest; never expose world names, account material or server passwords.
   @{ schema=1; files=$entries.Count; bytes=$bytes; sha256=$hashes;
      live_source=$true; consistent_offline_snapshot=$false; restore_tested=$false } |
      ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $staging 'private-manifest.json') -Encoding UTF8
+  $phase = 'FINALIZE'
   [IO.Directory]::Move($staging,$dest)
   $owned = $false
   Write-Output ('::notice title=Server private prebackup::FILES_COPIED_AND_HASHED=' + $entries.Count + ' SOURCE_UNCHANGED_DURING_EACH_COPY=true; WORLD_CONFIG_MODS_PLUGINS_PRIVATE=true; SERVER_NOT_STOPPED=true; CONSISTENT_OFFLINE_BACKUP=false; RESTORE_NOT_TESTED=true')
   exit 0
 } catch {
-  Write-Output '::error title=Server private prebackup::COPY_BLOCKED_OR_FAILED; LIVE_SERVER_UNCHANGED=true; NO_UPLOAD=true'
+  # Only code-defined phase/type/line, never the exception message or private path.
+  Write-Output ('::error title=Server private prebackup::COPY_BLOCKED_OR_FAILED PHASE=' + $phase + ' TYPE=' + $_.Exception.GetType().Name + ' LINE=' + $_.InvocationInfo.ScriptLineNumber + '; LIVE_SERVER_UNCHANGED=true; NO_UPLOAD=true')
   exit 2
 } finally {
   if ($owned -and $staging -and (Test-Path -LiteralPath $staging)) {
