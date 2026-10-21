@@ -1,0 +1,32 @@
+name: Forge client/server class-only compatibility audit
+# Read-only JAR byte comparison; no server launch, client launch or JAR upload.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-forge-class-audit.yml]
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Distinguish class changes from resource changes on hosted fixture
+        run: python3 scripts/fc_shared_jar_class_audit_test.py
+  pc-read-only:
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare only class fingerprints for owner-approved common JARs
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $profile = 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\FunCity RP Lite'
+          $game = if (Test-Path -LiteralPath (Join-Path $profile '.minecraft') -PathType Container) { '.minecraft' } else { 'minecraft' }
+          $clientMods = Join-Path (Join-Path $profile $game) 'mods'
+          $serverMods = 'C:\Users\Administrator\Desktop\FunCityLocal\server\mods'
+          & ./scripts/fc_shared_jar_class_audit.ps1 -ClientMods $clientMods -ServerMods $serverMods -Manifest agent/FUNCITY-RP-LITE-SELECTIE.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
