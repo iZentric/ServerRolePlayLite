@@ -57,6 +57,10 @@ try {
   & ./scripts/fc_embeddium_test_profile.ps1 -Source $source -Downloads $downloads -Synthetic | Out-Null
   if ($LASTEXITCODE -eq 0 -or -not (Test-Path -LiteralPath $target)) { throw 'Must not overwrite test profile' }
   Write-Output 'PASS: separate candidate with 20 byte-identical retained JARs, two replacements, 5-chunk preset, original/client accounts/world untouched'
+} catch {
+  Write-Output ('::error title=Hosted Embeddium fixture::TYPE=' + $_.Exception.GetType().Name +
+    ' MESSAGE=' + $_.Exception.Message + ' LINE=' + $_.InvocationInfo.ScriptLineNumber)
+  throw
 } finally {
   if (Test-Path -LiteralPath $root) { Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue }
 }
