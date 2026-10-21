@@ -31,7 +31,12 @@ jobs:
       - name: Synthetic separate-profile copy/rollback and privacy checks
         shell: pwsh
         run: |
-          try { ./scripts/fc_embeddium_test_profile_test.ps1 }
+          try {
+            ./scripts/fc_embeddium_test_profile_test.ps1
+            # The fixture intentionally invokes two scripts that return exit 2;
+            # their expected LASTEXITCODE must not become the hosted job result.
+            exit 0
+          }
           catch {
             Write-Output ('::error file=scripts/fc_embeddium_test_profile_test.ps1,line=1::HOSTED_FIXTURE_FAILED TYPE=' + $_.Exception.GetType().Name + ' MESSAGE=' + $_.Exception.Message)
             exit 2
