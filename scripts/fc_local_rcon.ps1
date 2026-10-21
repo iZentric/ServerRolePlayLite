@@ -88,7 +88,10 @@ try {
     $packet = Read-Packet $stream
     if ($packet.id -ne 89322 -or $packet.type -ne 0) { throw 'Unexpected RCON response' }
     if ($Command -eq 'list') {
-      $count = [regex]::Match($packet.text,'(?is)there are\s+(\d+)\b.{0,120}players.{0,30}online')
+      # Minecraft/plugin consoles may prepend ANSI color control codes to the count.
+      $plainList = [regex]::Replace($packet.text,'\x1b\[[0-9;]*[A-Za-z]','')
+      $plainList = [regex]::Replace($plainList,'[\x00-\x1f]',' ')
+      $count = [regex]::Match($plainList,'(?is)there are\s+(\d+)\b.{0,120}players.{0,30}online')
       $playerState = if ($count.Success -and [int]$count.Groups[1].Value -eq 0) { 'ZERO' }
                      elseif ($count.Success) { 'ACTIVE' } else { 'UNKNOWN' }
       # Print length/whitelisted grammar signals only, never the response or player names.

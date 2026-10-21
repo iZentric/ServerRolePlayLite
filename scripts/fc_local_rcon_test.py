@@ -54,7 +54,7 @@ with tempfile.TemporaryDirectory(prefix='fc-rcon-fixture-') as temp:
                     reply(conn, rid, 2, '')
                     rid, typ, value = packet(conn)
                     assert typ == 2 and value == 'list'
-                    reply(conn, rid, 0, 'There are 0 of a max of 20 players online: SECRET_PLAYER')
+                    reply(conn, rid, 0, '\x00' + 'There are \x1b[0;0m0 of a max of 20 players online: SECRET_PLAYER')
             except Exception as exc:
                 errors.append(str(exc))
 
