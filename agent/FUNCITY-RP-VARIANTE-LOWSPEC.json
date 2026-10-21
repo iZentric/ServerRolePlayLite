@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "minecraft": "1.16.5",
+  "loader": "Forge",
+  "baseline_manifest": "agent/FUNCITY-RP-LITE-SELECTIE.json",
+  "status": "DEFINITIONS_ONLY_UNTIL_LOCAL_PRISM_CREATION_AND_IN_GAME_TESTS",
+  "graphics_preset": {
+    "renderDistance": 5,
+    "graphicsMode": 0,
+    "particles": 1,
+    "mipmapLevels": 0,
+    "entityShadows": false,
+    "shaderpacks_copied": false,
+    "note": "Five chunks, Fast, particles Decreased, mipmap zero, entity shadows off. These are client graphics settings, NOT an FPS cap."
+  },
+  "variants": [
+    {
+      "id": "low_rubidium",
+      "prism_name": "FunCity RP LowSpec Rubidium",
+      "source_prism_name": "FunCity RP Lite",
+      "jar_count": 22,
+      "removed_only_in_variant": [],
+      "replaced_only_in_variant": {},
+      "role": "Recommended starting point: the same 22 Lite jars, new isolated graphics preset; Oculus remains to protect RP textures."
+    },
+    {
+      "id": "no_oculus_test",
+      "prism_name": "FunCity RP LowSpec fara Oculus TEST",
+      "source_prism_name": "FunCity RP Lite",
+      "jar_count": 21,
+      "removed_only_in_variant": ["oculus-mc1.16.5-1.4.7.jar"],
+      "replaced_only_in_variant": {},
+      "role": "Experimental: only remove shader integration; verify the reported RP texture issue before considering adoption."
+    },
+    {
+      "id": "embeddium_test",
+      "prism_name": "FunCity RP LowSpec Embeddium fara Oculus TEST",
+      "source_prism_name": "FunCity RP Lite Embeddium TEST",
+      "jar_count": 21,
+      "removed_only_in_variant": ["oculus-mc1.16.5-1.4.7.jar"],
+      "replaced_only_in_variant": {
+        "rubidium-mc1.16.5-0.2.13.jar": "embeddium-0.3.18+mc1.16.5.jar",
+        "TextruesRubidiumOptions-1.0.8-mc1.16.5.jar": "textrue_embeddium_options-0.1.1+mc1.16.5.jar"
+      },
+      "role": "Experimental: the alternative renderer pair plus no Oculus. Compare to no_oculus_test at identical settings; only consider if the no-Oculus RP textures work. The existing Embeddium TEST with Oculus remains the safe fallback."
+    }
+  ],
+  "never_added": ["Dynamic FPS", "FPS Reducer", "Distant Horizons", "Halogen", "Entity Culling", "Rubidium Extra"],
+  "do_not_touch": ["Freeroam 1.0.0", "FunCity RP Lite", "FunCity RP Lite Embeddium TEST", "server", "world", "accounts"],
+  "not_verified": ["game launch", "Forge login", "RP textures", "voice chat with two clients", "FPS at identical settings", "local resource packs"]
+}

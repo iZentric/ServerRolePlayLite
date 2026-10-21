@@ -1,0 +1,39 @@
+name: RP LowSpec client variants - hosted safety fixture
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/rp-lowspec-variants.yml
+      - agent/FUNCITY-RP-VARIANTE-LOWSPEC.json
+      - scripts/fc_rp_lowspec_variants.ps1
+      - scripts/fc_rp_lowspec_variants_test.ps1
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fixture-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check PowerShell syntax
+        shell: pwsh
+        run: |
+          foreach ($file in @('scripts/fc_rp_lowspec_variants.ps1','scripts/fc_rp_lowspec_variants_test.ps1')) {
+            $tokens=$null; $errors=$null
+            $null=[System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $file),[ref]$tokens,[ref]$errors)
+            if (@($errors).Count -ne 0) {
+              foreach ($problem in $errors) { Write-Output ('::error file=' + $file + '::' + $problem.Message) }
+              exit 2
+            }
+          }
+      - name: Create three fake local Prism profiles and assert fail-closed behavior
+        shell: pwsh
+        run: |
+          try {
+            ./scripts/fc_rp_lowspec_variants_test.ps1
+            exit 0
+          } catch {
+            Write-Output ('::error title=Hosted fixture failed::' + $_.Exception.Message)
+            exit 2
+          }
