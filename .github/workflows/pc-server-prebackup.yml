@@ -1,6 +1,7 @@
 name: Create private pre-maintenance server safety copy once
 # Copy on local PC only, hash-verify every file; never upload files or stop server.
 # This running-server copy is NOT the final consistent offline backup.
+# Retry once after safe phase/type diagnostics were added; never force-stop Java.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
