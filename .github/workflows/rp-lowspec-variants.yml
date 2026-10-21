@@ -37,3 +37,22 @@ jobs:
             Write-Output ('::error title=Hosted fixture failed::' + $_.Exception.Message)
             exit 2
           }
+  pc-create:
+    # One intentional push only; never run on ordinary documentation changes.
+    if: startsWith(github.event.head_commit.message, 'Create RP low-spec Prism variants once')
+    needs: fixture-only
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create isolated local variants only if client closed and inventories exact
+        shell: powershell
+        run: |
+          $lite = 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\FunCity RP Lite'
+          $test = 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\FunCity RP Lite Embeddium TEST'
+          & .\scripts\fc_rp_lowspec_variants.ps1 -Variant low_rubidium -Lite $lite
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & .\scripts\fc_rp_lowspec_variants.ps1 -Variant no_oculus_test -Lite $lite
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & .\scripts\fc_rp_lowspec_variants.ps1 -Variant embeddium_test -Lite $lite -EmbeddiumTest $test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
