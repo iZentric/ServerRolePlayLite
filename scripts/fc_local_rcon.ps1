@@ -98,9 +98,12 @@ try {
                else { 'OTHER' }
       $hasPlayers = [bool]($packet.text -match '(?i)\bplayers\b')
       $hasOnline = [bool]($packet.text -match '(?i)\bonline\b')
-      $thereAreNumber = [bool]($packet.text -match '(?i)\bthere are\b.{0,40}?\b\d+\b')
+      $thereAreNumber = [bool]($packet.text -match '(?is)\bthere are\b.{0,120}?\b\d+\b')
       $hasNoPlayers = [bool]($packet.text -match '(?i)\bno players\b')
-      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + ' RESPONSE_SHAPE=' + $shape + ' RESPONSE_LENGTH=' + $packet.text.Length + ' HAS_PLAYERS=' + $hasPlayers + ' HAS_ONLINE=' + $hasOnline + ' THERE_ARE_NUMBER=' + $thereAreNumber + ' NO_PLAYERS_PHRASE=' + $hasNoPlayers + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
+      $digitCount = [regex]::Matches($packet.text,'[0-9]').Count
+      $controlCount = [regex]::Matches($packet.text,'[\x00-\x1f]').Count
+      $colorCount = [regex]::Matches($packet.text,'§').Count
+      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + ' RESPONSE_SHAPE=' + $shape + ' RESPONSE_LENGTH=' + $packet.text.Length + ' HAS_PLAYERS=' + $hasPlayers + ' HAS_ONLINE=' + $hasOnline + ' THERE_ARE_NUMBER=' + $thereAreNumber + ' NO_PLAYERS_PHRASE=' + $hasNoPlayers + ' DIGITS=' + $digitCount + ' CONTROLS=' + $controlCount + ' COLORS=' + $colorCount + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
     } else { Write-Output '::notice title=FunCity local RCON::AUTH_OK=true SAVE_ALL_RESPONSE_RECEIVED=true; WORLD_NOT_MODIFIED_BY_AGENT=true' }
   } finally { $socket.Close() }
   exit 0
