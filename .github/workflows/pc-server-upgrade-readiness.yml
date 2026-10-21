@@ -6,6 +6,7 @@ on:
     branches: [arena/9bbcb24f-serverroleplaylite]
     paths:
       - .github/workflows/pc-server-upgrade-readiness.yml
+      - scripts/fc_server_upgrade_gate.ps1
       - scripts/fc_server_prebackup.ps1
       - scripts/fc_server_prebackup_test.ps1
 permissions:

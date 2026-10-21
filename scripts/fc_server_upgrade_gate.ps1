@@ -35,6 +35,16 @@ try {
   if ($portLine.Count -eq 1) { $rconPort = [int](($portLine[0] -split '=', 2)[1]) }
   $ownedListener = $false
   $serverProc = $false
+  $restartTaskMatches = $false
+  if (-not $Synthetic -and [Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT) {
+    $task = Get-ScheduledTask -TaskName 'FunCityLocalServer' -ErrorAction SilentlyContinue
+    if ($task -and $task.State -ne 'Disabled') {
+      $actions = @($task.Actions)
+      if ($actions.Count -eq 1 -and $actions[0].Execute -and $actions[0].WorkingDirectory -and
+          $actions[0].WorkingDirectory.TrimEnd([char[]]@([char]92,[char]47)).Equals($Server.TrimEnd([char[]]@([char]92,[char]47)),[StringComparison]::OrdinalIgnoreCase) -and
+          $actions[0].Arguments -match '(?i)-jar\s+FunCityEngine\.jar') { $restartTaskMatches = $true }
+    }
+  }
   if (-not $Synthetic -and $rconEnabled -and $rconPassPresent -and $rconPort -gt 0 -and $rconPort -le 65535) {
     $processes = @(Get-CimInstance Win32_Process -Filter "Name = 'java.exe' OR Name = 'javaw.exe'" -ErrorAction Stop | Where-Object {
       $_.CommandLine -and $_.CommandLine.IndexOf($Server, [StringComparison]::OrdinalIgnoreCase) -ge 0
@@ -46,7 +56,7 @@ try {
         Where-Object { $_.OwningProcess -eq $serverPid -and ($_.LocalAddress -eq '127.0.0.1' -or $_.LocalAddress -eq '::1') }).Count -gt 0
     }
   }
-  Write-Output ('::notice title=Server backup readiness::SOURCE_FILES=' + $files + ' SOURCE_BYTES_BUCKET_GIB=' + [math]::Ceiling($bytes / 1GB) + ' FREE_SPACE_FOR_2X_BACKUP=' + $spaceOk + ' RCON_CONFIGURED=' + ($rconEnabled -and $rconPassPresent -and $rconPort -gt 0 -and $rconPort -le 65535) + ' SERVER_PROCESS_UNIQUE=' + $serverProc + ' RCON_LOOPBACK_OWNED_BY_SERVER=' + $ownedListener + '; READ_ONLY=true; BACKUP_CREATED=false')
+  Write-Output ('::notice title=Server backup readiness::SOURCE_FILES=' + $files + ' SOURCE_BYTES_BUCKET_GIB=' + [math]::Ceiling($bytes / 1GB) + ' FREE_SPACE_FOR_2X_BACKUP=' + $spaceOk + ' RCON_CONFIGURED=' + ($rconEnabled -and $rconPassPresent -and $rconPort -gt 0 -and $rconPort -le 65535) + ' SERVER_PROCESS_UNIQUE=' + $serverProc + ' RCON_LOOPBACK_OWNED_BY_SERVER=' + $ownedListener + ' RESTART_TASK_MATCHES_SERVER=' + $restartTaskMatches + '; READ_ONLY=true; BACKUP_CREATED=false')
   exit 0
 } catch {
   Write-Output '::notice title=Server backup readiness::GATE_UNAVAILABLE; READ_ONLY=true; BACKUP_CREATED=false'
