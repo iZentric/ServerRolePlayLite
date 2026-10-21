@@ -44,9 +44,14 @@ jobs:
           cd "$root"
           # Upstream 2023 gradle.properties contains -XX:MaxPermSize, rejected by Java 17.
           # Override build JVM flags without altering CatServer runtime source/config.
-          if ! ./gradlew '-Dorg.gradle.jvmargs=-Xmx2G -Dfile.encoding=UTF-8' \
-               setup :forge:buildCatServer --no-daemon --max-workers=2 \
-               > "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
+          # Upstream documents setup THEN build as separate Gradle invocations.
+          # The combined graph compiled :forge without mapped Minecraft classes.
+          if ! (./gradlew '-Dorg.gradle.jvmargs=-Xmx2G -Dfile.encoding=UTF-8' \
+                   setup --no-daemon --max-workers=2 \
+                   > "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1 &&
+                ./gradlew '-Dorg.gradle.jvmargs=-Xmx2G -Dfile.encoding=UTF-8' \
+                   :forge:buildCatServer --no-daemon --max-workers=2 \
+                   >> "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1); then
             python3 "$GITHUB_WORKSPACE/scripts/fc_gradle_failure_classifier.py" \
               "$RUNNER_TEMP/fc-catserver-build-private.log"
             echo '::error title=FunCity source build::BUILD_FAILED; no binary promoted or uploaded.'
