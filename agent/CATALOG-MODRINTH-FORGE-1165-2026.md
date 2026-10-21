@@ -47,6 +47,10 @@
 | [Observable 0.2.1](https://modrinth.com/mod/observable/version/Pg3uqzyX) | Modrinth are ediție **Forge 1.16.5** pentru diagnosticarea costului entităților/tile entities; nu reduce singur sarcina. | Candidat de profilare pe copie, nu un optimizer de adăugat tuturor. |
 | [spark 1.9.1-forge1165](https://modrinth.com/mod/spark/version/9NSIbttL) | Profiler temporar de diagnostic, nu optimizer ce trebuie să rămână în clientul tuturor. | Folositor pentru a găsi un hotspot, nu un înlocuitor de mod RP. |
 
+### Corecție importantă: Performant este un mod real, nu un simplu nume din listă
+
+Am documentat separat [**Performant, alternativa server-side la RoadRunner**](ALTERNATIVE-PERFORMANT-FORGE-1165.md): [fișierul 4.1m este Forge 1.16.5 pe CurseForge](https://www.curseforge.com/minecraft/mc-mods/performant/files/4562378), iar autorul spune că poate fi instalat server-only sau client-only, incluzând AI/tick și culling client. **Autorul numește RoadRunner incompatibil**; nu trebuie adăugat peste serverul care îl avea în inventarul istoric. Aceasta este o opțiune de **schimb pe un server de test**, nu un mod client obligatoriu sau o creștere FPS garantată. [APTweaks 2.5.0](https://www.curseforge.com/minecraft/mc-mods/adaptive-performance-tweaks/files/4332244) și [MCMT 0.22.87](https://www.curseforge.com/minecraft/mc-mods/mcmt-multithreading/files/all) sunt alte fișiere Forge 1.16.5 cu implicații asupra simulării/compatibilității. Nu am găsit un release Modrinth *al autorului Performant* pentru 1.16.5; [rezultatul omonim de pe Modrinth](https://modrinth.com/project/RP9zdAa2) este un **modpack Fabric**, nu JAR-ul său.
+
 ### Proiecte cu nume atractiv, dar filtru greșit
 
 - [ImmediatelyFast Backport pentru 1.16.5](https://www.curseforge.com/minecraft/mc-mods/immediatelyfast-backport/files/8119275) este **Fabric**; [BadOptimizations](https://modrinth.com/mod/badoptimizations/versions) nu listează 1.16.5; [Exordium](https://github.com/tr7zw/Exordium/blob/main/Curseforge.md) spune că nu plănuiește backport; [Cull Leaves 2.1.0 1.16.5](https://modrinth.com/mod/cull-leaves/version/NfeMW5mF) este **Fabric**. Eticheta de ansamblu a proiectului («Forge/Fabric, 1.16.5») nu înseamnă aceeași ediție le combină pe amândouă.
@@ -101,7 +105,7 @@ Tabelul următor arată **fiecare nume** din secțiunea Forge 1.16.x a UsefulMod
 | [Observable](https://modrinth.com/mod/observable) | Server | Profiler (tile entities), nu fix automat. |
 | [Out of Sight](https://www.curseforge.com/minecraft/mc-mods/out-of-sight) | Client | Poate ascunde decorul RP. |
 | [Overworld Two](https://www.curseforge.com/minecraft/mc-mods/overworld-two-forge) | Server | Generare lume diferită; nu copia live. |
-| [Performant](https://www.curseforge.com/minecraft/mc-mods/performant) | Server | Poate interfera RoadRunner/AI. |
+| [Performant 4.1m](https://www.curseforge.com/minecraft/mc-mods/performant/files/4562378) | Server | Forge 1.16.5: alternativă 1:1 de TEST la RoadRunner, **incompatibil** cu acesta conform autorului; poate rula doar pe server. [Detalii](ALTERNATIVE-PERFORMANT-FORGE-1165.md). |
 | [RoadRunner](https://www.curseforge.com/minecraft/mc-mods/roadrunner) | Server | Tick server, nu FPS client. |
 | [Rubidium](https://www.curseforge.com/minecraft/mc-mods/rubidium) | Client | Instalat ca renderer. |
 | [Saturn](https://www.curseforge.com/minecraft/mc-mods/saturn) | Both | RAM; fără benchmark nu adăuga. |
