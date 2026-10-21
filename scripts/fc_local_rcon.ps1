@@ -96,7 +96,11 @@ try {
                elseif ($packet.text -match '(?i)there are') { 'VANILLA_PHRASE' }
                elseif ($packet.text -match '(?i)online players|players online') { 'ONLINE_PHRASE' }
                else { 'OTHER' }
-      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + ' RESPONSE_SHAPE=' + $shape + ' RESPONSE_LENGTH=' + $packet.text.Length + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
+      $hasPlayers = [bool]($packet.text -match '(?i)\bplayers\b')
+      $hasOnline = [bool]($packet.text -match '(?i)\bonline\b')
+      $thereAreNumber = [bool]($packet.text -match '(?i)\bthere are\b.{0,40}?\b\d+\b')
+      $hasNoPlayers = [bool]($packet.text -match '(?i)\bno players\b')
+      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + ' RESPONSE_SHAPE=' + $shape + ' RESPONSE_LENGTH=' + $packet.text.Length + ' HAS_PLAYERS=' + $hasPlayers + ' HAS_ONLINE=' + $hasOnline + ' THERE_ARE_NUMBER=' + $thereAreNumber + ' NO_PLAYERS_PHRASE=' + $hasNoPlayers + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
     } else { Write-Output '::notice title=FunCity local RCON::AUTH_OK=true SAVE_ALL_RESPONSE_RECEIVED=true; WORLD_NOT_MODIFIED_BY_AGENT=true' }
   } finally { $socket.Close() }
   exit 0
