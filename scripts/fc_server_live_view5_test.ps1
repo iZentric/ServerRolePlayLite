@@ -40,7 +40,7 @@ try {
       ([IO.File]::ReadAllBytes($cfg))[1] -ne [byte]233 -or
       $newText -cne [IO.File]::ReadAllText($cfg,$encoding)) { throw 'Byte-preserving view change failed' }
   [IO.File]::WriteAllText($temp,[IO.File]::ReadAllText($swap,$encoding),$encoding)
-  [IO.File]::Replace($temp,$cfg,$null)
+  [IO.File]::Replace($temp,$cfg,(Join-Path $root 'replaced-view-five.properties'))
   if ((Get-FileHash $cfg -Algorithm SHA256).Hash -cne $originalHash) { throw 'Rollback failed' }
   $unexpected=$oldText.Replace('view-distance=6','view-distance=5')
   if ([regex]::Matches($unexpected,$pattern).Count -ne 0) { throw 'Already-five fixture guard failed' }

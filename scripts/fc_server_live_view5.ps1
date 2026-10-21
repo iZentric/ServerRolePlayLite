@@ -141,7 +141,7 @@ try {
         }
         $restoreTemp=Join-Path (Split-Path -Parent $rollbackFile) 'restore-original-temp.properties'
         Copy-Item -LiteralPath $rollbackFile -Destination $restoreTemp -ErrorAction Stop
-        [IO.File]::Replace($restoreTemp,$cfg,$null)
+        [IO.File]::Replace($restoreTemp,$cfg,(Join-Path (Split-Path -Parent $rollbackFile) 'failed-view-five.properties'))
         if ((Get-FileHash -LiteralPath $cfg -Algorithm SHA256).Hash -cne $oldHash) { throw 'Config rollback digest mismatch' }
         $viewChanged=$false
       }
@@ -195,7 +195,7 @@ try {
           }
           $restoreTemp=Join-Path (Split-Path -Parent $rollbackFile) 'fallback-original-temp.properties'
           Copy-Item -LiteralPath $rollbackFile -Destination $restoreTemp -ErrorAction Stop
-          [IO.File]::Replace($restoreTemp,$cfg,$null)
+          [IO.File]::Replace($restoreTemp,$cfg,(Join-Path (Split-Path -Parent $rollbackFile) 'failed-view-five.properties'))
           if ((Get-FileHash -LiteralPath $cfg -Algorithm SHA256).Hash -cne $oldHash) { throw 'Fallback config digest mismatch' }
           $viewChanged=$false
           $null=Assert-RestartTask
