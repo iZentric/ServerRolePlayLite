@@ -80,6 +80,18 @@ try {
       $_ -match ('(?i)(?<![A-Za-z0-9_.-])' + [regex]::Escape($id) + '(?![A-Za-z0-9_.-])')
     }).Count -gt 0
   })
+  # Fixed lexicon only: discard every other token (including player/account/IP).
+  $safeWords=@('channel','channels','reject','rejected','rejecting','client','clientside','server','serverside',
+               'version','versions','missing','required','optional','remote','local','login','play',
+               'connection','accepted','accept','network','list','mod','mods','not','from','to','because')
+  $sample = if ($debugChannelReject.Count) { [string]$debugChannelReject[-1] } else { '' }
+  $tokens=@([regex]::Matches($sample,'[A-Za-z]+') | Select-Object -First 50 | ForEach-Object {
+    $word=$_.Value.ToLowerInvariant()
+    if ($safeWords -ccontains $word) { $word } else { '_' }
+  })
+  $rejectPattern=($tokens -join ' ')
+  $serverSideRejected=@($debugChannelReject | Where-Object { $_ -match '(?i)serverside|server.side|server channel' }).Count
+  $clientSideRejected=@($debugChannelReject | Where-Object { $_ -match '(?i)clientside|client.side|client channel' }).Count
   Write-Output ('::notice title=Latest Forge join evidence::CLIENT_LOG_AGE_H=' + $client.ageHours + ' SERVER_LOG_AGE_H=' + $serverLog.ageHours +
     ' CLIENT_CONNECT_HINTS=' + $signals.attempted + ' CLIENT_INCOMPLETE_HINTS=' + $signals.incomplete +
     ' CLIENT_REGISTRY_HINTS=' + $signals.registry + ' CLIENT_MODLIST_HINTS=' + $signals.modlist +
@@ -94,6 +106,8 @@ try {
     ' CHANNEL_MISMATCH=' + $debugChannelMismatch.Count + ' MODLIST_MISMATCH=' + $debugModListMismatch.Count +
     ' INCOMPLETE_DATA=' + $debugIncomplete.Count + ' DEBUG_ALLOWED_IDS_IN_ERROR_CONTEXT=' + ($debugMissing -join ',') +
     ' DEBUG_ALLOWLIST_REJECTED_CHANNEL_IDS=' + ($debugRejectIds -join ',') +
+    ' REJECT_SERVERSIDE_LINES=' + $serverSideRejected + ' REJECT_CLIENTSIDE_LINES=' + $clientSideRejected +
+    ' REJECT_FIXED_LEXICON=' + $rejectPattern +
     '; RECENT_LOG_TAIL_ONLY=true RAW_LOG_NOT_UPLOADED=true JOIN_NOT_PROVEN=true')
   exit 0
 } catch {
