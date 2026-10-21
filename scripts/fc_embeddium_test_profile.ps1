@@ -6,6 +6,8 @@ param([Parameter(Mandatory=$true)][string]$Source,
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
 Add-Type -AssemblyName System.IO.Compression
+# Windows PowerShell 5.1 stores ZipFile in FileSystem; pwsh may load the facade automatically.
+try { Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction Stop } catch { }
 $phase='PREFLIGHT'
 $stage=$null
 $stageOwned=$false
