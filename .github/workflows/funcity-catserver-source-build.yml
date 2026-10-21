@@ -41,7 +41,10 @@ jobs:
           set -Eeuo pipefail
           root="$RUNNER_TEMP/fc-catserver-source"
           cd "$root"
-          if ! ./gradlew setup :forge:buildCatServer --no-daemon --max-workers=4 \
+          # Upstream 2023 gradle.properties contains -XX:MaxPermSize, rejected by Java 17.
+          # Override build JVM flags without altering CatServer runtime source/config.
+          if ! ./gradlew '-Dorg.gradle.jvmargs=-Xmx2G -Dfile.encoding=UTF-8' \
+               setup :forge:buildCatServer --no-daemon --max-workers=2 \
                > "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
             python3 "$GITHUB_WORKSPACE/scripts/fc_gradle_failure_classifier.py" \
               "$RUNNER_TEMP/fc-catserver-build-private.log"
