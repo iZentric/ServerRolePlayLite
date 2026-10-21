@@ -1,0 +1,89 @@
+name: Verify all 29 selected RP server mods on five engine candidates
+# Five isolated GitHub-hosted jobs; no owner PC/live server/Prism/real world.
+# Selection is historical, one boot only; not client join, FPS or capacity.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/full-rp-29-engine-boot.yml
+      - scripts/fc_full_rp_engine_boot.py
+      - scripts/fc_full_rp_engine_boot_test.py
+permissions:
+  contents: read
+jobs:
+  closed-full-rp:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { engine: funcity, java: '11' }
+          - { engine: catserver-old, java: '17' }
+          - { engine: catserver-official, java: '17' }
+          - { engine: arclight, java: '17' }
+          - { engine: mist, java: '11' }
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PYTHONPATH: scripts
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+      - name: Synthetic mandatory-dependency guards
+        run: python3 scripts/fc_full_rp_engine_boot_test.py
+      - name: Download exact historical server, motor and plugin sources to runner temp
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-full-rp-${{ matrix.engine }}"
+          mkdir -p "$root"
+          gh release download jars-20261017-0952 -R "$GITHUB_REPOSITORY" \
+            -p functity-jare-toate.tar.gz -O "$root/engines.tar.gz"
+          echo "f2cb921efbf751fa24534a9a02b57197db46294ca7b71d9711b04996bf6d1784  $root/engines.tar.gz" | sha256sum -c -
+          python3 scripts/fc_plugin_first_extract.py "$root/engines.tar.gz" "$root/motor.jar"
+          gh release download lite -R "$GITHUB_REPOSITORY" \
+            -p CUANTIC-Server-CatServer-1.7.7.zip -O "$root/historic.zip"
+          echo "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  $root/historic.zip" | sha256sum -c -
+          gh release download v21.2 -R PlayPro/CoreProtect \
+            -p CoreProtect-21.2.jar -O "$root/CoreProtect.jar"
+          echo "04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977  $root/CoreProtect.jar" | sha256sum -c -
+          gh release download v21.0 -R google/guava \
+            -p guava-21.0.jar -O "$root/guava-21.0.jar"
+          echo "972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480  $root/guava-21.0.jar" | sha256sum -c -
+      - name: Fetch SHA-checked alternate engine only when needed
+        env:
+          ENGINE: ${{ matrix.engine }}
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-full-rp-$ENGINE"
+          case "$ENGINE" in
+            funcity|catserver-old) : ;;
+            catserver-official)
+              gh release download 23.05.26-1 -R Luohuayu/CatServer \
+                -p CatServer-1.16.5-1d8d6313-server.jar -O "$root/engine.jar" ;;
+            arclight)
+              gh release download lite -R "$GITHUB_REPOSITORY" \
+                -p CUANTIC-Server-Arclight-1.7.7.zip -O "$root/alternative.zip" ;;
+            mist)
+              gh release download lite -R "$GITHUB_REPOSITORY" \
+                -p CUANTIC-Server-Mist-EXPERIMENTAL-1.7.7.zip -O "$root/alternative.zip" ;;
+            *) exit 2 ;;
+          esac
+      - name: Stage exactly 29 selected mods and boot with six plugins; categorical result only
+        env:
+          ENGINE: ${{ matrix.engine }}
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-full-rp-$ENGINE"
+          case "$ENGINE" in
+            funcity) source="$root/motor.jar" ;;
+            catserver-old) source="$root/historic.zip" ;;
+            catserver-official) source="$root/engine.jar" ;;
+            arclight|mist) source="$root/alternative.zip" ;;
+            *) exit 2 ;;
+          esac
+          python3 scripts/fc_full_rp_engine_boot.py "$root" "$ENGINE" "$source" \
+            "$root/historic.zip" "$root/motor.jar" "$root/CoreProtect.jar" "$root/guava-21.0.jar"
