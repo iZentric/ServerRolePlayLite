@@ -53,7 +53,7 @@ jobs:
           [void][Management.Automation.Language.Parser]::ParseFile(
             (Resolve-Path 'scripts/fc_server_mod_matrix.ps1'),[ref]$tokens,[ref]$errors)
           if (@($errors).Count -gt 0) {
-            Write-Output ('::error title=Windows PowerShell syntax::' + $errors[0].Message)
+            Write-Output ('::error title=Windows PowerShell syntax::line=' + $errors[0].Extent.StartLineNumber + ' ' + $errors[0].Message)
             exit 2
           }
           & ./scripts/fc_server_mod_matrix.ps1 -Server 'C:\Users\Administrator\Desktop\FunCityLocal\server'
