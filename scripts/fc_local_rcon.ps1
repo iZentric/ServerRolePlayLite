@@ -5,6 +5,7 @@ param([Parameter(Mandatory=$true)][string]$Server,
       [switch]$Synthetic)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+$phase = 'CONFIG'
 function Read-Exactly([IO.Stream]$Stream,[int]$Count) {
   $buffer = New-Object 'byte[]' $Count
   $offset = 0
@@ -49,6 +50,7 @@ try {
   $port = [int](($ports[0] -split '=',2)[1])
   $password = ($passwords[0] -split '=',2)[1]
   if ($port -lt 1 -or $port -gt 65535 -or $password.Length -lt 8) { throw 'Invalid local RCON' }
+  $phase = 'IDENTITY'
   if (-not $Synthetic) {
     $procs = @(Get-CimInstance Win32_Process -Filter "Name = 'java.exe' OR Name = 'javaw.exe'" -ErrorAction Stop | Where-Object {
       $_.CommandLine -and $_.CommandLine.IndexOf($Server,[StringComparison]::OrdinalIgnoreCase) -ge 0
@@ -58,6 +60,7 @@ try {
         $_.OwningProcess -eq $procs[0].ProcessId -and $_.LocalAddress -eq '127.0.0.1'
       }).Count -ne 1) { throw 'Unidentified RCON server' }
   }
+  $phase = 'CONNECT'
   $socket = [Net.Sockets.TcpClient]::new()
   try {
     $async = $socket.BeginConnect('127.0.0.1',$port,$null,$null)
@@ -66,6 +69,7 @@ try {
     $socket.ReceiveTimeout = 3000
     $socket.SendTimeout = 3000
     $stream = $socket.GetStream()
+    $phase = 'AUTH'
     Send-Packet $stream 89321 3 $password
     $authed = $false
     for ($i=0;$i -lt 3;$i++) {
@@ -74,6 +78,7 @@ try {
       if ($packet.id -eq 89321 -and $packet.type -eq 2) { $authed=$true; break }
     }
     if (-not $authed) { throw 'No RCON auth confirmation' }
+    $phase = 'COMMAND'
     Send-Packet $stream 89322 2 $Command
     if ($Command -eq 'stop') {
       # The server may close the socket before sending the stop response.
@@ -91,6 +96,8 @@ try {
   } finally { $socket.Close() }
   exit 0
 } catch {
-  Write-Output '::notice title=FunCity local RCON::AUTH_OR_COMMAND_UNVERIFIED; PASSWORD_AND_RESPONSE_NOT_OUTPUT=true'
+  # The phase, exception class and fixed enum disclose no private payload or path.
+  $reason = if ($_.Exception.Message -ceq 'RCON auth refused') { 'AUTH_REJECTED' } else { 'UNCLASSIFIED' }
+  Write-Output ('::notice title=FunCity local RCON::AUTH_OR_COMMAND_UNVERIFIED PHASE=' + $phase + ' REASON=' + $reason + ' TYPE=' + $_.Exception.GetType().Name + ' LINE=' + $_.InvocationInfo.ScriptLineNumber + '; PASSWORD_AND_RESPONSE_NOT_OUTPUT=true')
   exit 2
 }

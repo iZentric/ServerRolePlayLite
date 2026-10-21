@@ -3,7 +3,9 @@ name: Verify local server RCON authentication and player count read-only
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
-    paths: [.github/workflows/pc-server-rcon-readonly.yml]
+    paths:
+      - .github/workflows/pc-server-rcon-readonly.yml
+      - scripts/fc_local_rcon.ps1
 permissions:
   contents: read
 jobs:
