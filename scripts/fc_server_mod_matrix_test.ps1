@@ -27,6 +27,9 @@ try {
         throw 'incompatible server optimizers not rejected'
     }
     Write-Output 'PASS: exact 29, extra mod and incompatible optimizers all classified without reading JARs'
+} catch {
+    Write-Output ('::error title=Synthetic mod matrix failed::' + $_.Exception.GetType().Name + ': ' + $_.Exception.Message)
+    throw
 } finally {
     Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
 }
