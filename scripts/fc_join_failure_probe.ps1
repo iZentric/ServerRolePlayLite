@@ -1,9 +1,32 @@
 # Read-only, bounded, privacy-safe diagnostic of most recent Prism Lite join attempt.
 # Never prints/ships raw log text, usernames, IPs, world data, config or secrets.
 param([Parameter(Mandatory=$true)][string]$Profile,
-      [Parameter(Mandatory=$true)][string]$Server)
+      [Parameter(Mandatory=$true)][string]$Server,
+      [switch]$Synthetic)
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
+try { Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction Stop } catch { }
+function Known-Mod-Ids([string]$Folder,[int]$ExpectedCount) {
+  $dir=[IO.DirectoryInfo]::new($Folder)
+  if (-not $dir.Exists -or ($dir.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw 'Unsafe mod folder' }
+  $jars=@(Get-ChildItem -LiteralPath $Folder -File -Filter '*.jar' -Force -ErrorAction Stop)
+  if ($jars.Count -ne $ExpectedCount) { throw 'Mod inventory changed' }
+  $result=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+  foreach ($jar in $jars) {
+    if (($jar.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or $jar.Length -gt 300000000) { throw 'Unsafe JAR' }
+    $zip=[IO.Compression.ZipFile]::OpenRead($jar.FullName)
+    try {
+      $entry=$zip.GetEntry('META-INF/mods.toml')
+      if (-not $entry -or $entry.Length -gt 1048576) { continue }
+      $reader=[IO.StreamReader]::new($entry.Open(),[Text.Encoding]::UTF8)
+      try { $toml=$reader.ReadToEnd() } finally { $reader.Dispose() }
+      foreach ($match in [regex]::Matches($toml,'(?m)^\s*modId\s*=\s*["'']([A-Za-z0-9_.-]{2,80})["'']')) {
+        $null=$result.Add($match.Groups[1].Value)
+      }
+    } finally { $zip.Dispose() }
+  }
+  return ,$result
+}
 function Recent-Lines([string]$Path) {
   $file = Get-Item -LiteralPath $Path -ErrorAction Stop
   if ($file.PSIsContainer -or ($file.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or
@@ -18,6 +41,10 @@ try {
       (Split-Path -Leaf (Split-Path -Parent $Server)) -cne 'FunCityLocal') { throw 'Unexpected location' }
   $games = @(@('.minecraft','minecraft') | Where-Object { Test-Path -LiteralPath (Join-Path $Profile $_) -PathType Container })
   if ($games.Count -ne 1) { throw 'Ambiguous Prism folder' }
+  $clientMods = Join-Path (Join-Path $Profile $games[0]) 'mods'
+  $serverMods = Join-Path $Server 'mods'
+  $clientIds = Known-Mod-Ids $clientMods $(if ($Synthetic) { 1 } else { 22 })
+  $serverIds = Known-Mod-Ids $serverMods $(if ($Synthetic) { 1 } else { 34 })
   $client = Recent-Lines (Join-Path (Join-Path (Join-Path $Profile $games[0]) 'logs') 'latest.log')
   $serverLog = Recent-Lines (Join-Path (Join-Path $Server 'logs') 'latest.log')
   $clientLines = @($client.lines)
@@ -80,6 +107,15 @@ try {
       $_ -match ('(?i)(?<![A-Za-z0-9_.-])' + [regex]::Escape($id) + '(?![A-Za-z0-9_.-])')
     }).Count -gt 0
   })
+  $clientRejected = New-Object 'System.Collections.Generic.List[string]'
+  $serverRejected = New-Object 'System.Collections.Generic.List[string]'
+  foreach ($id in $clientIds) {
+    if (-not [regex]::IsMatch($id,'^[a-zA-Z0-9_.-]{2,80}$')) { continue }
+    $pattern='(?i)(?<![A-Za-z0-9_.-])' + [regex]::Escape($id) + '(?![A-Za-z0-9_.-])'
+    if (@($debugChannelReject | Where-Object { $_ -match $pattern }).Count -eq 0) { continue }
+    if ($serverIds.Contains($id)) { $serverRejected.Add($id) }
+    else { $clientRejected.Add($id) }
+  }
   # Fixed lexicon only: discard every other token (including player/account/IP).
   $safeWords=@('channel','channels','reject','rejected','rejecting','client','clientside','server','serverside',
                'version','versions','missing','required','optional','remote','local','login','play',
@@ -106,6 +142,8 @@ try {
     ' CHANNEL_MISMATCH=' + $debugChannelMismatch.Count + ' MODLIST_MISMATCH=' + $debugModListMismatch.Count +
     ' INCOMPLETE_DATA=' + $debugIncomplete.Count + ' DEBUG_ALLOWED_IDS_IN_ERROR_CONTEXT=' + ($debugMissing -join ',') +
     ' DEBUG_ALLOWLIST_REJECTED_CHANNEL_IDS=' + ($debugRejectIds -join ',') +
+    ' REJECT_CLIENT_ONLY_MOD_IDS=' + ($clientRejected -join ',') +
+    ' REJECT_COMMON_MOD_IDS=' + ($serverRejected -join ',') +
     ' REJECT_SERVERSIDE_LINES=' + $serverSideRejected + ' REJECT_CLIENTSIDE_LINES=' + $clientSideRejected +
     ' REJECT_FIXED_LEXICON=' + $rejectPattern +
     '; RECENT_LOG_TAIL_ONLY=true RAW_LOG_NOT_UPLOADED=true JOIN_NOT_PROVEN=true')
