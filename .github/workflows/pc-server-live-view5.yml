@@ -1,5 +1,5 @@
 name: One-time guarded FunCity server view-distance five
-# Only on a uniquely gated push. Never upload private server contents.
+# Final one-time guarded push after hosted syntax/rollback fixture passed; never upload private server contents.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
