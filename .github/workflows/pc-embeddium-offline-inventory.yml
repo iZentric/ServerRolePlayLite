@@ -1,0 +1,57 @@
+name: Read-only inventory for separate Embeddium Lite test profile
+# Never launch Prism/game, download JARs, touch original/gameplay files or upload PC data.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-embeddium-offline-inventory.yml]
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read only exact candidate filenames in Prism mods folders
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          $instances='C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances'
+          $lite=Join-Path $instances 'FunCity RP Lite'
+          $source=Join-Path $lite '.minecraft\mods'
+          if (-not (Test-Path -LiteralPath $instances -PathType Container) -or -not (Test-Path -LiteralPath $source -PathType Container)) {
+            Write-Output '::error title=Embeddium offline gate::EXPECTED_LITE_NOT_FOUND; READ_ONLY=true'
+            exit 2
+          }
+          $expected=@('embeddium-0.3.18+mc1.16.5.jar','textrue_embeddium_options-0.1.1+mc1.16.5.jar')
+          $records=@{}
+          foreach ($name in $expected) { $records[$name]=@() }
+          $folders=@(Get-ChildItem -LiteralPath $instances -Directory -ErrorAction Stop | Where-Object {
+            ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0
+          })
+          foreach ($folder in $folders) {
+            foreach ($game in @('.minecraft','minecraft')) {
+              $mods=Join-Path (Join-Path $folder.FullName $game) 'mods'
+              if (-not (Test-Path -LiteralPath $mods -PathType Container)) { continue }
+              $modsInfo=Get-Item -LiteralPath $mods -ErrorAction Stop
+              if (($modsInfo.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { continue }
+              foreach ($name in $expected) {
+                $path=Join-Path $mods $name
+                if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { continue }
+                $file=Get-Item -LiteralPath $path -ErrorAction Stop
+                if (($file.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or $file.Length -gt 50000000) { continue }
+                $sha=(Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash
+                $records[$name]=@($records[$name]) + @($sha)
+              }
+            }
+          }
+          $liteJars=@(Get-ChildItem -LiteralPath $source -File -Filter '*.jar' -ErrorAction Stop)
+          $prismActive=@(Get-Process -Name 'prismlauncher' -ErrorAction SilentlyContinue).Count -gt 0
+          $target=Join-Path $instances 'FunCity RP Lite Embeddium TEST'
+          Write-Output ('::notice title=Candidate inventory::PRISM_ACTIVE=' + $prismActive + ' LITE_JARS=' + $liteJars.Count +
+            ' TEST_PROFILE_EXISTS=' + (Test-Path -LiteralPath $target) + ' READ_ONLY=true')
+          foreach ($name in $expected) {
+            $hashes=@($records[$name] | Sort-Object -Unique)
+            Write-Output ('::notice title=Candidate binary::NAME=' + $name + ' MATCHES=' + @($records[$name]).Count +
+              ' UNIQUE_HASHES=' + $hashes.Count + ' SHA256=' + ($hashes -join ',') + '; READ_ONLY=true')
+          }
