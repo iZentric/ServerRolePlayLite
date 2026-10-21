@@ -32,8 +32,10 @@ with tempfile.TemporaryDirectory(prefix='fc-join-probe-') as tmp:
     script = str(Path(__file__).with_name('fc_join_failure_probe.ps1'))
     result = subprocess.run(['pwsh', '-NoProfile', '-File', script, '-Profile', str(client),
                              '-Server', str(server), '-Synthetic'], capture_output=True, text=True, timeout=10)
-    assert result.returncode == 0, result.returncode
-    assert 'CLIENT_INCOMPLETE_HINTS=1' in result.stdout, result.stdout
+    if result.returncode or 'CLIENT_INCOMPLETE_HINTS=1' not in result.stdout or 'REJECT_CLIENT_ONLY_MOD_IDS=examplemod' not in result.stdout:
+        # Script output is fixed-form, synthetic and contains no raw log values.
+        print('::error title=Private join synthetic fixture::' + result.stdout.strip().replace('\n', ' ')[:500])
+        raise AssertionError('Synthetic Forge join classification failed')
     assert 'ALLOWLIST_MOD_IDS=clumps' in result.stdout, result.stdout
     assert 'DEBUG_ALLOWED_IDS_IN_ERROR_CONTEXT=clumps' in result.stdout, result.stdout
     assert 'REJECT_CLIENT_ONLY_MOD_IDS=examplemod' in result.stdout, result.stdout
