@@ -8,6 +8,7 @@ on:
     paths:
       - .github/workflows/funcity-catserver-source-build.yml
       - functity/catserver/patches/0001-funcity-operator-identity.patch
+      - scripts/fc_gradle_failure_classifier.py
 permissions:
   contents: read
 jobs:
