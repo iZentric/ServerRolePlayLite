@@ -1,0 +1,35 @@
+name: Safe separate Prism Embeddium 1.16.5 test profile
+# Runs on PC only after exact official filenames exist in Downloads and Prism/game closed.
+# The committed script never downloads binaries or edits source Lite/original/server.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-embeddium-test-profile.yml
+      - scripts/fc_embeddium_test_profile.ps1
+      - scripts/fc_embeddium_test_profile_test.ps1
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthetic separate-profile copy/rollback and privacy checks
+        shell: pwsh
+        run: ./scripts/fc_embeddium_test_profile_test.ps1
+  pc-create:
+    if: startsWith(github.event.head_commit.message, 'Create Embeddium Prism test profile once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage candidate only if verified files exist and Prism is closed
+        shell: powershell
+        run: |
+          & ./scripts/fc_embeddium_test_profile.ps1 `
+            -Source 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\FunCity RP Lite' `
+            -Downloads 'C:\Users\Administrator\Downloads'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
