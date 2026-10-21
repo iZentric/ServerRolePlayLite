@@ -128,6 +128,9 @@ try {
   $rejectPattern=($tokens -join ' ')
   $serverSideRejected=@($debugChannelReject | Where-Object { $_ -match '(?i)serverside|server.side|server channel' }).Count
   $clientSideRejected=@($debugChannelReject | Where-Object { $_ -match '(?i)clientside|client.side|client channel' }).Count
+  $absentVersion=@($debugChannelReject | Where-Object { $_ -match '(?i)\babsent\b' }).Count
+  $vanillaVersion=@($debugChannelReject | Where-Object { $_ -match '(?i)\bacceptvanilla\b|\bvanilla\b' }).Count
+  $emptyVersion=@($debugChannelReject | Where-Object { $_ -match '(?i)\bempty\b|\bnone\b' }).Count
   Write-Output ('::notice title=Latest Forge join evidence::CLIENT_LOG_AGE_H=' + $client.ageHours + ' SERVER_LOG_AGE_H=' + $serverLog.ageHours +
     ' CLIENT_CONNECT_HINTS=' + $signals.attempted + ' CLIENT_INCOMPLETE_HINTS=' + $signals.incomplete +
     ' CLIENT_REGISTRY_HINTS=' + $signals.registry + ' CLIENT_MODLIST_HINTS=' + $signals.modlist +
@@ -145,7 +148,8 @@ try {
     ' REJECT_CLIENT_ONLY_MOD_IDS=' + ($clientRejected -join ',') +
     ' REJECT_COMMON_MOD_IDS=' + ($serverRejected -join ',') +
     ' REJECT_SERVERSIDE_LINES=' + $serverSideRejected + ' REJECT_CLIENTSIDE_LINES=' + $clientSideRejected +
-    ' REJECT_FIXED_LEXICON=' + $rejectPattern +
+    ' REJECT_ABSENT_VERSION=' + $absentVersion + ' REJECT_VANILLA_VERSION=' + $vanillaVersion +
+    ' REJECT_EMPTY_VERSION=' + $emptyVersion + ' REJECT_FIXED_LEXICON=' + $rejectPattern +
     '; RECENT_LOG_TAIL_ONLY=true RAW_LOG_NOT_UPLOADED=true JOIN_NOT_PROVEN=true')
   exit 0
 } catch {
