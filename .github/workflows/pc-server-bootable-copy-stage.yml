@@ -1,5 +1,6 @@
 name: Prepare private bootable no-Clumps copy from verified offline backup
 # Never start a test server or edit original/JAR; PC copy requires exact commit prefix.
+# Synthetic whole-tree source/hash/Clumps fixture passed in hosted run 39598625157.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
