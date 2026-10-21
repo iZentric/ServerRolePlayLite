@@ -22,6 +22,16 @@ try {
   $serverLog = Recent-Lines (Join-Path (Join-Path $Server 'logs') 'latest.log')
   $clientLines = @($client.lines)
   $serverLines = @($serverLog.lines)
+  $disconnects = @($serverLines | Where-Object { $_ -match '(?i)(lost connection|disconnected|disconnecting)' })
+  $lastDisconnect = if ($disconnects.Count) { [string]$disconnects[-1] } else { '' }
+  $reasonFlags = @{
+    forge=[bool]($lastDisconnect -match '(?i)forge|fml')
+    mod=[bool]($lastDisconnect -match '(?i)\bmod(s|ded)?\b')
+    registry=[bool]($lastDisconnect -match '(?i)registr')
+    timeout=[bool]($lastDisconnect -match '(?i)timed out|timeout')
+    authentication=[bool]($lastDisconnect -match '(?i)auth|session|whitelist|banned')
+    network=[bool]($lastDisconnect -match '(?i)network|packet|protocol')
+  }
   $signals = @{
     attempted=@($clientLines | Where-Object { $_ -match '(?i)(connecting to|connect to|trying to connect|connecting:)'}).Count
     incomplete=@($clientLines | Where-Object { $_ -match '(?i)incomplete mod data|unvollst.ndige moddaten|incomplete set of tags' }).Count
@@ -44,7 +54,10 @@ try {
     ' CLIENT_CONNECT_HINTS=' + $signals.attempted + ' CLIENT_INCOMPLETE_HINTS=' + $signals.incomplete +
     ' CLIENT_REGISTRY_HINTS=' + $signals.registry + ' CLIENT_MODLIST_HINTS=' + $signals.modlist +
     ' CLIENT_VERSION_HINTS=' + $signals.version + ' SERVER_DISCONNECT_HINTS=' + $signals.serverDisconnect +
-    ' SERVER_REGISTRY_HINTS=' + $signals.serverRegistry + ' ALLOWLIST_MOD_IDS=' + ($mentioned -join ',') +
+    ' SERVER_REGISTRY_HINTS=' + $signals.serverRegistry + ' LAST_DISCONNECT_FORGE=' + $reasonFlags.forge +
+    ' LAST_DISCONNECT_MOD=' + $reasonFlags.mod + ' LAST_DISCONNECT_REGISTRY=' + $reasonFlags.registry +
+    ' LAST_DISCONNECT_TIMEOUT=' + $reasonFlags.timeout + ' LAST_DISCONNECT_AUTH=' + $reasonFlags.authentication +
+    ' LAST_DISCONNECT_NETWORK=' + $reasonFlags.network + ' ALLOWLIST_MOD_IDS=' + ($mentioned -join ',') +
     '; RECENT_LOG_TAIL_ONLY=true RAW_LOG_NOT_UPLOADED=true JOIN_NOT_PROVEN=true')
   exit 0
 } catch {
