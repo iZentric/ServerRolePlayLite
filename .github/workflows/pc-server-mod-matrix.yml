@@ -30,7 +30,16 @@ jobs:
           }
       - name: Test only synthetic temporary mod names
         shell: pwsh
-        run: ./scripts/fc_server_mod_matrix_test.ps1
+        run: |
+          $output=@(& pwsh -NoProfile -File ./scripts/fc_server_mod_matrix_test.ps1 2>&1)
+          $code=$LASTEXITCODE
+          if ($code -ne 0) {
+            # Fixture uses ONLY synthetic temporary files. Still redact arbitrary paths.
+            $safe=(($output | Select-Object -Last 2 | Out-String) -replace '[^a-zA-Z0-9 _:.=-]','_')
+            Write-Output ('::error title=Synthetic mod matrix failure::' + $safe.Substring(0,[Math]::Min(350,$safe.Length)))
+            exit 2
+          }
+          Write-Output '::notice title=Synthetic mod matrix::PASS'
   pc-read-only:
     needs: synthetic
     runs-on: [self-hosted, Windows]
