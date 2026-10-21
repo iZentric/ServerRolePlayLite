@@ -88,38 +88,15 @@ try {
     $packet = Read-Packet $stream
     if ($packet.id -ne 89322 -or $packet.type -ne 0) { throw 'Unexpected RCON response' }
     if ($Command -eq 'list') {
-      # Minecraft/plugin consoles may prepend ANSI color control codes to the count.
+      # Strip Minecraft colors before parsing; count 0 only on explicit player-list grammar.
       $plainList = [regex]::Replace($packet.text,([char]0xA7).ToString() + '[0-9a-fk-or]','',[Text.RegularExpressions.RegexOptions]::IgnoreCase)
       $plainList = [regex]::Replace($plainList,'\x1b\[[0-9;]*[A-Za-z]','')
       $plainList = [regex]::Replace($plainList,'[\x00-\x1f]',' ')
       $count = [regex]::Match($plainList,'(?is)there are\s+(\d+)\b.{0,120}players.{0,30}online')
       $playerState = if ($count.Success -and [int]$count.Groups[1].Value -eq 0) { 'ZERO' }
                      elseif ($count.Success) { 'ACTIVE' } else { 'UNKNOWN' }
-      # Print length/whitelisted grammar signals only, never the response or player names.
-      $shape = if ($packet.text.Length -eq 0) { 'EMPTY' }
-               elseif ($packet.text -match '(?i)there are') { 'VANILLA_PHRASE' }
-               elseif ($packet.text -match '(?i)online players|players online') { 'ONLINE_PHRASE' }
-               else { 'OTHER' }
-      $hasPlayers = [bool]($packet.text -match '(?i)\bplayers\b')
-      $hasOnline = [bool]($packet.text -match '(?i)\bonline\b')
-      $thereAreNumber = [bool]($packet.text -match '(?is)\bthere are\b.{0,120}?\b\d+\b')
-      $hasNoPlayers = [bool]($packet.text -match '(?i)\bno players\b')
-      $digitCount = [regex]::Matches($packet.text,'[0-9]').Count
-      $controlCount = [regex]::Matches($packet.text,'[\x00-\x1f]').Count
-      $colorCount = [regex]::Matches($packet.text,'§').Count
-      $phraseAt = $packet.text.IndexOf('There are',[StringComparison]::OrdinalIgnoreCase)
-      $firstDigit = [regex]::Match($packet.text,'[0-9]').Index
-      $digitOffsets = @([regex]::Matches($packet.text,'[0-9]') | ForEach-Object { $_.Index }) -join ','
-      $playersAt = $packet.text.IndexOf('players',[StringComparison]::OrdinalIgnoreCase)
-      $onlineAt = $packet.text.IndexOf('online',[StringComparison]::OrdinalIgnoreCase)
-      # Structural mask stops before the player list and replaces all letters/digits.
-      $safePrefix = $packet.text.Substring(0,[Math]::Min($playersAt + 7,60))
-      $safePrefix = [regex]::Replace($safePrefix,'[A-Za-z]','A')
-      $safePrefix = [regex]::Replace($safePrefix,'[0-9]','#')
-      $safePrefix = [regex]::Replace($safePrefix,'[\x00-\x20]','_')
-      $safePrefix = [regex]::Replace($safePrefix,'[^A#_/:;.,()\[\]{}+-]','?')
-      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + ' MASK=' + $safePrefix + ' RESPONSE_SHAPE=' + $shape + ' RESPONSE_LENGTH=' + $packet.text.Length + ' HAS_PLAYERS=' + $hasPlayers + ' HAS_ONLINE=' + $hasOnline + ' THERE_ARE_NUMBER=' + $thereAreNumber + ' NO_PLAYERS_PHRASE=' + $hasNoPlayers + ' DIGITS=' + $digitCount + ' CONTROLS=' + $controlCount + ' COLORS=' + $colorCount + ' PHRASE_AT=' + $phraseAt + ' DIGIT_AT=' + $firstDigit + ' DIGIT_OFFSETS=' + $digitOffsets + ' PLAYERS_AT=' + $playersAt + ' ONLINE_AT=' + $onlineAt + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
-    } else { Write-Output '::notice title=FunCity local RCON::AUTH_OK=true SAVE_ALL_RESPONSE_RECEIVED=true; WORLD_NOT_MODIFIED_BY_AGENT=true' }
+      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
+    } else { Write-Output '::notice title=FunCity local RCON::AUTH_OK=true SAVE_ALL_RESPONSE_RECEIVED=true' }
   } finally { $socket.Close() }
   exit 0
 } catch {
