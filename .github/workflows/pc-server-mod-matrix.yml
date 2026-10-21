@@ -9,6 +9,7 @@ on:
       - .github/workflows/pc-server-mod-matrix.yml
       - scripts/fc_server_mod_matrix.ps1
       - scripts/fc_server_mod_matrix_test.ps1
+      - agent/FUNCITY-SERVER-TARGET-28.json
 permissions:
   contents: read
 jobs:
