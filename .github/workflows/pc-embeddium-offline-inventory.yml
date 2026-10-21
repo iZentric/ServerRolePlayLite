@@ -1,5 +1,6 @@
 name: Read-only inventory for separate Embeddium Lite test profile
 # Never launch Prism/game, download JARs, touch original/gameplay files or upload PC data.
+# Recheck exact candidate filenames after owner confirmed both downloads and closing Prism.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
