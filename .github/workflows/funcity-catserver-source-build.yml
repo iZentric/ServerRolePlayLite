@@ -1,0 +1,55 @@
+name: FunCity candidate - build auditable branded CatServer fork
+# A source build experiment, NOT a release, installation, PC access or server update.
+# LGPL upstream credit retained. Branding only operator-facing name/logger; core
+# protocol identifiers, config names and Forge/Bukkit compatibility untouched.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/funcity-catserver-source-build.yml
+      - functity/catserver/patches/0001-funcity-operator-identity.patch
+permissions:
+  contents: read
+jobs:
+  source-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: |
+            8
+            17
+      - name: Fetch exact LGPL CatServer source and apply minimal identity patch
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-catserver-source"
+          git clone -q --depth 1 --filter=blob:none --branch 23.05.26-1 \
+            https://github.com/Luohuayu/CatServer.git "$root"
+          test "$(git -C "$root" rev-parse HEAD)" = '1d8d63138be77a606df2a5e940b960065948f983'
+          test -s "$root/LICENSE" && grep -q 'LESSER GENERAL PUBLIC LICENSE' "$root/LICENSE"
+          git -C "$root" apply --check "$GITHUB_WORKSPACE/functity/catserver/patches/0001-funcity-operator-identity.patch"
+          git -C "$root" apply "$GITHUB_WORKSPACE/functity/catserver/patches/0001-funcity-operator-identity.patch"
+          grep -Fq 'serverName = "FunCity"' "$root/src/main/java/org/bukkit/craftbukkit/v1_16_R3/CraftServer.java"
+          grep -Fq 'getLogger("FunCity")' "$root/src/main/java/catserver/server/CatServer.java"
+          grep -Fq 'new CatServerConfig("catserver.yml")' "$root/src/main/java/catserver/server/CatServer.java"
+          echo '::notice title=FunCity source audit::upstream=Luohuayu/CatServer tag=23.05.26-1 license=LGPL-3.0 identity_patch=PASS Forge/Bukkit identifiers=UNCHANGED no JAR published'
+      - name: Build source candidate; all logs remain on disposable hosted runner
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-catserver-source"
+          cd "$root"
+          if ! ./gradlew setup :forge:buildCatServer --no-daemon --max-workers=4 \
+               > "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
+            echo '::error title=FunCity source build::BUILD_FAILED; no binary promoted. See only private ephemeral runner log; no unverified JAR.'
+            exit 2
+          fi
+          jars=(forge/build/libs/CatServer-1.16.5-*-server.jar)
+          if [ "${#jars[@]}" != 1 ] || [ ! -s "${jars[0]}" ]; then
+            echo '::error title=FunCity source build::Expected one server JAR; no candidate promoted.'
+            exit 2
+          fi
+          unzip -p "${jars[0]}" META-INF/MANIFEST.MF | grep -q 'catserver.server.CatServerLaunch'
+          echo "::notice title=FunCity provisional fork source build::BUILD_PASS sha256=$(sha256sum "${jars[0]}" | cut -d' ' -f1) upstream=CatServer-1.16.5-1d8d6313 source=LGPL-3.0 runtime_join=NOT_TESTED no_artifact_uploaded=true"
