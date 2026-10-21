@@ -47,14 +47,17 @@ def details(text):
     }
     flags = [name for name, needle in markers.items() if needle.lower() in tail.lower()]
     # Task is public upstream source identifier only. No raw lines or URLs.
-    return task, ','.join(flags) if flags else 'NONE'
+    packages = sorted(set(re.findall(r'error: package ([A-Za-z][A-Za-z0-9_.]+) does not exist', tail)))[:5]
+    symbols = sorted(set(re.findall(r'(?m)^\s*symbol:\s*(?:class|variable|method)\s+([A-Za-z][A-Za-z0-9_]+)', tail)))[:5]
+    return task, ','.join(flags) if flags else 'NONE', ','.join(packages) or 'NONE', ','.join(symbols) or 'NONE'
 
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         sys.exit(2)
     text = Path(sys.argv[1]).read_text(encoding='utf-8', errors='replace')
-    task, flags = details(text)
+    task, flags, packages, symbols = details(text)
     print('::error title=FunCity source build safe diagnosis::CATEGORIES=' + classify(text) +
           ' FAILED_TASK=' + task + ' FLAGS=' + flags +
+          ' PUBLIC_UPSTREAM_PACKAGES=' + packages + ' PUBLIC_UPSTREAM_SYMBOLS=' + symbols +
           '; no raw CI log, download URL or credentials published')
