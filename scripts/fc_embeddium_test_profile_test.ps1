@@ -30,11 +30,15 @@ try {
   foreach ($name in $manifest.retained_in_future_target) {
     [IO.File]::WriteAllText((Join-Path $mods $name),('fixture:' + $name))
   }
+  Write-Output '::notice title=Embeddium fixture::PHASE=BEFORE_MISSING_BINARIES'
   & ./scripts/fc_embeddium_test_profile.ps1 -Source $source -Downloads $downloads -Synthetic | Out-Null
+  Write-Output ('::notice title=Embeddium fixture::PHASE=AFTER_MISSING_BINARIES EXIT=' + $LASTEXITCODE)
   if ($LASTEXITCODE -eq 0 -or (Test-Path -LiteralPath $target)) { throw 'Missing candidates should fail without creating profile' }
   Fixture-Jar (Join-Path $downloads 'embeddium-0.3.18+mc1.16.5.jar') 'embeddium'
   Fixture-Jar (Join-Path $downloads 'textrue_embeddium_options-0.1.1+mc1.16.5.jar') 'textrues_embeddium_options'
+  Write-Output '::notice title=Embeddium fixture::PHASE=BEFORE_CREATE'
   $result=& ./scripts/fc_embeddium_test_profile.ps1 -Source $source -Downloads $downloads -Synthetic
+  Write-Output ('::notice title=Embeddium fixture::PHASE=AFTER_CREATE EXIT=' + $LASTEXITCODE)
   if ($LASTEXITCODE -ne 0 -or -not ($result -match 'SEPARATE_TEST_PROFILE_CREATED=true')) { throw 'Separate candidate not built on fixture' }
   $copy=Join-Path $target '.minecraft/mods'
   if (@(Get-ChildItem -LiteralPath $copy -File -Filter '*.jar').Count -ne 22 -or
