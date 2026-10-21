@@ -43,7 +43,9 @@ jobs:
           cd "$root"
           if ! ./gradlew setup :forge:buildCatServer --no-daemon --max-workers=4 \
                > "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
-            echo '::error title=FunCity source build::BUILD_FAILED; no binary promoted. See only private ephemeral runner log; no unverified JAR.'
+            python3 "$GITHUB_WORKSPACE/scripts/fc_gradle_failure_classifier.py" \
+              "$RUNNER_TEMP/fc-catserver-build-private.log"
+            echo '::error title=FunCity source build::BUILD_FAILED; no binary promoted or uploaded.'
             exit 2
           fi
           jars=(forge/build/libs/CatServer-1.16.5-*-server.jar)
