@@ -88,7 +88,7 @@ try {
     $packet = Read-Packet $stream
     if ($packet.id -ne 89322 -or $packet.type -ne 0) { throw 'Unexpected RCON response' }
     if ($Command -eq 'list') {
-      $count = [regex]::Match($packet.text,'(?i)\bthere are\s+(\d+)\b.{0,120}\bplayers online\b')
+      $count = [regex]::Match($packet.text,'(?is)there are\s+(\d+)\b.{0,120}players.{0,30}online')
       $playerState = if ($count.Success -and [int]$count.Groups[1].Value -eq 0) { 'ZERO' }
                      elseif ($count.Success) { 'ACTIVE' } else { 'UNKNOWN' }
       # Print length/whitelisted grammar signals only, never the response or player names.
