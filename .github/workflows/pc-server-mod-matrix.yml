@@ -1,0 +1,33 @@
+name: Compare actual server mod counts with the 29-mod RP target (read-only)
+# File names are compared only in memory; Actions receives counts/booleans,
+# NEVER a mod list, any JAR, raw log, world/account file, password, or PC path.
+# No Prism/game/server stop, restart, second server or write to owner folders.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-server-mod-matrix.yml
+      - scripts/fc_server_mod_matrix.ps1
+      - scripts/fc_server_mod_matrix_test.ps1
+permissions:
+  contents: read
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test only synthetic temporary mod names
+        shell: pwsh
+        run: ./scripts/fc_server_mod_matrix_test.ps1
+  pc-read-only:
+    needs: synthetic
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare JAR counts and safe flags without copying/starting server
+        shell: powershell
+        run: |
+          & ./scripts/fc_server_mod_matrix.ps1 -Server 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
