@@ -1,6 +1,7 @@
 name: Read-only server backup and graceful-stop readiness
 # Only file metadata, RCON presence and local process ownership. No password,
 # world content, usernames, paths, server stop or second server.
+# Recheck space after the verified private copy boot before any live JAR change.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
