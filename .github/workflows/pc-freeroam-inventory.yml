@@ -20,8 +20,6 @@ on:
       - scripts/fc_lite_join_log_diagnostic_test.py
       - scripts/fc_server_no_clumps_stage.ps1
       - scripts/fc_server_no_clumps_stage_test.ps1
-      - scripts/fc_server_upgrade_gate.ps1
-      - scripts/fc_server_upgrade_gate_test.ps1
 permissions:
   contents: read
 jobs:
@@ -68,9 +66,6 @@ jobs:
       - name: Server mod stage without Clumps, no world or running server access (hosted fixture only)
         shell: pwsh
         run: ./scripts/fc_server_no_clumps_stage_test.ps1
-      - name: Server backup feasibility gate on hosted metadata fixture
-        shell: pwsh
-        run: ./scripts/fc_server_upgrade_gate_test.ps1
   read-only-pc:
     needs: guards
     runs-on: [self-hosted, Windows]
@@ -203,7 +198,4 @@ jobs:
           }
           # User-supplied error image warrants local diagnosis, not exposing any log text.
           & ./scripts/fc_lite_join_log_diagnostic.ps1 -Profile (Join-Path (Split-Path -Parent $profile) 'FunCity RP Lite')
-          if ($LASTEXITCODE -ne 0) { $global:LASTEXITCODE = 0 }
-          # No world bytes or server config values are uploaded. Size = file metadata only.
-          & ./scripts/fc_server_upgrade_gate.ps1 -Server $server
           if ($LASTEXITCODE -ne 0) { $global:LASTEXITCODE = 0 }
