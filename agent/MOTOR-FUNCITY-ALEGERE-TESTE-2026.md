@@ -1,0 +1,37 @@
+# FunCity RP: alegerea motorului și serverului, pe probe (22 octombrie 2026)
+
+**Alegerea mea pentru un candidat nou, pe COPIE: CatServer oficial 1.16.5 de la [tagul `23.05.26-1`](https://github.com/Luohuayu/CatServer/releases/tag/23.05.26-1), nu vechiul motor FunCity/Tenet b1.0827.** CatServer upstream are [sursă LGPL-3.0](https://github.com/Luohuayu/CatServer/tree/1d8d63138be77a606df2a5e940b960065948f983) (tag commit `1d8d63138be77a606df2a5e940b960065948f983`); JAR-ul oficial din probă are SHA256 `8edea98c597e7af44a45ef9093678c38ca3749d55a71cdff10218c1c6b946fd0`. Alegerea nu declară că a fost instalat pe PC, că merge lumea live sau că a trecut autenticarea și vocea. Serverul existent rămâne neatins până la teste private și rollback; nu îl deschidem public cât timp autentificarea offline/anti-impersonare nu este verificată.
+
+## 1. Testul motorului pe aceeași mașină GitHub
+
+[CI **39692158792 — PASS**](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39692158792) a rulat **F/C/O/O/C/F** pe *un singur runner* cu Java 11, 15 moduri de conținut/dependențe RP identice, 6 pluginuri identice, **RoadRunner + FerriteCore + ModernFix identice**, aceeași lume generată și 80 zombie/probă. Toate 6 au ajuns la `Done`, pluginurile s-au activat și serverele s-au oprit cu exit 0. În probele măsurate s-a schimbat **doar JAR-ul motor**.
+
+| Motor | CPU Java/30 secunde, două probe | Tick mediu din `forge tps`, ms, două probe | RSS mediană în probă, MiB |
+|---|---:|---:|---:|
+| FunCity/Mohist-Tenet b1.0827, existent | 6,59 / 6,35 | 2,85 / 2,46 | 2936 / 2892 |
+| CatServer vechi din arhivă | 2,74 / 3,58 | 1,23 / 1,38 | 2461 / 2506 |
+| **CatServer oficial** | **2,82 / 2,62** | **1,33 / 1,20** | **2456 / 2528** |
+
+**CatServer oficial este alegerea pentru fork FunCity:** a stat sub b1.0827 la CPU și tick în ambele probe și are o versiune upstream precisă pentru build/atribuire. Diferențele mici dintre cele două CatServer nu stabilesc un câștig semnificativ unul față de celălalt; vechiul binar a avut un boot intermitent eșuat în altă rundă de compatibilitate.
+
+**Limită:** două probe/braț de ~30 s, 80 zombie fără jucători, lume generată, nu orașul jucat; nu am măsurat capacitatea cu 20/60 jucători, vehicule, voice, FPS client, MSPT p95/p99 ori upgrade-ul lumii. Compararea la sarcină reală va putea infirma această alegere.
+
+## 2. Selecția modurilor de server și compatibilitatea motoarelor
+
+[CI **39694738682**](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39694738682), cinci joburi independente: cele **28 JAR-uri server propuse** au metadata Forge și dependențele obligatorii validate, au pornit și s-au oprit curat cu 6 pluginuri pe **CatServer oficial, FunCity b1.0827 și CatServer vechi**. **Arclight a ieșit înainte de `Done` cu cod 0; Mist cu cod 1**; runda este `failure` per ansamblu, nu „toate au trecut”. Nu atribuim cauza exactă a Arclight fără log verificabil (ar putea fi installer); niciunul nu este promovat. [Prima rulare cu 29 istorice](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39692647058) includea încă Clumps; nu o confundăm cu selecția actuală.
+
+**De ce 28, nu 29?** Tabelul istoric din `agent/DECIZII.md` marchează Clumps ca `PĂSTRAT` într-o țintă veche de 29. Proprietarul a scos Clumps din clientul Lite și ulterior din server cu backup/login; testul curent **exclude explicit `Clumps-6.0.0.28.jar`**, fără a-l reinstala. Dintre cele 28: 11 moduri de conținut RP, cele 4 dependențe, voce Forge pentru ambele părți și optimizări/compatibilitate moștenite (inclusiv RoadRunner, ModernFix, FerriteCore). Niciun mod de conținut nu a fost scos în acest test. [Scriptul de selecție din arhiva istorică](../scripts/fc_full_rp_engine_boot.py) nu copiază nicio lume reală.
+
+**Important:** serverul real avea la ultimul inventar ~34 moduri și ~13 pluginuri, nu această țintă 28/6. Beneficiul individual al fiecărui optimizer (Ksyxis, AI Improvements, rețete, dropuri, voice etc.) **nu e demonstrat** prin simpla pornire. Nu instalăm un pack de 28 peste cel de 34 și nu ștergem obiectele RP. Doar pe copia integrală, pe aceeași lume, cu dependențele clientului Lite și toate pluginurile reale, se pot verifica registrul, block entities, NPC, vehicule, comenzile, voice și restartul. Inventarul read-only al PC-ului este încă un pas separat; nu publica nume/hashuri de JAR-uri private.
+
+## 3. Optimizerul ales pentru CatServer
+
+[CI **39694213284 — PASS**](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39694213284) a schimbat **numai** RoadRunner 1.5.2 ↔ Performant 4.1m pe CatServer oficial cu cele 15 moduri RP, FerriteCore/ModernFix și aceeași lume generată; 4 porniri/opriri curate în ordine R/P/P/R. Tickul mediu a fost **0,76/0,60 ms pe RoadRunner**, respectiv **0,39/0,31 ms pe Performant**, dar CPU Java/30 s **3,49/2,07 s pe RoadRunner** versus **3,54/4,34 s pe Performant**. Scena este ușoară, ambele sub 1 ms, iar Performant este declarat incompatibil cu RoadRunner: [author](https://www.curseforge.com/minecraft/mc-mods/performant), [issue confirmat](https://github.com/MaxNeedsSnacks/roadrunner/issues/56).
+
+**Alegerea server RP actuală: RoadRunner + FerriteCore + ModernFix**, deoarece în scena noastră CatServer consumă mai puțin CPU cu el, câștigul de sub un milisecund al Performant nu justifică schimbarea mecanicilor RP fără testul NPC/vehicule și clientul nu primește vreun mod nou. Performant rămâne **alternativă reală** pentru A/B pe copie *în loc de* RoadRunner dacă profilarea pe lumea reală arată tick lent. Nu combinăm cele două.
+
+## 4. Motorul propriu și identitatea FunCity
+
+**Baza aleasă = fork auditat al sursei CatServer, NU redenumirea opacă a JAR-ului oficial.** [Patchul reproductibil](../functity/catserver/patches/0001-funcity-operator-identity.patch) aplicat cu `git apply --check` pe tagul exact schimbă doar numele raportat prin Bukkit API/`/version` (`serverName`) și numele loggerului de motor în `FunCity`; configul nativ `catserver.yml`, identitățile Forge/Bukkit, protocolul, namespace-urile și atribuirile de licență rămân. MOTD-ul FunCity există deja în configul repo, dar valoarea live nu e reconfirmată. Teste suplimentare trebuie să inspecteze mesajele/ping/help/crash/version/manifest și să dovedească că pluginurile încă funcționează; „FunCity peste tot” nu înseamnă ascunderea provenienței LGPL.
+
+[Workflow de build izolat](../.github/workflows/funcity-catserver-source-build.yml) a validat source pin/LICENȚA și aplicarea patchului, **dar compile-time buildul nu este încă PASS** (nicio arhivă/JAR branduit distribuit, nicio instalare). Fixul de bootstrap Java a fost încercat; diagnosticul din CI este păstrat doar în categorii, fără loguri private. Urmează compilare reproducibilă, SHA, boot exact cu 28 și 6, login/moduri/pluginuri, rollback din backup; abia apoi o copie completă pentru testul RP. FunCity vechi nu se înlocuiește în live din cifre sintetice.
