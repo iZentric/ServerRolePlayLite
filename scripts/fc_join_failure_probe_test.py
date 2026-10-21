@@ -17,7 +17,7 @@ with tempfile.TemporaryDirectory(prefix='fc-join-probe-') as tmp:
         'Incomplete mod data: registry missing clumps SECRET_TOKEN\n', encoding='utf-8')
     log.joinpath('latest.log').write_text(
         'secret-player lost connection due to registry mismatch\n', encoding='utf-8')
-    script = str(Path(__file__).with_suffix('.ps1'))
+    script = str(Path(__file__).with_name('fc_join_failure_probe.ps1'))
     result = subprocess.run(['pwsh', '-NoProfile', '-File', script, '-Profile', str(client),
                              '-Server', str(server)], capture_output=True, text=True, timeout=10)
     assert result.returncode == 0, result.returncode

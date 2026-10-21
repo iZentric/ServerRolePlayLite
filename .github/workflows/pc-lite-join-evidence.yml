@@ -3,7 +3,10 @@ name: Inspect latest Lite connection failure privately
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
-    paths: [.github/workflows/pc-lite-join-evidence.yml]
+    paths:
+      - .github/workflows/pc-lite-join-evidence.yml
+      - scripts/fc_join_failure_probe.ps1
+      - scripts/fc_join_failure_probe_test.py
 permissions:
   contents: read
 jobs:
