@@ -34,7 +34,7 @@ with tempfile.TemporaryDirectory(prefix='fc-join-probe-') as tmp:
                              '-Server', str(server), '-Synthetic'], capture_output=True, text=True, timeout=10)
     if result.returncode or 'CLIENT_INCOMPLETE_HINTS=1' not in result.stdout or 'REJECT_CLIENT_ONLY_MOD_IDS=examplemod' not in result.stdout:
         # Script output is fixed-form, synthetic and contains no raw log values.
-        print('::error title=Private join synthetic fixture::' + result.stdout.strip().replace('\n', ' ')[:500])
+        print('::error title=Private join synthetic fixture::' + result.stdout.strip().replace('\n', ' ')[-650:])
         raise AssertionError('Synthetic Forge join classification failed')
     assert 'ALLOWLIST_MOD_IDS=clumps' in result.stdout, result.stdout
     assert 'DEBUG_ALLOWED_IDS_IN_ERROR_CONTEXT=clumps' in result.stdout, result.stdout

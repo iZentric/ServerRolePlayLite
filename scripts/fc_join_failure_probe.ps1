@@ -58,7 +58,7 @@ try {
     $debugAge = $debug.ageHours
     $debugLines = @($debug.lines)
   }
-  $debugRelevant = @($debugLines | Where-Object { $_ -match '(?i)(missing|failed|mismatch|registr|handshake|disconnect|fml)' })
+  $debugRelevant = @($debugLines | Where-Object { $_ -match '(?i)(missing|failed|mismatch|registr|handshake|disconnect|fml|reject)' })
   $debugRegistries = @($debugRelevant | Where-Object { $_ -match '(?i)(missing registr|registry mismatch|registry remapping|failed to synchronize registr|unbound registr)' }).Count
   $debugChannelReject = @($debugRelevant | Where-Object { $_ -match '(?i)channel.*reject' })
   $debugChannelMissing = @($debugRelevant | Where-Object { $_ -match '(?i)channel.*missing' })
