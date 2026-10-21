@@ -1,6 +1,6 @@
 name: Freeroam original — read-only target inventory
 # No Prism launch, server start, JAR upload, artifact, world or account mutation.
-# Recheck the launcher/client gate after the one-time Clumps write was blocked.
+# Recheck the launcher/client gate after the owner's latest failed login; read-only.
 # Uses native PowerShell because Python is unavailable on this Windows runner.
 on:
   push:
