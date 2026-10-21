@@ -1,5 +1,6 @@
 name: Confirm live Forge trial after owner reports successful login
 # Read-only: no server stop, no raw player/account/log data or backup upload.
+# Check player state before proposing a reversible view-distance change.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
