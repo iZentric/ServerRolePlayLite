@@ -19,7 +19,7 @@ try {
     $section=$text.Split(@('## Server —'),[StringSplitOptions]::None)
     if ($section.Count -ne 2) { throw 'SERVER_MANIFEST_NOT_UNIQUE' }
     $table=$section[1].Split(@('## Pluginurile'),[StringSplitOptions]::None)[0]
-    $rows=@([regex]::Matches($table, '(?m)^\| S\d\d \| `([^`]+\.jar)` \| (PĂSTRAT|SCOS(?: din runtime normal)?) \|'))
+    $rows=@([regex]::Matches($table, '(?m)^\| S\d\d \| \x60([^\x60]+\.jar)\x60 \| (PĂSTRAT|SCOS(?: din runtime normal)?) \|'))
     $historicalTarget=@($rows | Where-Object { $_.Groups[2].Value -eq 'PĂSTRAT' } | ForEach-Object { $_.Groups[1].Value })
     # Historical 29 includes Clumps; current Lite/client and server excluded it.
     $target=@($historicalTarget | Where-Object { $_ -ne 'Clumps-6.0.0.28.jar' })
