@@ -111,7 +111,13 @@ try {
       $digitOffsets = @([regex]::Matches($packet.text,'[0-9]') | ForEach-Object { $_.Index }) -join ','
       $playersAt = $packet.text.IndexOf('players',[StringComparison]::OrdinalIgnoreCase)
       $onlineAt = $packet.text.IndexOf('online',[StringComparison]::OrdinalIgnoreCase)
-      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + ' RESPONSE_SHAPE=' + $shape + ' RESPONSE_LENGTH=' + $packet.text.Length + ' HAS_PLAYERS=' + $hasPlayers + ' HAS_ONLINE=' + $hasOnline + ' THERE_ARE_NUMBER=' + $thereAreNumber + ' NO_PLAYERS_PHRASE=' + $hasNoPlayers + ' DIGITS=' + $digitCount + ' CONTROLS=' + $controlCount + ' COLORS=' + $colorCount + ' PHRASE_AT=' + $phraseAt + ' DIGIT_AT=' + $firstDigit + ' DIGIT_OFFSETS=' + $digitOffsets + ' PLAYERS_AT=' + $playersAt + ' ONLINE_AT=' + $onlineAt + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
+      # Structural mask stops before the player list and replaces all letters/digits.
+      $safePrefix = $packet.text.Substring(0,[Math]::Min($playersAt + 7,60))
+      $safePrefix = [regex]::Replace($safePrefix,'[A-Za-z]','A')
+      $safePrefix = [regex]::Replace($safePrefix,'[0-9]','#')
+      $safePrefix = [regex]::Replace($safePrefix,'[\x00-\x20]','_')
+      $safePrefix = [regex]::Replace($safePrefix,'[^A#_/:;.,()\[\]{}+-]','?')
+      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + ' MASK=' + $safePrefix + ' RESPONSE_SHAPE=' + $shape + ' RESPONSE_LENGTH=' + $packet.text.Length + ' HAS_PLAYERS=' + $hasPlayers + ' HAS_ONLINE=' + $hasOnline + ' THERE_ARE_NUMBER=' + $thereAreNumber + ' NO_PLAYERS_PHRASE=' + $hasNoPlayers + ' DIGITS=' + $digitCount + ' CONTROLS=' + $controlCount + ' COLORS=' + $colorCount + ' PHRASE_AT=' + $phraseAt + ' DIGIT_AT=' + $firstDigit + ' DIGIT_OFFSETS=' + $digitOffsets + ' PLAYERS_AT=' + $playersAt + ' ONLINE_AT=' + $onlineAt + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
     } else { Write-Output '::notice title=FunCity local RCON::AUTH_OK=true SAVE_ALL_RESPONSE_RECEIVED=true; WORLD_NOT_MODIFIED_BY_AGENT=true' }
   } finally { $socket.Close() }
   exit 0
