@@ -212,7 +212,7 @@ try {
     ' SERVER_UNCHANGED=true LOGIN=NOT_TESTED FPS=NOT_MEASURED')
   exit 0
 } catch {
-  Write-Output ('PROFILE_NOT_CREATED_OR_INCOMPLETE=true PHASE=' + $phase +
+  Write-Output ('::warning title=RP LowSpec profile preflight::PROFILE_NOT_CREATED_OR_INCOMPLETE=true PHASE=' + $phase +
     ' ERROR_TYPE=' + $_.Exception.GetType().Name + ' NO_FORCED_PROCESS=true')
   exit 2
 } finally {
