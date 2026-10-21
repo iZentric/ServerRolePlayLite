@@ -1,0 +1,30 @@
+name: Verify owner stopped original server before isolated compatibility test
+# Read-only metadata; no stop/start, worlds, logs, secrets or uploads.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-server-owner-stop-check.yml]
+permissions:
+  contents: read
+jobs:
+  pc-read-only:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect original and copy process without touching either
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          $server='C:\Users\Administrator\Desktop\FunCityLocal\server'
+          $copy='C:\Users\Administrator\Desktop\FunCityLocal\Arena-CompatStages\bootable-no-clumps-39598696934\server'
+          $java=@(Get-CimInstance Win32_Process -Filter "Name = 'java.exe' OR Name = 'javaw.exe'" -ErrorAction Stop)
+          $original=@($java | Where-Object { $_.CommandLine -and $_.CommandLine.IndexOf($server,[StringComparison]::OrdinalIgnoreCase) -ge 0 })
+          $trial=@($java | Where-Object { $_.CommandLine -and $_.CommandLine.IndexOf($copy,[StringComparison]::OrdinalIgnoreCase) -ge 0 })
+          $listeners=@(Get-NetTCPConnection -State Listen -LocalPort 25565 -ErrorAction SilentlyContinue)
+          $task=Get-ScheduledTask -TaskName 'FunCityLocalServer' -ErrorAction Stop
+          $matches=$task.State -ne 'Disabled' -and @($task.Actions).Count -eq 1 -and
+            $task.Actions[0].WorkingDirectory -and
+            $task.Actions[0].WorkingDirectory.Equals($server,[StringComparison]::OrdinalIgnoreCase)
+          $prepared=Test-Path -LiteralPath 'C:\Users\Administrator\Desktop\FunCityLocal\Arena-CompatStages\bootable-no-clumps-39598696934\private-voicechat-trial.json' -PathType Leaf
+          Write-Output ('::notice title=Owner stop gate::ORIGINAL_PROCESS_COUNT=' + $original.Count + ' TEST_COPY_PROCESS_COUNT=' + $trial.Count + ' GAME_LISTENERS=' + $listeners.Count + ' ORIGINAL_RESTART_TASK_VALID=' + $matches + ' PRIVATE_TRIAL_PREPARED=' + $prepared + '; READ_ONLY=true')
