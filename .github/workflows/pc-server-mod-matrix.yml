@@ -17,6 +17,17 @@ jobs:
     timeout-minutes: 4
     steps:
       - uses: actions/checkout@v4
+      - name: Parse read-only script and synthetic fixture before running
+        shell: pwsh
+        run: |
+          foreach ($path in @('scripts/fc_server_mod_matrix.ps1','scripts/fc_server_mod_matrix_test.ps1')) {
+            $tokens=$null; $errors=$null
+            [void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $path),[ref]$tokens,[ref]$errors)
+            if (@($errors).Count -ne 0) {
+              Write-Output ('::error title=Synthetic PowerShell syntax::' + $path + ': ' + $errors[0].Message)
+              exit 2
+            }
+          }
       - name: Test only synthetic temporary mod names
         shell: pwsh
         run: ./scripts/fc_server_mod_matrix_test.ps1
