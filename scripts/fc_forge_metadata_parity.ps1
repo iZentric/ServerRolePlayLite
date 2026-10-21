@@ -11,10 +11,10 @@ function Hash-Entry([string]$Jar,[string]$Entry) {
   $sha=[Security.Cryptography.SHA256]::Create()
   try {
     if ($zip.Entries.Count -gt 60000) { throw 'Archive too large' }
-    $entry=$zip.GetEntry($Entry)
-    if (-not $entry) { return '<absent>' }
-    if ($entry.Length -gt 1048576) { throw 'Metadata entry too large' }
-    $stream=$entry.Open()
+    $zipEntry=$zip.GetEntry($Entry)
+    if (-not $zipEntry) { return '<absent>' }
+    if ($zipEntry.Length -gt 1048576) { throw 'Metadata entry too large' }
+    $stream=$zipEntry.Open()
     try { return [Convert]::ToBase64String($sha.ComputeHash($stream)) }
     finally { $stream.Dispose() }
   } finally { $zip.Dispose(); $sha.Dispose() }
