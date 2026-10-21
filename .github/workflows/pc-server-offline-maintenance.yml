@@ -1,5 +1,6 @@
 name: One-time zero-player offline server backup and original restart
-# Trigger ONLY by a reviewed workflow-file commit with exact message prefix.
+# Trigger PC work ONLY by a reviewed workflow-file commit with exact message prefix.
+# Hosted fixture and parser guards passed in run 39597725327 before authorization.
 # No world, logs, backup, player identities or secrets leave the Windows PC.
 on:
   push:
@@ -31,7 +32,7 @@ jobs:
     if: startsWith(github.event.head_commit.message, 'Offline maintenance safely once')
     needs: guards
     runs-on: [self-hosted, Windows]
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - name: Recheck zero players; normal stop; whole-tree offline backup; restore-copy rehearsal; restart original
