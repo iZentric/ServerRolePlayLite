@@ -103,7 +103,11 @@ try {
       $digitCount = [regex]::Matches($packet.text,'[0-9]').Count
       $controlCount = [regex]::Matches($packet.text,'[\x00-\x1f]').Count
       $colorCount = [regex]::Matches($packet.text,'§').Count
-      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + ' RESPONSE_SHAPE=' + $shape + ' RESPONSE_LENGTH=' + $packet.text.Length + ' HAS_PLAYERS=' + $hasPlayers + ' HAS_ONLINE=' + $hasOnline + ' THERE_ARE_NUMBER=' + $thereAreNumber + ' NO_PLAYERS_PHRASE=' + $hasNoPlayers + ' DIGITS=' + $digitCount + ' CONTROLS=' + $controlCount + ' COLORS=' + $colorCount + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
+      $phraseAt = $packet.text.IndexOf('There are',[StringComparison]::OrdinalIgnoreCase)
+      $firstDigit = [regex]::Match($packet.text,'[0-9]').Index
+      $playersAt = $packet.text.IndexOf('players',[StringComparison]::OrdinalIgnoreCase)
+      $onlineAt = $packet.text.IndexOf('online',[StringComparison]::OrdinalIgnoreCase)
+      Write-Output ('::notice title=FunCity local RCON::AUTH_OK=true PLAYER_STATE=' + $playerState + ' RESPONSE_SHAPE=' + $shape + ' RESPONSE_LENGTH=' + $packet.text.Length + ' HAS_PLAYERS=' + $hasPlayers + ' HAS_ONLINE=' + $hasOnline + ' THERE_ARE_NUMBER=' + $thereAreNumber + ' NO_PLAYERS_PHRASE=' + $hasNoPlayers + ' DIGITS=' + $digitCount + ' CONTROLS=' + $controlCount + ' COLORS=' + $colorCount + ' PHRASE_AT=' + $phraseAt + ' DIGIT_AT=' + $firstDigit + ' PLAYERS_AT=' + $playersAt + ' ONLINE_AT=' + $onlineAt + '; RAW_PLAYER_DATA_NOT_OUTPUT=true')
     } else { Write-Output '::notice title=FunCity local RCON::AUTH_OK=true SAVE_ALL_RESPONSE_RECEIVED=true; WORLD_NOT_MODIFIED_BY_AGENT=true' }
   } finally { $socket.Close() }
   exit 0
