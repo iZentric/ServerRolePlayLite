@@ -1,6 +1,7 @@
 name: Safe separate Prism Embeddium 1.16.5 test profile
 # Runs on PC only after exact filenames exist at owner-specified E:\Administrator\Downloads and Prism/game closed.
 # The committed script never downloads binaries or edits source Lite/original/server.
+# Hosted fixture passed in 39673456248; owner supplied E drive, read-only SHA audit 39673301267.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
