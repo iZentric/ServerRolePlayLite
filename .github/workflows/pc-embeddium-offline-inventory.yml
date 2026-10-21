@@ -33,20 +33,25 @@ jobs:
           $folders=@(Get-ChildItem -LiteralPath $instances -Directory -ErrorAction Stop | Where-Object {
             ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0
           })
+          $searchFolders=@()
           foreach ($folder in $folders) {
             foreach ($game in @('.minecraft','minecraft')) {
-              $mods=Join-Path (Join-Path $folder.FullName $game) 'mods'
-              if (-not (Test-Path -LiteralPath $mods -PathType Container)) { continue }
-              $modsInfo=Get-Item -LiteralPath $mods -ErrorAction Stop
-              if (($modsInfo.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { continue }
-              foreach ($name in $expected) {
-                $path=Join-Path $mods $name
-                if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { continue }
-                $file=Get-Item -LiteralPath $path -ErrorAction Stop
-                if (($file.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or $file.Length -gt 50000000) { continue }
-                $sha=(Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash
-                $records[$name]=@($records[$name]) + @($sha)
-              }
+              $searchFolders+=@(Join-Path (Join-Path $folder.FullName $game) 'mods')
+            }
+          }
+          # Only two exact public filenames, not a recursive inventory of personal downloads.
+          $searchFolders+=@('C:\Users\Administrator\Downloads')
+          foreach ($mods in $searchFolders) {
+            if (-not (Test-Path -LiteralPath $mods -PathType Container)) { continue }
+            $modsInfo=Get-Item -LiteralPath $mods -ErrorAction Stop
+            if (($modsInfo.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { continue }
+            foreach ($name in $expected) {
+              $path=Join-Path $mods $name
+              if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { continue }
+              $file=Get-Item -LiteralPath $path -ErrorAction Stop
+              if (($file.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or $file.Length -gt 50000000) { continue }
+              $sha=(Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash
+              $records[$name]=@($records[$name]) + @($sha)
             }
           }
           $liteJars=@(Get-ChildItem -LiteralPath $source -File -Filter '*.jar' -ErrorAction Stop)
