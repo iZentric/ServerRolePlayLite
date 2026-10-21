@@ -74,6 +74,12 @@ try {
       $_ -match ('(?i)(?<![A-Za-z0-9_.-])' + [regex]::Escape($id) + '(?![A-Za-z0-9_.-])')
     }).Count -gt 0
   })
+  $debugRejectIds = @($ids | Where-Object {
+    $id=$_
+    @($debugChannelReject | Where-Object {
+      $_ -match ('(?i)(?<![A-Za-z0-9_.-])' + [regex]::Escape($id) + '(?![A-Za-z0-9_.-])')
+    }).Count -gt 0
+  })
   Write-Output ('::notice title=Latest Forge join evidence::CLIENT_LOG_AGE_H=' + $client.ageHours + ' SERVER_LOG_AGE_H=' + $serverLog.ageHours +
     ' CLIENT_CONNECT_HINTS=' + $signals.attempted + ' CLIENT_INCOMPLETE_HINTS=' + $signals.incomplete +
     ' CLIENT_REGISTRY_HINTS=' + $signals.registry + ' CLIENT_MODLIST_HINTS=' + $signals.modlist +
@@ -87,6 +93,7 @@ try {
     ' CHANNEL_REJECT=' + $debugChannelReject.Count + ' CHANNEL_MISSING=' + $debugChannelMissing.Count +
     ' CHANNEL_MISMATCH=' + $debugChannelMismatch.Count + ' MODLIST_MISMATCH=' + $debugModListMismatch.Count +
     ' INCOMPLETE_DATA=' + $debugIncomplete.Count + ' DEBUG_ALLOWED_IDS_IN_ERROR_CONTEXT=' + ($debugMissing -join ',') +
+    ' DEBUG_ALLOWLIST_REJECTED_CHANNEL_IDS=' + ($debugRejectIds -join ',') +
     '; RECENT_LOG_TAIL_ONLY=true RAW_LOG_NOT_UPLOADED=true JOIN_NOT_PROVEN=true')
   exit 0
 } catch {
