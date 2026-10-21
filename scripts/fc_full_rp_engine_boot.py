@@ -39,6 +39,24 @@ def required_graph(jars):
     return {k: sorted(v['mod_ids']) for k, v in parsed.items()}
 
 
+def boot_once_or_installer_then_once(stage, report):
+    """Permit only a clean installer bootstrap with an explicit marker, then one boot."""
+    try:
+        return run_one(stage, report, generate=True)
+    except ValueError as exc:
+        if 'server did not reach Done;' not in str(exc) or 'exit=0' not in str(exc):
+            raise
+        log = stage/'private-benchmark.log'
+        text = log.read_text(encoding='utf-8', errors='replace')
+        if not any(marker in text.lower() for marker in ('successfully installed',
+                        'server installed', 'install complete', 'installation finished')):
+            raise
+        if (stage/'lab-world'/'level.dat').exists():
+            raise ValueError('installer left a world; no retry on possibly dirty state')
+        log.rename(stage/'private-installer.log')  # no logs outside runner
+        return run_one(stage, report, generate=True)
+
+
 def main(root, engine, source, archive, motor, core, guava):
     root = Path(root).resolve()
     tmp = os.environ.get('RUNNER_TEMP')
@@ -92,7 +110,7 @@ def main(root, engine, source, archive, motor, core, guava):
     props = set((stage/'server.properties').read_text().splitlines())
     if not {'server-ip=127.0.0.1', 'online-mode=true', 'white-list=true'} <= props:
         raise ValueError('not closed to public')
-    run_one(stage, report, generate=True)
+    boot_once_or_installer_then_once(stage, report)
     print(f'::notice title=29 chosen RP server mods boot::{engine} boot=PASS '
           'metadata=29 mandatory_deps=PASS plugins=6 stopped_cleanly=true '
           'NO client, login, voice transport, vehicle drive or live world tested', flush=True)
