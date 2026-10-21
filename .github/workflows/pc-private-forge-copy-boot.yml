@@ -1,6 +1,7 @@
 name: Bounded private Forge copy boot with original restart
 # Only owner's already-stopped original; no live JAR/world edits, no forced kills.
 # PC stage requires exact commit message prefix. Raw logs never leave PC.
+# Hosted RCON and syntax guards passed in run 39615924875; owner stopped original.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
