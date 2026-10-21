@@ -19,14 +19,14 @@ function Read-Exactly([IO.Stream]$Stream,[int]$Count) {
 function Send-Packet([IO.Stream]$Stream,[int]$Id,[int]$Type,[string]$Payload) {
   $data = [Text.Encoding]::UTF8.GetBytes($Payload)
   if ($data.Length -gt 1024) { throw 'Excessive RCON payload' }
-  $writer = [IO.BinaryWriter]::new($Stream,[Text.Encoding]::UTF8,$true)
-  $writer.Write([int]($data.Length + 10))
-  $writer.Write($Id)
-  $writer.Write($Type)
-  $writer.Write($data)
-  $writer.Write([byte]0)
-  $writer.Write([byte]0)
-  $writer.Flush()
+  # A single fixed byte frame avoids Windows PowerShell 5.1 BinaryWriter overload coercion.
+  $frame = New-Object 'byte[]' ($data.Length + 14)
+  [Array]::Copy([BitConverter]::GetBytes([int]($data.Length + 10)),0,$frame,0,4)
+  [Array]::Copy([BitConverter]::GetBytes([int]$Id),0,$frame,4,4)
+  [Array]::Copy([BitConverter]::GetBytes([int]$Type),0,$frame,8,4)
+  [Array]::Copy($data,0,$frame,12,$data.Length)
+  $Stream.Write($frame,0,$frame.Length)
+  $Stream.Flush()
 }
 function Read-Packet([IO.Stream]$Stream) {
   $size = [BitConverter]::ToInt32((Read-Exactly $Stream 4),0)
