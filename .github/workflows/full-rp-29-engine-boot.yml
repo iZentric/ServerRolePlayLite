@@ -1,4 +1,4 @@
-name: Verify all 29 selected RP server mods on five engine candidates
+name: Verify 28 client-aligned RP server mods on five engine candidates
 # Five isolated GitHub-hosted jobs; no owner PC/live server/Prism/real world.
 # Selection is historical, one boot only; not client join, FPS or capacity.
 on:
@@ -72,7 +72,7 @@ jobs:
                 -p CUANTIC-Server-Mist-EXPERIMENTAL-1.7.7.zip -O "$root/alternative.zip" ;;
             *) exit 2 ;;
           esac
-      - name: Stage exactly 29 selected mods and boot with six plugins; categorical result only
+      - name: Stage 28 client-aligned mods without Clumps; boot with six plugins; categorical result only
         env:
           ENGINE: ${{ matrix.engine }}
         run: |

@@ -1,4 +1,4 @@
-name: Compare actual server mod counts with the 29-mod RP target (read-only)
+name: Compare actual server mod counts with client-aligned 28-mod RP target (read-only)
 # File names are compared only in memory; Actions receives counts/booleans,
 # NEVER a mod list, any JAR, raw log, world/account file, password, or PC path.
 # No Prism/game/server stop, restart, second server or write to owner folders.

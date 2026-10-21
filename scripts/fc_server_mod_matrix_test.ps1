@@ -9,24 +9,24 @@ try {
     $section=$source.Split(@('## Server —'),[StringSplitOptions]::None)[1].Split(@('## Pluginurile'),[StringSplitOptions]::None)[0]
     $rows=@([regex]::Matches($section, '(?m)^\| S\d\d \| `([^`]+\.jar)` \| (PĂSTRAT|SCOS(?: din runtime normal)?) \|'))
     foreach ($m in $rows) {
-        if ($m.Groups[2].Value -eq 'PĂSTRAT') {
+        if ($m.Groups[2].Value -eq 'PĂSTRAT' -and $m.Groups[1].Value -ne 'Clumps-6.0.0.28.jar') {
             [IO.File]::WriteAllBytes((Join-Path $mods $m.Groups[1].Value),[byte[]]@(0))
         }
     }
     [IO.File]::WriteAllBytes((Join-Path $plugins 'Fake-plugin.jar'),[byte[]]@(0))
-    $run=@(& (Join-Path $PSScriptRoot 'fc_server_mod_matrix.ps1') -Server $srv)
-    if ($LASTEXITCODE -ne 0 -or $run.Count -ne 1 -or $run[0] -notmatch 'TARGET_29_MISSING=0 EXTRA_TO_TARGET=0') {
+    $run=@(& pwsh -NoProfile -File (Join-Path $PSScriptRoot 'fc_server_mod_matrix.ps1') -Server $srv)
+    if ($LASTEXITCODE -ne 0 -or $run.Count -ne 1 -or $run[0] -notmatch 'TARGET_28_MISSING=0 EXTRA_TO_TARGET=0') {
         throw 'matched inventory not identified'
     }
     [IO.File]::WriteAllBytes((Join-Path $mods 'extra-test.jar'),[byte[]]@(0))
-    $run=@(& (Join-Path $PSScriptRoot 'fc_server_mod_matrix.ps1') -Server $srv)
+    $run=@(& pwsh -NoProfile -File (Join-Path $PSScriptRoot 'fc_server_mod_matrix.ps1') -Server $srv)
     if ($LASTEXITCODE -ne 0 -or $run[0] -notmatch 'EXTRA_TO_TARGET=1') { throw 'extra mod not detected' }
     [IO.File]::WriteAllBytes((Join-Path $mods 'performant-fake.jar'),[byte[]]@(0))
-    $run=@(& (Join-Path $PSScriptRoot 'fc_server_mod_matrix.ps1') -Server $srv)
+    $run=@(& pwsh -NoProfile -File (Join-Path $PSScriptRoot 'fc_server_mod_matrix.ps1') -Server $srv)
     if ($LASTEXITCODE -ne 2 -or $run[0] -notmatch 'READ_ONLY_PRECHECK_FAILED') {
         throw 'incompatible server optimizers not rejected'
     }
-    Write-Output 'PASS: exact 29, extra mod and incompatible optimizers all classified without reading JARs'
+    Write-Output 'PASS: exact 28, extra mod and incompatible optimizers all classified without reading JARs'
 } catch {
     Write-Output ('::error title=Synthetic mod matrix failed::' + $_.Exception.GetType().Name + ': ' + $_.Exception.Message)
     throw

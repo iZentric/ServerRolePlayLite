@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Closed boot test of ALL 29 chosen historical RP server mods with 6 plugins.
+"""Closed boot test of 28 client-aligned RP server mods (historical 29 minus Clumps) with 6 plugins.
 
 Never touches PC, live server, worlds, accounts or any client profile. Historical
 selection, not proof of live inventory, player login or real RP gameplay.
@@ -84,13 +84,18 @@ def main(root, engine, source, archive, motor, core, guava):
         raise ValueError('decision inventory drift')
     report = plugin_stage(motor, archive, core, guava, root/'stage')
     stage = root/'stage'
-    jar_hashes = result['kept_sha256']
+    jar_hashes = dict(result['kept_sha256'])
+    # Owner removed Clumps on BOTH sides after a private backup/login trial.
+    # The 29-mod historical manifest still includes it; do not reintroduce it.
+    if jar_hashes.pop('Clumps-6.0.0.28.jar', None) is None:
+        raise ValueError('historical Clumps entry missing; selection drift')
+    client_aligned = kept - {'clumps-6.0.0.28.jar'}
     with zipfile.ZipFile(root/'selected-mods.zip') as z:
         if len(z.infolist()) != 29 or z.testzip() is not None:
             raise ValueError('invalid selected archive')
         jars = {name: z.read('mods/' + name) for name in jar_hashes}
         graph = required_graph(jars)
-        if set(n.casefold() for n in jars) != kept:
+        if set(n.casefold() for n in jars) != client_aligned or len(jars) != 28:
             raise ValueError('wrong mod selection')
         for name, raw in jars.items():
             path = stage/'mods'/name
@@ -111,8 +116,8 @@ def main(root, engine, source, archive, motor, core, guava):
     if not {'server-ip=127.0.0.1', 'online-mode=true', 'white-list=true'} <= props:
         raise ValueError('not closed to public')
     boot_once_or_installer_then_once(stage, report)
-    print(f'::notice title=29 chosen RP server mods boot::{engine} boot=PASS '
-          'metadata=29 mandatory_deps=PASS plugins=6 stopped_cleanly=true '
+    print(f'::notice title=28 client-aligned RP server mods boot::{engine} boot=PASS '
+          'metadata=28 clumps=ABSENT mandatory_deps=PASS plugins=6 stopped_cleanly=true '
           'NO client, login, voice transport, vehicle drive or live world tested', flush=True)
     return graph
 
@@ -123,5 +128,5 @@ if __name__ == '__main__':
             raise ValueError('expected runner root, engine, exact source, archive, motor, core, guava')
         main(*sys.argv[1:])
     except (OSError, ValueError, AssertionError, KeyError, zipfile.BadZipFile) as exc:
-        print('::error title=29-mod engine boot rejected::' + str(exc), file=sys.stderr)
+        print('::error title=28-mod engine boot rejected::' + str(exc), file=sys.stderr)
         sys.exit(2)

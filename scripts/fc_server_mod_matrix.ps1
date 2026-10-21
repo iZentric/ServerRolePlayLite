@@ -20,9 +20,11 @@ try {
     if ($section.Count -ne 2) { throw 'SERVER_MANIFEST_NOT_UNIQUE' }
     $table=$section[1].Split(@('## Pluginurile'),[StringSplitOptions]::None)[0]
     $rows=@([regex]::Matches($table, '(?m)^\| S\d\d \| `([^`]+\.jar)` \| (PĂSTRAT|SCOS(?: din runtime normal)?) \|'))
-    $target=@($rows | Where-Object { $_.Groups[2].Value -eq 'PĂSTRAT' } | ForEach-Object { $_.Groups[1].Value })
+    $historicalTarget=@($rows | Where-Object { $_.Groups[2].Value -eq 'PĂSTRAT' } | ForEach-Object { $_.Groups[1].Value })
+    # Historical 29 includes Clumps; current Lite/client and server excluded it.
+    $target=@($historicalTarget | Where-Object { $_ -ne 'Clumps-6.0.0.28.jar' })
     $archive=@($rows | ForEach-Object { $_.Groups[1].Value })
-    if ($archive.Count -ne 36 -or $target.Count -ne 29 -or @($archive | Sort-Object -Unique).Count -ne 36) {
+    if ($archive.Count -ne 36 -or $historicalTarget.Count -ne 29 -or $target.Count -ne 28 -or @($archive | Sort-Object -Unique).Count -ne 36) {
         throw 'MANIFEST_INVENTORY_CHANGED'
     }
     $modFiles=@(Get-ChildItem -LiteralPath $mods -File -Filter '*.jar' -ErrorAction Stop)
@@ -40,8 +42,8 @@ try {
     if ($road -and $perf) { throw 'INCOMPATIBLE_OPTIMIZERS_PRESENT' }
     $voice='voicechat-forge-1.16.5-2.3.23.jar' -in $actual
     Write-Output ('::notice title=PC server mod inventory READ ONLY::SERVER_JARS=' + $actual.Count +
-        ' PLUGIN_JARS=' + $pluginFiles.Count + ' TARGET_29_PRESENT=' + ($target.Count - $missing.Count) +
-        ' TARGET_29_MISSING=' + $missing.Count + ' EXTRA_TO_TARGET=' + $extras.Count +
+        ' PLUGIN_JARS=' + $pluginFiles.Count + ' TARGET_28_PRESENT=' + ($target.Count - $missing.Count) +
+        ' TARGET_28_MISSING=' + $missing.Count + ' EXTRA_TO_TARGET=' + $extras.Count +
         ' ARCHIVED_36_NAME_OVERLAP=' + $known.Count + ' ROADRUNNER=' + $road +
         ' PERFORMANT=' + $perf + ' VOICE=' + $voice + ' CLIENT_OR_WORLD_TEST=NO')
     exit 0
