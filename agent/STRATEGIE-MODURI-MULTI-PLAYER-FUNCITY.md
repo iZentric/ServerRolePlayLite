@@ -76,4 +76,6 @@
 
 **Native-first/opt-only:** [decizia cu porți pentru integrare sau eliminare](DECIZIE-NATIVE-FIRST-FUNCITY.md) clarifică faptul că beneficiul RP al ModernFix/FerriteCore nu a fost încă separat experimental; nu sunt „trei moduri garantat mai rapide”.
 
+**Decizia după testul de reducere:** [brațul 22 vs 28](ALEGERE-CONCRETA-MOTOR-MODURI-2026.md) nu a adus câștig repetabil de runtime și a degradat bootul; **28 rămâne baza de laborator**, nu o instrucțiune de eliminare a celor șase JAR-uri suplimentare de pe PC.
+
 **Concluzie de acțiune:** pentru multe persoane simultan, nu recomand un „mega-hibrid” cu toate JAR-urile de optimizare. Recomand CatServer oficial ca bază de fork, stiva prudentă RoadRunner/ModernFix/FerriteCore, conținut RP integral, pregenerare, măsurarea pluginurilor și modurilor în scenarii reprezentative, apoi doar patchuri sursă profilate. Motorul branduit încă nu este construit și validat; serverul/live-ul și clientul rămân nemodificate.
