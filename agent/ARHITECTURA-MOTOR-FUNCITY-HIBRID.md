@@ -1,6 +1,6 @@
 # FunCity Hybrid — motorul teoretic cel mai promițător pentru RP 1.16.5 (22.10.2026)
 
-**Verdict de arhitectură, nu JAR livrat:** un **fork sursă auditat de CatServer oficial `23.05.26-1`**, cu stratul Forge+Bukkit compatibil păstrat, identitate FunCity vizibilă și **RoadRunner + ModernFix + FerriteCore rulate separat** ca moduri de optimizare verificate. Portăm în sursa motorului *numai* schimbările punctuale care bat acest baseline, în același pachet/lume pe teste repetate fără regresii RP. Nu obținem un motor superior lipind bucăți din JAR-uri compilate.
+**Verdict de arhitectură, nu JAR livrat:** un **fork sursă auditat de CatServer oficial `23.05.26-1`**, cu stratul Forge+Bukkit compatibil păstrat și identitate FunCity vizibilă. RoadRunner + ModernFix + FerriteCore sunt **candidați separați**, nu trei câștiguri dovedite la jucători reali: RoadRunner are probe CPU sintetice, iar beneficiul independent al ModernFix/FerriteCore în scena RP trebuie măsurat. [Regula native-first și opt-only](DECIZIE-NATIVE-FIRST-FUNCITY.md) cere să portăm în sursa motorului *numai* schimbările punctuale care bat baseline-ul pe aceleași moduri/lume/jucători, fără regresii RP și fără JAR-ul duplicat. Nu obținem un motor superior lipind bucăți din JAR-uri compilate.
 
 ## De ce această bază, nu un amalgam de motoare
 

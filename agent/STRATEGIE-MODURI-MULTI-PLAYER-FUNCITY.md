@@ -74,4 +74,6 @@
 
 **Ablație țintită pe 28 moduri/6 pluginuri:** [raportul cu date și eșecuri pentru AI, rețete/Placebo, Ksyxis și vehicule](RP-MAFII-MASINI-COST-SERVER-2026.md) arată un semnal Ksyxis în lumea generată. Testul de mașini a fost **invalidat**: 16 entități la început, 0 la sfârșit într-o rerulare; nu există verdict RoadRunner specific mașinilor. Lipsesc condusul, mafiile reale, 34/13 și mulți clienți; nu ștergem ori instalăm JAR-uri în live pe această bază.
 
+**Native-first/opt-only:** [decizia cu porți pentru integrare sau eliminare](DECIZIE-NATIVE-FIRST-FUNCITY.md) clarifică faptul că beneficiul RP al ModernFix/FerriteCore nu a fost încă separat experimental; nu sunt „trei moduri garantat mai rapide”.
+
 **Concluzie de acțiune:** pentru multe persoane simultan, nu recomand un „mega-hibrid” cu toate JAR-urile de optimizare. Recomand CatServer oficial ca bază de fork, stiva prudentă RoadRunner/ModernFix/FerriteCore, conținut RP integral, pregenerare, măsurarea pluginurilor și modurilor în scenarii reprezentative, apoi doar patchuri sursă profilate. Motorul branduit încă nu este construit și validat; serverul/live-ul și clientul rămân nemodificate.
