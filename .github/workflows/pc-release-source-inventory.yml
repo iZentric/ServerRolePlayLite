@@ -90,6 +90,34 @@ jobs:
             if (-not (PlainDirectory $downloadRoot)) { continue }
             $candidates = @(Get-ChildItem -LiteralPath $downloadRoot -File -ErrorAction Stop |
               Where-Object { $_.Extension -in @('.mrpack','.zip') -and $_.Name -match '^(?i:Freeroam|FunCity|FUNCITY)' })
-            Notice 'PC existing project archives read only' "count=$($candidates.Count); NO_ARCHIVE_OPENED_NO_UPLOAD"
+            Notice 'PC existing project archives read only' "count=$($candidates.Count); NO_UPLOAD"
+            Add-Type -AssemblyName System.IO.Compression.FileSystem
+            $number = 0
+            foreach ($file in @($candidates | Select-Object -First 12)) {
+              $number++
+              # Examine only ZIP directory entry names, never print them or unpack data.
+              $mods=0; $plugins=0; $world=0; $sensitive=0; $entries=0
+              try {
+                $archive = [IO.Compression.ZipFile]::OpenRead($file.FullName)
+                try {
+                  foreach ($entry in $archive.Entries) {
+                    $entries++
+                    $entryName=$entry.FullName.Replace('\','/').ToLowerInvariant()
+                    if ($entryName -match '(^|/)mods/[^/]+\.jar$') { $mods++ }
+                    if ($entryName -match '(^|/)plugins/[^/]+\.jar$') { $plugins++ }
+                    if ($entryName -match '(^|/)(world[^/]*|saves|playerdata|stats|advancements|userdata|accounts)(/|$)') { $world++ }
+                    if ($entryName -match '(secret|token|password|credential|usercache|ops\.json|whitelist\.json|banned|\.pem$|\.key$|server\.properties$)') { $sensitive++ }
+                  }
+                } finally { $archive.Dispose() }
+                if ($world -gt 0 -or $sensitive -gt 0) {
+                  Notice 'PC project archive metadata only' "index=$number ext=$($file.Extension.ToLowerInvariant()) entries=$entries mods=$mods plugins=$plugins world_entries=$world sensitive_entries=$sensitive restricted=true; NO_HASH_NO_UPLOAD"
+                } else {
+                  $sha=(Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+                  Notice 'PC project archive metadata only' "index=$number ext=$($file.Extension.ToLowerInvariant()) bytes=$($file.Length) sha256=$sha entries=$entries mods=$mods plugins=$plugins world_entries=0 sensitive_entries=0"
+                }
+              } catch {
+                Notice 'PC project archive metadata only' "index=$number unreadable_or_locked=true; NO_FILE_CHANGED"
+              }
+            }
           }
           Notice 'PC release inventory scope' 'read_only=true player_data=false worlds=false secrets=false files_uploaded=0 process_changed=0'
