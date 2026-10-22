@@ -2,6 +2,8 @@
 
 **Răspuns sincer:** nu am testat fiecare mod existent pe internet și n-am măsurat un număr maxim de jucători. Nu există nici măcar o mulțime finită stabilă de „toate modurile”; testarea brută a fiecărui JAR pe un server RP ar consuma resurse fără să rezolve problema. Filtrul este: versiune/loader/autor verificabili, server-only ori fără schimbare client, țintirea unui cost real (tick, memorie, rețea, salvare), compatibilitatea cu hybridul și păstrarea gameplay-ului. Au fost revizuite numele din [catalogul 1.16](CATALOG-MODRINTH-FORGE-1165-2026.md), Modrinth, CurseForge și release-uri/cod GitHub, **nu** doar Performant. Un boot nu este câștig de performanță.
 
+**Actualizare host comunicat:** finalul este planificat pentru **2 CPU și 12 GB RAM**. Acestea nu sunt rezultate de benchmark pe acel host. Cu numai două CPU, costul pe firul principal, GC-ul și concurența cu voice/pluginuri contează mai mult decât numărul de JAR-uri; memoria de 12 GB trebuie împărțită între heap, JVM nativ, sistem și cache. [Bugetul inițial de test (nu aplicat) și rampa prudentă](CAPACITATE-FUNCITY-RP.md) sunt documentate separat. Fără tipul CPU, uplink și clienți reali nu rezultă o cifră de «maxim jucători».
+
 ## Ce poate limita simultan mai mulți jucători
 
 - **Main thread**: entități active, mașini conduse, pluginuri RP, evenimente și tick; recomandarea nu poate fi extrapolată din 80 zombie inactivi. MSPT **p95/p99** sub jucători reali contează mai mult decât media într-o lume goală.
