@@ -56,8 +56,9 @@ jobs:
           curl -fsSL --connect-timeout 10 --max-time 90 --retry 1 \
             'https://www.curseforge.com/api/v1/mods/831663/files/4583202/download' \
             -o "$root/chunksending-1.16.5-2.5.jar"
-          # First canary records SHA; pin it before claiming a reproducible
-          # comparison. The next step validates the embedded Forge mod ID.
+          # Author file ID + SHA captured from the first hosted retrieval;
+          # candidate does not proceed if upstream silently changes bytes.
+          echo "fbc4293c00b33aba3c292521058b9880eeeeb652893e549727927a3d08683b0c  $root/chunksending-1.16.5-2.5.jar" | sha256sum -c -
           test "$(stat -c %s "$root/chunksending-1.16.5-2.5.jar")" -lt 100000
       - name: Compare baseline clean boot and two candidate closed boots; no packet/capacity claim
         run: |

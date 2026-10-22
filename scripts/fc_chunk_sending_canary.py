@@ -17,6 +17,7 @@ from fc_plugin_first_stage import sha
 from fc_server_optimizer_ab import run_one
 
 CANDIDATE = 'chunksending-1.16.5-2.5.jar'
+CANDIDATE_SHA256 = 'fbc4293c00b33aba3c292521058b9880eeeeb652893e549727927a3d08683b0c'
 PHASE = 'PREFLIGHT'
 
 
@@ -46,7 +47,21 @@ def validate_candidate(root, candidate):
             any(dep not in ('forge', 'minecraft')
                 for deps in data['required_dependencies'].values() for dep in deps)):
         raise ValueError('not isolated Forge 1.16.5 chunk-sending candidate')
-    return sha(candidate)
+    digest = sha(candidate)
+    if digest != CANDIDATE_SHA256:
+        raise ValueError('official candidate hash differs from first hosted retrieval')
+    return digest
+
+
+def clone_clean_baseline(template, stage):
+    """Re-use verified inventory, not the already-running baseline world/FIFO."""
+    template, stage = Path(template), Path(stage)
+    exclude = {'.fcbench-in', 'private-benchmark.log', 'private-installer.log',
+               'lab-world', 'eula.txt'}
+    shutil.copytree(template, stage, symlinks=False,
+                    ignore=lambda directory, names: set(names) & exclude if Path(directory) == template else set())
+    if any((stage/name).exists() for name in exclude):
+        raise ValueError('candidate trial did not start from clean world')
 
 
 def main(root, source, archive, motor, core, guava, candidate):
@@ -68,7 +83,8 @@ def main(root, source, archive, motor, core, guava, candidate):
     for trial in (1, 2):
         PHASE = 'CANDIDATE_TRIAL_' + str(trial)
         stage = root/f'chunk-sending-trial-{trial}'
-        shutil.copytree(template, stage, symlinks=False)
+        # Exclude the baseline FIFO, world, EULA and log before each clean boot.
+        clone_clean_baseline(template, stage)
         if (stage/'mods'/CANDIDATE).exists() or (stage/'mods'/CANDIDATE).is_symlink():
             raise ValueError('candidate already in baseline')
         shutil.copyfile(candidate, stage/'mods'/CANDIDATE)
