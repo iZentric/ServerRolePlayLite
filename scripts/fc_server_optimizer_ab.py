@@ -142,6 +142,7 @@ def run_one(stage, report, generate=False):
             mspt = [float(m) for m in OVERALL.findall(text)]
             # Forge command may be unavailable on this hybrid; CPU/RSS still valid.
             result = {'rss_mib': round(statistics.median(v[0] for v in samples), 2),
+                      'boot_s_wall': j.done_wall_s,
                       'cpu_s': round(samples[-1][1] - start[1], 2),
                       'window_s': round(time.monotonic() - t0, 2),
                       'mean_mspt_from_forge_tps': round(statistics.median(mspt[-6:]), 2) if len(mspt) >= 4 else None,
