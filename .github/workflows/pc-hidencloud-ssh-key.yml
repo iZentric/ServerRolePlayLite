@@ -1,7 +1,9 @@
 name: Generate HidenCloud SSH public key on owner PC
 # A push on the fixed branch creates only a local client key on the Windows runner.
-# The PRIVATE key must NEVER be sent to GitHub (logs, artifacts, secrets, PRs).
-# Treat this key as an automation credential: workflows on this PC can use it.
+# The PRIVATE key must NEVER appear in logs, artifacts, or commits.
+# On a separate explicit user request, the existing PC identity may be stored
+# client-side encrypted in GitHub Actions Secrets if PC-side gh auth permits it.
+# Treat this as an automation credential: workflows on this PC can use it.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
