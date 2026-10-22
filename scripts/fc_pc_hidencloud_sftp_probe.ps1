@@ -82,7 +82,7 @@ try {
             $fingerprints = & $keygen -lf $knownHosts 2>$null
             foreach ($line in @($fingerprints)) {
                 if ($line -match 'SHA256:[A-Za-z0-9+/=]+') {
-                    Write-Output ('TOFU_SERVER_HOSTKEY_' + $Matches[0] + '_VERIFY_WITH_PROVIDER')
+                    Write-Output ('::notice title=HidenCloud server host key fingerprint (TOFU)::' + $Matches[0] + '; verify independently with provider before relying on it')
                     break
                 }
             }
