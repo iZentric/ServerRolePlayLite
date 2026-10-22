@@ -14,7 +14,7 @@
 
 ## Testele publicate după checkpoint
 
-[Raportul de integritate pe fișierele reale ale PC-ului](https://github.com/iZentric/ServerRolePlayLite/blob/431128c1b70030b5bdc8dbc4e315ca25f55fb8d6/agent/VERIFICARE-INTEGRITATE-RELEASE-2026-10-22.md) și [rularea GitHub Actions 39791600172](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39791600172) sunt disponibile la un commit fix ulterior tagului. Profilul Lite are **22/22** JAR-uri păstrate identice SHA-256 cu originalul; serverul real inventariat are **34 moduri / 13 pluginuri**, însă **13 din 19** JAR-uri cu nume comun client/server diferă ca SHA-256. Acest test este read-only și **nu probează** loginul, funcțiile RP sau un pachet gata de descărcat. Nicio lume ori JAR de pe PC nu a fost urcat în GitHub Actions.
+[Raportul de integritate pe fișierele reale ale PC-ului](https://github.com/iZentric/ServerRolePlayLite/blob/235e949393ddcb12f77e19ed39a7a242a208b418/agent/VERIFICARE-INTEGRITATE-RELEASE-2026-10-22.md) și [rularea GitHub Actions 39791600172](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39791600172) sunt disponibile la un commit fix ulterior tagului. Profilul Lite are **22/22** JAR-uri păstrate identice SHA-256 cu originalul; serverul real inventariat are **34 moduri / 13 pluginuri**, însă **13 din 19** JAR-uri cu nume comun client/server diferă ca SHA-256. Acest test este read-only și **nu probează** loginul, funcțiile RP sau un pachet gata de descărcat. Nicio lume ori JAR de pe PC nu a fost urcat în GitHub Actions.
 
 ## Stadiu verificat, fără promisiuni de lansare
 
