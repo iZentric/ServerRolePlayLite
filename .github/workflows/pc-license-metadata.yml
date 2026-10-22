@@ -1,5 +1,6 @@
 name: FunCity JAR source and license metadata inventory
-# Read-only: inspect only JAR metadata already on PC; no binary transfer or release.
+# Read-only: inspect JAR metadata already on PC; no binary transfer or release.
+# Syntax gate runs on the same Windows runner so no hosted runner is required.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
@@ -9,24 +10,18 @@ on:
 permissions:
   contents: read
 jobs:
-  syntax:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 4
+  metadata:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
-      - name: Check script syntax before PC runner
-        shell: pwsh
+      - name: Check PowerShell syntax before metadata access
+        shell: powershell
         run: |
           $tokens=$null; $errors=$null
           [void][Management.Automation.Language.Parser]::ParseFile(
             (Resolve-Path 'scripts/fc_pc_jar_license_inventory.ps1'),[ref]$tokens,[ref]$errors)
           if (@($errors).Count -ne 0) { throw 'LICENSE_INVENTORY_SCRIPT_SYNTAX_FAILED' }
-  metadata:
-    needs: syntax
-    runs-on: [self-hosted, Windows]
-    timeout-minutes: 8
-    steps:
-      - uses: actions/checkout@v4
       - name: Read installed mod and plugin license fields only
         shell: powershell
         run: |
