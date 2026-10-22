@@ -4,7 +4,9 @@
 
 **Ce se poate spune teoretic:** la 20 TPS serverul dispune de **50 ms per tick**. Un tick mediu de 1,2 ms cu 80 zombie nu implică „50 / 1,2 jucători”, nici un plafon de 100+; un client Forge adaugă trafic, chunk-uri distincte, pluginuri, evenimente și voice, iar CPU-ul unui thread poate satura înaintea CPU-ului total. `max-players` este doar o limită configurată, nu o probă de capacitate. Nu publicăm o cifră maximă până nu trece rampa cu clienți RP reali.
 
-## Bugetul comunicat pentru hostul final: **2 CPU, 12 GB RAM**
+> **Actualizare 22.10.2026:** captura Startup a serverului HidenCloud efectiv arată **3 GiB RAM / 15 GiB disc / 200% CPU**, nu 12 GB. Restul secțiunii de mai jos descrie un scenariu istoric de planificare, NU resursele hostului actual. La 3 GiB, comanda afișată lasă implicit ~2368 MiB heap și 704 MiB rezervă; compatibilitatea 34 moduri/13 pluginuri nu este testată. [Starea reală și backupul](HIDENCLOUD-MIGRARE-2026-10-22.md).
+
+## Bugetul comunicat inițial pentru un host viitor: **2 CPU, 12 GB RAM**
 
 Proprietarul a precizat configurația planificată; **nu este o măsurătoare pe o instanță deja provisionată**. Nu știm dacă „2 CPU” înseamnă două vCPU partajate ori două nuclee dedicate, nici frecvența/modelul, uploadul sau SSD/HDD. Pentru Minecraft hybrid, prioritatea devine **timpul pe threadul principal și costul p95/p99**: 12 GB RAM nu compensează saturarea unui fir de execuție. Pregen ajută worldgen, dar clienții răspândiți prin oraș tot activează chunkuri, tracking, pluginuri, vehicule și voice. Evităm moduri cu multithreading agresiv (MCMT/C2ME) ori JAR-uri de lumină/network/save fără dovadă pe sarcina dominantă; două CPU lasă și mai puțin loc pentru firele auxiliare și GC.
 
