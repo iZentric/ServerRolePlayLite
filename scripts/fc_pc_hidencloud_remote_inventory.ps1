@@ -68,7 +68,8 @@ try {
     $entries = @(Get-Content -LiteralPath $listing -ErrorAction Stop | Where-Object { $_.Trim() })
     $names = @($entries | ForEach-Object { $_.Trim() })
     # SFTP output remains private; only counts and known generic categories escape.
-    $labels = @('mods', 'plugins', 'world', 'server.properties', 'libraries', 'logs', 'eula.txt')
+    $labels = @('server', 'mods', 'plugins', 'world', 'server.properties', 'server.jar',
+        'FunCityEngine.jar', 'libraries', 'logs', 'eula.txt', 'funcity-server-39846067526')
     $flags = @($labels | ForEach-Object {
         $label = $_
         $found = @($names | Where-Object { $_ -ieq $label }).Count -gt 0

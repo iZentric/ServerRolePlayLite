@@ -1,4 +1,4 @@
-name: Read-only HidenCloud root inventory before any upload
+name: Read-only HidenCloud root inventory after owner moved server files
 # Uses the rotated PC client key. No downloads, uploads, host mutations,
 # artifacts, filenames, private config, world data, or secrets in logs.
 on:
