@@ -4,7 +4,7 @@
   <p><strong>Un oraș nou. Povestea e a voastră.</strong></p>
   <p>Minecraft Forge 1.16.5 · roleplay · dezvoltare publică, fără promisiuni de performanță inventate</p>
   <p><strong>🧪 În testare · ⛔ Fără release Lite verificat · ⛔ Fără server nou deschis jucătorilor</strong></p>
-  <p><a href="START-AICI.md">Start aici</a> · <a href="site/index.html">Pagina proiectului</a> · <a href="agent/INDEX-GITHUB-FUNCITY-2026.md">Tot progresul public</a> · <a href="https://github.com/iZentric/ServerRolePlayLite/pull/2">PR #2</a></p>
+  <p><a href="START-AICI.md">Start aici</a> · <a href="site/index.html">Pagina proiectului</a> · <a href="agent/INDEX-GITHUB-FUNCITY-2026.md">Tot progresul public</a> · <a href="https://github.com/iZentric/ServerRolePlayLite/releases/tag/funcity-rp-lite-dev-2026-10-22">Checkpoint GitHub (pre-release, neinstalabil)</a> · <a href="https://github.com/iZentric/ServerRolePlayLite/pull/2">PR #2</a></p>
 </div>
 
 ---
