@@ -1,0 +1,12 @@
+# Gate de integritate pe GitHub Actions — 22.10.2026
+
+> **Verificare read-only, NU lansare și NU test de gameplay.** Codul și rezultatele sunt publicate pe [PR #2](https://github.com/iZentric/ServerRolePlayLite/pull/2). Workflow-ul [FunCity release parity](../.github/workflows/pc-release-parity.yml) rulează o verificare a manifestelor pe un runner GitHub găzduit și compară doar *hashuri locale* pe runnerul Windows al proprietarului; niciun JAR, lume, cont, configurație privată sau log brut nu pleacă de pe PC.
+
+| Verificare | Rezultat observat | Limită |
+|---|---|---|
+| [Manifeste + fișiere reale, run 39791600172](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39791600172) | Originalul Freeroam: **28/28** nume. Profilul exact „FunCity RP Lite”: **22/22** nume; toate cele **22 SHA-256 identice** cu JAR-urile păstrate din original. Cele șase excluderi aprobate sunt doar în Lite. | Nu certifică pornirea clientului, FPS sau conectarea la server. Originalul nu a fost modificat. |
+| [Serverul real, același run](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39791600172) | **34** JAR-uri în `mods`, **13** în `plugins`; cele **28** de nume ale țintei de laborator apar între modurile serverului. | Nu înseamnă că serverul real rulează motorul de laborator ori că a fost testat 34/13 în joc. |
+| [Comparație client/server, același run](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39791600172) | Dintre cele **19** nume JAR comune clientului Lite și serverului, **6** au SHA-256 identic și **13** au SHA-256 diferit. | Byte diferit nu dovedește singur eroare de handshake, dar nici compatibilitate; cauza cere verificare pe copii și test de conectare real. |
+| [Repetare cu diagnostic de nume publice, run 39791828222](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39791828222) | Aceeași comparație read-only a fost rulatǎ cu raportarea numai a numelor deja declarate public în manifestul Lite. | Niciun binar nu a fost încărcat în Actions ori Releases. |
+
+**Concluzie:** selecția Lite de 22 păstrează byte-cu-byte JAR-urile reținute din original; clientul și serverul au 13 fișiere cu nume comun, dar conținut diferit. Nu transformăm succesul acestor teste de inventar în afirmația „release funcțional” ori într-un număr de jucători. Rămân necesare verificarea provenienței/licențelor, bootul și loginul Forge pe o copie închisă, funcțiile RP și pluginurile complete, backup/restaurare și un pachet client/server lipsit de date private. [Criteriile de publicare](PUBLICARE.md).
