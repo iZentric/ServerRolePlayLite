@@ -1,6 +1,12 @@
 name: Inspect already published funcity server ZIP
 # Hosted, read-only audit of the public historical asset. No repackaging or upload.
 on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/historic-server-asset-audit.yml
+      - scripts/fc_historic_server_release_audit.py
+      - scripts/fc_historic_server_release_audit_test.py
   workflow_dispatch:
 permissions:
   contents: read
