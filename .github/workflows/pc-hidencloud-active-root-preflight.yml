@@ -1,5 +1,6 @@
 name: Verify HidenCloud active root engine and port read-only
-# Download only server.jar and server.properties privately to PC runner temp.
+# Recheck corrected server.jar, host port, EULA and RCON before owner presses Start.
+# Download only server.jar, server.properties and eula.txt privately to PC runner temp.
 # Never print contents, filenames from listings, hashes of private files, or secrets.
 # No remote or local live server writes, no server start, no artifacts.
 on:
