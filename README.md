@@ -43,6 +43,7 @@ Pentru surse, versiuni Forge, dependențe client și motivele pentru care alte m
 ## Urmărește lucrările, fără să confunzi testul cu un release
 
 - **[Indexul GitHub](agent/INDEX-GITHUB-FUNCITY-2026.md)** — hartă către cod, workflow-uri, rulări și decizii actuale.
+- **[Cum recuperăm proiectul și arhivele istorice](agent/RECUPERARE-PACHETE-2026-10-22.md)** — ce există deja pentru client și server, hashuri din GitHub și ce **nu** este încă un pachet Lite instalabil.
 - **[Progresul verificabil](agent/PROGRES.md)** — jurnalul extins, inclusiv rezultate istorice și eșecuri.
 - **[Start aici](START-AICI.md)** — explicația simplă; unele probe vechi sunt marcate drept istorice.
 - **[Pagina statică](site/index.html)** — prezentare și dovezi, **nu** status live; sursa este `site/template.html` și publicarea Pages rămâne manuală.
