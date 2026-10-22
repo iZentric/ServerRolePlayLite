@@ -74,7 +74,7 @@
 
 **Ablație țintită pe 28 moduri/6 pluginuri:** [raportul cu date și eșecuri pentru AI, rețete/Placebo, Ksyxis și vehicule](RP-MAFII-MASINI-COST-SERVER-2026.md) arată un semnal Ksyxis în lumea generată. Testul de mașini a fost **invalidat**: 16 entități la început, 0 la sfârșit într-o rerulare; nu există verdict RoadRunner specific mașinilor. Lipsesc condusul, mafiile reale, 34/13 și mulți clienți; nu ștergem ori instalăm JAR-uri în live pe această bază.
 
-**Native-first/opt-only:** [decizia cu porți pentru integrare sau eliminare](DECIZIE-NATIVE-FIRST-FUNCITY.md) clarifică faptul că beneficiul RP al ModernFix/FerriteCore nu a fost încă separat experimental; nu sunt „trei moduri garantat mai rapide”.
+**Native-first/opt-only:** [decizia cu porți pentru integrare sau eliminare](DECIZIE-NATIVE-FIRST-FUNCITY.md) include [ablația separată 28/6](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39711748552) favorabilă FerriteCore la heap post-GC și ModernFix la CPU în lume generată; acestea încă nu sunt „trei moduri garantat mai rapide” în oraș cu jucători.
 
 **Decizia după testul de reducere:** [brațul 22 vs 28](ALEGERE-CONCRETA-MOTOR-MODURI-2026.md) nu a adus câștig repetabil de runtime și a degradat bootul; **28 rămâne baza de laborator**, nu o instrucțiune de eliminare a celor șase JAR-uri suplimentare de pe PC.
 
