@@ -9,7 +9,7 @@
 
 ---
 
-> **Stadiu la 22 octombrie 2026:** codul, testele și rapoartele recente sunt pe ramura [PR #2](https://github.com/iZentric/ServerRolePlayLite/pull/2), **nu integrate în `main` și nu publicate automat pe Pages**. PR-ul este deschis și are conflicte. [Indexul public](agent/INDEX-GITHUB-FUNCITY-2026.md) le reunește. Serverul instalat, lumea, profilul original și modpackul convenit **nu au fost modificate** de aceste probe.
+> **Stadiu la 22 octombrie 2026:** codul, testele și rapoartele recente sunt pe ramura [PR #2](https://github.com/iZentric/ServerRolePlayLite/pull/2), **nu integrate în `main` și nu publicate automat pe Pages**. PR-ul este deschis; conflictele cu `main` au fost rezolvate pe ramura PR. [Indexul public](agent/INDEX-GITHUB-FUNCITY-2026.md) le reunește. Serverul instalat, lumea, profilul original și modpackul convenit **nu au fost modificate** de aceste probe.
 
 ## Ce rămâne neschimbat
 
@@ -46,6 +46,6 @@ Pentru surse, versiuni Forge, dependențe client și motivele pentru care alte m
 - **[Progresul verificabil](agent/PROGRES.md)** — jurnalul extins, inclusiv rezultate istorice și eșecuri.
 - **[Start aici](START-AICI.md)** — explicația simplă; unele probe vechi sunt marcate drept istorice.
 - **[Pagina statică](site/index.html)** — prezentare și dovezi, **nu** status live; sursa este `site/template.html` și publicarea Pages rămâne manuală.
-- **[PR #2](https://github.com/iZentric/ServerRolePlayLite/pull/2)** — unde sunt postate schimbările. PR-ul nu e îmbinat; rezolvarea conflictelor și orice publicare pe `main`/Pages necesită un pas separat, verificat.
+- **[PR #2](https://github.com/iZentric/ServerRolePlayLite/pull/2)** — unde sunt postate schimbările. PR-ul nu e îmbinat, deși conflictele au fost rezolvate; integrarea în `main` și publicarea pe Pages sunt pași separați, care necesită verificare și aprobare.
 
 **Nu publicați sau descărcați lumea, loguri brute, conturi, IP-uri ori JAR-uri de la alți autori din acest proiect.** Nu există încă o adresă nouă de server pentru jucători sau un release Lite aprobat. [Drepturi și condiții de publicare](agent/PUBLICARE.md) · [Contribuții](CONTRIBUTING.md).

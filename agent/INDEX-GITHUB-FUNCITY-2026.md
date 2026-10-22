@@ -1,6 +1,6 @@
 # Tot progresul public verificabil — FunCity RP Lite (22.10.2026)
 
-**Locul public de lucru:** [PR #2](https://github.com/iZentric/ServerRolePlayLite/pull/2), ramura `arena/9bbcb24f-serverroleplaylite`. Codul, testele, manifestele, deciziile și rezultatele sintetice sunt împinse acolo; PR-ul este **deschis și în conflict cu `main`**, deci modificările din ramură nu sunt încă pagina principală sau un release. Nu pretindem că «pe GitHub» înseamnă «instalat pe server».
+**Locul public de lucru:** [PR #2](https://github.com/iZentric/ServerRolePlayLite/pull/2), ramura `arena/9bbcb24f-serverroleplaylite`. Codul, testele, manifestele, deciziile și rezultatele sintetice sunt împinse acolo; PR-ul este **deschis, cu conflictele față de `main` rezolvate pe ramura sa**, dar modificările nu sunt încă pagina principală sau un release. Nu pretindem că «pe GitHub» înseamnă «instalat pe server».
 
 **Nu schimbăm modpackul stabilit:** Freeroam 1.0.0 original (28 moduri) neatins; FunCity RP Lite (22 JAR-uri client) separat; Rubidium rămâne, Embeddium numai în TEST. Serverul real inventariat read-only avea 34 moduri/13 pluginuri, pe când ținta de **28 moduri/6 pluginuri** de mai jos este numai un **laborator**. Nimic nou nu a fost instalat în pack, pe PC/server sau în lumea reală; nu există un nou release Lite, motor branduit validat sau număr maxim de jucători demonstrat.
 

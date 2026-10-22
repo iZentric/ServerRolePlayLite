@@ -2,7 +2,7 @@
 
 > **Status: proiect public pe GitHub, încă în teste. Noul server Lite NU este pornit pentru jucători. Nu există un modpack Lite verificat pentru descărcare.**
 
-**Unde este tot progresul nou, nu doar rezumatul istoric de mai jos:** [index public cu fișierele și rulările GitHub](agent/INDEX-GITHUB-FUNCITY-2026.md) · [PR #2](https://github.com/iZentric/ServerRolePlayLite/pull/2). PR-ul este încă deschis, în conflict cu `main`: nimic din el nu este instalat automat. Freeroam original 28 și Lite separat 22 rămân cum s-a stabilit, iar hostul final comunicat este 2 CPU / 12 GB. Selecția nouă de motor este numai pentru *copia de test*, nu înlocuiește serverul existent. Unele afirmații de mai jos sunt istorice; pentru verdictul actual folosiți indexul.
+**Unde este tot progresul nou, nu doar rezumatul istoric de mai jos:** [index public cu fișierele și rulările GitHub](agent/INDEX-GITHUB-FUNCITY-2026.md) · [PR #2](https://github.com/iZentric/ServerRolePlayLite/pull/2). PR-ul este încă deschis; conflictele cu `main` au fost rezolvate, dar nimic din el nu este instalat automat. Freeroam original 28 și Lite separat 22 rămân cum s-a stabilit, iar hostul final comunicat este 2 CPU / 12 GB. Selecția nouă de motor este numai pentru *copia de test*, nu înlocuiește serverul existent. Unele afirmații de mai jos sunt istorice; pentru verdictul actual folosiți indexul.
 
 ## Ce vrem să fie
 
@@ -34,6 +34,6 @@ Un oraș Minecraft 1.16.5 construit de comunitate. Păstrăm conținutul RP din 
 
 - **Nu descărca** vechile release-uri ca fiind noul FunCity Lite; sunt alte pachete.
 - **Nu da public** adresă sau lume de server de aici: nu există încă o adresă nouă validată.
-- Urmărește [PR-ul cu dezvoltarea actuală](https://github.com/iZentric/ServerRolePlayLite/pull/2) și [detaliile tehnice](agent/PROGRES.md). PR-ul este public, dar are conflicte cu `main`; noua pagină nu apare încă pe prima pagină GitHub sau pe Pages.
+- Urmărește [PR-ul cu dezvoltarea actuală](https://github.com/iZentric/ServerRolePlayLite/pull/2) și [detaliile tehnice](agent/PROGRES.md). PR-ul este public și fără conflicte cu `main`, dar încă nu a fost integrat; noua pagină nu apare încă pe prima pagină GitHub sau pe Pages.
 
 **Pe scurt:** codul este public; clientul și serverul au trecut verificări limitate; **lansarea pentru jucători nu este încă gata**.
