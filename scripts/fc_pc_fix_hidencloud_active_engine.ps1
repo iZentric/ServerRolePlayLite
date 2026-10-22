@@ -27,6 +27,7 @@ try {
     if (-not $env:RUNNER_TEMP -or -not $env:USERPROFILE -or -not $env:GITHUB_RUN_ID -or
         $env:GITHUB_RUN_ID -notmatch '^\d+$' -or
         $env:USERNAME -in @('SYSTEM','LOCAL SERVICE','NETWORK SERVICE')) { throw 'NOT_OWNER_PC_RUNNER' }
+    $phase='PC_SOURCE_PATHS'
     $base=Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\Arena-Private-Backups\offline-39843776626'
     $source=Join-Path $base 'server\FunCityEngine.jar'
     $manifestFile=Join-Path $base 'private-manifest.json'
@@ -35,15 +36,19 @@ try {
         $item=Get-Item -LiteralPath $file -Force -ErrorAction Stop
         if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw 'UNSAFE_SOURCE' }
     }
+    $phase='BACKUP_MANIFEST'
     $manifest=Get-Content -LiteralPath $manifestFile -Raw -Encoding UTF8 -ErrorAction Stop | ConvertFrom-Json
     if ($manifest.consistent_offline_snapshot -ne $true -or $manifest.independent_restore_copy_verified -ne $true) { throw 'NOT_A_VERIFIED_OFFLINE_BACKUP' }
     $engineExpected=$manifest.sha256.PSObject.Properties['FunCityEngine.jar']
     $oldExpected=$manifest.sha256.PSObject.Properties['server.jar']
     if ($null -eq $engineExpected -or $null -eq $oldExpected) { throw 'SOURCE_JAR_NOT_IN_BACKUP_MANIFEST' }
+    $phase='SOURCE_SHA'
     $engineHash=(Get-FileHash -LiteralPath $source -Algorithm SHA256 -ErrorAction Stop).Hash
     if ($engineHash -cne $engineExpected.Value -or $engineHash -ceq $oldExpected.Value) { throw 'SOURCE_SHA_UNEXPECTED' }
+    $phase='PC_OPENSSH_CLIENT'
     $sftp=(Get-Command sftp.exe -ErrorAction Stop).Source
     $keygen=(Get-Command ssh-keygen.exe -ErrorAction Stop).Source
+    $phase='PC_TEMP_PATH'
     $temp=Join-Path $env:RUNNER_TEMP ('fc-host-engine-' + $env:GITHUB_RUN_ID)
     if (Test-Path -LiteralPath $temp) { throw 'TEMP_EXISTS' }
     [void](New-Item -ItemType Directory -Path $temp -ErrorAction Stop)
