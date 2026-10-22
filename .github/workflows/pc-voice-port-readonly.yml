@@ -32,11 +32,20 @@ jobs:
               $lines=@(Get-Content -LiteralPath $legacy -ErrorAction Stop | Where-Object { $_ -match '^\s*port\s*=\s*\d+\s*$' })
               if ($lines.Count -eq 1 -and $lines[0] -match '^\s*port\s*=\s*(\d+)') { $legacyPort=$Matches[1] }
             }
-            foreach ($port in @($tomlPort,$legacyPort)) {
+            $allToml=@(Get-ChildItem -LiteralPath $root -Recurse -File -Force -ErrorAction Stop |
+              Where-Object { $_.Name -ieq 'voicechat-server.toml' })
+            $nestedPort='UNKNOWN'
+            if ($allToml.Count -eq 1) {
+              $portLines=@(Get-Content -LiteralPath $allToml[0].FullName -ErrorAction Stop |
+                Where-Object { $_ -match '^\s*port\s*=\s*\d+\s*(?:#.*)?$' })
+              if ($portLines.Count -eq 1 -and $portLines[0] -match '^\s*port\s*=\s*(\d+)') { $nestedPort=$Matches[1] }
+            }
+            foreach ($port in @($tomlPort,$legacyPort,$nestedPort)) {
               if ($port -ne 'UNKNOWN' -and ([int]$port -lt 1 -or [int]$port -gt 65535)) { throw 'INVALID_VOICE_PORT' }
             }
             Write-Output ('::notice title=RP voice port from offline backup::TOML_PRESENT=' + $tomlPresent +
               ' TOML_PORT=' + $tomlPort + ' LEGACY_PRESENT=' + $legacyPresent + ' LEGACY_PORT=' + $legacyPort +
+              ' RECURSIVE_TOML_COUNT=' + $allToml.Count + ' UNIQUE_TOML_PORT=' + $nestedPort +
               ' HOST_SECONDARY_ALLOCATION=25103 UDP_AVAILABILITY_NOT_VERIFIED=true HOST_CONFIG_NOT_RECHECKED=true')
           } catch {
             Write-Output '::error title=RP voice port::READ_ONLY_CHECK_FAILED; no private values logged'
