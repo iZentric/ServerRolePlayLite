@@ -19,8 +19,10 @@ def main():
     assert len(set(cars)) == VEHICLES
     assert not any('127.0.0.1' in x or 'op ' in x for x in cmds)
     assert confirmed_vehicle_count('[Server: #cars has 16 [fcbench]]') == VEHICLES
+    assert confirmed_vehicle_count('#cars has 16 [fcbench]\n#cars has 16 [fcbench]',
+                                   snapshots=2) == VEHICLES
     for bad in ('', 'Summoned new Smart Car', '#cars has 15 [fcbench]',
-                '#cars has 16 [fcbench]\n#cars has 16 [fcbench]'):
+                '#cars has 16 [fcbench]\n#cars has 15 [fcbench]'):
         rejected(bad)
     print('PASS: 16 distinct parked modded vehicles, count gate requires exact server scoreboard')
 

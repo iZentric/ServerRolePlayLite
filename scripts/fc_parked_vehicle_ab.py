@@ -42,12 +42,12 @@ def vehicle_commands():
     return commands
 
 
-def confirmed_vehicle_count(text):
-    """The scoreboard RESULT of an entity selector, not a summon-success guess."""
+def confirmed_vehicle_count(text, snapshots=1):
+    """Scoreboard RESULT of an entity selector, not a summon-success guess."""
     matches = re.findall(r'#cars has (\d+) \[fcbench\]', text)
-    if len(matches) != 1 or int(matches[0]) != VEHICLES:
+    if len(matches) != snapshots or any(int(n) != VEHICLES for n in matches):
         raise ValueError('stationary modded vehicle entity count unconfirmed')
-    return int(matches[0])
+    return VEHICLES
 
 
 def run_vehicle(stage, report):
@@ -77,8 +77,11 @@ def run_vehicle(stage, report):
             if j.p.poll() is not None:
                 raise ValueError('server exited during vehicle measurement')
             samples.append(proc_sample(j.p.pid))
+        j.send('execute store result score #cars fcbench if entity @e[type=vehicle:smart_car]')
+        j.send('scoreboard players get #cars fcbench')
+        time.sleep(2)
         text = log.read_text(encoding='utf-8', errors='replace')
-        confirmed_vehicle_count(text)  # same 16 confirmed before and after window
+        confirmed_vehicle_count(text, snapshots=2)  # unchanged before AND after observation
         values = [float(x) for x in OVERALL.findall(text)]
         if len(values) < 4:
             raise ValueError('Forge tick samples absent')
