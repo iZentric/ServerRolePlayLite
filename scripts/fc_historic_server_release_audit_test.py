@@ -71,6 +71,7 @@ class HistoricServerZipAuditTest(unittest.TestCase):
                          (1, 1, 2, 26))
         self.assertEqual((result['nested_zip_inspected'], result['nested_mod_jars'],
                           result['nested_plugin_jars']), (1, 1, 1))
+        self.assertEqual(set(result['target_missing_public_names']), set(names[2:]))
         self.assertFalse((Path(self.tmp.name) / 'server').exists())
 
     def test_sha_required_and_symlink_refused(self):

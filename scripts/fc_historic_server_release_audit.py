@@ -3,7 +3,8 @@
 
 Do not extract to disk, run, upload, or repackage any entry. A bounded nested
 ZIP may be read into memory to inspect its directory only; never open its files.
-Output category counts only. A clean ZIP directory is NOT proof of a release.
+Output counts plus missing names only from the already-public 28-mod manifest.
+A clean ZIP directory is NOT proof of a release.
 """
 import argparse
 import hashlib
@@ -38,14 +39,17 @@ def audit(path, expected_sha=HISTORIC_SHA256, target=None):
     no inner file content is opened, extracted, executed, or published.
     """
     expected = set()
+    public_names = {}
     if target is not None:
         manifest = json.loads(Path(target).read_text(encoding='utf-8'))
         names = manifest.get('mods', [])
         if (manifest.get('schema') != 1 or len(names) != 28 or
                 not all(isinstance(n, str) and n.lower().endswith('.jar') and
-                        '/' not in n and '\\' not in n for n in names)):
+                        '/' not in n and '\\' not in n and
+                        not any(ord(ch) < 32 for ch in n) for n in names)):
             raise ValueError('invalid public 28-mod target manifest')
-        expected = {n.casefold() for n in names}
+        public_names = {n.casefold(): n for n in names}
+        expected = set(public_names)
         if len(expected) != 28:
             raise ValueError('duplicate public mod target')
     path = Path(path)
@@ -168,7 +172,9 @@ def audit(path, expected_sha=HISTORIC_SHA256, target=None):
     counts['target_outer_matches'] = len(outer_matches)
     counts['target_nested_matches'] = len(nested_matches)
     counts['target_combined_matches'] = len(outer_matches | nested_matches)
-    counts['target_missing_count'] = len(expected - (outer_matches | nested_matches))
+    missing = expected - (outer_matches | nested_matches)
+    counts['target_missing_count'] = len(missing)
+    counts['target_missing_public_names'] = sorted((public_names[n] for n in missing), key=str.casefold)
     # In particular, do not turn this into an "OK to publish" verdict.
     return counts
 
