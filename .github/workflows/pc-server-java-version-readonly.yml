@@ -1,0 +1,40 @@
+name: Check actual working PC server Java major version
+# Read-only process/task identity. No executable path, account, command line,
+# private config, players or secrets in output; never starts/stops server.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-server-java-version-readonly.yml]
+permissions:
+  contents: read
+jobs:
+  pc-java-read-only:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 4
+    steps:
+      - name: Inspect Java executable of the existing server task
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          $root=Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
+          $task=Get-ScheduledTask -TaskName 'FunCityLocalServer' -ErrorAction Stop
+          $actions=@($task.Actions)
+          if ($actions.Count -ne 1 -or -not $actions[0].Execute -or
+              -not $actions[0].WorkingDirectory -or
+              -not $actions[0].WorkingDirectory.TrimEnd([char[]]@([char]92,[char]47)).Equals(
+                  $root.TrimEnd([char[]]@([char]92,[char]47)),[StringComparison]::OrdinalIgnoreCase)) {
+              throw 'ORIGINAL_TASK_MISMATCH'
+          }
+          $exe=$actions[0].Execute
+          if (-not (Test-Path -LiteralPath $exe -PathType Leaf)) { throw 'JAVA_NOT_FOUND' }
+          $version=@(& $exe -version 2>&1 | ForEach-Object { $_.ToString() })
+          if ($LASTEXITCODE -ne 0 -or $version.Count -eq 0) { throw 'JAVA_VERSION_UNAVAILABLE' }
+          $major='UNKNOWN'
+          foreach ($line in $version) {
+              if ($line -match '(?i)version\s+"(?:1\.)?(\d+)') {
+                  $major=$Matches[1]
+                  break
+              }
+          }
+          if ($major -eq 'UNKNOWN') { throw 'JAVA_MAJOR_UNRECOGNIZED' }
+          Write-Output ('::notice title=Original PC server Java::JAVA_MAJOR=' + $major + '; version and executable path kept private; READ_ONLY=true')
