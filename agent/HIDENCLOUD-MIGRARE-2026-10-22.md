@@ -1,0 +1,24 @@
+# Migrare FunCity pe HidenCloud — stare și porți de siguranță (22.10.2026)
+
+**Nu este instalat un server nou pe HidenCloud. Nu există încă un ZIP server-only de publicat.** Datele private ale PC-ului nu sunt în Git, în Actions artifacts sau în chat.
+
+## Dovezi efective
+
+- [Preflight PC 39843663191](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39843663191): serverul local original rulează; 3.990 fișiere, sub 1 GiB ca ordin de mărime; spațiu suficient pentru două copii; RCON loopback și taskul de repornire corespund procesului; trei backupuri offline anterioare au manifest, **fără rehash în acea probă**.
+- [Backup nou PC 39843776626](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39843776626): s-au confirmat zero jucători înainte de oprire, salvare RCON, stop normal, copie integrală offline privată cu SHA per fișier, restaurare de probă separată verificată, apoi repornire a taskului original. Rezultat `STOP_SENT=True BACKUP_VERIFIED=True RESTORE_COPY_VERIFIED=True ORIGINAL_RESTARTED=True LIVE_JARS_CHANGED=false JOIN_TESTED=false`. Backupul rămâne numai în `FunCityLocal/Arena-Private-Backups/offline-39843776626` pe PC; nicio lume ori JAR nu s-a urcat în GitHub. Repornirea nu este probă de login ulterior.
+- [SFTP read-only 39843209712](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39843209712): noua cheie locală de pe PC s-a autentificat cu `pwd` la `olivia.hidencloud.com:2022`, user `izentric-150380.6ddc2b7d`. Fără shell sau scrieri; sandboxul Arena nu are conexiune directă la HidenCloud. Cheia serverului observată *TOFU*, `SHA256:8B88Xl+b19yzYinbJ9bZxwc79nW1sBZrF0XvGiCqdd4`, **nu este confirmată independent de furnizor**.
+- [Inventar remote read-only 39844323879](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39844323879): trei intrări în rădăcina SFTP; niciun nume standard `mods`, `plugins`, `world`, `server.properties`, `libraries`, `logs` sau `eula.txt` la rădăcină. Numele/conținutul celor trei nu au fost afișate, copiate ori modificate. Fingerprintul serverului este același cu primul TOFU; **cele trei intrări NU sunt încă salvate**. Nu presupune că hostul este gol.
+
+## Alegerea motorului fără a pierde lumea RP
+
+Serverul local funcțional are 34 moduri și 13 pluginuri, iar loginul din clientul Lite a fost confirmat anterior pe motorul local existent. CatServer **oficial 23.05.26-1** a fost mai bun în probele de laborator pe lume generată/15 moduri și a pornit ținta 28/6; documentat în [alegerea motorului](MOTOR-FUNCITY-ALEGERE-TESTE-2026.md) și [probele ulterioare](ALEGERE-CONCRETA-MOTOR-MODURI-2026.md). **Nu a fost testat cu toate 34/13, lumea reală, vocea și clientul**: nu-l numi încă „cel mai bun pentru live” și nu înlocui binarul curent în timpul transferului. Prima migrare controlată trebuie să păstreze exact serverul demonstrat funcțional; CatServer se probează în copie separată și se promovează numai după test complet și rollback.
+
+## Pași necesari înainte de upload / pornire
+
+1. Obține prin panoul oficial ori suport HidenCloud amprenta SSH a serverului SFTP și compar-o cu fingerprintul TOFU de mai sus; până atunci nu face operații de scriere. Verifică în panoul serverului ce motor/Java/startup command acceptă, RAM și spațiul disponibil, precum și controlul stop/start. Nu cere parole sau chei private în chat.
+2. Salvează **privat** toate cele trei intrări existente pe host înainte de orice suprascriere sau schimbare de startup; verifică dimensiuni, hashuri și restaurarea pe o copie locală, fără căi periculoase, symlinkuri sau fișiere private în loguri/artifacte. Dacă providerul nu permite backup complet, oprește migrarea.
+3. Din backupul offline PC verificat, formează pe PC o copie **privată** de server, cu întregul set RP/moduri/pluginuri/config/lume corecte. Nu folosi `FUNCTITY-SERVER.zip` istoric ca sursă: îi lipsesc nume din țintă și conține căi sensibile. Nu publica lumea/JAR-uri private într-un GitHub Release.
+4. Probează pe o copie motorul candidat cu toate componentele reale, inclusiv registru Forge, client Lite, vehicule/NPC/voce/pluginuri și restart; fără a rula un al doilea server peste portul sau lumea originală. Fără rezultate complete păstrează motorul curent la prima mutare.
+5. Urcă numai într-o locație nouă izolată pe host, verifică SHA și spațiu, apoi realizează cutover cu rollback și pornire controlată prin panou. Nu suprascrie cele trei intrări existente sau lumea existentă; nu declara succes fără boot/login și verificări de gameplay. Înainte de acces public rezolvă `online-mode=false`/anti-impersonarea și vocea UDP.
+
+**Blocaj curent:** cheia hostului nu este confirmată de provider, fișierele existente de pe host nu au backup, iar configurația de startup a panoului și testul 34/13 pe motorul nou lipsesc. Doar backupul local PC este verificat; niciun upload server nu a avut loc.
