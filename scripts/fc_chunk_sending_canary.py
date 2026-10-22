@@ -17,6 +17,21 @@ from fc_plugin_first_stage import sha
 from fc_server_optimizer_ab import run_one
 
 CANDIDATE = 'chunksending-1.16.5-2.5.jar'
+PHASE = 'PREFLIGHT'
+
+
+def safe_failure_category(exc):
+    """Only static flags from a disposable hosted stage, never raw logs/paths."""
+    text = str(exc)
+    if 'server did not reach Done' in text:
+        return 'BOOT_NOT_DONE'
+    if 'fatal server/plugin marker' in text:
+        return 'RUNTIME_FATAL'
+    if 'a staged plugin was not enabled' in text:
+        return 'PLUGIN_NOT_ENABLED'
+    if 'server did not stop cleanly' in text:
+        return 'STOP_UNCLEAN'
+    return 'PRECHECK_OR_RUNTIME'
 
 
 def validate_candidate(root, candidate):
@@ -35,8 +50,12 @@ def validate_candidate(root, candidate):
 
 
 def main(root, source, archive, motor, core, guava, candidate):
+    global PHASE
     root = Path(root).resolve()
     candidate_sha = validate_candidate(root, candidate)
+    print('::notice title=Official Chunk Sending canary file::file_id=4583202 mod_id=chunksending sha256=' +
+          candidate_sha + ' candidate_only=true no_jar_uploaded=true', flush=True)
+    PHASE = 'BASELINE'
     # The upstream harness verifies SHA-pinned official motor and historical
     # JARs, dependency metadata, exact mod/plugin inventory, loopback/whitelist
     # and clean baseline boot before any experimental candidate is staged.
@@ -47,6 +66,7 @@ def main(root, source, archive, motor, core, guava, candidate):
     if len(baseline) != 28 or len(report['plugins']) != 6:
         raise ValueError('baseline changed')
     for trial in (1, 2):
+        PHASE = 'CANDIDATE_TRIAL_' + str(trial)
         stage = root/f'chunk-sending-trial-{trial}'
         shutil.copytree(template, stage, symlinks=False)
         if (stage/'mods'/CANDIDATE).exists() or (stage/'mods'/CANDIDATE).is_symlink():
@@ -69,7 +89,9 @@ if __name__ == '__main__':
         if len(sys.argv) != 8:
             raise ValueError('wrong number of hosted runner inputs')
         main(*sys.argv[1:])
-    except (ValueError, OSError, AssertionError, KeyError, zipfile.BadZipFile):
-        print('::error title=Chunk Sending canary rejected::No promotion; private diagnostic remains on disposable runner',
+    except (ValueError, OSError, AssertionError, KeyError, zipfile.BadZipFile) as exc:
+        print('::error title=Chunk Sending canary rejected::PHASE=' + PHASE +
+              ' CATEGORY=' + safe_failure_category(exc) +
+              ' no raw log, private path, JAR or credentials published; no promotion',
               file=sys.stderr)
         sys.exit(2)

@@ -6,7 +6,7 @@ from tempfile import TemporaryDirectory
 from unittest.mock import patch
 from zipfile import ZipFile
 
-from fc_chunk_sending_canary import CANDIDATE, validate_candidate
+from fc_chunk_sending_canary import CANDIDATE, safe_failure_category, validate_candidate
 
 
 def denied(root, candidate):
@@ -18,6 +18,9 @@ def denied(root, candidate):
 
 
 def main():
+    assert safe_failure_category(ValueError('server did not reach Done; exit=0')) == 'BOOT_NOT_DONE'
+    assert safe_failure_category(ValueError('fatal server/plugin marker')) == 'RUNTIME_FATAL'
+    assert safe_failure_category(OSError('private-host-path-do-not-print')) == 'PRECHECK_OR_RUNTIME'
     with TemporaryDirectory() as tmp:
         temp = Path(tmp)
         root = temp/'fc-full-rp-catserver-official'
