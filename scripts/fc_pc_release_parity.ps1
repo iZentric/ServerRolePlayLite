@@ -97,14 +97,22 @@ try {
     $targetCount = 0
     foreach ($name in @($target.mods)) { if ($serverMods.ContainsKey($name)) { $targetCount++ } }
     $serverClientMatching = 0; $serverClientDifferent = 0
+    $differentNames = @()
     foreach ($name in @($lite.retained_in_future_target)) {
         if ($serverMods.ContainsKey($name)) {
             $a = (Get-FileHash -LiteralPath $serverMods[$name].FullName -Algorithm SHA256).Hash
             $b = (Get-FileHash -LiteralPath $liteMap[$name].FullName -Algorithm SHA256).Hash
-            if ($a -eq $b) { $serverClientMatching++ } else { $serverClientDifferent++ }
+            if ($a -eq $b) { $serverClientMatching++ } else {
+                $serverClientDifferent++
+                # Only names already present in the published 22-name manifest.
+                $differentNames += ($name -replace '[^A-Za-z0-9 ._()+-]', '_')
+            }
         }
     }
     Write-Output ('::notice title=Installed server inventory read only::mods=34 plugins=13 lab_target_name_overlap=' + $targetCount + '/28 shared_client_same_sha256=' + $serverClientMatching + ' shared_client_different_sha256=' + $serverClientDifferent + ' world_opened=0 files_copied=0 process_changed=0')
+    if ($differentNames.Count -gt 0) {
+        Write-Output ('::notice title=Shared client-server JARs with different SHA256::' + ($differentNames -join ' | '))
+    }
     if ($env:GITHUB_STEP_SUMMARY) {
         @(
             '## Read-only PC parity (not a gameplay or release test)',
