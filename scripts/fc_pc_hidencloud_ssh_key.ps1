@@ -16,7 +16,9 @@ try {
     } else {
         [void](New-Item -ItemType Directory -Path $dir -ErrorAction Stop)
     }
-    $private = Join-Path $dir 'funcity_hidencloud_ed25519'
+    # Do not overwrite or reuse the earlier identity exposed in chat.
+    # Generate a fresh, distinct local identity; reruns validate this same pair.
+    $private = Join-Path $dir 'funcity_hidencloud_ed25519_rotated'
     $public = $private + '.pub'
     $hasPrivate = Test-Path -LiteralPath $private
     $hasPublic = Test-Path -LiteralPath $public

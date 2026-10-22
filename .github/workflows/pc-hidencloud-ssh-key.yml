@@ -1,8 +1,7 @@
-name: Generate HidenCloud SSH public key on owner PC
-# The previously used private key was pasted into chat. Do NOT use or export
-# the old identity: the PC script refuses to report its public key as usable.
-# A replacement requires deliberate owner-controlled rotation; never log or
-# upload a private key.
+name: Generate replacement HidenCloud SSH public key on owner PC
+# The old identity was exposed in chat and is still on the PC: do NOT use it.
+# Generate a separate replacement on the PC without overwriting the old file.
+# Never log, upload, or commit a private key; display ONLY the new public key.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
