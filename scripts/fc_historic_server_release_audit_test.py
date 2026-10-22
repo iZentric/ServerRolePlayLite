@@ -29,9 +29,14 @@ class HistoricServerZipAuditTest(unittest.TestCase):
             ('FunCity/mods/a.jar', b'fixture'), ('FunCity/plugins/b.jar', b'fixture'),
             ('FunCity/engine.jar', b'fixture'), ('FunCity/world/level.dat', b'private fixture'),
             ('FunCity/ops.json', b'private fixture'), ('FunCity/server.properties', b'private fixture'),
-            ('FunCity/java/bin/java.exe', b'fixture'), ('FunCity/start.bat', b'fixture')])
+            ('FunCity/java/bin/java.exe', b'fixture'), ('FunCity/start.bat', b'fixture'),
+            ('FunCity/libraries/forge.jar', b'fixture'),
+            ('FunCity/mods/archive/extra.jar', b'fixture'),
+            ('FunCity/server-bundle.zip', b'fixture archive')])
         result = audit(self.path, expected)
-        self.assertEqual((result['mod_jars'], result['plugin_jars'], result['other_jars']), (1, 1, 1))
+        self.assertEqual((result['mod_jars'], result['plugin_jars'], result['other_jars']), (1, 1, 3))
+        self.assertEqual((result['mod_jars_in_deeper_folders'], result['library_jars']), (1, 1))
+        self.assertEqual((result['nested_archives'], result['nested_archive_bytes']), (1, 15))
         self.assertEqual((result['world_entries'], result['sensitive_entries']), (1, 3))
         self.assertEqual((result['scripts'], result['java_runtime_entries']), (2, 1))
         self.assertFalse((Path(self.tmp.name) / 'FunCity').exists())

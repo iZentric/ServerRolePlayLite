@@ -38,8 +38,11 @@ def audit(path, expected_sha=HISTORIC_SHA256):
     if sha256(path) != expected_sha:
         raise ValueError('archive SHA-256 does not match pinned published asset')
     counts = dict(entries=0, mod_jars=0, plugin_jars=0, other_jars=0,
+                  mod_jars_in_deeper_folders=0, plugin_jars_in_deeper_folders=0,
+                  library_jars=0, runtime_jars=0,
                   java_runtime_entries=0, world_entries=0, sensitive_entries=0,
-                  nested_archives=0, scripts=0, symlinks=0, encrypted=0,
+                  nested_archives=0, nested_archive_bytes=0, nested_archive_large=0,
+                  scripts=0, symlinks=0, encrypted=0,
                   unsafe_paths=0, duplicate_paths=0, uncompressed_bytes=0)
     seen = set()
     with zipfile.ZipFile(path) as archive:
@@ -85,8 +88,18 @@ def audit(path, expected_sha=HISTORIC_SHA256):
                 counts['plugin_jars'] += 1
             elif leaf.endswith('.jar'):
                 counts['other_jars'] += 1
+                if 'mods' in dirs:
+                    counts['mod_jars_in_deeper_folders'] += 1
+                elif 'plugins' in dirs:
+                    counts['plugin_jars_in_deeper_folders'] += 1
+                elif 'libraries' in dirs or 'lib' in dirs:
+                    counts['library_jars'] += 1
+                elif any(d in {'java', 'jre', 'jdk', 'runtime'} for d in dirs):
+                    counts['runtime_jars'] += 1
             if leaf.endswith(('.zip', '.tar', '.gz', '.7z', '.rar')):
                 counts['nested_archives'] += 1
+                counts['nested_archive_bytes'] += item.file_size
+                counts['nested_archive_large'] += int(item.file_size > 64 * 1024 * 1024)
             if leaf.endswith(('.bat', '.ps1', '.sh', '.exe')):
                 counts['scripts'] += 1
             if 'java' in dirs or 'jre' in dirs or 'jdk' in dirs:
