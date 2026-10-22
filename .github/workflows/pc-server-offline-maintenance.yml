@@ -1,6 +1,8 @@
 name: One-time zero-player offline server backup and original restart
 # Trigger PC work ONLY by a reviewed workflow-file commit with exact message prefix.
+# Owner requested a fresh full private backup before HidenCloud migration.
 # Hosted fixture and parser guards passed in run 39597725327 before authorization.
+# Fresh readiness run 39843663191 confirmed space, original process and restart task.
 # No world, logs, backup, player identities or secrets leave the Windows PC.
 on:
   push:
