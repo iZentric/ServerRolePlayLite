@@ -1,0 +1,16 @@
+name: FC-BENCH (retired)
+# Legacy workflow from main performed multi-hour benchmarks and could write to
+# repository branches. Do not run it automatically when resolving this PR.
+# A new benchmark must be explicitly scoped to an isolated, read-only lab.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse unreviewed benchmark automation
+        run: |
+          echo '::error::Use a reviewed, read-only lab workflow for new measurements.'
+          exit 1
