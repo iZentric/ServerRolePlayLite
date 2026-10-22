@@ -1,3 +1,5 @@
+> **Actualizări publicate pe GitHub (22.10.2026):** [indexul tuturor lucrărilor publicabile, codului, testelor și rezultatelor recente](agent/INDEX-GITHUB-FUNCITY-2026.md) · [PR #2, ramura de lucru](https://github.com/iZentric/ServerRolePlayLite/pull/2). PR-ul este deschis și în conflict cu `main`: raportul nou **nu este încă pe `main`/Pages sau într-un release**. Modpackul convenit și serverul/lumea instalate rămân neschimbate; hostul final planificat este 2 CPU / 12 GB, iar maximul de jucători nu a fost măsurat. Documentele istorice de mai jos descriu etape anterioare, nu schimbări live.
+
 <div align="center">
   <img src="site/assets/funcity-city.webp" alt="Ilustrație FunCity: oraș în lumini cyan și magenta" width="160" height="160">
   <h1>FunCity RP Lite</h1>
@@ -17,7 +19,7 @@ FunCity este un proiect de **oraș roleplay construit împreună cu jucătorii**
 |---|---|---|
 | **Conținut RP: obiectivul** | Nu promitem un „Lite” golit de obiecte și mecanici. | Șase JAR-uri RP/dependențe identificate din vechiul reper FunCity au fost restaurate în LowSpec; copia de server a pornit. Cele 28 de nume ale originalului Freeroam au fost inventariate; gameplay-ul și conectarea noului profil Lite rămân neverificate. |
 | **O cale de intrare pentru PC-uri mai slabe** | Profilul LowSpec este configurat cu 5 chunkuri și maximum 2 GiB heap. | Fișierele sunt verificate pe disc, dar nu există benchmark FPS sau garanție pentru orice laptop. |
-| **Optimizări server alese cu rost** | Nu adăugăm zeci de JAR-uri pentru îmbunătățiri presupuse. | RoadRunner, FerriteCore și ModernFix au trecut doar bootul pe o copie; efectul MSPT/RAM rămâne de măsurat înainte de includerea definitivă. |
+| **Optimizări server alese cu rost** | Nu adăugăm zeci de JAR-uri pentru îmbunătățiri presupuse. | [Ablații 28/6](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39711748552) favorizează FerriteCore la heap post-GC și ModernFix la CPU în laborator; [Performant a eșuat](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39711647739) ca substitut în packul 28. Nicio cifră MSPT cu jucători sau capacitate live. |
 | **Oraș deschis, moderare responsabilă** | CoreProtect este pentru jurnal și rollback administrativ, nu pentru protecție preventivă de teren. | Pluginul s-a activat în bootul izolat; incidentele reale și restaurarea nu sunt încă probate. |
 
 > **Important pentru jucători:** acesta este un proiect public **în dezvoltare**, nu o invitație de conectare. Nu descărca vechile release-uri ale repo-ului ca și cum ar fi noul FunCity RP Lite. Nu există încă un pachet Lite sau o adresă de server validate pentru intrarea în joc.
