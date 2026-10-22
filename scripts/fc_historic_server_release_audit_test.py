@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Fixture-only tests; never download, extract, or execute historic server files."""
 import hashlib
+import io
+import json
 from pathlib import Path
 import stat
 import tempfile
@@ -53,6 +55,23 @@ class HistoricServerZipAuditTest(unittest.TestCase):
         self.assertEqual(result['unsafe_paths'], 3)
         self.assertEqual(result['duplicate_paths'], 1)
         self.assertEqual(result['symlinks'], 1)
+
+    def test_public_target_matches_outer_and_nested_without_inner_extraction(self):
+        target = Path(__file__).resolve().parents[1] / 'agent/FUNCITY-SERVER-TARGET-28.json'
+        names = json.loads(target.read_text(encoding='utf-8'))['mods']
+        inner_buffer = io.BytesIO()
+        with zipfile.ZipFile(inner_buffer, 'w') as inner:
+            inner.writestr('old-backup/mods/' + names[1], b'fixture nested JAR')
+            inner.writestr('old-backup/plugins/private.jar', b'fixture plugin')
+        expected = self.create([('server/mods/' + names[0], b'fixture outer JAR'),
+                                ('server/data/snapshot.zip', inner_buffer.getvalue())])
+        result = audit(self.path, expected, target)
+        self.assertEqual((result['target_outer_matches'], result['target_nested_matches'],
+                          result['target_combined_matches'], result['target_missing_count']),
+                         (1, 1, 2, 26))
+        self.assertEqual((result['nested_zip_inspected'], result['nested_mod_jars'],
+                          result['nested_plugin_jars']), (1, 1, 1))
+        self.assertFalse((Path(self.tmp.name) / 'server').exists())
 
     def test_sha_required_and_symlink_refused(self):
         expected = self.create([('mods/a.jar', b'fixture')])

@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Read-only metadata audit of the already-published funcity server ZIP.
 
-Do not extract, run, upload, or repackage any entry. Output category counts only.
-A clean ZIP directory is NOT proof of a safe or licensed server release.
+Do not extract to disk, run, upload, or repackage any entry. A bounded nested
+ZIP may be read into memory to inspect its directory only; never open its files.
+Output category counts only. A clean ZIP directory is NOT proof of a release.
 """
 import argparse
 import hashlib
+import io
 import json
 import re
 import stat
@@ -29,7 +31,23 @@ def sha256(path):
     return digest.hexdigest()
 
 
-def audit(path, expected_sha=HISTORIC_SHA256):
+def audit(path, expected_sha=HISTORIC_SHA256, target=None):
+    """Count ZIP directory categories, optionally compare public target mod names.
+
+    Nested ZIP directory indexes are inspected in memory with bounded input;
+    no inner file content is opened, extracted, executed, or published.
+    """
+    expected = set()
+    if target is not None:
+        manifest = json.loads(Path(target).read_text(encoding='utf-8'))
+        names = manifest.get('mods', [])
+        if (manifest.get('schema') != 1 or len(names) != 28 or
+                not all(isinstance(n, str) and n.lower().endswith('.jar') and
+                        '/' not in n and '\\' not in n for n in names)):
+            raise ValueError('invalid public 28-mod target manifest')
+        expected = {n.casefold() for n in names}
+        if len(expected) != 28:
+            raise ValueError('duplicate public mod target')
     path = Path(path)
     if not re.fullmatch(r'[0-9a-f]{64}', expected_sha):
         raise ValueError('expected SHA-256 must be a 64-character lowercase hex string')
@@ -42,9 +60,15 @@ def audit(path, expected_sha=HISTORIC_SHA256):
                   library_jars=0, runtime_jars=0,
                   java_runtime_entries=0, world_entries=0, sensitive_entries=0,
                   nested_archives=0, nested_archive_bytes=0, nested_archive_large=0,
+                  nested_zip_inspected=0, nested_zip_skipped=0, nested_mod_jars=0,
+                  nested_plugin_jars=0, target_outer_matches=0, target_nested_matches=0,
+                  target_combined_matches=0, target_missing_count=0,
                   scripts=0, symlinks=0, encrypted=0,
                   unsafe_paths=0, duplicate_paths=0, uncompressed_bytes=0)
     seen = set()
+    outer_matches = set()
+    nested_matches = set()
+    nested_zips = []
     with zipfile.ZipFile(path) as archive:
         members = archive.infolist()
         if len(members) > 100_000:
@@ -82,6 +106,8 @@ def audit(path, expected_sha=HISTORIC_SHA256):
                     ('password', 'secret', 'token', 'credential', 'private')) or
                   leaf.endswith(('.pem', '.key', '.p12', '.log'))):
                 counts['sensitive_entries'] += 1
+            if leaf.endswith('.jar') and 'mods' in dirs and leaf in expected:
+                outer_matches.add(leaf)
             if len(parts) >= 2 and dirs[-1] == 'mods' and leaf.endswith('.jar'):
                 counts['mod_jars'] += 1
             elif len(parts) >= 2 and dirs[-1] == 'plugins' and leaf.endswith('.jar'):
@@ -100,10 +126,49 @@ def audit(path, expected_sha=HISTORIC_SHA256):
                 counts['nested_archives'] += 1
                 counts['nested_archive_bytes'] += item.file_size
                 counts['nested_archive_large'] += int(item.file_size > 64 * 1024 * 1024)
+                if leaf.endswith('.zip'):
+                    nested_zips.append(item)
             if leaf.endswith(('.bat', '.ps1', '.sh', '.exe')):
                 counts['scripts'] += 1
             if 'java' in dirs or 'jre' in dirs or 'jdk' in dirs:
                 counts['java_runtime_entries'] += 1
+        # Nested ZIP files can be backups; inspect their indexes separately, never
+        # treat their JARs as validated runtime files. No inner payload is opened.
+        for item in nested_zips:
+            if (item.flag_bits & 1 or item.file_size > 100 * 1024 * 1024 or
+                    item.compress_size == 0 or item.file_size > item.compress_size * 200):
+                counts['nested_zip_skipped'] += 1
+                continue
+            try:
+                with zipfile.ZipFile(io.BytesIO(archive.read(item))) as inner:
+                    if len(inner.infolist()) > 100_000:
+                        counts['nested_zip_skipped'] += 1
+                        continue
+                    counts['nested_zip_inspected'] += 1
+                    for member in inner.infolist():
+                        if member.is_dir():
+                            continue
+                        parts = member.filename.replace('\\', '/').split('/')
+                        if (any(p in {'', '.', '..'} for p in parts) or
+                                any(ord(ch) < 32 for ch in member.filename) or
+                                re.match(r'^[a-zA-Z]:', parts[0]) or
+                                (member.create_system == 3 and
+                                 stat.S_IFMT(member.external_attr >> 16) == stat.S_IFLNK)):
+                            continue
+                        dirs = [p.casefold() for p in parts[:-1]]
+                        leaf = parts[-1].casefold()
+                        if leaf.endswith('.jar') and 'mods' in dirs:
+                            counts['nested_mod_jars'] += 1
+                            if leaf in expected:
+                                nested_matches.add(leaf)
+                        if leaf.endswith('.jar') and 'plugins' in dirs:
+                            counts['nested_plugin_jars'] += 1
+            except (zipfile.BadZipFile, RuntimeError, EOFError):
+                counts['nested_zip_skipped'] += 1
+    counts['target_outer_matches'] = len(outer_matches)
+    counts['target_nested_matches'] = len(nested_matches)
+    counts['target_combined_matches'] = len(outer_matches | nested_matches)
+    counts['target_missing_count'] = len(expected - (outer_matches | nested_matches))
     # In particular, do not turn this into an "OK to publish" verdict.
     return counts
 
@@ -112,8 +177,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--archive', required=True)
     parser.add_argument('--expected-sha', default=HISTORIC_SHA256)
+    parser.add_argument('--target', default=str(Path(__file__).resolve().parents[1] /
+                                                 'agent/FUNCITY-SERVER-TARGET-28.json'))
     args = parser.parse_args()
-    print('HISTORIC_SERVER_ZIP_METADATA ' + json.dumps(audit(args.archive, args.expected_sha),
+    print('HISTORIC_SERVER_ZIP_METADATA ' + json.dumps(audit(args.archive, args.expected_sha, args.target),
                                                     sort_keys=True))
     print('NOT_A_RELEASE_GATE: names/content/rights/gameplay not audited; nothing extracted or uploaded')
 
