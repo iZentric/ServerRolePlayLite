@@ -41,6 +41,17 @@ Pentru Saturn am mers mai departe cu **[B/S/S/B, 39713736343 — PASS 4/4](https
 
 **Decizie:** păstrăm FerriteCore; Saturn ca substitut folosește ~126 MiB mai mult heap după GC în ambele probe, fără avantaj CPU repetabil. Tickul mediu este ușor mai mic pentru Saturn, dar e sub 1 ms într-o lume fără jucători și nu validează capacitatea p95/p99. Nu stivuim Saturn peste FerriteCore doar din popularitate. Sunt măsurători independente de ablația de mai sus și pot varia între rulări; **nu** le combinăm numeric între joburi CI ca pe un singur A/B. Smooth Chunk Save rămâne numai candidat *condiționat de o problemă reală de save/p99*, cu copie, comparație și verificare la restart. Nicio schimbare pe serverul sau clientul instalat.
 
+## O optimizare găsită independent: Starlight original, nu Performant
+
+Am revenit asupra afirmației prea restrictive că nu ar exista Starlight Forge 1.16.5: [release-ul GitHub original PaperMC RC2](https://github.com/PaperMC/Starlight/releases/tag/1.0.0-RC2) conține un **pre-release Forge 1.16.5**. După verificarea assetului SHA-pinned, [canary-ul 28/6 + Starlight 29/6](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39768089449) a trecut; apoi [B/S/S/B pe copii ale aceleiași lumi generate](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39768710154) a schimbat efectiv **24 × 1024 blocuri** stone/glowstone în fiecare braț (B=28, S=29):
+
+| Braț, două observații | CPU s: editări + 12 s de așteptare | RSS după așteptare MiB | Timp până la confirmarea comenzilor s |
+|---|---:|---:|---:|
+| B: fără Starlight | 2,87 / 2,39 | 2056 / 1642 | 0,40 / 0,20 |
+| S: cu Starlight RC2 | **1,40 / 1,39** | 2288 / 2085 | 0,20 / 0,20 |
+
+**Interpretare restrânsă:** există un semnal repetat de economie CPU în această sarcină specială de *editări luminoase*, cu RSS mai mare în probe. Confirmarea comenzilor nu măsoară finalizarea propagării luminii ori p95/p99 MSPT. Nu am verificat luminile corecte și blocurile la restart, lumea RP reală, condusul, clientul sau 13 pluginuri; într-un oraș deja pregenerat optimizarea poate sta aproape inactivă. **Nu adăugăm Starlight la stack-ul implicit**, nici alternativele sale Radon/Sulfuric, fără hotspot real și teste de corectitudine. Pentru că acesta este un candidat descoperit separat de Performant și cu ediție originală verificată, îl documentăm în [auditul de scalare și trierea celorlalte moduri](AUDIT-PLAYER-SCALING-FORGE-1165-2026.md); nu-l numim „record de jucători”.
+
 ## Ce este ales și ce NU se aplică încă
 
 1. **Motor pentru copia de test:** CatServer oficial, nu o fuziune de JAR-uri. Rămâne necesar un build de sursă FunCity verificat pentru orice produs cu brand; atribuirea/licența CatServer rămân vizibile. Nu înlocuim motorul actual de pe PC pe baza laboratorului.
