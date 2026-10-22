@@ -1,6 +1,6 @@
 # Alegerea concretă FunCity RP 1.16.5 — native-first, după testul lean (22.10.2026)
 
-**Aleg acum:** **CatServer oficial 23.05.26-1, cu ținta existentă de 28 moduri client-aligned / șase pluginuri în laborator**, drept baza cea mai defensabilă pentru **următorul test privat**, nu un nou instalator pe PC. RoadRunner rămâne **singur** (nu cu Performant): pe 28/6 brațul Performant a declanșat un marker fatal și a fost respins. Ksyxis rămâne în țintă cât timp funcțiile zonei spawn nu sunt afectate; ModernFix/FerriteCore au acum probe separate favorabile de CPU/heap în CI, dar nu teste cu jucători. Păstrăm armele, vehiculele, vocea, blocurile, biblioteca lor, InControl și Connectivity până la verificarea funcției. Nu adăugăm Chunk Sending ori alte JAR-uri noi. Configurația propusă cu 22 **nu** devine înlocuitorul celor 28: [lista exactă de comparație](FUNCITY-SERVER-LEAN-22.json) rămâne numai un braț experimental de CI.
+**Aleg acum:** **CatServer oficial 23.05.26-1, cu ținta existentă de 28 moduri client-aligned / șase pluginuri în laborator**, drept baza cea mai defensabilă pentru **următorul test privat**, nu un nou instalator pe PC. RoadRunner rămâne **singur** (nu cu Performant): pe 28/6 brațul Performant a declanșat un marker fatal și a fost respins. Ksyxis rămâne în țintă cât timp funcțiile zonei spawn nu sunt afectate; ModernFix/FerriteCore au acum probe separate favorabile de CPU/heap în CI, dar nu teste cu jucători. Păstrăm armele, vehiculele, vocea, blocurile, biblioteca lor, InControl și Connectivity până la verificarea funcției. Nu adăugăm Chunk Sending ori alte JAR-uri noi: Saturn a pornit, dar a pierdut la heap față de FerriteCore într-o substituție măsurată; Smooth Chunk Save a trecut doar bootul, nu un test de salvare. Configurația propusă cu 22 **nu** devine înlocuitorul celor 28: [lista exactă de comparație](FUNCITY-SERVER-LEAN-22.json) rămâne numai un braț experimental de CI.
 
 ## Test nou: 28 față de 22, nu doar păreri
 
@@ -27,6 +27,19 @@ Am încercat să scot din **copia izolată** AI Improvements, FastSuite + FastWo
 | M: fără ModernFix | 345,40 / 344,90 | 1905 / 1651 | 5,11 / 4,98 | 0,32 / 0,32 |
 
 **Ce decid aceste probe:** FerriteCore a redus memoria heap post-GC cu ~125 MiB față de brațul fără el, în acest scenariu; fără ModernFix, CPU-ul măsurat a crescut mult în ambele repetări. Nu le scoatem pentru a fi „mai nativi” doar fiindcă sunt JAR-uri. Sunt diferențe de laborator cu 0 jucători și 2 probe/arm, **nu** dovadă de +N jucători, p95/p99 sau lipsă de risc la condus, voice și 13 pluginuri. „Heap post-GC” și RSS măsoară lucruri diferite, iar performanța exactă depinde de lume/hardware.
+
+## Filtru suplimentar 1.16.5: moduri noi testate, fără a îngrămădi JAR-uri
+
+Am verificat edițiile autorului, Forge 1.16.5, partea server, metadata și dependențele. [Canary-ul izolat **39713299824**](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39713299824) a trecut baseline-ul 28/6 și, separat, câte un boot curat 29/6 pentru **Saturn** și **Smooth Chunk Save**, cu fișierele de autor identificate prin file ID și SHA-256 (vezi [registrul pieței](VERIFICARE-PIATA-SERVER-1165-2026.md)). Nu există client ori lume reală în probe. Smooth Chunk Save **nu intră în stack**: bootul nu măsoară spike-uri de salvare, persistența ori coruperea la restart. Fast Async World Save are o dependență suplimentară și schimbă calea de persistență; FastFurnace cere sarcină de cuptoare, Tick Tweaks 1.16.5 identificat e Fabric. Niciunul nu este accelerator demonstrat pentru orașul nostru.
+
+Pentru Saturn am mers mai departe cu **[B/S/S/B, 39713736343 — PASS 4/4](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39713736343)**: B = FerriteCore + ModernFix, S = **Saturn în loc de FerriteCore**, ModernFix păstrat. Aceleași 28 moduri/sase pluginuri, 80 zombie/lume generată, două repetări/arm:
+
+| Memorie optimizer, două observații | Heap post-GC MiB | RSS MiB | CPU s/~30 s | Tick mediu ms |
+|---|---:|---:|---:|---:|
+| **B: FerriteCore** | **321,86 / 321,72** | **1898 / 1797** | 2,02 / 2,37 | 0,77 / 0,82 |
+| S: Saturn, fără FerriteCore | 448,70 / 447,55 | 1997 / 2130 | 2,13 / 1,88 | 0,72 / 0,77 |
+
+**Decizie:** păstrăm FerriteCore; Saturn ca substitut folosește ~126 MiB mai mult heap după GC în ambele probe, fără avantaj CPU repetabil. Tickul mediu este ușor mai mic pentru Saturn, dar e sub 1 ms într-o lume fără jucători și nu validează capacitatea p95/p99. Nu stivuim Saturn peste FerriteCore doar din popularitate. Sunt măsurători independente de ablația de mai sus și pot varia între rulări; **nu** le combinăm numeric între joburi CI ca pe un singur A/B. Smooth Chunk Save rămâne numai candidat *condiționat de o problemă reală de save/p99*, cu copie, comparație și verificare la restart. Nicio schimbare pe serverul sau clientul instalat.
 
 ## Ce este ales și ce NU se aplică încă
 
