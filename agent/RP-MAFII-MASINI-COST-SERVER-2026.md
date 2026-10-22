@@ -21,16 +21,20 @@ Unități: boot secunde până la `Done`; CPU = secunde de CPU consumate în fer
 
 **Interpretare limitată:** Ksyxis arată un **semnal repetat de beneficiu** în această lume generată fără jucători (boot cu ~12–14 s mai rapid și tick mediu mai mic când e prezent). Nu scoatem Ksyxis din ținta de test. Dacă centrul orașului este spawnul activ, efectul poate fi diferit: trebuie confirmat pe copie cu client și pluginuri complete. AI Improvements și triada de rețete au probe suprapuse/inconsecvente în sarcina *fără NPC modat sau crafting*; niciun verdict de „inutil” sau de ștergere. RSS de la grupul R oscilează mult chiar între două rulări. Nu avem p95/p99 ori consumul raportat per JAR.
 
-### Statistici mașini parcate: [rularea 39707192281](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39707192281) — **PASS**, 4/4 brațe
+### Control suplimentar: [A/B RoadRunner vs Performant 39706471113](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39706471113)
 
-16 entități `vehicle:smart_car` confirmate în fiecare probă, pe aceeași platformă/lume generată, șase pluginuri. Fără șoferi sau pachete de poziție spre clienți:
+Acesta este **altă configurație** (15 moduri RP/6 pluginuri și 80 zombie), nu se compară numeric cu cele 28 de mai sus. RoadRunner: CPU s/~30 s **7,64 / 7,82**, tick mediu ms **2,65 / 2,89**, RSS MiB **2317 / 2148**; Performant: CPU **8,27 / 8,41**, tick mediu **2,06 / 2,11**, RSS **2308 / 2349**. Observația se repetă: RoadRunner consumă mai puțin CPU în aceste două probe, Performant arată medie de tick mai mică; fără clienți/mașini în mișcare, 34/13 și p95/p99 nu alegem un înlocuitor, nici nu le cumulăm.
+
+### Statistici exploratorii mașini: [rularea 39707192281](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39707192281) — **PASS inițial, dar rezultat NEVALIDAT la verificarea continuității**
+
+16 entități `vehicle:smart_car` confirmate **la începutul** fiecărei probe, pe aceeași platformă/lume generată, șase pluginuri. [Rularea de control 39707899405](https://github.com/iZentric/ServerRolePlayLite/actions/runs/39707899405) a eșuat când harness-ul a cerut verificarea suplimentară a numărului de vehicule **la finalul** ferestrei; cauza exactă (număr diferit sau parsare) nu este încă determinată fără publicarea logurilor brute. Valorile inițiale de mai jos **nu decid dacă RoadRunner câștigă**, până când persistă 16/16 la ambele capete. Fără șoferi sau pachete de poziție spre clienți:
 
 | Braț | Boot s | CPU s/~30 s | RSS MiB | tick mediu ms |
 |---|---|---|---|---|
 | R, 28 cu RoadRunner | 25,80 / 27,80 | 0,89 / 0,85 | 1990 / 1622 | 0,34 / 0,33 |
 | N, 27 fără RoadRunner | 27,04 / 27,05 | 1,07 / 0,98 | 1802 / 2337 | 0,57 / 0,45 |
 
-**Interpretare:** RoadRunner are CPU și tick mediu mai mici în **ambele** observații cu vehicule *nemişcate*, deci nu îl scoatem doar pentru a scădea numărul de JAR-uri. RSS are variație mare, nu acordăm câștig RAM. Mișcarea, condusul, coliziunile, traficul de rețea, lumea cu clădiri și mafii și celelalte șapte pluginuri rămân netestate; cifrele de mai sus **nu** dau plafon de jucători.
+**Interpretare condiționată:** valorile inițiale RoadRunner au CPU și tick mediu mai mici în **ambele** observații, dar verificarea de continuitate a vehiculelor a eșuat într-o rerulare. Este un *semnal de investigat*, nu motiv de schimbare a JAR-urilor. RSS are variație mare, nu acordăm câștig RAM. Mișcarea, condusul, coliziunile, traficul de rețea, lumea cu clădiri și mafii și celelalte șapte pluginuri rămân netestate; cifrele de mai sus **nu** dau plafon de jucători.
 
 **Regulă de interpretare:** două probe de 30 s și o medie `forge tps` arată doar comportamentul laboratorului; diferența poate fi zgomot de JVM/GC, ordine, configurația din template sau lumea sintetică. Nu scoatem automat moduri când rezultatele sunt apropiate, nici nu promovăm un mod pentru un singur număr bun. Datele care *pot* conduce la o decizie: profil al hotspotului pe copia privată a lumii pregenerate, inventar exact al celor șase JAR-uri extra și al celor 13 pluginuri, două sesiuni cu clienți Forge reali conduși prin oraș, cu p95/p99 tick, FPS p5, CPU thread principal, RSS/GC, disc, upload/UDP, număr de vehicule și interacțiuni mafie/economie. Protocolul cu praguri: [capacitate RP](CAPACITATE-FUNCITY-RP.md).
 

@@ -46,6 +46,10 @@ def confirmed_vehicle_count(text, snapshots=1):
     """Scoreboard RESULT of an entity selector, not a summon-success guess."""
     matches = re.findall(r'#cars has (\d+) \[fcbench\]', text)
     if len(matches) != snapshots or any(int(n) != VEHICLES for n in matches):
+        # Only synthetic entity counts, not raw log lines/worlds/identifiers.
+        print('::notice title=Synthetic parked car continuity gate::' +
+              'requested_snapshots=' + str(snapshots) +
+              ' observed_counts=' + json.dumps([int(n) for n in matches[:3]]), flush=True)
         raise ValueError('stationary modded vehicle entity count unconfirmed')
     return VEHICLES
 
@@ -77,9 +81,10 @@ def run_vehicle(stage, report):
             if j.p.poll() is not None:
                 raise ValueError('server exited during vehicle measurement')
             samples.append(proc_sample(j.p.pid))
+        j.send('scoreboard players set #cars fcbench -1')  # reject stale 16 if count command fails
         j.send('execute store result score #cars fcbench if entity @e[type=vehicle:smart_car]')
         j.send('scoreboard players get #cars fcbench')
-        time.sleep(2)
+        time.sleep(3)
         text = log.read_text(encoding='utf-8', errors='replace')
         confirmed_vehicle_count(text, snapshots=2)  # unchanged before AND after observation
         values = [float(x) for x in OVERALL.findall(text)]
