@@ -1,0 +1,75 @@
+name: Verify HidenCloud active root engine and port read-only
+# Download only server.jar and server.properties privately to PC runner temp.
+# Never print contents, filenames from listings, hashes of private files, or secrets.
+# No remote or local live server writes, no server start, no artifacts.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-hidencloud-active-root-preflight.yml]
+permissions:
+  contents: read
+jobs:
+  active-root-read-only:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 5
+    steps:
+      - name: Compare active engine with PC backup and inspect host binding flags
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          $temp=$null
+          try {
+            if (-not $env:RUNNER_TEMP -or -not $env:GITHUB_RUN_ID -or $env:GITHUB_RUN_ID -notmatch '^\d+$') { throw 'RUNNER_MISSING' }
+            $key=Join-Path $env:USERPROFILE '.ssh\funcity_hidencloud_ed25519_rotated'
+            $original=Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\Arena-Private-Backups\offline-39843776626\server\FunCityEngine.jar'
+            if (-not (Test-Path -LiteralPath $key -PathType Leaf) -or -not (Test-Path -LiteralPath $original -PathType Leaf)) { throw 'LOCAL_SOURCE_MISSING' }
+            $sftp=(Get-Command sftp.exe -ErrorAction Stop).Source
+            $keygen=(Get-Command ssh-keygen.exe -ErrorAction Stop).Source
+            $temp=Join-Path $env:RUNNER_TEMP ('fc-active-check-' + $env:GITHUB_RUN_ID)
+            if (Test-Path -LiteralPath $temp) { throw 'TEMP_EXISTS' }
+            [void](New-Item -ItemType Directory -Path $temp -ErrorAction Stop)
+            $batch=Join-Path $temp 'commands.txt'
+            $known=Join-Path $temp 'known_hosts'
+            $privateOutput=Join-Path $temp 'private-output.txt'
+            $hostJar=Join-Path $temp 'host-server.jar'
+            $hostProps=Join-Path $temp 'host-server.properties'
+            $connection=@('-q','-b',$batch,'-P','2022','-i',$key,
+              '-o','BatchMode=yes','-o','IdentitiesOnly=yes',
+              '-o','PreferredAuthentications=publickey','-o','PasswordAuthentication=no',
+              '-o','KbdInteractiveAuthentication=no','-o',('UserKnownHostsFile=' + $known),
+              '-o','ConnectTimeout=12')
+            $destination='izentric-150380.6ddc2b7d@olivia.hidencloud.com'
+            [IO.File]::WriteAllText($batch,"pwd`nbye`n",[Text.Encoding]::ASCII)
+            & $sftp @connection -o 'StrictHostKeyChecking=accept-new' $destination 1>$privateOutput 2>$null
+            if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $known -PathType Leaf)) { throw 'CONNECTION_FAILED' }
+            $fingerprints=@(& $keygen -lf $known 2>$null)
+            if ($LASTEXITCODE -ne 0 -or $fingerprints.Count -ne 1 -or
+              $fingerprints[0] -notmatch '\sSHA256:8B88Xl\+b19yzYinbJ9bZxwc79nW1sBZrF0XvGiCqdd4\s') { throw 'SERVER_HOST_KEY_CHANGED' }
+            $jarLocal=$hostJar.Replace([char]92,[char]47)
+            $propsLocal=$hostProps.Replace([char]92,[char]47)
+            [IO.File]::WriteAllText($batch,
+              ('get server.jar "' + $jarLocal + '"' + "`n" + 'get server.properties "' + $propsLocal + '"' + "`nbye`n"),
+              [Text.Encoding]::ASCII)
+            & $sftp @connection -o 'StrictHostKeyChecking=yes' $destination 1>$privateOutput 2>$null
+            if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $hostJar -PathType Leaf) -or
+              -not (Test-Path -LiteralPath $hostProps -PathType Leaf)) { throw 'READ_ONLY_DOWNLOAD_FAILED' }
+            $sameEngine=((Get-FileHash -LiteralPath $hostJar -Algorithm SHA256).Hash -eq
+              (Get-FileHash -LiteralPath $original -Algorithm SHA256).Hash)
+            $catServerOfficial=((Get-FileHash -LiteralPath $hostJar -Algorithm SHA256).Hash -ieq
+              '8edea98c597e7af44a45ef9093678c38ca3749d55a71cdff10218c1c6b946fd0')
+            $lines=@(Get-Content -LiteralPath $hostProps -ErrorAction Stop)
+            $ipLine=@($lines | Where-Object { $_ -match '^server-ip=' })
+            $portLine=@($lines | Where-Object { $_ -match '^server-port=' })
+            $loopback=($ipLine.Count -eq 1 -and $ipLine[0] -match '^server-ip=(127\.0\.0\.1|localhost)$')
+            $portCorrect=($portLine.Count -eq 1 -and $portLine[0] -eq 'server-port=24595')
+            $offlineMode=@($lines | Where-Object { $_ -eq 'online-mode=false' }).Count -eq 1
+            Write-Output ('::notice title=HidenCloud active server preflight::SERVER_JAR_MATCHES_PC_ENGINE=' + $sameEngine +
+              ' SERVER_JAR_IS_OFFICIAL_CATSERVER=' + $catServerOfficial + ' SERVER_IP_LOOPBACK=' + $loopback +
+              ' SERVER_PORT_MATCHES_ALLOCATION=' + $portCorrect + ' ONLINE_MODE_FALSE=' + $offlineMode +
+              ' ROOT_FILES_READ_ONLY=true STARTUP_NOT_TESTED=true')
+          } catch {
+            Write-Output '::error title=HidenCloud active server preflight::CHECK_UNVERIFIED; no remote changes'
+            exit 2
+          } finally {
+            if ($temp -and (Test-Path -LiteralPath $temp)) { Remove-Item -LiteralPath $temp -Recurse -Force -ErrorAction SilentlyContinue }
+          }
