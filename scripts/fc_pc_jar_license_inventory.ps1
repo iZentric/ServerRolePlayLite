@@ -45,7 +45,7 @@ try {
         if ($byName.ContainsKey($file.Name)) { throw 'DUPLICATE_NAME' }
         $byName[$file.Name]=$file
     }
-    $labels=@{}; $licenseFileCount=0; $missing=@()
+    $labels=@{}; $licenseFileCount=0; $missing=@(); $review=@()
     foreach ($name in @($target.mods)) {
         if (-not $byName.ContainsKey($name)) { throw 'TARGET_FILE_NOT_ON_PC' }
         $info=Metadata $byName[$name]
@@ -53,6 +53,11 @@ try {
         $labels[$info.label]++
         if ($info.licenseFile) { $licenseFileCount++ }
         if ($info.label -eq 'UNDECLARED') { $missing += ($name -replace '[^A-Za-z0-9 ._()+-]','_') }
+        if ($info.label -match '^(?i)(All rights reserved|ARR|Custom license|Insert License Here|Not specified|UNDECLARED)$') {
+            # All these exact filenames are already public in FUNCITY-SERVER-TARGET-28.json.
+            # This is a triage hint, never a redistribution decision or license grant.
+            $review += (($name -replace '[^A-Za-z0-9 ._()+-]','_') + '=' + $info.label)
+        }
     }
     $pluginLicenseFiles=0; $pluginMetadata=0
     foreach ($file in $plugins) {
@@ -65,6 +70,7 @@ try {
     Write-Output ('::notice title=Server target JAR license metadata read only::target_mods=28 classes=' + $classes + ' license_file_in_jar=' + $licenseFileCount + '/28; metadata_is_NOT_redistribution_permission=true')
     Write-Output ('::notice title=Installed plugin JAR license metadata read only::plugins=13 license_file_in_jar=' + $pluginLicenseFiles + '/13 forge_metadata=' + $pluginMetadata + '/13; no_plugin_names_or_bytes_published=true')
     if ($missing.Count -gt 0) { Write-Output ('::notice title=Target JARs without Forge license field::' + ($missing -join ' | ')) }
+    if ($review.Count -gt 0) { Write-Output ('::notice title=Public target names requiring manual rights review::' + ($review -join ' | ')) }
     Write-Output 'PASS: metadata inventory complete, no file copied, no release or live change'
     exit 0
 } catch {
