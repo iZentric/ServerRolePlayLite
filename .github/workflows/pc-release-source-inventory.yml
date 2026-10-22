@@ -1,0 +1,95 @@
+name: PC release source inventory (read-only)
+# Inventory only: never copy or upload mods, server files, worlds, accounts or logs.
+# Do not stop/start any process, modify Prism or read private configs.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-release-source-inventory.yml]
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare allowlisted file names in memory; report counts only
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          function Notice([string]$title, [string]$value) {
+            Write-Output ('::notice title=' + $title + '::' + $value)
+          }
+          function PlainDirectory([string]$path) {
+            if (-not (Test-Path -LiteralPath $path -PathType Container)) { return $false }
+            $item = Get-Item -LiteralPath $path -Force
+            return (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0)
+          }
+          function JarNames([string]$path) {
+            if (-not (PlainDirectory $path)) { return @() }
+            return @(Get-ChildItem -LiteralPath $path -File -Filter '*.jar' -ErrorAction Stop |
+              Where-Object { ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0 } |
+              ForEach-Object { $_.Name })
+          }
+          $lite = Get-Content -LiteralPath 'agent/FUNCITY-RP-LITE-SELECTIE.json' -Raw -Encoding UTF8 | ConvertFrom-Json
+          $original = Get-Content -LiteralPath 'agent/FREEROAM-LISTA-DECLARATA.json' -Raw -Encoding UTF8 | ConvertFrom-Json
+          if ($lite.ready_for_release -or $lite.retained_in_future_target.Count -ne 22 -or $original.jar_names.Count -ne 28) {
+            throw 'UNEXPECTED_MANIFEST_STATE'
+          }
+          $roots = @()
+          if ($env:APPDATA) { $roots += Join-Path $env:APPDATA 'PrismLauncher' }
+          $roots += 'C:\Users\Administrator\AppData\Roaming\PrismLauncher'
+          $roots = @($roots | Select-Object -Unique)
+          $profiles = @()
+          foreach ($root in $roots) {
+            foreach ($relative in @('instances','Arena-Archived-Instances')) {
+              $container = Join-Path $root $relative
+              if (-not (PlainDirectory $container)) { continue }
+              $dirs = @(Get-ChildItem -LiteralPath $container -Directory -ErrorAction Stop | Select-Object -First 80)
+              foreach ($dir in $dirs) {
+                if (($dir.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { continue }
+                $profiles += $dir.FullName
+                if ($relative -eq 'Arena-Archived-Instances') {
+                  $profiles += @(Get-ChildItem -LiteralPath $dir.FullName -Directory -ErrorAction Stop |
+                    Where-Object { ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0 } |
+                    Select-Object -First 80 | ForEach-Object { $_.FullName })
+                }
+              }
+            }
+          }
+          $profiles = @($profiles | Select-Object -Unique)
+          $originalFound = 0; $bestOriginal = 0; $liteFound = 0; $bestLite = 0
+          foreach ($profile in $profiles) {
+            $name = Split-Path $profile -Leaf
+            $minecraft = Join-Path $profile '.minecraft'
+            if (-not (PlainDirectory $minecraft)) { $minecraft = Join-Path $profile 'minecraft' }
+            $mods = @(JarNames (Join-Path $minecraft 'mods'))
+            if ($name -eq 'Freeroam 1.0.0') {
+              $originalFound++
+              $matching = @($original.jar_names | Where-Object { $_ -in $mods }).Count
+              if ($matching -gt $bestOriginal) { $bestOriginal = $matching }
+            }
+            if ($name -eq 'FunCity-Lite-LowSpec-LAB-1.16.5' -or $name -eq 'FunCity RP Lite') {
+              $liteFound++
+              $matching = @($lite.retained_in_future_target | Where-Object { $_ -in $mods }).Count
+              if ($matching -gt $bestLite) { $bestLite = $matching }
+            }
+          }
+          Notice 'PC client release sources read only' "original_profiles=$originalFound original_declared_name_matches_best=$bestOriginal/28 lite_profiles=$liteFound lite_target_name_matches_best=$bestLite/22; NO_CLIENT_COPY"
+          $servers = @('C:\Users\Administrator\Desktop\FunCityLocal\server', 'E:\Administrator\Desktop\FunCity\FunCity server')
+          foreach ($server in $servers) {
+            if (-not (PlainDirectory $server)) { continue }
+            $mods = @(JarNames (Join-Path $server 'mods'))
+            $plugins = @(JarNames (Join-Path $server 'plugins'))
+            $engineCount = @(JarNames $server).Count
+            Notice 'PC server release source read only' "mod_jars=$($mods.Count) plugin_jars=$($plugins.Count) root_jars=$engineCount; NO_SERVER_COPY_NO_WORLD"
+          }
+          $downloadRoots = @('E:\Administrator\Downloads')
+          if ($env:USERPROFILE) { $downloadRoots += Join-Path $env:USERPROFILE 'Downloads' }
+          foreach ($downloadRoot in @($downloadRoots | Select-Object -Unique)) {
+            if (-not (PlainDirectory $downloadRoot)) { continue }
+            $candidates = @(Get-ChildItem -LiteralPath $downloadRoot -File -ErrorAction Stop |
+              Where-Object { $_.Extension -in @('.mrpack','.zip') -and $_.Name -match '^(?i:Freeroam|FunCity|FUNCITY)' })
+            Notice 'PC existing project archives read only' "count=$($candidates.Count); NO_ARCHIVE_OPENED_NO_UPLOAD"
+          }
+          Notice 'PC release inventory scope' 'read_only=true player_data=false worlds=false secrets=false files_uploaded=0 process_changed=0'
