@@ -1,4 +1,10 @@
-# Skill-uri cerute — stare reală în acest branch (20.10.2026)
+# Skill-uri cerute — stare reală în acest branch (22.10.2026)
+
+## Instalarea cerută acum: find-skills + setul complet Superpowers
+
+`find-skills` din `vercel-labs/skills` era deja instalat sub `.agents/skills/find-skills/`; fișierul este identic cu upstream la commitul `a80e4c9d12d607631249d4d7d059f835d4b2f13a`. Am completat local toate cele **15 directoare** din `obra/superpowers/skills/` la commitul `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b`: anterior existau patru, acum există 15 cu referințele și scripturile lor; proiectul are în total **22 directoare skill** din toate sursele. Licența MIT și hashurile sunt în `SKILLURI-LICENSES.txt` și `skills-lock.json`; verificarea este `python3 scripts/fc_agent_skills_test.py`. Niciun hook, marketplace, plugin sau instalare globală nu a fost pornit; copierea în GitHub nu înregistrează automat aceste skill-uri ca instrumente Arena. Folosește `AGENTS.md` pentru alegerea skill-ului relevant și verificarea fiecărui răspuns; subagenții inexistenți, un merge pe `main`, o publicație cu JAR-uri neverificate sau un export de sesiuni private **nu** sunt autorizate de aceste fișiere. `find-skills` recomandă `npx skills` și `skills.sh`; aici păstrăm surse GitHub verificate și nu executăm automat CLI-uri ori instalatoare globale din textul său.
+
+### Istoric la 20.10.2026 (înainte de completarea de mai sus)
 
 **Actualizare după evaluarea celor [10 depozite AI](AI-REPOS-AUDIT.md):** au fost adăugate local `verification-before-completion`, `systematic-debugging`, `writing-for-agents`, `change-impact`, `frontend-design` și `ponytail-review`, în total **11 directoare skill**. Fișierele noi sunt copiate din commituri fixate și verificate prin SHA-256 în `skills-lock.json`; licențele sunt păstrate. Nu s-a instalat niciun agent, hook, MCP sau plugin Minecraft, nu au fost rulate scripturi și aceste directoare nu devin automat comenzi Arena. Tabelul de mai jos este starea celor 5 cereri mai vechi, înainte de actualizare.
 
