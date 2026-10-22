@@ -1,6 +1,6 @@
 name: Official Forge 1.16.5 server candidates - separate closed canaries
 # Research only: new runner, one process at a time, no PC/real world/clients.
-# First official fetch records SHAs; pin before any measured A/B. No rollout.
+# Exact author file IDs and first-hosted-retrieval SHAs pinned. No rollout.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
@@ -56,6 +56,7 @@ jobs:
           curl -fsSL --connect-timeout 10 --max-time 90 --retry 1 \
             'https://www.curseforge.com/api/v1/mods/670986/files/4017215/download' \
             -o "$root/saturn-mc1.16.5-0.0.3.jar"
+          echo "c7ad5a2b51c58e7da78bca343a3ce55ab390205e965baa87d35b78af6b650953  $root/saturn-mc1.16.5-0.0.3.jar" | sha256sum -c -
       - name: Get author's exact Smooth Chunk Save Forge 1.16.5 file 4453876
         run: |
           set -Eeuo pipefail
@@ -63,6 +64,7 @@ jobs:
           curl -fsSL --connect-timeout 10 --max-time 90 --retry 1 \
             'https://www.curseforge.com/api/v1/mods/582327/files/4453876/download' \
             -o "$root/smoothchunk1.16.5-2.0.jar"
+          echo "e7ab1d4fd31ee8e8be75a711df7b403d54a86514432302c8ad79a87851a2bc26  $root/smoothchunk1.16.5-2.0.jar" | sha256sum -c -
       - name: Validate Forge metadata, then closed baseline and each candidate separately
         run: |
           set -Eeuo pipefail

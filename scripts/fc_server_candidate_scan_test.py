@@ -6,6 +6,8 @@ from tempfile import TemporaryDirectory
 from unittest.mock import patch
 from zipfile import ZipFile
 
+import fc_server_candidate_scan as scan
+from fc_plugin_first_stage import sha
 from fc_server_candidate_scan import CANDIDATES, verify
 
 
@@ -31,19 +33,22 @@ def main():
     with TemporaryDirectory() as d:
         root = Path(d)
         with patch.dict(os.environ, {'RUNNER_TEMP': d}):
-            for label, (name, file_id, _) in CANDIDATES.items():
+            for label, (name, file_id, project_id, _) in CANDIDATES.items():
                 path = root/name
                 create(path, label)
-                result = verify(root, label)
-                assert result[0] == path and result[1] == label and result[3] == file_id
-                path.unlink()
-                create(path, label, 'unapprovedclientmod')
-                reject(lambda: verify(root, label))
-                path.unlink()
-                path.symlink_to(root/'arbitrary.jar')
-                reject(lambda: verify(root, label))
-                path.unlink()
-                create(path, label)
+                with patch.dict(scan.CANDIDATES, {label: (name, file_id, project_id, sha(path))}):
+                    result = verify(root, label)
+                    assert result[0] == path and result[1] == label and result[3] == file_id
+                    with patch.dict(scan.CANDIDATES, {label: (name, file_id, project_id, '0'*64)}):
+                        reject(lambda: verify(root, label))
+                    path.unlink()
+                    create(path, label, 'unapprovedclientmod')
+                    reject(lambda: verify(root, label))
+                    path.unlink()
+                    path.symlink_to(root/'arbitrary.jar')
+                    reject(lambda: verify(root, label))
+                    path.unlink()
+                    create(path, label)
     print('PASS: two distinct exact author artifacts, Forge mod IDs, no new client dependency or symlink')
 
 

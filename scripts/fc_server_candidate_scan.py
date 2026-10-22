@@ -19,14 +19,16 @@ from fc_plugin_first_stage import sha
 from fc_server_optimizer_ab import run_one
 
 CANDIDATES = {
-    'saturn': ('saturn-mc1.16.5-0.0.3.jar', 4017215, 670986),
-    'smooth': ('smoothchunk1.16.5-2.0.jar', 4453876, 582327),
+    'saturn': ('saturn-mc1.16.5-0.0.3.jar', 4017215, 670986,
+               'c7ad5a2b51c58e7da78bca343a3ce55ab390205e965baa87d35b78af6b650953'),
+    'smooth': ('smoothchunk1.16.5-2.0.jar', 4453876, 582327,
+               'e7ab1d4fd31ee8e8be75a711df7b403d54a86514432302c8ad79a87851a2bc26'),
 }
 PHASE = 'PREFLIGHT'
 
 
 def verify(root, label):
-    name, file_id, project_id = CANDIDATES[label]
+    name, file_id, project_id, expected_sha = CANDIDATES[label]
     path = root/name
     if (path.is_symlink() or not path.is_file() or path.resolve() != root/name or
             not 1000 < path.stat().st_size < 100_000):
@@ -38,9 +40,10 @@ def verify(root, label):
     if any(dep not in ('minecraft', 'forge') for deps in
            data['required_dependencies'].values() for dep in deps):
         raise ValueError('candidate needs a new mod dependency')
-    # File/project IDs are pinned by the workflow's author endpoint; SHA is
-    # reported on first retrieval and MUST be pinned before a measured A/B.
-    return path, data['mod_ids'][0], sha(path), file_id, project_id
+    digest = sha(path)
+    if digest != expected_sha:
+        raise ValueError('official candidate bytes changed since hosted SHA capture')
+    return path, data['mod_ids'][0], digest, file_id, project_id
 
 
 def main(root, engine, archive, motor, core, guava):
@@ -55,7 +58,7 @@ def main(root, engine, archive, motor, core, guava):
     for label, (_, modid, digest, file_id, _) in inspected.items():
         print('::notice title=Official Forge 1.16.5 candidate metadata::candidate=' + label +
               ' file_id=' + str(file_id) + ' mod_id=' + modid + ' sha256=' + digest +
-              ' SHA_NOT_YET_PINNED no_promotion=true', flush=True)
+              ' SHA_PINNED=true no_promotion=true', flush=True)
     PHASE = 'BASELINE'
     full_boot(root, 'catserver-official', engine, archive, motor, core, guava)
     stage = root/'stage'
