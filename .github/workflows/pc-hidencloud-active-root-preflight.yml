@@ -33,6 +33,7 @@ jobs:
             $privateOutput=Join-Path $temp 'private-output.txt'
             $hostJar=Join-Path $temp 'host-server.jar'
             $hostProps=Join-Path $temp 'host-server.properties'
+            $hostEula=Join-Path $temp 'host-eula.txt'
             $connection=@('-q','-b',$batch,'-P','2022','-i',$key,
               '-o','BatchMode=yes','-o','IdentitiesOnly=yes',
               '-o','PreferredAuthentications=publickey','-o','PasswordAuthentication=no',
@@ -47,12 +48,15 @@ jobs:
               $fingerprints[0] -notmatch '\sSHA256:8B88Xl\+b19yzYinbJ9bZxwc79nW1sBZrF0XvGiCqdd4\s') { throw 'SERVER_HOST_KEY_CHANGED' }
             $jarLocal=$hostJar.Replace([char]92,[char]47)
             $propsLocal=$hostProps.Replace([char]92,[char]47)
+            $eulaLocal=$hostEula.Replace([char]92,[char]47)
             [IO.File]::WriteAllText($batch,
-              ('get server.jar "' + $jarLocal + '"' + "`n" + 'get server.properties "' + $propsLocal + '"' + "`nbye`n"),
+              ('get server.jar "' + $jarLocal + '"' + "`n" + 'get server.properties "' + $propsLocal + '"' +
+               "`n" + 'get eula.txt "' + $eulaLocal + '"' + "`nbye`n"),
               [Text.Encoding]::ASCII)
             & $sftp @connection -o 'StrictHostKeyChecking=yes' $destination 1>$privateOutput 2>$null
             if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $hostJar -PathType Leaf) -or
-              -not (Test-Path -LiteralPath $hostProps -PathType Leaf)) { throw 'READ_ONLY_DOWNLOAD_FAILED' }
+              -not (Test-Path -LiteralPath $hostProps -PathType Leaf) -or
+              -not (Test-Path -LiteralPath $hostEula -PathType Leaf)) { throw 'READ_ONLY_DOWNLOAD_FAILED' }
             $sameEngine=((Get-FileHash -LiteralPath $hostJar -Algorithm SHA256).Hash -eq
               (Get-FileHash -LiteralPath $original -Algorithm SHA256).Hash)
             $catServerOfficial=((Get-FileHash -LiteralPath $hostJar -Algorithm SHA256).Hash -ieq
@@ -63,9 +67,13 @@ jobs:
             $loopback=($ipLine.Count -eq 1 -and $ipLine[0] -match '^server-ip=(127\.0\.0\.1|localhost)$')
             $portCorrect=($portLine.Count -eq 1 -and $portLine[0] -eq 'server-port=24595')
             $offlineMode=@($lines | Where-Object { $_ -eq 'online-mode=false' }).Count -eq 1
+            $rconEnabled=@($lines | Where-Object { $_ -eq 'enable-rcon=true' }).Count -eq 1
+            $queryEnabled=@($lines | Where-Object { $_ -eq 'enable-query=true' }).Count -eq 1
+            $eulaAccepted=@(Get-Content -LiteralPath $hostEula | Where-Object { $_ -eq 'eula=true' }).Count -eq 1
             Write-Output ('::notice title=HidenCloud active server preflight::SERVER_JAR_MATCHES_PC_ENGINE=' + $sameEngine +
               ' SERVER_JAR_IS_OFFICIAL_CATSERVER=' + $catServerOfficial + ' SERVER_IP_LOOPBACK=' + $loopback +
               ' SERVER_PORT_MATCHES_ALLOCATION=' + $portCorrect + ' ONLINE_MODE_FALSE=' + $offlineMode +
+              ' RCON_ENABLED=' + $rconEnabled + ' QUERY_ENABLED=' + $queryEnabled + ' EULA_ACCEPTED=' + $eulaAccepted +
               ' ROOT_FILES_READ_ONLY=true STARTUP_NOT_TESTED=true')
           } catch {
             Write-Output '::error title=HidenCloud active server preflight::CHECK_UNVERIFIED; no remote changes'
