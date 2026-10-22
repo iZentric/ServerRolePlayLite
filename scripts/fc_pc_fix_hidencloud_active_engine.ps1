@@ -41,10 +41,13 @@ try {
     if ($manifest.consistent_offline_snapshot -ne $true -or $manifest.independent_restore_copy_verified -ne $true) { throw 'NOT_A_VERIFIED_OFFLINE_BACKUP' }
     $engineExpected=$manifest.sha256.PSObject.Properties['FunCityEngine.jar']
     $oldExpected=$manifest.sha256.PSObject.Properties['server.jar']
-    if ($null -eq $engineExpected -or $null -eq $oldExpected) { throw 'SOURCE_JAR_NOT_IN_BACKUP_MANIFEST' }
+    if ($null -eq $engineExpected) { throw 'WORKING_ENGINE_NOT_IN_BACKUP_MANIFEST' }
+    # server.jar may be a pre-existing HidenCloud file, not a PC backup file.
+    # Preserve and hash it independently rather than assuming its provenance.
     $phase='SOURCE_SHA'
     $engineHash=(Get-FileHash -LiteralPath $source -Algorithm SHA256 -ErrorAction Stop).Hash
-    if ($engineHash -cne $engineExpected.Value -or $engineHash -ceq $oldExpected.Value) { throw 'SOURCE_SHA_UNEXPECTED' }
+    if ($engineHash -cne $engineExpected.Value -or
+        ($null -ne $oldExpected -and $engineHash -ceq $oldExpected.Value)) { throw 'SOURCE_SHA_UNEXPECTED' }
     $phase='PC_OPENSSH_CLIENT'
     $sftp=(Get-Command sftp.exe -ErrorAction Stop).Source
     $keygen=(Get-Command ssh-keygen.exe -ErrorAction Stop).Source
@@ -74,7 +77,7 @@ try {
     $oldLocalArg=$oldLocal.Replace([char]92,[char]47)
     Invoke-PrivateSftp ('get server.jar "' + $oldLocalArg + '"')
     $oldHash=(Get-FileHash -LiteralPath $oldLocal -Algorithm SHA256 -ErrorAction Stop).Hash
-    if ($oldHash -cne $oldExpected.Value) { throw 'HOST_JAR_CHANGED_SINCE_FULL_SHA_CHECK' }
+    if ($null -ne $oldExpected -and $oldHash -cne $oldExpected.Value) { throw 'HOST_JAR_CHANGED_SINCE_FULL_SHA_CHECK' }
 
     $phase='UPLOAD_NEW_JAR_CANDIDATE'
     $candidate='server.jar.funcity-candidate-' + $env:GITHUB_RUN_ID
@@ -95,6 +98,11 @@ try {
     $phase='SAVE_OLD_JAR_UNDER_UNIQUE_ROLLBACK_NAME'
     Invoke-PrivateSftp ('rename server.jar ' + $rollbackName)
     $oldMoved=$true
+    $rollbackLocal=Join-Path $temp 'rollback-readback.jar'
+    Invoke-PrivateSftp ('get ' + $rollbackName + ' "' + $rollbackLocal.Replace([char]92,[char]47) + '"')
+    if ((Get-FileHash -LiteralPath $rollbackLocal -Algorithm SHA256 -ErrorAction Stop).Hash -cne $oldHash) {
+        throw 'OLD_HOST_JAR_ROLLBACK_SHA_MISMATCH'
+    }
     $phase='PROMOTE_VERIFIED_ENGINE'
     Invoke-PrivateSftp ('rename ' + $candidate + ' server.jar')
     $promoted=$true
