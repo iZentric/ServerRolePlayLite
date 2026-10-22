@@ -46,18 +46,25 @@ jobs:
           # Override build JVM flags without altering CatServer runtime source/config.
           # Upstream documents setup THEN build as separate Gradle invocations.
           # The combined graph compiled :forge without mapped Minecraft classes.
-          if ! (./gradlew '-Dorg.gradle.jvmargs=-Xmx2G -Dfile.encoding=UTF-8' \
-                   setup --no-daemon --max-workers=2 \
-                   > "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1 &&
-                ./gradlew '-Dorg.gradle.jvmargs=-Xmx2G -Dfile.encoding=UTF-8' \
-                   :forge:buildCatServer --no-daemon --max-workers=2 \
-                   >> "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1); then
+          if ! ./gradlew '-Dorg.gradle.jvmargs=-Xmx2G -Dfile.encoding=UTF-8' \
+               setup --no-daemon --max-workers=2 \
+               > "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
             python3 "$GITHUB_WORKSPACE/scripts/fc_gradle_failure_classifier.py" \
               "$RUNNER_TEMP/fc-catserver-build-private.log"
-            echo '::error title=FunCity source build::BUILD_FAILED; no binary promoted or uploaded.'
+            echo '::error title=FunCity source build::SETUP_FAILED; no binary promoted or uploaded.'
             exit 2
           fi
-          jars=(forge/build/libs/CatServer-1.16.5-*-server.jar)
+          echo '::notice title=FunCity source build::UPSTREAM_SETUP_PASS; no JAR published.'
+          if ! ./gradlew '-Dorg.gradle.jvmargs=-Xmx2G -Dfile.encoding=UTF-8' \
+               :forge:buildCatServer --no-daemon --max-workers=2 \
+               >> "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
+            python3 "$GITHUB_WORKSPACE/scripts/fc_gradle_failure_classifier.py" \
+              "$RUNNER_TEMP/fc-catserver-build-private.log"
+            echo '::error title=FunCity source build::COMPILE_FAILED; no binary promoted or uploaded.'
+            exit 2
+          fi
+          # :forge projectDir is projects/forge (settings.gradle), not ./forge.
+          jars=(projects/forge/build/libs/CatServer-1.16.5-*-server.jar)
           if [ "${#jars[@]}" != 1 ] || [ ! -s "${jars[0]}" ]; then
             echo '::error title=FunCity source build::Expected one server JAR; no candidate promoted.'
             exit 2
