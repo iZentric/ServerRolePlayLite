@@ -5,6 +5,7 @@ from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
 from fc_rp_mod_cost_ab_test import fake_jar
+from fc_plugin_first_stage import sha
 from fc_starlight_official_canary import FILE, verify
 
 
@@ -25,7 +26,8 @@ def main():
         with ZipFile(jar, 'a') as z:
             z.writestr('p', b'0'*(97563-len(data)-78))
         assert jar.stat().st_size == 97563
-        path, digest = verify(root)
+        reject(lambda: verify(root))  # synthetic bytes must not match pinned author SHA
+        path, digest = verify(root, sha(jar))
         assert path == jar and len(digest) == 64
         reject(lambda: verify(root, '0'*64))
         wrong = fake_jar('wrongmod')

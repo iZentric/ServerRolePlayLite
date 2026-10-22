@@ -20,12 +20,12 @@ from fc_server_optimizer_ab import run_one
 FILE = 'starlight-forge-1.0.0-RC2-1.16.5.jar'
 RELEASE = '1.0.0-RC2'
 ASSET_ID = 35665567
-# First trusted hosted retrieval will publish this digest, which MUST be pinned
-# before a measured comparison. Release API pre-2022 does not report a digest.
+# SHA from official hosted release retrieval 39768089449 (GH asset API lacked digest).
+SHA256 = '02c7b7bba187d8a066ce0bbb1f60c1d17961cb4cc2a61a9d0138232a9e1eebf0'
 PHASE = 'PREFLIGHT'
 
 
-def verify(root, expected_sha=None):
+def verify(root, expected_sha=SHA256):
     path = root/FILE
     if (path.is_symlink() or not path.is_file() or path.resolve() != root/FILE
             or path.stat().st_size != 97563):
@@ -36,7 +36,7 @@ def verify(root, expected_sha=None):
                 data['required_dependencies'].values() for dep in deps)):
         raise ValueError('unexpected Forge metadata/mod id/dependency')
     digest = sha(path)
-    if expected_sha is not None and digest != expected_sha:
+    if digest != expected_sha:
         raise ValueError('official release bytes changed')
     return path, digest
 
@@ -50,7 +50,7 @@ def main(root, engine, archive, motor, core, guava):
     path, digest = verify(root)
     print('::notice title=Starlight original 1.16.5 Forge RC2::release=' + RELEASE +
           ' asset_id=' + str(ASSET_ID) + ' sha256=' + digest +
-          ' SHA_NOT_YET_PINNED no_rollout=true', flush=True)
+          ' SHA_PINNED=true no_rollout=true', flush=True)
     PHASE = 'BASELINE'
     full_boot(root, 'catserver-official', engine, archive, motor, core, guava)
     template = root/'stage'

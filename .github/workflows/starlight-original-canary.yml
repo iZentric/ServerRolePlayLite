@@ -1,6 +1,6 @@
 name: Original Starlight Forge 1.16.5 - CatServer hybrid canary
 # Research only: new runner, one process at a time, no PC/real world/clients.
-# Author pre-release GitHub asset; first runner captures SHA. No rollout.
+# Author pre-release GitHub asset SHA pinned from official hosted retrieval. No rollout.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
@@ -56,6 +56,7 @@ jobs:
           gh release download 1.0.0-RC2 -R PaperMC/Starlight \
             -p starlight-forge-1.0.0-RC2-1.16.5.jar \
             -O "$root/starlight-forge-1.0.0-RC2-1.16.5.jar"
+          echo "02c7b7bba187d8a066ce0bbb1f60c1d17961cb4cc2a61a9d0138232a9e1eebf0  $root/starlight-forge-1.0.0-RC2-1.16.5.jar" | sha256sum -c -
       - name: Inspect official metadata then baseline and Starlight independent boots
         run: |
           set -Eeuo pipefail
