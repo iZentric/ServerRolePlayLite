@@ -26,7 +26,9 @@ jobs:
           mkdir -p "$RUNNER_TEMP/funcity-historic"
           gh release download funcity -R iZentric/ServerRolePlayLite \
             -p FUNCTITY-SERVER.zip -D "$RUNNER_TEMP/funcity-historic"
-          python3 scripts/fc_historic_server_release_audit.py \
+          result=$(python3 scripts/fc_historic_server_release_audit.py \
             --archive "$RUNNER_TEMP/funcity-historic/FUNCTITY-SERVER.zip" \
-            --expected-sha 0752393616e898ede7f1b68f3bb2c68c063235581eca4af6b6d9d02d3cfbb289
+            --expected-sha 0752393616e898ede7f1b68f3bb2c68c063235581eca4af6b6d9d02d3cfbb289)
+          printf '%s\n' "$result"
+          printf '::notice title=Published server ZIP directory only::%s\n' "$(printf '%s\n' "$result" | head -n 1)"
           rm -f "$RUNNER_TEMP/funcity-historic/FUNCTITY-SERVER.zip"
