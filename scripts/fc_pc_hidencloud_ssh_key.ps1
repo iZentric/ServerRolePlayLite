@@ -56,6 +56,13 @@ try {
     if ($publicLine -notmatch '^ssh-ed25519 [A-Za-z0-9+/=]+ funcity-hidencloud-2026-10-22$') {
         throw 'PUBLIC_KEY_INVALID'
     }
+    # The original PC identity was exposed in chat. Never report it as usable;
+    # keep it on disk for deliberate owner-controlled revocation and rotation.
+    $exposedPublicKey = 'AAAAC3NzaC1lZDI1NTE5AAAAIM25Ri3sNCuYzBIPpErBs3rwDSdDM3BWn5qUcgQRMfJy'
+    if (($publicLine -split ' ')[1] -eq $exposedPublicKey) {
+        Write-Output '::error title=SSH key generation::EXPOSED_KEY_ROTATION_REQUIRED; old PC key NOT usable'
+        exit 2
+    }
     $derived = (& $keygen -y -P '""' -f $private 2>$null)
     if ($LASTEXITCODE -ne 0 -or ($derived -split ' ')[1] -ne ($publicLine -split ' ')[1]) {
         throw 'PRIVATE_PUBLIC_MISMATCH'
