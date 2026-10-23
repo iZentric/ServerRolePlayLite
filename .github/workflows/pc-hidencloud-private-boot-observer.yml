@@ -1,7 +1,8 @@
 name: Observe HidenCloud private first boot (read-only)
 # PC self-hosted runner is the only available SFTP path; NOT panel access.
-# On push: one quick smoke check. On manual dispatch: watch about 8 minutes
-# for logs/latest.log to differ from verified PC backup. Never publish log data.
+# A push to this workflow starts a short watch after the smoke check passed.
+# Watch about 8 minutes for logs/latest.log to differ from verified PC backup.
+# Never publish log data.
 # This cannot prove that the panel is online or that players can join.
 on:
   workflow_dispatch:
@@ -59,9 +60,9 @@ jobs:
             $javaError=$false
             $memoryError=$false
             $bindError=$false
-            # A push performs a one-shot connectivity/baseline check; dispatch watches
-            # at 15-second intervals and exits early on a boot/fatal marker.
-            $samples=if ($env:GITHUB_EVENT_NAME -eq 'push') { 1 } else { 30 }
+            # The previous push smoke check passed. Watch at 15-second intervals;
+            # exit early on a boot/fatal marker. No continuously running service.
+            $samples=30
             for ($attempt=0; $attempt -lt $samples; $attempt++) {
               if (Test-Path -LiteralPath $local -PathType Leaf) { Remove-Item -LiteralPath $local -Force }
               & $sftp @connection -o 'StrictHostKeyChecking=yes' $destination 1>$privateOutput 2>$null
