@@ -63,6 +63,8 @@ jobs:
             $errorLines=0
             $errorCategory='NONE'
             $errorSeverity='NONE'
+            $errorTiming='UNKNOWN'
+            $exceptionType='UNKNOWN'
             $pluginLoadError=$false
             $uncaughtServerException=$false
             # One fresh snapshot after first boot, not a process liveness claim.
@@ -86,6 +88,12 @@ jobs:
                   $errorLines=$errorMatches.Count
                   if ($errorLines -eq 1) {
                     $privateError=$errorMatches[0].Value
+                    $doneMatch=[regex]::Match($text,'Done \([0-9.,]+s\)! For help, type')
+                    if ($doneMatch.Success) {
+                      $errorTiming=if ($errorMatches[0].Index -lt $doneMatch.Index) { 'BEFORE_DONE' } else { 'AFTER_DONE' }
+                    }
+                    $knownException=[regex]::Match($privateError,'\b(NullPointerException|IllegalStateException|IllegalArgumentException|IOException|SocketException|RuntimeException|ClassNotFoundException|NoClassDefFoundError|ConcurrentModificationException|TimeoutException|UnsupportedOperationException|OutOfMemoryError)\b')
+                    if ($knownException.Success) { $exceptionType=$knownException.Groups[1].Value }
                     $errorCategory=if ($privateError -match '(?i)voice.?chat|microphone|audio|udp') { 'VOICE' }
                       elseif ($privateError -match '(?i)plugin|mod load|forge|bukkit|dependency') { 'PLUGIN_OR_MOD' }
                       elseif ($privateError -match '(?i)world|chunk|region|level|datapack') { 'WORLD_OR_DATA' }
@@ -112,6 +120,7 @@ jobs:
               ' JAVA_ERROR=' + $javaError + ' MEMORY_ERROR=' + $memoryError +
               ' BIND_ERROR=' + $bindError + ' ERROR_LINES=' + $errorLines +
               ' ERROR_CATEGORY=' + $errorCategory + ' ERROR_SEVERITY=' + $errorSeverity +
+              ' ERROR_TIMING=' + $errorTiming + ' EXCEPTION_TYPE=' + $exceptionType +
               ' PLUGIN_OR_MOD_LOAD_ERROR=' + $pluginLoadError +
               ' UNCAUGHT_SERVER_EXCEPTION=' + $uncaughtServerException +
               ' SFTP_LOG_ONLY=true LIVE_STATUS_NOT_VERIFIED=true NO_REMOTE_WRITES=true')
