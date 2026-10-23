@@ -1,0 +1,42 @@
+name: Backup stopped HidenCloud root to private PC before engine test
+# NEVER run while HidenCloud is Online. Owner must explicitly confirm Offline
+# first. SFTP read-only; private backup stays on PC, never GitHub artifacts.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-checkpoint-host-before-catserver.yml
+      - scripts/fc_pc_backup_stopped_host_before_catserver.ps1
+permissions:
+  contents: read
+concurrency:
+  group: funcity-host-engine-swap-one-at-a-time
+  cancel-in-progress: false
+jobs:
+  syntax:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse checkpoint script without running on host or PC
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path $PWD 'scripts/fc_pc_backup_stopped_host_before_catserver.ps1'),
+            [ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'OFFLINE_BACKUP_SCRIPT_SYNTAX_FAILED' }
+  pc-checkpoint:
+    if: startsWith(github.event.head_commit.message, 'Backup stopped HidenCloud before CatServer')
+    needs: syntax
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 35
+    env:
+      OWNER_CONFIRMED_OFFLINE: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Privately read back stopped host expected files and SHA every copy
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_backup_stopped_host_before_catserver.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
