@@ -62,6 +62,7 @@ jobs:
             $bindError=$false
             $errorLines=0
             $errorCategory='NONE'
+            $errorSeverity='NONE'
             $pluginLoadError=$false
             $uncaughtServerException=$false
             # One fresh snapshot after first boot, not a process liveness claim.
@@ -91,7 +92,13 @@ jobs:
                       elseif ($privateError -match '(?i)outofmemory|java|jvm|heap|class') { 'JAVA_OR_MEMORY' }
                       elseif ($privateError -match '(?i)connection|network|socket|port') { 'NETWORK' }
                       else { 'OTHER_UNCLASSIFIED' }
-                  } elseif ($errorLines -gt 1) { $errorCategory='MULTIPLE_UNCLASSIFIED' }
+                    $errorSeverity=if ($privateError -match '(?i)missing.{0,30}depend|NoClassDefFoundError|ClassNotFoundException|NoSuchMethodError|UnsupportedClassVersionError') { 'INCOMPATIBLE_OR_MISSING_DEPENDENCY' }
+                      elseif ($privateError -match '(?i)could not load|failed to load|unable to load|error occurred while enabling|failed to register|could not enable|disabled due to') { 'FUNCTIONAL_LOAD_FAILURE' }
+                      elseif ($privateError -match '(?i)update check|checking for updates|metrics|telemetry|http.{0,30}(unavailable|timeout|failed)') { 'OPTIONAL_EXTERNAL_SERVICE' }
+                      elseif ($privateError -match '(?i)permission denied|access denied|read.only|no space left|unable to save') { 'STORAGE_OR_PERMISSIONS' }
+                      elseif ($privateError -match '(?i)exception|caused by|fatal|crash') { 'EXCEPTION_REPORTED' }
+                      else { 'UNCLASSIFIED_NEEDS_PRIVATE_REVIEW' }
+                  } elseif ($errorLines -gt 1) { $errorCategory='MULTIPLE_UNCLASSIFIED'; $errorSeverity='MULTIPLE_UNCLASSIFIED' }
                   $pluginLoadError=($text -match '(?i)Could not load plugin|Error occurred while enabling|Mod loading has failed|Missing or unsupported mandatory dependencies')
                   $uncaughtServerException=($text -match '(?i)Encountered an unexpected exception|Exception in server tick loop')
                   $state=if ($done) { 'DONE_MARKER_SEEN_NOT_LIVE_PROOF' } else { 'NEW_LOG_STARTUP_PENDING' }
@@ -104,7 +111,8 @@ jobs:
               ' NEW_LOG=' + $changed + ' DONE=' + $done + ' STOPPING_SEEN=' + $stopped +
               ' JAVA_ERROR=' + $javaError + ' MEMORY_ERROR=' + $memoryError +
               ' BIND_ERROR=' + $bindError + ' ERROR_LINES=' + $errorLines +
-              ' ERROR_CATEGORY=' + $errorCategory + ' PLUGIN_OR_MOD_LOAD_ERROR=' + $pluginLoadError +
+              ' ERROR_CATEGORY=' + $errorCategory + ' ERROR_SEVERITY=' + $errorSeverity +
+              ' PLUGIN_OR_MOD_LOAD_ERROR=' + $pluginLoadError +
               ' UNCAUGHT_SERVER_EXCEPTION=' + $uncaughtServerException +
               ' SFTP_LOG_ONLY=true LIVE_STATUS_NOT_VERIFIED=true NO_REMOTE_WRITES=true')
           } catch {
