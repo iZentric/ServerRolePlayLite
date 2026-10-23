@@ -61,6 +61,7 @@ jobs:
             $memoryError=$false
             $bindError=$false
             $errorLines=0
+            $errorCategory='NONE'
             $pluginLoadError=$false
             $uncaughtServerException=$false
             # One fresh snapshot after first boot, not a process liveness claim.
@@ -80,7 +81,17 @@ jobs:
                   $javaError=($text -match 'UnsupportedClassVersionError|has been compiled by a more recent version of the Java Runtime')
                   $memoryError=($text -match 'OutOfMemoryError|Could not reserve enough space for object heap')
                   $bindError=($text -match '(?i)FAILED TO BIND TO PORT|Address already in use')
-                  $errorLines=[regex]::Matches($text,'(?m)^\[[0-9:]+\] \[[^\r\n\]]+/(?:ERROR|FATAL)\]').Count
+                  $errorMatches=[regex]::Matches($text,'(?m)^\[[0-9:]+\] \[[^\r\n\]]+/(?:ERROR|FATAL)\][^\r\n]*')
+                  $errorLines=$errorMatches.Count
+                  if ($errorLines -eq 1) {
+                    $privateError=$errorMatches[0].Value
+                    $errorCategory=if ($privateError -match '(?i)voice.?chat|microphone|audio|udp') { 'VOICE' }
+                      elseif ($privateError -match '(?i)plugin|mod load|forge|bukkit|dependency') { 'PLUGIN_OR_MOD' }
+                      elseif ($privateError -match '(?i)world|chunk|region|level|datapack') { 'WORLD_OR_DATA' }
+                      elseif ($privateError -match '(?i)outofmemory|java|jvm|heap|class') { 'JAVA_OR_MEMORY' }
+                      elseif ($privateError -match '(?i)connection|network|socket|port') { 'NETWORK' }
+                      else { 'OTHER_UNCLASSIFIED' }
+                  } elseif ($errorLines -gt 1) { $errorCategory='MULTIPLE_UNCLASSIFIED' }
                   $pluginLoadError=($text -match '(?i)Could not load plugin|Error occurred while enabling|Mod loading has failed|Missing or unsupported mandatory dependencies')
                   $uncaughtServerException=($text -match '(?i)Encountered an unexpected exception|Exception in server tick loop')
                   $state=if ($done) { 'DONE_MARKER_SEEN_NOT_LIVE_PROOF' } else { 'NEW_LOG_STARTUP_PENDING' }
@@ -93,7 +104,7 @@ jobs:
               ' NEW_LOG=' + $changed + ' DONE=' + $done + ' STOPPING_SEEN=' + $stopped +
               ' JAVA_ERROR=' + $javaError + ' MEMORY_ERROR=' + $memoryError +
               ' BIND_ERROR=' + $bindError + ' ERROR_LINES=' + $errorLines +
-              ' PLUGIN_OR_MOD_LOAD_ERROR=' + $pluginLoadError +
+              ' ERROR_CATEGORY=' + $errorCategory + ' PLUGIN_OR_MOD_LOAD_ERROR=' + $pluginLoadError +
               ' UNCAUGHT_SERVER_EXCEPTION=' + $uncaughtServerException +
               ' SFTP_LOG_ONLY=true LIVE_STATUS_NOT_VERIFIED=true NO_REMOTE_WRITES=true')
           } catch {
