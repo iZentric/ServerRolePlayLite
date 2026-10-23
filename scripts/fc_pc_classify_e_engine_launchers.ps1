@@ -26,8 +26,11 @@ try {
         catserver=0; mohist=0; arclight=0; magma=0; mist=0; forge=0;
         bukkit_paper=0; vanilla=0; other=0; missing_main=0;
         other_embeds_both=0; other_embeds_forge_only=0; other_embeds_bukkit_only=0;
-        other_embeds_neither=0 }
-    $workingHints=[ordered]@{ bukkit=$false; forge=$false; mohist=$false; tenet=$false }
+        other_embeds_neither=0; all_mohist_code_hints=0; all_catserver_code_hints=0;
+        all_embeds_both=0; all_embeds_forge_only=0; all_embeds_bukkit_only=0;
+        all_embeds_neither=0 }
+    $workingHints=[ordered]@{ bukkit=$false; forge=$false; mohist=$false; tenet=$false;
+        main_family='missing' }
     Add-Type -AssemblyName System.IO.Compression.FileSystem
     foreach ($record in $launchers) {
         if ($record.relative_path -match '^\s*$|(^|[\\/])\.\.?([\\/]|$)' -or
@@ -66,27 +69,35 @@ try {
                 '(?i)minecraft\.server' { $family='vanilla'; $counts.vanilla++; break }
                 default { $counts.other++; break }
             }
-            if ($family -eq 'other' -or $record.sha256 -eq $workingHash) {
-                # Embedded classes are only HINTS: launchers may load dependencies
-                # outside the JAR. Never reject an engine solely from a missing hint.
-                $hasBukkit=$false; $hasForge=$false; $hasMohist=$false; $hasTenet=$false
-                foreach ($part in $zip.Entries) {
-                    $name=$part.FullName
-                    if ($name -match '^(org/bukkit/|org/bukkit/craftbukkit/)') { $hasBukkit=$true }
-                    if ($name -match '^net/minecraftforge/') { $hasForge=$true }
-                    if ($name -match '(?i)mohist') { $hasMohist=$true }
-                    if ($name -match '(?i)tenet') { $hasTenet=$true }
-                }
-                if ($family -eq 'other') {
-                    if ($hasBukkit -and $hasForge) { $counts.other_embeds_both++ }
-                    elseif ($hasForge) { $counts.other_embeds_forge_only++ }
-                    elseif ($hasBukkit) { $counts.other_embeds_bukkit_only++ }
-                    else { $counts.other_embeds_neither++ }
-                }
-                if ($record.sha256 -eq $workingHash) {
-                    $workingHints.bukkit=$hasBukkit; $workingHints.forge=$hasForge
-                    $workingHints.mohist=$hasMohist; $workingHints.tenet=$hasTenet
-                }
+            # Embedded classes are only HINTS: launchers may load dependencies
+            # outside the JAR. A Forge Main-Class can belong to a Mohist hybrid.
+            # Never reject an engine solely from a missing hint.
+            $hasBukkit=$false; $hasForge=$false; $hasMohist=$false
+            $hasTenet=$false; $hasCatserver=$false
+            foreach ($part in $zip.Entries) {
+                $name=$part.FullName
+                if ($name -match '^org/bukkit/') { $hasBukkit=$true }
+                if ($name -match '^net/minecraftforge/') { $hasForge=$true }
+                if ($name -match '(?i)mohist') { $hasMohist=$true }
+                if ($name -match '(?i)tenet') { $hasTenet=$true }
+                if ($name -match '(?i)catserver') { $hasCatserver=$true }
+            }
+            if ($hasMohist) { $counts.all_mohist_code_hints++ }
+            if ($hasCatserver) { $counts.all_catserver_code_hints++ }
+            if ($hasBukkit -and $hasForge) { $counts.all_embeds_both++ }
+            elseif ($hasForge) { $counts.all_embeds_forge_only++ }
+            elseif ($hasBukkit) { $counts.all_embeds_bukkit_only++ }
+            else { $counts.all_embeds_neither++ }
+            if ($family -eq 'other') {
+                if ($hasBukkit -and $hasForge) { $counts.other_embeds_both++ }
+                elseif ($hasForge) { $counts.other_embeds_forge_only++ }
+                elseif ($hasBukkit) { $counts.other_embeds_bukkit_only++ }
+                else { $counts.other_embeds_neither++ }
+            }
+            if ($record.sha256 -eq $workingHash) {
+                $workingHints.bukkit=$hasBukkit; $workingHints.forge=$hasForge
+                $workingHints.mohist=$hasMohist; $workingHints.tenet=$hasTenet
+                $workingHints.main_family=$family
             }
         } finally { $zip.Dispose() }
     }
@@ -94,7 +105,10 @@ try {
     $officialFound=($seen.Contains('8edea98c597e7af44a45ef9093678c38ca3749d55a71cdff10218c1c6b946fd0'))
     if ($counts.unique_launcher_sha + $counts.duplicate_sha -ne $counts.all_launchers -or
         $counts.other_embeds_both + $counts.other_embeds_forge_only +
-        $counts.other_embeds_bukkit_only + $counts.other_embeds_neither -ne $counts.other) {
+        $counts.other_embeds_bukkit_only + $counts.other_embeds_neither -ne $counts.other -or
+        $counts.all_embeds_both + $counts.all_embeds_forge_only +
+        $counts.all_embeds_bukkit_only + $counts.all_embeds_neither -ne $counts.unique_launcher_sha -or
+        ($currentFound -and $workingHints.main_family -eq 'missing')) {
         throw 'COUNT_INCONSISTENT'
     }
     Write-Output ('::notice title=E FunCity server launcher triage::LAUNCHERS=' + $counts.all_launchers +
@@ -107,7 +121,14 @@ try {
         ' OTHER_EMBEDS_FORGE_ONLY=' + $counts.other_embeds_forge_only +
         ' OTHER_EMBEDS_BUKKIT_ONLY=' + $counts.other_embeds_bukkit_only +
         ' OTHER_EMBEDS_NEITHER=' + $counts.other_embeds_neither +
+        ' ALL_MOHIST_CODE_HINTS=' + $counts.all_mohist_code_hints +
+        ' ALL_CATSERVER_CODE_HINTS=' + $counts.all_catserver_code_hints +
+        ' ALL_EMBEDS_BUKKIT_AND_FORGE=' + $counts.all_embeds_both +
+        ' ALL_EMBEDS_FORGE_ONLY=' + $counts.all_embeds_forge_only +
+        ' ALL_EMBEDS_BUKKIT_ONLY=' + $counts.all_embeds_bukkit_only +
+        ' ALL_EMBEDS_NEITHER=' + $counts.all_embeds_neither +
         ' MISSING_MAIN=' + $counts.missing_main + ' WORKING_PC_ENGINE_PRESENT=' + $currentFound +
+        ' WORKING_PC_MAIN_FAMILY=' + $workingHints.main_family +
         ' WORKING_PC_MOHIST_CODE_HINT=' + $workingHints.mohist +
         ' WORKING_PC_TENET_CODE_HINT=' + $workingHints.tenet +
         ' WORKING_PC_BUKKIT_CODE_HINT=' + $workingHints.bukkit +
