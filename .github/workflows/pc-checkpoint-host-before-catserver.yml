@@ -1,6 +1,6 @@
 name: Backup stopped HidenCloud root to private PC before engine test
-# NEVER run while HidenCloud is Online. Owner must explicitly confirm Offline
-# first. SFTP read-only; private backup stays on PC, never GitHub artifacts.
+# NEVER run while HidenCloud is Online. Owner explicitly selected Offline in Arena
+# before this one-time checkpoint. SFTP read-only; backup stays on PC, not GitHub.
 on:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
