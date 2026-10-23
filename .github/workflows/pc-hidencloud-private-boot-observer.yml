@@ -65,6 +65,7 @@ jobs:
             $errorSeverity='NONE'
             $errorTiming='UNKNOWN'
             $exceptionType='UNKNOWN'
+            $errorSeenInPcBackup='UNKNOWN'
             $pluginLoadError=$false
             $uncaughtServerException=$false
             # One fresh snapshot after first boot, not a process liveness claim.
@@ -88,6 +89,17 @@ jobs:
                   $errorLines=$errorMatches.Count
                   if ($errorLines -eq 1) {
                     $privateError=$errorMatches[0].Value
+                    if ((Test-Path -LiteralPath $original -PathType Leaf) -and
+                        (Get-Item -LiteralPath $original).Length -le 33554432) {
+                      $pcText=Get-Content -LiteralPath $original -Raw -ErrorAction Stop
+                      $pcErrors=[regex]::Matches($pcText,'(?m)^\[[0-9:]+\] \[[^\r\n\]]+/(?:ERROR|FATAL)\][^\r\n]*')
+                      $same=$false
+                      $hostNormalized=$privateError -replace '^\[[0-9:]+\]\s*',''
+                      foreach ($entry in $pcErrors) {
+                        if (($entry.Value -replace '^\[[0-9:]+\]\s*','') -ceq $hostNormalized) { $same=$true; break }
+                      }
+                      $errorSeenInPcBackup=$same
+                    }
                     $doneMatch=[regex]::Match($text,'Done \([0-9.,]+s\)! For help, type')
                     if ($doneMatch.Success) {
                       $errorTiming=if ($errorMatches[0].Index -lt $doneMatch.Index) { 'BEFORE_DONE' } else { 'AFTER_DONE' }
@@ -121,6 +133,7 @@ jobs:
               ' BIND_ERROR=' + $bindError + ' ERROR_LINES=' + $errorLines +
               ' ERROR_CATEGORY=' + $errorCategory + ' ERROR_SEVERITY=' + $errorSeverity +
               ' ERROR_TIMING=' + $errorTiming + ' EXCEPTION_TYPE=' + $exceptionType +
+              ' EXACT_ERROR_ALREADY_IN_PC_BACKUP=' + $errorSeenInPcBackup +
               ' PLUGIN_OR_MOD_LOAD_ERROR=' + $pluginLoadError +
               ' UNCAUGHT_SERVER_EXCEPTION=' + $uncaughtServerException +
               ' SFTP_LOG_ONLY=true LIVE_STATUS_NOT_VERIFIED=true NO_REMOTE_WRITES=true')
