@@ -9,12 +9,25 @@ on:
       - .github/workflows/funcity-catserver-source-build.yml
       - functity/catserver/patches/0001-funcity-operator-identity.patch
       - scripts/fc_gradle_failure_classifier.py
+      - scripts/fc_funcity_capacity_profile_test.py
+      - functity/capacity/3g-view4/server.properties
+      - functity-config/server.properties
 permissions:
   contents: read
 jobs:
-  source-candidate:
+  profile-gate:
     runs-on: ubuntu-24.04
-    timeout-minutes: 65
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preserve RP/auth/bind and test only isolated view-distance/watchdog arm
+        run: python3 scripts/fc_funcity_capacity_profile_test.py
+  source-candidate:
+    needs: profile-gate
+    runs-on: ubuntu-24.04
+    # The pinned upstream setup previously passed but source compilation was
+    # cancelled by the old 65-minute job limit. This is a bounded build only.
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -70,4 +83,16 @@ jobs:
             exit 2
           fi
           unzip -p "${jars[0]}" META-INF/MANIFEST.MF | grep -q 'catserver.server.CatServerLaunch'
+          # Verify the operator-facing identity reached the *compiled* artifact,
+          # not merely the working tree. Keep CatServer/Forge protocol identifiers.
+          if ! python3 - "${jars[0]}" <<'PY'
+          import sys, zipfile
+          with zipfile.ZipFile(sys.argv[1]) as z:
+              assert b'FunCity' in z.read('org/bukkit/craftbukkit/v1_16_R3/CraftServer.class')
+              assert b'FunCity' in z.read('catserver/server/CatServer.class')
+          PY
+          then
+            echo '::error title=FunCity source build::COMPILED_BRANDING_NOT_VERIFIED; no candidate promoted.'
+            exit 2
+          fi
           echo "::notice title=FunCity provisional fork source build::BUILD_PASS sha256=$(sha256sum "${jars[0]}" | cut -d' ' -f1) upstream=CatServer-1.16.5-1d8d6313 source=LGPL-3.0 runtime_join=NOT_TESTED no_artifact_uploaded=true"
