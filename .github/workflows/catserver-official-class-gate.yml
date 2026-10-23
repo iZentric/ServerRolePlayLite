@@ -1,0 +1,55 @@
+name: Audit official CatServer public launcher class versions
+# Public upstream JAR only. This static test cannot validate Java 11 runtime,
+# 34 private mods, 13 plugins, the world, or player/voice login.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/catserver-official-class-gate.yml]
+permissions:
+  contents: read
+jobs:
+  public-jar-static:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Verify release hash and launcher bytecode without private content
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          temp="$(mktemp -d)"
+          trap 'rm -rf -- "$temp"' EXIT
+          cd "$temp"
+          gh release download 23.05.26-1 -R Luohuayu/CatServer \
+            -p CatServer-1.16.5-1d8d6313-server.jar -O upstream.jar
+          echo '8edea98c597e7af44a45ef9093678c38ca3749d55a71cdff10218c1c6b946fd0  upstream.jar' | sha256sum -c - >/dev/null
+          python3 - <<'PY'
+          import collections, struct, zipfile
+          with zipfile.ZipFile('upstream.jar') as jar:
+              lines = jar.read('META-INF/MANIFEST.MF').decode('utf-8', 'replace').splitlines()
+              unfolded = []
+              for line in lines:
+                  if line.startswith(' ') and unfolded:
+                      unfolded[-1] += line[1:]
+                  else:
+                      unfolded.append(line)
+              main = [line.split(': ', 1)[1] for line in unfolded if line.startswith('Main-Class: ')]
+              if len(main) != 1 or not main[0].strip():
+                  raise SystemExit('::error title=CatServer launcher::MAIN_CLASS_UNVERIFIED')
+              entry = main[0].replace('.', '/') + '.class'
+              launcher = jar.read(entry)[:8]
+              if len(launcher) != 8 or launcher[:4] != b'\xca\xfe\xba\xbe':
+                  raise SystemExit('::error title=CatServer launcher::CLASS_HEADER_UNVERIFIED')
+              major = struct.unpack('>H', launcher[6:])[0]
+              counts = collections.Counter()
+              for name in jar.namelist():
+                  if name.endswith('.class'):
+                      with jar.open(name) as source:
+                          header = source.read(8)
+                      if len(header) == 8 and header[:4] == b'\xca\xfe\xba\xbe':
+                          counts[struct.unpack('>H', header[6:])[0]] += 1
+              print('::notice title=CatServer public bytecode::LAUNCHER_CLASS_MAJOR=' + str(major)
+                    + ' CLASSES_ABOVE_JAVA11=' + str(sum(n for v,n in counts.items() if v > 55))
+                    + ' JAVA11_RUNTIME_NOT_PROVEN=true PRIVATE_FULL_PACK_NOT_USED=true NO_HOST_CHANGE=true')
+          PY
