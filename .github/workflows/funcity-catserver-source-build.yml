@@ -8,6 +8,12 @@ on:
     paths:
       - .github/workflows/funcity-catserver-source-build.yml
       - functity/catserver/patches/0001-funcity-operator-identity.patch
+      - functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch
+      - scripts/fc_funcity_bridge_patch_test.py
+      - scripts/fc_funcity_compiled_engine_gate.py
+      - scripts/fc_funcity_compiled_engine_gate_test.py
+      - scripts/fc_funcity_java11_smoke.py
+      - scripts/fc_funcity_java11_smoke_test.py
       - scripts/fc_gradle_failure_classifier.py
       - scripts/fc_gradle_failure_classifier_test.py
       - scripts/fc_funcity_capacity_profile_test.py
@@ -30,6 +36,9 @@ jobs:
           python3 scripts/fc_funcity_capacity_profile_test.py
           python3 scripts/fc_funcity_hybrid_config_test.py
           python3 scripts/fc_gradle_failure_classifier_test.py
+          python3 scripts/fc_funcity_bridge_patch_test.py
+          python3 scripts/fc_funcity_compiled_engine_gate_test.py
+          python3 scripts/fc_funcity_java11_smoke_test.py
   source-candidate:
     needs: profile-gate
     runs-on: ubuntu-24.04
@@ -43,8 +52,9 @@ jobs:
           distribution: temurin
           java-version: |
             8
+            11
             17
-      - name: Fetch exact LGPL CatServer source and apply minimal identity patch
+      - name: Fetch pinned LGPL CatServer and apply reviewed FunCity source patches
         run: |
           set -Eeuo pipefail
           root="$RUNNER_TEMP/fc-catserver-source"
@@ -54,10 +64,14 @@ jobs:
           test -s "$root/LICENSE" && grep -q 'LESSER GENERAL PUBLIC LICENSE' "$root/LICENSE"
           git -C "$root" apply --check "$GITHUB_WORKSPACE/functity/catserver/patches/0001-funcity-operator-identity.patch"
           git -C "$root" apply "$GITHUB_WORKSPACE/functity/catserver/patches/0001-funcity-operator-identity.patch"
+          git -C "$root" apply --check "$GITHUB_WORKSPACE/functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch"
+          git -C "$root" apply "$GITHUB_WORKSPACE/functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch"
+          python3 "$GITHUB_WORKSPACE/scripts/fc_funcity_bridge_patch_test.py" --source \
+            "$root/src/main/java/catserver/server/CatServerEventHandler.java"
           grep -Fq 'serverName = "FunCity"' "$root/src/main/java/org/bukkit/craftbukkit/v1_16_R3/CraftServer.java"
           grep -Fq 'getLogger("FunCity")' "$root/src/main/java/catserver/server/CatServer.java"
           grep -Fq 'new CatServerConfig("catserver.yml")' "$root/src/main/java/catserver/server/CatServer.java"
-          echo '::notice title=FunCity source audit::upstream=Luohuayu/CatServer tag=23.05.26-1 license=LGPL-3.0 identity_patch=PASS Forge/Bukkit identifiers=UNCHANGED no JAR published'
+          echo '::notice title=FunCity source audit::upstream=Luohuayu/CatServer tag=23.05.26-1 license=LGPL-3.0 identity_patch=PASS block_place_forge_veto_patch=PASS protocol_identifiers=UNCHANGED no_JAR_published=true'
       - name: Build source candidate; all logs remain on disposable hosted runner
         run: |
           set -Eeuo pipefail
@@ -105,17 +119,18 @@ jobs:
             echo '::error title=FunCity source build::Expected one server JAR; no candidate promoted.'
             exit 2
           fi
-          unzip -p "${jars[0]}" META-INF/MANIFEST.MF | grep -q 'catserver.server.CatServerLaunch'
-          # Verify the operator-facing identity reached the *compiled* artifact,
-          # not merely the working tree. Keep CatServer/Forge protocol identifiers.
-          if ! python3 - "${jars[0]}" <<'PY'
-          import sys, zipfile
-          with zipfile.ZipFile(sys.argv[1]) as z:
-              assert b'FunCity' in z.read('org/bukkit/craftbukkit/v1_16_R3/CraftServer.class')
-              assert b'FunCity' in z.read('catserver/server/CatServer.class')
-          PY
-          then
-            echo '::error title=FunCity source build::COMPILED_BRANDING_NOT_VERIFIED; no candidate promoted.'
+          # CatServer's launcher contains the Forge/Bukkit implementation as
+          # data/*-universal.jar. The earlier top-level .class check was wrong:
+          # run 40006634485 compiled successfully, then failed that check.
+          # Verify both compiled and packaged classes. ForgeGradle reobfuscates
+          # the latter, so raw bytecode equality would be a false failure.
+          if ! python3 "$GITHUB_WORKSPACE/scripts/fc_funcity_compiled_engine_gate.py" \
+               "${jars[0]}" projects/forge/build/classes/java/main; then
+            echo '::error title=FunCity source build::COMPILED_ENGINE_GATE_FAILED; no candidate promoted.'
             exit 2
           fi
-          echo "::notice title=FunCity provisional fork source build::BUILD_PASS sha256=$(sha256sum "${jars[0]}" | cut -d' ' -f1) upstream=CatServer-1.16.5-1d8d6313 source=LGPL-3.0 runtime_join=NOT_TESTED no_artifact_uploaded=true"
+          echo '::notice title=FunCity compiled engine::COMPILED_CLASSES_AND_LAUNCHER_PASS; Java11 boot follows.'
+          test -x "$JAVA_HOME_11_X64/bin/java"
+          python3 "$GITHUB_WORKSPACE/scripts/fc_funcity_java11_smoke.py" \
+            "$JAVA_HOME_11_X64/bin/java" "${jars[0]}"
+          echo "::notice title=FunCity provisional engine::BUILD_AND_EMPTY_JAVA11_BOOT_PASS sha256=$(sha256sum "${jars[0]}" | cut -d' ' -f1) upstream=CatServer-1.16.5-1d8d6313 source=LGPL-3.0 rp_34mods_13plugins=NOT_TESTED client_join=NOT_TESTED capacity=NOT_TESTED no_artifact_uploaded=true"
