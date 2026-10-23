@@ -76,6 +76,8 @@ jobs:
               ' SERVER_PORT_MATCHES_ALLOCATION=' + $portCorrect + ' ONLINE_MODE_FALSE=' + $offlineMode +
               ' RCON_ENABLED=' + $rconEnabled + ' QUERY_ENABLED=' + $queryEnabled + ' EULA_ACCEPTED=' + $eulaAccepted +
               ' ROOT_FILES_READ_ONLY=true STARTUP_NOT_TESTED=true')
+            if (-not $sameEngine -or -not $loopback -or -not $portCorrect -or -not $offlineMode -or
+                $rconEnabled -or $queryEnabled -or -not $eulaAccepted) { throw 'PRIVATE_BOOT_PRECONDITION_CHANGED' }
           } catch {
             Write-Output '::error title=HidenCloud active server preflight::CHECK_UNVERIFIED; no remote changes'
             exit 2
