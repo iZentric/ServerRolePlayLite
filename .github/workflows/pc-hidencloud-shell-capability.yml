@@ -42,8 +42,13 @@ jobs:
               '-o','PasswordAuthentication=no','-o','KbdInteractiveAuthentication=no',
               '-o',('UserKnownHostsFile=' + $known),'-o','StrictHostKeyChecking=yes',
               '-o','ConnectTimeout=8','-o','ServerAliveInterval=5','-o','ServerAliveCountMax=1')
+            # A denied SSH exec writes to stderr and exits nonzero; that is a
+            # valid NEGATIVE result, not a PowerShell NativeCommandError.
+            $ErrorActionPreference='Continue'
             & $ssh @options $destination 'printf FUNCITY_READONLY_SHELL_PROBE' 1>$output 2>$errorFile
-            $available=($LASTEXITCODE -eq 0 -and (Get-Content -LiteralPath $output -Raw -ErrorAction SilentlyContinue) -eq 'FUNCITY_READONLY_SHELL_PROBE')
+            $exitCode=$LASTEXITCODE
+            $ErrorActionPreference='Stop'
+            $available=($exitCode -eq 0 -and (Get-Content -LiteralPath $output -Raw -ErrorAction SilentlyContinue) -eq 'FUNCITY_READONLY_SHELL_PROBE')
             Write-Output ('::notice title=HidenCloud SSH command capability::SSH_EXEC_CONFIRMED=' + $available +
               ' SFTP_WORKS=true PANEL_ACCESS_NOT_TESTED=true NO_REMOTE_WRITES=true NO_RESTART_ATTEMPTED=true')
           } catch {
