@@ -1,0 +1,3094 @@
+fisiere-config gasite: 15077
+subdirectoare: builduri | cuantic | FunCity server | modpack uri | motor | servere referinta | _ex | cuantic\config | cuantic\defaultconfigs | cuantic\mods | cuantic\plugins | cuantic\config\incontrol | modpack uri\Vision-mods | servere referinta\hypecity | servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft | servere referinta\minecity | servere referinta\nmc | servere referinta\viberp | servere referinta\hypecity\config | servere referinta\hypecity\crash-reports | servere referinta\hypecity\debug | servere referinta\hypecity\hypecity | servere referinta\hypecity\libraries | servere referinta\hypecity\logs | servere referinta\hypecity\mods | servere referinta\hypecity\mohist-config | servere referinta\hypecity\pfm | servere referinta\hypecity\plugins | servere referinta\hypecity\config\CoroUtil | servere referinta\hypecity\config\PlasmoVoice | servere referinta\hypecity\config\toughasnails | servere referinta\hypecity\config\worldedit | servere referinta\hypecity\config\worldedit\.archive-unpack | servere referinta\hypecity\config\worldedit\schematics | servere referinta\hypecity\config\worldedit\sessions | servere referinta\hypecity\config\worldedit\.archive-unpack\9b94df90 | servere referinta\hypecity\config\worldedit\.archive-unpack\9b94df90\af | servere referinta\hypecity\config\worldedit\.archive-unpack\9b94df90\ar | servere referinta\hypecity\config\worldedit\.archive-unpack\9b94df90\ast | servere referinta\hypecity\config\worldedit\.archive-unpack\9b94df90\az
+raport trunchiat la 424 fisiere din 15077
+==== cuantic\bukkit.yml (380 B) ====
+# bukkit.yml - stratul de tuning CUANTIC (fara lilieci in pesteri, mobi redusi pt RolePlay)
+settings:
+  allow-end: false
+spawn-limits:
+  monsters: 20
+  animals: 6
+  water-animals: 2
+  water-ambient: 2
+  ambient: 0
+chunk-gc:
+  period-in-ticks: 400
+  load-threshold: 300
+ticks-per:
+  animal-spawns: 400
+  monster-spawns: 10
+  water-spawns: 40
+  ambient-spawns: 400
+  autosave: 6000
+
+==== cuantic\catserver.yml (459 B) ====
+# catserver.yml - tunat pe cheile reale (autopsia tribunalului, 8 oct)
+world:
+  keepSpawnInMemory: false
+  forceSaveOnWatchdog: true
+fakePlayer:
+  permissions:
+  - essentials.build
+  eventPass: false
+plugin:
+  patcher:
+    enableDynmapCompatible: false
+    enableEssentialsNewVersionCompatible: true
+    enableMythicMobsPatcherCompatible: false
+    enableWorldEditCompatible: true
+disableFMLStatusModInfo: true
+disableAsyncCatchWarn: true
+versionCheck: false
+
+==== cuantic\commands.yml (186 B) ====
+# commands.yml - CUANTIC: aliasuri de consola + numele serverului (brand unde se vede)
+name: CUANTIC
+filter: Â§
+commands: {}
+alias:
+  cuantic:
+  - version
+  cuantictps:
+  - spark health
+
+==== cuantic\config\connectivity-common.toml (223 B) ====
+["Connectivity settings"]
+	disableLoginLimits = true
+	disablePacketLimits = true
+	debugPrintMessages = false
+	logintimeout = 2400
+	disconnectTimeout = 60
+	packetHistoryMinutes = 5
+	showFullResourceLocationException = false
+
+==== cuantic\config\ferritecore-mixin.toml (221 B) ====
+# CUANTIC â€” toate optimizarile de memorie FerriteCore activate explicit
+replaceNeighborLookup = true
+replacePropertyMap = true
+cacheMultipartPredicates = true
+modelResourceLocations = true
+multipartDeduplication = true
+
+==== cuantic\config\forge-common.toml (81 B) ====
+# gol intentionat - cheile [server] NU au voie aici (Forge le reseta cu warning)
+
+==== cuantic\config\modernfix-mixins.properties (257 B) ====
+# CUANTIC SERVER â€” pe server nu se randeaza iteme, deci dynamic_resources e 100% sigur
+mixin.perf.dynamic_resources=true
+mixin.perf.dedup_location=true
+mixin.perf.compact_bit_storage=true
+mixin.perf.thread_priorities=true
+mixin.bugfix.chunk_deadlock=true
+
+==== cuantic\config\modernlife-common.toml (94 B) ====
+# generat gol intentionat - ModernLife il umple la primul boot (ucide eroarea File not found)
+
+==== cuantic\config\smoothchunk-common.toml (169 B) ====
+["Config category"]
+	#Delay before a chunk is saved to disk, default: 300 seconds.
+	#Range: 10 ~ 3600
+	chunkSaveDelay = 300
+	#Enable debug logging
+	debugLogging = false
+
+==== cuantic\defaultconfigs\forge-server.toml (183 B) ====
+# Scutul anti-crash sta in defaultconfigs/forge-server.toml ([server] e config de LUME la Forge 1.16)
+[server]
+    removeErroringEntities = true
+    removeErroringTileEntities = true
+
+==== cuantic\server.properties (647 B) ====
+\
+#Minecraft server properties - CUANTIC (consum minim)
+motd=\u00A7b\u00A7lCUANTIC \u00A78\u00A7o1.7.7 \u00A7f| \u00A7aorice PC, zero lag \u00A7f| \u00A7dOras+Survival+Claims \u00A7f| \u00A7ecost 0
+max-players=25
+view-distance=4
+player-idle-timeout=0
+# sync-chunk-writes exista doar din 1.19; pe 1.16.5 punem transportul nativ (epoll), care chiar exista
+use-native-transport=true
+network-compression-threshold=512
+spawn-protection=0
+allow-flight=true
+enable-command-block=true
+max-tick-time=-1
+entity-broadcast-range-percentage=60
+online-mode=false
+pvp=true
+difficulty=normal
+gamemode=survival
+level-name=world
+enable-status=true
+white-list=false
+
+==== cuantic\spigot.yml (1449 B) ====
+# spigot.yml - stratul de tuning CUANTIC (acelasi fisier il primesc si CatServer si Mist)
+# Aliniat 1:1 cu setarile din Client (Out of Sight = 24/32, EntityCulling = 32, renderDistance = 4)
+settings:
+  save-user-cache-on-stop-only: true
+  netty-threads: 2
+  moved-wrongly-threshold: 0.35
+  moved-too-quickly-multiplier: 25.0
+  log-villager-deaths: false
+world-settings:
+  default:
+    mob-spawn-range: 3
+    entity-activation-range:
+      animals: 12
+      monsters: 16
+      raiders: 16
+      misc: 6
+      tick-inactive-villagers: false
+      wake-up-inactive:
+        animals-max-per-tick: 1
+        animals-every: 200
+        animals-for: 60
+        monsters-max-per-tick: 2
+        monsters-every: 120
+        monsters-for: 60
+        villagers-max-per-tick: 1
+        villagers-every: 300
+        villagers-for: 40
+        flying-monsters-max-per-tick: 1
+        flying-monsters-every: 200
+        flying-monsters-for: 60
+    entity-tracking-range:
+      players: 48
+      animals: 24
+      monsters: 24
+      misc: 12
+      other: 32
+    max-tnt-per-tick: 10
+    merge-radius:
+      item: 4.0
+      exp: 6.0
+    item-despawn-rate: 2400
+    max-entity-collisions: 2
+    tick-inactive-villagers: false
+    nerf-spawner-mobs: true
+    ticks-per:
+      hopper-transfer: 24
+      hopper-check: 24
+      monster-spawns: 10
+    hopper-amount: 3
+    arrow-despawn-rate: 200
+    trident-despawn-rate: 200
+    zombie-aggressive-towards-villager: false
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\bukkit.yml (1139 B) ====
+# This is the main configuration file for Bukkit.
+# As you can see, there's actually not that much to configure without any plugins.
+# For a reference for any variable inside this file, check out the Bukkit Wiki at
+# https://www.spigotmc.org/go/bukkit-yml
+# 
+# If you need help on this file, feel free to join us on irc or leave a message
+# on the forums asking for advice.
+# 
+# IRC: #spigot @ irc.spi.gt
+#    (If this means nothing to you, just go to https://www.spigotmc.org/go/irc )
+# Forums: https://www.spigotmc.org/
+# Bug tracker: https://www.spigotmc.org/go/bugs
+
+
+settings:
+  allow-end: false
+  warn-on-overload: true
+  permissions-file: permissions.yml
+  update-folder: update
+  plugin-profiling: false
+  connection-throttle: -1
+  query-plugins: true
+  deprecated-verbose: default
+  shutdown-message: Server inchis !
+  minimum-api: none
+spawn-limits:
+  monsters: 8
+  animals: 5
+  water-animals: 1
+  water-ambient: 2
+  ambient: 1
+chunk-gc:
+  period-in-ticks: 400
+ticks-per:
+  animal-spawns: 400
+  monster-spawns: 7
+  water-spawns: 400
+  water-ambient-spawns: 400
+  ambient-spawns: 400
+  autosave: 6000
+aliases: now-in-commands.yml
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\commands.yml (645 B) ====
+# This is the commands configuration file for Bukkit.
+# For documentation on how to make use of this file, check out the Bukkit Wiki at
+# https://www.spigotmc.org/go/commands-yml
+# 
+# If you need help on this file, feel free to join us on irc or leave a message
+# on the forums asking for advice.
+# 
+# IRC: #spigot @ irc.spi.gt
+#    (If this means nothing to you, just go to https://www.spigotmc.org/go/irc )
+# Forums: https://www.spigotmc.org/
+# Bug tracker: https://www.spigotmc.org/go/bugs
+
+command-block-overrides: []
+ignore-vanilla-permissions: false
+aliases:
+  icanhasbukkit:
+  - version $1-
+  sell:
+  - economyshopgui-premium:sellall $1-
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\aiimprovements-common.toml (6211 B) ====
+
+#Entity Settings
+[entity]
+
+	#General
+	[entity.general]
+		#Allow AI tasks to be removed from entities at runtime. If this is disable no per mob or per mob type removes will run.
+		allow_remove_calls = true
+		#Allows repeat remove calls to bubble to the top of the list to improve performance of repeat mob spawning.
+		enable_call_bubbling = true
+
+	#Entity Mob
+	[entity.mob]
+
+		#Remove Look Goal
+		[entity.mob.remove_look_goal]
+			#Remove the look at goal (player or attack target) AI task. This will cause AIs to not face targets or walking directions.
+			remove_look_goal = false
+			#Set this to true to apply this setting to all mobs on the filter list. Set this to false to NOT apply this to mobs on the filter list.
+			is_allowlist = false
+			#The list of mobs that is affected by this setting according to is_allowlist
+			filter_list = []
+
+		#Remove Look Random
+		[entity.mob.remove_look_random]
+			#Remove the look at random position AI task. This will cause AIs to feel a little lifeless as they do not animate head movement while idle.
+			remove_look_random = false
+			#Set this to true to apply this setting to all mobs on the filter list. Set this to false to NOT apply this to mobs on the filter list.
+			is_allowlist = false
+			#The list of mobs that is affected by this setting according to is_allowlist
+			filter_list = []
+
+		#Replace Look Controller
+		[entity.mob.replace_look_controller]
+			#Replaces the default look controller with a version featuring cached tan math improving performance. Only works on vanilla style mobs, if a mod overrides the look controller it will skip.
+			replace_look_controller = true
+			#Set this to true to apply this setting to all mobs on the filter list. Set this to false to NOT apply this to mobs on the filter list.
+			is_allowlist = false
+			#The list of mobs that is affected by this setting according to is_allowlist
+			filter_list = []
+
+	#Entity Fish
+	[entity.fish]
+		#Remove the fish's random swimming pathfinder. This will cause fish to stay in position more often.
+		remove_swim = false
+		#Remove the fish's panic pathfinder. This will cause fish to not run away.
+		remove_panic = false
+		#Remove the fish's AI task to avoid players.
+		remove_avoid_player = false
+		#Remove the fish's AI task to follow a leader fish to act as a group of fish.
+		remove_follow_leader = false
+		#Remove the fish's AI task to puff up when entities are nearby
+		remove_puff = false
+
+	#Squid Fish
+	[entity.squid]
+		#Remove the squid's flee pathfinder. This will cause squid to not run away.
+		remove_flee = false
+		#Remove the squid's random movement pathfinder. This will cause squid to swim around randomly.
+		remove_random_move = false
+
+	#Cow
+	[entity.cow]
+		#Remove the cow's float AI task. This causes cows to no longer swim in water.
+		remove_float = false
+		#Remove the cow's panic AI task. This causes cows to no longer run around after being hit, or search water to extinguish themselves.
+		remove_panic = false
+		#Remove the cow's breed AI task. This causes cows to be unable to breed to create offspring.
+		remove_breed = false
+		#Remove the cow's tempt AI task. This causes cows to no longer follow the player if they're holding an item they like.
+		remove_tempt = false
+		#Remove the cow's follow parent AI task. This causes baby cows to no longer follow their parents.
+		remove_follow_parent = false
+		#Remove the cow's random stroll AI task. This causes cows to no longer walk around randomly.
+		remove_stroll = false
+
+	#Chicken
+	[entity.chicken]
+		#Remove the chicken's float AI task. This causes chickens to no longer swim in water.
+		remove_float = false
+		#Remove the chicken's panic AI task. This causes chickens to no longer run around after being hit, or search water to extinguish themselves.
+		remove_panic = false
+		#Remove the chicken's breed AI task. This causes chickens to be unable to breed to create offspring.
+		remove_breed = false
+		#Remove the chicken's tempt AI task. This causes chickens to no longer follow the player if they're holding an item they like.
+		remove_tempt = false
+		#Remove the chicken's follow parent AI task. This causes baby chickens to no longer follow their parents.
+		remove_follow_parent = false
+		#Remove the chicken's random stroll AI task. This causes chickens to no longer walk around randomly.
+		remove_stroll = false
+
+	#Pig
+	[entity.pig]
+		#Remove the pig's float AI task. This causes pigs to no longer swim in water.
+		remove_float = false
+		#Remove the pig's panic AI task. This causes pigs to no longer run around after being hit, or search water to extinguish themselves.
+		remove_panic = false
+		#Remove the pig's breed AI task. This causes pigs to be unable to breed to create offspring.
+		remove_breed = false
+		#Remove the pig's tempt AI task. This causes pigs to no longer follow the player if they're holding an item they like.
+		remove_tempt = false
+		#Remove the pig's follow parent AI task. This causes baby pigs to no longer follow their parents.
+		remove_follow_parent = false
+		#Remove the pig's random stroll AI task. This causes pigs to no longer walk around randomly.
+		remove_stroll = false
+
+	#Sheep
+	[entity.sheep]
+		#Remove the sheep's float AI task. This causes sheep to no longer swim in water.
+		remove_float = false
+		#Remove the sheep's panic AI task. This causes sheep to no longer run around after being hit, or search water to extinguish themselves.
+		remove_panic = false
+		#Remove the sheep's breed AI task. This causes sheep to be unable to breed to create offspring.
+		remove_breed = false
+		#Remove the sheep's tempt AI task. This causes sheep to no longer follow the player if they're holding an item they like.
+		remove_tempt = false
+		#Remove the sheep's follow parent AI task. This causes baby sheep to no longer follow their parents.
+		remove_follow_parent = false
+		#Remove the sheep's random stroll AI task. This causes sheep to no longer walk around randomly.
+		remove_stroll = false
+		#Remove the sheep's eat block AI task. This causes sheep to no lon
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\aquaculture-common.toml (1348 B) ====
+
+["basic options"]
+	#Enable fish mob spawning? Weight & biomes can be modified in the Aquaculture fish loot table
+	"Enable fish spawning?" = true
+	"Should fish be added as compostables for the composter/worm farm? (Based on fish, or weight if enabled)" = true
+	"Enable debug mode? (Enables additional logging)" = false
+	"Should Aquaculture fish be able to be used to breed cats & ocelots?" = true
+	"Show Fillet recipes in JEI?" = true
+	"Enable weight for fish? Useful for fishing competitions" = false
+
+	["basic options"."Amount of Message In A Bottle messages"]
+		#Range: 0 ~ 255
+		" Used to add additional custom messages" = 29
+
+["neptunium options"]
+	#Should Neptune's bounty be added as fishing loot? Very rare.
+	"Add Neptune's Bounty as loot?" = true
+	"Enable recipes for Neptunium items?" = false
+	"Enable recipes for Neptunium armor?" = false
+
+["spawn options"]
+
+	["spawn options".starshell_turtle]
+		include = ["TWILIGHT"]
+		#Range: 0 ~ 64
+		min = 1
+		#Range: 0 ~ 64
+		max = 2
+		#Range: 0 ~ 100
+		weight = 5
+		exclude = [""]
+
+	["spawn options".arrau_turtle]
+		include = ["JUNGLE"]
+		#Range: 0 ~ 64
+		min = 1
+		#Range: 0 ~ 64
+		max = 2
+		#Range: 0 ~ 100
+		weight = 8
+		exclude = [""]
+
+	["spawn options".box_turtle]
+		include = ["SWAMP"]
+		#Range: 0 ~ 64
+		min = 1
+		#Range: 0 ~ 64
+		max = 2
+		#Range: 0 ~ 100
+		weight = 10
+		exclude = [""]
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\cfm-common.toml (249 B) ====
+
+#Mail configuration settings
+[mail]
+	#The maximum amount of mail that can be in a player's mail queue.
+	#Range: > 1
+	maxMailQueue = 10
+	#The interval in ticks for mail boxes to pull mail from the player's queue
+	#Range: > 1
+	pullMailInterval = 30
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\cgm-common.toml (6156 B) ====
+
+[common]
+
+	#Properties relating to grenades
+	[common.grenades]
+		#The max distance which the explosion is effective to
+		#Range: 0.0 ~ 1.7976931348623157E308
+		explosionRadius = 0
+
+	#Properties relating to stun grenades
+	[common.stun_grenades]
+
+		#Blinding properties of stun grenades
+		[common.stun_grenades.blind]
+			#If true, hostile mobs will be unable to target entities while they are blinded by a stun grenade.
+			blindMobs = true
+
+			[common.stun_grenades.blind.effect_criteria]
+				#Effect will have this duration (in ticks) if the grenade is directly at the player's eyes while looking directly at it.
+				#Range: > 0
+				durationMax = 220
+				#Angle between the eye/looking direction and the eye/grenade direction must be no more than half this many degrees to have an effect.
+				#Range: 0.0 ~ 360.0
+				angleEffect = 170.0
+				#If true, the effect is only applied if the line between the eyes and the grenade does not intersect any non-liquid blocks with an opacity greater than 0.
+				raytraceOpaqueBlocks = true
+				#Grenade must be no more than this many meters away to have an effect.
+				#Range: 0.0 ~ 1.7976931348623157E308
+				radius = 15.0
+				#After duration is attenuated by distance, it will be further attenuated depending on the angle (in degrees) between the eye/looking direction and the eye/grenade direction. This is done by multiplying it by 1 (no attenuation) if the angle is 0; and by this value if the angle is the maximum within the angle of effect.
+				#Range: 0.0 ~ 1.0
+				angleAttenuationMax = 0.75
+				#Effect will have this duration (in ticks) if the grenade is the maximum distance from the player's eyes while looking directly at it.
+				#Range: > 0
+				durationMin = 10
+
+		#Deafening properties of stun grenades
+		[common.stun_grenades.deafen]
+			#If true, peaceful mobs will panic upon being deafened by a stun grenade.
+			panicMobs = true
+
+			[common.stun_grenades.deafen.effect_criteria]
+				#Effect will have this duration (in ticks) if the grenade is directly at the player's eyes while looking directly at it.
+				#Range: > 0
+				durationMax = 280
+				#Angle between the eye/looking direction and the eye/grenade direction must be no more than half this many degrees to have an effect.
+				#Range: 0.0 ~ 360.0
+				angleEffect = 360.0
+				#If true, the effect is only applied if the line between the eyes and the grenade does not intersect any non-liquid blocks with an opacity greater than 0.
+				raytraceOpaqueBlocks = false
+				#Grenade must be no more than this many meters away to have an effect.
+				#Range: 0.0 ~ 1.7976931348623157E308
+				radius = 15.0
+				#After duration is attenuated by distance, it will be further attenuated depending on the angle (in degrees) between the eye/looking direction and the eye/grenade direction. This is done by multiplying it by 1 (no attenuation) if the angle is 0; and by this value if the angle is the maximum within the angle of effect.
+				#Range: 0.0 ~ 1.0
+				angleAttenuationMax = 0.75
+				#Effect will have this duration (in ticks) if the grenade is the maximum distance from the player's eyes while looking directly at it.
+				#Range: > 0
+				durationMin = 100
+
+	#Properties relating to mob aggression
+	[common.aggro_mobs]
+		#If true, in addition to causing peaceful mobs to panic, firing a gun will also cause nearby hostile mobs to target the shooter.
+		angerHostileMobs = true
+		#Any mobs of defined will not aggro on shooters
+		exemptMobs = []
+		#Any mobs within a sphere of this radius will aggro on the shooter of an unsilenced gun.
+		#Range: 0.0 ~ 1.7976931348623157E308
+		unsilencedRange = 20.0
+		#If true, nearby mobs are angered and/or scared by the firing of guns.
+		enabled = true
+
+	#Properties relating to missiles
+	[common.missiles]
+		#The max distance which the explosion is effective to
+		#Range: 0.0 ~ 1.7976931348623157E308
+		explosionRadius = 0
+
+	#Properties relating to projectile spread
+	[common.projectile_spread]
+		#The amount of time in milliseconds before logic to apply spread is skipped. The value indicates a reasonable amount of time before a weapon is considered stable again.
+		#Range: 0 ~ 1000
+		spreadThreshold = 300
+		#The amount of times a player has to shoot within the spread threshold before the maximum amount of spread is applied. Setting the value higher means it will take longer for the spread to be applied.
+		#Range: > 1
+		maxCount = 10
+
+	#Properties relating to gameplay
+	[common.gameplay]
+		#Enables the check for head shots for players. Projectiles that hit the head of a player will have increased damage.
+		enableHeadShots = true
+		#If true, projectiles will cause knockback when an entity is hit. By default this is set to true to match the behaviour of Minecraft.
+		enableKnockback = true
+		#If enable, allows guns to shoot out glass and remove blocks on explosions
+		enableGunGriefing = false
+		#The extra amount to expand an entity's bounding box when checking for projectile collision. Setting this value higher will make it easier to hit entities
+		#Range: 0.0 ~ 1.0
+		growBoundingBoxAmount = 0.3
+		#The value to multiply the damage by if projectile hit the players head
+		#Range: 1.0 ~ 1.7976931348623157E308
+		headShotDamageMultiplier = 1.25
+		#If true, improves the accuracy of weapons by considering the ping of the player. This has no affect on singleplayer. This will add a little overhead if enabled.
+		improvedHitboxes = true
+		#If true, projectiles will ignore leaves when checking for collision
+		ignoreLeaves = true
+		#The value to multiply the damage by if projectile is a critical hit
+		#Range: 1.0 ~ 1.7976931348623157E308
+		criticalDamageMultiplier = 1.5
+		#Sets the strengthof knockback when shot by a bullet projectile. Knockback must be enabled for this to take effect. If value is equal to zero, knockback will use default minecraft value
+		#Range: 0.0 ~ 1.0
+		knockbackStrength = 0.45
+
+	#Properties relating to network
+	[common.network]
+		#The distance players need to be within to be able to track new projectiles trail
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\christmas_festivity.toml (555 B) ====
+
+#Christmas Festivity Configurations
+[christmasfestivity]
+	#This set if the mod generate the gift inside the Present on the Christmas day. Set to 'false' for disable it.
+	christmas_gift = true
+	#This make the game send a chat message on the Christmas day. Set to 'false' for disable it.
+	christmas_message = true
+	#This disable the spawn of particle on the Toppers blocks. Set to 'false' for disable it.
+	toppers_particles = true
+	#This disable the function of right click the item to get a reward. Set to 'false' for disable it.
+	advent_calendar = true
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\fastbench.cfg (143 B) ====
+# Configuration file
+
+general {
+    # If the recipe book button is removed. [default: true]
+    B:"Remove Recipe Book Button"=true
+}
+
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\ferritecore-mixin.toml (1243 B) ====
+#Use a slightly more compact, but also slightly slower representation for block states
+compactFastMap = false
+#Cache the predicate instances used in multipart models
+cacheMultipartPredicates = true
+#Do not create a new MultipartBakedModel instance for each block state using the same multipartmodel. Requires cacheMultipartPredicates to be enabled
+multipartDeduplication = true
+#Deduplicate cached data for blockstates, most importantly collision and render shapes
+blockstateCacheDeduplication = true
+#Avoid creation of new strings when creating ModelResourceLocations
+modelResourceLocations = true
+#Do not keep already-parsed NBT data for partially loaded chunks in memory
+reducedChunkNBT = true
+#Replace the blockstate neighbor table
+replaceNeighborLookup = true
+#Populate the neighbor table used by vanilla. Enabling this slightly increases memory usage, but can help with issues in the rare case where mods access it directly.
+populateNeighborTable = false
+#Do not store the properties of a state explicitly and read themfrom the replace neighbor table instead. Requires replaceNeighborLookup to be enabled
+replacePropertyMap = true
+#Deduplicate vertex data of baked quads in the basic model implementations
+bakedQuadDeduplication = true
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\fml.toml (234 B) ====
+# Enable forge global version checking
+versionCheck = true
+# does the splashscreen run
+splashscreen = true
+defaultConfigPath = "defaultconfigs"
+# max threads for parallel loading : -1 uses Runtime#availableProcessors
+maxThreads = -1
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\forge-common.toml (303 B) ====
+
+#General configuration settings
+[general]
+	#Defines a default world type to use. The vanilla default world type is represented by 'default'.
+	#The modded world types are registry names which should include the registry namespace, such as 'examplemod:example_world_type'.
+	defaultWorldType = "default"
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\performant-common.toml (9840 B) ====
+
+["Load balancing settings"]
+
+	["Load balancing settings"."Tile entities load balancing settings"]
+		#Requires TELoadBalancing = true. Enables dealing with lag caused by tile entities during chunk unload. This is normally not needed. default = false
+		TEUnloadLag = true
+		#Enables Tile entity load balancing. default: true
+		TELoadBalancing = true
+		#Mean tick time at which load balancing takes effect, 1000 / mean tick time = TPS. default: 55
+		#Range: 1 ~ 200
+		meanTickTH = 55
+		#Enables debug log output for lagging tile entities, default = false
+		TEDebugOutput = false
+
+	# Load balancing is a mechanic which profiles and throttles down lagging entities, tileentities and event subscribers.
+	# It is used to prevent a certain laggy mob or block from lagging out the whole game. Since this is rather invasive and may cause the lagging
+	# entity/block to not work nicely it is only done once the game goes over the configured lagging threshold.
+	# Those thresholds as set in miliseconds, anything below 50ms is 20 TPS (1s = 1000ms, 1000 / 50 = 20).
+	# Above 50ms ticks is where your game starts to lag, as it hits 100% cpu and starts skipping ticks.
+	# This is where load balancing comes in and reduces the lag caused by specific entities and blocks.
+	# If you run into trouble with some of the entities or blocks not working correctly you can disable it here
+	#
+	["Load balancing settings"."Entity AI Load balancing settings"]
+		#Mean tick time at which AI load balancing takes effect, 1000 / mean tick time = TPS. default: 55
+		#Range: 1 ~ 200
+		meanTickAITH = 55
+		#Enables load balancing for entity AI. default = true
+		AILoadBalancing = true
+		#Whether to debug lagging entities and log offenders, requires load balancing to be enabled. default = true
+		logEntityAILag = true
+
+	["Load balancing settings"."Event load balancing settings, events mostly cause lag during world/server/entity/player ticks,usually showing up in profilings under e"]
+		#Enables logging too large packets causing disconnects. , default = true
+		displayTooLargePackets = true
+
+		["Load balancing settings"."Event load balancing settings, events mostly cause lag during world/server/entity/player ticks,usually showing up in profilings under e"."Entity settings"]
+			#Entity spawn interval setting, determines how frequently entities are spawned overall. 1 = Vanilla default, default = 10
+			#Range: 1 ~ 1000
+			spawnInterval = 10
+			#List of entities excluded from beeing affected by dynamic entity updates: e.g. format :  ["minecraft:zombie", "minecraft:creeper"]
+			excludedTickDistanceMobs = []
+			#Fix leash lag from entities on a leash, default = true
+			fixLeash = true
+			#List of entities excluded from multithreaded movement. format :  ["minecraft:zombie", "minecraft:creeper"]
+			excludedThreadedMovement = []
+			#Should entities with glowing effect always be rendered?. default = true
+			alwaysglow = true
+			#Enable multithreading support for entities, requires fastCollisions to be enabled. default = true
+			multiEntities = true
+			#Disables block changes notifying all entity paths in the world, to possibly adjust their paths, disable with Immersive Engineering, incompat, default = true
+			disableNotifyOnBlockChange = true
+			#List of entities excluded from beeing affected by dynamic entity rendering, by entity ID: e.g. format :  ["minecraft:zombie", "minecraft:creeper"]
+			excludedRenderHidingMobs = []
+			#Slower updating of armor stands, default = true
+			slowArmorStands = true
+			#Enables improved entity collision and movement calculations for any non item entity, default = true
+			fastCollisions = true
+			#Enables less laggy entity item pickup, default = true
+			noLagItemPickup = true
+			#Enables dynamic update distance, it will reduces entity updates when far away from the player, respecting the entities own update range. default = true. Requires restart
+			enableDynamicEntityUpdates = true
+			#Enables fast itemstack comparisons
+			fastItemCompare = true
+			#Entity density setting, determines how many entities are spawned overall. 1 = Vanilla default, 0.1 e.g 10x less than vanilla. 10 = 10x more than vanilla, default = 1
+			#Range: 0.01 ~ 100.0
+			entityDensity = 1.0
+			#Enables dynamic entity rendering, stops non-visible entities from beeing rendered but can sometimes cause a slight phasing-in delay. Usually a large boost to fps, default = true. Require restart
+			enableDynamicEntityRendering = true
+			#Enable fast inventory advancement triggers, many advancements based on items tend to lag the players, default = true
+			fastInventoryAdvancement = true
+			#Adapt entity speed to tps, makes entities struggle less with lag. default = true
+			adaptiveSpeed = true
+			#Entity dynamic update distance setting, reduces the entities own update range from players at which entities get slowed down, in chunks(16blocks). The higher you set this, the closer to the player entities will get slower updates. Default = 0
+			#Range: 0 ~ 1000
+			entityUpdateDistanceReduction = 0
+			#Enable faster pathfinding, default = true
+			fastPathFinding = true
+
+		["Load balancing settings"."Event load balancing settings, events mostly cause lag during world/server/entity/player ticks,usually showing up in profilings under e"."Utility settings, debugging and other"]
+			#Set the disconnect timeout while loggging in, in ticks. 20 ticks = 1 sec, default = 120 seconds
+			#Range: 600 ~ 20000
+			logintimeout = 2400
+			#Set the amount of items at which too many stacked items report their position. Default = 100 items
+			#Range: 2 ~ 1000
+			maxItems = 100
+			#Enable additional debug logging, default = false
+			debugOptionsEnabled = false
+			#Disables the config reload during the game, can cause performance issues on some linux systems, default = false
+			disableConfigReload = false
+			#Enable printing of world/chunk saves for debugging purposes, those normally happen every 5minutes. default = false
+			printWorldSaves = false
+			#Set the watchdog timeout for the integrated server
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\pfm.toml (158 B) ====
+tablesOfDifferentMaterialsConnect = false
+chairsFacePlayer = true
+countersOfDifferentMaterialsConnect = false
+foodPopsOffStove = false
+checkForUpdates = true
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\PlasmoVoice\server.yml (2734 B) ====
+udp:
+  ip: 185.255.5.55
+  port: 25569
+
+# Supported sample rates:
+# 8000
+# 12000
+# 24000
+# 48000
+sample_rate: 48000
+
+# Voice distance
+distances:
+  - 8
+  - 16
+  - 24
+# Default voice distance
+# If 0 distance will be first element from distances
+default_distance: 8
+
+# Max priority distance
+# 0 = infinite
+max_priority_distance: 0
+
+# default: Everyone have permission by default
+# op: Only operators have permission
+# Use /vperms command to give permissions to non-operators
+permissions:
+  "voice.list": default
+  "voice.reconnect": default
+  "voice.speak": default
+  "voice.activation": default
+  "voice.priority": op
+  "voice.mute": op
+  "voice.unmute": op
+  "voice.mutelist": op
+  "voice.reload": op
+  "voice.permissions": op
+
+# Example:
+# Voice distance is 16
+# Fade distance will be 16/8=2
+# Should be int >= 1
+fade_divisor: 8
+priority_fade_divisor: 8
+
+disable_voice_activation: false
+
+# Disable connection logs (New client, Remove client, client timed out)
+disable_logs: true
+
+messages:
+  prefix: "&6[Plasmo Voice]&7 "
+  list: "Clients ({count}/{online_players}): {players}"
+  already_muted: "{player} already muted"
+  player_not_found: "Player not found"
+  not_muted: "{player} not muted"
+  muted_list: "Muted players:"
+  muted_list_entry: "&7&l{player}&7, expires: {expires}. Reason: {reason}"
+  muted_list_empty: "No players are muted"
+  mute_expires_format: "yyyy.MM.dd 'at' HH:mm:ss"
+  mute_expires_never: "never"
+  muted_perm: "{player} is permanently muted. Reason: {reason}"
+  muted: "Muted {player} {duration}. Reason: {reason}"
+  player_muted_perm: "You've been permanently muted. Reason: {reason}"
+  player_muted: "You've been muted {duration}. Reason: {reason}"
+  player_unmuted: "You've been unmuted"
+  unmuted: "Unmuted {player}"
+  mute_no_reason: "not specified"
+  mute_durations:
+    seconds: "for %s sec"
+    minutes: "for %s min"
+    hours: "for %s h"
+    days: "for %s d"
+    weeks: "for %s w"
+  reconnect_sent: "Reconnect packet sent"
+  reloaded: "Config reloaded"
+  mod_missing_kick_message: "Sorry, you need to install the Plasmo Voice mod to play on this server.\nDownload here: https://www.curseforge.com/minecraft/mc-mods/plasmo-voice-client"
+
+  permissions:
+    not_found: "Permission not found"
+    already: "{player} already has {permission} ({value})"
+    set: "Set {permission} to {value} for {player}"
+    no_permission: "{player} does not have {permission}"
+    unset: "Unset {permission} for {player}"
+    check: "{player} permission check for {permission}: {value}"
+
+  help:
+    mute: "Usage: /vmute <player> [duration] [reason]"
+    unmute: "Usage: /vunmute <player>"
+
+# do not touch
+config_version: 1.0.3
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\randompatches.toml (15742 B) ====
+# RandomPatches configuration.
+# All configuration options not under [client] are server-sided unless otherwise stated.
+
+# Client-sided options.
+[client]
+	# Optimizes bamboo rendering.
+	# This works by overriding the method that returns the ambient occlusion light value for the bamboo block, which runs some expensive logic, but always returns 1.0F.
+	# Changes to this option are applied after a game restart.
+	# Default: true
+	optimize_bamboo_rendering = true
+	# Removes the glowing effect from potions.
+	# This makes the potion colors more visible.
+	# Default: true
+	remove_glowing_effect_from_potions = true
+	# Removes the glowing effect from enchanted books.
+	# Default: false
+	remove_glowing_effect_from_enchanted_books = false
+	# Disables the warning that displays when loading a world that uses experimental settings.
+	# Default: true
+	disable_experimental_settings_warning = true
+	# The framerate limit slider step size.
+	# The vanilla default is 10.0.
+	# Min: 1.4E-45
+	# Max: 260.0
+	# Default: 1.0
+	framerate_limit_slider_step_size = 1.0
+	# Causes Minecraft to show the main menu screen after disconnecting rather than the Realms or multiplayer screen.
+	# Default: false
+	return_to_main_menu_after_disconnect = false
+	# Gives capes to RandomPatches contributors.
+	# Default: true
+	contributor_capes = true
+
+	# Client-sided bug fixes.
+	[client.bug_fixes]
+		# Fixes water in cauldrons rendering as opaque.
+		# This bug is reported as MC-13187: https://bugs.mojang.com/browse/MC-13187
+		# Changes to this option are applied after resources are reloaded or a world restart.
+		# Default: true
+		fix_water_in_cauldrons_rendering_as_opaque = true
+		# Fixes end portals only rendering from above.
+		# This bug is reported as MC-3366: https://bugs.mojang.com/browse/MC-3366
+		# Default: true
+		fix_end_portals_only_rendering_from_above = true
+		# Fixes only 18 out of 20 rows of pixels showing of villager robe textures.
+		# This issue also affects witches.
+		# This bug is reported as MC-53312: https://bugs.mojang.com/browse/MC-53312
+		# Changes to this option are applied after a game restart.
+		# Default: true
+		fix_villager_robe_textures = true
+		# Fixes the player model sometimes disappearing in certain instances.
+		# This is most noticeable when flying with elytra in a straight line in third-person mode.
+		# A video of this issue can be found here: https://youtu.be/YdbxknpfJHQ
+		# Changes to this option are applied after a game restart.
+		# Default: true
+		fix_invisible_player_model = true
+
+	# Options related to key bindings.
+	[client.key_bindings]
+		# The secondary sprint key binding.
+		# This allows double-tap sprinting to be disabled, fixing MC-203401: https://bugs.mojang.com/browse/MC-203401
+		# Default: true
+		secondary_sprint = true
+		# The dismount key binding.
+		# This allows the dismount key to be different from the sneak key.
+		# Default: true
+		dismount = true
+		# The narrator toggle key binding.
+		# This fixes MC-122645: https://bugs.mojang.com/browse/MC-122645
+		# Default: true
+		toggle_narrator = true
+		# The pause key binding.
+		# This is only for pausing and unpausing the game; the Escape key is still used to close GUI screens.
+		# This partially fixes MC-147718: https://bugs.mojang.com/browse/MC-147718
+		# Default: true
+		pause = true
+		# The GUI toggle key binding.
+		# This partially fixes MC-147718: https://bugs.mojang.com/browse/MC-147718
+		# Default: true
+		toggle_gui = true
+		# The debug info toggle key binding.
+		# The F3 key is still used for F3 actions.
+		# This partially fixes MC-147718: https://bugs.mojang.com/browse/MC-147718
+		# Default: true
+		toggle_debug_info = true
+		# Allows double-tap sprinting while flying.
+		# This fixes MC-68453: https://bugs.mojang.com/browse/MC-68453
+		# Default: true
+		double_tap_sprinting_while_flying = true
+		# Makes standalone modifier keys not conflict with key combinations with that modifier key, which seems to be intended Forge behavior.
+		# Default: true
+		standalone_modifiers_do_not_conflict_with_combinations = true
+
+	# Options related to the Minecraft window.
+	[client.window]
+		# Enables custom Minecraft window titles.
+		# Default: true
+		custom_title = true
+		# The simple Minecraft window title.
+		# The current activity, the number of mods loaded and mod versions are not available.
+		# Variables:
+		#  - ${mcversion}: The Minecraft version
+		#  - ${username}: The username.
+		# '$' can be escaped by using an extra '$'.
+		# Default: "Minecraft ${mcversion}"
+		simple_title = "Minecraft ${mcversion}"
+		# The Minecraft window title.
+		# The current activity is not available.
+		# Variables:
+		#  - ${mcversion}: The Minecraft version
+		#  - ${username}: The username.
+		#  - ${modsloaded}: The number of mods loaded.
+		#  - ${modversion:modid}: The version of the mod with the specified ID.
+		# '$' can be escaped by using an extra '$'.
+		# Default: "Minecraft ${mcversion}"
+		title = "Minecraft ${mcversion}"
+		# The Minecraft window title that also takes into account the current activity.
+		# Variables:
+		#  - ${mcversion}: The Minecraft version
+		#  - ${activity}: The current activity.
+		#  - ${username}: The username.
+		#  - ${modsloaded}: The number of mods loaded.
+		#  - ${modversion:modid}: The version of the mod with the specified ID.
+		# '$' can be escaped by using an extra '$'.
+		# Default: "Minecraft ${mcversion} - ${activity}"
+		title_with_activity = "Minecraft ${mcversion} - ${activity}"
+		# Enables custom Minecraft window icons.
+		# Default: true
+		custom_icon = true
+		# The path to the 16x16 Minecraft window icon relative to the Minecraft instance directory.
+		# Forward slashes should be used even on Windows to preserve compatibility with other platforms.
+		# Backward slashes will automatically be replaced.
+		# Default: ""
+		icon_16x16 = ""
+		# The path to the 16x16 Minecraft window icon relative to the Minecraft instance directory.
+		# Forward slashes should be used even on Windows to preserve compatibility with other platforms.
+		# Backward slash
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\smoothchunk-common.toml (298 B) ====
+
+["Config category"]
+	#Delay before a chunk is saved to disk, default: 300 seconds. If you enable the noSaveAll config, it is suggest to set this to 180.
+	#Range: 100 ~ 3000
+	chunkSaveDelay = 180
+	#Enables debug logging of how many chunks got saved in a tick. default: false
+	debugLogging = false
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\toughasnails\thirst.toml (4455 B) ====
+
+#Please be advised that certain thirst-related options are world-specific and are located in <Path to your world folder>/serverconfig/toughasnails-server.toml.
+[general]
+	#The threshold at which exhaustion causes a reduction in hydration and the thirst bar.
+	#Range: 0.0 ~ 1.7976931348623157E308
+	exhaustion_threshold = 6.5
+
+[drink_options]
+	#Hydration restored from drinking with hands.
+	#Range: 0.0 ~ 1.7976931348623157E308
+	hand_drinking_hydration = 0.1
+	#Thirst restored from drinking with hands.
+	#Range: 0 ~ 20
+	hand_drinking_thirst = 1
+
+	#Effects of drinks from Vanilla, Tough As Nails and other mods.
+	[[drink_options.drink_entries]]
+		poison_chance = 0.25
+		thirst = 2
+		hydration = 0.2
+		location = "minecraft:potion"
+
+	[[drink_options.drink_entries]]
+		poison_chance = 0.75
+		thirst = 1
+		hydration = 0.1
+		location = "toughasnails:dirty_water_bottle"
+
+	[[drink_options.drink_entries]]
+		poison_chance = 0.75
+		thirst = 1
+		hydration = 0.1
+		location = "toughasnails:dirty_water_canteen"
+
+	[[drink_options.drink_entries]]
+		poison_chance = 0.0
+		thirst = 3
+		hydration = 0.4
+		location = "toughasnails:purified_water_bottle"
+
+	[[drink_options.drink_entries]]
+		poison_chance = 0.0
+		thirst = 3
+		hydration = 0.4
+		location = "toughasnails:purified_water_canteen"
+
+	[[drink_options.drink_entries]]
+		poison_chance = 0.25
+		thirst = 2
+		hydration = 0.2
+		location = "toughasnails:water_canteen"
+
+[biome_options]
+
+	#The types of water found in biomes from Vanilla and other mods.
+	[[biome_options.biome_water_entries]]
+		location = "minecraft:swamp"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "minecraft:swamp_hills"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "minecraft:mushroom_fields"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "minecraft:mushroom_field_shore"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:bayou"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:bayou_mangrove"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:dead_swamp"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:deep_bayou"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:fungal_field"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:fungal_jungle"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:highland_moor"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:jade_cliffs"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:jade_grassland"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:ominous_mire"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:ominous_woods"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:overgrown_fungal_jungle"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:rainforest"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:rainforest_cliffs"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:rainforest_floodplain"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:silkglade"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:silkglade_nest"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:tundra_bog"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:volcanic_plains"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:volcano"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:wasteland"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:wetland"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:wetland_marsh"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:wooded_wasteland"
+		type = "DIRTY"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:alps"
+		type = "PURIFIED"
+
+	[[biome_options.biome_water_entries]]
+		location = "biomesoplenty:rainbow_hills"
+		type = "PURIFIED"
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\usefulbackpacks-common.toml (278 B) ====
+
+#Common configuration settings
+[common]
+	#This option controls if backpacks in backpacks are allowed.
+	#If set to true you can put backpacks in existing backpacks and stack them together.
+	#If set to false you cannot put backpacks in backpacks
+	allowStackingBackpacks = false
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\worldedit\worldedit.properties (2512 B) ====
+#Don't put comments; they get removed
+#Sat Oct 14 09:34:51 PDT 2023
+max-super-pickaxe-size=5
+use-inventory-creative-override=false
+use-inventory-override=false
+default-max-polyhedron-points=-1
+disallowed-blocks=minecraft\:oak_sapling,minecraft\:jungle_sapling,minecraft\:dark_oak_sapling,minecraft\:spruce_sapling,minecraft\:birch_sapling,minecraft\:acacia_sapling,minecraft\:black_bed,minecraft\:blue_bed,minecraft\:brown_bed,minecraft\:cyan_bed,minecraft\:gray_bed,minecraft\:green_bed,minecraft\:light_blue_bed,minecraft\:light_gray_bed,minecraft\:lime_bed,minecraft\:magenta_bed,minecraft\:orange_bed,minecraft\:pink_bed,minecraft\:purple_bed,minecraft\:red_bed,minecraft\:white_bed,minecraft\:yellow_bed,minecraft\:powered_rail,minecraft\:detector_rail,minecraft\:grass,minecraft\:dead_bush,minecraft\:moving_piston,minecraft\:piston_head,minecraft\:sunflower,minecraft\:rose_bush,minecraft\:dandelion,minecraft\:poppy,minecraft\:brown_mushroom,minecraft\:red_mushroom,minecraft\:tnt,minecraft\:torch,minecraft\:fire,minecraft\:redstone_wire,minecraft\:wheat,minecraft\:potatoes,minecraft\:carrots,minecraft\:melon_stem,minecraft\:pumpkin_stem,minecraft\:beetroots,minecraft\:rail,minecraft\:lever,minecraft\:redstone_torch,minecraft\:redstone_wall_torch,minecraft\:repeater,minecraft\:comparator,minecraft\:stone_button,minecraft\:birch_button,minecraft\:acacia_button,minecraft\:dark_oak_button,minecraft\:jungle_button,minecraft\:oak_button,minecraft\:spruce_button,minecraft\:cactus,minecraft\:sugar_cane,minecraft\:bedrock
+shell-save-type=
+craftscript-dir=craftscripts
+register-help=true
+snapshots-dir=
+max-calculation-timeout=300
+history-size=15
+super-pickaxe-drop-items=true
+max-changed-blocks=-1
+default-max-polygon-points=-1
+scripting-timeout=3000
+calculation-timeout=100
+nav-use-glass=true
+extended-y-limit=false
+nav-wand-item=minecraft\:compass
+log-file=
+butcher-max-radius=-1
+max-radius=-1
+wand-item=minecraft\:wooden_axe
+profile=false
+use-in-creative=false
+default-vertical-height=256
+super-pickaxe-many-drop-items=true
+max-polyhedron-points=20
+server-side-cui=true
+snapshots-experimental=false
+max-brush-radius=6
+allow-symbolic-links=false
+default-locale=default
+trace-unflushed-sessions=false
+max-polygon-points=20
+default-max-changed-blocks=-1
+log-commands=false
+use-inventory=false
+log-format=[%1$tY-%1$tm-%1$td %1$tH\:%1$tM\:%1$tS %4$s]\: %5$s%6$s%n
+cheat-mode=false
+butcher-default-radius=-1
+schematic-save-dir=schematics
+nav-wand-distance=50
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\config\xlfoodmod.toml (188 B) ====
+
+["Seed/Flower Settings"]
+	#Should XL Food Mod Seeds be Obtainable?
+	"Generate Grass" = false
+	#Should Vanilla(flavoring) Flowers be Obtainable?
+	"Generate Vanilla Flower" = false
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\help.yml (2576 B) ====
+# This is the help configuration file for Bukkit.
+# 
+# By default you do not need to modify this file. Help topics for all plugin commands are automatically provided by
+# or extracted from your installed plugins. You only need to modify this file if you wish to add new help pages to
+# your server or override the help pages of existing plugin commands.
+# 
+# This file is divided up into the following parts:
+# -- general-topics: lists admin defined help topics
+# -- index-topics:   lists admin defined index topics
+# -- amend-topics:   lists topic amendments to apply to existing help topics
+# -- ignore-plugins: lists any plugins that should be excluded from help
+# 
+# Examples are given below. When amending command topic, the string <text> will be replaced with the existing value
+# in the help topic. Color codes can be used in topic text. The color code character is & followed by 0-F.
+# ================================================================
+# 
+# Set this to true to list the individual command help topics in the master help.
+# command-topics-in-master-index: true
+# 
+# Each general topic will show up as a separate topic in the help index along with all the plugin command topics.
+# general-topics:
+#     Rules:
+#         shortText: Rules of the server
+#         fullText: |
+#             &61. Be kind to your fellow players.
+#             &B2. No griefing.
+#             &D3. No swearing.
+#         permission: topics.rules
+# 
+# Each index topic will show up as a separate sub-index in the help index along with all the plugin command topics.
+# To override the default help index (displayed when the user executes /help), name the index topic "Default".
+# index-topics:
+#     Ban Commands:
+#         shortText: Player banning commands
+#         preamble: Moderator - do not abuse these commands
+#         permission: op
+#         commands:
+#             - /ban
+#             - /ban-ip
+#             - /banlist
+# 
+# Topic amendments are used to change the content of automatically generated plugin command topics.
+# amended-topics:
+#     /stop:
+#         shortText: Stops the server cold....in its tracks!
+#         fullText: <text> - This kills the server.
+#         permission: you.dont.have
+# 
+# Any plugin in the ignored plugins list will be excluded from help. The name must match the name displayed by
+# the /plugins command. Ignore "Bukkit" to remove the standard bukkit commands from the index. Ignore "All"
+# to completely disable automatic help topic generation.
+# ignore-plugins:
+#    - PluginNameOne
+#    - PluginNameTwo
+#    - PluginNameThree
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\mohist-config\mohist.yml (1500 B) ====
+# This is the main configuration file for Mohist.
+# As you can see, there's tons to configure. Some options may impact gameplay, so use 
+# with caution, and make sure you know what each option does before configuring.
+# For a reference for any variable inside this file, check out the Mohist wiki at
+# https://wiki.mohistmc.com/
+# If you need help with the configuration or have any questions related to Spigot,
+# join us at the Discord or drop by our forums and leave a post.
+# Discord: https://discord.gg/mohistmc
+# Forums: https://mohistmc.com/
+# Forums (CN): https://mohistmc.cn/
+
+max-bees-in-hive: 3
+enchantment-table-book-animation-tick: false
+mohist:
+  vanilla_lang: en_us
+  check_update: false
+  lang: xx_XX
+  custom_flags: aaaa bbbb
+  check_libraries: true
+  disable_mods_blacklist: false
+  disable_plugins_blacklist: false
+  check_update_auto_download: false
+  use_custom_java11: false
+  show_logo: true
+  optimize_explosions: true
+  prevent_from_entering_unloaded_chunks: true
+  forge_ignore_optional_mods_version_check: false
+  ignore_empty_time: all_worlds
+  chunk_unload_delay: 5
+  enable_worldedit_fix: true
+  networkmanager:
+    debug: false
+    intercept: []
+libraries_black_list: aaaaa;bbbbbb
+config-version: 1
+anvilfix:
+  maximumrepaircost: 40
+  enchantment_fix: false
+  max_enchantment_level: 32767
+player_modlist_blacklist:
+  enable: false
+  list: []
+server_modlist_whitelist:
+  enable: false
+  list: '[minecraft, forge, pfm, cfm, cloth-config]'
+forge:
+  hidejoinmodslist: false
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\permissions.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AuthMe\commands.yml (2229 B) ====
+
+# This configuration file allows you to execute commands on various events.
+# Supported placeholders in commands:
+#   %p is replaced with the player name.
+#   %nick is replaced with the player's nick name
+#   %ip is replaced with the player's IP address
+#   %country is replaced with the player's country
+# 
+# For example, if you want to send a welcome message to a player who just registered:
+# onRegister:
+#   welcome:
+#     command: 'msg %p Welcome to the server!'
+#     executor: CONSOLE
+# 
+# This will make the console execute the msg command to the player.
+# Each command under an event has a name you can choose freely (e.g. 'welcome' as above),
+# after which a mandatory 'command' field defines the command to run,
+# and 'executor' defines who will run the command (either PLAYER or CONSOLE). Longer example:
+# onLogin:
+#   welcome:
+#     command: 'msg %p Welcome back!'
+#     executor: PLAYER
+#   broadcast:
+#     command: 'broadcast %p has joined, welcome back!'
+#     executor: CONSOLE
+# 
+# You can also add delay to command. It will run after the specified ticks. Example:
+# onLogin:
+#   rules:
+#     command: 'rules'
+#     executor: PLAYER
+#     delay: 200
+# 
+# Supported command events: onLogin, onSessionLogin, onFirstLogin, onJoin, onLogout, onRegister, onUnregister
+# 
+# For onLogin and onFirstLogin, you can use 'ifNumberOfAccountsLessThan' and 'ifNumberOfAccountsAtLeast'
+# to specify limits to how many accounts a player can have (matched by IP) for a command to be run:
+# onLogin:
+#   warnOnManyAccounts:
+#     command: 'say Uh oh! %p has many alt accounts!'
+#     executor: CONSOLE
+#     ifNumberOfAccountsAtLeast: 5
+# Commands to run for players logging in whose 'last login date' was empty
+onFirstLogin: {}
+onJoin: {}
+onLogin: {}
+# These commands are called whenever a logged in player uses /logout or quits.
+# The commands are not run if a player that was not logged in quits the server.
+# Note: if your server crashes, these commands won't be run, so don't rely on them to undo
+# 'onLogin' commands that would be dangerous for non-logged in players to have!
+onLogout: {}
+onRegister: {}
+onSessionLogin: {}
+# Commands to run whenever a player is unregistered (by himself, or by an admin)
+onUnregister: {}
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AuthMe\config.yml (26286 B) ====
+DataSource:
+    # What type of database do you want to use?
+    # Valid values: SQLITE, MYSQL, POSTGRESQL
+    backend: SQLITE
+    # Enable the database caching system, should be disabled on bungeecord environments
+    # or when a website integration is being used.
+    caching: true
+    # Database host address
+    mySQLHost: 127.0.0.1
+    # Database port
+    mySQLPort: '3306'
+    # Connect to MySQL database over SSL
+    mySQLUseSSL: true
+    # Verification of server's certificate.
+    # We would not recommend to set this option to false.
+    # Set this option to false at your own risk if and only if you know what you're doing
+    mySQLCheckServerCertificate: true
+    # Username to connect to the MySQL database
+    mySQLUsername: authme
+    # Password to connect to the MySQL database
+    mySQLPassword: '12345'
+    # Driver Name of the MySQL database
+    mySQLDriverClassName: com.mysql.jdbc.Driver
+    # Database Name, use with converters or as SQLITE database name
+    mySQLDatabase: authme
+    # Table of the database
+    mySQLTablename: authme
+    # Column of IDs to sort data
+    mySQLColumnId: id
+    # Column for storing or checking players nickname
+    mySQLColumnName: username
+    # Column for storing or checking players RealName
+    mySQLRealName: realname
+    # Column for storing players passwords
+    mySQLColumnPassword: password
+    # Column for storing players passwords salts
+    mySQLColumnSalt: ''
+    # Column for storing players emails
+    mySQLColumnEmail: email
+    # Column for storing if a player is logged in or not
+    mySQLColumnLogged: isLogged
+    # Column for storing if a player has a valid session or not
+    mySQLColumnHasSession: hasSession
+    # Column for storing a player's TOTP key (for two-factor authentication)
+    mySQLtotpKey: totp
+    # Column for storing the player's last IP
+    mySQLColumnIp: ip
+    # Column for storing players lastlogins
+    mySQLColumnLastLogin: lastlogin
+    # Column storing the registration date
+    mySQLColumnRegisterDate: regdate
+    # Column for storing the IP address at the time of registration
+    mySQLColumnRegisterIp: regip
+    # Column for storing player LastLocation - X
+    mySQLlastlocX: x
+    # Column for storing player LastLocation - Y
+    mySQLlastlocY: y
+    # Column for storing player LastLocation - Z
+    mySQLlastlocZ: z
+    # Column for storing player LastLocation - World Name
+    mySQLlastlocWorld: world
+    # Column for storing player LastLocation - Yaw
+    mySQLlastlocYaw: yaw
+    # Column for storing player LastLocation - Pitch
+    mySQLlastlocPitch: pitch
+    # Column for storing players uuids (optional)
+    mySQLPlayerUUID: ''
+    # Overrides the size of the DB Connection Pool, default = 10
+    poolSize: 10
+    # The maximum lifetime of a connection in the pool, default = 1800 seconds
+    # You should set this at least 30 seconds less than mysql server wait_timeout
+    maxLifetime: 1800
+ExternalBoardOptions:
+    # Column for storing players groups
+    mySQLColumnGroup: ''
+    # -1 means disabled. If you want that only activated players
+    # can log into your server, you can set here the group number
+    # of unactivated users, needed for some forum/CMS support
+    nonActivedUserGroup: -1
+    # Other MySQL columns where we need to put the username (case-sensitive)
+    mySQLOtherUsernameColumns: []
+    # How much log2 rounds needed in BCrypt (do not change if you do not know what it does)
+    bCryptLog2Round: 10
+    # phpBB table prefix defined during the phpBB installation process
+    phpbbTablePrefix: phpbb_
+    # phpBB activated group ID; 2 is the default registered group defined by phpBB
+    phpbbActivatedGroupId: 2
+    # IP Board table prefix defined during the IP Board installation process
+    IPBTablePrefix: ipb_
+    # IP Board default group ID; 3 is the default registered group defined by IP Board
+    IPBActivatedGroupId: 3
+    # Xenforo table prefix defined during the Xenforo installation process
+    XFTablePrefix: xf_
+    # XenForo default group ID; 2 is the default registered group defined by Xenforo
+    XFActivatedGroupId: 2
+    # Wordpress prefix defined during WordPress installation
+    wordpressTablePrefix: wp_
+settings:
+    sessions:
+        # Do you want to enable the session feature?
+        # If enabled, when a player authenticates successfully,
+        # his IP and his nickname is saved.
+        # The next time the player joins the server, if his IP
+        # is the same as last time and the timeout hasn't
+        # expired, he will not need to authenticate.
+        enabled: false
+        # After how many minutes should a session expire?
+        # A player's session ends after the timeout or if his IP has changed
+        timeout: 10
+    # Message language, available languages:
+    # https://github.com/AuthMe/AuthMeReloaded/blob/master/docs/translations.md
+    messagesLanguage: ro
+    # Forces authme to hook into Vault instead of a specific permission handler system.
+    forceVaultHook: false
+    # Log level: INFO, FINE, DEBUG. Use INFO for general messages,
+    # FINE for some additional detailed ones (like password failed),
+    # and DEBUG for debugging
+    logLevel: FINE
+    # By default we schedule async tasks when talking to the database. If you want
+    # typical communication with the database to happen synchronously, set this to false
+    useAsyncTasks: true
+    # The name of the server, used in some placeholders.
+    serverName: Hype-City
+    restrictions:
+        # Can not authenticated players chat?
+        # Keep in mind that this feature also blocks all commands not
+        # listed in the list below.
+        allowChat: false
+        # Hide the chat log from players who are not authenticated?
+        hideChat: true
+        # Allowed commands for unauthenticated players
+        allowCommands: 
+        - /login
+        - /log
+        - /l
+        - /register
+        - /reg
+        - /email
+        - /captcha
+        - /2fa
+        - /totp
+        # Max number of allowed registrations per 
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AuthMe\messages\help_en.yml (1829 B) ====
+# Translation config for the AuthMe help, e.g. when /authme help or /authme help register is called
+
+# -------------------------------------------------------
+# List of texts used in the help section
+common:
+    header: '==========[ AuthMeReloaded HELP ]=========='
+    optional: 'Optional'
+    hasPermission: 'You have permission'
+    noPermission: 'No permission'
+    default: 'Default'
+    result: 'Result'
+    defaultPermissions:
+        notAllowed: 'No permission'
+        opOnly: 'OP''s only'
+        allowed: 'Everyone allowed'
+
+# -------------------------------------------------------
+# Titles of the individual help sections
+# Set the translation text to empty text to disable the section, e.g. to hide alternatives:
+#   alternatives: ''
+section:
+    command: 'Command'
+    description: 'Short description'
+    detailedDescription: 'Detailed description'
+    arguments: 'Arguments'
+    permissions: 'Permissions'
+    alternatives: 'Alternatives'
+    children: 'Commands'
+
+# -------------------------------------------------------
+# You can translate the data for all commands using the below pattern.
+# For example to translate /authme reload, create a section "authme.reload", or "login" for /login
+# If the command has arguments, you can use arg1 as below to translate the first argument, and so forth
+# Translations don't need to be complete; any missing section will be taken from the default silently
+# Important: Put main commands like "authme" before their children (e.g. "authme.reload")
+commands:
+    authme.register:
+        description: 'Register a player'
+        detailedDescription: 'Register the specified player with the specified password.'
+        arg1:
+            label: 'player'
+            description: 'Player name'
+        arg2:
+            label: 'password'
+            description: 'Password'
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AuthMe\messages\help_ro.yml (1845 B) ====
+# Translation config for the AuthMe help, e.g. when /authme help or /authme help register is called
+
+# -------------------------------------------------------
+# List of texts used in the help section
+common:
+    header: '==========[ AuthMeReloaded HELP ]=========='
+    optional: 'Optional'
+    hasPermission: 'Tu ai permisiunea'
+    noPermission: 'Fara permisiune'
+    default: 'Default'
+    result: 'Rezultat'
+    defaultPermissions:
+        notAllowed: 'Nu ai permisiune'
+        opOnly: 'Doar pentru operatori'
+        allowed: 'Toata lumea are acces'
+
+# -------------------------------------------------------
+# Titles of the individual help sections
+# Set the translation text to empty text to disable the section, e.g. to hide alternatives:
+#   alternatives: ''
+section:
+    command: 'Comanda'
+    description: 'Descriere scurta'
+    detailedDescription: 'Descriere detaliata'
+    arguments: 'Argumente'
+    permissions: 'Permisiuni'
+    alternatives: 'Alternative'
+    children: 'Comenzi'
+
+# -------------------------------------------------------
+# You can translate the data for all commands using the below pattern.
+# For example to translate /authme reload, create a section "authme.reload", or "login" for /login
+# If the command has arguments, you can use arg1 as below to translate the first argument, and so forth
+# Translations don't need to be complete; any missing section will be taken from the default silently
+# Important: Put main commands like "authme" before their children (e.g. "authme.reload")
+commands:
+    authme.register:
+        description: 'Inregistreaza un jucator'
+        detailedDescription: 'Inregistreaza un jucator cu parola specificata.'
+        arg1:
+            label: 'jucator'
+            description: 'Numele jucatorului'
+        arg2:
+            label: 'parola'
+            description: 'Parola'
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AuthMe\messages\messages_en.yml (8516 B) ====
+# List of global tags:
+# %nl% - Goes to new line.
+# %username% - Replaces the username of the player receiving the message.
+# %displayname% - Replaces the nickname (and colors) of the player receiving the message.
+
+# Registration
+registration:
+  register_request: '&3Please, register to the server with the command: /register <password> <ConfirmPassword>'
+  command_usage: '&cUsage: /register <password> <ConfirmPassword>'
+  reg_only: '&4Only registered users can join the server! Please visit http://example.com to register yourself!'
+  kicked_admin_registered: 'An admin just registered you; please log in again.'
+  success: '&2Successfully registered!'
+  disabled: '&cIn-game registration is disabled!'
+  name_taken: '&cYou already have registered this username!'
+
+# Password errors on registration
+password:
+  match_error: '&cPasswords didn''t match, check them again!'
+  name_in_password: '&cYou can''t use your name as password, please choose another one...'
+  unsafe_password: '&cThe chosen password isn''t safe, please choose another one...'
+  forbidden_characters: '&4Your password contains illegal characters. Allowed chars: %valid_chars'
+  wrong_length: '&cYour password is too short or too long! Please try with another one!'
+
+# Login
+login:
+  command_usage: '&cUsage: /login <password>'
+  wrong_password: '&cWrong password!'
+  success: '&2Successful login!'
+  login_request: '&cPlease, login with the command: /login <password>'
+  timeout_error: '&4Login timeout exceeded, you have been kicked from the server, please try again!'
+
+# Errors
+error:
+  unregistered_user: '&cThis user isn''t registered!'
+  denied_command: '&cIn order to use this command you must be authenticated!'
+  denied_chat: '&cIn order to chat you must be authenticated!'
+  not_logged_in: '&cYou''re not logged in!'
+  tempban_max_logins: '&cYou have been temporarily banned for failing to log in too many times.'
+  max_registration: '&cYou have exceeded the maximum number of registrations (%reg_count/%max_acc %reg_names) for your connection!'
+  no_permission: '&4You don''t have the permission to perform this action!'
+  unexpected_error: '&4An unexpected error occurred, please contact an administrator!'
+  kick_for_vip: '&3A VIP player has joined the server when it was full!'
+  logged_in: '&cYou''re already logged in!'
+  kick_unresolved_hostname: '&cAn error occurred: unresolved player hostname!'
+
+# AntiBot
+antibot:
+  kick_antibot: 'AntiBot protection mode is enabled! You have to wait some minutes before joining the server.'
+  auto_enabled: '&4[AntiBotService] AntiBot enabled due to the huge number of connections!'
+  auto_disabled: '&2[AntiBotService] AntiBot disabled after %m minutes!'
+
+unregister:
+  success: '&cSuccessfully unregistered!'
+  command_usage: '&cUsage: /unregister <password>'
+
+# Other messages
+misc:
+  accounts_owned_self: 'You own %count accounts:'
+  accounts_owned_other: 'The player %name has %count accounts:'
+  account_not_activated: '&cYour account isn''t activated yet, please check your emails!'
+  password_changed: '&2Password changed successfully!'
+  logout: '&2Logged out successfully!'
+  reload: '&2Configuration and database have been reloaded correctly!'
+  usage_change_password: '&cUsage: /changepassword <oldPassword> <newPassword>'
+
+# Session messages
+session:
+  invalid_session: '&cYour IP has been changed and your session data has expired!'
+  valid_session: '&2Logged-in due to Session Reconnection.'
+
+# Error messages when joining
+on_join_validation:
+  name_length: '&4Your username is either too short or too long!'
+  characters_in_name: '&4Your username contains illegal characters. Allowed chars: %valid_chars'
+  country_banned: '&4Your country is banned from this server!'
+  not_owner_error: 'You are not the owner of this account. Please choose another name!'
+  kick_full_server: '&4The server is full, try again later!'
+  same_nick_online: '&4The same username is already playing on the server!'
+  invalid_name_case: 'You should join using username %valid, not %invalid.'
+  same_ip_online: 'A player with the same IP is already in game!'
+  quick_command: 'You used a command too fast! Please, join the server again and wait more before using any command.'
+
+# Email
+email:
+  usage_email_add: '&cUsage: /email add <email> <confirmEmail>'
+  usage_email_change: '&cUsage: /email change <oldEmail> <newEmail>'
+  new_email_invalid: '&cInvalid new email, try again!'
+  old_email_invalid: '&cInvalid old email, try again!'
+  invalid: '&cInvalid email address, try again!'
+  added: '&2Email address successfully added to your account!'
+  request_confirmation: '&cPlease confirm your email address!'
+  changed: '&2Email address changed correctly!'
+  email_show: '&2Your current email address is: &f%email'
+  incomplete_settings: 'Error: not all required settings are set for sending emails. Please contact an admin.'
+  already_used: '&4The email address is already being used'
+  send_failure: 'The email could not be sent. Please contact an administrator.'
+  no_email_for_account: '&2You currently don''t have email address associated with this account.'
+  add_email_request: '&3Please add your email to your account with the command: /email add <yourEmail> <confirmEmail>'
+  change_password_expired: 'You cannot change your password using this command anymore.'
+  email_cooldown_error: '&cAn email was already sent recently. You must wait %time before you can send a new one.'
+  add_not_allowed: '&cAdding email was not allowed.'
+  change_not_allowed: '&cChanging email was not allowed.'
+
+# Password recovery by email
+recovery:
+  forgot_password_hint: '&3Forgot your password? Please use the command: /email recovery <yourEmail>'
+  command_usage: '&cUsage: /email recovery <Email>'
+  email_sent: '&2Recovery email sent successfully! Please check your email inbox!'
+  code:
+    code_sent: 'A recovery code to reset your password has been sent to your email.'
+    incorrect: 'The recovery code is not correct! You have %count tries remaining.'
+    tries_exceeded: 'You ha
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AuthMe\messages\messages_ro.yml (9010 B) ====
+# List of global tags:
+# %nl% - Goes to new line.
+# %username% - Replaces the username of the player receiving the message.
+# %displayname% - Replaces the nickname (and colors) of the player receiving the message.
+
+# Registration
+registration:
+  register_request: '&3Te rugam sa te inregistrezi folosind comanda "/register <Parola> <CorfirmareParola>"'
+  command_usage: '&cFoloseste comanda: /register <Parola> <ConfirmareParola>'
+  reg_only: '&4Doar jucatori inregistrati pot intra pe server! Te rugam foloseste http://example.com pentru a te inregistra!'
+  kicked_admin_registered: 'Un administrator tocmai te-a inregistrat, te rog autentifica-te din nou.'
+  success: '&2Te-ai inregistrat cu succes!'
+  disabled: '&cInregistrarea in joc nu este activata!'
+  name_taken: '&cCineva este inregistrat cu acest nume!'
+
+# Password errors on registration
+password:
+  match_error: '&cParolele nu corespund, verifica-le din nou!'
+  name_in_password: '&c&cNu poti folosi numele ca si parola. Te rugam sa folosesti alta parola...'
+  unsafe_password: '&cParola aleasa nu este sigura. Te rugam sa folosesti alta parola...'
+  forbidden_characters: '&4Parola ta contine caractere nepermise. Caractere permise: %valid_chars'
+  wrong_length: '&cParola ta este prea scurta pentru a te inregistra! Te rugam incearca alta parola!'
+
+# Login
+login:
+  command_usage: '&cFoloseste comanda "/login <Parola>" pentru a te autentifica.'
+  wrong_password: '&cParola gresita!'
+  success: '&2Te-ai autentificat cu succes!'
+  login_request: '&cTe rugam sa te autentifici folosind comanda: /login <Parola>'
+  timeout_error: '&4A expirat timpul de autentificare si ai fost dat afara de server, te rugam incearca din nou!'
+
+# Errors
+error:
+  unregistered_user: '&cAcest jucator nu este inregistrat!'
+  denied_command: '&cPentru a utiliza aceasta comanda trebuie sa fi autentificat!'
+  denied_chat: '&cPentru a utiliza chat-ul trebuie sa fi autentificat!'
+  not_logged_in: '&cNu esti autentificat!'
+  tempban_max_logins: '&cAi fost banat temporar deoarece ai esuat sa te autentifici de prea multe ori.'
+  max_registration: '&cAi depasit numarul maxim de inregistrari (%reg_count /%max_acc %reg_names) pentru conexiunea dvs.!'
+  no_permission: '&4Nu ai permisiunea de a efectua aceasta actiune!'
+  unexpected_error: '&4A aparut o eroare, te rugam contacteaza un administrator!'
+  kick_for_vip: '&3Un VIP a intrat pe server cand era plin!'
+  logged_in: '&cEsti deja autentificat!'
+  kick_unresolved_hostname: '&cA aparut o eroare: nume gazda nerezolvat!'
+
+# AntiBot
+antibot:
+  kick_antibot: 'Protectia AntiBot este activata! Trebuie sa astepti cateva minute pentru a intra pe server.'
+  auto_enabled: '&4[Protectie AntiBot] AntiBot-ul a fost activat din cauza numarului mare de conexiuni!'
+  auto_disabled: '&2[Protectie AntiBot] AntiBot-ul a fost dezactivat dupa %m minute!'
+
+unregister:
+  success: '&cTi-ai sters contul cu succes!'
+  command_usage: '&cFoloseste comanda: /unregister <Parola>'
+
+# Other messages
+misc:
+  accounts_owned_self: 'Detii %count conturi:'
+  accounts_owned_other: 'Jucatorul %name are %count conturi:'
+  account_not_activated: '&cContul tau nu este activat, te rugam verifica-ti email-ul!'
+  password_changed: '&2Parola a fost schimbata cu succes!'
+  logout: '&2Te-ai deconectat cu succes!'
+  reload: '&2Configuratiile si baza de date s-au reincarcat corect!'
+  usage_change_password: '&cFoloseste comanda: /changepassword <ParolaVeche> <ParolaNoua>'
+
+# Session messages
+session:
+  invalid_session: '&cIP-ul tau a fost schimbat si sesiunea ta a expirat!'
+  valid_session: '&2Conectat datorita reconectarii sesiunii.'
+
+# Error messages when joining
+on_join_validation:
+  name_length: '&4Numele tau este fie prea scurt, fie prea lung!'
+  characters_in_name: '&4Numele tau contine caractere ilegale. Caractere permise: %valid_chars'
+  country_banned: '&4Tara ta este interzisa pe acest server!'
+  not_owner_error: 'Tu nu esti detinatorul acestui cont. Te rugam alege alt nume!'
+  kick_full_server: '&4Server-ul este plin, incearca mai tarziu!'
+  same_nick_online: '&4Acelasi nume apartine unui jucator care e deja pe server!'
+  invalid_name_case: 'Ar trebui sa intri cu numele %valid, nu %invalid'
+  same_ip_online: 'Un jucator cu acelasi IP este deja in joc!'
+  quick_command: 'Ai folosit o comanda prea repede! Te rugam, intra din nou pe server si astepta mai mult inainte de a utiliza orice comanda.'
+
+# Email
+email:
+  usage_email_add: '&cFoloseste comanda: /email add <Email> <ConfrimareEmail>'
+  usage_email_change: '&cFoloseste comanda: /email change <EmailVechi> <EmailNou>'
+  new_email_invalid: '&cNoul email este nevalid, incearca din nou!'
+  old_email_invalid: '&cEmail-ul vechi este nevalid, incearca din nou!'
+  invalid: '&cEmail-ul este nevalid, incearca din nou!'
+  added: '&2Email-ul a fost adaugat cu succes la contul tau!'
+  request_confirmation: '&cTe rugam sa confirmi adresa ta de email!'
+  changed: '&2Email-ul a fost schimbat cu succes!'
+  email_show: '&2Adresa ta curenta de email este: &f%email'
+  incomplete_settings: 'Eroare: Nu indeplinesti conditiile trimiterii unui email! Te rugam contacteaza un administrator.'
+  already_used: '&4Email-ul acesta este deja folosit de altcineva'
+  send_failure: 'Email-ul nu a putut fi trimis. Ta rugam contactatezi un administrator.'
+  no_email_for_account: '&2Nu ai nici o adresa de email asociata cu acest cont.'
+  add_email_request: '&3Te rugam adaugati email-ul la contul tau folosind comanda "/email add <Email> <ConfrimaEmail>"'
+  change_password_expired: 'Nu mai iti poti schimba parola folosind aceasta comanda.'
+  email_cooldown_error: '&cAi primit deja un mail pentru schimbarea parolei. Trebuie sa astepti %time inainte de a trimite unul nou.'
+  add_not_allowed: '&cAdaugarea email-ului nu a fost permisa.'
+  change_not_allowed: '&cModificarea email-ului nu a fost permisa.'
+
+# Password recovery by email
+recovery:
+  forgot_password_hint: '&3Ti-ai uitat parola? Te rugam foloseste comanda "/email recovery <Email>"'
+  command_usage: '&cFo
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AuthMe\spawn.yml (241 B) ====
+spawn:
+  world: world
+  x: -256.4955472922791
+  y: 68.0625
+  z: -273.3921220249573
+  yaw: 359.6373
+  pitch: 1.6497945
+firstspawn:
+  world: world
+  x: -256.4955472922791
+  y: 68.0625
+  z: -273.3921220249573
+  yaw: 359.6373
+  pitch: 1.6497945
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\blacklist.yml (2145 B) ====
+#############################################################################################################
+#                          _             _____    _          _                                              #
+#          /\             | |           |  __ \  (_)        | |             B L A C K L I S T . Y M L       #
+#         /  \     _   _  | |_    ___   | |__) |  _    ___  | | __  _   _   _ __                            #
+#        / /\ \   | | | | | __|  / _ \  |  ___/  | |  / __| | |/ / | | | | | '_ \                           #
+#       / ____ \  | |_| | | |_  | (_) | | |      | | | (__  |   <  | |_| | | |_) |                          #
+#      /_/    \_\  \__,_|  \__|  \___/  |_|      |_|  \___| |_|\_\  \__,_| | .__/                           #
+#                                                                          | |                              #
+#                                                                          |_|                              #
+#############################################################################################################
+# By: BUTTERFIELD8 & The Zircon Network                                                                     #
+# Discord: https://discord.gg/ncHH4FP                                                                       #
+# Material Names: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html                         #
+# Entity Names: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html                  #
+#############################################################################################################
+
+#Set to "true" if you would like to enable the blacklist
+doBlacklisted: false
+doBlacklistedEntities: true
+doAutoSmeltBlacklist: false
+
+#By listing blocks below you are adding them to the blacklist therefore causing them to drop to the ground.
+Blacklisted:
+
+BlacklistedEntities:
+  - PLAYER
+
+BlacklistedWorlds:
+  - example
+
+#These materials will be ignored when auto smelt is enabled. Only items that can be smelted should be added.
+AutoSmeltBlacklist:
+  - OAK_LOG
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\config.yml (2852 B) ====
+ConfigVersion: 1.3
+#############################################################################################################
+#                          _             _____    _          _                                              #
+#          /\             | |           |  __ \  (_)        | |                                             #
+#         /  \     _   _  | |_    ___   | |__) |  _    ___  | | __  _   _   _ __                            #
+#        / /\ \   | | | | | __|  / _ \  |  ___/  | |  / __| | |/ / | | | | | '_ \                           #
+#       / ____ \  | |_| | | |_  | (_) | | |      | | | (__  |   <  | |_| | | |_) |                          #
+#      /_/    \_\  \__,_|  \__|  \___/  |_|      |_|  \___| |_|\_\  \__,_| | .__/                           #
+#                                                                          | |                              #
+#                                                                          |_|                              #
+#############################################################################################################
+# By: BUTTERFIELD8 & The Zircon Network                                                                     #
+# Discord: https://discord.gg/ncHH4FP                                                                       #
+#############################################################################################################
+
+#Message Prefix
+msgPrefix: "&8[&6&lHYPECITY&8]"
+
+#Toggle Message - /auto
+msgAutoPickupEnable: "&7You have&a enabled &7auto pickup."
+msgAutoPickupDisable: "&7You have&c disabled &7auto pickup."
+
+#Toggle Message - /autosmelt
+msgAutoSmeltEnable: "&7You have&a enabled &7auto smelt."
+msgAutoSmeltDisable: "&7You have&c disabled &7auto smelt."
+
+#Toggle Message - /drops
+msgAutoMobDropsEnable: "&7You have&a enabled &7auto drops."
+msgAutoMobDropsDisable: "&7You have&c disabled &7auto drops."
+
+#Aditional toggling messages
+msgAutoEnable: "&7Auto pickup has been automatically&a enabled&7."
+doAutoEnableMSG: true
+msgEnabledJoinMSG: "&7Auto pickup has been automatically&a enabled&7."
+doEnabledOnJoinMSG: true
+
+#reload Config Message
+msgReload: "&cReloaded Config"
+
+#Fully Inventory Message
+msgFullInv: "&7Inventarul tau este plin!"
+doFullInvMSG: true
+titlebar:
+  doTitleBar: false
+  line1: "&cWarning"
+  line2: "&7Inventory is full!"
+
+#This is most useful for prison servers! -- This setting is not normally recommended
+#This feature voids any extra blocks broken when /auto is enabled and the inventory is full!
+voidOnFullInv: false
+
+#Plase does not have permission
+msgNoperms: "&cYou don't have permission to use this command"
+
+#Require Permissions | Do players require permission to run commands?
+requirePerms:
+  autopickup: true
+  auto-reload: true
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\papi.yml (1510 B) ====
+#############################################################################################################
+#                          _             _____    _          _                                              #
+#          /\             | |           |  __ \  (_)        | |                       P A P I . Y M L       #
+#         /  \     _   _  | |_    ___   | |__) |  _    ___  | | __  _   _   _ __                            #
+#        / /\ \   | | | | | __|  / _ \  |  ___/  | |  / __| | |/ / | | | | | '_ \                           #
+#       / ____ \  | |_| | | |_  | (_) | | |      | | | (__  |   <  | |_| | | |_) |                          #
+#      /_/    \_\  \__,_|  \__|  \___/  |_|      |_|  \___| |_|\_\  \__,_| | .__/                           #
+#                                                                          | |                              #
+#                                                                          |_|                              #
+#############################################################################################################
+# By: BUTTERFIELD8 & The Zircon Network                                                                     #
+# Discord: https://discord.gg/ncHH4FP                                                                       #
+#############################################################################################################
+papi:
+  enabled:
+    true: "&aEnabled"
+    false: "&cDisabled"
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\010b4a71-1717-30b0-b3a2-4c0624d5ec93.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0185a747-224a-3566-8969-107d7eebe9ed.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\018b5121-508b-35a2-9ea5-f9ceccaa0fc1.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\01c43318-5d89-3e2f-8472-a3a396aa1cbb.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\025fc750-295c-332b-9a61-ca612dcef985.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\030e8379-e8ce-3614-908a-2b411fa44821.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\031e7c88-4529-32bf-bcf7-b6b24e57164f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\03bb0c85-2f73-3f69-aba6-0d5b619a82a7.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\046a0994-d97d-3660-a561-1cf0975561a6.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\05422bbb-2a02-3f16-b676-f7599f3e04fc.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\05a049bf-852a-3e89-ba84-316dfd8df3c0.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\05f9fab6-0da7-3549-acb6-fe61ba79dd87.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\06a80707-54d6-3a96-83bf-16fcb994b975.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0714f36f-72fb-3483-b206-5c3aa2397e16.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\073a14b9-cf05-308f-bff1-4e08eb4c6668.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\07bf0583-9c5b-30d5-b898-f5fd036ad512.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\09836ed2-8912-3eef-81f5-1c8ec9b1452e.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\09aa0e7e-083d-3ba0-b430-25881ad68780.yml (14 B) ====
+enabled: true
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\09dcecf7-24e6-3f8c-904a-01276443d9f0.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0a4c213b-52db-3f66-b510-37c66ae48062.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0a97fca6-3b71-3e78-a23e-02bf15b0b5a9.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0b11e487-4216-3d73-9d19-a13a30cf6cb9.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0b686c15-b559-3ca7-92a2-bf29537c3e8c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0c8f9927-a6d9-36d6-87e4-f8d98940c0dc.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0d2c5e1e-3670-39b5-9ce2-cae7c672683b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0d4306dd-bff1-3b2b-845f-74c8b9a56ec6.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0d5c3cb0-eeec-30d6-9ebd-2b0ce37f1459.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0d9524a2-8226-3b1d-abfe-9fc49ec9920f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\0ee4f563-92e6-3f1d-a3d8-2cf95648f91f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\1131ebb6-35d9-37bb-b565-a4cf094b07df.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\126663d6-e21b-3ce5-8cdf-7303bc4d4694.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\12caf773-50fd-3699-b5b4-be95cac0bc08.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\134663e0-cb9d-3f96-822c-f09a47fe26c0.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\134afa96-7284-36b7-863a-32c7d4575fe4.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\1394687d-28d9-3243-bd04-3389590a390d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\14bd5bc6-b1bf-3446-a2be-8044ddb15e7f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\14d5b98d-97bd-30d3-9f4a-1d3ca1dd3b0c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\158b7f16-47c6-344d-99b6-27ccd0862fad.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\15b8bd2c-05b6-3234-8657-678f2d860a18.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\16a32024-885a-36a6-aa62-67a414953986.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\16c62d5c-f754-3faa-aa1b-1a8f0879ef1d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\17a49dc3-63e7-3201-94c7-e4af5c6ffc17.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\1808319a-5c27-3e6e-a2fe-5d582f551173.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\185fc707-e35e-3484-a98e-9b50f0def30b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\19ade7b9-3d0c-3849-bff9-79c531db27cc.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\19d84761-b463-3ddc-a7b6-a61a391ae139.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\1a034532-7fc1-3354-bdd1-0ca9eba6fbe2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\1a41cda4-43e7-3d85-96c3-979b867767eb.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\1b0d68b7-1d36-33c2-ad51-64c8a66e28db.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\1b22996e-31fb-3a13-8e5a-7f877c1791bc.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\1d9219fa-879f-36d6-8833-916c132ebb1f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\1e189826-0df8-35e9-95ea-9beb070fc6d2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\1e70c032-3a1a-3b31-a650-7c7beb084b2a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\1f50d8cc-81ac-3d6d-aa60-e1099b1ddae5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\20755ad6-2bf2-3dfe-84ef-aa389e1dcb61.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2087309e-8a2e-3b60-b39b-ed56df519848.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\20c8114d-d5d4-3b78-8460-59bdf899c51b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\215bc920-5219-3908-bb0c-2067929a13f5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2203178d-1460-3afa-a60a-a972ba926e87.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\22a00f7f-8248-3c45-8921-d738c3720b3c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\22bd40bd-cff3-3cd3-8191-041897026606.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\230de00c-e890-3403-be0f-b347f2b6d926.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\239df200-5edf-39da-9f14-a06830a58a42.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\25a6330b-dae2-3fe4-8c74-ffaebc052028.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\25d7e909-8b69-37ba-98d8-45453656a6bf.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2603ed3f-8e0d-30ab-8cf5-5c5b3f3488f0.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\27c0605c-c526-3a33-b78c-d9b2744db950.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\27f4c12d-dec3-3ab5-92bc-7ec6df699b18.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2820f9e2-6a44-3c32-adc2-a88857ed0f38.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2876aa69-e391-391a-894c-121c577e087b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2900efc6-1605-3a22-a494-a220df052ae0.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2b03f10e-841e-3c52-8e4f-ddd76d86b53e.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2ba87be9-9d83-3d35-84b7-3658e47182f7.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2bcbdae3-9fed-3f81-a0b4-23c5cfb280b7.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2be0f748-fc10-33eb-8563-9b01de30ca91.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2c229ea5-6096-3845-be65-111dffffa5cc.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2ca5e574-3816-3ab6-aafb-81bc28d30a16.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2cb0202c-0feb-3139-9b7c-fc7a896581d1.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2d75aef4-517b-392c-945d-19c3b3c59e06.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2da3f933-fcd5-3ac2-8480-d6cabf5c8642.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2db7f7e0-a0dd-304e-9cd6-5c24c8b47a45.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2eb37550-1d47-3c78-98c5-cd6768f1d55c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\2f37918a-1c49-3d3c-9939-259e19311d28.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\301d3c17-1b77-339d-8698-2fc2fef98031.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\30c370fb-a886-3ef4-940d-adf9068b9ccb.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3272882a-1627-30e2-a882-45a5cddb13c9.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\32ad5cfe-53ae-320d-90f9-57faa721c7b4.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\32ef843f-07a1-39ab-9b11-8e979877ef32.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3365cbc2-ae93-3ab3-99be-7c5aecce0d33.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\34d07cc0-d272-3a97-b315-26831e5b791d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\35127b83-460f-35a2-8007-e3ed8a876d91.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\35bd164c-fe36-3827-89a8-7fb55d5714ee.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3664244c-10ab-3ea2-84bf-1e98c14ac33f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\36aa5717-8ab0-324f-b035-38f90e4aa2e9.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\38fa63fc-fc12-3a50-877b-a632fbf1b955.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\39b5feb8-80b3-36d1-b2f1-48121ed0808a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\39f75f37-71be-32f2-a386-29eba19d033c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\39fef1f7-a93b-3495-a3a0-22c3e675bebf.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3a1cbaea-2b15-3611-89cb-e6bc9fbc58e7.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3a2ae067-c449-3e29-8017-e93f0fd3a4cd.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3ac7283a-3301-3f61-86cb-7f52b528f56c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3b4fd66c-2850-340a-9a06-b1e02d938807.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3b7f19f0-8022-3845-95b0-ded4004e1d83.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3c2130de-0cd0-3269-b4ae-5a890f0ccdde.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3ca53bd4-18f8-389c-9b04-633d4bbaa228.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3cde177a-ffd1-3feb-8030-0ea30be1b332.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3ce13fb7-78f0-3cec-9f22-547f6fba434a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3d64bbfd-97c3-3dc1-96cb-70216878593c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3dab383a-1fb7-3896-9de5-e56d461c1b1a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3dc02fa3-38fb-39bf-8bba-e8fcad85ea54.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3dc42b67-b62a-3e52-adcb-02c35f9c64c4.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3dc8dbe3-b1f8-37e9-9f6b-5ba7b589ab31.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3e350385-02ea-37da-8879-58469ad1eaba.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3ee0978f-546f-328c-87c5-4cc0ae6fa419.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\3fc1d916-cccd-3916-8fe0-d0152d1aa672.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\412c82f2-1f57-3a31-8a8e-5dfd1e66afc3.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\41b99716-cd8c-373c-acf1-c01590409308.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\4272b32b-e235-3443-b795-8047c06137e5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\42ba05b8-f25a-386c-8b3f-18657880c8e1.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\45193980-25a1-36ab-8e48-88b1ace5736a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\452663bd-043f-3f52-9398-06773d7a75ef.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\453076f9-46df-33cf-8a30-0046ce56033b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\475044bc-e3fc-3ad9-b8ac-0690814ab130.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\47aff655-04ea-3c70-84ea-1cd39e762339.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\48cd881a-861d-311b-a63e-e5e180ef1722.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\4975cd60-1ab9-3715-89a4-0fce36efbadd.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\49d5675d-2b9c-3908-8a4a-634dfc069625.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\4bef1134-e5dd-3662-9361-04bc4665b140.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\4c665d47-7a3f-3cba-b2c0-65be38f9f173.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\4ce4a9cf-10f4-31b2-b4cc-7e5fbc288e92.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\4d5c0097-2338-3815-a085-a9e8664569f5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\4d6a1d5c-2d99-3794-b25a-1bc0e9a4d9b0.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\50ee623a-3b39-32f1-9815-b785676e709a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\52a90cb7-5b04-3593-a2cd-40adcaaceecc.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\536e7349-4b0f-3c18-a70b-1c826a2e215e.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\53a00635-3939-3b71-b29a-3ee1975d47aa.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\54ceeabe-51b6-39d0-8936-a40a33e9f664.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\55a5d1fe-e7a3-38d5-8c03-62297dc107c5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\56256639-5755-3c2a-8eec-bff41635dac6.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\5637aa56-fd15-3c0b-87b6-47349d977a3f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\563c0cd1-0d42-309a-9137-65149af894cd.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\56db0dd2-23ae-3b24-9658-a5d3a5ad6217.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\571da727-98a0-34e7-8395-f56932412d5a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\575c42a8-e014-3a2c-97b9-71539c803f49.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\57f53368-07f5-3734-850b-b9d1cf4f3c01.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\5805f1db-94d6-3845-8f26-15b19f95c090.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\590f6628-b308-36ea-9814-97441d130615.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\59ce0db3-b657-34f0-8a04-9665e3a5445d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\5ab562c5-48e2-3070-b2c2-9f1d799a026b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\5aef3a15-e1e0-3bbf-946c-a21b5e82913d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\5d60d88e-dd9f-3e9c-af6c-815b3064b451.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\5df39916-13b8-3748-b6e4-13fa5615f52c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\5e389cd5-dae2-37e8-8340-bfdbf1656850.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\5f25ef25-1bba-3f2f-83e4-fdf96cb33776.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\5f66a9ef-ff68-32a1-bbdc-e28663275d43.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\60592a46-1215-3faa-9623-bd5e2c49a4de.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\60f706ef-fb68-374b-b88e-d210bc935de3.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\6143aa4d-50a7-35e9-acd6-1b51d6677393.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\630200c4-b7c8-384b-82b5-5fbee522c035.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\646ace53-8049-32ed-bc6e-67204df3f446.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\6528e989-7dd7-319e-b3a4-fe88ef5257ac.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\65f81d1b-a4c3-3d48-8c33-6b05aa4d19f2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\670526d5-95f3-3d67-a50e-763f6468b78a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\679f4f92-8e9d-3517-9011-5226aa841bae.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\691d9dc8-c0b9-3f49-a4d8-8259b4fac56e.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\6afaaf32-8408-3938-af0a-33851ef2e398.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\6c11e186-1270-3450-9cb9-0aaa8ea55a64.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\6cb81cc6-1d91-3be0-b7bb-34b42fbe03d8.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\6e198fe5-9e81-3208-98f6-22f8eeb72ed6.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\6edbe2c4-afe4-3b19-83b5-4fdeee797b97.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\6f978dc2-3af5-3d45-b7c0-cc8729c83ddb.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\711316b9-0784-3a99-a412-2c2ea242e6a3.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\721ac440-2afd-3721-889b-4de7a6996899.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\722c5476-8afe-39a5-86f6-3eb742a0ae8a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7301f618-73f5-34d0-925b-d8c7bb71d769.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\737246c4-697e-3f6f-8000-01ec294d5727.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7464b837-be78-311b-bcb6-d95c0d8dce3b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\74c25104-12ff-3d35-90a2-d8379affbfb4.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\750bebdf-afe8-39ea-b39f-0c71f6502a7c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\754b7dd1-0bfe-3bcb-ba7d-b63d827c06b2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\75a12c6c-a231-3d60-af5c-b4caa0ea157b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\75debf2a-b788-35e4-af75-424dcbf6d224.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\765069e4-cb2a-36f6-9b65-6b61e193fe5d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\77601437-47bd-326c-b660-018632e79c2b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\77d0f2e3-e12e-34dd-96d8-6de9e665dec6.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7806c68c-daaa-3cc2-8036-7370199315d8.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\79e9c45c-dd7d-3aa5-978c-d3bad31c1c68.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7a4f0844-edeb-3e08-a1ae-ab60d3ab83c3.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7b8d8d31-7890-35d2-815d-b56c15304861.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7bd50794-737b-33de-b61a-84c27127201b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7c00c34f-8c4a-349d-8860-7fe9c4cfd1f6.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7ce1c41c-d1fe-301f-b7c4-4c55dfdc748b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7d12915c-1ebf-324f-8b73-1dd8a428cdf8.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7d225b07-6dd3-3559-a4f4-771faf49aaf4.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7d317af3-a02d-37e4-a6bc-362c38bb07de.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7d725d62-8ea1-3e17-9c00-cd4d6afa3910.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7dc6177b-2d09-3057-8b2f-e2267af8a027.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7f64e231-a2c7-352c-98cd-9c0e50663c31.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\7f667364-f8f6-3abc-ad89-69f61d8abb0f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8018a7ed-b15b-3f81-a357-481370c823ce.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8029ce40-0da1-383e-9f88-110a27f226fe.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\809ab876-53e3-3d32-b02c-44be7cdb65ab.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\80e1427f-a12b-3e95-ae2c-1aee3e64ae94.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\816a2f88-17f4-3eae-ba87-3eb15f57baee.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\819aa235-d547-3002-b46b-4a32441a047b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\81f93fbd-033b-3128-9be6-ba0d0160a14b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8218e7a1-535e-34b6-a9e4-a730376218a5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\82cd44e1-39df-3146-824f-d5742560d228.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\82fb2162-3830-32a8-b472-f8ec60b91a22.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\83747334-77e8-3496-a7c3-4f7e564a8b6d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\83d3242a-5619-321e-afeb-f1d9b8d81bbb.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8405565f-770a-354d-9a23-d06ec3b19042.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\85b7adb9-ae89-30b6-ad6e-58672f90630e.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\86486e94-3124-3d34-b7f1-5b0e479c9ab2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\86507da0-b70a-3e66-afc5-8d0ece823359.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\86a69cae-4dbb-3616-ac06-639e0a359c90.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8726e4c6-fc92-3f33-96e2-e68dd89cc439.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\874ccfef-b5fd-3904-bed2-500cc75b9ad2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\88c08f9f-8813-3fbb-8a1b-541b921bda2b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\895b9a1d-92a5-3298-8b95-5e248428aebe.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8bb870eb-c1ed-3328-acbc-ed12b9f38cde.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8c49c293-6e90-30c8-9b05-48fd3ad475b7.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8c7cacde-1726-3ef5-addb-d51031799c43.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8cb7e514-545b-3655-af9b-e9e988719e3d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8cdfb279-2c17-3712-aa58-e80b8d706ac2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8dfcee80-b1fd-3ca5-99c2-9c1e2cdad34e.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8f51c10d-89ff-3d8c-a64a-33eb4b2abd80.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8f539750-4f64-356c-b47c-9b80f484b5ab.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\8f9f4f0f-841e-373d-9d35-5aa3be3488f9.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\90a3211c-b7a3-3b9e-8205-2a76459c386e.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\91720271-840d-3856-8b5b-2e29ec8593fe.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\91a36a4d-fc8d-33ec-bc25-46a3709ea83f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\93913360-e359-3bc3-bc2d-0e407a02cc23.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\94d1d847-a651-36c5-8982-8b076fa89660.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\94d921d9-1d45-3af0-bb98-59185b535a57.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\94f98429-a646-3025-b285-2cb53ff021f5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\9587d4a0-21c6-3467-9fe2-2596372c03a7.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\963aff19-394f-3c3b-b78e-f67b2fe063db.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\984c8e60-beb7-3ace-933f-02120e102c3d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\98d3b9f8-b29f-3bb6-a29b-e9a072ace36b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\98fcab47-20fa-3c1c-bbe4-c7156dd6eb88.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\99b2688a-e37d-3095-9d05-e153a5f1f2f1.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\9a4eeb13-21b9-3f09-a652-9cfa0822e572.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\9b25c67c-9f7f-38e1-a43b-70b796cd2eb5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\9be0b9f6-5cde-3564-b13f-1afe6efc5453.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\9c59fe8b-3273-38c9-9eed-855e6508d23b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\9d7bdfad-648d-3437-8287-2838ac28753f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\9dadab6a-8f08-3784-bd20-6a944eee1f0c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\9de37940-b56a-396f-b384-5eb965f3c756.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a0fd6a77-4239-34e0-81c4-1cdafaa47040.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a1a1c3cf-3568-3dd7-8396-d3a0cb94f7ba.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a1f2ba52-eb15-3875-9050-9dde19f56f6f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a27a56d1-6f3c-3237-8b92-ad448d1d1d46.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a2cf8c79-c2e9-3e71-b07f-44a61d7a93bd.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a30a0b28-94c7-3c98-9fe1-d835e8125d94.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a38734ac-0687-3b81-8b7e-36b449d63320.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a3bc7229-e378-3b2c-afd0-9b9db8d984f2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a4f2c447-4d14-356d-b430-01c3c830d76f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a4f7f2a7-d79e-3a7b-8535-f5376eb2b1d6.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a5265082-ead4-3432-8bba-d51d3c116681.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a595cdcf-bccd-3817-8767-56a3738d1239.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a5c1f558-4dfb-3b71-b7a4-e042939484a3.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a759b5ad-1d19-382c-a87e-721c2535e6e2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a88fce71-c456-3e01-8ce6-d6c0bceef180.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a92195c4-6ae1-3dc9-a134-a8365f8b40a9.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a9a88b58-3e8f-317f-aafc-a5be3ca19ecc.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\a9ae2ed1-7644-36c9-81ba-56b81c35cee0.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\aa3bd6a2-68b1-30cf-aa15-8fa078ac933a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\aa6dcac1-4971-37cf-8df7-1a461dd1550a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\abfbad12-58ac-39c5-8c0d-2b2fdfdbe56f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ac6776d7-264c-3c8d-b887-1bc8ad04c562.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ae0b3a18-0f6a-34cf-833f-6a1e63cd18e2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\af1faa88-d89b-3898-a034-7883fd084846.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\af6c8a7a-beb4-3b66-9677-c464986b4374.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\aff8cba3-9905-3b1b-8b5c-99f5badf8980.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b0c3ae9b-f91e-3ebe-9235-f247b7cf6f1a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b192a5e8-cd0e-3742-bfcd-d59805316a36.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b19489de-3563-31e6-9371-d492fb61301a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b1ecd7b8-39cb-325e-9bb9-e3da81d205ea.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b20aac13-d0f3-340d-950c-71d05e0208b1.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b388a635-10e0-31a3-a186-03fcc02c06fe.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b43c1266-b27d-3b94-861f-e5c3be4713c0.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b4ca6f09-fa1f-3b04-8423-b09070f4979f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b4f47e58-7a24-3089-90e9-07df09b0a6a2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b598d2c9-e236-3081-89a2-c493f4a98c7c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b63ac2a9-a6aa-397a-8efa-4b6245adb2e9.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b7ba9199-4edc-3e23-b5f5-a8078b83ed01.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\b7c620d3-63f4-3440-a282-49b79b76607a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ba25ac47-d8d4-3369-998f-37d8ba00a098.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ba39ddbe-0c4b-3f1f-847f-7755eb3cb452.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ba3fe363-a50f-319c-9c61-17cdefb4194e.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\bb8b26ab-f8fd-3696-97ab-f25811146aac.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\bc57c4cc-a804-371d-a79a-aa87c4194100.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\be7efdc5-6752-3daf-90f9-93b6b75cd6c1.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\beb6f2c0-0fd7-3e63-a2f3-66a40a945fec.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\bf20048c-a55a-322c-a100-5493e7b87286.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c0ab401c-c666-316f-8bee-38baf162a362.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c118c7ae-ea12-33d6-9f42-36e62164da44.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c169440c-d353-3948-9bff-5e1f31397a57.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c2eb9447-08eb-3f74-b5db-c1aef3126ba6.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c4489cb9-f872-3c4d-bf4d-6ef36043fad0.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c47eba89-3d9a-3a15-b36c-cc6d02dd0737.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c4fa5553-4d25-3cb4-90d6-4c90c027181a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c54d0332-697d-3450-b36c-92af6776ce81.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c67455c0-4a0b-3c3c-bc9b-56261c9437b6.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c6a5a216-f746-39b5-a6b4-9a349adc3c2b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c785a76c-f062-3330-a27d-e6ee32e37150.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c7e93fd4-063d-3a6b-96f4-f85ea46659ac.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c817485b-e05b-3b5a-bac9-bfb816e6725b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\c9dc4db5-d018-3247-a945-ac725c00f00f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ca322dcf-05ed-3f5a-8958-5af9cbfd2018.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\caa27d07-74ef-3f17-ae78-6d1772e69969.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\cb9e9ff8-f1b7-3f7a-ae98-be4bcf7b5ac5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\cc74cdff-52b4-36f9-9dec-1f4478d198ed.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\cc773ea7-22a1-32bd-a3bc-beea54f877fe.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\cd46ed77-da49-3261-a325-2dc2a29074d9.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\cd6022f5-aaa4-3fc7-969d-24a530de93ac.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ce13a015-2774-3cbe-b094-aa7ab740528a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ce86a1e1-ad58-34e3-9092-76e76182b9c3.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\cedd7c3e-cbcf-31b2-a8bc-4bc28fccc930.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\cf51b238-dd2f-320f-9e32-9a8be54031f2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d05b0258-b96a-340c-99e9-bd7813ce51aa.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d14b5ae6-5a97-3425-9aac-c6f62097a52a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d1eeda43-9bb9-3918-acca-ae86b078e7bb.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d3416307-e004-38fa-9beb-ab509e5ea3c7.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d3d2c6f3-d2f9-3615-abe6-372234e3ffdf.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d4a488f5-9b10-3923-8d37-695fd8587e2c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d5a338aa-de89-317e-96a8-5c90671f2ce3.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d5deabb1-64f9-3d4f-b76e-7e89360b8aaf.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d6932d1f-caf0-30de-b6b4-28498a6aa3b1.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d80e5cc9-0856-3ea3-8585-b9fe6ea5fa2e.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d87f5492-e3ed-3bbf-b75d-5a1d94404f24.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d89b5c64-efec-3297-b6f6-db7b7b868f19.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d8f3f392-0d83-35f1-9111-2aa41ed8e556.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\d9083a5e-e569-394b-869e-c68cf618fa65.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\daa04cb4-01bf-3246-b049-2037a981d519.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\db9ccc69-d0b7-352f-a7d1-36eec754b71c.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\dbdbf53c-24bc-3a1e-a335-7c896377f42d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\dbf6535b-cd51-32f6-aa4e-b1badf70d800.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\dcbd97d6-7f0e-37fe-824d-d4743e1cbf6d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\dceac256-a30a-3308-8e82-24b6e90e3e7d.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\dcf552e3-27cf-3f57-adac-e2eafbb53b9b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\dd14424d-5610-3aea-b4c7-7788f81cfa38.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\dd591984-86e0-3b14-862a-ffbfc0192653.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ddec9d32-d76c-3c27-88b8-e10856f5ef55.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\de0beb90-e1e9-38d9-a015-c331b2fcaa69.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\deb907f4-3048-34c3-8596-baccd8e8cab0.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\def24eb9-fafc-33c8-ab57-c9f84a5bf62b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e0ed0be7-ab11-3a82-886d-ce6f2e477a41.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e110e27f-c286-3f7a-93b6-2dd4c3711ca3.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e1929685-8df1-3f89-9bf4-7d34172dcd0f.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e26df470-f7ec-34ed-a039-fb5528a0d775.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e2d14508-6d9c-3d94-b7e8-9679ddd2b5e0.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e30704c6-b518-3dd1-8adb-faca6e5ddebd.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e338aa16-7d30-3b2d-b1b5-cf1655125712.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e58bb94e-21f3-39e7-ba31-cd576f209cce.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e5e18951-fc82-318e-880d-17d94bd9d066.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e5f14520-07f0-36f1-b1ca-c96265fec39b.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e674f810-59b2-36e1-8935-41ec8a3fa2e5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e76d1a33-da8c-3b4c-8c11-6525b8247292.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e7a63435-cdb3-39d1-b173-48154372ebf6.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e8fb4576-6ff8-3114-b625-60a2707826d2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\e9b2ba8b-4f9d-3cb6-adda-e8d259cffa98.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ea01cf02-3c3f-35aa-aff9-54e4aa6a38cd.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ea63e7f4-fe0b-3dee-b24e-deafaecc47e9.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ebeee346-0ff8-3d18-a61b-841f0fbc7846.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ec107353-591d-3c2b-8499-ec997a0949f4.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ec77a33e-895f-3520-ae4c-29dd8f3d191a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ed2b77b4-59f9-321a-9f70-b18c57ac4fcb.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ed91e43b-9141-31f6-91ba-e231c02eaca2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\ee789f11-50e2-384c-b844-25ea22c3a3a5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\eebcea7f-c10c-3435-bb4f-ba4205cd7ed4.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\f11c363c-1ff3-3fd0-8c1a-5c3c27c45586.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\f1565704-231e-3f89-adc7-a5985fbfcc22.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\f1905223-7f12-33b8-9fdf-5132e41a732a.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\f3cffd71-8eb8-3683-bed1-3189983e59c5.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\f3ec5da9-b422-3705-9791-9259a98abbde.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\f46bdf8c-f889-3123-8f6b-7f18b61135d2.yml (0 B) ====
+
+
+==== servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft\plugins\AutoPickup\PlayerData\f4e189d2-f41d-3fad-9df3-bc685c3a32b0.yml (0 B) ====
+

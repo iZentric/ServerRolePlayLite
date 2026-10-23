@@ -1,0 +1,136 @@
+name: FunCity candidate - build auditable branded CatServer fork
+# A source build experiment, NOT a release, installation, PC access or server update.
+# LGPL upstream credit retained. Branding only operator-facing name/logger; core
+# protocol identifiers, config names and Forge/Bukkit compatibility untouched.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/funcity-catserver-source-build.yml
+      - functity/catserver/patches/0001-funcity-operator-identity.patch
+      - functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch
+      - scripts/fc_funcity_bridge_patch_test.py
+      - scripts/fc_funcity_compiled_engine_gate.py
+      - scripts/fc_funcity_compiled_engine_gate_test.py
+      - scripts/fc_funcity_java11_smoke.py
+      - scripts/fc_funcity_java11_smoke_test.py
+      - scripts/fc_gradle_failure_classifier.py
+      - scripts/fc_gradle_failure_classifier_test.py
+      - scripts/fc_funcity_capacity_profile_test.py
+      - scripts/fc_funcity_hybrid_config_test.py
+      - functity/capacity/3g-view4/server.properties
+      - functity/capacity/3g-view4/bukkit.yml
+      - functity/capacity/3g-view4/config/connectivity-common.toml
+      - functity/capacity/3g-view4/defaultconfigs/forge-server.toml
+      - functity-config/server.properties
+permissions:
+  contents: read
+jobs:
+  profile-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test isolated view-distance and hybrid safety arms (no live changes)
+        run: |
+          python3 scripts/fc_funcity_capacity_profile_test.py
+          python3 scripts/fc_funcity_hybrid_config_test.py
+          python3 scripts/fc_gradle_failure_classifier_test.py
+          python3 scripts/fc_funcity_bridge_patch_test.py
+          python3 scripts/fc_funcity_compiled_engine_gate_test.py
+          python3 scripts/fc_funcity_java11_smoke_test.py
+  source-candidate:
+    needs: profile-gate
+    runs-on: ubuntu-24.04
+    # The pinned upstream setup previously passed but source compilation was
+    # cancelled by the old 65-minute job limit. This is a bounded build only.
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: |
+            8
+            11
+            17
+      - name: Fetch pinned LGPL CatServer and apply reviewed FunCity source patches
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-catserver-source"
+          git clone -q --depth 1 --filter=blob:none --branch 23.05.26-1 \
+            https://github.com/Luohuayu/CatServer.git "$root"
+          test "$(git -C "$root" rev-parse HEAD)" = '1d8d63138be77a606df2a5e940b960065948f983'
+          test -s "$root/LICENSE" && grep -q 'LESSER GENERAL PUBLIC LICENSE' "$root/LICENSE"
+          git -C "$root" apply --check "$GITHUB_WORKSPACE/functity/catserver/patches/0001-funcity-operator-identity.patch"
+          git -C "$root" apply "$GITHUB_WORKSPACE/functity/catserver/patches/0001-funcity-operator-identity.patch"
+          git -C "$root" apply --check "$GITHUB_WORKSPACE/functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch"
+          git -C "$root" apply "$GITHUB_WORKSPACE/functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch"
+          python3 "$GITHUB_WORKSPACE/scripts/fc_funcity_bridge_patch_test.py" --source \
+            "$root/src/main/java/catserver/server/CatServerEventHandler.java"
+          grep -Fq 'serverName = "FunCity"' "$root/src/main/java/org/bukkit/craftbukkit/v1_16_R3/CraftServer.java"
+          grep -Fq 'getLogger("FunCity")' "$root/src/main/java/catserver/server/CatServer.java"
+          grep -Fq 'new CatServerConfig("catserver.yml")' "$root/src/main/java/catserver/server/CatServer.java"
+          echo '::notice title=FunCity source audit::upstream=Luohuayu/CatServer tag=23.05.26-1 license=LGPL-3.0 identity_patch=PASS block_place_forge_veto_patch=PASS protocol_identifiers=UNCHANGED no_JAR_published=true'
+      - name: Build source candidate; all logs remain on disposable hosted runner
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-catserver-source"
+          cd "$root"
+          # Previous source build run 39992979019 passed setup but failed
+          # :forge:compileJava under the 2 GiB Gradle JVM and parallel workers.
+          # Reuse the *previously successful isolated source-build recipe* from
+          # run 38126700415: serialize Gradle, give setup room, then fork javac.
+          # This changes build infrastructure, not CatServer runtime semantics.
+          sed -i -e 's/-XX:MaxPermSize=512m//g' \
+                 -e 's/-Xmx3G/-Xmx5G/g' \
+                 -e 's/org.gradle.parallel=true/org.gradle.parallel=false/' \
+                 -e 's/org.gradle.configureondemand=true/org.gradle.configureondemand=false/' \
+                 gradle.properties
+          grep -Fq 'org.gradle.parallel=false' gradle.properties
+          grep -Fq 'org.gradle.configureondemand=false' gradle.properties
+          if ! ./gradlew --no-daemon --no-parallel --max-workers=1 setup \
+               > "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
+            python3 "$GITHUB_WORKSPACE/scripts/fc_gradle_failure_classifier.py" \
+              "$RUNNER_TEMP/fc-catserver-build-private.log"
+            echo '::error title=FunCity source build::SETUP_FAILED; no binary promoted or uploaded.'
+            exit 2
+          fi
+          echo '::notice title=FunCity source build::UPSTREAM_SETUP_PASS; no JAR published.'
+          cat >> build.gradle <<'GRADLE'
+          project(':forge') {
+              tasks.withType(JavaCompile).configureEach {
+                  options.fork = true
+                  options.forkOptions.memoryMaximumSize = '4g'
+              }
+          }
+          GRADLE
+          sed -i 's/-Xmx5G/-Xmx2G/g' gradle.properties
+          if ! ./gradlew --no-daemon --no-parallel --max-workers=1 buildCatServer \
+               >> "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
+            python3 "$GITHUB_WORKSPACE/scripts/fc_gradle_failure_classifier.py" \
+              "$RUNNER_TEMP/fc-catserver-build-private.log"
+            echo '::error title=FunCity source build::COMPILE_FAILED; no binary promoted or uploaded.'
+            exit 2
+          fi
+          # :forge projectDir is projects/forge (settings.gradle), not ./forge.
+          jars=(projects/forge/build/libs/CatServer-1.16.5-*-server.jar)
+          if [ "${#jars[@]}" != 1 ] || [ ! -s "${jars[0]}" ]; then
+            echo '::error title=FunCity source build::Expected one server JAR; no candidate promoted.'
+            exit 2
+          fi
+          # CatServer's launcher contains the Forge/Bukkit implementation as
+          # data/*-universal.jar. The earlier top-level .class check was wrong:
+          # run 40006634485 compiled successfully, then failed that check.
+          # Verify both compiled and packaged classes. ForgeGradle reobfuscates
+          # the latter, so raw bytecode equality would be a false failure.
+          if ! python3 "$GITHUB_WORKSPACE/scripts/fc_funcity_compiled_engine_gate.py" \
+               "${jars[0]}" projects/forge/build/classes/java/main; then
+            echo '::error title=FunCity source build::COMPILED_ENGINE_GATE_FAILED; no candidate promoted.'
+            exit 2
+          fi
+          echo '::notice title=FunCity compiled engine::COMPILED_CLASSES_AND_LAUNCHER_PASS; Java11 boot follows.'
+          test -x "$JAVA_HOME_11_X64/bin/java"
+          python3 "$GITHUB_WORKSPACE/scripts/fc_funcity_java11_smoke.py" \
+            "$JAVA_HOME_11_X64/bin/java" "${jars[0]}"
+          echo "::notice title=FunCity provisional engine::BUILD_AND_EMPTY_JAVA11_BOOT_PASS sha256=$(sha256sum "${jars[0]}" | cut -d' ' -f1) upstream=CatServer-1.16.5-1d8d6313 source=LGPL-3.0 rp_34mods_13plugins=NOT_TESTED client_join=NOT_TESTED capacity=NOT_TESTED no_artifact_uploaded=true"

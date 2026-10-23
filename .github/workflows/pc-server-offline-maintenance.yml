@@ -1,0 +1,45 @@
+name: One-time zero-player offline server backup and original restart
+# Trigger PC work ONLY by a reviewed workflow-file commit with exact message prefix.
+# Owner requested a fresh full private backup before HidenCloud migration.
+# Hosted fixture and parser guards passed in run 39597725327 before authorization.
+# Fresh readiness run 39843663191 confirmed space, original process and restart task.
+# No world, logs, backup, player identities or secrets leave the Windows PC.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-server-offline-maintenance.yml]
+permissions:
+  contents: read
+concurrency:
+  group: funcity-maintenance-one-at-a-time
+  cancel-in-progress: false
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthetic private offline backup and independent restore rehearsal
+        shell: pwsh
+        run: ./scripts/fc_server_offline_backup_test.ps1
+      - name: Synthetic RCON authorization and color-coded zero-player list
+        run: python3 scripts/fc_local_rcon_test.py
+      - name: Check orchestrator PowerShell syntax without running it
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'scripts/fc_server_offline_maintenance.ps1'),[ref]$tokens,[ref]$errors)
+          if ($errors.Count -ne 0) { throw 'Maintenance syntax failure' }
+  pc-maintenance:
+    if: startsWith(github.event.head_commit.message, 'Offline maintenance safely once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recheck zero players; normal stop; whole-tree offline backup; restore-copy rehearsal; restart original
+        shell: powershell
+        run: |
+          $server = 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+          & ./scripts/fc_server_offline_maintenance.ps1 -Server $server
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

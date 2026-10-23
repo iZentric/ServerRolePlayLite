@@ -1,0 +1,41 @@
+name: Upload complete offline PC server to isolated HidenCloud SFTP stage
+# One-time owner-requested transfer. Private files go ONLY from the owner's PC
+# to their HidenCloud account; never through GitHub artifacts/logs or this repo.
+# Existing host files and the running original PC server are not modified.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-upload-server-to-hidencloud-stage.yml
+      - scripts/fc_pc_upload_verified_server_to_hidencloud.ps1
+permissions:
+  contents: read
+concurrency:
+  group: funcity-host-private-upload-one-at-a-time
+  cancel-in-progress: false
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse transfer script without executing it
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path $PWD 'scripts/fc_pc_upload_verified_server_to_hidencloud.ps1'),
+            [ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'TRANSFER_SCRIPT_SYNTAX_FAILED' }
+  pc-private-upload:
+    if: startsWith(github.event.head_commit.message, 'Upload offline verified PC server to HidenCloud stage')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify private offline backup then upload and SHA-check private readback
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_upload_verified_server_to_hidencloud.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

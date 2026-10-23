@@ -1,0 +1,15 @@
+name: MOVE-TO-PC (retired)
+# Corrupt legacy workflow previously attempted to write on the PC and branch.
+# Kept as an explicit, read-only fail-closed record; use isolated stage instead.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse legacy live migration
+        run: |
+          echo '::error::MOVE-TO-PC retired; no PC/server/world changes are permitted here.'
+          exit 1

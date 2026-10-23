@@ -1,0 +1,45 @@
+name: Check private backup for public-login plugin candidates
+# No host changes and no plugin/JAR names, config contents, player names or
+# credentials printed. Jar filename heuristic is NOT an auth/security test.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-auth-public-readiness-readonly.yml]
+permissions:
+  contents: read
+jobs:
+  pc-auth-inventory:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 3
+    steps:
+      - name: Count possible login plugin jars in verified offline backup
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          try {
+            if (-not $env:USERPROFILE -or -not $env:GITHUB_RUN_ID -or $env:GITHUB_RUN_ID -notmatch '^\d+$') { throw 'NOT_PC_RUNNER' }
+            $backup=Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\Arena-Private-Backups\offline-39843776626'
+            $manifest=Join-Path $backup 'private-manifest.json'
+            $root=Join-Path $backup 'server'
+            $plugins=Join-Path $root 'plugins'
+            $props=Join-Path $root 'server.properties'
+            foreach ($path in @($manifest,$root,$plugins,$props)) {
+              $item=Get-Item -LiteralPath $path -Force -ErrorAction Stop
+              if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw 'UNSAFE_PC_PATH' }
+            }
+            $meta=Get-Content -LiteralPath $manifest -Raw -ErrorAction Stop | ConvertFrom-Json
+            if ($meta.consistent_offline_snapshot -ne $true -or $meta.independent_restore_copy_verified -ne $true) { throw 'BACKUP_NOT_VERIFIED' }
+            $jars=@(Get-ChildItem -LiteralPath $plugins -File -Force -ErrorAction Stop |
+              Where-Object { $_.Extension -ieq '.jar' })
+            $candidatePattern='(?i)^(?:AuthMe(?:Reloaded)?|nLogin|LoginSecurity|LibreLogin|OpenLogin|FastLogin|JPremium|AdvancedLogin|AdvancedAuth|SimpleAuth|LoginPlus|EasyLogin)(?:[-_. ].*)?\.jar$'
+            $candidates=@($jars | Where-Object { $_.Name -match $candidatePattern })
+            $lines=@(Get-Content -LiteralPath $props -ErrorAction Stop)
+            $offline=@($lines | Where-Object { $_ -eq 'online-mode=false' }).Count -eq 1
+            Write-Output ('::notice title=RP public login readiness inventory::PLUGIN_JARS=' + $jars.Count +
+              ' KNOWN_LOGIN_JAR_FILENAME_CANDIDATES=' + $candidates.Count +
+              ' PC_BACKUP_OFFLINE_MODE=' + $offline +
+              ' HOST_AUTH_NOT_TESTED=true FILENAME_HEURISTIC_ONLY=true NO_HOST_WRITES=true')
+          } catch {
+            Write-Output '::error title=RP public login readiness inventory::CHECK_FAILED; no private data printed'
+            exit 2
+          }

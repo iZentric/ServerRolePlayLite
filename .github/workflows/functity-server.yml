@@ -1,0 +1,14 @@
+name: functity-server (retired)
+# The old ZIP republisher could ship unvalidated JARs, world and configurations.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse legacy server repackaging
+        run: |
+          echo '::error::Server packaging needs an isolated test and explicit release approval.'
+          exit 1

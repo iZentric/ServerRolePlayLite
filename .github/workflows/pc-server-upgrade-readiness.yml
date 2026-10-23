@@ -1,0 +1,38 @@
+name: Read-only server backup and graceful-stop readiness
+# Only file metadata, RCON presence and local process ownership. No password,
+# world content, usernames, paths, server stop or second server.
+# Recheck offline-backup space and restart task before the owner-requested view-distance=5 maintenance.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-server-upgrade-readiness.yml
+      - scripts/fc_server_upgrade_gate.ps1
+      - scripts/fc_server_prebackup.ps1
+      - scripts/fc_server_prebackup_test.ps1
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Private config and world metadata remain local on fixture
+        shell: pwsh
+        run: ./scripts/fc_server_upgrade_gate_test.ps1
+      - name: Read-only source and private SHA-verified online copy on hosted fixture
+        shell: pwsh
+        run: ./scripts/fc_server_prebackup_test.ps1
+  pc-read-only:
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Estimate consistent-backup capacity and local graceful-stop control
+        shell: powershell
+        run: |
+          $server = 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+          & ./scripts/fc_server_upgrade_gate.ps1 -Server $server
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

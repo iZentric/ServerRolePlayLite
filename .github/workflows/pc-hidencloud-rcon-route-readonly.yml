@@ -1,0 +1,66 @@
+name: Check whether HidenCloud SFTP permits private RCON tunnel
+# Non-mutating SSH channel probe from trusted PC runner; no password or
+# Minecraft/RCON changes. SSH direct-tcpip to the loopback game port while
+# server is offline; report only whether forwarding was rejected/undetermined.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-hidencloud-rcon-route-readonly.yml]
+permissions:
+  contents: read
+jobs:
+  route-check:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 3
+    steps:
+      - name: Probe private SSH forwarding without enabling RCON
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          $temp=$null
+          try {
+            if (-not $env:RUNNER_TEMP -or -not $env:GITHUB_RUN_ID -or $env:GITHUB_RUN_ID -notmatch '^\d+$') { throw 'NOT_PC_RUNNER' }
+            $key=Join-Path $env:USERPROFILE '.ssh\funcity_hidencloud_ed25519_rotated'
+            if (-not (Test-Path -LiteralPath $key -PathType Leaf)) { throw 'KEY_MISSING' }
+            $sftp=(Get-Command sftp.exe -ErrorAction Stop).Source
+            $ssh=(Get-Command ssh.exe -ErrorAction Stop).Source
+            $keygen=(Get-Command ssh-keygen.exe -ErrorAction Stop).Source
+            $temp=Join-Path $env:RUNNER_TEMP ('fc-rcon-route-' + $env:GITHUB_RUN_ID)
+            if (Test-Path -LiteralPath $temp) { throw 'TEMP_EXISTS' }
+            [void](New-Item -ItemType Directory -Path $temp -ErrorAction Stop)
+            $batch=Join-Path $temp 'batch.txt'
+            $known=Join-Path $temp 'known_hosts'
+            $output=Join-Path $temp 'private-output.txt'
+            $errorFile=Join-Path $temp 'private-stderr.txt'
+            $empty=Join-Path $temp 'empty-stdin.txt'
+            [IO.File]::WriteAllText($empty,'',[Text.Encoding]::ASCII)
+            $destination='izentric-150380.6ddc2b7d@olivia.hidencloud.com'
+            $options=@('-p','2022','-i',$key,'-o','BatchMode=yes','-o','IdentitiesOnly=yes',
+              '-o','PreferredAuthentications=publickey','-o','PasswordAuthentication=no',
+              '-o','KbdInteractiveAuthentication=no','-o',('UserKnownHostsFile=' + $known),
+              '-o','ConnectTimeout=8','-o','ConnectionAttempts=1')
+            [IO.File]::WriteAllText($batch,"pwd`nbye`n",[Text.Encoding]::ASCII)
+            & $sftp -q -b $batch -P 2022 -i $key -o 'BatchMode=yes' -o 'IdentitiesOnly=yes' -o ('UserKnownHostsFile=' + $known) -o 'StrictHostKeyChecking=accept-new' $destination 1>$output 2>$null
+            if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $known -PathType Leaf)) { throw 'SFTP_UNAVAILABLE' }
+            $fingerprints=@(& $keygen -lf $known 2>$null)
+            if ($LASTEXITCODE -ne 0 -or $fingerprints.Count -ne 1 -or
+              $fingerprints[0] -notmatch '\sSHA256:8B88Xl\+b19yzYinbJ9bZxwc79nW1sBZrF0XvGiCqdd4\s') { throw 'HOST_KEY_CHANGED' }
+            $args=@('-T','-W','127.0.0.1:24595') + $options + @('-o','StrictHostKeyChecking=yes',$destination)
+            $process=Start-Process -FilePath $ssh -ArgumentList $args -NoNewWindow -PassThru -RedirectStandardInput $empty -RedirectStandardOutput $output -RedirectStandardError $errorFile
+            if (-not $process.WaitForExit(12000)) { $process.Kill(); $process.WaitForExit(); $route='INDETERMINATE_TIMEOUT' }
+            else {
+              $errorText=Get-Content -LiteralPath $errorFile -Raw -ErrorAction SilentlyContinue
+              $route=if ($errorText -match '(?i)administratively prohibited|unknown channel type|port forwarding is disabled') {
+                'TUNNEL_REJECTED'
+              } elseif ($errorText -match '(?i)connect failed: Connection refused') {
+                'FORWARD_CHANNEL_ACCEPTED_TARGET_OFFLINE'
+              } else { 'INDETERMINATE' }
+            }
+            Write-Output ('::notice title=RCON private route::SSH_DIRECT_TCPIP=' + $route +
+              ' SERVER_OFFLINE=true RCON_NOT_ENABLED=true PORT_ALLOCATION_NOT_LISTENER=true NO_REMOTE_WRITES=true')
+          } catch {
+            Write-Output '::error title=RCON private route::PROBE_FAILED; no private data or remote writes'
+            exit 2
+          } finally {
+            if ($temp -and (Test-Path -LiteralPath $temp)) { Remove-Item -LiteralPath $temp -Recurse -Force -ErrorAction SilentlyContinue }
+          }

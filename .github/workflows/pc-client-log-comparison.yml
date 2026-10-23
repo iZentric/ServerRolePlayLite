@@ -1,0 +1,31 @@
+name: Read-only sanitized Rubidium versus Embeddium client log comparison
+# Do not upload/artifact/log raw Minecraft files. No client/Prism/server launch or modification.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-client-log-comparison.yml
+      - scripts/fc_client_log_comparison.ps1
+      - scripts/fc_client_log_comparison_test.ps1
+permissions:
+  contents: read
+jobs:
+  fixture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthetic comparison, bounded timing and privacy
+        shell: pwsh
+        run: ./scripts/fc_client_log_comparison_test.ps1
+  pc-read-only:
+    needs: fixture
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read only latest local Minecraft logs for the two named profiles
+        shell: powershell
+        run: |
+          & ./scripts/fc_client_log_comparison.ps1 -Instances 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

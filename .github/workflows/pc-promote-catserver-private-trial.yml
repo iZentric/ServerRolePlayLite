@@ -1,0 +1,43 @@
+name: Promote official CatServer only after stopped-host checkpoint
+# One-time opt-in; no start/stop and no world/plugin/mod/config writes. Do not
+# call this a proven best engine; first private boot and rollback remain gates.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-promote-catserver-private-trial.yml
+      - scripts/fc_pc_promote_catserver_private_trial.ps1
+permissions:
+  contents: read
+concurrency:
+  group: funcity-host-engine-swap-one-at-a-time
+  cancel-in-progress: false
+jobs:
+  syntax:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse private trial promotion script without execution
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path $PWD 'scripts/fc_pc_promote_catserver_private_trial.ps1'),
+            [ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'TRIAL_PROMOTION_SCRIPT_SYNTAX_FAILED' }
+  pc-promote:
+    if: startsWith(github.event.head_commit.message, 'Promote official CatServer for private trial after checkpoint')
+    needs: syntax
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 15
+    env:
+      OWNER_CONFIRMED_OFFLINE: 'true'
+      FC_CHECKPOINT_RUN_ID: '39987066839'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare private checkpoint and active engine, then swap only root JAR with rollback
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_promote_catserver_private_trial.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

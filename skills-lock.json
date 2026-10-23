@@ -1,0 +1,195 @@
+{
+  "version": 1,
+  "skills": {
+    "brainstorming": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/brainstorming/SKILL.md",
+      "computedHash": "61a7ef918652108c76a3fd01e02dd92d39996c6b46d4cb2819cbd03f6c45e46a",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "treeHash": "c7df2e2fbd0ee30184f631f0ae196a6b591cec122b75a40c93455d947f215a67",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "c00eeea0e13e74fe4a9d84ba0a8542205a1b736d65f13134fe1a6647eb14976f",
+      "sourceCommit": "a80e4c9d12d607631249d4d7d059f835d4b2f13a",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "computedHash": "5ea13a6d9f0d4bb694405d79acd00cadec0d21bb138c4dd10fcf3c500cb835c2"
+    },
+    "task-observer": {
+      "source": "rebelytics/one-skill-to-rule-them-all",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "a91f051a337027cc61868132407b24098bc0859a4a3e4357740a15dc7334145f"
+    },
+    "using-superpowers": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/using-superpowers/SKILL.md",
+      "computedHash": "82c5c8866ad7f5dd4440ce66bd7806ba48a2f13771beae5cf112e53f08fe36ba",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "treeHash": "bcdbc241f63b69c68e66b9168012dc703ef955ac381a955a72aa2c0f256495bc",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "verification-before-completion": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/verification-before-completion/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3",
+      "licensePath": "agent/SKILLURI-LICENSES.txt",
+      "treeHash": "d8a53168f152b6163bd3447f7d4c20b6b4cddf6bd907f9aa5856b514c032db0e"
+    },
+    "systematic-debugging": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/systematic-debugging/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202",
+      "licensePath": "agent/SKILLURI-LICENSES.txt",
+      "treeHash": "7c2628773e52f1687e74f9d802f2ea1c2cbae24ef5ca3fda0b8f21340f50d590"
+    },
+    "writing-for-agents": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/productivity/writing-for-agents/SKILL.md",
+      "sourceCommit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "computedHash": "551adca942227b44192edba88acd4e8db911f0121ce58ad16944ccf6a896a74a",
+      "licensePath": ".agents/skills/writing-for-agents/LICENSE.txt",
+      "supplementaryFiles": {
+        "SKILL-MECHANICS.md": "c768e6307c7c10728c401c213f2c4ba71c542127eeb7ad2956aabd15a0fa0059"
+      }
+    },
+    "change-impact": {
+      "source": "affaan-m/ECC",
+      "sourceType": "github",
+      "skillPath": "skills/change-impact/SKILL.md",
+      "sourceCommit": "07971588f8ac7a60080ba8c1b7920c9e8e733e7d",
+      "computedHash": "b8d8a11417af8b84e93983a8eb682e3b9a16d04f926778eb635c96e90019bf18",
+      "licensePath": ".agents/skills/change-impact/LICENSE.txt"
+    },
+    "ponytail-review": {
+      "source": "DietrichGebert/ponytail",
+      "sourceType": "github",
+      "skillPath": "skills/ponytail-review/SKILL.md",
+      "sourceCommit": "09c434ab73ca43761c5d8b0c5d341926c2fba710",
+      "computedHash": "33fe4ebe22a460924e5d4a261e223df22e409cc94ab76182bee9fb91a3ef022e",
+      "licensePath": ".agents/skills/ponytail-review/LICENSE.txt"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "sourceCommit": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+      "computedHash": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3",
+      "licensePath": ".agents/skills/frontend-design/LICENSE.txt"
+    },
+    "diagnosing-superpowers": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/diagnosing-superpowers/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "3143de8695c5a2d63e8b1675f33837578076f464deb127c2ebdd0b46fceef886",
+      "treeHash": "41d5660b88d14facf891305fc9d0edf6ceca4ce642679d449b7b03d64ad3471c",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "dispatching-parallel-agents": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/dispatching-parallel-agents/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "1968923066f3b707eb01d1992cdf4c42284c3855f70253b9cd5000ff45fca13c",
+      "treeHash": "1acb899b23c2bdb5af5961e7b97ba43fb2a5593822db755747ef3d5db9f825a4",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "executing-plans": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/executing-plans/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "e4649e59880ef2643d1da128e3d607e87e3f969410d72095a5bf65811b6036dc",
+      "treeHash": "51dc855ca9759849339dfcc67334c47bdf05b623cc241e500f70289907917b7a",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "finishing-a-development-branch": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/finishing-a-development-branch/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "8db5a922b242dd4e1bf824cb91c13b3e8d8e8a86d6ceaf7f0774eb9cce909d65",
+      "treeHash": "1da9182001d887c0fb8c62aeee35c8f65b438b32a30b79104baedcca9e0ebef6",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "receiving-code-review": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/receiving-code-review/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438",
+      "treeHash": "e5dd23be2d93f751c8b28d647c4b139754aedfe75648cd8e1100e47f5da0c3c5",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "requesting-code-review": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/requesting-code-review/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "2180e14a448e9410bec88e6646a2d1f0ce7fdd58de27388c1e052e929679d2bc",
+      "treeHash": "da21da5cdf7894945c3990bdea317b1be4e2cf553831d22027558ca45a6cc45b",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "subagent-driven-development": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/subagent-driven-development/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "ba41f697136cba88a7962d60c8e2f97488ba04a8688b1d0fbeb27f6953808e75",
+      "treeHash": "249b79397489aaf48e90da699e777cd1f88073a85160c45594107242b7e5a5a0",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "test-driven-development": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/test-driven-development/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "64b03fce4aee5a97a93160cea8111f3ba13a17b7c001db4bd5836d67fd10705d",
+      "treeHash": "8e8772822d25e4dfc9295cf4526c6251a10458c7417ac50c4b42e5d9fc91e0b0",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "using-git-worktrees": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/using-git-worktrees/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "8cfb86f121269e8f7f12361e6795c4f6738828340e28964c9229d365666c9edd",
+      "treeHash": "98dc7da4ead1fe3c523c7ac314082f1f85114ad5e6ec39d4426b4a7f76ed9d0c",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "writing-plans": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/writing-plans/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "a6c67c1900064347c2a329990dd3c555657c51c3ec53b259a08aa01a2c26139a",
+      "treeHash": "b96f84fcdd4fc87bf3264e960e7a423bf6d3612e2b3355b4d6cd5f61ef7fe45d",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    },
+    "writing-skills": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/writing-skills/SKILL.md",
+      "sourceCommit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "computedHash": "8cb3ac68c6d8c4bb46886b998b09af7989643cab8bd0e46ee86dd62e64546bbe",
+      "treeHash": "9ca4cdbef07abe834a36aeed5434f0afed6d3679dab61041e0ba9cf9a99ea425",
+      "licensePath": "agent/SKILLURI-LICENSES.txt"
+    }
+  }
+}

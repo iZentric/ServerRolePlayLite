@@ -1,0 +1,25 @@
+name: Check PC server backup capacity before HidenCloud migration
+# Read-only metadata of the existing local server; no process stop, file copy,
+# SFTP upload, world change, JAR change, or private data in GitHub artifacts.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-host-migration-preflight.yml]
+permissions:
+  contents: read
+jobs:
+  pc-backup-readiness:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check current server inventory, backup space, restart gate and RCON ownership
+        shell: powershell
+        run: |
+          $server = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
+          & ./scripts/fc_server_upgrade_gate.ps1 -Server $server
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $parent = Join-Path (Split-Path -Parent $server) 'Arena-Private-Backups'
+          $manifests = @(Get-ChildItem -LiteralPath $parent -Directory -Filter 'offline-*' -ErrorAction SilentlyContinue |
+            Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'private-manifest.json') -PathType Leaf })
+          Write-Output ('::notice title=Private backup presence::OFFLINE_BACKUP_MANIFEST_COUNT=' + $manifests.Count + '; manifests not rehashed here; PRIVATE_ONLY=true')

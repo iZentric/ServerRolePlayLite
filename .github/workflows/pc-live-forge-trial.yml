@@ -1,0 +1,50 @@
+name: Fresh offline backup then reversible Forge live trial
+# Only after owner delegation, zero-player RCON gate, tested private copy boot.
+# Never expose worlds, account data, logs, RCON password or JARs in Actions.
+# Copy boot 39616088218; fresh-space gate 39617249283; hosted guards 39618148173 passed.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-live-forge-trial.yml]
+permissions:
+  contents: read
+concurrency:
+  group: funcity-maintenance-one-at-a-time
+  cancel-in-progress: false
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthetic offline backup and independent restore rehearsal
+        shell: pwsh
+        run: ./scripts/fc_server_offline_backup_test.ps1
+      - name: Synthetic RCON and private copy classification
+        run: python3 scripts/fc_local_rcon_test.py
+      - name: Parse live maintenance script and assert backup precedes JAR delta
+        shell: pwsh
+        run: |
+          $text=Get-Content -LiteralPath scripts/fc_server_live_forge_trial.ps1 -Raw
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseInput($text,[ref]$tokens,[ref]$errors)
+          if ($errors.Count -gt 0) { throw 'Live maintenance syntax failure' }
+          $backup=$text.IndexOf("$" + "backupVerified = $" + "true")
+          $move=$text.IndexOf('Move-Item -LiteralPath $liveClumps')
+          if ($backup -lt 0 -or $move -lt $backup -or $text -notmatch 'Restore-Old-Mods') {
+            throw 'Backup or rollback ordering missing'
+          }
+  pc-live-trial:
+    if: startsWith(github.event.head_commit.message, 'Apply reversible Forge live trial once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zero-player stop; fresh offline backup; two JAR delta; restart original task
+        shell: powershell
+        run: |
+          $server='C:\Users\Administrator\Desktop\FunCityLocal\server'
+          $copy='C:\Users\Administrator\Desktop\FunCityLocal\Arena-CompatStages\bootable-no-clumps-39598696934\server'
+          & ./scripts/fc_server_live_forge_trial.ps1 -Server $server -Copy $copy
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
