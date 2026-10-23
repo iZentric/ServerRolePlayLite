@@ -1,0 +1,54 @@
+name: Check whether existing HidenCloud SFTP identity has SSH exec capability
+# Read-only command capability probe. It never attempts restart/stop, never
+# reads host files, credentials or console. HidenCloud panel control separate.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-hidencloud-shell-capability.yml]
+permissions:
+  contents: read
+jobs:
+  pc-shell-probe:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 3
+    steps:
+      - name: Pin existing SSH host fingerprint then request a no-op command
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          $temp=$null
+          try {
+            if (-not $env:RUNNER_TEMP -or -not $env:GITHUB_RUN_ID -or $env:GITHUB_RUN_ID -notmatch '^\d+$') { throw 'RUNNER_MISSING' }
+            $key=Join-Path $env:USERPROFILE '.ssh\funcity_hidencloud_ed25519_rotated'
+            if (-not (Test-Path -LiteralPath $key -PathType Leaf)) { throw 'KEY_MISSING' }
+            $temp=Join-Path $env:RUNNER_TEMP ('fc-host-shell-cap-' + $env:GITHUB_RUN_ID)
+            if (Test-Path -LiteralPath $temp) { throw 'TEMP_EXISTS' }
+            [void](New-Item -ItemType Directory -Path $temp -ErrorAction Stop)
+            $sftp=(Get-Command sftp.exe -ErrorAction Stop).Source
+            $ssh=(Get-Command ssh.exe -ErrorAction Stop).Source
+            $keygen=(Get-Command ssh-keygen.exe -ErrorAction Stop).Source
+            $batch=Join-Path $temp 'batch.txt'
+            $known=Join-Path $temp 'known_hosts'
+            $output=Join-Path $temp 'private-output.txt'
+            $errorFile=Join-Path $temp 'private-error.txt'
+            $destination='izentric-150380.6ddc2b7d@olivia.hidencloud.com'
+            [IO.File]::WriteAllText($batch,"pwd`nbye`n",[Text.Encoding]::ASCII)
+            & $sftp -q -b $batch -P 2022 -i $key -o 'BatchMode=yes' -o 'IdentitiesOnly=yes' -o ('UserKnownHostsFile=' + $known) -o 'StrictHostKeyChecking=accept-new' $destination 1>$output 2>$null
+            if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $known -PathType Leaf)) { throw 'SFTP_UNAVAILABLE' }
+            $fp=@(& $keygen -lf $known 2>$null)
+            if ($LASTEXITCODE -ne 0 -or $fp.Count -ne 1 -or
+                $fp[0] -notmatch '\sSHA256:8B88Xl\+b19yzYinbJ9bZxwc79nW1sBZrF0XvGiCqdd4\s') { throw 'HOST_KEY_CHANGED' }
+            $options=@('-T','-p','2022','-i',$key,'-o','BatchMode=yes','-o','IdentitiesOnly=yes',
+              '-o','PasswordAuthentication=no','-o','KbdInteractiveAuthentication=no',
+              '-o',('UserKnownHostsFile=' + $known),'-o','StrictHostKeyChecking=yes',
+              '-o','ConnectTimeout=8','-o','ServerAliveInterval=5','-o','ServerAliveCountMax=1')
+            & $ssh @options $destination 'printf FUNCITY_READONLY_SHELL_PROBE' 1>$output 2>$errorFile
+            $available=($LASTEXITCODE -eq 0 -and (Get-Content -LiteralPath $output -Raw -ErrorAction SilentlyContinue) -eq 'FUNCITY_READONLY_SHELL_PROBE')
+            Write-Output ('::notice title=HidenCloud SSH command capability::SSH_EXEC_CONFIRMED=' + $available +
+              ' SFTP_WORKS=true PANEL_ACCESS_NOT_TESTED=true NO_REMOTE_WRITES=true NO_RESTART_ATTEMPTED=true')
+          } catch {
+            Write-Output '::error title=HidenCloud SSH command capability::PROBE_FAILED; no secret or remote changes'
+            exit 2
+          } finally {
+            if ($temp -and (Test-Path -LiteralPath $temp)) { Remove-Item -LiteralPath $temp -Recurse -Force -ErrorAction SilentlyContinue }
+          }
