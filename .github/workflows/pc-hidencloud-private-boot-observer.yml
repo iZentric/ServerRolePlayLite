@@ -1,0 +1,96 @@
+name: Observe HidenCloud private first boot (read-only)
+# PC self-hosted runner is the only available SFTP path; NOT panel access.
+# On push: one quick smoke check. On manual dispatch: watch about 8 minutes
+# for logs/latest.log to differ from verified PC backup. Never publish log data.
+# This cannot prove that the panel is online or that players can join.
+on:
+  workflow_dispatch:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-hidencloud-private-boot-observer.yml]
+permissions:
+  contents: read
+jobs:
+  observe:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 14
+    steps:
+      - name: Detect changed startup log and report safe status flags only
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          $temp=$null
+          try {
+            if (-not $env:RUNNER_TEMP -or -not $env:USERPROFILE -or -not $env:GITHUB_RUN_ID -or
+                $env:GITHUB_RUN_ID -notmatch '^\d+$') { throw 'UNEXPECTED_RUNNER' }
+            $key=Join-Path $env:USERPROFILE '.ssh\funcity_hidencloud_ed25519_rotated'
+            $original=Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\Arena-Private-Backups\offline-39843776626\server\logs\latest.log'
+            if (-not (Test-Path -LiteralPath $key -PathType Leaf)) { throw 'LOCAL_SFTP_KEY_MISSING' }
+            $baseline='UNKNOWN'
+            if (Test-Path -LiteralPath $original -PathType Leaf) {
+              $baseline=(Get-FileHash -LiteralPath $original -Algorithm SHA256).Hash
+            }
+            $sftp=(Get-Command sftp.exe -ErrorAction Stop).Source
+            $keygen=(Get-Command ssh-keygen.exe -ErrorAction Stop).Source
+            $temp=Join-Path $env:RUNNER_TEMP ('fc-private-boot-observer-' + $env:GITHUB_RUN_ID)
+            if (Test-Path -LiteralPath $temp) { throw 'TEMP_EXISTS' }
+            [void](New-Item -ItemType Directory -Path $temp -ErrorAction Stop)
+            $batch=Join-Path $temp 'batch.txt'
+            $known=Join-Path $temp 'known_hosts'
+            $privateOutput=Join-Path $temp 'sftp-output.txt'
+            $local=Join-Path $temp 'latest.log'
+            $connection=@('-q','-b',$batch,'-P','2022','-i',$key,
+              '-o','BatchMode=yes','-o','IdentitiesOnly=yes','-o','PreferredAuthentications=publickey',
+              '-o','PasswordAuthentication=no','-o','KbdInteractiveAuthentication=no',
+              '-o',('UserKnownHostsFile=' + $known),'-o','ConnectTimeout=12')
+            $destination='izentric-150380.6ddc2b7d@olivia.hidencloud.com'
+            [IO.File]::WriteAllText($batch,"pwd`nbye`n",[Text.Encoding]::ASCII)
+            & $sftp @connection -o 'StrictHostKeyChecking=accept-new' $destination 1>$privateOutput 2>$null
+            if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $known -PathType Leaf)) { throw 'SFTP_UNAVAILABLE' }
+            $fingerprints=@(& $keygen -lf $known 2>$null)
+            if ($LASTEXITCODE -ne 0 -or $fingerprints.Count -ne 1 -or
+              $fingerprints[0] -notmatch '\sSHA256:8B88Xl\+b19yzYinbJ9bZxwc79nW1sBZrF0XvGiCqdd4\s') { throw 'HOST_KEY_CHANGED' }
+            $localSftp=$local.Replace([char]92,[char]47)
+            [IO.File]::WriteAllText($batch,('get logs/latest.log "' + $localSftp + '"' + "`nbye`n"),[Text.Encoding]::ASCII)
+            $state='NO_NEW_LOG'
+            $changed=$false
+            $done=$false
+            $stopped=$false
+            $javaError=$false
+            $memoryError=$false
+            $bindError=$false
+            # A push performs a one-shot connectivity/baseline check; dispatch watches
+            # at 15-second intervals and exits early on a boot/fatal marker.
+            $samples=if ($env:GITHUB_EVENT_NAME -eq 'push') { 1 } else { 30 }
+            for ($attempt=0; $attempt -lt $samples; $attempt++) {
+              if (Test-Path -LiteralPath $local -PathType Leaf) { Remove-Item -LiteralPath $local -Force }
+              & $sftp @connection -o 'StrictHostKeyChecking=yes' $destination 1>$privateOutput 2>$null
+              if ($LASTEXITCODE -eq 0 -and (Test-Path -LiteralPath $local -PathType Leaf)) {
+                $meta=Get-Item -LiteralPath $local -ErrorAction Stop
+                if ($meta.Length -gt 33554432) { $state='LOG_TOO_LARGE'; break }
+                if ($baseline -eq 'UNKNOWN') { $state='NO_BASELINE_TO_PROVE_NEW_LOG'; break }
+                $changed=((Get-FileHash -LiteralPath $local -Algorithm SHA256).Hash -cne $baseline)
+                if ($changed) {
+                  $text=Get-Content -LiteralPath $local -Raw -ErrorAction Stop
+                  $done=($text -match 'Done \([0-9.,]+s\)! For help, type')
+                  $stopped=($text -match '(?i)Stopping server')
+                  $javaError=($text -match 'UnsupportedClassVersionError|has been compiled by a more recent version of the Java Runtime')
+                  $memoryError=($text -match 'OutOfMemoryError|Could not reserve enough space for object heap')
+                  $bindError=($text -match '(?i)FAILED TO BIND TO PORT|Address already in use')
+                  $state=if ($done) { 'DONE_MARKER_SEEN_NOT_LIVE_PROOF' } else { 'NEW_LOG_STARTUP_PENDING' }
+                  if ($done -or $javaError -or $memoryError -or $bindError -or $stopped) { break }
+                }
+              }
+              if ($attempt -lt ($samples - 1)) { Start-Sleep -Seconds 15 }
+            }
+            Write-Output ('::notice title=HidenCloud private boot observer::STATE=' + $state +
+              ' NEW_LOG=' + $changed + ' DONE=' + $done + ' STOPPING_SEEN=' + $stopped +
+              ' JAVA_ERROR=' + $javaError + ' MEMORY_ERROR=' + $memoryError +
+              ' BIND_ERROR=' + $bindError +
+              ' SFTP_LOG_ONLY=true LIVE_STATUS_NOT_VERIFIED=true NO_REMOTE_WRITES=true')
+          } catch {
+            Write-Output '::error title=HidenCloud private boot observer::CHECK_FAILED; no private data or remote writes'
+            exit 2
+          } finally {
+            if ($temp -and (Test-Path -LiteralPath $temp)) { Remove-Item -LiteralPath $temp -Recurse -Force -ErrorAction SilentlyContinue }
+          }
