@@ -22,12 +22,17 @@ CATEGORIES = {
 }
 
 
-def classify(text):
-    # Prioritize the final failure, not benign download/progress text at the start.
+def classify(text, task='UNKNOWN'):
+    # A distribution URL seen in the wrapper's download progress is NOT proof
+    # of a distribution failure after setup succeeded and javac ran. Previous
+    # run 39992979019 was misleadingly labeled GRADLE_DISTRIBUTION although
+    # the only failed task was :forge:compileJava.
     low = text.lower()[-30_000:]
     hits = [name for name, patterns in CATEGORIES.items()
             if any(re.search(pattern, low) for pattern in patterns)]
-    return ','.join(hits) if hits else 'UNCLASSIFIED'
+    if task.endswith(':compileJava') and 'GRADLE_DISTRIBUTION' in hits:
+        hits.remove('GRADLE_DISTRIBUTION')
+    return ','.join(hits) if hits else ('COMPILER_FAILURE_UNCLASSIFIED' if task.endswith(':compileJava') else 'UNCLASSIFIED')
 
 
 def details(text):
@@ -57,7 +62,7 @@ if __name__ == '__main__':
         sys.exit(2)
     text = Path(sys.argv[1]).read_text(encoding='utf-8', errors='replace')
     task, flags, packages, symbols = details(text)
-    print('::error title=FunCity source build safe diagnosis::CATEGORIES=' + classify(text) +
+    print('::error title=FunCity source build safe diagnosis::CATEGORIES=' + classify(text, task) +
           ' FAILED_TASK=' + task + ' FLAGS=' + flags +
           ' PUBLIC_UPSTREAM_PACKAGES=' + packages + ' PUBLIC_UPSTREAM_SYMBOLS=' + symbols +
           '; no raw CI log, download URL or credentials published')

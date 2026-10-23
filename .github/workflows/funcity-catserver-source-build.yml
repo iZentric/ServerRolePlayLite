@@ -9,8 +9,13 @@ on:
       - .github/workflows/funcity-catserver-source-build.yml
       - functity/catserver/patches/0001-funcity-operator-identity.patch
       - scripts/fc_gradle_failure_classifier.py
+      - scripts/fc_gradle_failure_classifier_test.py
       - scripts/fc_funcity_capacity_profile_test.py
+      - scripts/fc_funcity_hybrid_config_test.py
       - functity/capacity/3g-view4/server.properties
+      - functity/capacity/3g-view4/bukkit.yml
+      - functity/capacity/3g-view4/config/connectivity-common.toml
+      - functity/capacity/3g-view4/defaultconfigs/forge-server.toml
       - functity-config/server.properties
 permissions:
   contents: read
@@ -20,8 +25,11 @@ jobs:
     timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
-      - name: Preserve RP/auth/bind and test only isolated view-distance/watchdog arm
-        run: python3 scripts/fc_funcity_capacity_profile_test.py
+      - name: Test isolated view-distance and hybrid safety arms (no live changes)
+        run: |
+          python3 scripts/fc_funcity_capacity_profile_test.py
+          python3 scripts/fc_funcity_hybrid_config_test.py
+          python3 scripts/fc_gradle_failure_classifier_test.py
   source-candidate:
     needs: profile-gate
     runs-on: ubuntu-24.04
@@ -55,12 +63,19 @@ jobs:
           set -Eeuo pipefail
           root="$RUNNER_TEMP/fc-catserver-source"
           cd "$root"
-          # Upstream 2023 gradle.properties contains -XX:MaxPermSize, rejected by Java 17.
-          # Override build JVM flags without altering CatServer runtime source/config.
-          # Upstream documents setup THEN build as separate Gradle invocations.
-          # The combined graph compiled :forge without mapped Minecraft classes.
-          if ! ./gradlew '-Dorg.gradle.jvmargs=-Xmx2G -Dfile.encoding=UTF-8' \
-               setup --no-daemon --max-workers=2 \
+          # Previous source build run 39992979019 passed setup but failed
+          # :forge:compileJava under the 2 GiB Gradle JVM and parallel workers.
+          # Reuse the *previously successful isolated source-build recipe* from
+          # run 38126700415: serialize Gradle, give setup room, then fork javac.
+          # This changes build infrastructure, not CatServer runtime semantics.
+          sed -i -e 's/-XX:MaxPermSize=512m//g' \
+                 -e 's/-Xmx3G/-Xmx5G/g' \
+                 -e 's/org.gradle.parallel=true/org.gradle.parallel=false/' \
+                 -e 's/org.gradle.configureondemand=true/org.gradle.configureondemand=false/' \
+                 gradle.properties
+          grep -Fq 'org.gradle.parallel=false' gradle.properties
+          grep -Fq 'org.gradle.configureondemand=false' gradle.properties
+          if ! ./gradlew --no-daemon --no-parallel --max-workers=1 setup \
                > "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
             python3 "$GITHUB_WORKSPACE/scripts/fc_gradle_failure_classifier.py" \
               "$RUNNER_TEMP/fc-catserver-build-private.log"
@@ -68,8 +83,16 @@ jobs:
             exit 2
           fi
           echo '::notice title=FunCity source build::UPSTREAM_SETUP_PASS; no JAR published.'
-          if ! ./gradlew '-Dorg.gradle.jvmargs=-Xmx2G -Dfile.encoding=UTF-8' \
-               :forge:buildCatServer --no-daemon --max-workers=2 \
+          cat >> build.gradle <<'GRADLE'
+          project(':forge') {
+              tasks.withType(JavaCompile).configureEach {
+                  options.fork = true
+                  options.forkOptions.memoryMaximumSize = '4g'
+              }
+          }
+          GRADLE
+          sed -i 's/-Xmx5G/-Xmx2G/g' gradle.properties
+          if ! ./gradlew --no-daemon --no-parallel --max-workers=1 buildCatServer \
                >> "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
             python3 "$GITHUB_WORKSPACE/scripts/fc_gradle_failure_classifier.py" \
               "$RUNNER_TEMP/fc-catserver-build-private.log"

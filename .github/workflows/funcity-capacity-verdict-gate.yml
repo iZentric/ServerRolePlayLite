@@ -9,7 +9,11 @@ on:
       - scripts/fc_funcity_capacity_verdict.py
       - scripts/fc_funcity_capacity_verdict_test.py
       - scripts/fc_funcity_capacity_profile_test.py
+      - scripts/fc_funcity_hybrid_config_test.py
       - functity/capacity/3g-view4/server.properties
+      - functity/capacity/3g-view4/bukkit.yml
+      - functity/capacity/3g-view4/config/connectivity-common.toml
+      - functity/capacity/3g-view4/defaultconfigs/forge-server.toml
       - functity-config/server.properties
   pull_request:
     paths:
@@ -17,7 +21,11 @@ on:
       - scripts/fc_funcity_capacity_verdict.py
       - scripts/fc_funcity_capacity_verdict_test.py
       - scripts/fc_funcity_capacity_profile_test.py
+      - scripts/fc_funcity_hybrid_config_test.py
       - functity/capacity/3g-view4/server.properties
+      - functity/capacity/3g-view4/bukkit.yml
+      - functity/capacity/3g-view4/config/connectivity-common.toml
+      - functity/capacity/3g-view4/defaultconfigs/forge-server.toml
       - functity-config/server.properties
 permissions:
   contents: read
@@ -31,5 +39,6 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/fc_funcity_capacity_profile_test.py
+          python3 scripts/fc_funcity_hybrid_config_test.py
           python3 scripts/fc_funcity_capacity_verdict_test.py
           echo '::notice title=FunCity static gate::No real-client measurements or capacity gain claimed.'
