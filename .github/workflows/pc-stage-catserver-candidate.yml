@@ -1,0 +1,40 @@
+name: Stage CatServer official candidate on HidenCloud without activating it
+# One-time opt-in push. NEVER stops live, renames server.jar, changes world or
+# sets Startup Java. Only stages a SHA-checked public candidate for later tests.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-stage-catserver-candidate.yml
+      - scripts/fc_pc_stage_catserver_candidate.ps1
+permissions:
+  contents: read
+concurrency:
+  group: funcity-host-engine-swap-one-at-a-time
+  cancel-in-progress: false
+jobs:
+  syntax:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse script without execution
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path $PWD 'scripts/fc_pc_stage_catserver_candidate.ps1'),
+            [ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'STAGE_SYNTAX_FAILED' }
+  pc-stage:
+    if: startsWith(github.event.head_commit.message, 'Stage CatServer official candidate once')
+    needs: syntax
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify current JAR, upload candidate to NEW inactive name and SHA readback
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_stage_catserver_candidate.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
