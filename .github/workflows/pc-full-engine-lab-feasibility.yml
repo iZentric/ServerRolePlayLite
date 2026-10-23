@@ -1,0 +1,23 @@
+name: Gate a full 34 mod 13 plugin engine A/B without touching live
+# The private world and JARs remain on owner's PC. This is a read-only gate,
+# NOT a boot/benchmark, host engine change, public Release or chat blocker.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-full-engine-lab-feasibility.yml
+      - scripts/fc_pc_full_engine_lab_preflight.ps1
+permissions:
+  contents: read
+jobs:
+  pc-lab-preflight:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify entire private content JAR set and safe lab prerequisites
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          & ./scripts/fc_pc_full_engine_lab_preflight.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
