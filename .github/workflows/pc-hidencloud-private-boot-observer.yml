@@ -60,6 +60,9 @@ jobs:
             $javaError=$false
             $memoryError=$false
             $bindError=$false
+            $errorLines=0
+            $pluginLoadError=$false
+            $uncaughtServerException=$false
             # One fresh snapshot after first boot, not a process liveness claim.
             $samples=1
             for ($attempt=0; $attempt -lt $samples; $attempt++) {
@@ -77,6 +80,9 @@ jobs:
                   $javaError=($text -match 'UnsupportedClassVersionError|has been compiled by a more recent version of the Java Runtime')
                   $memoryError=($text -match 'OutOfMemoryError|Could not reserve enough space for object heap')
                   $bindError=($text -match '(?i)FAILED TO BIND TO PORT|Address already in use')
+                  $errorLines=[regex]::Matches($text,'(?m)^\[[0-9:]+\] \[[^\r\n\]]+/(?:ERROR|FATAL)\]').Count
+                  $pluginLoadError=($text -match '(?i)Could not load plugin|Error occurred while enabling|Mod loading has failed|Missing or unsupported mandatory dependencies')
+                  $uncaughtServerException=($text -match '(?i)Encountered an unexpected exception|Exception in server tick loop')
                   $state=if ($done) { 'DONE_MARKER_SEEN_NOT_LIVE_PROOF' } else { 'NEW_LOG_STARTUP_PENDING' }
                   if ($done -or $javaError -or $memoryError -or $bindError -or $stopped) { break }
                 }
@@ -86,7 +92,9 @@ jobs:
             Write-Output ('::notice title=HidenCloud private boot observer::STATE=' + $state +
               ' NEW_LOG=' + $changed + ' DONE=' + $done + ' STOPPING_SEEN=' + $stopped +
               ' JAVA_ERROR=' + $javaError + ' MEMORY_ERROR=' + $memoryError +
-              ' BIND_ERROR=' + $bindError +
+              ' BIND_ERROR=' + $bindError + ' ERROR_LINES=' + $errorLines +
+              ' PLUGIN_OR_MOD_LOAD_ERROR=' + $pluginLoadError +
+              ' UNCAUGHT_SERVER_EXCEPTION=' + $uncaughtServerException +
               ' SFTP_LOG_ONLY=true LIVE_STATUS_NOT_VERIFIED=true NO_REMOTE_WRITES=true')
           } catch {
             Write-Output '::error title=HidenCloud private boot observer::CHECK_FAILED; no private data or remote writes'
