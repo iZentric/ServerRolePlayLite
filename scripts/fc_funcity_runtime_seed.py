@@ -44,8 +44,11 @@ def inventory(root):
 def export_runtime(boot_work, output, engine):
     """Copy only required private launcher runtime, never world/log/config."""
     boot_work, output = Path(boot_work), Path(output)
-    if output.exists() or output.is_symlink() or not output.parent.is_dir():
-        raise InvalidSeed('new private runtime seed directory required')
+    repo = Path(__file__).resolve().parents[1]
+    target = output.resolve(strict=False)
+    if (target == repo or repo in target.parents or output.exists()
+            or output.is_symlink() or not output.parent.is_dir()):
+        raise InvalidSeed('new PRIVATE runtime seed directory outside repository required')
     if not (boot_work/'libraries').is_dir() or not (boot_work/'foxlaunch-data'/'install.dat').is_file():
         raise InvalidSeed('CatServer first-boot libraries/install marker missing')
     for folder in FOLDERS:

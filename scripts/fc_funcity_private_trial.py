@@ -255,7 +255,8 @@ def trial(java, source, output, engine, expected_sha, runtime_seed, port=25595, 
     for attempt in (1, 2):
         if not boot_once(java, staged, attempt, timeout):
             raise TrialRejected('private boot/stop ' + str(attempt) + ' failed; inspect LOCAL log only')
-        print('PRIVATE_FULL_PACK_BOOT_' + str(attempt) + '=PASS mods=34 plugins=13 client=NOT_TESTED')
+        print('PRIVATE_FULL_PACK_BOOT_' + str(attempt) +
+              '=PASS input_mod_jars=34 input_plugin_jars=13 active_mods_plugins=NOT_VERIFIED client=NOT_TESTED')
     return True
 
 

@@ -99,6 +99,15 @@ class PrivateTrialTest(unittest.TestCase):
             self.assertFalse((output/'private-boot.log').exists())
             self.assertEqual((source/'libraries'/'old.jar').read_bytes(), b'MOHIST RUNTIME')
 
+    def test_refuse_private_runtime_export_inside_public_repository(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            inside_repo = Path(__file__).resolve().parents[1]/'NEVER-CREATE-PRIVATE-SEED'
+            self.assertFalse(inside_repo.exists())
+            with self.assertRaises(InvalidSeed):
+                export_runtime(Path(temp)/'bootstrap', inside_repo, jar)
+            self.assertFalse(inside_repo.exists())
+
     def test_refuse_corrupted_or_wrong_engine_runtime_seed(self):
         with tempfile.TemporaryDirectory() as temp:
             source, output, jar, digest, seed = synthetic_lab(temp)
