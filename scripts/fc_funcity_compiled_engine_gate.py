@@ -29,15 +29,8 @@ def require(condition, message):
         raise InvalidEngine(message)
 
 
-def check(jar_path, classes_root):
-    for relative, marker in IDENTITY.items():
-        path = Path(classes_root) / relative
-        require(path.is_file(), 'missing compiled class: ' + relative)
-        data = path.read_bytes()
-        require(marker in data, 'compiled identity missing: ' + relative)
-    bridge_file = Path(classes_root) / BRIDGE
-    require(bridge_file.is_file(), 'missing compiled event bridge')
-    require(len(bridge_file.read_bytes()) > 100, 'empty compiled event bridge')
+def check_packaged(jar_path):
+    """Presence/branding gate for a local launcher; not a source provenance proof."""
     with zipfile.ZipFile(jar_path) as outer:
         require(b'catserver.server.CatServerLaunch' in outer.read('META-INF/MANIFEST.MF'),
                 'launcher manifest missing')
@@ -54,6 +47,18 @@ def check(jar_path, classes_root):
             require(BRIDGE in names and len(universal.read(BRIDGE)) > 100,
                     'missing/empty packaged event bridge')
     return True
+
+
+def check(jar_path, classes_root):
+    for relative, marker in IDENTITY.items():
+        path = Path(classes_root) / relative
+        require(path.is_file(), 'missing compiled class: ' + relative)
+        data = path.read_bytes()
+        require(marker in data, 'compiled identity missing: ' + relative)
+    bridge_file = Path(classes_root) / BRIDGE
+    require(bridge_file.is_file(), 'missing compiled event bridge')
+    require(len(bridge_file.read_bytes()) > 100, 'empty compiled event bridge')
+    return check_packaged(jar_path)
 
 
 if __name__ == '__main__':
