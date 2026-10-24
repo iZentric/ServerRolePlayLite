@@ -1,5 +1,7 @@
 # Motor FunCity — sursă verificabilă, Forge + Bukkit 1.16.5
 
+[Obiective măsurabile și starea actuală](GOALS.md).
+
 **Identitate:** fork experimental al [CatServer LGPL-3.0, tag 23.05.26-1](https://github.com/Luohuayu/CatServer/tree/1d8d63138be77a606df2a5e940b960065948f983), pin `1d8d63138be77a606df2a5e940b960065948f983`. Păstrează Forge 36.2.39, namespace-ul CraftBukkit/Spigot, protocolul, `catserver.yml` și atribuirea upstream; numele de operator/logger devine FunCity. Nu este o versiune nouă de Minecraft ori un substitut fără risc pentru Mohistul actual.
 
 ## Cod schimbat, nu doar numele
