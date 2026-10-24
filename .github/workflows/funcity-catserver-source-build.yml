@@ -3,6 +3,7 @@ name: FunCity candidate - build auditable branded CatServer fork
 # LGPL upstream credit retained. Branding only operator-facing name/logger; core
 # protocol identifiers, config names and Forge/Bukkit compatibility untouched.
 on:
+  workflow_dispatch:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
     paths:
