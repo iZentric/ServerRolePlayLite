@@ -46,7 +46,7 @@ def smoke(java, jar, deadline_seconds=420):
                                        cwd=work, stdin=subprocess.PIPE, stdout=logfile,
                                        stderr=subprocess.STDOUT, start_new_session=True)
             started = time.monotonic()
-            reached_done = fatal = False
+            reached_done = fatal = sent_stop = False
             try:
                 while time.monotonic() - started < deadline_seconds:
                     text = logpath.read_text(encoding='utf-8', errors='replace')
@@ -58,6 +58,7 @@ def smoke(java, jar, deadline_seconds=420):
                     if reached_done and not fatal:
                         process.stdin.write(b'stop\n')
                         process.stdin.flush()
+                        sent_stop = True
                     else:
                         process.terminate()
                 process.stdin.close()
@@ -72,7 +73,7 @@ def smoke(java, jar, deadline_seconds=420):
                         process.wait(timeout=10)
                 # Inspect the final segment as well; startup success is not a clean stop.
                 final_done, final_fatal = inspect(logpath.read_text(encoding='utf-8', errors='replace'))
-                return final_done and not final_fatal and process.returncode == 0
+                return sent_stop and final_done and not final_fatal and process.returncode == 0
             finally:
                 if not process.stdin.closed:
                     process.stdin.close()

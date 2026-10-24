@@ -37,6 +37,17 @@ class SmokeTest(unittest.TestCase):
     def test_fatal_fake_process(self):
         self.assertFalse(self.fake('[main/FATAL] crash'))
 
+    def test_done_then_exit_without_stop_is_not_clean_shutdown(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            jar = root / 'synthetic.jar'
+            jar.write_bytes(b'NOT A MINECRAFT JAR')
+            fake_java = root / 'fake-java'
+            fake_java.write_text('#!/usr/bin/env python3\n'
+                                 'print("Done (2s)! For help, type \\"help\\"", flush=True)\n')
+            fake_java.chmod(0o755)
+            self.assertFalse(smoke(fake_java, jar, deadline_seconds=5))
+
 
 if __name__ == '__main__':
     unittest.main()
