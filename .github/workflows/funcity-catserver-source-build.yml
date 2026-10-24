@@ -16,9 +16,12 @@ on:
       - scripts/fc_funcity_java11_smoke_test.py
       - scripts/fc_gradle_failure_classifier.py
       - scripts/fc_gradle_failure_classifier_test.py
+      - scripts/fc_funcity_setup_retry.py
+      - scripts/fc_funcity_setup_retry_test.py
       - scripts/fc_funcity_capacity_profile_test.py
       - scripts/fc_funcity_hybrid_config_test.py
       - functity/capacity/3g-view4/server.properties
+      - functity/capacity/3g-view4-only/server.properties
       - functity/capacity/3g-view4/bukkit.yml
       - functity/capacity/3g-view4/config/connectivity-common.toml
       - functity/capacity/3g-view4/defaultconfigs/forge-server.toml
@@ -36,6 +39,7 @@ jobs:
           python3 scripts/fc_funcity_capacity_profile_test.py
           python3 scripts/fc_funcity_hybrid_config_test.py
           python3 scripts/fc_gradle_failure_classifier_test.py
+          python3 scripts/fc_funcity_setup_retry_test.py
           python3 scripts/fc_funcity_bridge_patch_test.py
           python3 scripts/fc_funcity_compiled_engine_gate_test.py
           python3 scripts/fc_funcity_java11_smoke_test.py
@@ -89,13 +93,30 @@ jobs:
                  gradle.properties
           grep -Fq 'org.gradle.parallel=false' gradle.properties
           grep -Fq 'org.gradle.configureondemand=false' gradle.properties
-          if ! ./gradlew --no-daemon --no-parallel --max-workers=1 setup \
-               > "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
+          # A previous run (40008214490) stopped while resolving public Gradle
+          # dependencies. Distinguish a transient fetch failure from 401/403/404,
+          # compile or resource failures; retry at most ONCE in the same runner
+          # so partial downloads can be reused. No unlicensed binary cache or
+          # raw log is uploaded. This is not an unbounded rerun of the same job.
+          setup_pass=false
+          for attempt in 1 2; do
+            if ./gradlew --no-daemon --no-parallel --max-workers=1 setup \
+                 > "$RUNNER_TEMP/fc-catserver-build-private.log" 2>&1; then
+              setup_pass=true
+              break
+            fi
+            if [ "$attempt" -eq 1 ] && python3 "$GITHUB_WORKSPACE/scripts/fc_funcity_setup_retry.py" \
+                  "$RUNNER_TEMP/fc-catserver-build-private.log"; then
+              echo '::notice title=FunCity source setup::Transient network failure; one bounded retry.'
+              sleep 15
+              continue
+            fi
             python3 "$GITHUB_WORKSPACE/scripts/fc_gradle_failure_classifier.py" \
               "$RUNNER_TEMP/fc-catserver-build-private.log"
             echo '::error title=FunCity source build::SETUP_FAILED; no binary promoted or uploaded.'
             exit 2
-          fi
+          done
+          test "$setup_pass" = true
           echo '::notice title=FunCity source build::UPSTREAM_SETUP_PASS; no JAR published.'
           cat >> build.gradle <<'GRADLE'
           project(':forge') {

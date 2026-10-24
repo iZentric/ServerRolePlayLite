@@ -10,6 +10,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / 'functity-config/server.properties'
 CANDIDATE = ROOT / 'functity/capacity/3g-view4/server.properties'
+VIEW_ONLY = ROOT / 'functity/capacity/3g-view4-only/server.properties'
 
 
 def parse(path):
@@ -28,16 +29,19 @@ def parse(path):
 
 
 def test_profile():
-    base, candidate = parse(BASE), parse(CANDIDATE)
-    assert base.keys() == candidate.keys(), 'profile changed property set'
-    assert base['view-distance'] == '5' and candidate['view-distance'] == '4'
-    assert base['max-tick-time'] == '-1' and candidate['max-tick-time'] == '60000'
+    base, candidate, view_only = parse(BASE), parse(CANDIDATE), parse(VIEW_ONLY)
+    assert base.keys() == candidate.keys() == view_only.keys(), 'profile changed property set'
+    assert base['view-distance'] == '5' and candidate['view-distance'] == view_only['view-distance'] == '4'
+    assert base['max-tick-time'] == view_only['max-tick-time'] == '-1'
+    assert candidate['max-tick-time'] == '60000'
+    assert {k for k in base if base[k] != view_only[k]} == {'view-distance'}
     assert {k for k in base if base[k] != candidate[k]} == {'view-distance', 'max-tick-time'}
-    assert candidate['server-ip'] == '127.0.0.1'  # No exposure as a side effect.
-    assert candidate['online-mode'] == base['online-mode']
-    assert candidate['entity-broadcast-range-percentage'] == base['entity-broadcast-range-percentage']
-    assert candidate['max-players'] == base['max-players']  # It is not a capacity result.
-    assert 'simulation-distance' not in candidate  # Minecraft/Forge 1.16.5.
+    for arm in (candidate, view_only):
+        assert arm['server-ip'] == '127.0.0.1'  # No exposure as a side effect.
+        assert arm['online-mode'] == base['online-mode']
+        assert arm['entity-broadcast-range-percentage'] == base['entity-broadcast-range-percentage']
+        assert arm['max-players'] == base['max-players']  # Not a capacity result.
+        assert 'simulation-distance' not in arm  # Minecraft/Forge 1.16.5.
     assert (2 * 5 + 1) ** 2 == 121 and (2 * 4 + 1) ** 2 == 81
     with tempfile.TemporaryDirectory() as tmp:
         fixture = Path(tmp) / 'bad.properties'
@@ -48,8 +52,8 @@ def test_profile():
             assert str(exc).startswith('duplicate property:')
         else:
             raise AssertionError('duplicate view-distance accepted')
-    print('PASS: isolated view 5->4 capacity arm, 121->81 nominal chunk window; '
-          'watchdog enabled; NO live write, no player-count claim')
+    print('PASS: isolated view 5->4-only arm (watchdog unchanged) and view4+watchdog safety arm; '
+          '121->81 nominal chunk window; NO live write, no player-count claim')
 
 
 if __name__ == '__main__':
