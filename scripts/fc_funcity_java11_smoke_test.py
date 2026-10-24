@@ -46,7 +46,11 @@ class SmokeTest(unittest.TestCase):
             fake_java.write_text('#!/usr/bin/env python3\n'
                                  'print("Done (2s)! For help, type \\"help\\"", flush=True)\n')
             fake_java.chmod(0o755)
-            self.assertFalse(smoke(fake_java, jar, deadline_seconds=5))
+            diagnostic = {}
+            self.assertFalse(smoke(fake_java, jar, deadline_seconds=5, diagnostic=diagnostic))
+            self.assertTrue(diagnostic['done'])
+            self.assertFalse(diagnostic['stop_sent'])
+            self.assertEqual(diagnostic['exit_code'], 0)
 
 
 if __name__ == '__main__':

@@ -32,7 +32,7 @@ def inspect(text):
     return bool(DONE.search(text)), bool(FATAL.search(text))
 
 
-def smoke(java, jar, deadline_seconds=420):
+def smoke(java, jar, deadline_seconds=420, diagnostic=None):
     jar = Path(jar).resolve(strict=True)
     if not jar.is_file() or not Path(java).is_file() or deadline_seconds < 1:
         raise ValueError('missing Java/JAR or invalid deadline')
@@ -73,6 +73,11 @@ def smoke(java, jar, deadline_seconds=420):
                         process.wait(timeout=10)
                 # Inspect the final segment as well; startup success is not a clean stop.
                 final_done, final_fatal = inspect(logpath.read_text(encoding='utf-8', errors='replace'))
+                if diagnostic is not None:
+                    diagnostic.update(done=final_done, fatal=final_fatal,
+                                      stop_sent=sent_stop, exit_code=process.returncode,
+                                      deadline_expired=not reached_done and not fatal and
+                                      time.monotonic() - started >= deadline_seconds)
                 return sent_stop and final_done and not final_fatal and process.returncode == 0
             finally:
                 if not process.stdin.closed:
@@ -85,11 +90,18 @@ def smoke(java, jar, deadline_seconds=420):
 if __name__ == '__main__':
     if len(sys.argv) != 3:
         sys.exit(2)
+    diagnostic = {}
     try:
-        ok = smoke(sys.argv[1], sys.argv[2])
+        ok = smoke(sys.argv[1], sys.argv[2], diagnostic=diagnostic)
     except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
-        print('JAVA11_LOOPBACK_SMOKE_REJECTED: ' + type(exc).__name__, file=sys.stderr)
+        print('::error title=Java11 loopback smoke::Exception=' + type(exc).__name__ +
+              '; no raw server log uploaded', file=sys.stderr)
         sys.exit(2)
     print('JAVA11_LOOPBACK_BOOT_CLEAN_STOP=' + str(ok).lower() +
           ' world=generated mods=0 plugins=0 players=0 client_login=NOT_TESTED')
+    if not ok:
+        # GitHub check annotations are accessible without downloading private logs.
+        # Flags only; no log lines, paths or credentials are exposed.
+        print('::error title=Java11 loopback smoke::' +
+              ' '.join(k + '=' + str(v).lower() for k, v in diagnostic.items()), file=sys.stderr)
     sys.exit(0 if ok else 2)

@@ -3,6 +3,8 @@
 # (build) and JDK 11 (smoke). Never publishes a JAR, touches a host or overwrites
 # an existing directory. Workdir and resulting binary stay on THIS machine.
 set -Eeuo pipefail
+stage=preflight
+trap 'rc=$?; echo "::error title=FunCity private build::STAGE_FAILED stage=$stage exit=$rc; private Gradle/server logs not uploaded" >&2' ERR
 if [ "$#" -ne 2 ]; then
   echo 'usage: bash scripts/fc_funcity_build_private.sh NEW_OUTSIDE_REPO_WORKDIR JAVA11_BIN' >&2
   exit 2
@@ -27,12 +29,14 @@ if ! "$java11" -version 2>&1 | head -n 1 | grep -Eq '(openjdk|java) version "11(
   exit 2
 fi
 mkdir "$root"
+stage=clone
 source_dir="$root/source"
 log="$root/private-build.log"
 git clone -q --depth 1 --filter=blob:none --branch 23.05.26-1 \
   https://github.com/Luohuayu/CatServer.git "$source_dir"
 test "$(git -C "$source_dir" rev-parse HEAD)" = '1d8d63138be77a606df2a5e940b960065948f983'
 test -s "$source_dir/LICENSE" && grep -q 'LESSER GENERAL PUBLIC LICENSE' "$source_dir/LICENSE"
+stage=patch
 for patch in 0001-funcity-operator-identity.patch 0002-preserve-forge-block-place-cancellation.patch; do
   git -C "$source_dir" apply --check "$repo/functity/catserver/patches/$patch"
   git -C "$source_dir" apply "$repo/functity/catserver/patches/$patch"
@@ -50,6 +54,7 @@ sed -i -e 's/-XX:MaxPermSize=512m//g' \
        gradle.properties
 grep -Fq 'org.gradle.parallel=false' gradle.properties
 grep -Fq 'org.gradle.configureondemand=false' gradle.properties
+stage=setup
 for attempt in 1 2; do
   if ./gradlew --no-daemon --no-parallel --max-workers=1 setup > "$log" 2>&1; then
     break
@@ -60,7 +65,7 @@ for attempt in 1 2; do
     continue
   fi
   python3 "$repo/scripts/fc_gradle_failure_classifier.py" "$log"
-  echo 'SETUP_FAILED; no binary promoted' >&2
+  echo '::error title=FunCity private build::STAGE_FAILED stage=setup; no binary promoted' >&2
   exit 2
 done
 cat >> build.gradle <<'GRADLE'
@@ -72,9 +77,10 @@ project(':forge') {
 }
 GRADLE
 sed -i 's/-Xmx5G/-Xmx2G/g' gradle.properties
+stage=compile
 if ! ./gradlew --no-daemon --no-parallel --max-workers=1 buildCatServer >> "$log" 2>&1; then
   python3 "$repo/scripts/fc_gradle_failure_classifier.py" "$log"
-  echo 'COMPILE_FAILED; no binary promoted' >&2
+  echo '::error title=FunCity private build::STAGE_FAILED stage=compile; no binary promoted' >&2
   exit 2
 fi
 jars=(projects/forge/build/libs/CatServer-1.16.5-*-server.jar)
@@ -82,9 +88,12 @@ if [ "${#jars[@]}" -ne 1 ] || [ ! -s "${jars[0]}" ]; then
   echo 'expected one compiled launcher' >&2
   exit 2
 fi
+stage=compiled_gate
 python3 "$repo/scripts/fc_funcity_compiled_engine_gate.py" \
   "${jars[0]}" projects/forge/build/classes/java/main
+stage=empty_java11_boot
 python3 "$repo/scripts/fc_funcity_java11_smoke.py" "$java11" "${jars[0]}"
+stage=private_copy
 # Copy ONLY to a new PRIVATE local workdir; refuse a pre-existing target.
 result="$root/FunCityEngine-private-trial.jar"
 cp -n "${jars[0]}" "$result"
