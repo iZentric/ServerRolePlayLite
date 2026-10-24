@@ -19,6 +19,7 @@ import zipfile
 
 from fc_funcity_compiled_engine_gate import InvalidEngine, check_packaged
 from fc_funcity_java11_smoke import inspect
+from fc_funcity_runtime_seed import InvalidSeed, validate_runtime
 
 MARKER = 'FUNCITY_INACTIVE_ISOLATED_COPY_V1\n'
 CRITICAL = {'server-ip', 'server-port', 'white-list', 'enable-rcon', 'enable-query',
@@ -93,7 +94,7 @@ def port_is_unused(port):
             raise TrialRejected('loopback port is not free') from exc
 
 
-def preflight(source, output, engine, expected_sha, port):
+def preflight(source, output, engine, expected_sha, port, runtime_seed):
     raw_source, raw_output, raw_engine = map(lambda p: Path(p).absolute(),
                                              (source, output, engine))
     if raw_source.is_symlink() or raw_output.is_symlink() or raw_engine.is_symlink():
@@ -101,12 +102,19 @@ def preflight(source, output, engine, expected_sha, port):
     source = raw_source.resolve(strict=False)
     output = raw_output.resolve(strict=False)  # Canonicalize symlinked ancestors.
     engine = raw_engine.resolve(strict=False)
+    raw_seed = Path(runtime_seed).absolute()
+    if raw_seed.is_symlink():
+        raise TrialRejected('linked runtime seed refused')
+    runtime_seed = raw_seed.resolve(strict=False)
     repo = Path(__file__).resolve().parents[1]
     if (not source.is_dir()
             or output.exists() or not output.parent.is_dir()
             or descendant(output, source) or descendant(source, output)
-            or descendant(output, repo) or descendant(source, repo)):
-        raise TrialRejected('require an existing inactive source copy and a NEW output outside the repo')
+            or descendant(output, repo) or descendant(source, repo)
+            or descendant(runtime_seed, source) or descendant(source, runtime_seed)
+            or descendant(output, runtime_seed) or descendant(runtime_seed, output)
+            or descendant(runtime_seed, repo)):
+        raise TrialRejected('require isolated source/seed and NEW output outside repo')
     before = inventory(source)  # Reject links before opening ANY files under the copy.
     if not (source / '.funcity-isolated-copy').is_file() or (source / '.funcity-isolated-copy').read_text() != MARKER:
         raise TrialRejected('inactive-source-copy marker missing')
@@ -118,6 +126,7 @@ def preflight(source, output, engine, expected_sha, port):
         raise TrialRejected('candidate JAR must be outside input/output copy')
     if sha(engine) != expected_sha:
         raise TrialRejected('candidate SHA-256 mismatch')
+    seed_folders = validate_runtime(runtime_seed, expected_sha)
     try:
         check_packaged(engine)
     except (InvalidEngine, OSError, KeyError, zipfile.BadZipFile) as exc:
@@ -132,16 +141,27 @@ def preflight(source, output, engine, expected_sha, port):
             or not (source / 'server.jar').is_file()):
         raise TrialRejected('world or full 34-mod/13-plugin pack or rollback engine missing')
     port_is_unused(port)
-    return source, output, engine, safe_properties, before
+    return source, output, engine, safe_properties, before, runtime_seed, seed_folders
 
 
-def prepare(source, output, engine, expected_sha, port):
-    source, output, engine, safe_properties, before = preflight(source, output, engine, expected_sha, port)
+def prepare(source, output, engine, expected_sha, port, runtime_seed):
+    source, output, engine, safe_properties, before, runtime_seed, seed_folders = preflight(
+        source, output, engine, expected_sha, port, runtime_seed)
     # Refuse to overwrite even a directory created between preflight and copytree.
     shutil.copytree(source, output, symlinks=False)
     try:
         if inventory(output) != before or inventory(source) != before:
             raise TrialRejected('source/output SHA inventory differs; no trial started')
+        # Keep original Mohist runtime separately; CatServer's first boot needs
+        # its OWN launcher libraries while network egress is disabled.
+        prior = output / '.funcity-prior-runtime'
+        if prior.exists() or prior.is_symlink():
+            raise TrialRejected('reserved rollback runtime path already exists')
+        prior.mkdir()
+        for folder in seed_folders:
+            if (output / folder).exists():
+                (output / folder).replace(prior / folder)
+            shutil.copytree(runtime_seed / folder, output / folder)
         # Only the NEW output is edited; the supplied copy and its rollback engine remain untouched.
         (output / 'server.jar').replace(output / 'server-before-funcity-trial.jar')
         shutil.copyfile(engine, output / 'server.jar')
@@ -226,12 +246,12 @@ def boot_once(java, output, attempt, timeout, settle_seconds=30):
                 process.stdin.close()
 
 
-def trial(java, source, output, engine, expected_sha, port=25595, timeout=900):
+def trial(java, source, output, engine, expected_sha, runtime_seed, port=25595, timeout=900):
     java_is_11(java)   # Fail before copying data if the runtime is wrong.
     namespace_supported()  # Mandatory isolation, not an operator claim.
     if timeout < 1:
         raise TrialRejected('invalid timeout')
-    staged = prepare(source, output, engine, expected_sha, port)
+    staged = prepare(source, output, engine, expected_sha, port, runtime_seed)
     for attempt in (1, 2):
         if not boot_once(java, staged, attempt, timeout):
             raise TrialRejected('private boot/stop ' + str(attempt) + ' failed; inspect LOCAL log only')
@@ -245,13 +265,15 @@ if __name__ == '__main__':
     cli.add_argument('--source-copy', required=True, type=Path)
     cli.add_argument('--output', required=True, type=Path)
     cli.add_argument('--engine', required=True, type=Path)
+    cli.add_argument('--runtime-seed', required=True, type=Path)
     cli.add_argument('--sha256', required=True)
     cli.add_argument('--port', type=int, default=25595)
     cli.add_argument('--timeout', type=int, default=900)
     args = cli.parse_args()
     try:
-        trial(args.java, args.source_copy, args.output, args.engine, args.sha256, args.port, args.timeout)
-    except (OSError, TrialRejected, subprocess.TimeoutExpired, InvalidEngine) as exc:
+        trial(args.java, args.source_copy, args.output, args.engine, args.sha256,
+              args.runtime_seed, args.port, args.timeout)
+    except (OSError, TrialRejected, subprocess.TimeoutExpired, InvalidEngine, InvalidSeed) as exc:
         print('PRIVATE_TRIAL_REJECTED: ' + type(exc).__name__ +
               ' (details and logs remain on the local isolated machine)', file=sys.stderr)
         sys.exit(2)

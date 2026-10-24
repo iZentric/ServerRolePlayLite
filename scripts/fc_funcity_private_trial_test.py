@@ -11,6 +11,7 @@ from subprocess import CompletedProcess
 from fc_funcity_compiled_engine_gate_test import fixture
 from fc_funcity_private_trial import (MARKER, TrialRejected, isolated_java_command,
                                        namespace_supported, prepare, preflight, properties, trial)
+from fc_funcity_runtime_seed import export_runtime, validate_runtime, InvalidSeed
 
 
 def unused_port():
@@ -38,7 +39,17 @@ def synthetic_lab(root):
     binary_dir.mkdir()
     jar, _classes = fixture(binary_dir)
     digest = hashlib.sha256(jar.read_bytes()).hexdigest()
-    return source, root / 'new-trial', jar, digest
+    (source / 'libraries').mkdir()
+    (source / 'libraries' / 'old.jar').write_bytes(b'MOHIST RUNTIME')
+    bootstrap = root / 'bootstrap'
+    (bootstrap / 'libraries').mkdir(parents=True)
+    (bootstrap / 'libraries' / 'new.jar').write_bytes(b'CATSERVER RUNTIME')
+    (bootstrap / 'foxlaunch-data').mkdir()
+    (bootstrap / 'foxlaunch-data' / 'install.dat').write_text('synthetic')
+    (bootstrap / 'private-boot.log').write_text('NOT A SEED')
+    seed = root / 'runtime-seed'
+    export_runtime(bootstrap, seed, jar)
+    return source, root / 'new-trial', jar, digest, seed
 
 
 def fake_java(root, *, fatal=False, version='11.0.29'):
@@ -70,9 +81,9 @@ class PrivateTrialTest(unittest.TestCase):
 
     def test_prepare_only_new_copy_with_rollback(self):
         with tempfile.TemporaryDirectory() as temp:
-            source, output, jar, digest = synthetic_lab(temp)
+            source, output, jar, digest, seed = synthetic_lab(temp)
             before = (source / 'server.jar').read_bytes()
-            prepared = prepare(source, output, jar, digest, unused_port())
+            prepared = prepare(source, output, jar, digest, unused_port(), seed)
             self.assertEqual(prepared, output)
             self.assertEqual((source / 'server.jar').read_bytes(), before)
             self.assertEqual((output / 'server-before-funcity-trial.jar').read_bytes(), before)
@@ -82,37 +93,52 @@ class PrivateTrialTest(unittest.TestCase):
             self.assertEqual((source / 'rp' / 'level.dat').read_bytes(),
                              (output / 'rp' / 'level.dat').read_bytes())
             self.assertFalse((output / '.funcity-isolated-copy').exists())
+            self.assertEqual((output/'libraries'/'new.jar').read_bytes(), b'CATSERVER RUNTIME')
+            self.assertEqual((output/'.funcity-prior-runtime'/'libraries'/'old.jar').read_bytes(),
+                             b'MOHIST RUNTIME')
+            self.assertFalse((output/'private-boot.log').exists())
+            self.assertEqual((source/'libraries'/'old.jar').read_bytes(), b'MOHIST RUNTIME')
+
+    def test_refuse_corrupted_or_wrong_engine_runtime_seed(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with self.assertRaises(InvalidSeed):
+                validate_runtime(seed, '0' * 64)
+            (seed/'libraries'/'new.jar').write_bytes(b'CORRUPTED')
+            with self.assertRaises(InvalidSeed):
+                preflight(source, output, jar, digest, unused_port(), seed)
+            self.assertFalse(output.exists())
 
     def test_refuse_missing_marker_or_wrong_sha_or_live_target(self):
         with tempfile.TemporaryDirectory() as temp:
-            source, output, jar, digest = synthetic_lab(temp)
+            source, output, jar, digest, seed = synthetic_lab(temp)
             port = unused_port()
             (source / '.funcity-isolated-copy').unlink()
             with self.assertRaises(TrialRejected):
-                preflight(source, output, jar, digest, port)
+                preflight(source, output, jar, digest, port, seed)
             (source / '.funcity-isolated-copy').write_text(MARKER)
             with self.assertRaises(TrialRejected):
-                preflight(source, output, jar, '0' * 64, port)
+                preflight(source, output, jar, '0' * 64, port, seed)
             with self.assertRaises(TrialRejected):
-                preflight(source, source / 'nested-output', jar, digest, port)
+                preflight(source, source / 'nested-output', jar, digest, port, seed)
             (source / 'plugins' / '00.jar').unlink()
             with self.assertRaises(TrialRejected):
-                preflight(source, output, jar, digest, port)
+                preflight(source, output, jar, digest, port, seed)
 
     def test_refuse_links_or_taken_port(self):
         with tempfile.TemporaryDirectory() as temp:
-            source, output, jar, digest = synthetic_lab(temp)
+            source, output, jar, digest, seed = synthetic_lab(temp)
             with socket.socket() as sock:
                 sock.bind(('127.0.0.1', 0))
                 with self.assertRaises(TrialRejected):
-                    preflight(source, output, jar, digest, sock.getsockname()[1])
+                    preflight(source, output, jar, digest, sock.getsockname()[1], seed)
             link = Path(temp)/'repo-link'
             link.symlink_to(Path(__file__).resolve().parents[1], target_is_directory=True)
             with self.assertRaises(TrialRejected):
-                preflight(source, link/'untracked-secret-copy', jar, digest, unused_port())
+                preflight(source, link/'untracked-secret-copy', jar, digest, unused_port(), seed)
             (source / 'mods' / 'linked.jar').symlink_to(source / 'mods' / '00.jar')
             with self.assertRaises(TrialRejected):
-                preflight(source, output, jar, digest, unused_port())
+                preflight(source, output, jar, digest, unused_port(), seed)
 
     def test_boot_requires_kernel_network_isolation(self):
         cmd = isolated_java_command('/opt/java11/bin/java')
@@ -122,36 +148,36 @@ class PrivateTrialTest(unittest.TestCase):
 
     def test_isolation_failure_aborts_before_copy(self):
         with tempfile.TemporaryDirectory() as temp:
-            source, output, jar, digest = synthetic_lab(temp)
+            source, output, jar, digest, seed = synthetic_lab(temp)
             with patch('fc_funcity_private_trial.shutil.which', return_value='/usr/bin/tool'), \
                  patch('fc_funcity_private_trial.subprocess.run',
                        side_effect=[CompletedProcess([], 0, stdout=b'', stderr=b'openjdk version "11.0.29"'),
                                     CompletedProcess([], 1)]) as run:
                 with self.assertRaises(TrialRejected):
-                    trial(Path(temp)/'fake-java', source, output, jar, digest, unused_port())
+                    trial(Path(temp)/'fake-java', source, output, jar, digest, seed, unused_port())
             self.assertEqual(run.call_count, 2)
             self.assertFalse(output.exists())
 
     def test_two_boots_and_failure_stop(self):
         with tempfile.TemporaryDirectory() as temp:
-            source, output, jar, digest = synthetic_lab(temp)
+            source, output, jar, digest, seed = synthetic_lab(temp)
             with patch('fc_funcity_private_trial.namespace_supported'), \
                  patch('fc_funcity_private_trial.boot_once', return_value=True) as boots:
-                self.assertTrue(trial(fake_java(temp), source, output, jar, digest,
+                self.assertTrue(trial(fake_java(temp), source, output, jar, digest, seed,
                                       unused_port(), timeout=5))
             self.assertEqual(boots.call_count, 2)
         with tempfile.TemporaryDirectory() as temp:
-            source, output, jar, digest = synthetic_lab(temp)
+            source, output, jar, digest, seed = synthetic_lab(temp)
             with patch('fc_funcity_private_trial.namespace_supported'), \
                  patch('fc_funcity_private_trial.boot_once', side_effect=[False, True]) as boots:
                 with self.assertRaises(TrialRejected):
-                    trial(fake_java(temp, fatal=True), source, output, jar, digest,
+                    trial(fake_java(temp, fatal=True), source, output, jar, digest, seed,
                           unused_port(), timeout=5)
             self.assertEqual(boots.call_count, 1)
         with tempfile.TemporaryDirectory() as temp:
-            source, output, jar, digest = synthetic_lab(temp)
+            source, output, jar, digest, seed = synthetic_lab(temp)
             with self.assertRaises(TrialRejected):
-                trial(fake_java(temp, version='17.0.1'), source, output, jar, digest,
+                trial(fake_java(temp, version='17.0.1'), source, output, jar, digest, seed,
                       unused_port(), timeout=5)
             self.assertFalse(output.exists())
 

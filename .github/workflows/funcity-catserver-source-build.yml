@@ -16,6 +16,7 @@ on:
       - scripts/fc_funcity_compiled_engine_gate_test.py
       - scripts/fc_funcity_private_trial.py
       - scripts/fc_funcity_private_trial_test.py
+      - scripts/fc_funcity_runtime_seed.py
       - scripts/fc_funcity_java11_smoke.py
       - scripts/fc_funcity_java11_smoke_test.py
       - scripts/fc_gradle_failure_classifier.py

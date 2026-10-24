@@ -92,10 +92,10 @@ stage=compiled_gate
 python3 "$repo/scripts/fc_funcity_compiled_engine_gate.py" \
   "${jars[0]}" projects/forge/build/classes/java/main
 stage=empty_java11_boot
-python3 "$repo/scripts/fc_funcity_java11_smoke.py" "$java11" "${jars[0]}"
+python3 "$repo/scripts/fc_funcity_java11_smoke.py" "$java11" "${jars[0]}" "$root/runtime-seed"
 stage=private_copy
 # Copy ONLY to a new PRIVATE local workdir; refuse a pre-existing target.
 result="$root/FunCityEngine-private-trial.jar"
 cp -n "${jars[0]}" "$result"
 test -s "$result" && cmp -s "${jars[0]}" "$result"
-echo "PRIVATE_CANDIDATE_BUILD_PASS sha256=$(sha256sum "$result" | cut -d' ' -f1) binary=$result rp_pack=NOT_TESTED client=NOT_TESTED no_artifact_uploaded=true"
+echo "PRIVATE_CANDIDATE_BUILD_PASS sha256=$(sha256sum "$result" | cut -d' ' -f1) binary=$result runtime_seed=$root/runtime-seed rp_pack=NOT_TESTED client=NOT_TESTED no_artifact_uploaded=true"

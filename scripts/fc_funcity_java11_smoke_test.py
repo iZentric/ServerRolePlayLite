@@ -37,6 +37,23 @@ class SmokeTest(unittest.TestCase):
     def test_fatal_fake_process(self):
         self.assertFalse(self.fake('[main/FATAL] crash'))
 
+    def test_runtime_seed_is_private_and_requires_clean_stop(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            jar = root/'synthetic.jar'
+            jar.write_bytes(b'NOT A MINECRAFT JAR')
+            fake = root/'fake-java'
+            fake.write_text('#!/usr/bin/env python3\nfrom pathlib import Path\n'
+                            'Path("libraries").mkdir()\nPath("libraries/test.jar").write_bytes(b"x")\n'
+                            'Path("foxlaunch-data").mkdir()\n'
+                            'Path("foxlaunch-data/install.dat").write_bytes(b"y")\n'
+                            'print("Done (2s)! For help, type \\"help\\"", flush=True)\ninput()\n')
+            fake.chmod(0o755)
+            seed = root/'private-runtime-seed'
+            self.assertTrue(smoke(fake, jar, deadline_seconds=5, runtime_export=seed))
+            self.assertTrue((seed/'libraries'/'test.jar').is_file())
+            self.assertFalse((seed/'private-boot.log').exists())
+
     def test_done_then_exit_without_stop_is_not_clean_shutdown(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

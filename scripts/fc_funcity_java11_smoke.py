@@ -11,6 +11,8 @@ import sys
 import tempfile
 import time
 
+from fc_funcity_runtime_seed import export_runtime, InvalidSeed
+
 DONE = re.compile(r'\bDone \([^\n]*\)! For help, type "help"')
 FATAL = re.compile(r'\[(?:[^\n]*?/)?(?:ERROR|FATAL)\]|Exception in thread', re.I)
 PROPERTIES = '''server-ip=127.0.0.1
@@ -32,7 +34,7 @@ def inspect(text):
     return bool(DONE.search(text)), bool(FATAL.search(text))
 
 
-def smoke(java, jar, deadline_seconds=420, diagnostic=None):
+def smoke(java, jar, deadline_seconds=420, diagnostic=None, runtime_export=None):
     jar = Path(jar).resolve(strict=True)
     if not jar.is_file() or not Path(java).is_file() or deadline_seconds < 1:
         raise ValueError('missing Java/JAR or invalid deadline')
@@ -78,7 +80,10 @@ def smoke(java, jar, deadline_seconds=420, diagnostic=None):
                                       stop_sent=sent_stop, exit_code=process.returncode,
                                       deadline_expired=not reached_done and not fatal and
                                       time.monotonic() - started >= deadline_seconds)
-                return sent_stop and final_done and not final_fatal and process.returncode == 0
+                passed = sent_stop and final_done and not final_fatal and process.returncode == 0
+                if passed and runtime_export is not None:
+                    export_runtime(work, runtime_export, jar)
+                return passed
             finally:
                 if not process.stdin.closed:
                     process.stdin.close()
@@ -88,12 +93,13 @@ def smoke(java, jar, deadline_seconds=420, diagnostic=None):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
+    if len(sys.argv) not in (3, 4):
         sys.exit(2)
     diagnostic = {}
     try:
-        ok = smoke(sys.argv[1], sys.argv[2], diagnostic=diagnostic)
-    except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
+        ok = smoke(sys.argv[1], sys.argv[2], diagnostic=diagnostic,
+                   runtime_export=sys.argv[3] if len(sys.argv) == 4 else None)
+    except (OSError, ValueError, subprocess.TimeoutExpired, InvalidSeed) as exc:
         print('::error title=Java11 loopback smoke::Exception=' + type(exc).__name__ +
               '; no raw server log uploaded', file=sys.stderr)
         sys.exit(2)
