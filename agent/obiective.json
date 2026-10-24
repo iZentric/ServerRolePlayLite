@@ -67,7 +67,7 @@
         "39178227217: build si doua booturi 36/14 trecute; proba cu Curtain a esuat pe candidat si baseline; nu e verdict",
         "2026-10-24: patch sursa 0002 pastreaza veto Forge la place/multiplace; aplica pe SHA upstream pinuit si testeaza 8 combinatii booleene; nu este un castig MSPT dovedit.",
         "CI 40129947766: contract Java 11 fara Gradle compilat/executat pe metoda onBlockPlaceEvent patch-uita, 16/16 cazuri place+multiplace trecute; mutantul fara veto respins. Tipuri simulate, nu JAR/server/pack sau clienti reali.",
-        "H1 2026-10-25: 40129850195 si 40133167444 build+boot gol Java11 PASS; 40133495038 si 40133594470 rețeta privată PASS. După gate explicit stop: 40133626401 FAIL, 40134487042 PASS; 40134993872 verifică runtime-seed pentru boot offline, 40135100715 gate pe ultimul commit în curs la ultima verificare. Nu exista boot pe copia privată 34/13, clienți sau capacitate."
+        "H1: 40134993872 si 40135100715 source build + compiled universal gate + Java11 empty boot cu stop explicit + runtime-seed privat PASS; 40133626401 anterior FAIL. Zero moduri/pluginuri/clienti in aceste probe. H2/H3 cu copia privata 34/13 si H5 capacitatea reala netestate; activ host neschimbat, Start/Restart indisponibil prin SFTP."
       ]
     },
     {
