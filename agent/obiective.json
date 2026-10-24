@@ -25,7 +25,7 @@
     {
       "id": "F2",
       "titlu": "Baseline si incarcare",
-      "criteriu": "Trei repetari b1.0827 si probe 0/5/10/20/40 cu clienti realisti >=10 min, GC, spark si top 5",
+      "criteriu": "Rampa 5/10/15 clienti Forge pe host echivalent 3 GiB; 20 numai pe upgrade verificat; ABBA 2 sesiuni/arm/treapta, 5 min warm-up + 20 min masurat, p95/p99/CPU/RSS/GC/uplink, fara defecte RP; nu extrapola.",
       "status": "nepornit",
       "dovada": []
     },
@@ -39,7 +39,7 @@
     {
       "id": "F4",
       "titlu": "Configuratii server",
-      "criteriu": "O valoare per A/B, fara pierdere de survival-RP sau vizibilitate",
+      "criteriu": "View 5 vs 4 cu watchdog identic, apoi 5 setari de siguranta separat; 2 sesiuni/arm, zero regresii RP/voice/auth pe copie; niciun config live inaintea testelor.",
       "status": "in lucru",
       "dovada": [
         "2026-10-24: functity/capacity/3g-view4 are profil view 5->4 si protectii Forge/Connectivity/Bukkit; teste statice trecute in CI 40008214490, niciun config live schimbat sau A/B cu clienti.",
@@ -61,7 +61,7 @@
     {
       "id": "F6",
       "titlu": "Motor si CI",
-      "criteriu": "Core propriu: hotspot server profilat, patch mic cu registry/API intacte, 3 comparatii repetate cu b1.0827, Forge+pluginuri, CI fara publicare",
+      "criteriu": "2/2 builduri independente din sursa CatServer pinuita cu patchuri 0001+0002, clase in JAR universal si 2/2 booturi/opriri Java 11; ulterior profil hotspot si A/B cu pachet complet pentru orice claim de performanta.",
       "status": "in lucru",
       "dovada": [
         "39178227217: build si doua booturi 36/14 trecute; proba cu Curtain a esuat pe candidat si baseline; nu e verdict",
@@ -73,7 +73,7 @@
     {
       "id": "F7",
       "titlu": "Identitate si compatibilitate",
-      "criteriu": "Audit toate suprafetele vizibile + matrice mod-plugin testata, provenienta pastrata",
+      "criteriu": "34/34 moduri, 13/13 pluginuri, 2 clienti Forge cu login tehnic, auth plugin si voice, 1 impersonare respinsa, 2 restarturi, 0 crash/erori critice/pierderi inventar; matrice mod-plugin pe copia lumii.",
       "status": "in lucru",
       "dovada": [
         "2026-10-24: identitatea operator FunCity si veto Forge->Bukkit au teste statice si patchuri sursa pinuita; compatibilitatea client Forge/34+13/voice/auth nu este validata.",
@@ -90,7 +90,7 @@
     {
       "id": "F9",
       "titlu": "Rezilienta",
-      "criteriu": "Backup si restore cronometrate, staging si rollback demonstrate fara atingere live",
+      "criteriu": "Manifest SHA-256 pentru 100% root host inclusiv extra; 1 restore pe copie si 1 rollback JAR demonstrat, fara scrieri pe PC-ul activ.",
       "status": "in lucru",
       "dovada": [
         "scripts/fc_community_preflight.py: read-only free-space/size policy, symlink/secret fixture PASS; no real host audit, world backup or restore tested",
@@ -100,7 +100,7 @@
     {
       "id": "F10",
       "titlu": "Raport si pachet final",
-      "criteriu": "Rezumat masurat si limite, o singura intrebare pentru aplicare live; niciun JAR nevalidat publicat",
+      "criteriu": "H1-H6 din functity/catserver/GOALS.md trecut cu dovezi; limita operationala <=80% din treapta reala trecuta (10 testati -> max 8, 15 -> max 12), raport cu necunoscute, fara JAR neverificat publicat.",
       "status": "nepornit",
       "dovada": []
     }
