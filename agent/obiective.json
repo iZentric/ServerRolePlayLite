@@ -67,7 +67,8 @@
         "39178227217: build si doua booturi 36/14 trecute; proba cu Curtain a esuat pe candidat si baseline; nu e verdict",
         "2026-10-24: patch sursa 0002 pastreaza veto Forge la place/multiplace; aplica pe SHA upstream pinuit si testeaza 8 combinatii booleene; nu este un castig MSPT dovedit.",
         "CI 40006634485 a compilat/impachetat numai candidatul anterior, dar verificarea claselor a esuat (launcher subtire). CI 40008214490 a trecut gate static si aplicarea 0002, apoi SETUP_FAILED / DEPENDENCY_NETWORK inainte de compilare. Niciun JAR cu 0002 sau boot Java 11 validat.",
-        "Prioritate: GOALS.md H1, reparatie infrastructura dependente, apoi H2 runtime; nu relansa identic fara diagnostic."
+        "Prioritate: GOALS.md H1, reparatie infrastructura dependente, apoi H2 runtime; nu relansa identic fara diagnostic.",
+        "CI 40129947766: contract Java 11 fara Gradle compilat/executat pe metoda onBlockPlaceEvent patch-uita, 16/16 cazuri place+multiplace trecute; mutantul fara veto respins. Tipuri simulate, nu JAR/server/pack sau clienti reali."
       ]
     },
     {
