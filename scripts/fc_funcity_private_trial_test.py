@@ -106,6 +106,10 @@ class PrivateTrialTest(unittest.TestCase):
                 sock.bind(('127.0.0.1', 0))
                 with self.assertRaises(TrialRejected):
                     preflight(source, output, jar, digest, sock.getsockname()[1])
+            link = Path(temp)/'repo-link'
+            link.symlink_to(Path(__file__).resolve().parents[1], target_is_directory=True)
+            with self.assertRaises(TrialRejected):
+                preflight(source, link/'untracked-secret-copy', jar, digest, unused_port())
             (source / 'mods' / 'linked.jar').symlink_to(source / 'mods' / '00.jar')
             with self.assertRaises(TrialRejected):
                 preflight(source, output, jar, digest, unused_port())

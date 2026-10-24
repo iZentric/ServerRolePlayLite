@@ -94,9 +94,15 @@ def port_is_unused(port):
 
 
 def preflight(source, output, engine, expected_sha, port):
-    source, output, engine = map(lambda p: Path(p).absolute(), (source, output, engine))
+    raw_source, raw_output, raw_engine = map(lambda p: Path(p).absolute(),
+                                             (source, output, engine))
+    if raw_source.is_symlink() or raw_output.is_symlink() or raw_engine.is_symlink():
+        raise TrialRejected('direct symlink paths are not permitted')
+    source = raw_source.resolve(strict=False)
+    output = raw_output.resolve(strict=False)  # Canonicalize symlinked ancestors.
+    engine = raw_engine.resolve(strict=False)
     repo = Path(__file__).resolve().parents[1]
-    if (source.is_symlink() or output.is_symlink() or not source.is_dir()
+    if (not source.is_dir()
             or output.exists() or not output.parent.is_dir()
             or descendant(output, source) or descendant(source, output)
             or descendant(output, repo) or descendant(source, repo)):

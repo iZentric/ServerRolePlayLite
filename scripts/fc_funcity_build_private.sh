@@ -16,7 +16,8 @@ if [ -e "$root" ] || [ -L "$root" ] || [ ! -f "$java11" ]; then
   echo 'new workdir and existing Java 11 executable required' >&2
   exit 2
 fi
-for tool in git python3 sha256sum java; do command -v "$tool" >/dev/null || exit 2; done
+for tool in git python3 sha256sum java realpath; do command -v "$tool" >/dev/null || exit 2; done
+java11="$(realpath "$java11")"  # Remain correct after cd into pinned source.
 if ! java -version 2>&1 | head -n 1 | grep -Eq '(openjdk|java) version "17([.+"]|$)'; then
   echo 'JDK 17 must be active for the upstream build' >&2
   exit 2
