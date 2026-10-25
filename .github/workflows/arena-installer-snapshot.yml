@@ -1,0 +1,31 @@
+name: Arena installer - reviewable runner snapshot
+# Phase 1: capture the exact public installer bytes from a disposable GH-hosted
+# runner. No credentials, private pack, self-hosted PC or server access.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Download only, check Bash syntax and record digest
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          curl --proto '=https' --tlsv1.2 --location --fail --silent --show-error \
+            --retry 2 --connect-timeout 10 --max-time 60 --max-filesize 2097152 \
+            'https://platform.arena.ai/setup.sh' -o "$RUNNER_TEMP/arena-setup.sh"
+          test -s "$RUNNER_TEMP/arena-setup.sh"
+          bash -n "$RUNNER_TEMP/arena-setup.sh"
+          sha256sum "$RUNNER_TEMP/arena-setup.sh"
+          wc -c "$RUNNER_TEMP/arena-setup.sh"
+          echo 'Installer downloaded for inspection only; NOT executed.'
+      - name: Preserve public installer for exact-byte review
+        uses: actions/upload-artifact@v4
+        with:
+          name: arena-setup-public-script
+          path: ${{ runner.temp }}/arena-setup.sh
+          retention-days: 1
+          if-no-files-found: error
