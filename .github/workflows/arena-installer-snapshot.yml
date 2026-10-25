@@ -22,7 +22,9 @@ jobs:
             'https://platform.arena.ai/setup.sh' -o "$RUNNER_TEMP/arena-setup.sh"
           test -s "$RUNNER_TEMP/arena-setup.sh"
           bash -n "$RUNNER_TEMP/arena-setup.sh"
-          sha256sum "$RUNNER_TEMP/arena-setup.sh"
+          digest="$(sha256sum "$RUNNER_TEMP/arena-setup.sh" | cut -d ' ' -f 1)"
+          echo "::notice file=.github/workflows/arena-installer-snapshot.yml,title=Public installer SHA256::$digest"
+          printf 'SHA256=%s\n' "$digest" >> "$GITHUB_STEP_SUMMARY"
           wc -c "$RUNNER_TEMP/arena-setup.sh"
           echo 'Installer downloaded for inspection only; NOT executed.'
       - name: Preserve public installer for exact-byte review
