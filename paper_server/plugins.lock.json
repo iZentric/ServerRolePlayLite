@@ -1,0 +1,89 @@
+{
+  "paper": {
+    "minecraft_version": "26.2",
+    "stable_build_observed": 134,
+    "java_major": 25,
+    "sha256_observed": "3cce0a4922baf79bd8e1275ee5ff9f073f24675770e09b0d4be9442d513e7a6b",
+    "fill_v3_builds_url": "https://fill.papermc.io/v3/projects/paper/versions/26.2/builds",
+    "note": "Downloader resolves the newest STABLE build for this pinned game version at run time and independently verifies the API-provided SHA-256."
+  },
+  "required_plugins": [
+    {
+      "name": "EssentialsX",
+      "version": "2.22.0",
+      "components": ["EssentialsX", "EssentialsXChat", "EssentialsXSpawn"],
+      "compatibility": "Official release supports Minecraft 26.2.",
+      "source": "https://github.com/EssentialsX/Essentials/releases"
+    },
+    {
+      "name": "LuckPerms",
+      "version": "5.5.88",
+      "components": ["Bukkit/Paper"],
+      "compatibility": "Official download is for Bukkit/Paper and supports 1.8.8+.",
+      "source": "https://luckperms.net/download"
+    },
+    {
+      "name": "WorldEdit",
+      "version": "7.4.5",
+      "components": ["Bukkit/Paper"],
+      "compatibility": "Stable Paper release covers 26.2; required by WorldGuard.",
+      "source": "https://hangar.papermc.io/EngineHub/WorldEdit/versions"
+    },
+    {
+      "name": "WorldGuard",
+      "version": "7.0.19",
+      "components": ["Bukkit/Paper"],
+      "compatibility": "Official 7.0.19 build declares 26.2-26.3 support; install with WorldEdit.",
+      "source": "https://dev.bukkit.org/projects/worldguard/files"
+    },
+    {
+      "name": "CoreProtect Community Edition",
+      "version": "24.1",
+      "components": ["Bukkit/Paper"],
+      "compatibility": "Public stable Community Edition supports 1.16.5-26.2; this is the compatibility ceiling that keeps the set on 26.2 rather than 26.3.",
+      "source": "https://hangar.papermc.io/CORE/CoreProtect/versions"
+    },
+    {
+      "name": "VaultUnlocked",
+      "version": "2.20.3",
+      "components": ["Bukkit/Paper"],
+      "compatibility": "Maintained Vault-compatible API replacement; release declares support through 26.3, including 26.2.",
+      "source": "https://www.spigotmc.org/resources/vaultunlocked.117277/"
+    },
+    {
+      "name": "Chunky",
+      "version": "1.5.3",
+      "components": ["Paper"],
+      "compatibility": "Hangar release supports 26.1-26.3.",
+      "source": "https://hangar.papermc.io/pop4959/Chunky/versions"
+    },
+    {
+      "name": "spark",
+      "version": "bundled",
+      "components": ["Paper built-in"],
+      "compatibility": "Paper 1.21+ bundles spark; do not install a duplicate by default.",
+      "source": "https://docs.papermc.io/paper/profiling/"
+    }
+  ],
+  "not_installed_and_why": [
+    {
+      "name": "ClaimChunk 0.0.25-FIX3",
+      "reason": "Legacy pack's last listed build has documented testing only through Minecraft 1.20.6/1.21, with no declared 26.2 support. The current FunCity direction is an open city without player land claims; do not load this unverified plugin. Revisit only if claims become a confirmed requirement and a 26.2-compatible replacement is approved.",
+      "source": "https://www.spigotmc.org/resources/claimchunk.44458/"
+    },
+    {
+      "name": "ProtocolLib",
+      "reason": "No retained plugin in this lean stack needs packet interception. The stable ProtocolLib release does not declare 26.2; although upstream dev builds track 26.2, no development build is included without a required consumer.",
+      "source": "https://github.com/dmulloy2/ProtocolLib/releases"
+    },
+    {
+      "name": "SkinsRestorer",
+      "reason": "Not required for an online-mode server, which remains the safe default. Add only if custom skin handling is explicitly required and its exact build is checked against 26.2.",
+      "source": "https://skinsrestorer.net/docs/requirements"
+    },
+    {
+      "name": "EssentialsXAntiBuild / EssentialsXProtect",
+      "reason": "Omitted as redundant with WorldGuard for the planned region-protection use; do not load duplicate build/protection layers without a specific tested need."
+    }
+  ]
+}

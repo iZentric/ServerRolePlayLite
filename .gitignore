@@ -4,3 +4,14 @@
 !overrides.zip
 work/
 __pycache__/
+
+# Generated Paper server data and backups (never commit runtime state)
+paper_server/runtime/
+paper_server/backups/
+
+# Per-user Claude Code credentials and local overrides
+.claude/settings.local.json
+
+# Per-user OpenCode credentials and local overrides
+.opencode/opencode.local.json
+.opencode/opencode.local.jsonc

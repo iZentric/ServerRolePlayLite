@@ -1,0 +1,150 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+
+usage() {
+  cat <<'EOF'
+FunCity coding agent launcher
+
+Usage:
+  ./scripts/agent [hybrid|arena|antigravity|auto|claude|agy|doctor] [CLI arguments...]
+
+Modes:
+  hybrid       Choose a local client: Arena Claude Code, Antigravity CLI, or free OpenCode.
+  arena        Claude Code using the official Arena Quickstart (Option A) settings.
+  antigravity  Google Antigravity CLI (agy), with its own Google sign-in/provider.
+  auto         Separate OpenCode + opencode-free-router profile; Arena is not included.
+  claude       Alias for arena; uses the current Claude Code settings.
+  agy          Alias for antigravity.
+  doctor       Check local commands without reading or printing credentials.
+
+Default mode: arena
+EOF
+}
+
+need_command() {
+  local cmd="$1"
+  local install_hint="$2"
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    printf 'Lipsește comanda: %s\n%s\n' "$cmd" "$install_hint" >&2
+    exit 127
+  fi
+}
+
+free_router_launcher() {
+  local dir="${FREE_ROUTER_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/opencode/free-router}"
+  if command -v opencode-free >/dev/null 2>&1; then
+    command -v opencode-free
+  elif [[ -x "$dir/opencode-free" ]]; then
+    printf '%s\n' "$dir/opencode-free"
+  else
+    return 1
+  fi
+}
+
+launch_arena_claude() {
+  need_command claude 'Instalează Claude Code și rulează Quickstart-ul oficial Arena (Option A) în mediul tău. Accesul/cota nu pot fi verificate de launcher.'
+  exec claude "$@"
+}
+
+launch_antigravity() {
+  need_command agy 'Instalează Antigravity CLI din https://antigravity.google/docs/getting-started și autentifică-te cu Google. Cheia Arena nu se folosește aici.'
+  exec agy "$@"
+}
+
+mode="${1:-arena}"
+case "$mode" in
+  -h|--help|help)
+    usage
+    exit 0
+    ;;
+  hybrid)
+    if (($#)); then shift; fi
+    if [[ ! -t 0 ]]; then
+      printf 'Modul hybrid cere un terminal interactiv. Alege explicit: ./scripts/agent arena sau ./scripts/agent auto.\n' >&2
+      exit 2
+    fi
+    cat <<'EOF'
+Alege clientul pentru această sesiune:
+  1) Arena Quickstart A — Claude Code
+  2) Google Antigravity CLI — propriul cont/provider Google
+  3) Modele gratuite — OpenCode + free-router, separat de Arena
+
+Toate lucrează în repo-ul local. Providerii și credențialele rămân separate;
+nu există fallback automat și cheia Arena nu este transferată.
+EOF
+    read -r -p 'Alegere [1/2/3]: ' hybrid_choice
+    case "$hybrid_choice" in
+      1) exec "$repo_root/scripts/agent" arena "$@" ;;
+      2) exec "$repo_root/scripts/agent" antigravity "$@" ;;
+      3) exec "$repo_root/scripts/agent" auto "$@" ;;
+      *) printf 'Alegere invalidă; rulează din nou ./scripts/agent hybrid.\n' >&2; exit 2 ;;
+    esac
+    ;;
+  arena|claude)
+    if (($#)); then shift; fi
+    launch_arena_claude "$@"
+    ;;
+  antigravity|agy)
+    if (($#)); then shift; fi
+    launch_antigravity "$@"
+    ;;
+  auto)
+    if (($#)); then shift; fi
+    need_command opencode 'Instalează OpenCode V2 conform docs/CUSTOM-AGENT.md.'
+    opencode_version="$(opencode --version 2>/dev/null | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1 || true)"
+    opencode_major="${opencode_version%%.*}"
+    if [[ -z "$opencode_version" || ! "$opencode_major" =~ ^[0-9]+$ || "$opencode_major" -lt 2 ]]; then
+      printf 'opencode-free-router cere OpenCode V2+; versiunea detectată: %s.\n' "${opencode_version:-unknown}" >&2
+      exit 78
+    fi
+    if command -v node >/dev/null 2>&1; then
+      if ! node -e 'const [a, b] = process.versions.node.split(".").map(Number); process.exit(a > 22 || (a === 22 && b >= 18) ? 0 : 1)'; then
+        printf 'opencode-free-router cere Node 22.18+; primul node din PATH este %s.\n' "$(node --version)" >&2
+        exit 78
+      fi
+    elif ! command -v bun >/dev/null 2>&1; then
+      printf 'Lipsește Node 22.18+ (sau Bun, dacă Node nu este instalat).\n' >&2
+      exit 127
+    fi
+    if ! launcher="$(free_router_launcher)"; then
+      cat >&2 <<'EOF'
+Nu găsesc opencode-free. Modul auto folosește opencode-free-router v0.1.7,
+care nu este instalat automat. Consultă docs/CUSTOM-AGENT.md pentru instalarea
+fixată și configurarea pool-ului limitat la modele Zen ZDR. Această rută este
+separată de Arena Quickstart și nu folosește cheia Arena.
+EOF
+      exit 127
+    fi
+    exec "$launcher" "$@"
+    ;;
+  doctor)
+    printf 'Repository: %s\n' "$repo_root"
+    for cmd in claude agy opencode opencode-free node; do
+      if command -v "$cmd" >/dev/null 2>&1; then
+        version=""
+        case "$cmd" in
+          claude|agy|opencode) version="$($cmd --version 2>/dev/null | head -n 1 || true)" ;;
+          node) version="$(node --version 2>/dev/null || true)" ;;
+          opencode-free) version="(launcher found)" ;;
+        esac
+        printf 'OK   %-14s %s %s\n' "$cmd" "$(command -v "$cmd")" "$version"
+      else
+        printf 'MISS %-14s\n' "$cmd"
+      fi
+    done
+    if free_path="$(free_router_launcher 2>/dev/null)"; then
+      printf 'OK   %-14s %s\n' 'free-router' "$free_path"
+    else
+      printf 'MISS %-14s (opțional; consultă docs/CUSTOM-AGENT.md)\n' 'free-router'
+    fi
+    printf '\nArena Quickstart, eligibilitatea cheii și cotele nu sunt verificate; credential values are not inspected or printed.\n'
+    ;;
+  *)
+    printf 'Mod necunoscut: %s\n\n' "$mode" >&2
+    usage >&2
+    exit 2
+    ;;
+esac

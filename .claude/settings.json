@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "extraKnownMarketplaces": {
+    "fun-city-agent-plugins": {
+      "source": {
+        "source": "settings",
+        "name": "fun-city-agent-plugins",
+        "plugins": [
+          {
+            "name": "superpowers",
+            "source": {
+              "source": "github",
+              "repo": "obra/superpowers",
+              "sha": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "enabledPlugins": {
+    "superpowers@fun-city-agent-plugins": true
+  }
+}
