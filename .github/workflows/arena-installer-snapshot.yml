@@ -3,6 +3,9 @@ name: Arena installer - reviewable runner snapshot
 # runner. No credentials, private pack, self-hosted PC or server access.
 on:
   workflow_dispatch:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/arena-installer-snapshot.yml]
 permissions:
   contents: read
 jobs:
