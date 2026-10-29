@@ -32,8 +32,9 @@ function Get-FcRestartReadiness {
         # Repeated keys are ambiguous across Java properties readers: fail closed.
         $rconLines=@(Get-Content -LiteralPath $properties -Encoding UTF8 -ErrorAction Stop |
             Where-Object { $_ -match '^\s*enable-rcon\s*[:=]' })
+        # Java .properties has whole-line comments, not trailing comments.
         $rconDisabled=($rconLines.Count -eq 1 -and
-            $rconLines[0] -match '^\s*enable-rcon\s*[:=]\s*false\s*(?:[#!].*)?$')
+            $rconLines[0] -match '^\s*enable-rcon\s*[:=]\s*false\s*$')
     }
     if ($spigotPresent) {
         $lines=@(Get-Content -LiteralPath $spigot -Encoding UTF8 -ErrorAction Stop)
@@ -47,8 +48,15 @@ function Get-FcRestartReadiness {
                 continue
             }
             if ($line -match '^[^\s#][^:]*:\s*') { $inside=$false }
-            if ($inside -and $line -match '^  restart-script:\s*(.*?)\s*$') {
-                $restartValues.Add($Matches[1])
+            if ($inside -and $line -match '^ +restart-script:\s*(.*?)\s*$') {
+                $value=$Matches[1]
+                # If indentation is not the direct child form we recognize,
+                # reject rather than silently assume CatServer's default.
+                if ($line -match '^  restart-script:') {
+                    $restartValues.Add($value)
+                } else {
+                    $restartValues.Add('INVALID_INDENT')
+                }
             }
         }
         if ($settingsCount -eq 1 -and $restartValues.Count -eq 0) {

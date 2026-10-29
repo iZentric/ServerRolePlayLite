@@ -25,6 +25,8 @@ try {
     if (-not $default.RestartScriptDefaulted -or -not $default.StaticPreconditionsMet) { throw 'DEFAULT_NOT_RECOGNIZED' }
     Set-Content -LiteralPath (Join-Path $root 'spigot.yml') -Value @('settings:', '  restart-script: "./start.sh"') -Encoding UTF8
     Assert-FcState $true 'quoted'
+    Set-Content -LiteralPath (Join-Path $root 'spigot.yml') -Value @('settings:', '    restart-script: /other.sh') -Encoding UTF8
+    Assert-FcState $false 'unexpected-indent-path'
     Set-Content -LiteralPath (Join-Path $root 'spigot.yml') -Value @('settings:', '  restart-script: ../start.sh') -Encoding UTF8
     Assert-FcState $false 'path-escape'
     Set-Content -LiteralPath (Join-Path $root 'spigot.yml') -Value @('settings:', '  restart-script: ./start.sh', '  restart-script: ./start.sh') -Encoding UTF8
@@ -36,6 +38,8 @@ try {
     Assert-FcState $false 'duplicate-rcon'
     Set-Content -LiteralPath (Join-Path $root 'server.properties') -Value 'enable-rcon=true' -Encoding UTF8
     Assert-FcState $false 'rcon-enabled'
+    Set-Content -LiteralPath (Join-Path $root 'server.properties') -Value 'enable-rcon=false # not a Java properties comment' -Encoding UTF8
+    Assert-FcState $false 'invalid-inline-comment'
     Set-Content -LiteralPath (Join-Path $root 'server.properties') -Value 'enable-rcon=false' -Encoding UTF8
     $scriptListed=$false
     Assert-FcState $false 'missing-script-from-listing'
