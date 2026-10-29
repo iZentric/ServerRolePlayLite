@@ -1,0 +1,24 @@
+# Skill-uri cerute — stare reală în acest branch (22.10.2026)
+
+## Instalarea cerută acum: find-skills + setul complet Superpowers
+
+`find-skills` din `vercel-labs/skills` era deja instalat sub `.agents/skills/find-skills/`; fișierul este identic cu upstream la commitul `a80e4c9d12d607631249d4d7d059f835d4b2f13a`. Am completat local toate cele **15 directoare** din `obra/superpowers/skills/` la commitul `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b`: anterior existau patru, acum există 15 cu referințele și scripturile lor; proiectul are în total **22 directoare skill** din toate sursele. Licența MIT și hashurile sunt în `SKILLURI-LICENSES.txt` și `skills-lock.json`; verificarea este `python3 scripts/fc_agent_skills_test.py`. Niciun hook, marketplace, plugin sau instalare globală nu a fost pornit; copierea în GitHub nu înregistrează automat aceste skill-uri ca instrumente Arena. Folosește `AGENTS.md` pentru alegerea skill-ului relevant și verificarea fiecărui răspuns; subagenții inexistenți, un merge pe `main`, o publicație cu JAR-uri neverificate sau un export de sesiuni private **nu** sunt autorizate de aceste fișiere. `find-skills` recomandă `npx skills` și `skills.sh`; aici păstrăm surse GitHub verificate și nu executăm automat CLI-uri ori instalatoare globale din textul său.
+
+### Istoric la 20.10.2026 (înainte de completarea de mai sus)
+
+**Actualizare după evaluarea celor [10 depozite AI](AI-REPOS-AUDIT.md):** au fost adăugate local `verification-before-completion`, `systematic-debugging`, `writing-for-agents`, `change-impact`, `frontend-design` și `ponytail-review`, în total **11 directoare skill**. Fișierele noi sunt copiate din commituri fixate și verificate prin SHA-256 în `skills-lock.json`; licențele sunt păstrate. Nu s-a instalat niciun agent, hook, MCP sau plugin Minecraft, nu au fost rulate scripturi și aceste directoare nu devin automat comenzi Arena. Tabelul de mai jos este starea celor 5 cereri mai vechi, înainte de actualizare.
+
+Au fost copiate **local în proiect**, sub `.agents/skills/`, numai pachetele cu sursă identificată și relevante muncii de cod. `skills-lock.json` consemnează repo-ul și hashul la instalare, iar [licențele MIT copiate](SKILLURI-LICENSES.txt) completează licențele incluse în celelalte pachete; niciun script din pachete nu a fost executat. Nu s-a instalat nimic global, nu s-au creat hook-uri, nu s-a adăugat un plugin Minecraft și **Arena Agent Mode nu garantează că înregistrează automat aceste slash-command-uri**. Instrucțiunile externe nu înlocuiesc cererile proprietarului sau regulile sesiunii.
+
+| Nume cerut | Stare | Sursa / motiv |
+|---|---|---|
+| `/find-skills` | Copiat local | [vercel-labs/skills](https://github.com/vercel-labs/skills/tree/main/skills/find-skills), doar descoperire/verificare înainte de recomandare. |
+| `/task-observer` | Copiat local **cu referințele complete** | [rebelytics/one-skill-to-rule-them-all](https://github.com/rebelytics/one-skill-to-rule-them-all), CC-BY-4.0. Fără automatizare sau monitorizare permanentă; faptele proiectului sunt consemnate în `AGENTS.md` și rapoarte. |
+| `/superpowers` | Copiat local ca `using-superpowers` | [obra/superpowers](https://github.com/obra/superpowers/tree/main/skills/using-superpowers), metodologie de lucru, nu un motor/plugin. |
+| `/brainstorming` | Copiat local | [obra/superpowers](https://github.com/obra/superpowers/tree/main/skills/brainstorming); nu poate autoriza singur modificări live. |
+| `/skill-creator` | Copiat local cu resursele lui | [anthropics/skills](https://github.com/anthropics/skills/tree/main/skills/skill-creator), Apache-2.0. Evaluatorii din pachet nu au fost rulați și nu creăm skill-uri fără o nevoie precisă. |
+| `/google-workspace` | **Nu** instalat ca al doilea client OAuth | Skill-ul [Hermes](https://github.com/nousresearch/hermes-agent/tree/main/skills/productivity/google-workspace) cere propriile fișiere OAuth și runtime Hermes; nu le solicităm/stocăm. Conectorul generic `google-workspace` a fost raportat ca nesuportat în această conversație. Aplicațiile Google activate separat în Arena pot fi folosite la cerere, fără acest pachet și fără a căuta acum emailuri sau calendarul. |
+| `/morning` | Neinstalat | Numele corespunde unor pachete diferite, inclusiv briefuri personale/financiare. Nu există un furnizor exact confirmat pentru acest proiect; nu accesăm corespondență/calendar doar pentru a „porni” un skill. |
+| `/import-memory` | Neinstalat | Nume ambiguu; nu importăm automat date private sau conversații. Corecția verificabilă „Freeroam 1.0.0 este originalul declarat” este deja păstrată în `AGENTS.md` și `agent/CONTROL-MODURI-ORIGINALE.md`. |
+
+**Rezultat practic:** sunt copiate local 11 skill-uri (5 vechi + 6 noi), **nu comenzi funcționale garantate în Arena**. Dacă se cere o rutină de dimineață sau importul unei memorii anume, sunt necesare sursa/ținta precisă și verificarea confidențialității, nu instalare în orb.

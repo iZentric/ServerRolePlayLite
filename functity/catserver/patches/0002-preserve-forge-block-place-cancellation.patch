@@ -1,0 +1,13 @@
+diff --git a/src/main/java/catserver/server/CatServerEventHandler.java b/src/main/java/catserver/server/CatServerEventHandler.java
+--- a/src/main/java/catserver/server/CatServerEventHandler.java
++++ b/src/main/java/catserver/server/CatServerEventHandler.java
+@@ -42,2 +42,5 @@
+         if (event.getEntity() instanceof ServerPlayerEntity) {
++            // A Forge protection mod can cancel placement before this listener runs.
++            // A Bukkit plugin may also veto, but must not clear that Forge veto.
++            boolean forgeCanceled = event.isCanceled();
+             if (event instanceof BlockEvent.EntityMultiPlaceEvent) {
+@@ -57,2 +60,2 @@
+-            event.setCanceled(bukkitEvent.isCancelled() || !bukkitEvent.canBuild());
++            event.setCanceled(forgeCanceled || bukkitEvent.isCancelled() || !bukkitEvent.canBuild());
+         }

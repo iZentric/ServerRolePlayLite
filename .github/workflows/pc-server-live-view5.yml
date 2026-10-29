@@ -1,0 +1,37 @@
+name: One-time guarded FunCity server view-distance five
+# Final one-time guarded push after hosted syntax/rollback fixture passed; never upload private server contents.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-server-live-view5.yml
+      - scripts/fc_server_live_view5.ps1
+      - scripts/fc_server_live_view5_test.ps1
+permissions:
+  contents: read
+concurrency:
+  group: funcity-server-live-maintenance
+  cancel-in-progress: false
+jobs:
+  fixture:
+    if: startsWith(github.event.head_commit.message, 'Test server view-five fixture') || startsWith(github.event.head_commit.message, 'Apply guarded view-distance five once')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse script and rehearse config preservation and rollback on synthetic fixture
+        shell: pwsh
+        run: ./scripts/fc_server_live_view5_test.ps1
+  pc-maintenance:
+    if: startsWith(github.event.head_commit.message, 'Apply guarded view-distance five once')
+    needs: fixture
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zero players, normal stop, new private offline backup and rehearsal, view five, original restart
+        shell: powershell
+        run: |
+          $server = 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+          & ./scripts/fc_server_live_view5.ps1 -Server $server
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

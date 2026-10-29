@@ -1,0 +1,8 @@
+["Connectivity settings"]
+	disableLoginLimits = false
+	disablePacketLimits = false
+	debugPrintMessages = false
+	logintimeout = 2400
+	disconnectTimeout = 60
+	packetHistoryMinutes = 5
+	showFullResourceLocationException = false

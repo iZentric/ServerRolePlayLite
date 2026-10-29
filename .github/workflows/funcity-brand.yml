@@ -1,0 +1,14 @@
+name: FUNCITY-BRAND (retired)
+# The old workflow published a client pack without Forge/FPS validation.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse unvalidated client republishing
+        run: |
+          echo '::error::Brand/client releases need Forge login and source/license checks.'
+          exit 1

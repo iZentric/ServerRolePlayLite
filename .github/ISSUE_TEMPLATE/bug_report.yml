@@ -1,0 +1,45 @@
+name: Raportează o problemă
+description: Problemă reproducibilă în proiectul FunCity RP Lite (fără date private)
+title: '[Bug] '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        FunCity Lite este în laborator. Nu publica loguri brute, adrese de server, nume de lumi/jucători, date de cont, tokenuri sau copii ale lumii. Redactează orice exemplu înainte să îl trimiți.
+  - type: input
+    id: area
+    attributes:
+      label: Componentă
+      description: Client LowSpec, server de laborator, pagină web sau documentație?
+      placeholder: Exemplu — client LowSpec
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pași de reproducere
+      description: Fără adrese, nume de lumi sau date de cont.
+      placeholder: '1. ... 2. ...'
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ce ai așteptat și ce s-a întâmplat?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versiune / mediu
+      placeholder: Minecraft 1.16.5, Forge 36.2.42, Java 11; fără identificatori privați
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Confidențialitate
+      options:
+        - label: Am eliminat datele private și nu am atașat loguri brute ori lumi.
+          required: true

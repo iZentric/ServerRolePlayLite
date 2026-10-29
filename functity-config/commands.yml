@@ -1,0 +1,8 @@
+# Configuratie pentru comenzile Bukkit; NU schimba identitatea motorului sau /version.
+# FunCity se afiseaza separat in MOTD. Nu oferim alias public catre /version
+# pana cand raspunsul motorului nu este branduit si validat efectiv.
+command-block-overrides: []
+ignore-vanilla-permissions: false
+aliases:
+  fctps:
+  - tps

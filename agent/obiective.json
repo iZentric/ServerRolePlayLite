@@ -1,0 +1,108 @@
+{
+  "schema": 1,
+  "branch": "arena/9bbcb24f-serverroleplaylite",
+  "obiective": [
+    {
+      "id": "F0",
+      "titlu": "Orientare si ritual",
+      "criteriu": "AGENTS, jurnal, obiective, laborator si init testate; stare verificat/necunoscut",
+      "status": "trecut",
+      "dovada": [
+        "2026-10-19 ./agent/init.sh exit 0: JSON/Python/Bash, YAML 31, 36/36 server inventory, audit fixtures, four pinned Tenet patch apply --check PASS; no Java/game test",
+        "Workspace restored at origin branch 9804b45 without overwriting diag/pc-probe.txt or out/"
+      ]
+    },
+    {
+      "id": "F1",
+      "titlu": "Configuratia activa",
+      "criteriu": "Tabel repo vs root si world/defaultconfigs incarcate pe instanta izolata; backup inaintea oricarei aplicari",
+      "status": "blocat",
+      "dovada": [
+        "F1 static: root YAML/defaultconfigs path and repo view5, spawn20/6/2, compression=-1 verified via Python assertions",
+        "Effective PC/world config not available; no live writes or backups performed"
+      ]
+    },
+    {
+      "id": "F2",
+      "titlu": "Baseline si incarcare",
+      "criteriu": "Rampa 5/10/15 clienti Forge pe host echivalent 3 GiB; 20 numai pe upgrade verificat; ABBA 2 sesiuni/arm/treapta, 5 min warm-up + 20 min masurat, p95/p99/CPU/RSS/GC/uplink, fara defecte RP; nu extrapola.",
+      "status": "nepornit",
+      "dovada": []
+    },
+    {
+      "id": "F3",
+      "titlu": "JVM si GC",
+      "criteriu": "Un singur flag schimbat per A/B, baseline repetat, heap post-GC si GC p95/max",
+      "status": "nepornit",
+      "dovada": []
+    },
+    {
+      "id": "F4",
+      "titlu": "Configuratii server",
+      "criteriu": "View 5 vs 4 cu watchdog identic, apoi 5 setari de siguranta separat; 2 sesiuni/arm, zero regresii RP/voice/auth pe copie; niciun config live inaintea testelor.",
+      "status": "in lucru",
+      "dovada": [
+        "2026-10-24: functity/capacity/3g-view4 are profil view 5->4 si protectii Forge/Connectivity/Bukkit; teste statice trecute in CI 40008214490, niciun config live schimbat sau A/B cu clienti.",
+        "Criterii de promovare si comparatie izolate: functity/catserver/GOALS.md H4-H5."
+      ]
+    },
+    {
+      "id": "F5",
+      "titlu": "Moduri si pluginuri",
+      "criteriu": "Audit online 25 client + server-only, dependente si rol pe PC slab; schimbari doar dupa A/B FPS/RAM, login Forge, compatibilitate RP si rollback",
+      "status": "in lucru",
+      "dovada": [
+        "agent/audit-modpack.md: 25/25 JAR-uri istorice clasificate cu surse; server-only analizate; nu este verdict de FPS",
+        "scripts/fc_client_audit.py: 8 legaturi de dependenta validate din nume; Clumps registry failure, 13 same-name SHA differences in diag/fix.txt",
+        "Hosted CI 39257647037: release 1.2.5 SHA verified, source 25/25 -> local-only candidate 23/23, 135786860 -> 135771260 B, remote 24697368 B; no import/Forge login/FPS; PC runners API 403",
+        "CI 39266263549 success: voice client/server Forge 2.3.23 code 513/513 classes identical despite resource/hash differences; client candidate 24/24 archive audit; no login/UDP/audio/FPS"
+      ]
+    },
+    {
+      "id": "F6",
+      "titlu": "Motor si CI",
+      "criteriu": "2/2 builduri independente din sursa CatServer pinuita cu patchuri 0001+0002, clase in JAR universal si 2/2 booturi/opriri Java 11; ulterior profil hotspot si A/B cu pachet complet pentru orice claim de performanta.",
+      "status": "in lucru",
+      "dovada": [
+        "39178227217: build si doua booturi 36/14 trecute; proba cu Curtain a esuat pe candidat si baseline; nu e verdict",
+        "2026-10-24: patch sursa 0002 pastreaza veto Forge la place/multiplace; aplica pe SHA upstream pinuit si testeaza 8 combinatii booleene; nu este un castig MSPT dovedit.",
+        "CI 40129947766: contract Java 11 fara Gradle compilat/executat pe metoda onBlockPlaceEvent patch-uita, 16/16 cazuri place+multiplace trecute; mutantul fara veto respins. Tipuri simulate, nu JAR/server/pack sau clienti reali.",
+        "H1: 40134993872 si 40135100715 source build + compiled universal gate + Java11 empty boot cu stop explicit + runtime-seed privat PASS; 40133626401 anterior FAIL. Zero moduri/pluginuri/clienti in aceste probe. H2/H3 cu copia privata 34/13 si H5 capacitatea reala netestate; activ host neschimbat, Start/Restart indisponibil prin SFTP."
+      ]
+    },
+    {
+      "id": "F7",
+      "titlu": "Identitate si compatibilitate",
+      "criteriu": "34/34 moduri, 13/13 pluginuri, 2 clienti Forge cu login tehnic, auth plugin si voice, 1 impersonare respinsa, 2 restarturi, 0 crash/erori critice/pierderi inventar; matrice mod-plugin pe copia lumii.",
+      "status": "in lucru",
+      "dovada": [
+        "2026-10-24: identitatea operator FunCity si veto Forge->Bukkit au teste statice si patchuri sursa pinuita; compatibilitatea client Forge/34+13/voice/auth nu este validata.",
+        "Matricea de acceptare si probele lipsa sunt in functity/catserver/GOALS.md H2-H3."
+      ]
+    },
+    {
+      "id": "F8",
+      "titlu": "Logare si incidente",
+      "criteriu": "CoreProtect in test: bloc/container/modded, flux politie RP/admin, rollback limitat si snapshot restaurat",
+      "status": "nepornit",
+      "dovada": []
+    },
+    {
+      "id": "F9",
+      "titlu": "Rezilienta",
+      "criteriu": "Manifest SHA-256 pentru 100% root host inclusiv extra; 1 restore pe copie si 1 rollback JAR demonstrat, fara scrieri pe PC-ul activ.",
+      "status": "in lucru",
+      "dovada": [
+        "scripts/fc_community_preflight.py: read-only free-space/size policy, symlink/secret fixture PASS; no real host audit, world backup or restore tested",
+        "2026-10-24: checkpoint host offline 39987066839: 4034 fisiere asteptate SHA verificate; intrarile extra host si controlul Start/Restart nu sunt acoperite; vezi GOALS.md H6."
+      ]
+    },
+    {
+      "id": "F10",
+      "titlu": "Raport si pachet final",
+      "criteriu": "H1-H6 din functity/catserver/GOALS.md trecut cu dovezi; limita operationala <=80% din treapta reala trecuta (10 testati -> max 8, 15 -> max 12), raport cu necunoscute, fara JAR neverificat publicat.",
+      "status": "nepornit",
+      "dovada": []
+    }
+  ]
+}

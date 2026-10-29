@@ -1,0 +1,14 @@
+name: RP-LITE (retired)
+# Legacy job tried to add untested mods and restart the live server. Never run it.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse unsafe live modifications
+        run: |
+          echo '::error::RP-LITE retired; test mods only on an isolated stage.'
+          exit 1

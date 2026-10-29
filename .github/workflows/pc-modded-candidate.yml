@@ -1,0 +1,74 @@
+name: PC FunCity full-content closed server boot
+# One-shot loopback-only server compatibility test; NEVER creates a Prism profile.
+# Existing server, worlds, profiles, accounts and hosting must remain untouched.
+# JARs from user's old pack are NOT certified user-authored or cleared for release.
+# Trial ONLY: full RP content plus 3 broad-impact server optimizers; boot != measured benefit.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-modded-candidate.yml
+      - scripts/fc_modded_candidate_pc_smoke.py
+      - scripts/fc_modded_candidate.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pc-modded-boot:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: scripts
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check baseline and optimizer selection without real JARs
+        shell: powershell
+        run: |
+          python scripts/fc_modded_candidate_test.py
+          if ($LASTEXITCODE -ne 0) { throw 'Synthetic selection refused' }
+      - name: Download SHA-pinned old inputs and create NEW modded stage
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Join-Path $env:RUNNER_TEMP ('fc-modded-PC-' + $env:GITHUB_RUN_ID)
+          if (Test-Path -LiteralPath $root) { throw 'PC modded lab exists; no overwrite' }
+          $null = New-Item -ItemType Directory -Path $root
+          $inputs = @(
+            @{name='engines.tar.gz'; sha='f2cb921efbf751fa24534a9a02b57197db46294ca7b71d9711b04996bf6d1784'; url='https://github.com/iZentric/ServerRolePlayLite/releases/download/jars-20261017-0952/functity-jare-toate.tar.gz'},
+            @{name='old-plugins.zip'; sha='fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15'; url='https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Server-CatServer-1.7.7.zip'},
+            @{name='CoreProtect.jar'; sha='04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977'; url='https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar'},
+            @{name='guava-21.0.jar'; sha='972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480'; url='https://github.com/google/guava/releases/download/v21.0/guava-21.0.jar'}
+          )
+          foreach ($item in $inputs) {
+            $path = Join-Path $root $item.name
+            try { Invoke-WebRequest -Uri $item.url -OutFile $path -UseBasicParsing -MaximumRedirection 5 }
+            catch { throw ('PC input unavailable: ' + $item.name + '; no server started') }
+            if ((Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -ne $item.sha) {
+              throw ('PC input SHA256 mismatch: ' + $item.name + '; no server started')
+            }
+          }
+          python scripts/fc_plugin_first_extract.py (Join-Path $root 'engines.tar.gz') (Join-Path $root 'motor.jar')
+          if ($LASTEXITCODE -ne 0) { throw 'Motor extraction refused' }
+          python scripts/fc_modded_candidate.py --engine (Join-Path $root 'motor.jar') `
+            --archive (Join-Path $root 'old-plugins.zip') `
+            --coreprotect (Join-Path $root 'CoreProtect.jar') `
+            --guava21 (Join-Path $root 'guava-21.0.jar') `
+            --output (Join-Path $root 'stage') --server-optimizer-lab
+          if ($LASTEXITCODE -ne 0) { throw 'Modded stage refused' }
+      - name: Start and stop NEW full-content lab server, no player joins
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Join-Path $env:RUNNER_TEMP ('fc-modded-PC-' + $env:GITHUB_RUN_ID)
+          python scripts/fc_modded_candidate_pc_smoke.py (Join-Path $root 'stage')
+          if ($LASTEXITCODE -ne 0) { throw 'Modded PC lab boot failed; no public service' }
+          Write-Output '::notice title=PC full-content optimizer trial::server_started_and_stopped=true content_and_dependencies=15 trial_optimizers=3 public=false client_join=NOT_TESTED benefit=NOT_MEASURED ownership=UNVERIFIED'

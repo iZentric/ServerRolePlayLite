@@ -1,0 +1,41 @@
+name: FunCity release parity - real PC bytes without upload
+# Tests exact client hashes and real server counts on the existing Windows runner.
+# Does NOT transfer binaries, read configs/worlds/accounts, boot Minecraft, or deploy.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-release-parity.yml
+      - scripts/fc_release_manifest_gate.py
+      - scripts/fc_pc_release_parity.ps1
+      - agent/FREEROAM-LISTA-DECLARATA.json
+      - agent/FUNCITY-RP-LITE-SELECTIE.json
+      - agent/FUNCITY-SERVER-TARGET-28.json
+permissions:
+  contents: read
+jobs:
+  declared-manifests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gate declared client and server targets offline
+        run: python3 scripts/fc_release_manifest_gate.py
+      - name: PowerShell syntax gate before touching PC
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path 'scripts/fc_pc_release_parity.ps1'),[ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'PC_PARITY_SCRIPT_SYNTAX_FAILED' }
+  installed-byte-parity:
+    needs: declared-manifests
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read JAR hashes from original, Lite and server without publishing binaries
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_release_parity.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

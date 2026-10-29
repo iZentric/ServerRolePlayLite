@@ -1,0 +1,31 @@
+name: Apply reversible five-chunk Lite graphics preset when Prism is closed
+# Never closes Prism/game; private options backup; no mod/world/server writes.
+# Synthetic settings/restore rehearsal passed in hosted run 39655688937.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-lite-lowfps-options.yml]
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthetic numeric preset, private backup and restore rehearsal
+        shell: pwsh
+        run: ./scripts/fc_lite_lowfps_options_test.ps1
+  pc-apply:
+    if: startsWith(github.event.head_commit.message, 'Apply safe Lite five-chunk preset once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refuse active Prism/client; backup and set only five graphics options
+        shell: powershell
+        run: |
+          $profile='C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\FunCity RP Lite'
+          & ./scripts/fc_lite_lowfps_options.ps1 -Profile $profile
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

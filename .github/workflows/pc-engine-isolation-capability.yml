@@ -1,0 +1,39 @@
+name: Check PC sandbox options for safe full-engine lab
+# Read-only capability hints, never starts/stops PC server, VM, or host.
+# Presence of a component is NOT proof of isolation or enough free RAM.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-engine-isolation-capability.yml]
+permissions:
+  contents: read
+jobs:
+  pc-sandbox-options:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 3
+    steps:
+      - name: Inventory possible offline sandbox runtimes without printing PC details
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          try {
+            if (-not $env:RUNNER_TEMP -or -not $env:USERPROFILE) { throw 'NOT_OWNER_PC_RUNNER' }
+            $sandbox=Test-Path -LiteralPath (Join-Path $env:WINDIR 'System32\WindowsSandbox.exe') -PathType Leaf
+            $wsl=$null -ne (Get-Command wsl.exe -ErrorAction SilentlyContinue)
+            $podman=$null -ne (Get-Command podman.exe -ErrorAction SilentlyContinue)
+            $docker=$null -ne (Get-Command docker.exe -ErrorAction SilentlyContinue)
+            $vmService=Get-Service -Name vmcompute -ErrorAction SilentlyContinue
+            $hyperv=$null -ne $vmService -and $vmService.Status -eq 'Running'
+            $admin=[Security.Principal.WindowsPrincipal]::new([Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+            $os=Get-CimInstance Win32_OperatingSystem -ErrorAction Stop
+            $freeRam=[long]$os.FreePhysicalMemory * 1024L
+            $enough=$freeRam -ge 4294967296L
+            Write-Output ('::notice title=PC engine lab isolation options::WINDOWS_SANDBOX_BINARY=' + $sandbox +
+              ' WSL_CLIENT_PRESENT=' + $wsl + ' PODMAN_CLI_PRESENT=' + $podman +
+              ' DOCKER_CLI_PRESENT=' + $docker + ' VM_COMPUTE_RUNNING=' + $hyperv +
+              ' RUNNER_ADMIN=' + $admin + ' FREE_RAM_AT_LEAST_4_GIB=' + $enough +
+              ' WORKING_ISOLATION_NOT_PROVEN=true PC_SERVER_UNCHANGED=true HOST_UNCHANGED=true')
+          } catch {
+            Write-Output '::error title=PC engine lab isolation options::READ_ONLY_PROBE_FAILED; no private values printed'
+            exit 2
+          }

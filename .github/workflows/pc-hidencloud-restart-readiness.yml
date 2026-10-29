@@ -1,0 +1,44 @@
+name: FunCity restart - read-only static preflight
+# Read-only SFTP access from the rotated-key owner PC. No host writes,
+# console/RCON command, world transfer, artifacts or private config in logs.
+# A listed start.sh and matching spigot.yml do NOT prove /restart works.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-hidencloud-restart-readiness.yml
+      - scripts/fc_pc_hidencloud_restart_readiness.ps1
+      - scripts/fc_pc_restart_readiness_lib.ps1
+      - scripts/fc_pc_restart_readiness_test.ps1
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-fixtures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse all PowerShell sources, then run synthetic fixtures
+        shell: pwsh
+        run: |
+          foreach ($name in @('fc_pc_hidencloud_restart_readiness.ps1',
+              'fc_pc_restart_readiness_lib.ps1', 'fc_pc_restart_readiness_test.ps1')) {
+            $tokens=$null; $errors=$null
+            [void][Management.Automation.Language.Parser]::ParseFile(
+              (Join-Path $PWD ('scripts/' + $name)), [ref]$tokens, [ref]$errors)
+            if (@($errors).Count -ne 0) { throw 'RESTART_PREFLIGHT_SYNTAX_INVALID' }
+          }
+          & ./scripts/fc_pc_restart_readiness_test.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+  owner-pc-readonly:
+    needs: offline-fixtures
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect fixed restart prerequisites via SFTP without host changes
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_hidencloud_restart_readiness.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

@@ -1,0 +1,39 @@
+name: Read back all HidenCloud active server files and compare backup SHA
+# Owner moved files into /home/container. Read-only SFTP from the PC runner;
+# compare every original backup file without printing private paths/content.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-verify-hidencloud-active-root.yml
+      - scripts/fc_pc_verify_hidencloud_active_root.ps1
+permissions:
+  contents: read
+concurrency:
+  group: funcity-host-active-verify-one-at-a-time
+  cancel-in-progress: false
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse read-only checker script without executing it
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path $PWD 'scripts/fc_pc_verify_hidencloud_active_root.ps1'),
+            [ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'ACTIVE_ROOT_VERIFY_SCRIPT_SYNTAX_FAILED' }
+  pc-root-verify:
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download expected root files privately and compare all backup SHA values
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_verify_hidencloud_active_root.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

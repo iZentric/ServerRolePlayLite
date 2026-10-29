@@ -1,0 +1,36 @@
+name: Classify all private E drive engine launcher candidates
+# Static hash/manifest inspection on owner's Windows runner. No JAR boot,
+# player/world data, private names or content in GitHub logs or artifacts.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-e-funcity-engine-triage.yml
+      - scripts/fc_pc_classify_e_engine_launchers.ps1
+permissions:
+  contents: read
+jobs:
+  syntax:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse triage script without inspecting PC files
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path $PWD 'scripts/fc_pc_classify_e_engine_launchers.ps1'),
+            [ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'E_ENGINE_TRIAGE_SCRIPT_SYNTAX_FAILED' }
+  pc-triage:
+    needs: syntax
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deduplicate launchers by SHA and classify engine families privately
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_classify_e_engine_launchers.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

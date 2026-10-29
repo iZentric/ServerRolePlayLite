@@ -1,0 +1,37 @@
+name: zip-patch
+# Legacy package audit only. Never publish an unvalidated server ZIP/JAR.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  p:
+    timeout-minutes: 25
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: CoreProtect in FUNCTITY-SERVER.zip
+        run: |
+          set -e
+          exec > >(tee /tmp/patch.log) 2>&1
+          mkdir -p $GITHUB_WORKSPACE/s && cd $GITHUB_WORKSPACE/s
+          echo "== jos zip + jar =="
+          curl -sfL "https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar" -o CoreProtect.jar
+          echo '04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977  CoreProtect.jar' | sha256sum -c -
+          echo "descarc zip curent..."
+          curl -sfL "https://github.com/iZentric/ServerRolePlayLite/releases/download/funcity/FUNCTITY-SERVER.zip" -o f.zip
+          echo "zip: $(stat -c%s f.zip)B"
+          unzip -q f.zip -d unz
+          mkdir -p unz/plugins && cp CoreProtect.jar unz/plugins/CoreProtect.jar
+          echo "== config 100% in pachet =="
+          cp "$GITHUB_WORKSPACE/functity-config/server.properties" unz/server.properties
+          mkdir -p unz/config unz/defaultconfigs
+          # Bukkit/Spigot load these files at the server root, not config/.
+          for cf in spigot.yml bukkit.yml commands.yml; do cp "$GITHUB_WORKSPACE/functity-config/$cf" "unz/$cf"; done
+          for cf in connectivity-common.toml modernfix-mixins.properties; do cp "$GITHUB_WORKSPACE/functity-config/$cf" "unz/config/$cf"; done
+          cp "$GITHUB_WORKSPACE/functity-config/forge-server.toml" unz/defaultconfigs/forge-server.toml
+          # This copies files for a read-only layout audit; it never repacks or uploads.
+          for cf in spigot.yml bukkit.yml commands.yml server.properties; do test -s "unz/$cf"; done
+          for cf in connectivity-common.toml modernfix-mixins.properties; do test -s "unz/config/$cf"; done
+          test -s unz/defaultconfigs/forge-server.toml
+          echo 'Layout verificat in copia izolata; configuratia live de pe PC ramane nemasurata.'

@@ -1,58 +1,58 @@
 name: FUNCITY-BUILD
-# Build 0 = referinta: Mohist 1.16.5 la commit fixat, compilat reproducibil pe runner
-# curat. Fara patch-uri FunCity in acest tur (incă). Arunca JAR-ul + logul + metadata
-# pe bransa functity-out; de acolo le citesc si decidem pasul cu patch-urile.
+# Candidat FunCity: build izolat la schimbarea motorului sau manual. Nu publica
+# JAR-uri, nu modifica serverul PC si nu scrie pe alta ramura.
+# Build lung doar la pornire manuală, fără release sau acces la PC/live.
 on:
-  push:
-    paths:
-      - deploy/functity-build.txt
-      - .github/workflows/functity-build.yml
-      - functity/**
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 55
+    timeout-minutes: 150
     env:
+      GH_TOKEN: ${{ github.token }}
       MOHIST_PIN: 754b578ef3e4881d854bcd1df5d299ada3fd429f
     steps:
       - uses: actions/checkout@v4
 
       - name: Adu sursa la commit fixat
         run: |
-          set -euo pipefail
-          git clone -q https://github.com/MohistMC/Mohist -b 1.16.5 src
-          git -C src fetch -q --tags origin || true
-          git -C src checkout -q "$MOHIST_PIN" -B 1.16.5
+          set -Eeuo pipefail
+          trap 'rc=$?; echo "::error::source failed rc=$rc line=$LINENO cmd=$BASH_COMMAND" | tee -a /tmp/fc-source-debug.txt; exit "$rc"' ERR
+          echo "source: clone" | tee -a /tmp/fc-source-debug.txt
+          # Repository-ul Mohist 1.16.5 este acum TiangongCraft/Tenet; commitul si GPL raman fixate.
+          git clone -q https://github.com/TiangongCraft/Tenet -b 1.16.5 src
+          echo "source: checkout pin $MOHIST_PIN" | tee -a /tmp/fc-source-debug.txt
+          git -C src checkout -q --detach "$MOHIST_PIN"
+          test "$(git -C src rev-parse HEAD)" = "$MOHIST_PIN"
           git -C src log -1 --format='pin: %H %ci %s' | head -1
           for bf in "$GITHUB_WORKSPACE"/functity/buildfix/*.patch; do
-            git -C src apply "$bf" && echo "buildfix aplicat: $(basename "$bf")" || echo "BUILDFIX_ESUAT: $(basename "$bf")"
+            echo "source: buildfix $(basename "$bf")" | tee -a /tmp/fc-source-debug.txt
+            git -C src apply --check "$bf"
+            git -C src apply "$bf"
+            echo "buildfix aplicat: $(basename "$bf")"
           done
-          git -C src describe --tags --abbrev=7 || echo "describe ESUAT (semnal ca clone-ul e stramb)"
           shopt -s nullglob
           APPLIED=()
-          REJECTED=""
-          if grep -q NOPATCH deploy/functity-build.txt 2>/dev/null; then
-            echo "NOPATCH: build de referinta, fara patch-uri"
-          else
-            for pt in functity/patches/*.patch; do
-              ABS="$GITHUB_WORKSPACE/$pt"
-              if git -C src apply --check "$ABS" 2>/tmp/applycheck.txt; then
-                git -C src apply "$ABS" && APPLIED+=("$(basename "$pt")")
-              else
-                REJECTED="$(basename "$pt")"
-                { echo "PATCH respins de git apply --check: $(basename "$pt")"; cat /tmp/applycheck.txt; } > /tmp/patch-rejected.txt
-              fi
-            done
-          fi
+          for pt in functity/patches/*.patch; do
+            echo "source: patch $(basename "$pt")" | tee -a /tmp/fc-source-debug.txt
+            ABS="$GITHUB_WORKSPACE/$pt"
+            if ! git -C src apply --check "$ABS" 2>/tmp/applycheck.txt; then
+              { echo "PATCH respins: $(basename "$pt")"; cat /tmp/applycheck.txt; } >&2
+              echo "::error::PATCH $(basename "$pt") respins: $(tr '\n' ';' < /tmp/applycheck.txt | head -c 800)"
+              exit 1
+            fi
+            git -C src apply "$ABS"
+            APPLIED+=("$(basename "$pt")")
+          done
           if [ ${#APPLIED[@]} -gt 0 ]; then
             echo "aplicate: ${APPLIED[*]}"
             echo "BUILD_ID=b1.$(date -u +%H%M)" >> "$GITHUB_ENV"
           else
-            [ -n "$REJECTED" ] && echo "BUILD_ID=b0-patchrespins" >> "$GITHUB_ENV" || echo "BUILD_ID=b0" >> "$GITHUB_ENV"
+            echo "BUILD_ID=b0" >> "$GITHUB_ENV"
           fi
 
       - uses: actions/setup-java@v4
@@ -60,8 +60,7 @@ jobs:
           distribution: temurin
           java-version: '11'
 
-      - name: Compileaza
-        continue-on-error: true
+      - name: Compileaza (esecul opreste candidatul)
         run: |
           set -uo pipefail
           cd src
@@ -70,29 +69,10 @@ jobs:
           GE=$?
           echo "gradle exit: $GE" | tee -a ../build-out.log
           printf '::warning::gradle exit=%s tail=%s\n' "$GE" "$(tail -c 1400 ../build-out.log | tr '\n' '~')"
-
-      - name: Baseline oficial Mohist 1.16.5-1237 (independent de build-ul nostru)
-        if: always()
-        run: |
-          set +e
-          mkdir -p /tmp/fc
-          OK=""
-          for U in https://repo1.maven.org/maven2/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar https://maven.mohistmc.com/com/mohistmc/mohist/1.16.5-1237/mohist-1.16.5-1237-server.jar; do
-            curl -fsSL --max-time 600 -o /tmp/fc/mohist-1.16.5-1237-server.jar "$U" && { OK=$U; break; }
-          done
-          S=$(sha256sum /tmp/fc/mohist-1.16.5-1237-server.jar 2>/dev/null | cut -d" " -f1)
-          E=17d08ed544aab50f0c9c0281507a44d765cfeb371289a10d47e2143146255bff
-          if [ "$S" = "$E" ]; then
-            echo "SHA-256 OFICIAL OK; sursa: $OK; marime: $(stat -c %s /tmp/fc/mohist-1.16.5-1237-server.jar)B; descarcare: $(date -u '+%F %T')" > /tmp/fc/OFFICIAL.txt
-            echo "$S  mohist-1.16.5-1237-server.jar" >> /tmp/fc/SHA256SUMS.txt
-          else
-            rm -f /tmp/fc/mohist-1.16.5-1237-server.jar
-            echo "SHA MISMATCH sau esec descarcare: got=[$S]" > /tmp/fc/OFFICIAL.txt
-          fi
-          printf '::warning::oficial: %s\n' "$(tr '\n' '~' < /tmp/fc/OFFICIAL.txt | head -c 300)"
+          exit "$GE"
 
       - name: Colecteaza artefactele
-        if: always()
+        if: success()
         run: |
           set +e
           mkdir -p /tmp/fc
@@ -116,36 +96,196 @@ jobs:
           # (fara echo cu citiri in bash: fix-ul blocajului din run-urile 38519696768/38528969346)
           python3 "$GITHUB_WORKSPACE/functity/ci/meta.py" /tmp/fc "$BUILD_ID" "$MOHIST_PIN" "$GITHUB_WORKSPACE" > /tmp/fc/metadata.json
           python3 -m json.tool /tmp/fc/metadata.json >/dev/null || { echo "::error::metadata.json INVALID"; exit 1; }
-          cp /tmp/patch-rejected.txt /tmp/fc/ 2>/dev/null || true
           ls -la /tmp/fc
 
-      - name: Publica pe functity-out (model rp-drop cu token in URL)
-        if: always()
+      - name: Valideaza build-ul fara publicare
         run: |
-          set +e
-          cd /tmp; rm -rf fcout
-          git clone -q "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" -b functity-out fcout 2>/tmp/clone.err
-          CL=$?
-          printf '::warning::clone functity-out: exit=%s err=%s\n' "$CL" "$(tr '\n' '~' < /tmp/clone.err | head -c 300)"
-          cd fcout || { echo "fara clone, opresc"; exit 0; }
-          git config user.name 'functity-ci[bot]'
-          git config user.email 'functity-ci@localhost'
-          mkdir -p "builds/$BUILD_ID"
-          cp /tmp/fc/* "builds/$BUILD_ID/" 2>/dev/null
-          git add -A "builds/$BUILD_ID"
-          git commit -qm "functity $BUILD_ID" || echo "nimic de commituit"
-          git push -q origin HEAD:refs/heads/functity-out 2>/tmp/push.err
-          PE=$?
-          printf '::warning::push: exit=%s err=%s fisiere=%s\n' "$PE" "$(tr '\n' '~' < /tmp/push.err | head -c 400)" "$(cd builds/$BUILD_ID && ls | tr '\n' ',' | head -c 200)"
-          if [ $PE -ne 0 ]; then
-            git pull -q --rebase origin functity-out 2>/dev/null
-            git push -q origin HEAD:refs/heads/functity-out 2>/tmp/push2.err
-            printf '::warning::push retry: exit=%s err=%s\n' "$?" "$(tr '\n' '~' < /tmp/push2.err | head -c 400)"
-          fi
+          set -euo pipefail
+          JAR="/tmp/fc/FunCity-1.16.5-${BUILD_ID}.jar"
+          test -s "$JAR"
+          (cd /tmp/fc && sha256sum -c SHA256SUMS.txt)
+          unzip -p "$JAR" META-INF/MANIFEST.MF | grep -q ServerLaunchArgs
+          grep -q 'NAME = "FunCity"' src/src/main/java/com/mohistmc/MohistMC.java
+          echo "CANDIDAT_VERIFICAT_STATIC: $BUILD_ID sha=$(sha256sum "$JAR" | cut -d' ' -f1)"
+          echo 'Verificare statica doar; urmeaza boot si boți pe copie izolata.'
+
+      - name: Preflight cu pack-ul original, fara client Forge
+        id: preflight
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/fc-smoke/preflight
+          gh release download lite --repo "$GITHUB_REPOSITORY" -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O /tmp/fc-smoke/pack.zip
+          echo 'fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  /tmp/fc-smoke/pack.zip' | sha256sum -c -
+          python3 - <<'PY'
+          import json
+          c = {"arm": "funcity-candidate", "pack_zip": "/tmp/fc-smoke/pack.zip",
+               "pack_sha256": "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15",
+               "boot_jar": "FunCity.jar", "install_timeout": 480, "boot_timeout": 360,
+               "java_args": ["-Xms1G", "-Xmx3G"],
+               "props": {"server-ip": "127.0.0.1", "server-port": "25565", "online-mode": "false", "view-distance": "5", "level-seed": "20261018"}}
+          with open('/tmp/fc-smoke/arm.json', 'w') as f: json.dump(c, f)
+          PY
+          FC_JAR="/tmp/fc/FunCity-1.16.5-${BUILD_ID}.jar" \
+          FC_STAGE=/tmp/fc-smoke/stage FC_OUT=/tmp/fc-smoke/preflight \
+          FC_WORLD_MODE=save FC_WORLD_SNAPSHOT=/tmp/fc-smoke/world-reference \
+          FC_TRIALS=2 FC_RUN_SECONDS=90 python3 scripts/fc_bench.py --arm-conf /tmp/fc-smoke/arm.json
+          python3 - <<'PY'
+          import json
+          r = json.load(open('/tmp/fc-smoke/preflight/funcity-candidate.json'))
+          assert r['status'] == 'MASURAT' and r['probate_reusite'] == 2 and r['pack_mods'] == 36 and r['pack_plugins'] == 14 and r['critice_total'] == 0, r
+          print('PRE-FLIGHT: pack 36 moduri / 14 pluginuri; boot reusit; nu este benchmark de capacitate')
+          PY
+
+      - name: Verifica numele FunCity in bytecode-ul instalat, nu doar in sursa
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, subprocess, zipfile
+          stage = Path('/tmp/fc-smoke/stage')
+          candidates = [stage / 'FunCity.jar', *stage.joinpath('libraries').rglob('*.jar')]
+          found = []
+          for jar in candidates:
+              try:
+                  with zipfile.ZipFile(jar) as z:
+                      if 'com/mohistmc/MohistMC.class' not in z.namelist():
+                          continue
+              except zipfile.BadZipFile:
+                  raise SystemExit(f'JAR invalid in bootstrap: {jar}')
+              result = subprocess.run(['javap', '-constants', '-classpath', str(jar),
+                                       'com.mohistmc.MohistMC'], capture_output=True, text=True, timeout=30)
+              if result.returncode or not re.search(r'\bNAME\s*=\s*"FunCity"\s*;', result.stdout):
+                  raise SystemExit(f'bytecode fara constanta FunCity: {jar}: {result.stderr[-300:]}')
+              found.append(str(jar.relative_to(stage)))
+          if not found:
+              raise SystemExit('clasa MohistMC negasita in JAR-ul instalat/biblioteci')
+          print('BRANDING_BYTECODE_VALIDAT:', found)
+          PY
+
+      - name: CoreProtect verificat din proiectul original (doar copia de test)
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3 https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar -o /tmp/fc-smoke/CoreProtect.jar
+          echo '04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977  /tmp/fc-smoke/CoreProtect.jar' | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib, shutil
+          from pathlib import Path
+          plugins = Path('/tmp/fc-smoke/stage/plugins')
+          matches = [p for p in plugins.glob('*.jar') if p.name.lower().startswith('coreprotect')]
+          if len(matches) > 1 or any(hashlib.sha256(p.read_bytes()).hexdigest() != '04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977' for p in matches):
+              raise SystemExit('CoreProtect in pack is duplicated or not the pinned upstream release')
+          if not matches:
+              shutil.copyfile('/tmp/fc-smoke/CoreProtect.jar', plugins / 'CoreProtect.jar')
+          print('CoreProtect v21.2 pregatit doar in stage; nicio schimbare pe PC/release')
+          PY
+
+      - name: Proba cu 3 boți server-side (fail-closed)
+        run: |
+          set -euo pipefail
+          gh release download 1.3.2 --repo Gu-ZT/Curtain -p 'curtain-mc1.16.5-1.3.2.jar' -O /tmp/fc-smoke/curtain.jar
+          echo 'c9234d2c5ca43c337abac25a05022fe2f226c884855aa6941b6130c60777819d  /tmp/fc-smoke/curtain.jar' | sha256sum -c -
+          FC_WORLD_SNAPSHOT=/tmp/fc-smoke/world-reference \
+          python3 scripts/fc_fakeplayer_smoke.py /tmp/fc-smoke/stage FunCity.jar /tmp/fc-smoke/curtain.jar /tmp/fc-smoke/bots
+          echo 'Boții sint entitati server-side, NU handshake-uri Forge reale. JAR-ul ramine nepublicat.'
+
+      - name: Compara cu motorul FunCity b1.0827 deja folosit (aceeasi masina si pack)
+        if: ${{ always() && steps.preflight.outcome == 'success' }}
+        run: |
+          set -Eeuo pipefail
+          trap 'rc=$?; echo "::error::current baseline step rc=$rc command=$BASH_COMMAND"; exit "$rc"' ERR
+          gh release download jars-20261017-0952 --repo "$GITHUB_REPOSITORY" -p 'functity-jare-toate.tar.gz' -O /tmp/fc-smoke/current.tar.gz
+          echo 'f2cb921efbf751fa24534a9a02b57197db46294ca7b71d9711b04996bf6d1784  /tmp/fc-smoke/current.tar.gz' | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib, json, shutil, tarfile
+          from pathlib import Path
+          root = Path('/tmp/fc-smoke')
+          with tarfile.open(root / 'current.tar.gz', 'r:gz') as t:
+              matches = [m for m in t.getmembers() if m.isfile() and Path(m.name).name in ('FunCity-b1.0827.jar', 'FunCity-1.16.5-b1.0827.jar')]
+              if len(matches) != 1: raise SystemExit(f'expected one b1.0827 JAR, found {len(matches)}')
+              with t.extractfile(matches[0]) as src, (root / 'current.jar').open('wb') as dst:
+                  shutil.copyfileobj(src, dst)
+          actual = hashlib.sha256((root / 'current.jar').read_bytes()).hexdigest()
+          if actual != 'd6ffa35c1ea9032a4a95f7f1e34b734aa7f53b0358dda6b9e6592326640a15dd':
+              raise SystemExit(f'current engine sha mismatch: {actual}')
+          c = json.loads((root / 'arm.json').read_text())
+          c['arm'] = 'current-b1.0827'
+          (root / 'current-arm.json').write_text(json.dumps(c))
+          print('Pinned current engine extracted; world/pack unchanged for comparator')
+          PY
+          FC_JAR=/tmp/fc-smoke/current.jar \
+          FC_STAGE=/tmp/fc-smoke/stage-current FC_OUT=/tmp/fc-smoke/current \
+          FC_WORLD_MODE=restore FC_WORLD_SNAPSHOT=/tmp/fc-smoke/world-reference \
+          FC_TRIALS=2 FC_RUN_SECONDS=90 python3 scripts/fc_bench.py --arm-conf /tmp/fc-smoke/current-arm.json
+          python3 - <<'PY'
+          import json, shutil
+          from pathlib import Path
+          root = Path('/tmp/fc-smoke')
+          report = json.loads((root / 'current/current-b1.0827.json').read_text())
+          if report['status'] != 'MASURAT' or report['probate_reusite'] != 2 or report['pack_mods'] != 36 or report['pack_plugins'] != 14 or report['critice_total'] != 0:
+              print('::error::current baseline incomplete: status=%s boots=%s mods=%s plugins=%s critical=%s' %
+                    tuple(report.get(k) for k in ('status', 'probate_reusite', 'pack_mods', 'pack_plugins', 'critice_total')))
+              raise SystemExit('current engine did not complete matched 36/14 baseline')
+          shutil.copyfile(root / 'CoreProtect.jar', root / 'stage-current/plugins/CoreProtect.jar')
+          PY
+          FC_WORLD_SNAPSHOT=/tmp/fc-smoke/world-reference \
+          python3 scripts/fc_fakeplayer_smoke.py /tmp/fc-smoke/stage-current FunCity.jar /tmp/fc-smoke/curtain.jar /tmp/fc-smoke/bots-current
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('/tmp/fc-smoke')
+          a = json.loads((root / 'preflight/funcity-candidate.json').read_text())
+          b = json.loads((root / 'current/current-b1.0827.json').read_text())
+          ab = json.loads((root / 'bots/result.json').read_text())
+          bb = json.loads((root / 'bots-current/result.json').read_text())
+          both_valid = bool(ab['valid'] and bb['valid'])
+          worlds = [r.get('world_snapshot_sha256') for r in (a, b, ab, bb)]
+          same_world = bool(all(worlds) and len(set(worlds)) == 1)
+          fields = ('boot_medie_s', 'rss_medie_mb', 'cpu_medie_pct', 'gc_pauza_max_ms')
+          result = {'candidate_sha256': ab.get('engine_sha256'), 'current_sha256': bb.get('engine_sha256'),
+                    'both_bot_arms_valid': both_valid, 'same_world': same_world,
+                    'world_snapshot_sha256': worlds[0] if same_world else None,
+                    'method': 'matched runner, pack sha pinned, identical hashed world restored before every trial and bot arm, view 5, Java 11, two 90s idle trials/arm + three fake players moving for 40s/arm; order not randomized',
+                    'limits': 'NOT human capacity, client Forge handshake, PC measurement or 10-year reliability proof',
+                    'candidate_idle': {k: a.get(k) for k in fields}, 'current_idle': {k: b.get(k) for k in fields},
+                    'candidate_bots': {k: ab.get(k) for k in ('active_40s_cpu_seconds', 'active_40s_rss_max_mib')},
+                    'current_bots': {k: bb.get(k) for k in ('active_40s_cpu_seconds', 'active_40s_rss_max_mib')}}
+          (root / 'comparison.json').write_text(json.dumps(result, indent=2) + '\n')
+          print(json.dumps(result, indent=2))
+          if not same_world:
+              raise SystemExit('arms/trials did not share the same world; comparison invalid')
+          if not both_valid:
+              raise SystemExit('at least one bot arm failed; no performance winner')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: funcity-build-diagnostics
+          path: |
+            /tmp/fc-source-debug.txt
+            build-out.log
+            /tmp/fc/BUILD-LOG.txt
+            /tmp/fc/metadata.json
+            /tmp/fc/ESUARE.txt
+            /tmp/fc-smoke/preflight/*.json
+            /tmp/fc-smoke/preflight/*.log
+            /tmp/fc-smoke/bots/result.json
+            /tmp/fc-smoke/bots/fakeplayers.log
+            /tmp/fc-smoke/current/*.json
+            /tmp/fc-smoke/current/*.log
+            /tmp/fc-smoke/bots-current/result.json
+            /tmp/fc-smoke/bots-current/fakeplayers.log
+            /tmp/fc-smoke/comparison.json
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Verific local (infolare bara de progres)
         if: always()
         run: |
           set +e
+          if [ -f /tmp/fc-source-debug.txt ]; then
+            printf '::warning::source trace: %s\n' "$(tr '\n' ';' < /tmp/fc-source-debug.txt | head -c 1100)"
+          fi
           echo "BUILD_ID=$BUILD_ID"
           echo "::group::gradle tail"
           tail -c 2000 build-out.log | tr '\n' '~' | head -c 1500

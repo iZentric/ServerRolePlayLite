@@ -1,0 +1,20 @@
+# FunCity 1.16.5 Lite - pastreaza populatia survival si mecanismele de spawn
+settings:
+  allow-end: false
+  keep-spawn-loaded: true
+  warn-on-overload: false
+spawn-limits:
+  monsters: 20
+  animals: 6
+  water-animals: 2
+  water-ambient: 2
+  ambient: 0
+chunk-gc:
+  period-in-ticks: 400
+  load-threshold: 300
+ticks-per:
+  animal-spawns: 400
+  monster-spawns: 10
+  water-spawns: 40
+  ambient-spawns: 400
+  autosave: 6000

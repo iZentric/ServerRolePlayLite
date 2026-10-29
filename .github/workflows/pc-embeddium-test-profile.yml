@@ -1,0 +1,59 @@
+name: Safe separate Prism Embeddium 1.16.5 test profile
+# Runs on PC only after exact filenames exist at owner-specified E:\Administrator\Downloads and Prism/game closed.
+# The committed script never downloads binaries or edits source Lite/original/server.
+# Hosted fixture passed in 39673664948; owner supplied E drive, read-only SHA audit 39673301267.
+# First PC run 39673517511 stopped before staging; retry only after ZipFile 5.1 fix.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-embeddium-test-profile.yml
+      - scripts/fc_embeddium_test_profile.ps1
+      - scripts/fc_embeddium_test_profile_test.ps1
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse PowerShell installer and fixture
+        shell: pwsh
+        run: |
+          foreach ($name in @('scripts/fc_embeddium_test_profile.ps1','scripts/fc_embeddium_test_profile_test.ps1')) {
+            $tokens=$null; $errors=$null
+            $null=[System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $name),[ref]$tokens,[ref]$errors)
+            foreach ($problem in $errors) {
+              Write-Output ('::error file=' + $name + ',line=' + $problem.Extent.StartLineNumber + '::' + $problem.Message)
+            }
+            if (@($errors).Count -gt 0) { exit 2 }
+          }
+          Write-Output 'PowerShell profile scripts syntax PASS'
+      - name: Synthetic separate-profile copy/rollback and privacy checks
+        shell: pwsh
+        run: |
+          try {
+            ./scripts/fc_embeddium_test_profile_test.ps1
+            # The fixture intentionally invokes two scripts that return exit 2;
+            # their expected LASTEXITCODE must not become the hosted job result.
+            exit 0
+          }
+          catch {
+            Write-Output ('::error file=scripts/fc_embeddium_test_profile_test.ps1,line=1::HOSTED_FIXTURE_FAILED TYPE=' + $_.Exception.GetType().Name + ' MESSAGE=' + $_.Exception.Message)
+            exit 2
+          }
+  pc-create:
+    if: startsWith(github.event.head_commit.message, 'Create Embeddium Prism test profile once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage candidate only if verified files exist and Prism is closed
+        shell: powershell
+        run: |
+          & ./scripts/fc_embeddium_test_profile.ps1 `
+            -Source 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\FunCity RP Lite' `
+            -Downloads 'E:\Administrator\Downloads'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

@@ -1,0 +1,61 @@
+name: Compare actual server mod counts with client-aligned 28-mod RP target (read-only)
+# File names are compared only in memory; Actions receives counts/booleans,
+# NEVER a mod list, any JAR, raw log, world/account file, password, or PC path.
+# No Prism/game/server stop, restart, second server or write to owner folders.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-server-mod-matrix.yml
+      - scripts/fc_server_mod_matrix.ps1
+      - scripts/fc_server_mod_matrix_test.ps1
+      - agent/FUNCITY-SERVER-TARGET-28.json
+permissions:
+  contents: read
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse read-only script and synthetic fixture before running
+        shell: pwsh
+        run: |
+          foreach ($path in @('scripts/fc_server_mod_matrix.ps1','scripts/fc_server_mod_matrix_test.ps1')) {
+            $tokens=$null; $errors=$null
+            [void][Management.Automation.Language.Parser]::ParseFile((Resolve-Path $path),[ref]$tokens,[ref]$errors)
+            if (@($errors).Count -ne 0) {
+              Write-Output ('::error title=Synthetic PowerShell syntax::' + $path + ': ' + $errors[0].Message)
+              exit 2
+            }
+          }
+      - name: Test only synthetic temporary mod names
+        shell: pwsh
+        run: |
+          $output=@(& pwsh -NoProfile -File ./scripts/fc_server_mod_matrix_test.ps1 2>&1)
+          $code=$LASTEXITCODE
+          if ($code -ne 0) {
+            # Fixture uses ONLY synthetic temporary files. Still redact arbitrary paths.
+            $safe=(($output | Select-Object -Last 2 | Out-String) -replace '[^a-zA-Z0-9 _:.=-]','_')
+            Write-Output ('::error title=Synthetic mod matrix failure::' + $safe.Substring(0,[Math]::Min(350,$safe.Length)))
+            exit 2
+          }
+          Write-Output '::notice title=Synthetic mod matrix::PASS'
+  pc-read-only:
+    needs: synthetic
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare JAR counts and safe flags without copying/starting server
+        shell: powershell
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path 'scripts/fc_server_mod_matrix.ps1'),[ref]$tokens,[ref]$errors)
+          if (@($errors).Count -gt 0) {
+            Write-Output ('::error title=Windows PowerShell syntax::line=' + $errors[0].Extent.StartLineNumber + ' ' + $errors[0].Message)
+            exit 2
+          }
+          & ./scripts/fc_server_mod_matrix.ps1 -Server 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

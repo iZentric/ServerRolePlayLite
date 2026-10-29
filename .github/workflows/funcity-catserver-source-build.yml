@@ -1,0 +1,71 @@
+name: FunCity candidate - private reproducible source build
+# The SAME script runs on Actions or an isolated owner's Linux machine.
+# Actions intentionally deletes its binary with the disposable runner: no JAR,
+# private pack, world or raw log is uploaded to a public repository.
+on:
+  workflow_dispatch:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/funcity-catserver-source-build.yml
+      - functity/catserver/patches/0001-funcity-operator-identity.patch
+      - functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch
+      - scripts/fc_funcity_build_private.sh
+      - scripts/fc_funcity_bridge_patch_test.py
+      - scripts/fc_funcity_compiled_engine_gate.py
+      - scripts/fc_funcity_compiled_engine_gate_test.py
+      - scripts/fc_funcity_private_trial.py
+      - scripts/fc_funcity_private_trial_test.py
+      - scripts/fc_funcity_runtime_seed.py
+      - scripts/fc_funcity_java11_smoke.py
+      - scripts/fc_funcity_java11_smoke_test.py
+      - scripts/fc_gradle_failure_classifier.py
+      - scripts/fc_gradle_failure_classifier_test.py
+      - scripts/fc_funcity_setup_retry.py
+      - scripts/fc_funcity_setup_retry_test.py
+      - scripts/fc_funcity_capacity_profile_test.py
+      - scripts/fc_funcity_hybrid_config_test.py
+      - functity/capacity/3g-view4/server.properties
+      - functity/capacity/3g-view4-only/server.properties
+      - functity/capacity/3g-view4/bukkit.yml
+      - functity/capacity/3g-view4/config/connectivity-common.toml
+      - functity/capacity/3g-view4/defaultconfigs/forge-server.toml
+      - functity-config/server.properties
+permissions:
+  contents: read
+jobs:
+  profile-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test isolated trial, static patches and build safeguards
+        run: |
+          bash -n scripts/fc_funcity_build_private.sh
+          python3 scripts/fc_funcity_private_trial_test.py
+          python3 scripts/fc_funcity_capacity_profile_test.py
+          python3 scripts/fc_funcity_hybrid_config_test.py
+          python3 scripts/fc_gradle_failure_classifier_test.py
+          python3 scripts/fc_funcity_setup_retry_test.py
+          python3 scripts/fc_funcity_bridge_patch_test.py
+          python3 scripts/fc_funcity_compiled_engine_gate_test.py
+          python3 scripts/fc_funcity_java11_smoke_test.py
+  source-candidate:
+    needs: profile-gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: |
+            8
+            11
+            17
+      - name: Build pinned source, verify nested classes and boot on Java 11
+        run: |
+          set -Eeuo pipefail
+          bash scripts/fc_funcity_build_private.sh \
+            "$RUNNER_TEMP/fc-catserver-private" "$JAVA_HOME_11_X64/bin/java"
+          echo '::notice title=FunCity candidate::Build and empty Java 11 boot checked; JAR discarded with runner. RP full pack, clients and capacity still untested.'
