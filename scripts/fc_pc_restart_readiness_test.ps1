@@ -15,6 +15,12 @@ function Assert-FcState {
     }
 }
 try {
+    if (Test-FcRootEntryListed -Names @(' start.sh','start.sh ') -Expected 'start.sh') {
+        throw 'TRIMMED_REMOTE_NAME_FALSE_POSITIVE'
+    }
+    if (-not (Test-FcRootEntryListed -Names @('start.sh') -Expected 'start.sh')) {
+        throw 'EXACT_REMOTE_NAME_REJECTED'
+    }
     [void](New-Item -ItemType Directory -Path $root -ErrorAction Stop)
     Set-Content -LiteralPath (Join-Path $root 'server.properties') -Value 'enable-rcon=false' -Encoding UTF8
     Set-Content -LiteralPath (Join-Path $root 'spigot.yml') -Value @('settings:', '  restart-script: ./start.sh', 'world-settings:', '  default: {}') -Encoding UTF8

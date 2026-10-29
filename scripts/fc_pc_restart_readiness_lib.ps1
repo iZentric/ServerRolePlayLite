@@ -11,6 +11,13 @@ function Test-FcRegularSmallFile {
         $item.Length -gt 0 -and $item.Length -le $Limit)
 }
 
+function Test-FcRootEntryListed {
+    param([string[]]$Names, [string]$Expected)
+    # SFTP ls -1a emits exact names. Trimming would turn a distinct remote
+    # entry like " start.sh " into a false positive for the root script.
+    return ($Names -ccontains $Expected)
+}
+
 function Get-FcRestartReadiness {
     param([Parameter(Mandatory=$true)][string]$Root,
           [bool]$StartScriptListed=$false)

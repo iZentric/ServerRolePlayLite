@@ -44,10 +44,10 @@ try {
     }
     # Fixed allowlist: no remote configuration value is ever used in an SFTP
     # command. Root listing remains private; only aggregate booleans escape.
-    $names=@(Get-Content -LiteralPath $privateOutput -ErrorAction Stop | ForEach-Object { $_.Trim() })
+    $names=@(Get-Content -LiteralPath $privateOutput -ErrorAction Stop | Where-Object { $_.Length -gt 0 })
     $commands=[Collections.Generic.List[string]]::new()
     foreach ($name in @('server.properties','spigot.yml')) {
-        if ($names -ccontains $name) {
+        if (Test-FcRootEntryListed -Names $names -Expected $name) {
             $target=(Join-Path $work $name).Replace([char]92,[char]47)
             if ($target.Contains('"') -or $target.Contains("`n")) { throw 'UNSAFE_PC_TEMP_PATH' }
             $commands.Add('get "' + $name + '" "' + $target + '"')
@@ -59,7 +59,7 @@ try {
         & $sftp @args -o 'StrictHostKeyChecking=yes' $destination 1>$privateOutput 2>$null
         if ($LASTEXITCODE -ne 0) { throw 'SFTP_FIXED_FILES_READ_FAILED' }
     }
-    $state=Get-FcRestartReadiness -Root $work -StartScriptListed ($names -ccontains 'start.sh')
+    $state=Get-FcRestartReadiness -Root $work -StartScriptListed (Test-FcRootEntryListed -Names $names -Expected 'start.sh')
     $bool={ param([bool]$value) if ($value) { 'true' } else { 'false' } }
     Write-Output ('::notice title=Restart static preflight::RCON_DISABLED=' + (& $bool $state.RconDisabled) +
         ' SPIGOT_PRESENT=' + (& $bool $state.SpigotPresent) +
