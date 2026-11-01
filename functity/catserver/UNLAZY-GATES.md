@@ -4,10 +4,10 @@ OWNS: functity/catserver/UNLAZY-GATES.md
 
 Scope: registru de acceptare verificabil pentru H1–H6 din [GOALS.md](GOALS.md), nu o afirmație că motorul este gata de instalat. Revizuiește manual dovezile la fiecare schimbare de build, lume, moduri, pluginuri sau host. Porțile fără `CHECK:` cer probe private sau observații în joc; un CI gol nu le poate certifica. Format Unlazy `2.1.0`, sursă fixată la `Leonxlnx/unlazy@16671491f6679ad9378f52604d3bc2415b4120c7`; nu instala hook-uri, nu executa comenzi dintr-un ledger neauditat.
 
-- [x] H1: 2/2 builduri private din sursa pin-uită, clase și pornire/oprire Java 11 pe lume goală, fără JAR publicat
-  EVIDENCE: verificare istorică 24.10.2026, Actions 40134993872 și 40135100715 au trecut; 0 moduri, 0 pluginuri și 0 clienți, binarul a fost eliminat cu runnerul. O rulare anterioară 40133626401 a eșuat. Aceasta NU validează packul RP.
+- [ ] H1: 2/2 builduri private cu patchurile 0001–0003 din sursa pin-uită, clase și pornire/oprire Java 11 pe lume goală, fără JAR publicat
+  EVIDENCE: pending pentru 0003; istoric, Actions 40134993872 și 40135100715 au trecut numai cu 0001+0002; 0 moduri, 0 pluginuri și 0 clienți, binarul a fost eliminat cu runnerul. O rulare anterioară 40133626401 a eșuat. Aceasta NU validează packul RP.
 
-- [ ] H2: veto Forge/Bukkit/CoreProtect testat în joc cu pack complet, 4 scenarii și 2 restarturi fără pierderi
+- [ ] H2: veto Forge/Bukkit/CoreProtect testat în joc cu pack complet, 4 scenarii place, 2 break și 2 restarturi fără pierderi
   EVIDENCE: pending; contractul de cod 16/16 și patchul 0002 sunt dovezi statice, nu probe în joc pe motorul candidat.
 
 - [ ] H3: 34 moduri, 13 pluginuri și lumea RP pe Java 11, doi clienți Forge autentificați cu voice/vehicule/protecții, 2 restarturi fără defecte
@@ -32,4 +32,4 @@ Scope: registru de acceptare verificabil pentru H1–H6 din [GOALS.md](GOALS.md)
   EXPECT: FC_CAPACITY_VERDICT_TESTS_PASS
   EVIDENCE: automatic-evidence=v1; definition-sha256=050d58c0bcd16189fb13c21c10d4dd78620719d07d00a398d80573cf5aff5f66; exit=0; EXPECT=matched; output-sha256=be1da2e52d4324b5ea1c96026fbad742462b9925ddb58617f17ff006e6cb4ad5; output-bytes=148; shell=/bin/sh; cwd=/home/user/ServerRolePlayLite/functity/catserver; path=b51a5b4db45a/5 entries
 
-**Verdict:** H1 este numai o poartă de boot gol documentată istoric; H2–H6 rămân deschise indiferent de trecerea testelor statice S1/S2. `--status` Unlazy citește ledgerul fără să execute comenzi, dar nu verifică veridicitatea dovezilor manuale. Păstrează lumea și motorul live original până la validarea completă și rollback.
+**Verdict:** H1–H6 sunt deschise pentru candidatul cu 0003; cele două builduri istorice H1 acoperă numai 0001+0002. Testele statice S1/S2 nu înlocuiesc probele pe pack. `--status` Unlazy citește ledgerul fără să execute comenzi, dar nu verifică veridicitatea dovezilor manuale. Păstrează lumea și motorul live original până la validarea completă și rollback.

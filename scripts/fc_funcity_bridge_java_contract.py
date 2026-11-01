@@ -15,10 +15,10 @@ HEADER = '''import java.util.ArrayList;
 import java.util.List;
 
 public class BridgeContract {
-    static class World {}
+    static class World { boolean isClientSide() { return false; } }
     static class ServerWorld extends World {}
     static class Entity {}
-    static class ServerPlayerEntity extends Entity {}
+    static class ServerPlayerEntity extends Entity { Object getBukkitEntity() { return this; } }
     static class Hand { static final Hand MAIN_HAND = new Hand(); }
     static class Direction { Direction getOpposite() { return this; } }
     static class BlockPos {
@@ -32,6 +32,31 @@ public class BridgeContract {
         static CraftBlockState getBlockState(World world, BlockPos pos) { return new CraftBlockState(); }
     }
     static class BlockSnapshot { BlockPos getPos() { return new BlockPos(); } }
+    static class CraftBlock { static CraftBlock at(World world, BlockPos pos) { return new CraftBlock(); } }
+    static class BlockBreakEvent {
+        private boolean canceled;
+        private int exp;
+        BlockBreakEvent(CraftBlock block, Object player) {}
+        boolean isCancelled() { return canceled; }
+        void setCancelled(boolean value) { canceled = value; }
+        int getExpToDrop() { return exp; }
+        void setExpToDrop(int value) { exp = value; }
+        boolean isDropItems() { return true; }
+    }
+    static class PluginManager {
+        static boolean cancel, sawCanceled;
+        static int calls;
+        void callEvent(BlockBreakEvent event) {
+            calls++;
+            sawCanceled = event.isCancelled();
+            event.setCancelled(cancel); // A plugin can un-cancel a Forge veto.
+            event.setExpToDrop(7);
+        }
+    }
+    static class Bukkit {
+        static final PluginManager manager = new PluginManager();
+        static PluginManager getPluginManager() { return manager; }
+    }
     static class BlockPlaceEvent {
         final boolean canceled, canBuild;
         BlockPlaceEvent(boolean canceled, boolean canBuild) {
@@ -61,6 +86,18 @@ public class BridgeContract {
                 return items;
             }
         }
+        static class BreakEvent {
+            private boolean canceled;
+            private int exp = 3;
+            BreakEvent(boolean canceled) { this.canceled = canceled; }
+            World getWorld() { return new World(); }
+            BlockPos getPos() { return new BlockPos(); }
+            Object getPlayer() { return new ServerPlayerEntity(); }
+            boolean isCanceled() { return canceled; }
+            void setCanceled(boolean value) { canceled = value; }
+            int getExpToDrop() { return exp; }
+            void setExpToDrop(int value) { exp = value; }
+        }
     }
     static class CraftEventFactory {
         static boolean cancel, build;
@@ -78,6 +115,7 @@ public class BridgeContract {
         }
     }
     static class UnderTest {
+        static boolean isDropItems;
 '''
 FOOTER = '''    }
     public static void main(String[] args) {
@@ -105,7 +143,21 @@ FOOTER = '''    }
                 }
             }
         }
-        if (cases != 16) throw new AssertionError("missing case");
+        for (boolean forge : new boolean[]{false, true}) {
+            for (boolean bukkit : new boolean[]{false, true}) {
+                PluginManager.cancel = bukkit;
+                PluginManager.calls = 0;
+                BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(forge);
+                new UnderTest().onBreakBlockEvent(event);
+                if (event.isCanceled() != (forge || bukkit) ||
+                        PluginManager.sawCanceled != forge || PluginManager.calls != 1 ||
+                        event.getExpToDrop() != 7 || !UnderTest.isDropItems) {
+                    throw new AssertionError("Forge/Bukkit block-break veto or callback regression");
+                }
+                cases++;
+            }
+        }
+        if (cases != 20) throw new AssertionError("missing case");
         System.out.println("JAVA11_BRIDGE_CONTRACT_PASS cases=" + cases);
     }
 }
@@ -124,15 +176,29 @@ def extract_method(text):
     return method
 
 
+def extract_break_method(text):
+    start = text.index('public void onBreakBlockEvent(BlockEvent.BreakEvent event) {')
+    end = text.index('\n    @SubscribeEvent', start)
+    method = text[start:end].strip()
+    if (method.count('boolean forgeCanceled = event.isCanceled();') != 1 or
+            method.count('event.setCanceled(forgeCanceled || bukkitEvent.isCancelled());') != 1 or
+            method.count('Bukkit.getPluginManager().callEvent(bukkitEvent);') != 1):
+        raise ValueError('not the pinned FunCity block-break method')
+    return method
+
+
 def run_contract(source, javac, java):
-    method = extract_method(Path(source).read_text(encoding='utf-8'))
+    text = Path(source).read_text(encoding='utf-8')
+    place, breaking = extract_method(text), extract_break_method(text)
     with tempfile.TemporaryDirectory(prefix='fc-bridge-contract-') as temp:
         root = Path(temp)
         java_file = root / 'BridgeContract.java'
-        for mutant in (True, False):
-            to_compile = method.replace('forgeCanceled || bukkitEvent.isCancelled()',
-                                        'bukkitEvent.isCancelled()') if mutant else method
-            java_file.write_text(HEADER + '        ' + to_compile + '\n' + FOOTER)
+        for mutant in ('place', 'break', ''):
+            p = place.replace('forgeCanceled || bukkitEvent.isCancelled()',
+                              'bukkitEvent.isCancelled()') if mutant == 'place' else place
+            b = breaking.replace('forgeCanceled || bukkitEvent.isCancelled()',
+                                 'bukkitEvent.isCancelled()') if mutant == 'break' else breaking
+            java_file.write_text(HEADER + '        ' + p + '\n        ' + b + '\n' + FOOTER)
             compiler = subprocess.run([javac, '--release', '11', '-d', temp, str(java_file)],
                                       capture_output=True, timeout=60)
             if compiler.returncode:
@@ -142,7 +208,7 @@ def run_contract(source, javac, java):
             if mutant and result.returncode == 0:
                 raise ValueError('deliberately broken Forge veto was not rejected')
             if not mutant and (result.returncode != 0 or
-                               b'JAVA11_BRIDGE_CONTRACT_PASS cases=16' not in result.stdout):
+                               b'JAVA11_BRIDGE_CONTRACT_PASS cases=20' not in result.stdout):
                 raise ValueError('real Forge/Bukkit veto failed Java11 contract')
     return True
 
@@ -155,4 +221,4 @@ if __name__ == '__main__':
     except (ValueError, OSError, subprocess.TimeoutExpired) as exc:
         print('BRIDGE_JAVA11_CONTRACT_REJECTED: ' + str(exc), file=sys.stderr)
         sys.exit(2)
-    print('BRIDGE_JAVA11_CONTRACT_PASS: 16 live method cases, mutant rejected, no Minecraft jars')
+    print('BRIDGE_JAVA11_CONTRACT_PASS: 20 place/break cases, two mutants rejected, no Minecraft jars')

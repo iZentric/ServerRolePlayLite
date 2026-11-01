@@ -10,8 +10,10 @@ on:
       - .github/workflows/funcity-catserver-source-build.yml
       - functity/catserver/patches/0001-funcity-operator-identity.patch
       - functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch
+      - functity/catserver/patches/0003-preserve-forge-block-break-cancellation.patch
       - scripts/fc_funcity_build_private.sh
       - scripts/fc_funcity_bridge_patch_test.py
+      - scripts/fc_funcity_break_veto_test.py
       - scripts/fc_funcity_compiled_engine_gate.py
       - scripts/fc_funcity_compiled_engine_gate_test.py
       - scripts/fc_funcity_private_trial.py
@@ -48,6 +50,7 @@ jobs:
           python3 scripts/fc_gradle_failure_classifier_test.py
           python3 scripts/fc_funcity_setup_retry_test.py
           python3 scripts/fc_funcity_bridge_patch_test.py
+          python3 scripts/fc_funcity_break_veto_test.py
           python3 scripts/fc_funcity_compiled_engine_gate_test.py
           python3 scripts/fc_funcity_java11_smoke_test.py
   source-candidate:

@@ -9,12 +9,16 @@ on:
       - scripts/fc_funcity_bridge_java_contract.py
       - scripts/fc_funcity_bridge_java_contract_test.py
       - functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch
+      - functity/catserver/patches/0003-preserve-forge-block-break-cancellation.patch
+      - scripts/fc_funcity_break_veto_test.py
   pull_request:
     paths:
       - .github/workflows/funcity-bridge-java-contract.yml
       - scripts/fc_funcity_bridge_java_contract.py
       - scripts/fc_funcity_bridge_java_contract_test.py
       - functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch
+      - functity/catserver/patches/0003-preserve-forge-block-break-cancellation.patch
+      - scripts/fc_funcity_break_veto_test.py
 permissions:
   contents: read
 jobs:
@@ -27,8 +31,10 @@ jobs:
         with:
           distribution: temurin
           java-version: '11'
-      - name: Verify harness refuses an unpatched method
-        run: python3 scripts/fc_funcity_bridge_java_contract_test.py
+      - name: Verify place and break harnesses reject unpatched methods
+        run: |
+          python3 scripts/fc_funcity_bridge_java_contract_test.py
+          python3 scripts/fc_funcity_break_veto_test.py
       - name: Compile and run source-patched Forge/Bukkit veto in Java 11
         run: |
           set -Eeuo pipefail
@@ -38,7 +44,10 @@ jobs:
           test "$(git -C "$root" rev-parse HEAD)" = '1d8d63138be77a606df2a5e940b960065948f983'
           git -C "$root" apply --check "$GITHUB_WORKSPACE/functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch"
           git -C "$root" apply "$GITHUB_WORKSPACE/functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch"
+          git -C "$root" apply --check "$GITHUB_WORKSPACE/functity/catserver/patches/0003-preserve-forge-block-break-cancellation.patch"
+          git -C "$root" apply "$GITHUB_WORKSPACE/functity/catserver/patches/0003-preserve-forge-block-break-cancellation.patch"
+          python3 scripts/fc_funcity_break_veto_test.py --source "$root/src/main/java/catserver/server/CatServerEventHandler.java"
           python3 scripts/fc_funcity_bridge_java_contract.py \
             "$root/src/main/java/catserver/server/CatServerEventHandler.java" \
             "$JAVA_HOME/bin/javac" "$JAVA_HOME/bin/java"
-          echo '::notice title=FunCity bridge::Java11 synthetic place/multiplace contract PASS; full CatServer build and real RP join remain separate gates.'
+          echo '::notice title=FunCity bridge::Java11 synthetic place/multiplace/break contract PASS; full CatServer build and real RP join remain separate gates.'

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Structural tests; the hosted job compiles/runs the actual Java method."""
 import unittest
-from fc_funcity_bridge_java_contract import extract_method
+from fc_funcity_bridge_java_contract import extract_method, extract_break_method
 
 
 class JavaHarnessTest(unittest.TestCase):
@@ -27,6 +27,19 @@ class JavaHarnessTest(unittest.TestCase):
     def test_reject_missing_multiplace(self):
         with self.assertRaises(ValueError):
             extract_method(self.text.replace('CraftEventFactory.callBlockMultiPlaceEvent', 'other'))
+
+    def test_break_requires_original_forge_veto(self):
+        text = '''@SubscribeEvent(receiveCanceled = true)
+public void onBreakBlockEvent(BlockEvent.BreakEvent event) {
+    boolean forgeCanceled = event.isCanceled();
+    Bukkit.getPluginManager().callEvent(bukkitEvent);
+    event.setCanceled(forgeCanceled || bukkitEvent.isCancelled());
+}
+    @SubscribeEvent
+'''
+        self.assertIn('forgeCanceled', extract_break_method(text))
+        with self.assertRaises(ValueError):
+            extract_break_method(text.replace('forgeCanceled || ', ''))
 
 
 if __name__ == '__main__':

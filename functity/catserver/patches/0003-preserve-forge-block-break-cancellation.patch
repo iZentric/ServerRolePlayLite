@@ -1,0 +1,19 @@
+diff --git a/src/main/java/catserver/server/CatServerEventHandler.java b/src/main/java/catserver/server/CatServerEventHandler.java
+--- a/src/main/java/catserver/server/CatServerEventHandler.java
++++ b/src/main/java/catserver/server/CatServerEventHandler.java
+@@ -61,12 +61,14 @@
+     @SubscribeEvent(receiveCanceled = true)
+     public void onBreakBlockEvent(BlockEvent.BreakEvent event) {
+         if (!event.getWorld().isClientSide()) {
++            // A Bukkit plugin may un-cancel its event, but not the earlier Forge veto.
++            boolean forgeCanceled = event.isCanceled();
+             CraftBlock craftBlock = CraftBlock.at(event.getWorld(), event.getPos());
+             BlockBreakEvent bukkitEvent = new BlockBreakEvent(craftBlock, ((ServerPlayerEntity) event.getPlayer()).getBukkitEntity());
+             bukkitEvent.setCancelled(event.isCanceled());
+             bukkitEvent.setExpToDrop(event.getExpToDrop());
+             Bukkit.getPluginManager().callEvent(bukkitEvent);
+-            event.setCanceled(bukkitEvent.isCancelled());
++            event.setCanceled(forgeCanceled || bukkitEvent.isCancelled());
+             event.setExpToDrop(bukkitEvent.getExpToDrop());
+             isDropItems = bukkitEvent.isDropItems();
+         }

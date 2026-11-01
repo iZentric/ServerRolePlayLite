@@ -37,11 +37,13 @@ git clone -q --depth 1 --filter=blob:none --branch 23.05.26-1 \
 test "$(git -C "$source_dir" rev-parse HEAD)" = '1d8d63138be77a606df2a5e940b960065948f983'
 test -s "$source_dir/LICENSE" && grep -q 'LESSER GENERAL PUBLIC LICENSE' "$source_dir/LICENSE"
 stage=patch
-for patch in 0001-funcity-operator-identity.patch 0002-preserve-forge-block-place-cancellation.patch; do
+for patch in 0001-funcity-operator-identity.patch 0002-preserve-forge-block-place-cancellation.patch 0003-preserve-forge-block-break-cancellation.patch; do
   git -C "$source_dir" apply --check "$repo/functity/catserver/patches/$patch"
   git -C "$source_dir" apply "$repo/functity/catserver/patches/$patch"
 done
 python3 "$repo/scripts/fc_funcity_bridge_patch_test.py" --source \
+  "$source_dir/src/main/java/catserver/server/CatServerEventHandler.java"
+python3 "$repo/scripts/fc_funcity_break_veto_test.py" --source \
   "$source_dir/src/main/java/catserver/server/CatServerEventHandler.java"
 grep -Fq 'serverName = "FunCity"' "$source_dir/src/main/java/org/bukkit/craftbukkit/v1_16_R3/CraftServer.java"
 grep -Fq 'getLogger("FunCity")' "$source_dir/src/main/java/catserver/server/CatServer.java"
