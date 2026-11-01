@@ -56,6 +56,8 @@ python3 scripts/fc_funcity_private_trial.py \
   --sha256 SHA256_HEX_AL_BINARULUI_LOCAL
 ```
 
+Pentru **ținta 2 vCPU / 12 GB** de laborator poți adăuga `--heap-gib 8` numai la această probă pe copie; scriptul refuză înainte de copiere dacă nu găsește cel puțin 10 GiB disponibili (inclusiv limita cgroup). Implicit rămâne `-Xmx2G`; această opțiune nu măsoară clienți și nu schimbă motorul sau hostul live. [Criteriul de capacitate pentru 12 GB](../capacity/README.md) este separat.
+
 **Limită:** acest laborator încă nu există cu lumea completă în mediul disponibil aici; cele două booturi pe pachet complet nu au fost executate. Proba nu oferă acces client din rețea (intenționat), deci autentificarea efectivă, voice UDP, vehiculele, restarturile cu jucători și capacitatea rămân etape separate. Unele pluginuri pot necesita servicii externe; eșecul sub izolare se investighează fără a conecta copia direct la producție. Nu instala candidatul pe host înainte de H2–H6, backup complet și controlul real Start/Restart/rollback.
 
 ## Ce lipsește înainte de a spune «motorul meu e gata»

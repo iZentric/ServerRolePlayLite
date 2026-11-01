@@ -41,6 +41,19 @@ def fixture():
     return data
 
 
+def fixture_2cpu_12gb():
+    """Synthetic declarations, never measurements from a real player."""
+    data = fixture()
+    data["schema"] = 2
+    env = data["environment"]
+    env.update(cpu_logical=2, ram_limit_mib=12288, jvm_xmx_mib=8192)
+    for level in data["levels"]:
+        for item in level["trials"]:
+            item.update(rss_peak_mib=9000, hardware_sha256=env["hardware_sha256"],
+                        jvm_xmx_mib=env["jvm_xmx_mib"])
+    return data
+
+
 class VerdictTest(unittest.TestCase):
     def test_artificial_positive(self):
         self.assertEqual(verify(fixture()), (5, 10))
@@ -84,6 +97,58 @@ class VerdictTest(unittest.TestCase):
 
     def test_hardware_mismatch(self):
         self.reject(lambda d: d["environment"].update(ram_limit_mib=12288))
+
+    def test_new_2cpu_12gb_target_accepts_complete_synthetic_fixture(self):
+        self.assertEqual(verify(fixture_2cpu_12gb()), (5, 10))
+
+    def test_new_target_accepts_decimal_12gb_as_actual_mib(self):
+        data = fixture_2cpu_12gb()
+        data["environment"]["ram_limit_mib"] = 11444
+        self.assertEqual(verify(data), (5, 10))
+
+    def test_new_target_requires_5_10_15_20_rungs_in_order(self):
+        data = fixture_2cpu_12gb()
+        for level, players in zip(data["levels"], (10, 20)):
+            level["players"] = players
+            for item in level["trials"]:
+                item["logged_in_players"] = players
+        with self.assertRaises(InvalidEvidence):
+            verify(data)
+
+    def test_new_target_rejects_wrong_cpu_or_memory(self):
+        for change in ({"cpu_logical": 1}, {"ram_limit_mib": 3072},
+                       {"ram_limit_mib": 13000}):
+            with self.subTest(change=change):
+                data = fixture_2cpu_12gb()
+                data["environment"].update(change)
+                with self.assertRaises(InvalidEvidence):
+                    verify(data)
+
+    def test_new_target_requires_two_gib_os_headroom(self):
+        data = fixture_2cpu_12gb()
+        data["levels"][1]["trials"][1]["rss_peak_mib"] = 10241
+        with self.assertRaises(InvalidEvidence):
+            verify(data)
+
+    def test_new_target_rejects_oversized_or_mixed_heap(self):
+        for value in (12288, 0):
+            with self.subTest(value=value):
+                data = fixture_2cpu_12gb()
+                data["environment"]["jvm_xmx_mib"] = value
+                with self.assertRaises(InvalidEvidence):
+                    verify(data)
+        data = fixture_2cpu_12gb()
+        data["levels"][1]["trials"][1]["jvm_xmx_mib"] = 4096
+        with self.assertRaises(InvalidEvidence):
+            verify(data)
+
+    def test_new_target_rejects_mixed_or_missing_hardware_identity(self):
+        for value in (None, "a" * 64):
+            with self.subTest(value=value):
+                data = fixture_2cpu_12gb()
+                data["levels"][1]["trials"][1]["hardware_sha256"] = value
+                with self.assertRaises(InvalidEvidence):
+                    verify(data)
 
     def test_nonfinite_fails_closed(self):
         self.reject(lambda d: d["levels"][0]["trials"][0].update(mspt_p95=float("nan")))

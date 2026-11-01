@@ -40,12 +40,24 @@ def sha(value, name):
 
 
 def verify(data):
-    require(isinstance(data, dict) and data.get("schema") == 1, "unsupported schema")
+    require(isinstance(data, dict) and type(data.get("schema")) is int
+            and data["schema"] in (1, 2), "unsupported schema")
     env = data.get("environment")
     require(isinstance(env, dict), "missing environment")
-    require(env.get("java_major") == 11 and env.get("ram_limit_mib") == 3072
+    require(env.get("java_major") == 11
             and env.get("mod_jars") == 34 and env.get("plugin_jars") == 13,
-            "not the pinned FunCity Java 11 / 3 GiB / 34+13 pack")
+            "not the pinned FunCity Java 11 / 34+13 pack")
+    if data["schema"] == 1:
+        require(env.get("ram_limit_mib") == 3072, "not the legacy 3 GiB target")
+        memory_reserve_mib = 128
+    else:
+        require(type(env.get("cpu_logical")) is int and env["cpu_logical"] == 2
+                and type(env.get("ram_limit_mib")) is int
+                and 11400 <= env["ram_limit_mib"] <= 12288
+                and type(env.get("jvm_xmx_mib")) is int
+                and 1 <= env["jvm_xmx_mib"] <= 8192,
+                "not the 2 vCPU / measured 12 GB target or safe Xmx envelope")
+        memory_reserve_mib = 2048
     require(env.get("world_kind") == "private-rp-copy"
             and env.get("clients") == "real-forge-1.16.5"
             and env.get("hardware_kind") == "isolated-host-equivalent",
@@ -64,11 +76,14 @@ def verify(data):
     baseline_high = candidate_high = 0
     baseline_stopped = candidate_stopped = False
     baseline_failure_at_candidate = False
-    for level in levels:
+    for rung_index, level in enumerate(levels):
         require(isinstance(level, dict), "invalid player rung")
         players = level.get("players")
         require(type(players) is int and 1 <= players <= 64 and players not in seen
                 and (not seen or players > max(seen)), "rungs must be distinct and ascending")
+        if data["schema"] == 2:
+            require(rung_index < 4 and players == (5, 10, 15, 20)[rung_index],
+                    "12 GB ramp must start at 5 and advance through 10/15 before 20")
         seen.add(players)
         trials = level.get("trials")
         require(isinstance(trials, list) and len(trials) == 4
@@ -78,6 +93,12 @@ def verify(data):
         for trial in trials:
             arm = trial["arm"]
             require(trial.get("engine_sha256") == engines[arm], "trial engine hash mismatch")
+            if data["schema"] == 2:
+                require(trial.get("hardware_sha256") == env["hardware_sha256"],
+                        "trial hardware hash mismatch")
+                require(type(trial.get("jvm_xmx_mib")) is int
+                        and trial["jvm_xmx_mib"] == env["jvm_xmx_mib"],
+                        "trial JVM heap mismatch")
             require(trial.get("logged_in_players") == players, "incomplete real-client joins")
             measured = number(trial, "measured_seconds", 1200, 86400)
             warmup = number(trial, "warmup_seconds", 300, 3600)
@@ -96,7 +117,7 @@ def verify(data):
             uplink = number(trial, "uplink_percent", 0, 100)
             # A measured failure is evidence of a failed rung, not malformed input.
             outcomes[arm].append(tps >= 19.5 and p95 <= 35 and p99 <= 45
-                                 and rss <= env["ram_limit_mib"] - 128
+                                 and rss <= env["ram_limit_mib"] - memory_reserve_mib
                                  and cpu <= 75 and uplink <= 70
                                  and trial["critical_errors"] == 0
                                  and all(trial[key] for key in ("auth_ok", "voice_ok", "vehicles_ok",

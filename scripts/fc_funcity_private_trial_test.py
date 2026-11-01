@@ -9,8 +9,9 @@ from unittest.mock import patch
 from subprocess import CompletedProcess
 
 from fc_funcity_compiled_engine_gate_test import fixture
-from fc_funcity_private_trial import (MARKER, TrialRejected, isolated_java_command,
-                                       namespace_supported, prepare, preflight, properties, trial)
+from fc_funcity_private_trial import (MARKER, TrialRejected, available_memory_mib,
+                                       isolated_java_command, namespace_supported,
+                                       prepare, preflight, properties, trial)
 from fc_funcity_runtime_seed import export_runtime, validate_runtime, InvalidSeed
 
 
@@ -154,6 +155,53 @@ class PrivateTrialTest(unittest.TestCase):
         self.assertEqual(cmd[:6], ['unshare', '--user', '--map-root-user', '--net', '--', 'sh'])
         self.assertIn('ip link set lo up && exec "$@"', cmd)
         self.assertIn('server.jar', cmd)
+
+    def test_12gb_lab_uses_eight_gib_heap_without_changing_isolation(self):
+        cmd = isolated_java_command('/opt/java11/bin/java', heap_gib=8)
+        self.assertEqual(cmd[:6], ['unshare', '--user', '--map-root-user', '--net', '--', 'sh'])
+        self.assertIn('-Xmx8G', cmd)
+        self.assertNotIn('-Xmx2G', cmd)
+
+    def test_large_heap_uses_cgroup_free_memory_not_host_free_memory(self):
+        data = {'/proc/meminfo': 'MemAvailable: 12582912 kB\n',
+                '/sys/fs/cgroup/memory.max': str(12 * 1024**3),
+                '/sys/fs/cgroup/memory.current': str(8 * 1024**3)}
+        with patch('fc_funcity_private_trial.Path.read_text',
+                   autospec=True, side_effect=lambda path: data[str(path)]), \
+             patch('fc_funcity_private_trial.Path.exists',
+                   autospec=True, side_effect=lambda path: str(path) in data):
+            self.assertEqual(available_memory_mib(), 4096)
+        with patch('fc_funcity_private_trial.Path.read_text', return_value='invalid'):
+            self.assertEqual(available_memory_mib(), 0)
+
+    def test_heap_above_eight_gib_rejected_before_copy(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with self.assertRaises(TrialRejected):
+                trial(Path(temp)/'fake-java', source, output, jar, digest, seed,
+                      unused_port(), heap_gib=12)
+            self.assertFalse(output.exists())
+
+    def test_eight_gib_trial_rejects_insufficient_memory_before_copy(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with patch('fc_funcity_private_trial.namespace_supported'), \
+                 patch('fc_funcity_private_trial.available_memory_mib', return_value=9000):
+                with self.assertRaises(TrialRejected):
+                    trial(fake_java(temp), source, output, jar, digest, seed,
+                          unused_port(), heap_gib=8)
+            self.assertFalse(output.exists())
+
+    def test_eight_gib_trial_passes_heap_to_both_isolated_boots(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with patch('fc_funcity_private_trial.namespace_supported'), \
+                 patch('fc_funcity_private_trial.available_memory_mib', return_value=11264), \
+                 patch('fc_funcity_private_trial.boot_once', return_value=True) as boots:
+                self.assertTrue(trial(fake_java(temp), source, output, jar, digest, seed,
+                                      unused_port(), timeout=5, heap_gib=8))
+            self.assertEqual(boots.call_count, 2)
+            self.assertTrue(all(call.kwargs['heap_gib'] == 8 for call in boots.call_args_list))
 
     def test_isolation_failure_aborts_before_copy(self):
         with tempfile.TemporaryDirectory() as temp:

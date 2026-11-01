@@ -16,7 +16,7 @@ Scope: registru de acceptare verificabil pentru H1–H6 din [GOALS.md](GOALS.md)
 - [ ] H4: după H2/H3, server view-distance 5 vs 4 și câte un toggle pe rând, apoi configurațiile mod/plugin efectiv încărcate din world/serverconfig; auth/voice și RP păstrate
   EVIDENCE: pending; profiluri statice există, dar nu există A/B cu doi clienți sau configurare live validată.
 
-- [ ] H5: capacitatea la 5/10/15 clienți Forge reali măsurată pe host echivalent 3 GiB, repetat A/B/B/A; 20 numai după upgrade confirmat
+- [ ] H5: capacitatea la 5/10/15 clienți Forge reali măsurată pe ținta 2 vCPU / 12 GB verificată, repetat A/B/B/A; 20 numai după treapta 15 trecută
   EVIDENCE: pending; A/B sintetice au 0 jucători și nu furnizează un plafon de capacitate.
 
 - [ ] H6: backup SHA-256 al întregii rădăcini host inclusiv extras, restaurare pe copie, rollback JAR și control Start/Restart verificat înainte de orice promovare
@@ -27,9 +27,9 @@ Scope: registru de acceptare verificabil pentru H1–H6 din [GOALS.md](GOALS.md)
   EXPECT: FC_BRIDGE_PATCH_TESTS_PASS
   EVIDENCE: automatic-evidence=v1; definition-sha256=b8a95de23b004a4800e13dd510e476e684a30c3af96174bcbbceba4d38b3f4bd; exit=0; EXPECT=matched; output-sha256=0e86ce652cd51fa686406f0e55e7309860f35b4c8bd8542525d7877bbbb1a7cf; output-bytes=129; shell=/bin/sh; cwd=/home/user/ServerRolePlayLite/functity/catserver; path=b51a5b4db45a/5 entries
 
-- [x] S2: testele sintetice ale validatorului de capacitate resping dovezi invalide; nu demonstrează capacitate reală
+- [ ] S2: testele sintetice ale validatorului de capacitate pentru 3 GiB și 2 vCPU/12 GB resping dovezi invalide; nu demonstrează capacitate reală
   CHECK: python3 ../../scripts/fc_funcity_capacity_verdict_test.py && printf 'FC_CAPACITY_VERDICT_TESTS_PASS\n'
   EXPECT: FC_CAPACITY_VERDICT_TESTS_PASS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=050d58c0bcd16189fb13c21c10d4dd78620719d07d00a398d80573cf5aff5f66; exit=0; EXPECT=matched; output-sha256=be1da2e52d4324b5ea1c96026fbad742462b9925ddb58617f17ff006e6cb4ad5; output-bytes=148; shell=/bin/sh; cwd=/home/user/ServerRolePlayLite/functity/catserver; path=b51a5b4db45a/5 entries
+  EVIDENCE: pending refresh Unlazy după schimbarea testului; 24 teste sintetice au trecut local, dar vechiul hash automat nu mai certifică această versiune.
 
 **Verdict:** H1 este închis numai pentru build/boot pe lume goală cu 0003; H2–H6 rămân deschise. Testele statice S1/S2 nu înlocuiesc probele pe pack. `--status` Unlazy citește ledgerul fără să execute comenzi, dar nu verifică veridicitatea dovezilor manuale. Păstrează lumea și motorul live original până la validarea completă și rollback.

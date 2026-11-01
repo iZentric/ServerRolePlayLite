@@ -196,18 +196,45 @@ def namespace_supported():
         raise TrialRejected('network namespace cannot bring up isolated loopback')
 
 
-def isolated_java_command(java):
+def available_memory_mib():
+    """Conservative Linux MemAvailable, bounded by the active cgroup if limited."""
+    try:
+        text = Path('/proc/meminfo').read_text()
+        match = re.search(r'^MemAvailable:\s+(\d+)\s+kB$', text, re.MULTILINE)
+        if not match:
+            return 0
+        available = int(match.group(1)) // 1024
+        for limit_path, usage_path in (
+            ('/sys/fs/cgroup/memory.max', '/sys/fs/cgroup/memory.current'),
+            ('/sys/fs/cgroup/memory/memory.limit_in_bytes',
+             '/sys/fs/cgroup/memory/memory.usage_in_bytes'),
+        ):
+            limit_file, usage_file = Path(limit_path), Path(usage_path)
+            if limit_file.exists() and usage_file.exists():
+                limit = limit_file.read_text().strip()
+                if limit != 'max':
+                    available = min(available, max(0, int(limit) - int(usage_file.read_text()))
+                                    // (1024 * 1024))
+                break
+        return available
+    except (OSError, ValueError):
+        return 0  # Never try a large JVM when available memory cannot be checked.
+
+
+def isolated_java_command(java, heap_gib=2):
+    if type(heap_gib) is not int or heap_gib not in (2, 4, 6, 8):
+        raise TrialRejected('unsupported private trial heap')
     # There is NO host network interface inside this new namespace. Plugins
     # cannot reach external DBs/webhooks/auth APIs from a copied configuration.
     return ['unshare', '--user', '--map-root-user', '--net', '--',
             'sh', '-c', 'ip link set lo up && exec "$@"', 'sh', str(java),
-            '-Xms256m', '-Xmx2G', '-jar', 'server.jar', 'nogui']
+            '-Xms256m', f'-Xmx{heap_gib}G', '-jar', 'server.jar', 'nogui']
 
 
-def boot_once(java, output, attempt, timeout, settle_seconds=30):
+def boot_once(java, output, attempt, timeout, settle_seconds=30, heap_gib=2):
     log = output / ('funcity-private-trial-' + str(attempt) + '.log')
     with log.open('wb') as stream:
-        process = subprocess.Popen(isolated_java_command(java),
+        process = subprocess.Popen(isolated_java_command(java, heap_gib),
                                    cwd=output, stdin=subprocess.PIPE, stdout=stream,
                                    stderr=subprocess.STDOUT, start_new_session=True)
         deadline = time.monotonic() + timeout
@@ -246,14 +273,19 @@ def boot_once(java, output, attempt, timeout, settle_seconds=30):
                 process.stdin.close()
 
 
-def trial(java, source, output, engine, expected_sha, runtime_seed, port=25595, timeout=900):
+def trial(java, source, output, engine, expected_sha, runtime_seed, port=25595, timeout=900,
+          heap_gib=2):
+    if type(heap_gib) is not int or heap_gib not in (2, 4, 6, 8):
+        raise TrialRejected('unsupported private trial heap')
     java_is_11(java)   # Fail before copying data if the runtime is wrong.
     namespace_supported()  # Mandatory isolation, not an operator claim.
     if timeout < 1:
         raise TrialRejected('invalid timeout')
+    if heap_gib > 2 and available_memory_mib() < (heap_gib + 2) * 1024:
+        raise TrialRejected('insufficient free RAM/cgroup headroom for private trial')
     staged = prepare(source, output, engine, expected_sha, port, runtime_seed)
     for attempt in (1, 2):
-        if not boot_once(java, staged, attempt, timeout):
+        if not boot_once(java, staged, attempt, timeout, heap_gib=heap_gib):
             raise TrialRejected('private boot/stop ' + str(attempt) + ' failed; inspect LOCAL log only')
         print('PRIVATE_FULL_PACK_BOOT_' + str(attempt) +
               '=PASS input_mod_jars=34 input_plugin_jars=13 active_mods_plugins=NOT_VERIFIED client=NOT_TESTED')
@@ -270,10 +302,12 @@ if __name__ == '__main__':
     cli.add_argument('--sha256', required=True)
     cli.add_argument('--port', type=int, default=25595)
     cli.add_argument('--timeout', type=int, default=900)
+    cli.add_argument('--heap-gib', type=int, choices=(2, 4, 6, 8), default=2,
+                     help='private full-pack boot only; 8 GiB needs >=10 GiB free')
     args = cli.parse_args()
     try:
         trial(args.java, args.source_copy, args.output, args.engine, args.sha256,
-              args.runtime_seed, args.port, args.timeout)
+              args.runtime_seed, args.port, args.timeout, args.heap_gib)
     except (OSError, TrialRejected, subprocess.TimeoutExpired, InvalidEngine, InvalidSeed) as exc:
         print('PRIVATE_TRIAL_REJECTED: ' + type(exc).__name__ +
               ' (details and logs remain on the local isolated machine)', file=sys.stderr)
