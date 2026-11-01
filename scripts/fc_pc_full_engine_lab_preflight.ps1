@@ -40,7 +40,12 @@ try {
         }
     }
     $os=Get-CimInstance Win32_OperatingSystem -ErrorAction Stop
+    $machine=Get-CimInstance Win32_ComputerSystem -ErrorAction Stop
     $freeRam=[long]$os.FreePhysicalMemory * 1024L
+    $pcCpusOkay=([int]$machine.NumberOfLogicalProcessors -ge 2)
+    $pcRamMiB=[long]([math]::Floor([double]$machine.TotalPhysicalMemory / 1048576))
+    $pcRam12GB=($pcRamMiB -ge 11400 -and $pcRamMiB -le 12288)
+    $pcFreeFor8G=($freeRam -ge (10L*1073741824L))
     $drive=[IO.DriveInfo]::new([IO.Path]::GetPathRoot($env:RUNNER_TEMP))
     $spaceOkay=($drive.IsReady -and $drive.AvailableFreeSpace -ge (2L*[long]$manifest.bytes+4294967296L))
     $memoryOkay=($freeRam -ge 4294967296L)
@@ -50,6 +55,8 @@ try {
         ' PLUGIN_JARS_SHA_VERIFIED=' + $plugins.Count + ' REAL_WORLD_PRESENT=true' +
         ' FREE_DISK_FOR_TWO_THROWAWAY_COPIES=' + $spaceOkay +
         ' FREE_RAM_FOR_ISOLATED_LAB=' + $memoryOkay + ' DOCKER_CLI_PRESENT=' + $dockerPresent +
+        ' PC_LOGICAL_CPU_AT_LEAST_2=' + $pcCpusOkay + ' PC_RAM_12GB_RANGE=' + $pcRam12GB +
+        ' PC_FREE_RAM_FOR_8G_JVM=' + $pcFreeFor8G + ' TARGET_HOST_SPECS_NOT_VERIFIED=true' +
         ' SAFE_NETWORK_ISOLATION_NOT_VERIFIED=true NO_WORLD_BOOT=true PC_AND_HOST_LIVE_UNTOUCHED=true')
 } catch {
     Write-Output '::error title=Full RP engine A/B feasibility::PREFLIGHT_FAILED; no private paths/data printed; no live changes'

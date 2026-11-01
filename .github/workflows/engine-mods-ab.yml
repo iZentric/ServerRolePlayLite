@@ -1,7 +1,9 @@
 name: FunCity vs both CatServers - same 18 RP+optimization mods
+run-name: Three archived engines, 18 mods / 6 plugins / 0 players — NOT 2 vCPU / 12 GB capacity
 # One GitHub-hosted VM, Java 11, same frozen generated world, 6 plugins,
 # FerriteCore+ModernFix+RoadRunner; ONLY engine JAR differs. No owner PC/live.
 on:
+  workflow_dispatch:
   push:
     branches: [arena/9bbcb24f-serverroleplaylite]
     paths:

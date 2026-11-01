@@ -7,10 +7,18 @@ on:
     paths:
       - .github/workflows/pc-full-engine-lab-feasibility.yml
       - scripts/fc_pc_full_engine_lab_preflight.ps1
+      - scripts/fc_pc_full_engine_lab_preflight_test.py
 permissions:
   contents: read
 jobs:
+  offline-fixtures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/fc_pc_full_engine_lab_preflight_test.py
   pc-lab-preflight:
+    needs: offline-fixtures
     runs-on: [self-hosted, Windows]
     timeout-minutes: 8
     steps:
