@@ -8,6 +8,8 @@ on:
       - .github/workflows/funcity-capacity-verdict-gate.yml
       - scripts/fc_funcity_capacity_verdict.py
       - scripts/fc_funcity_capacity_verdict_test.py
+      - scripts/fc_funcity_lab_resources.py
+      - scripts/fc_funcity_lab_resources_test.py
       - scripts/fc_funcity_capacity_profile_test.py
       - scripts/fc_funcity_hybrid_config_test.py
       - functity/capacity/3g-view4/server.properties
@@ -21,6 +23,8 @@ on:
       - .github/workflows/funcity-capacity-verdict-gate.yml
       - scripts/fc_funcity_capacity_verdict.py
       - scripts/fc_funcity_capacity_verdict_test.py
+      - scripts/fc_funcity_lab_resources.py
+      - scripts/fc_funcity_lab_resources_test.py
       - scripts/fc_funcity_capacity_profile_test.py
       - scripts/fc_funcity_hybrid_config_test.py
       - functity/capacity/3g-view4/server.properties
@@ -43,4 +47,5 @@ jobs:
           python3 scripts/fc_funcity_capacity_profile_test.py
           python3 scripts/fc_funcity_hybrid_config_test.py
           python3 scripts/fc_funcity_capacity_verdict_test.py
+          python3 scripts/fc_funcity_lab_resources_test.py
           echo '::notice title=FunCity static gate::No real-client measurements or capacity gain claimed.'

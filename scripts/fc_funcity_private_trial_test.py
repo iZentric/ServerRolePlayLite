@@ -192,14 +192,30 @@ class PrivateTrialTest(unittest.TestCase):
                           unused_port(), heap_gib=8)
             self.assertFalse(output.exists())
 
+    def test_target_resource_gate_refuses_before_copy_or_boot(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with self.assertRaises(TrialRejected):
+                trial(Path(temp)/'fake-java', source, output, jar, digest, seed,
+                      unused_port(), heap_gib=2, require_target=True)
+            self.assertFalse(output.exists())
+            from fc_funcity_lab_resources import LabRejected
+            with patch('fc_funcity_private_trial.require_lab_resources',
+                       side_effect=LabRejected('not 12GB')):
+                with self.assertRaises(TrialRejected):
+                    trial(Path(temp)/'fake-java', source, output, jar, digest, seed,
+                          unused_port(), heap_gib=8, require_target=True)
+            self.assertFalse(output.exists())
+
     def test_eight_gib_trial_passes_heap_to_both_isolated_boots(self):
         with tempfile.TemporaryDirectory() as temp:
             source, output, jar, digest, seed = synthetic_lab(temp)
             with patch('fc_funcity_private_trial.namespace_supported'), \
+                 patch('fc_funcity_private_trial.require_lab_resources', return_value=True), \
                  patch('fc_funcity_private_trial.available_memory_mib', return_value=11264), \
                  patch('fc_funcity_private_trial.boot_once', return_value=True) as boots:
                 self.assertTrue(trial(fake_java(temp), source, output, jar, digest, seed,
-                                      unused_port(), timeout=5, heap_gib=8))
+                                      unused_port(), timeout=5, heap_gib=8, require_target=True))
             self.assertEqual(boots.call_count, 2)
             self.assertTrue(all(call.kwargs['heap_gib'] == 8 for call in boots.call_args_list))
 

@@ -18,6 +18,7 @@ import time
 import zipfile
 
 from fc_funcity_compiled_engine_gate import InvalidEngine, check_packaged
+from fc_funcity_lab_resources import LabRejected, inspect_host as require_lab_resources
 from fc_funcity_java11_smoke import inspect
 from fc_funcity_runtime_seed import InvalidSeed, validate_runtime
 
@@ -274,9 +275,16 @@ def boot_once(java, output, attempt, timeout, settle_seconds=30, heap_gib=2):
 
 
 def trial(java, source, output, engine, expected_sha, runtime_seed, port=25595, timeout=900,
-          heap_gib=2):
+          heap_gib=2, require_target=False):
     if type(heap_gib) is not int or heap_gib not in (2, 4, 6, 8):
         raise TrialRejected('unsupported private trial heap')
+    if require_target:
+        if heap_gib != 8:
+            raise TrialRejected('2-vCPU/12-GB lab requires matching 8-GiB heap')
+        try:
+            require_lab_resources()  # Before ANY private copy or server start.
+        except LabRejected as exc:
+            raise TrialRejected('2-vCPU/12-GB lab resources not proven') from exc
     java_is_11(java)   # Fail before copying data if the runtime is wrong.
     namespace_supported()  # Mandatory isolation, not an operator claim.
     if timeout < 1:
@@ -304,10 +312,13 @@ if __name__ == '__main__':
     cli.add_argument('--timeout', type=int, default=900)
     cli.add_argument('--heap-gib', type=int, choices=(2, 4, 6, 8), default=2,
                      help='private full-pack boot only; 8 GiB needs >=10 GiB free')
+    cli.add_argument('--require-2cpu-12gb', action='store_true',
+                     help='fail before copying unless the isolated Linux lab has verified resources')
     args = cli.parse_args()
     try:
         trial(args.java, args.source_copy, args.output, args.engine, args.sha256,
-              args.runtime_seed, args.port, args.timeout, args.heap_gib)
+              args.runtime_seed, args.port, args.timeout, args.heap_gib,
+              args.require_2cpu_12gb)
     except (OSError, TrialRejected, subprocess.TimeoutExpired, InvalidEngine, InvalidSeed) as exc:
         print('PRIVATE_TRIAL_REJECTED: ' + type(exc).__name__ +
               ' (details and logs remain on the local isolated machine)', file=sys.stderr)
