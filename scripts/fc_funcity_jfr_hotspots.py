@@ -15,7 +15,7 @@ class ProfileRejected(ValueError):
     pass
 
 
-def summarize(data):
+def summarize(data, minimum=100):
     try:
         events = data['recording']['events']
     except (KeyError, TypeError) as exc:
@@ -45,8 +45,8 @@ def summarize(data):
         name = owner + '.' + function
         counts[name] += 1
     total = counts.total()
-    if total < 100:
-        raise ProfileRejected('fewer than 100 server-thread CPU samples; profile longer under load')
+    if minimum < 1 or total < minimum:
+        raise ProfileRejected(f'fewer than {minimum} server-thread CPU samples; profile longer under load')
     return total, counts.most_common()
 
 

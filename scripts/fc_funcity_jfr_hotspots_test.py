@@ -44,6 +44,14 @@ class HotspotTest(unittest.TestCase):
             with self.assertRaises(ProfileRejected):
                 main(Path(__file__))
 
+    def test_short_java_fixture_does_not_lower_private_cli_gate(self):
+        recording = {'recording': {'events': [sample('Server thread', 'JfrFixture')]}}
+        self.assertEqual(summarize(recording, minimum=1), (1, [('JfrFixture.tick', 1)]))
+        with self.assertRaises(ProfileRejected):
+            summarize(recording)
+        with self.assertRaises(ProfileRejected):
+            summarize(recording, minimum=0)
+
     def test_rejects_missing_or_insufficient_evidence(self):
         for data in ({}, {'recording': {'events': []}},
                      {'recording': {'events': [sample('Server thread', 'rp.Vehicle')] * 99}},
