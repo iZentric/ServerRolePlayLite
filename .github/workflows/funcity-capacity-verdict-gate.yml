@@ -11,6 +11,8 @@ on:
       - scripts/fc_funcity_lab_resources.py
       - scripts/fc_funcity_lab_resources_test.py
       - scripts/fc_funcity_capacity_profile_test.py
+      - scripts/fc_funcity_jfr_hotspots.py
+      - scripts/fc_funcity_jfr_hotspots_test.py
       - scripts/fc_funcity_hybrid_config_test.py
       - functity/capacity/3g-view4/server.properties
       - functity/capacity/3g-view4-only/server.properties
@@ -26,6 +28,8 @@ on:
       - scripts/fc_funcity_lab_resources.py
       - scripts/fc_funcity_lab_resources_test.py
       - scripts/fc_funcity_capacity_profile_test.py
+      - scripts/fc_funcity_jfr_hotspots.py
+      - scripts/fc_funcity_jfr_hotspots_test.py
       - scripts/fc_funcity_hybrid_config_test.py
       - functity/capacity/3g-view4/server.properties
       - functity/capacity/3g-view4-only/server.properties
@@ -41,11 +45,34 @@ jobs:
     timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
       - name: Check isolated config and synthetic verdict reject cases
         run: |
           set -euo pipefail
           python3 scripts/fc_funcity_capacity_profile_test.py
+          python3 scripts/fc_funcity_jfr_hotspots_test.py
           python3 scripts/fc_funcity_hybrid_config_test.py
           python3 scripts/fc_funcity_capacity_verdict_test.py
           python3 scripts/fc_funcity_lab_resources_test.py
           echo '::notice title=FunCity static gate::No real-client measurements or capacity gain claimed.'
+      - name: Check parser against a real synthetic Java 11 JFR export
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/JfrFixture.java" <<'JAVA'
+          public class JfrFixture {
+              public static void main(String[] args) {
+                  Thread.currentThread().setName("Server thread");
+                  long until = System.nanoTime() + 14_000_000_000L;
+                  while (System.nanoTime() < until) Math.sqrt(System.nanoTime());
+              }
+          }
+          JAVA
+          javac "$RUNNER_TEMP/JfrFixture.java"
+          java -XX:StartFlightRecording=settings=profile,filename="$RUNNER_TEMP/fixture.jfr" \
+            -cp "$RUNNER_TEMP" JfrFixture
+          jfr print --json --events jdk.ExecutionSample "$RUNNER_TEMP/fixture.jfr" \
+            > "$RUNNER_TEMP/fixture.json"
+          python3 scripts/fc_funcity_jfr_hotspots.py "$RUNNER_TEMP/fixture.json"

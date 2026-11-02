@@ -47,4 +47,17 @@ Am verificat rezultatele din experimentele arhivate, nu doar codul: [patchul pen
 2. Boot și oprire curată la Java 11 cu 28/6 în GitHub; apoi copie izolată a **34 moduri + 13 pluginuri și a lumii reale** la limita măsurată a țintei 2 vCPU / 12 GB (profilul 3 GiB rămâne numai reper istoric), client Lite, login/anti-impersonare, voice, condus, NPC, persistență și restaurare. PC-ul activ și hostul live nu sunt laborator fără izolare și control.
 3. A/B/B/A repetat pe aceeași lume și aceleași sarcini, inclusiv vedere/condus 4 vs 5. Pentru o afirmație de **capacitate a motorului**, [verificatorul fail-closed](../../scripts/fc_funcity_capacity_verdict.py) cere la fiecare treaptă două sesiuni pe braț de minimum 20 minute măsurate după ≥5 minute de warm-up, ordine A/B/B/A, clienți Forge reali, 34/13, Java 11, aceeași copie de lume/scenariu/hardware și RSS ≤ limita efectivă −2048 MiB pentru schema 2 (schema 1 păstrează ≤2944 MiB la 3 GiB). Praguri propuse: TPS ≥19,5, MSPT p95 ≤35 ms, p99 ≤45 ms, CPU total ≤75%, uplink ≤70%, GC/memorie stabile, auth/voice/vehicule/RP/restart/restore OK, fără erori critice. Treapta superioară a candidatului trebuie să treacă ambele probe, iar baseline să pice **ambele** probe la aceeași treaptă; orice regresie de compatibilitate respinge treapta. JSON-ul este doar o **declarație de măsurători**, nu dovada independentă a execuției: observațiile reale și identitatea clienților se validează privat; nu publicăm lumea, playeri, loguri ori credențiale. Testele unitare ale verificatorului sunt artificiale, nu rezultate de performanță. Dacă 4 chunkuri produc pop-in sau incompatibilități, rămâne 5. Pe 2 vCPU, firul principal poate limita înaintea RAM; nu putem deduce +N jucători dintr-un nume de motor.
 
+## Profil CPU privat înainte de un patch de performanță
+
+Pe Linux TEST izolat, cu Java 11 și pachetul complet, după încălzire și **în timpul clienților Forge reali**, înregistrează câte un profil de ~120 s pentru CatServer oficial și candidatul FunCity, pe aceeași copie/scenariu. Comenzile următoare se rulează **numai pe instanța TEST**, cu PID-ul JVM-ului de test, nu pe live/PC:
+
+```sh
+jcmd "$TEST_JVM_PID" JFR.start name=funcitycap settings=profile duration=120s filename=/private/lab/cpu.jfr
+# După încheierea capturii; păstrează ambele fișiere doar în laborator.
+jfr print --json --events jdk.ExecutionSample /private/lab/cpu.jfr > /private/lab/cpu.json
+python3 scripts/fc_funcity_jfr_hotspots.py /private/lab/cpu.json
+```
+
+Analizorul raportează doar topul metodelor din eșantioanele CPU ale `Server thread`; refuză exportul aflat în repo, lipsa a 100 de eșantioane sau un format neașteptat. Profilul JFR/JSON poate conține date private: **nu îl comite, nu îl încărca în Actions și nu îl distribui**. Frecvența eșantioanelor nu este timp total per tick și nu este un plafon de jucători; o optimizare aleasă astfel cere test de regresie, A/B/B/A și poarta H5. Hopper/ticket au regresat anterior; Starlight este promițător doar în scena de lumină, iar view 4 există deja ca experiment reversibil, nu ca avantaj demonstrat al motorului.
+
 **Stare live:** `server.jar` de pe HidenCloud rămâne motorul original Mohist/Tenet; candidatul oficial CatServer este doar staged inactiv. Backupul hostului oprit este verificat, intrările extra nu sunt acoperite. SFTP nu permite restart și agentul nu are accesul oficial de power din panou. Nu declara FunCity instalat sau hostul Online.
