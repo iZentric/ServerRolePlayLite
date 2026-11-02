@@ -1,0 +1,80 @@
+name: FunCity - dedicated private lab resource probe only
+# No world, player, JAR, config, host or network operations on the private runner.
+# Never use a generic self-hosted Linux label: this job needs its own TEST label.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/funcity-private-lab-resources.yml
+      - scripts/fc_funcity_runner_probe_test.py
+permissions: {}
+jobs:
+  hosted-fixtures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 scripts/fc_funcity_lab_resources_test.py
+          python3 scripts/fc_funcity_runner_probe_test.py
+  private-resource-probe:
+    needs: hosted-fixtures
+    runs-on: [self-hosted, Linux, funcity-capacity-lab]
+    timeout-minutes: 3
+    steps:
+      - name: Check effective 2 vCPU / 12 GB and free memory without reading private content
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          import re
+          import sys
+
+          def optional(path):
+              try:
+                  return Path(path).read_text(encoding='ascii').strip()
+              except FileNotFoundError:
+                  return None
+
+          def check():
+              text = Path('/proc/meminfo').read_text(encoding='ascii')
+              def mib(name):
+                  match = re.search(r'^' + name + r':\s+(\d+) kB$', text, re.M)
+                  if not match:
+                      raise ValueError('memory unavailable')
+                  return int(match.group(1)) // 1024
+              total, free = mib('MemTotal'), mib('MemAvailable')
+              cpu_max = optional('/sys/fs/cgroup/cpu.max')
+              if cpu_max is None:
+                  quota = optional('/sys/fs/cgroup/cpu/cpu.cfs_quota_us')
+                  period = optional('/sys/fs/cgroup/cpu/cpu.cfs_period_us')
+                  cpu_max = ((quota if quota and quota != '-1' else 'max') + ' ' + period
+                             if period else 'max 100000')
+              quota, period = cpu_max.split()
+              cpus = min(len(os.sched_getaffinity(0)),
+                         float('inf') if quota == 'max' else int(quota) / int(period))
+              limit = optional('/sys/fs/cgroup/memory.max')
+              used = optional('/sys/fs/cgroup/memory.current')
+              if limit is None:
+                  limit = optional('/sys/fs/cgroup/memory/memory.limit_in_bytes')
+                  used = optional('/sys/fs/cgroup/memory/memory.usage_in_bytes')
+              if limit and limit != 'max':
+                  if used is None:
+                      raise ValueError('cgroup usage unavailable')
+                  total = min(total, int(limit) // 1048576)
+                  free = min(free, max(0, int(limit) - int(used)) // 1048576)
+              return cpus == 2 and 11400 <= total <= 12288 and free >= 10240
+
+          try:
+              valid = check()
+          except (OSError, ValueError, TypeError, AttributeError, ZeroDivisionError):
+              valid = False
+          if not valid:
+              print('LAB_RESOURCES_VERIFIED=false NO_PRIVATE_FILES_READ=true NO_SERVER_START=true')
+              sys.exit(2)
+          print('LAB_RESOURCES_VERIFIED=true NO_PRIVATE_FILES_READ=true NO_SERVER_START=true')
+          PY
