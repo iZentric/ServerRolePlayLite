@@ -75,4 +75,9 @@ jobs:
             -cp "$RUNNER_TEMP" JfrFixture
           jfr print --json --events jdk.ExecutionSample "$RUNNER_TEMP/fixture.jfr" \
             > "$RUNNER_TEMP/fixture.json"
-          python3 scripts/fc_funcity_jfr_hotspots.py "$RUNNER_TEMP/fixture.json"
+          if ! python3 scripts/fc_funcity_jfr_hotspots.py "$RUNNER_TEMP/fixture.json" \
+            > "$RUNNER_TEMP/profile-summary.txt" 2> "$RUNNER_TEMP/profile-error.txt"; then
+            echo "::error title=Synthetic Java 11 JFR parser::$(cat "$RUNNER_TEMP/profile-error.txt")"
+            exit 1
+          fi
+          cat "$RUNNER_TEMP/profile-summary.txt"
