@@ -70,8 +70,17 @@ jobs:
               }
           }
           JAVA
+          # Short fixture: request enough JFR samples without a 120-second CI spin.
+          python3 - <<'PY'
+          import os, pathlib, xml.etree.ElementTree as ET
+          config = ET.parse(pathlib.Path(os.environ['JAVA_HOME']) / 'lib/jfr/profile.jfc')
+          period = config.find(".//event[@name='jdk.ExecutionSample']/setting[@name='period']")
+          assert period is not None
+          period.text = '10 ms'
+          config.write(pathlib.Path(os.environ['RUNNER_TEMP']) / 'fixture.jfc', encoding='utf-8')
+          PY
           javac "$RUNNER_TEMP/JfrFixture.java"
-          java -XX:StartFlightRecording=settings=profile,filename="$RUNNER_TEMP/fixture.jfr" \
+          java -XX:StartFlightRecording=settings="$RUNNER_TEMP/fixture.jfc",filename="$RUNNER_TEMP/fixture.jfr" \
             -cp "$RUNNER_TEMP" JfrFixture
           jfr print --json --events jdk.ExecutionSample "$RUNNER_TEMP/fixture.jfr" \
             > "$RUNNER_TEMP/fixture.json"
