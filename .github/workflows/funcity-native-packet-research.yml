@@ -80,6 +80,6 @@ jobs:
                   times[arm].append(float(match.group(1)))
               results[name] = {'java_ms': round(statistics.median(times['J']), 2),
                                'rust_libdeflate_ms': round(statistics.median(times['R']), 2)}
-          print('PUBLIC_ZLIB_MICROBENCH=' + json.dumps(results, separators=(',', ':')))
-          print('LIMITS: native Rust calls MIT libdeflate outside JNI; no real players, JVM/network overhead, 34/13 pack or capacity claim')
+          print('::notice title=Public packet microbench::' + json.dumps(results, separators=(',', ':')))
+          print('::notice title=Strict interpretation::Rust calls MIT libdeflate outside JNI; no clients, network/JVM overhead, 34/13 pack or capacity claim')
           PY
