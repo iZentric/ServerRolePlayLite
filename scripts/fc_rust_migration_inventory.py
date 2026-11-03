@@ -8,7 +8,10 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import sys
+import tomllib
+import zipfile
 
 MARKER = 'FUNCITY_INACTIVE_ISOLATED_COPY_V1'
 REPO = Path(__file__).resolve().parents[1]
@@ -21,6 +24,48 @@ class InventoryError(ValueError):
 
 def outside_repo(path):
     return path != REPO and REPO not in path.parents
+
+
+def declared_metadata(path, folder):
+    """Only bounded JAR declarations, never proof of runtime behavior or licenses."""
+    try:
+        with zipfile.ZipFile(path) as jar:
+            if len(jar.infolist()) > 100_000:
+                raise InventoryError('too many JAR entries')
+            descriptor = 'META-INF/mods.toml' if folder == 'mods' else 'plugin.yml'
+            names = jar.namelist()
+            if names.count(descriptor) > 1:
+                raise InventoryError('ambiguous duplicate JAR descriptor')
+            if descriptor not in names:
+                return {'status': 'MISSING', 'mod_ids': [], 'required_mod_ids': []} if folder == 'mods' else {'status': 'MISSING', 'plugin_name': 'UNVERIFIED'}
+            info = jar.getinfo(descriptor)
+            if info.file_size > 200_000:
+                raise InventoryError('oversized JAR descriptor')
+            text = jar.read(descriptor).decode('utf-8-sig')
+    except (zipfile.BadZipFile, UnicodeError, RuntimeError) as exc:
+        raise InventoryError('unreadable JAR descriptor') from exc
+    if folder == 'plugins':
+        # YAML has many valid forms; parse only a simple scalar name, never dependencies.
+        match = re.search(r'(?m)^name:\s*([A-Za-z][A-Za-z0-9_.-]{0,127})\s*$', text)
+        return {'status': 'DECLARED_ONLY' if match else 'UNPARSED',
+                'plugin_name': match.group(1) if match else 'UNVERIFIED'}
+    try:
+        data = tomllib.loads(text)
+        mods = data['mods']
+        if not isinstance(mods, list) or not mods:
+            raise ValueError('missing mod list')
+        ids = [m['modId'] for m in mods]
+        deps = data.get('dependencies', {})
+        required = [dep['modId'] for declared in deps.values() for dep in declared
+                    if dep.get('mandatory') is True]
+        if (not isinstance(deps, dict) or
+                any(not isinstance(value, str) or not re.fullmatch(r'[a-z0-9_.-]{1,128}', value)
+                    for value in ids + required)):
+            raise ValueError('invalid declared identifiers')
+        return {'status': 'DECLARED_ONLY', 'mod_ids': sorted(set(ids)),
+                'required_mod_ids': sorted(set(required))}
+    except (tomllib.TOMLDecodeError, ValueError, KeyError, TypeError, AttributeError):
+        return {'status': 'UNPARSED', 'mod_ids': [], 'required_mod_ids': []}
 
 
 def read_copy(root):
@@ -46,6 +91,7 @@ def read_copy(root):
                     digest.update(chunk)
             items.append({
                 'file': f'{folder}/{path.name}', 'sha256': digest.hexdigest(),
+                'declared_metadata': declared_metadata(path, folder),
                 'behavior': 'UNVERIFIED', 'source_and_license': 'UNVERIFIED',
                 'client_protocol_and_registry': 'UNVERIFIED',
                 'world_save_and_nbt': 'UNVERIFIED', 'dependencies': 'UNVERIFIED',
