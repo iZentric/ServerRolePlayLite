@@ -1,5 +1,6 @@
 import { moveCamera, rotateCamera, type Camera } from './camera.js';
 import { createRenderer } from './renderer.js';
+import { createDemoWorld } from './world.js';
 import './style.css';
 
 const canvas = document.querySelector<HTMLCanvasElement>('#world')!;
@@ -9,6 +10,8 @@ const status = document.querySelector<HTMLElement>('#status')!;
 const position = document.querySelector<HTMLElement>('#position')!;
 const fps = document.querySelector<HTMLElement>('#fps')!;
 const heading = document.querySelector<HTMLElement>('#heading')!;
+const world = createDemoWorld();
+document.querySelector<HTMLElement>('#chunks')!.textContent = String(world.chunkCount);
 let render: ReturnType<typeof createRenderer>;
 let camera: Camera = { x: 0, y: 2.1, z: 9, yaw: -Math.PI / 2, pitch: -0.08 };
 const keys = new Set<string>();
@@ -93,7 +96,7 @@ function frame(now: number): void {
 }
 
 try {
-  render = createRenderer(canvas);
+  render = createRenderer(canvas, world);
   requestAnimationFrame(frame);
 } catch (error) {
   status.textContent = error instanceof Error ? error.message : 'Randarea nu a pornit.';

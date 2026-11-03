@@ -1,4 +1,5 @@
 import type { Camera } from './camera.js';
+import type { World } from './world.js';
 
 const VERTEX = `#version 300 es
 in vec3 aPosition;
@@ -42,7 +43,7 @@ function shader(gl: WebGL2RenderingContext, kind: number, source: string): WebGL
   return compiled;
 }
 
-function createScene(): Float32Array {
+function createScene(world: World): Float32Array {
   const vertices: number[] = [];
   function box(x: number, y: number, z: number, sx: number, sy: number, sz: number,
                color: readonly [number, number, number]): void {
@@ -63,7 +64,7 @@ function createScene(): Float32Array {
     }
   }
 
-  // Etapa 1: geometrie fixă de orientare, NU chunkuri sau lume RP încărcată.
+  // Platformă fixă de orientare; monumentele sunt voxeli din chunkuri locale.
   box(0, -0.35, 0, 100, 0.6, 100, [0.10, 0.15, 0.23]);
   for (let coordinate = -48; coordinate <= 48; coordinate += 2) {
     const color: [number, number, number] = coordinate % 10 === 0
@@ -75,24 +76,19 @@ function createScene(): Float32Array {
   for (let z = 2; z >= -18; z -= 4) {
     box(0, 0.064, z, 0.28, 0.012, 1.4, [0.35, 0.67, 0.65]);
   }
-  box(0, 0.40, -15, 8, 0.8, 8, [0.17, 0.30, 0.38]);
-  box(0, 1.15, -15, 5.5, 0.7, 5.5, [0.20, 0.43, 0.48]);
-  box(0, 4.20, -15, 2.3, 5.7, 2.3, [0.22, 0.65, 0.65]);
-  box(0, 7.20, -15, 3.1, 0.4, 3.1, [0.91, 0.67, 0.39]);
-  for (const side of [-1, 1]) {
-    for (let row = 0; row < 5; row++) {
-      const z = 2 - row * 7;
-      const height = 2.2 + ((row * 3 + (side + 1)) % 4) * 1.4;
-      box(side * 8, height / 2, z, 3, height, 3,
-        row % 2 ? [0.18, 0.30, 0.48] : [0.17, 0.38, 0.49]);
-      box(side * 8, height + 0.10, z, 3.25, 0.20, 3.25, [0.36, 0.72, 0.73]);
-      box(side * 6.15, 0.17, z, 0.16, 0.34, 2.3, [0.77, 0.46, 0.34]);
-    }
-  }
+  const colors: ReadonlyArray<readonly [number, number, number]> = [
+    [0, 0, 0], [0.17, 0.30, 0.38], [0.18, 0.30, 0.48],
+    [0.22, 0.65, 0.65], [0.91, 0.67, 0.39], [0.17, 0.38, 0.49],
+  ];
+  world.forEachBlock((x, y, z, id) => {
+    const color = colors[id];
+    if (!color) throw new Error(`Bloc necunoscut în scenă: ${id}`);
+    box(x + 0.5, y + 0.5, z + 0.5, 1, 1, 1, color);
+  });
   return new Float32Array(vertices);
 }
 
-export function createRenderer(canvas: HTMLCanvasElement): (camera: Camera) => void {
+export function createRenderer(canvas: HTMLCanvasElement, world: World): (camera: Camera) => void {
   const gl = canvas.getContext('webgl2', { antialias: true, alpha: false, powerPreference: 'high-performance' });
   if (!gl) throw new Error('WebGL2 nu este disponibil în acest browser.');
   const program = gl.createProgram();
@@ -113,7 +109,7 @@ export function createRenderer(canvas: HTMLCanvasElement): (camera: Camera) => v
   if (!vao || !buffer) throw new Error('Nu pot aloca geometria WebGL2.');
   gl.bindVertexArray(vao);
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  const scene = createScene();
+  const scene = createScene(world);
   gl.bufferData(gl.ARRAY_BUFFER, scene, gl.STATIC_DRAW);
   for (const [name, offset] of [['aPosition', 0], ['aColor', 3], ['aNormal', 6]] as const) {
     const attribute = gl.getAttribLocation(program, name);

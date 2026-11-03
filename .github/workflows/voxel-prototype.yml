@@ -1,0 +1,31 @@
+name: FunCity Voxel Lab - isolated visual prototype
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - voxel-prototype/**
+      - .github/workflows/voxel-prototype.yml
+  pull_request:
+    paths:
+      - voxel-prototype/**
+      - .github/workflows/voxel-prototype.yml
+permissions:
+  contents: read
+jobs:
+  typecheck-test-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: voxel-prototype
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: voxel-prototype/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: echo '::notice title=Limit::Browser voxel prototype only; no Forge/Bukkit mods, private world, real clients or player-capacity test.'

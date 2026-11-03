@@ -9,5 +9,5 @@
     "types": ["node"],
     "skipLibCheck": true
   },
-  "include": ["src/camera.ts", "test/camera.test.ts"]
+  "include": ["src/camera.ts", "src/world.ts", "test/camera.test.ts", "test/world.test.ts"]
 }
