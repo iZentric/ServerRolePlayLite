@@ -45,6 +45,13 @@ def validate(rows, mods, plugins):
     } for arm in NAMES}
 
 
+def notice_rows(results):
+    if set(results) != set(NAMES.values()):
+        raise ValueError('all five completed engines required before reporting')
+    return [f'::notice title={arm}::' + json.dumps(results[name], separators=(',', ':'))
+            for arm, name in NAMES.items()]
+
+
 def source_candidate(root, private, brand, folder):
     raw = Path(private)
     private = raw.resolve()
@@ -90,10 +97,10 @@ def main(root, archived, official, x_private, q_private):
     for arm, name in NAMES.items():
         results[name]['sha256'] = (sha(x[0]) if arm == 'X' else sha(q[0]) if arm == 'Q'
                                    else base.ENGINES[base.ARMS[arm]][3])
-    print('::notice title=Five pinned engines SAME public job::' + json.dumps({
-        'order': ORDER, 'engines': results,
-        'limits': '18 public mods/6 plugins/80 mobs/0 clients; not 34/13, 2vCPU/12GB or capacity',
-    }, separators=(',', ':')), flush=True)
+    for line in notice_rows(results):
+        print(line, flush=True)
+    print(f'::notice title=Five public engines complete::order={ORDER} '
+          'mods=18 plugins=6 mobs=80 clients=0 no_capacity_claim=true', flush=True)
     return results
 
 

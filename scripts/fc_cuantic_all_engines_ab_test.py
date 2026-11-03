@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from fc_cuantic_all_engines_ab import NAMES, ORDER, source_candidate, validate
+from fc_cuantic_all_engines_ab import NAMES, ORDER, notice_rows, source_candidate, validate
 
 
 class FiveEngineTest(unittest.TestCase):
@@ -35,6 +35,16 @@ class FiveEngineTest(unittest.TestCase):
         rows['Q'][1]['cpu_s'] = float('nan')
         with self.assertRaises(ValueError):
             validate(rows, 18, 6)
+
+    def test_five_short_public_rows_survive_annotation_limits(self):
+        rows = {arm: [dict(cpu_s=2.0, rss_mib=2300,
+                           mean_mspt_from_forge_tps=.8, players=0,
+                           summons_confirmed=80) for _ in range(2)] for arm in NAMES}
+        results = validate(rows, 18, 6)
+        notices = notice_rows(results)
+        self.assertEqual(len(notices), 5)
+        self.assertTrue(all(len(line) < 350 and line.startswith('::notice ') for line in notices))
+        self.assertEqual({line.split('title=')[1].split('::')[0] for line in notices}, set(NAMES))
 
     def test_rejects_wrong_candidate_location_or_brand(self):
         with tempfile.TemporaryDirectory() as tmp:
