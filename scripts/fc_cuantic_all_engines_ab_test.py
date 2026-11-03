@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Public synthetic fixtures; numbers are NOT benchmark results."""
+import inspect
 import os
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
 
-from fc_cuantic_all_engines_ab import NAMES, ORDER, notice_rows, source_candidate, validate
+from fc_cuantic_all_engines_ab import NAMES, ORDER, main, notice_rows, source_candidate, validate
 
 
 class FiveEngineTest(unittest.TestCase):
@@ -45,6 +46,10 @@ class FiveEngineTest(unittest.TestCase):
         self.assertEqual(len(notices), 5)
         self.assertTrue(all(len(line) < 350 and line.startswith('::notice ') for line in notices))
         self.assertEqual({line.split('title=')[1].split('::')[0] for line in notices}, set(NAMES))
+
+    def test_no_intermediate_annotations_exhaust_final_result_quota(self):
+        before_validation = inspect.getsource(main).split('results = validate(rows,', 1)[0]
+        self.assertNotIn('::notice', before_validation)
 
     def test_rejects_wrong_candidate_location_or_brand(self):
         with tempfile.TemporaryDirectory() as tmp:

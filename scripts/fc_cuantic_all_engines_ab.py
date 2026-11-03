@@ -91,8 +91,6 @@ def main(root, archived, official, x_private, q_private):
             trial = copy_trial(root/'stage', output, root/'world-base',
                                'X', archived, official, jar, runtime, folders)
         rows[arm].append(run_one(trial, report))
-        print(f'::notice title=Five-engine public arm {index}::arm={arm} '
-              'players=0 DATA_WITHHELD_UNTIL_ALL_VALID', flush=True)
     results = validate(rows, len(report['server_mods']), len(report['plugins']))
     for arm, name in NAMES.items():
         results[name]['sha256'] = (sha(x[0]) if arm == 'X' else sha(q[0]) if arm == 'Q'
