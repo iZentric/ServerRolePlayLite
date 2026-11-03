@@ -91,7 +91,7 @@ jobs:
           java -Djava.library.path="$RUNNER_TEMP" -cp "$RUNNER_TEMP" \
             PacketDifferential281 "$RUNNER_TEMP/fc281-public-cases.tsv" \
             > "$RUNNER_TEMP/fc281-packet-result"
-          grep -Fxq 'PACKET_DIFFERENTIAL_PASS cases=261 corrupted_header_rejected=true public_only=true' \
+          grep -Fxq 'PACKET_DIFFERENTIAL_PASS cases=261 corrupted_header_rejected=true undersized_buffer_rejected=true public_only=true' \
             "$RUNNER_TEMP/fc281-packet-result"
           grep -Fxq 'BRIDGE_JAVA11_CONTRACT_PASS: 20 place/break cases, two mutants rejected, no Minecraft jars' \
             "$RUNNER_TEMP/fc281-bridge-result"

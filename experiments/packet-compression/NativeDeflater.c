@@ -8,6 +8,15 @@ JNIEXPORT jlong JNICALL Java_NativeDeflater_create(JNIEnv *env, jclass type, jin
     return (jlong)(intptr_t)libdeflate_alloc_compressor(level);
 }
 
+JNIEXPORT jint JNICALL Java_NativeDeflater_bound(JNIEnv *env, jclass type,
+        jlong handle, jint length) {
+    (void)env; (void)type;
+    struct libdeflate_compressor *compressor = (void *)(intptr_t)handle;
+    if (!compressor || length < 0) return -1;
+    size_t needed = libdeflate_zlib_compress_bound(compressor, (size_t)length);
+    return needed > 0 && needed <= INT32_MAX ? (jint)needed : -1;
+}
+
 JNIEXPORT jint JNICALL Java_NativeDeflater_compress(JNIEnv *env, jclass type,
         jlong handle, jobject input, jint length, jobject output) {
     (void)type;

@@ -75,7 +75,9 @@ public final class PacketDifferential281 {
                 staging.put(input.duplicate()).flip();
                 input = staging;
             }
-            ByteBuffer output = ByteBuffer.allocateDirect(raw.length + 1024);
+            int limit = NativeDeflater.bound(nativeHandle, raw.length);
+            if (limit < 1) throw new IllegalStateException("invalid native zlib bound");
+            ByteBuffer output = ByteBuffer.allocateDirect(limit);
             int n = NativeDeflater.compress(nativeHandle, input, raw.length, output);
             if (n <= 0 || n > output.capacity())
                 throw new IllegalStateException("JNI zlib unavailable or buffer too small");
@@ -112,7 +114,8 @@ public final class PacketDifferential281 {
             byte[] scratch = new byte[8192];
             while (!inflater.finished()) {
                 int n = inflater.inflate(scratch);
-                if (n == 0) throw new DataFormatException("truncated or stalled zlib");
+                if (n == 0 && !inflater.finished())
+                    throw new DataFormatException("truncated or stalled zlib");
                 out.write(scratch, 0, n);
                 if (out.size() > declared) throw new DataFormatException("inflated beyond declared size");
             }
@@ -145,11 +148,17 @@ public final class PacketDifferential281 {
                 else if (fields[3].equals("heap")) direct = false;
                 else throw new IllegalArgumentException("invalid source representation");
                 byte[] raw = payload(size, fields[2], cases);
-                byte[] javaFrame = encode(raw, threshold, false, direct, deflater, handle);
-                byte[] nativeFrame = encode(raw, threshold, true, direct, deflater, handle);
-                if (!Arrays.equals(strictDecode(javaFrame, threshold), raw) ||
-                        !Arrays.equals(strictDecode(nativeFrame, threshold), raw))
-                    throw new AssertionError("differential payload mismatch: " + fields[0]);
+                byte[] javaFrame;
+                byte[] nativeFrame;
+                try {
+                    javaFrame = encode(raw, threshold, false, direct, deflater, handle);
+                    nativeFrame = encode(raw, threshold, true, direct, deflater, handle);
+                    if (!Arrays.equals(strictDecode(javaFrame, threshold), raw) ||
+                            !Arrays.equals(strictDecode(nativeFrame, threshold), raw))
+                        throw new AssertionError("differential payload mismatch");
+                } catch (Exception | AssertionError failure) {
+                    throw new AssertionError("public case failed: " + fields[0], failure);
+                }
                 if (cases == 0) {
                     mutant = nativeFrame.clone();
                     mutant[0] = 1; // Deliberately misdeclare bypass as compressed.
@@ -162,7 +171,12 @@ public final class PacketDifferential281 {
                 if (!Arrays.equals(strictDecode(mutant, 256), payload(1, "zeros", 0))) rejected = true;
             } catch (DataFormatException expected) { rejected = true; }
             if (!rejected) throw new AssertionError("corrupt frame not rejected");
-            System.out.println("PACKET_DIFFERENTIAL_PASS cases=" + cases + " corrupted_header_rejected=true public_only=true");
+            ByteBuffer source = ByteBuffer.allocateDirect(1024);
+            int limit = NativeDeflater.bound(handle, 1024);
+            if (limit < 2 || NativeDeflater.compress(handle, source, 1024,
+                    ByteBuffer.allocateDirect(limit - 1)) != -1)
+                throw new AssertionError("too-small JNI output not rejected");
+            System.out.println("PACKET_DIFFERENTIAL_PASS cases=" + cases + " corrupted_header_rejected=true undersized_buffer_rejected=true public_only=true");
         } finally {
             deflater.end();
             NativeDeflater.destroy(handle);

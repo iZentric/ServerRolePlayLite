@@ -7,6 +7,7 @@ public final class NativeDeflater {
     static { System.loadLibrary("fc_native"); }
     // Package-private for the standalone pipeline-cost harness; not a server API.
     static native long create(int level);
+    static native int bound(long handle, int length);
     static native int compress(long handle, ByteBuffer input, int length, ByteBuffer output);
     static native void destroy(long handle);
 
@@ -21,10 +22,12 @@ public final class NativeDeflater {
             throw new IllegalArgumentException("invalid public packet size");
         ByteBuffer source = ByteBuffer.allocateDirect(bytes.length);
         source.put(bytes).flip();
-        ByteBuffer result = ByteBuffer.allocateDirect(bytes.length + 1024);
         long compressor = create(6);
         if (compressor == 0) throw new IllegalStateException("native compressor unavailable");
         try {
+            int maxResult = bound(compressor, bytes.length);
+            if (maxResult < 1) throw new IllegalStateException("invalid native bound");
+            ByteBuffer result = ByteBuffer.allocateDirect(maxResult);
             for (int i = 0; i < 100; i++)
                 if (compress(compressor, source, bytes.length, result) < 1)
                     throw new IllegalStateException("native warm-up failed");
