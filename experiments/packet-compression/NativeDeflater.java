@@ -5,9 +5,10 @@ import java.nio.file.Path;
 
 public final class NativeDeflater {
     static { System.loadLibrary("fc_native"); }
-    private static native long create(int level);
-    private static native int compress(long handle, ByteBuffer input, int length, ByteBuffer output);
-    private static native void destroy(long handle);
+    // Package-private for the standalone pipeline-cost harness; not a server API.
+    static native long create(int level);
+    static native int compress(long handle, ByteBuffer input, int length, ByteBuffer output);
+    static native void destroy(long handle);
 
     public static void main(String[] args) throws Exception {
         if (args.length != 3) throw new IllegalArgumentException("INPUT OUTPUT LOOPS");

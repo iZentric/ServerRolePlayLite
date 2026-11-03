@@ -48,7 +48,8 @@ jobs:
             -I "$root/libdeflate" experiments/packet-compression/NativeDeflater.c \
             "$root/build/libdeflate.a" -o "$root/libfc_native.so"
           javac -d "$root" experiments/packet-compression/JavaDeflater.java \
-            experiments/packet-compression/NativeDeflater.java
+            experiments/packet-compression/NativeDeflater.java \
+            experiments/packet-compression/PacketPipelineBench.java
           python3 scripts/fc_packet_vectors.py "$root/packets" > "$root/manifest.txt"
       - name: Interleave Java/Rust/Rust/Java and verify zlib round-trip
         run: |
@@ -126,4 +127,53 @@ jobs:
                                'jni_libdeflate_ms': round(statistics.median(times['N']), 2)}
           print('::notice title=JVM direct-buffer JNI compression microbench::' + json.dumps(results, separators=(',', ':')))
           print('::notice title=JNI strict limits::Public bytes, no Netty integration, clients, private 34/13 pack or player-capacity claim')
+          PY
+      - name: Model per-packet heap/direct input and fresh direct output (not Netty)
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-native-packet-research"
+          while read -r name _; do
+            case "$name" in
+              packet-1024-*) loops=500 ;;
+              packet-32768-*) loops=120 ;;
+              packet-262144-*) loops=30 ;;
+              *) exit 2 ;;
+            esac
+            for source in heap direct; do
+              for arm in J N N J; do
+                index="$(find "$root" -maxdepth 1 -name "$name-$source-$arm-*.pipeline" | wc -l)"
+                kind=java
+                if [ "$arm" = N ]; then kind=native; fi
+                java -Djava.library.path="$root" -cp "$root" PacketPipelineBench \
+                  "$root/packets/$name" "$root/$name-$source-$arm-$index.pipeline" \
+                  "$loops" "$source" "$kind"
+              done
+            done
+          done < "$root/manifest.txt" > "$root/pipeline-timings.txt"
+          ROOT="$root" python3 - <<'PY'
+          import json, os, re, statistics, zlib
+          from pathlib import Path
+          root = Path(os.environ['ROOT'])
+          lines = (root/'pipeline-timings.txt').read_text().splitlines()
+          vectors = [name for name, _ in (line.split() for line in (root/'manifest.txt').read_text().splitlines())]
+          assert len(vectors) == 6 and len(lines) == 48
+          results = {}
+          for v, name in enumerate(vectors):
+              raw = (root/'packets'/name).read_bytes()
+              for s, source in enumerate(('heap', 'direct')):
+                  times = {'J': [], 'N': []}
+                  for j, arm in enumerate(('J', 'N', 'N', 'J')):
+                      encoded = (root/f'{name}-{source}-{arm}-{len(times[arm])}.pipeline').read_bytes()
+                      assert zlib.decompress(encoded) == raw, 'packet pipeline zlib round-trip failed'
+                      kind = 'java' if arm == 'J' else 'native'
+                      line = lines[v*8 + s*4 + j]
+                      match = re.fullmatch(r'PIPELINE_MS=([0-9.]+) arm=' + kind +
+                          r' source=' + source + r' loops=\d+ bytes=\d+ sink=-?\d+', line)
+                      assert match, 'missing/incorrect pipeline observation'
+                      times[arm].append(float(match.group(1)))
+                  results[name + '/' + source] = {
+                      'java_ms': round(statistics.median(times['J']), 2),
+                      'jni_ms': round(statistics.median(times['N']), 2)}
+          print('::notice title=Public packet pipeline cost model (not Netty)::' + json.dumps(results, separators=(',', ':')))
+          print('::notice title=Pipeline limitations::Fresh direct output/heap-or-direct input model, no packet framing, real Netty buffers, clients, 34/13 pack or capacity gain')
           PY
