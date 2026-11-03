@@ -9,6 +9,10 @@ on:
       - .github/workflows/funcity-source-vs-engines-synthetic.yml
       - scripts/fc_custom_engine_mods_ab.py
       - scripts/fc_custom_engine_mods_ab_test.py
+      - scripts/fc_funcity_addon_canary.py
+      - scripts/fc_funcity_addon_canary_test.py
+      - scripts/fc_funcity_private_trial.py
+      - scripts/fc_funcity_private_trial_test.py
       - scripts/fc_funcity_build_private.sh
       - functity/catserver/patches/0001-funcity-operator-identity.patch
       - functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch
@@ -37,6 +41,7 @@ jobs:
           set -Eeuo pipefail
           python3 scripts/fc_engine_mods_ab_test.py
           python3 scripts/fc_custom_engine_mods_ab_test.py
+          python3 scripts/fc_funcity_addon_canary_test.py
           python3 scripts/fc_funcity_private_trial_test.py
       - name: Fetch exact OLD public synthetic inputs into runner temp
         run: |
@@ -62,6 +67,7 @@ jobs:
       - name: Build and boot pinned custom source with patches 0001-0003
         run: |
           set -Eeuo pipefail
+          unset GH_TOKEN GITHUB_TOKEN
           bash scripts/fc_funcity_build_private.sh \
             "$RUNNER_TEMP/fc-catserver-private" "$JAVA_HOME_11_X64/bin/java"
       - name: Stage same historical public content and generated world
@@ -74,9 +80,31 @@ jobs:
       - name: Interleave F/X/O/O/X/F and publish only complete synthetic trials
         run: |
           set -Eeuo pipefail
+          unset GH_TOKEN GITHUB_TOKEN
           export JAVA_HOME="$JAVA_HOME_11_X64"
           export PATH="$JAVA_HOME/bin:$PATH"
           root="$RUNNER_TEMP/fc-server-optimizer-ab"
           python3 scripts/fc_custom_engine_mods_ab.py "$root" \
             "$root/old-plugins.zip" "$root/official.jar" "$RUNNER_TEMP/fc-catserver-private"
           echo '::notice title=Strict limit::All arms have 0 clients and a generated world. This cannot validate a player count or the 34/13 RP pack.'
+      - name: Fetch SHA-pinned experimental server-only optimizers (never upload)
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-server-optimizer-ab"
+          gh release download 1.0.0-RC2 -R PaperMC/Starlight \
+            -p starlight-forge-1.0.0-RC2-1.16.5.jar \
+            -O "$root/starlight-forge-1.0.0-RC2-1.16.5.jar"
+          echo "02c7b7bba187d8a066ce0bbb1f60c1d17961cb4cc2a61a9d0138232a9e1eebf0  $root/starlight-forge-1.0.0-RC2-1.16.5.jar" | sha256sum -c -
+          curl -fsSL --connect-timeout 10 --max-time 90 --retry 1 \
+            'https://www.curseforge.com/api/v1/mods/831663/files/4583202/download' \
+            -o "$root/chunksending-1.16.5-2.5.jar"
+          echo "fbc4293c00b33aba3c292521058b9880eeeeb652893e549727927a3d08683b0c  $root/chunksending-1.16.5-2.5.jar" | sha256sum -c -
+      - name: Boot additive FunCity plus both optimizer mods on public copy
+        run: |
+          set -Eeuo pipefail
+          unset GH_TOKEN GITHUB_TOKEN
+          export JAVA_HOME="$JAVA_HOME_11_X64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          root="$RUNNER_TEMP/fc-server-optimizer-ab"
+          python3 scripts/fc_funcity_addon_canary.py "$root" "$RUNNER_TEMP/fc-catserver-private"
+          echo '::notice title=Limit::Only a 20-mod/6-plugin public boot. Not a 34/13 or real-client capacity result.'

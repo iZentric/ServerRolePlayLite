@@ -9,7 +9,7 @@ from unittest.mock import patch
 from subprocess import CompletedProcess
 
 from fc_funcity_compiled_engine_gate_test import fixture
-from fc_funcity_private_trial import (MARKER, TrialRejected, available_memory_mib,
+from fc_funcity_private_trial import (ADDONS, MARKER, TrialRejected, available_memory_mib,
                                        isolated_java_command, namespace_supported,
                                        prepare, preflight, properties, trial)
 from fc_funcity_runtime_seed import export_runtime, validate_runtime, InvalidSeed
@@ -99,6 +99,62 @@ class PrivateTrialTest(unittest.TestCase):
                              b'MOHIST RUNTIME')
             self.assertFalse((output/'private-boot.log').exists())
             self.assertEqual((source/'libraries'/'old.jar').read_bytes(), b'MOHIST RUNTIME')
+
+    def test_optional_optimizers_only_add_pinned_mods_to_new_copy(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            name = 'starlight-forge-1.0.0-RC2-1.16.5.jar'
+            addon = Path(temp)/name
+            addon.write_bytes(b'PRIVATE TEST FIXTURE ONLY')
+            second = Path(temp)/'chunksending-1.16.5-2.5.jar'
+            second.write_bytes(b'SECOND TEST FIXTURE ONLY')
+            expected = hashlib.sha256(addon.read_bytes()).hexdigest()
+            other_sha = hashlib.sha256(second.read_bytes()).hexdigest()
+            pins = {name: (expected, len(addon.read_bytes())),
+                    second.name: (other_sha, len(second.read_bytes()))}
+            with patch.dict(ADDONS, pins, clear=True):
+                for index, single in enumerate((addon, second)):
+                    solo = prepare(source, Path(temp)/f'solo-{index}', jar, digest,
+                                   unused_port(), seed, addons=[single])
+                    self.assertEqual(len(list((solo/'mods').glob('*.jar'))), 35)
+                    self.assertEqual((solo/'mods'/single.name).read_bytes(), single.read_bytes())
+                staged = prepare(source, output, jar, digest, unused_port(), seed,
+                                 addons=[addon, second])
+                self.assertEqual(len(list((source/'mods').glob('*.jar'))), 34)
+                self.assertEqual(len(list((staged/'mods').glob('*.jar'))), 36)
+                self.assertEqual((staged/'mods'/name).read_bytes(), addon.read_bytes())
+                self.assertEqual((staged/'mods'/second.name).read_bytes(), second.read_bytes())
+                self.assertEqual((staged/'server-before-funcity-trial.jar').read_bytes(),
+                                 b'original rollback engine')
+                with self.assertRaises(TrialRejected):
+                    prepare(source, Path(temp)/'duplicate', jar, digest,
+                            unused_port(), seed, addons=[addon, addon])
+                self.assertFalse((Path(temp)/'duplicate').exists())
+                unapproved = Path(temp)/'unknown-optimizer.jar'
+                unapproved.write_bytes(b'NO PIN')
+                with self.assertRaises(TrialRejected):
+                    prepare(source, Path(temp)/'unapproved', jar, digest,
+                            unused_port(), seed, addons=[unapproved])
+                self.assertFalse((Path(temp)/'unapproved').exists())
+                link = Path(temp)/'link'/name
+                link.parent.mkdir()
+                link.symlink_to(addon)
+                with self.assertRaises(TrialRejected):
+                    prepare(source, Path(temp)/'linked', jar, digest,
+                            unused_port(), seed, addons=[link])
+                self.assertFalse((Path(temp)/'linked').exists())
+                addon.write_bytes(b'MODIFIED RELEASE')
+                with self.assertRaises(TrialRejected):
+                    prepare(source, Path(temp)/'tampered', jar, digest,
+                            unused_port(), seed, addons=[addon])
+                self.assertFalse((Path(temp)/'tampered').exists())
+                source_mod = source/'mods'/name
+                source_mod.write_bytes(b'ORIGINAL CONTENT')
+                addon.write_bytes(b'PRIVATE TEST FIXTURE ONLY')
+                with self.assertRaises(TrialRejected):
+                    prepare(source, Path(temp)/'collision', jar, digest,
+                            unused_port(), seed, addons=[addon])
+                self.assertFalse((Path(temp)/'collision').exists())
 
     def test_refuse_private_runtime_export_inside_public_repository(self):
         with tempfile.TemporaryDirectory() as temp:

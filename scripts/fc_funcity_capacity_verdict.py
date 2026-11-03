@@ -14,6 +14,8 @@ import re
 import sys
 from pathlib import Path
 
+from fc_funcity_private_trial import ADDONS
+
 SHA = re.compile(r"[0-9a-f]{64}\Z")
 ORDER = ("baseline", "candidate", "candidate", "baseline")
 
@@ -41,7 +43,7 @@ def sha(value, name):
 
 def verify(data):
     require(isinstance(data, dict) and type(data.get("schema")) is int
-            and data["schema"] in (1, 2), "unsupported schema")
+            and data["schema"] in (1, 2, 3), "unsupported schema")
     env = data.get("environment")
     require(isinstance(env, dict), "missing environment")
     require(env.get("java_major") == 11
@@ -64,11 +66,24 @@ def verify(data):
             "not the real-client private RP test environment")
     for key in ("pack_sha256", "world_sha256", "scenario_sha256", "hardware_sha256"):
         sha(env.get(key), key)
+    addons = {"baseline": [], "candidate": []}
+    if data["schema"] == 3:
+        addons = data.get("addons")
+        allowed = {digest for digest, _size in ADDONS.values()}
+        require(isinstance(addons, dict) and set(addons) == set(ORDER)
+                and addons["baseline"] == []
+                and isinstance(addons["candidate"], list)
+                and 1 <= len(addons["candidate"]) <= len(allowed)
+                and all(isinstance(digest, str) for digest in addons["candidate"])
+                and addons["candidate"] == sorted(set(addons["candidate"]))
+                and set(addons["candidate"]) <= allowed,
+                "unsupported, duplicate or missing experimental addon fingerprints")
     engines = data.get("engines")
     require(isinstance(engines, dict) and set(engines) == set(ORDER), "two engine arms required")
     for arm in ("baseline", "candidate"):
         sha(engines[arm], arm + " engine")
-    require(engines["baseline"] != engines["candidate"], "no engine change to compare")
+    require(engines["baseline"] != engines["candidate"] or data["schema"] == 3,
+            "no engine change to compare")
 
     levels = data.get("levels")
     require(isinstance(levels, list) and levels, "no tested player rungs")
@@ -81,7 +96,7 @@ def verify(data):
         players = level.get("players")
         require(type(players) is int and 1 <= players <= 64 and players not in seen
                 and (not seen or players > max(seen)), "rungs must be distinct and ascending")
-        if data["schema"] == 2:
+        if data["schema"] in (2, 3):
             require(rung_index < 4 and players == (5, 10, 15, 20)[rung_index],
                     "12 GB ramp must start at 5 and advance through 10/15 before 20")
         seen.add(players)
@@ -93,7 +108,11 @@ def verify(data):
         for trial in trials:
             arm = trial["arm"]
             require(trial.get("engine_sha256") == engines[arm], "trial engine hash mismatch")
-            if data["schema"] == 2:
+            if data["schema"] == 3:
+                require(trial.get("addon_sha256") == addons[arm]
+                        and type(trial.get("addons_loaded_ok")) is bool,
+                        "trial additive optimizer inventory/loading mismatch")
+            if data["schema"] in (2, 3):
                 require(trial.get("hardware_sha256") == env["hardware_sha256"],
                         "trial hardware hash mismatch")
                 require(type(trial.get("jvm_xmx_mib")) is int
@@ -120,6 +139,7 @@ def verify(data):
                                  and rss <= env["ram_limit_mib"] - memory_reserve_mib
                                  and cpu <= 75 and uplink <= 70
                                  and trial["critical_errors"] == 0
+                                 and (data["schema"] != 3 or trial["addons_loaded_ok"])
                                  and all(trial[key] for key in ("auth_ok", "voice_ok", "vehicles_ok",
                                          "rp_ok", "memory_stable", "gc_stable", "clean_restart_ok",
                                          "backup_restore_ok")))

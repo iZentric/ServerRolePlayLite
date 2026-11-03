@@ -8,6 +8,7 @@ on:
       - .github/workflows/funcity-capacity-verdict-gate.yml
       - scripts/fc_funcity_capacity_verdict.py
       - scripts/fc_funcity_capacity_verdict_test.py
+      - scripts/fc_funcity_private_trial.py
       - scripts/fc_funcity_lab_resources.py
       - scripts/fc_funcity_lab_resources_test.py
       - scripts/fc_funcity_capacity_profile_test.py
@@ -25,6 +26,7 @@ on:
       - .github/workflows/funcity-capacity-verdict-gate.yml
       - scripts/fc_funcity_capacity_verdict.py
       - scripts/fc_funcity_capacity_verdict_test.py
+      - scripts/fc_funcity_private_trial.py
       - scripts/fc_funcity_lab_resources.py
       - scripts/fc_funcity_lab_resources_test.py
       - scripts/fc_funcity_capacity_profile_test.py

@@ -5,6 +5,7 @@ import json
 import unittest
 
 from fc_funcity_capacity_verdict import InvalidEvidence, unique_keys, verify
+from fc_funcity_private_trial import ADDONS
 
 
 def trial(arm, players, engine, **changes):
@@ -97,6 +98,33 @@ class VerdictTest(unittest.TestCase):
 
     def test_hardware_mismatch(self):
         self.reject(lambda d: d["environment"].update(ram_limit_mib=12288))
+
+    def test_2cpu_12gb_additive_pack_schema_preserves_all_original_mods(self):
+        data = fixture_2cpu_12gb()
+        data['schema'] = 3
+        additions = [sha for sha, size in ADDONS.values()]
+        data['addons'] = {'baseline': [], 'candidate': additions}
+        for level in data['levels']:
+            for item in level['trials']:
+                item['addon_sha256'] = data['addons'][item['arm']]
+                item['addons_loaded_ok'] = True
+        self.assertEqual(verify(data), (5, 10))
+        data['engines']['candidate'] = data['engines']['baseline']
+        for level in data['levels']:
+            for item in level['trials']:
+                item['engine_sha256'] = data['engines'][item['arm']]
+        self.assertEqual(verify(data), (5, 10))  # Same engine, different addon pack.
+        for mutate in (
+            lambda d: d['addons']['candidate'].append('0' * 64),
+            lambda d: d['levels'][1]['trials'][1].update(addon_sha256=[]),
+            lambda d: d['levels'][1]['trials'][1].update(addons_loaded_ok=False),
+            lambda d: d['environment'].update(mod_jars=32),
+        ):
+            with self.subTest(mutate=mutate):
+                altered = copy.deepcopy(data)
+                mutate(altered)
+                with self.assertRaises(InvalidEvidence):
+                    verify(altered)
 
     def test_new_2cpu_12gb_target_accepts_complete_synthetic_fixture(self):
         self.assertEqual(verify(fixture_2cpu_12gb()), (5, 10))

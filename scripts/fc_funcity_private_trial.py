@@ -27,6 +27,14 @@ CRITICAL = {'server-ip', 'server-port', 'white-list', 'enable-rcon', 'enable-que
             'max-players', 'level-name', 'online-mode'}
 SHIELD = {'server-ip': '127.0.0.1', 'white-list': 'true', 'enable-rcon': 'false',
           'enable-query': 'false', 'max-players': '2'}
+# Official Forge 1.16.5 release bytes; experimental additions, NEVER a replacement
+# for any of the owner's 34 mods. Binaries remain on the private TEST machine.
+ADDONS = {
+    'starlight-forge-1.0.0-RC2-1.16.5.jar':
+        ('02c7b7bba187d8a066ce0bbb1f60c1d17961cb4cc2a61a9d0138232a9e1eebf0', 97563),
+    'chunksending-1.16.5-2.5.jar':
+        ('fbc4293c00b33aba3c292521058b9880eeeeb652893e549727927a3d08683b0c', None),
+}
 
 
 class TrialRejected(ValueError):
@@ -145,14 +153,44 @@ def preflight(source, output, engine, expected_sha, port, runtime_seed):
     return source, output, engine, safe_properties, before, runtime_seed, seed_folders
 
 
-def prepare(source, output, engine, expected_sha, port, runtime_seed):
+def verified_addons(addons, source, output, runtime_seed):
+    if len(addons) > len(ADDONS):
+        raise TrialRejected('too many experimental optimizer JARs')
+    repo = Path(__file__).resolve().parents[1]
+    found = []
+    for raw in addons:
+        raw = Path(raw).absolute()
+        path = raw.resolve(strict=False)
+        spec = ADDONS.get(raw.name)
+        if (raw.is_symlink() or not spec or raw.name in {p.name for p in found}
+                or not path.is_file() or path.stat().st_size > 100_000
+                or (spec[1] is not None and path.stat().st_size != spec[1])
+                or any(descendant(path, parent) for parent in
+                       (repo, source, output, runtime_seed))
+                or (source/'mods'/raw.name).exists()
+                or (source/'mods'/raw.name).is_symlink()
+                or sha(path) != spec[0]):
+            raise TrialRejected('optional optimizer must be an exact pinned private JAR outside source/repo')
+        found.append(path)
+    return found
+
+
+def prepare(source, output, engine, expected_sha, port, runtime_seed, addons=()):
     source, output, engine, safe_properties, before, runtime_seed, seed_folders = preflight(
         source, output, engine, expected_sha, port, runtime_seed)
+    additions = verified_addons(addons, source, output, runtime_seed)  # Before ANY copy.
     # Refuse to overwrite even a directory created between preflight and copytree.
     shutil.copytree(source, output, symlinks=False)
     try:
         if inventory(output) != before or inventory(source) != before:
             raise TrialRejected('source/output SHA inventory differs; no trial started')
+        for addon in additions:
+            staged = output/'mods'/addon.name
+            if staged.exists() or staged.is_symlink():
+                raise TrialRejected('optimizer collides with original mod; no trial started')
+            shutil.copyfile(addon, staged)
+            if sha(staged) != ADDONS[addon.name][0]:
+                raise TrialRejected('optimizer SHA changed during copy; no trial started')
         # Keep original Mohist runtime separately; CatServer's first boot needs
         # its OWN launcher libraries while network egress is disabled.
         prior = output / '.funcity-prior-runtime'
@@ -275,7 +313,7 @@ def boot_once(java, output, attempt, timeout, settle_seconds=30, heap_gib=2):
 
 
 def trial(java, source, output, engine, expected_sha, runtime_seed, port=25595, timeout=900,
-          heap_gib=2, require_target=False):
+          heap_gib=2, require_target=False, addons=()):
     if type(heap_gib) is not int or heap_gib not in (2, 4, 6, 8):
         raise TrialRejected('unsupported private trial heap')
     if require_target:
@@ -291,12 +329,13 @@ def trial(java, source, output, engine, expected_sha, runtime_seed, port=25595, 
         raise TrialRejected('invalid timeout')
     if heap_gib > 2 and available_memory_mib() < (heap_gib + 2) * 1024:
         raise TrialRejected('insufficient free RAM/cgroup headroom for private trial')
-    staged = prepare(source, output, engine, expected_sha, port, runtime_seed)
+    staged = prepare(source, output, engine, expected_sha, port, runtime_seed, addons)
     for attempt in (1, 2):
         if not boot_once(java, staged, attempt, timeout, heap_gib=heap_gib):
             raise TrialRejected('private boot/stop ' + str(attempt) + ' failed; inspect LOCAL log only')
         print('PRIVATE_FULL_PACK_BOOT_' + str(attempt) +
-              '=PASS input_mod_jars=34 input_plugin_jars=13 active_mods_plugins=NOT_VERIFIED client=NOT_TESTED')
+              '=PASS input_mod_jars=34 experimental_addons=' + str(len(addons)) +
+              ' input_plugin_jars=13 active_mods_plugins=NOT_VERIFIED client=NOT_TESTED')
     return True
 
 
@@ -314,11 +353,13 @@ if __name__ == '__main__':
                      help='private full-pack boot only; 8 GiB needs >=10 GiB free')
     cli.add_argument('--require-2cpu-12gb', action='store_true',
                      help='fail before copying unless the isolated Linux lab has verified resources')
+    cli.add_argument('--experimental-addon', action='append', type=Path, default=[],
+                     help='optional private SHA-pinned Starlight/Chunk Sending JAR; repeat for both')
     args = cli.parse_args()
     try:
         trial(args.java, args.source_copy, args.output, args.engine, args.sha256,
               args.runtime_seed, args.port, args.timeout, args.heap_gib,
-              args.require_2cpu_12gb)
+              args.require_2cpu_12gb, args.experimental_addon)
     except (OSError, TrialRejected, subprocess.TimeoutExpired, InvalidEngine, InvalidSeed) as exc:
         print('PRIVATE_TRIAL_REJECTED: ' + type(exc).__name__ +
               ' (details and logs remain on the local isolated machine)', file=sys.stderr)
