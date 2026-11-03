@@ -1,0 +1,133 @@
+name: PC FunCity Lite low-spec client candidate
+# Adds opt-in client-only render/memory mods to a NEW Prism instance.
+# Never edits an existing profile or claims universal FPS / laptop compatibility.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-low-spec-client.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  low-spec-profile:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 6
+    steps:
+      - name: Build NEW 14-JAR Prism profile from already installed FunCity files
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if (-not $env:APPDATA) { throw 'Runner Prism account unavailable' }
+          $root = Join-Path $env:APPDATA 'PrismLauncher\instances'
+          if (-not (Test-Path -LiteralPath $root -PathType Container)) { throw 'Prism instances not visible' }
+          $name = 'FunCity-Lite-LowSpec-LAB-1.16.5'
+          $dest = Join-Path $root $name
+          if (Test-Path -LiteralPath $dest) { throw 'Low-spec instance exists; no overwrite' }
+          # Same nine JAR names as the separately tested modded server, plus four
+          # client-only optimizers and Oculus for reported Rubidium texture issues.
+          $contentAndLibraries = @(
+            'Modernxl 1.16.5.jar', 'modernlife-1.16.5-1.15.jar',
+            'cfm-7.0.0pre22-1.16.3.jar', 'roadstuff-1.16.5-4.3.0.jar',
+            'vehicle-mod-0.45.2-1.16.5 (1).jar', 'cgm-1.2.6-1.16.5.jar',
+            'additional-guns-0.7.1-1.16.5.jar', 'mapperbase-1.16.5-2.4.0.0.jar',
+            'obfuscate-0.6.3-1.16.5.jar'
+          )
+          $optimizers = @(
+            'rubidium-mc1.16.5-0.2.13.jar',
+            'entityculling-forge-mc1.16.5-1.5.2.jar',
+            'ferritecore-2.1.1-forge.jar',
+            'modernfix-forge-5.18.0+mc1.16.5.jar'
+          )
+          $visualCompatibility = @('oculus-mc1.16.5-1.4.7.jar')
+          $selected = @($contentAndLibraries + $optimizers + $visualCompatibility)
+          if ($selected.Count -ne 14 -or @($selected | Select-Object -Unique).Count -ne 14) {
+            throw 'Duplicate or missing client JAR selection'
+          }
+          $source = $null
+          foreach ($profile in @(Get-ChildItem -LiteralPath $root -Directory | Where-Object {
+            $_.Name -like '*FunCity*' -and $_.Name -notlike '*LAB*' })) {
+            $pack = Join-Path $profile.FullName 'mmc-pack.json'
+            if (-not (Test-Path -LiteralPath $pack -PathType Leaf)) { continue }
+            $components = @((Get-Content -LiteralPath $pack -Raw | ConvertFrom-Json).components)
+            if (-not @($components | Where-Object { $_.uid -eq 'net.minecraft' -and $_.version -eq '1.16.5' }).Count -or
+                -not @($components | Where-Object { $_.uid -eq 'net.minecraftforge' -and $_.version -eq '36.2.42' }).Count) { continue }
+            foreach ($rel in @('.minecraft\mods', 'minecraft\mods')) {
+              $dir = Join-Path $profile.FullName $rel
+              if ((Test-Path -LiteralPath $dir -PathType Container) -and
+                  @($selected | Where-Object { -not (Test-Path -LiteralPath (Join-Path $dir $_) -PathType Leaf) }).Count -eq 0) {
+                $source = $dir
+                break
+              }
+            }
+            if ($source) { break }
+          }
+          if (-not $source) {
+            foreach ($profile in @(Get-ChildItem -LiteralPath $root -Directory | Where-Object {
+              $_.Name -like '*FunCity*' -and $_.Name -notlike '*LAB*' })) {
+              foreach ($rel in @('.minecraft\mods', 'minecraft\mods')) {
+                $dir = Join-Path $profile.FullName $rel
+                if (Test-Path -LiteralPath $dir -PathType Container) {
+                  $missing = @($selected | Where-Object { -not (Test-Path -LiteralPath (Join-Path $dir $_) -PathType Leaf) })
+                  $safe = (($missing -join '|') -replace '[^A-Za-z0-9 ._+()|=-]', '_')
+                  Write-Output ('::notice title=Existing FunCity candidate coverage::missing_count=' + $missing.Count + ' missing_names=' + $safe.Substring(0,[Math]::Min(600,$safe.Length)))
+                }
+              }
+            }
+            Write-Output '::error title=LowSpec source::No existing matching original Prism profile has all 14 JARs; no change'
+            throw 'No original 1.16.5/Forge 36.2.42 profile contains all 14 exact names; no changes'
+          }
+          Write-Output '::notice title=LowSpec source::all_14_JAR_names_present=true; begin new temporary profile'
+          $packJson = @{ formatVersion = 1; components = @(
+            @{ uid = 'net.minecraft'; version = '1.16.5'; important = $true },
+            @{ uid = 'net.minecraftforge'; version = '36.2.42' }
+          ) } | ConvertTo-Json -Depth 8
+          $cfg = @"
+          [General]
+          ConfigVersion=1.2
+          InstanceType=OneSix
+          iconKey=default
+          name=FunCity Lite LowSpec LAB 1.16.5
+          OverrideMemory=true
+          MinMemAlloc=512
+          MaxMemAlloc=2048
+          "@
+          $options = "graphicsMode:0`nrenderDistance:5`nparticles:2`nmipmapLevels:0`nclouds:false`nentityDistanceScaling:0.5`nmaxFps:60`n"
+          $note = 'PRIVATE low-spec client candidate, not an FPS claim. 9 FunCity content/dependency JARs + Rubidium (render), Entity Culling (occlusion), FerriteCore and ModernFix (memory/fixes), Oculus (visual compatibility); no shaders. 5 chunk render, 2 GiB heap preset. No player join, GUI launch, RP/voice or owner-license verification. Existing Prism profiles untouched.'
+          $tmp = Join-Path $root ('.FunCity-LowSpec-LAB-' + [guid]::NewGuid().ToString('N'))
+          try {
+            $null = New-Item -ItemType Directory -Path $tmp
+            $mc = Join-Path $tmp '.minecraft'
+            $mods = Join-Path $mc 'mods'
+            $null = New-Item -ItemType Directory -Path $mods -Force
+            $digests = @{}
+            foreach ($jar in $selected) {
+              $from = Join-Path $source $jar
+              $to = Join-Path $mods $jar
+              Copy-Item -LiteralPath $from -Destination $to -ErrorAction Stop
+              $before = (Get-FileHash -LiteralPath $from -Algorithm SHA256).Hash.ToLowerInvariant()
+              $after = (Get-FileHash -LiteralPath $to -Algorithm SHA256).Hash.ToLowerInvariant()
+              if ($before -ne $after) { throw ('JAR copy SHA mismatch: ' + $jar) }
+              $digests[$jar] = $after
+            }
+            [IO.File]::WriteAllText((Join-Path $tmp 'mmc-pack.json'), $packJson, [Text.UTF8Encoding]::new($false))
+            [IO.File]::WriteAllText((Join-Path $tmp 'instance.cfg'), $cfg, [Text.UTF8Encoding]::new($false))
+            [IO.File]::WriteAllText((Join-Path $mc 'options.txt'), $options, [Text.UTF8Encoding]::new($false))
+            [IO.File]::WriteAllText((Join-Path $tmp 'LAB-READ-ME.txt'), $note, [Text.UTF8Encoding]::new($false))
+            $manifest = @{minecraft='1.16.5'; forge='36.2.42'; jar_sha256=$digests;
+                          content_and_libraries=$contentAndLibraries; client_optimizers=$optimizers;
+                          visual_compatibility=$visualCompatibility; gui_client_test='NOT_TESTED';
+                          fps='NOT_MEASURED'; release='BLOCKED'} | ConvertTo-Json -Depth 8
+            [IO.File]::WriteAllText((Join-Path $tmp 'LAB-MANIFEST.json'), $manifest, [Text.UTF8Encoding]::new($false))
+            $copied = @(Get-ChildItem -LiteralPath $mods -File).Count
+            $recorded = @((Get-Content -LiteralPath (Join-Path $tmp 'LAB-MANIFEST.json') -Raw | ConvertFrom-Json).jar_sha256.PSObject.Properties).Count
+            Write-Output ('::notice title=LowSpec client inventory::copied=' + $copied + ' sha_records=' + $recorded)
+            if ($copied -ne 14 -or $recorded -ne 14) { throw 'Client inventory drift' }
+            if (Test-Path -LiteralPath $dest) { throw 'Low-spec profile created concurrently; refusal to overwrite' }
+            Rename-Item -LiteralPath $tmp -NewName $name -ErrorAction Stop
+            Write-Output '::notice title=PC low-spec client LAB::new_prism_profile=true minecraft=1.16.5 forge=36.2.42 client_jars=14 content_and_libraries=9 client_optimizers=4 visual_compatibility=1 render_chunks=5 max_heap_mib=2048 old_profiles_untouched=true GUI_launch=NOT_TESTED FPS=NOT_MEASURED'
+          }
+          finally {
+            if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Recurse -Force }
+          }

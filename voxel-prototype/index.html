@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1727" />
+  <title>FunCity Voxel Lab — Etapa 02</title>
+</head>
+<body>
+  <canvas id="world" tabindex="0" aria-label="Prototip 3D first-person FunCity"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-copy"><strong>FUNCITY<span class="accent">/</span>VOXEL</strong><small>LABORATOR DE MOTOR · 02</small></span>
+    </div>
+    <div class="top-meta"><span class="live-dot"></span><span id="status">PROTOTIP LOCAL</span><span class="top-divider"></span><span>ETAPA <b>02 / 09</b></span></div>
+  </header>
+
+  <main id="entry" class="entry">
+    <div class="entry-content">
+      <p class="eyebrow"><span class="eyebrow-line"></span> UN NOU PUNCT DE PLECARE <span class="eyebrow-index">/ 2026</span></p>
+      <h1>O lume nouă.<br /><em>Din primul pas.</em></h1>
+      <p class="lead">Cameră first-person, blocuri în chunkuri 16×16×256 și randare WebGL2. Un prototip vizual separat de serverul RP existent.</p>
+      <div class="entry-actions">
+        <button id="start" type="button">Intră în prototip <span aria-hidden="true">↗</span></button>
+        <span class="entry-note">Fără instalare. Fără modificări pe server.</span>
+      </div>
+      <div class="stage-progress"><span class="progress-active"></span><span class="progress-active"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <p class="stage-label">02 — BLOCURI & CHUNKURI <span>URMEAZĂ: MESHING & ATLAS</span></p>
+    </div>
+    <div class="entry-side" aria-hidden="true"><div class="side-rule"></div><span>PROTOTIP<br />VIZUAL<br />INDEPENDENT</span><div class="side-number">002</div></div>
+  </main>
+
+  <div class="crosshair" aria-hidden="true"><span></span><span></span></div>
+  <aside class="telemetry" aria-label="Indicatori ai prototipului">
+    <div class="telemetry-title"><span class="live-dot"></span> TELEMETRIE <span>LIVE</span></div>
+    <div class="telemetry-row"><span>POZIȚIE XYZ</span><strong id="position">0.0 / 2.1 / 9.0</strong></div>
+    <div class="telemetry-row"><span>ORIENTARE</span><strong id="heading">270°</strong></div>
+    <div class="telemetry-row"><span>CADRE / SEC</span><strong id="fps">—</strong></div>
+    <div class="telemetry-row"><span>CHUNKURI LOCALE</span><strong id="chunks">—</strong></div>
+    <div class="telemetry-foot">WEBGL2 <span>•</span> SCENĂ STATICĂ <span>•</span> 0 CLIENȚI RP TESTAȚI</div>
+  </aside>
+  <footer class="controlbar"><span><b>W A S D</b> MIȘCARE</span><span><b>MOUSE / SĂGEȚI</b> PRIVIRE</span><span><b>SPACE / E / Q</b> SUS / JOS</span><span><b>SHIFT</b> SPRINT</span><span><b>ESC</b> PAUZĂ</span></footer>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

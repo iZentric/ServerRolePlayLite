@@ -1,0 +1,50 @@
+name: Prepare HidenCloud for private boot with host port and no RCON
+# One-time owner-requested host config correction. Keep server-ip loopback,
+# online-mode false, world and motor unchanged; never start or expose publicly.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-prepare-hidencloud-private-boot.yml
+      - scripts/fc_pc_prepare_hidencloud_private_boot.ps1
+permissions:
+  contents: read
+concurrency:
+  group: funcity-host-private-boot-config-one-at-a-time
+  cancel-in-progress: false
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse host config script without executing it
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path $PWD 'scripts/fc_pc_prepare_hidencloud_private_boot.ps1'),
+            [ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'HOST_PRIVATE_CONFIG_SCRIPT_SYNTAX_FAILED' }
+      - name: Check minimal property replacements on LF and CRLF fixtures
+        shell: pwsh
+        run: |
+          foreach ($newline in @("`n","`r`n")) {
+            $before=('server-ip=127.0.0.1','server-port=25565','enable-rcon=true','online-mode=false','rcon.password=secret-preserved') -join $newline
+            $after=[regex]::Replace($before,'(?m)^server-port=\d+(\r?)$','server-port=24595$1')
+            $after=[regex]::Replace($after,'(?m)^enable-rcon=true(\r?)$','enable-rcon=false$1')
+            $expected=('server-ip=127.0.0.1','server-port=24595','enable-rcon=false','online-mode=false','rcon.password=secret-preserved') -join $newline
+            if ($after -cne $expected) { throw 'HOST_PRIVATE_CONFIG_REPLACEMENT_FAILED' }
+          }
+  pc-private-config:
+    if: startsWith(github.event.head_commit.message, 'Prepare HidenCloud private boot config once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Save host config rollback then change only game port and disable RCON
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_prepare_hidencloud_private_boot.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

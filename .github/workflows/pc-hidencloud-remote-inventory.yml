@@ -1,0 +1,30 @@
+name: Read-only HidenCloud root inventory after owner moved server files
+# Uses the rotated PC client key. No downloads, uploads, host mutations,
+# artifacts, filenames, private config, world data, or secrets in logs.
+on:
+  workflow_dispatch:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-hidencloud-remote-inventory.yml
+      - scripts/fc_pc_hidencloud_remote_inventory.ps1
+permissions:
+  contents: read
+jobs:
+  root-read-only:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate PowerShell inventory syntax
+        shell: powershell
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path 'scripts/fc_pc_hidencloud_remote_inventory.ps1'),[ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'REMOTE_INVENTORY_SCRIPT_SYNTAX_FAILED' }
+      - name: List only the SFTP root and emit aggregate counts
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_hidencloud_remote_inventory.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

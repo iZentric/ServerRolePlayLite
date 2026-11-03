@@ -1,0 +1,34 @@
+name: Compare exact Forge metadata in shared Lite and server mods
+# Read-only and private; never uploads archives or starts/stops server/Prism.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-forge-metadata-parity.yml
+      - scripts/fc_forge_metadata_parity.ps1
+      - scripts/fc_forge_metadata_parity_test.py
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthetic metadata digest and privacy fixture
+        run: python3 scripts/fc_forge_metadata_parity_test.py
+  pc-read-only:
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare mods.toml and Forge metadata digests in approved common JARs
+        shell: powershell
+        run: |
+          $profile='C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\FunCity RP Lite'
+          $game=if (Test-Path -LiteralPath (Join-Path $profile '.minecraft') -PathType Container) { '.minecraft' } else { 'minecraft' }
+          $client=Join-Path (Join-Path $profile $game) 'mods'
+          $server='C:\Users\Administrator\Desktop\FunCityLocal\server\mods'
+          & ./scripts/fc_forge_metadata_parity.ps1 -ClientMods $client -ServerMods $server -Manifest agent/FUNCITY-RP-LITE-SELECTIE.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

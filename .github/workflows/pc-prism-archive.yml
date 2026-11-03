@@ -1,0 +1,60 @@
+name: PC Prism keep four and archive others reversibly
+# User requested one Lite profile plus EGK, V RP and Fabulously Optimized.
+# Same-volume rename out of instances, NEVER delete a world or profile data.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-prism-archive.yml
+      - scripts/fc_pc_prism_archive.py
+      - scripts/fc_pc_prism_archive_test.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  archive:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Archive only if Prism and Minecraft are both closed
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $java = @(Get-CimInstance Win32_Process -Filter "name = 'java.exe' OR name = 'javaw.exe'")
+          $prism = @(Get-Process -Name 'prismlauncher','PrismLauncher' -ErrorAction SilentlyContinue | Select-Object -Unique Id)
+          if ($java.Count -gt 0 -or $prism.Count -gt 0) {
+            Write-Output ('::error title=Prism safe archive::REFUSED game_or_launcher_open=true java_count=' + $java.Count + ' prism_count=' + $prism.Count + '; close both before retry')
+            throw 'Prism/Minecraft still running; no profile moved'
+          }
+          python scripts/fc_pc_prism_archive_test.py
+          if ($LASTEXITCODE -ne 0) { throw 'Archive safety fixture failed; no real profile changed' }
+          $root = Join-Path $env:APPDATA 'PrismLauncher\instances'
+          python scripts/fc_pc_prism_archive.py --instances $root --run-id $env:GITHUB_RUN_ID
+          if ($LASTEXITCODE -ne 0) { throw 'Prism inventory drift; no profile moved' }
+          python scripts/fc_pc_prism_archive.py --instances $root --run-id $env:GITHUB_RUN_ID --apply
+          if ($LASTEXITCODE -ne 0) { throw 'Prism move refused or incomplete; originals/backups remain' }
+      - name: Verify only four requested profiles visible and backup intact
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $base = Join-Path $env:APPDATA 'PrismLauncher'
+          $root = Join-Path $base 'instances'
+          $keep = @(Get-ChildItem -LiteralPath $root -Directory -ErrorAction Stop)
+          $backup = Join-Path $base ('Arena-Archived-Instances\' + $env:GITHUB_RUN_ID)
+          $old = @(Get-ChildItem -LiteralPath $backup -Directory -ErrorAction Stop)
+          if ($keep.Count -ne 4 -or $old.Count -ne 4 -or
+              -not (Test-Path -LiteralPath (Join-Path $backup 'RESTORE.txt') -PathType Leaf)) {
+            throw 'Prism archive verification failed; do not delete any backup'
+          }
+          if (-not @($keep | Where-Object { $_.Name -eq 'FunCity-Lite-LowSpec-LAB-1.16.5' }).Count -or
+              -not @($keep | Where-Object { $_.Name -match '(?i)egk' }).Count -or
+              -not @($keep | Where-Object { $_.Name -match '(?i)v[ _-]?rp' }).Count -or
+              -not @($keep | Where-Object { $_.Name -match '(?i)^Fabulously Optimized$' }).Count) {
+            throw 'Requested kept profile missing; backups still available'
+          }
+          Write-Output ('::notice title=Prism archive verified::visible_profiles=4 archived_profiles=4 worlds_and_screenshots_preserved=true backup=PrismLauncher/Arena-Archived-Instances/' + $env:GITHUB_RUN_ID + ' NO_PROFILES_DELETED')

@@ -1,0 +1,179 @@
+name: FunCity experimental Rust packet compression - microbench ONLY
+# Public deterministic byte arrays; never the owner pack, world, clients or JAR.
+# This measures compressor throughput OUTSIDE JNI, not server player capacity.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/funcity-native-packet-research.yml
+      - experiments/packet-compression/**
+      - scripts/fc_packet_vectors.py
+      - scripts/fc_packet_vectors_test.py
+permissions:
+  contents: read
+jobs:
+  native-versus-java:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+      - name: Confirm deterministic public workload and toolchains
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/fc_packet_vectors_test.py
+          rustc --version
+          javac -version
+      - name: Build pinned MIT libdeflate only in disposable runner temp
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-native-packet-research"
+          mkdir "$root"
+          git clone -q --depth 1 --filter=blob:none https://github.com/ebiggers/libdeflate.git "$root/libdeflate"
+          git -C "$root/libdeflate" fetch -q --depth 1 origin 0758d0a12d34fac281b0fe27c5155fbe753d9511
+          git -C "$root/libdeflate" checkout -q --detach FETCH_HEAD
+          test "$(git -C "$root/libdeflate" rev-parse HEAD)" = 0758d0a12d34fac281b0fe27c5155fbe753d9511
+          test -s "$root/libdeflate/COPYING"
+          cmake -S "$root/libdeflate" -B "$root/build" -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+            -DLIBDEFLATE_BUILD_SHARED_LIB=OFF -DLIBDEFLATE_BUILD_GZIP=OFF -DLIBDEFLATE_INSTALL=OFF
+          cmake --build "$root/build" --target libdeflate_static --parallel 2
+          rustc --edition=2021 --crate-name fc_packet -O \
+            -L "native=$root/build" experiments/packet-compression/RustLibdeflate.rs \
+            -o "$root/rust-packet"
+          gcc -O3 -fPIC -shared -I "$JAVA_HOME/include" -I "$JAVA_HOME/include/linux" \
+            -I "$root/libdeflate" experiments/packet-compression/NativeDeflater.c \
+            "$root/build/libdeflate.a" -o "$root/libfc_native.so"
+          javac -d "$root" experiments/packet-compression/JavaDeflater.java \
+            experiments/packet-compression/NativeDeflater.java \
+            experiments/packet-compression/PacketPipelineBench.java
+          python3 scripts/fc_packet_vectors.py "$root/packets" > "$root/manifest.txt"
+      - name: Interleave Java/Rust/Rust/Java and verify zlib round-trip
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-native-packet-research"
+          while read -r name loops; do
+            for arm in J R R J; do
+              index="$(find "$root" -maxdepth 1 -name "$name-$arm-*.zlib" | wc -l)"
+              output="$root/$name-$arm-$index.zlib"
+              if [ "$arm" = J ]; then
+                java -cp "$root" JavaDeflater "$root/packets/$name" "$output" "$loops"
+              else
+                "$root/rust-packet" "$root/packets/$name" "$output" "$loops"
+              fi
+            done
+          done < "$root/manifest.txt" > "$root/timings.txt"
+          ROOT="$root" python3 - <<'PY'
+          import json, os, re, statistics, zlib
+          from pathlib import Path
+          root = Path(os.environ['ROOT'])
+          lines = (root/'timings.txt').read_text().splitlines()
+          vectors = [line.split() for line in (root/'manifest.txt').read_text().splitlines()]
+          assert len(vectors) == 6 and len(lines) == 24
+          results = {}
+          for i, (name, _loops) in enumerate(vectors):
+              raw = (root/'packets'/name).read_bytes()
+              times = {'J': [], 'R': []}
+              for j, arm in enumerate(('J', 'R', 'R', 'J')):
+                  data = (root/f'{name}-{arm}-{times[arm].__len__()}.zlib').read_bytes()
+                  assert zlib.decompress(data) == raw, 'protocol zlib round-trip failed'
+                  prefix = 'JAVA' if arm == 'J' else 'RUST'
+                  match = re.fullmatch(prefix + r'_ZLIB_MS=([0-9.]+) loops=\d+ source_bytes=\d+ compressed_bytes=\d+', lines[4*i+j])
+                  assert match, 'missing/incorrect benchmark observation'
+                  times[arm].append(float(match.group(1)))
+              results[name] = {'java_ms': round(statistics.median(times['J']), 2),
+                               'rust_libdeflate_ms': round(statistics.median(times['R']), 2)}
+          print('::notice title=Public packet microbench::' + json.dumps(results, separators=(',', ':')))
+          print('::notice title=Strict interpretation::Rust calls MIT libdeflate outside JNI; no clients, network/JVM overhead, 34/13 pack or capacity claim')
+          PY
+      - name: Measure JVM-to-native direct-buffer cost, verify every stream
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-native-packet-research"
+          while read -r name loops; do
+            for arm in J N N J; do
+              index="$(find "$root" -maxdepth 1 -name "$name-$arm-*.jni" | wc -l)"
+              output="$root/$name-$arm-$index.jni"
+              if [ "$arm" = J ]; then
+                java -cp "$root" JavaDeflater "$root/packets/$name" "$output" "$loops"
+              else
+                java -Djava.library.path="$root" -cp "$root" NativeDeflater \
+                  "$root/packets/$name" "$output" "$loops"
+              fi
+            done
+          done < "$root/manifest.txt" > "$root/jni-timings.txt"
+          ROOT="$root" python3 - <<'PY'
+          import json, os, re, statistics, zlib
+          from pathlib import Path
+          root = Path(os.environ['ROOT'])
+          lines = (root/'jni-timings.txt').read_text().splitlines()
+          vectors = [line.split() for line in (root/'manifest.txt').read_text().splitlines()]
+          assert len(vectors) == 6 and len(lines) == 24
+          results = {}
+          for i, (name, _loops) in enumerate(vectors):
+              raw = (root/'packets'/name).read_bytes()
+              times = {'J': [], 'N': []}
+              for j, arm in enumerate(('J', 'N', 'N', 'J')):
+                  data = (root/f'{name}-{arm}-{len(times[arm])}.jni').read_bytes()
+                  assert zlib.decompress(data) == raw, 'JNI zlib round-trip failed'
+                  prefix = 'JAVA' if arm == 'J' else 'JNI'
+                  match = re.fullmatch(prefix + r'_ZLIB_MS=([0-9.]+) loops=\d+ source_bytes=\d+ compressed_bytes=\d+', lines[4*i+j])
+                  assert match, 'missing/incorrect JVM observation'
+                  times[arm].append(float(match.group(1)))
+              results[name] = {'java_ms': round(statistics.median(times['J']), 2),
+                               'jni_libdeflate_ms': round(statistics.median(times['N']), 2)}
+          print('::notice title=JVM direct-buffer JNI compression microbench::' + json.dumps(results, separators=(',', ':')))
+          print('::notice title=JNI strict limits::Public bytes, no Netty integration, clients, private 34/13 pack or player-capacity claim')
+          PY
+      - name: Model per-packet heap/direct input and fresh direct output (not Netty)
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-native-packet-research"
+          while read -r name _; do
+            case "$name" in
+              packet-1024-*) loops=500 ;;
+              packet-32768-*) loops=120 ;;
+              packet-262144-*) loops=30 ;;
+              *) exit 2 ;;
+            esac
+            for source in heap direct; do
+              for arm in J N N J; do
+                index="$(find "$root" -maxdepth 1 -name "$name-$source-$arm-*.pipeline" | wc -l)"
+                kind=java
+                if [ "$arm" = N ]; then kind=native; fi
+                java -Djava.library.path="$root" -cp "$root" PacketPipelineBench \
+                  "$root/packets/$name" "$root/$name-$source-$arm-$index.pipeline" \
+                  "$loops" "$source" "$kind"
+              done
+            done
+          done < "$root/manifest.txt" > "$root/pipeline-timings.txt"
+          ROOT="$root" python3 - <<'PY'
+          import json, os, re, statistics, zlib
+          from pathlib import Path
+          root = Path(os.environ['ROOT'])
+          lines = (root/'pipeline-timings.txt').read_text().splitlines()
+          vectors = [name for name, _ in (line.split() for line in (root/'manifest.txt').read_text().splitlines())]
+          assert len(vectors) == 6 and len(lines) == 48
+          results = {}
+          for v, name in enumerate(vectors):
+              raw = (root/'packets'/name).read_bytes()
+              for s, source in enumerate(('heap', 'direct')):
+                  times = {'J': [], 'N': []}
+                  for j, arm in enumerate(('J', 'N', 'N', 'J')):
+                      encoded = (root/f'{name}-{source}-{arm}-{len(times[arm])}.pipeline').read_bytes()
+                      assert zlib.decompress(encoded) == raw, 'packet pipeline zlib round-trip failed'
+                      kind = 'java' if arm == 'J' else 'native'
+                      line = lines[v*8 + s*4 + j]
+                      match = re.fullmatch(r'PIPELINE_MS=([0-9.]+) arm=' + kind +
+                          r' source=' + source + r' loops=\d+ bytes=\d+ sink=-?\d+', line)
+                      assert match, 'missing/incorrect pipeline observation'
+                      times[arm].append(float(match.group(1)))
+                  results[name + '/' + source] = {
+                      'java_ms': round(statistics.median(times['J']), 2),
+                      'jni_ms': round(statistics.median(times['N']), 2)}
+          print('::notice title=Public packet pipeline cost model (not Netty)::' + json.dumps(results, separators=(',', ':')))
+          print('::notice title=Pipeline limitations::Fresh direct output/heap-or-direct input model, no packet framing, real Netty buffers, clients, 34/13 pack or capacity gain')
+          PY

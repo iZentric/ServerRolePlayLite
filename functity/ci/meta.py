@@ -28,7 +28,7 @@ def main():
     print(json.dumps({
         "produs": "FunCity — motor propriu pe baza Mohist 1.16.5",
         "build": build or "b0",
-        "baza_upstream": {"repo": "MohistMC/Mohist", "branch": "1.16.5", "commit": pin,
+        "baza_upstream": {"repo": "TiangongCraft/Tenet", "anterior": "MohistMC/Mohist", "branch": "1.16.5", "commit": pin,
                           "licenta": "GPL-3.0 (baza); derivatele publicate raman sub licencia proiectului"},
         "buildfix_aplicate": ["P0b: ForgeGradle 6.0.16 pin", "P0c/P0d: reparații pipeline (functity/buildfix)"],
         "patchuri_proprii": patches_applied,

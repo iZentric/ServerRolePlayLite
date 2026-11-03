@@ -1,0 +1,18 @@
+diff --git a/src/main/java/catserver/server/CatServer.java b/src/main/java/catserver/server/CatServer.java
+index a2ba24c..2f0c9ba 100644
+--- a/src/main/java/catserver/server/CatServer.java
++++ b/src/main/java/catserver/server/CatServer.java
+@@ -6,3 +6,3 @@ import org.apache.logging.log4j.Logger;
+ public class CatServer {
+-    public static final Logger log = LogManager.getLogger("CatServer");
++    public static final Logger log = LogManager.getLogger("FunCity");
+     private static final String version = "1.16.5";
+diff --git a/src/main/java/org/bukkit/craftbukkit/v1_16_R3/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/v1_16_R3/CraftServer.java
+index 4444c98..7cca9ce 100644
+--- a/src/main/java/org/bukkit/craftbukkit/v1_16_R3/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/v1_16_R3/CraftServer.java
+@@ -144,3 +144,3 @@ import java.util.logging.Logger;
+ public final class CraftServer implements Server {
+-    private final String serverName = "CatServer";
++    private final String serverName = "FunCity";
+     public static String serverVersion;

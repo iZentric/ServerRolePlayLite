@@ -1,8 +1,7 @@
 diff --git a/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java b/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
-index 4af3ce2e..e6b08beb 100644
 --- a/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
 +++ b/src/main/java/net/minecraftforge/items/VanillaInventoryCodeHooks.java
-@@ -95,14 +95,22 @@ public class VanillaInventoryCodeHooks
+@@ -95,14 +95,21 @@
                      CraftItemStack oitemstack = CraftItemStack.asCraftMirror(stack.copy().split(1));
                      org.bukkit.inventory.InventoryHolder owner = InventoryOwner.get((TileEntity) destination);
                      org.bukkit.inventory.Inventory destinationInventory = owner != null ? owner.getInventory() : InventoryOwner.inventoryFromForge(itemHandler);
@@ -10,12 +9,11 @@ index 4af3ce2e..e6b08beb 100644
 -                    Bukkit.getPluginManager().callEvent(event);
 -                    if (event.isCancelled()) {
 -                        return false;
-+                    // FunCity P1: dropper.getOwner() poate fi null cand BE-ul e detinut de un mod
-+                    // (vehicle/entitate-inventar) ori netratat ca BlockOwner — NPE in fiecare tick.
-+                    // Fara ambele inventare nu putem face bridge-ul: sarim eventul, mergem pe semantica vanilla.
-+                    org.bukkit.inventory.Inventory sourceInventory = dropper.getOwner() != null ? dropper.getOwner().getInventory() : null;
-+                    org.bukkit.inventory.ItemStack moved = (org.bukkit.inventory.ItemStack) oitemstack.clone();
-+                    if (sourceInventory != null && destinationInventory != null) {
++                    // FunCity: InventoryOwner.getInventory supplies a Bukkit view even without a block owner.
++                    // Keep the plugin event and its cancellation semantics for modded droppers.
++                    org.bukkit.inventory.Inventory sourceInventory = InventoryOwner.getInventory(dropper);
++                    org.bukkit.inventory.ItemStack moved = oitemstack;
++                    if (destinationInventory != null) {
 +                        InventoryMoveItemEvent event = new InventoryMoveItemEvent(sourceInventory, oitemstack.clone(), destinationInventory, true);
 +                        Bukkit.getPluginManager().callEvent(event);
 +                        if (event.isCancelled()) {

@@ -3,4 +3,5 @@
 *.zip
 !overrides.zip
 work/
+.arena/
 __pycache__/

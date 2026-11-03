@@ -1,0 +1,29 @@
+name: FunCity homepage - static accuracy and links
+# Read-only, GitHub-hosted: NEVER deploy Pages, access the PC or publish artifacts.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - README.md
+      - START-AICI.md
+      - site/template.html
+      - site/index.html
+      - scripts/fc_site_claims_test.py
+      - .github/workflows/site-content-check.yml
+  pull_request:
+    paths:
+      - README.md
+      - START-AICI.md
+      - site/template.html
+      - site/index.html
+      - scripts/fc_site_claims_test.py
+permissions:
+  contents: read
+jobs:
+  static-copy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check page and README claim/link consistency without writing or deploying
+        run: python3 scripts/fc_site_claims_test.py

@@ -1,0 +1,29 @@
+name: Probe HidenCloud SFTP read-only from owner PC
+# Trigger once on workflow/script changes; no private key in GitHub Secrets.
+# Uses only the rotated key on the owner's Windows runner. No remote writes.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-hidencloud-sftp-probe.yml
+      - scripts/fc_pc_hidencloud_sftp_probe.ps1
+permissions:
+  contents: read
+jobs:
+  sftp-read-only:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate probe PowerShell syntax
+        shell: powershell
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path 'scripts/fc_pc_hidencloud_sftp_probe.ps1'),[ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'SFTP_PROBE_SCRIPT_SYNTAX_FAILED' }
+      - name: Test TCP and SFTP public-key authentication with pwd only
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_hidencloud_sftp_probe.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

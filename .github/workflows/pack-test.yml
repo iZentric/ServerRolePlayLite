@@ -1,0 +1,11 @@
+name: RETIRED-PACK-TEST
+# Old test mixed server and client mods without validated hashes; no valid login/FPS proof.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  archived:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo RETIRED-no-action

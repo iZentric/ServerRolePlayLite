@@ -24,9 +24,11 @@ Reguli de onestitate implementate aici:
 Rulare (de CI): python3 fc_bench.py --arm-conf arm.json cu env:
   FC_JAR=cale jar de boot (poate lipsi pt catserver) ; FC_STAGE=director lucru
   FC_OUT=director rezultate ; FC_TRIALS=3 FC_RUN_SECONDS=300 FC_BOOT_TIMEOUT=600
-  FC_INSTALL_TIMEOUT=420 FC_EXCLUDE='libraries/* run/* version.json /*.jar'
+  conf.exclude=["mods/SpawnerFix-1.16.2-1.0.0.3.jar"] doar pe /tmp/fc-smoke;
+  fara exclude: bootstrap-ul omite automat libraries/run/version.json/jar root.
 """
-import argparse, json, os, re, signal, socket, statistics, struct, subprocess, sys, threading, time, uuid, zipfile
+import argparse, hashlib, json, os, re, shutil, signal, socket, statistics, struct, subprocess, sys, threading, time, uuid, zipfile
+from pathlib import Path
 
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
 DONE_RE = re.compile(r"Done \(([0-9]+\.[0-9]+)s\)")
@@ -362,13 +364,44 @@ class JvmRun:
 # ---------------- faza A: stage + instalare bootstrap + setup lume ----------------
 
 def build_stage(conf, jar, stage):
-    os.makedirs(stage, exist_ok=True)
+    """Extract an isolated pack arm; optional exact JAR exclusion is test-only.
+
+    Fail before extraction if the requested JAR is absent, duplicated, or unsafe.
+    This cannot be used to remove mods from a real installed server/profile.
+    """
     zp = conf["pack_zip"]
-    excl = set(conf.get("exclude", []))
+    excluded = conf.get("exclude", [])
+    if not isinstance(excluded, list) or any(
+        not isinstance(name, str) or not re.fullmatch(r"mods/[^/\\]+\.jar", name)
+        for name in excluded
+    ) or len(excluded) != len(set(excluded)):
+        raise ValueError("exclude must be unique exact mods/<filename>.jar paths")
+    root = Path(stage).resolve()
+    if excluded:
+        sandbox = Path("/tmp/fc-smoke").resolve()
+        if root == sandbox or not root.is_relative_to(sandbox):
+            raise ValueError("mod exclusion requires a disposable /tmp/fc-smoke arm")
+        if root.exists() and any(root.iterdir()):
+            raise ValueError("mod exclusion requires an empty stage (no stale JARs)")
     keep_libs = conf.get("keep_pack_libs", False)
     with zipfile.ZipFile(zp) as z:
-        for info in z.infolist():
+        members = z.infolist()
+        for info in members:
             name = info.filename
+            if name.startswith("/") or "\\" in name or any(p in (".", "..", "") for p in name.rstrip("/").split("/")):
+                raise ValueError(f"unsafe pack entry: {name}")
+            if (info.external_attr >> 16) & 0o170000 == 0o120000:
+                raise ValueError(f"symlink entry refused: {name}")
+        for name in excluded:
+            if sum(info.filename == name and not info.is_dir() for info in members) != 1:
+                raise ValueError(f"requested mod absent/duplicated in pack: {name}")
+        os.makedirs(stage, exist_ok=True)
+        skipped = {}
+        for info in members:
+            name = info.filename
+            if name in excluded:
+                skipped[name] = hashlib.sha256(z.read(info)).hexdigest()
+                continue
             top = name.split("/", 1)[0]
             base = name.rsplit("/", 1)[-1]
             if not keep_libs:
@@ -389,6 +422,7 @@ def build_stage(conf, jar, stage):
                     dst.write(chunk)
                 if (info.external_attr >> 16) & 0o111:
                     os.chmod(target, (info.external_attr >> 16) & 0o777)
+    return skipped
 
 def resolve_boot_jar(conf, jar, stage):
     kind = conf.get("boot_jar")
@@ -441,6 +475,72 @@ def apply_overrides(conf, stage):
             open(my, "w").write(re.sub(r"^(\s*)check_update:\s*true", r"\1check_update: false", txt, flags=re.M))
             rec["mohist.yml:check_update"] = {"inainte": "true", "dupa": "false"}
     return rec, port
+
+def world_fingerprint(root, names):
+    """Content fingerprint of the exact world files used at the start of a trial."""
+    h = hashlib.sha256()
+    for name in names:
+        folder = root / name
+        if folder.is_symlink() or not folder.is_dir():
+            raise ValueError(f"world directory missing or symlink: {folder}")
+        for path in sorted(folder.rglob('*')):
+            if path.is_symlink():
+                raise ValueError(f"world symlink refused: {path}")
+            if path.is_file():
+                rel = path.relative_to(root).as_posix().encode()
+                h.update(len(rel).to_bytes(4, 'big') + rel)
+                with path.open('rb') as f:
+                    for block in iter(lambda: f.read(1 << 20), b''):
+                        h.update(block)
+    return h.hexdigest()
+
+
+def matched_world(stage, snapshot, level_name, mode):
+    """Store after generation; restore the same immutable world before every arm/trial.
+
+    Only enabled by the isolated CI workflow. Never use on a live server.
+    """
+    stage, snapshot = Path(stage).resolve(), Path(snapshot).resolve()
+    sandbox = Path('/tmp/fc-smoke').resolve()
+    if not stage.is_relative_to(sandbox) or not snapshot.is_relative_to(sandbox):
+        raise ValueError('matched-world test is allowed only in /tmp/fc-smoke')
+    if level_name in ('', '.', '..') or Path(level_name).name != level_name:
+        raise ValueError('unsafe world name')
+    roots = (level_name, level_name + '_nether', level_name + '_the_end')
+    manifest = snapshot / 'manifest.json'
+    if mode == 'save':
+        if snapshot.exists():
+            raise ValueError('world reference already exists; refusing to overwrite')
+        if not (stage / level_name / 'level.dat').is_file():
+            raise ValueError('world not generated; cannot save fair comparison')
+        names = [name for name in roots if (stage / name).is_dir()]
+        digest = world_fingerprint(stage, names)
+        snapshot.mkdir(parents=True)
+        for name in names:
+            shutil.copytree(stage / name, snapshot / name, symlinks=False)
+        if world_fingerprint(snapshot, names) != digest:
+            raise ValueError('world reference copy differs from source')
+        manifest.write_text(json.dumps({'names': names, 'sha256': digest}) + '\n')
+        return digest
+    if mode != 'restore' or not manifest.is_file():
+        raise ValueError('missing immutable world reference')
+    data = json.loads(manifest.read_text())
+    names = data['names']
+    if not isinstance(names, list) or level_name not in names or not set(names) <= set(roots):
+        raise ValueError('invalid reference world names')
+    if world_fingerprint(snapshot, names) != data['sha256']:
+        raise ValueError('reference world changed during comparison')
+    for name in roots:
+        dest = stage / name
+        if dest.is_symlink():
+            raise ValueError('world destination symlink refused')
+        if dest.exists():
+            shutil.rmtree(dest)
+        if name in names:
+            shutil.copytree(snapshot / name, dest, symlinks=False)
+    if world_fingerprint(stage, names) != data['sha256']:
+        raise ValueError('arm did not receive the identical world')
+    return data['sha256']
 
 # ---------------- faza B: o proba ----------------
 
@@ -581,7 +681,7 @@ def main():
         return 2
 
     log(f"=== brat {conf['arm']}: stage ===")
-    build_stage(conf, jar, stage)
+    report["excluded_mods_test_only"] = build_stage(conf, jar, stage)
     bootjar = resolve_boot_jar(conf, os.path.abspath(jar) if jar else "", stage)
     sdir = lambda d: len([f for f in os.listdir(os.path.join(stage, d)) if f.endswith(".jar")]) if os.path.isdir(os.path.join(stage, d)) else 0
     mods, plugins = sdir("mods"), sdir("plugins")
@@ -699,11 +799,34 @@ def main():
                 except OSError:
                     pass
         report["lume_mb_dupar_instalare"] = round(tot / 1e6, 1)
+    # A fixed seed is NOT the same world: engine-specific world generation and
+    # trial order can bias results. Make one reference after generation, then
+    # restore its exact files before every measured trial on BOTH engines.
+    world_mode = os.environ.get('FC_WORLD_MODE', '')
+    world_snapshot = os.environ.get('FC_WORLD_SNAPSHOT', '')
+    world_name = read_props(os.path.join(stage, 'server.properties'))[0].get('level-name', 'world')
+    if world_mode:
+        if not world_snapshot:
+            raise ValueError('FC_WORLD_SNAPSHOT missing')
+        if world_mode == 'save':
+            if not (Path(stage) / world_name / 'level.dat').is_file():
+                log('=== world generation: unmeasured preparation boot ===')
+                warm, _ = one_trial(conf, stage, bootjar, port, 0, outdir, 0)
+                if not warm.get('boot_reusit') or warm.get('oprire') != 'CLEAN' or warm.get('critice'):
+                    raise RuntimeError(f'world preparation boot failed: {warm}')
+            report['world_snapshot_sha256'] = matched_world(stage, world_snapshot, world_name, 'save')
+        elif world_mode == 'restore':
+            report['world_snapshot_sha256'] = matched_world(stage, world_snapshot, world_name, 'restore')
+        else:
+            raise ValueError(f'unknown FC_WORLD_MODE: {world_mode}')
+        report['world_start_identical_each_trial'] = True
     results = []
     boot_times = []
     for i in range(1, trials + 1):
         log(f"=== proba {i}/{trials} ===")
         try:
+            if world_mode:
+                assert matched_world(stage, world_snapshot, world_name, 'restore') == report['world_snapshot_sha256']
             res, j = one_trial(conf, stage, bootjar, port, i, outdir, run_seconds)
         except Exception as e:
             res = {"trial": i, "boot_reusit": False, "boot_esec_motiv": f"driver: {type(e).__name__}: {e}"}

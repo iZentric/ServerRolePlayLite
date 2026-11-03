@@ -1,0 +1,8 @@
+diff --git a/src/main/java/com/mohistmc/MohistMC.java b/src/main/java/com/mohistmc/MohistMC.java
+--- a/src/main/java/com/mohistmc/MohistMC.java
++++ b/src/main/java/com/mohistmc/MohistMC.java
+@@ -24,3 +24,3 @@
+ public class MohistMC {
+-    public static final String NAME = "Mohist";
++    public static final String NAME = "FunCity";
+     public static Logger LOGGER = LogManager.getLogger();

@@ -1,0 +1,54 @@
+PC probe 2026-10-18T17:12:42
+PC runner: KERNELOS-PC; cont: Administrator
+Server b1.0827: True
+Prism FunCity: True; Clumps: True
+RAM fizic PC: 15.9 GB
+FunCity : jar-uri=25
+mod additional-guns-0.7.1-1.16.5.jar: id=[additionalguns, forge, minecraft, cgm, obfuscate] nume=[Additional Guns]
+mod cfm-7.0.0pre22-1.16.3.jar: id=[cfm, forge, minecraft] nume=[MrCrayfish's Furniture Mod]
+mod cgm-1.2.6-1.16.5.jar: id=[cgm, forge, minecraft, obfuscate, controllable, backpacked] nume=[MrCrayfish's Gun Mod]
+mod Clumps-6.0.0.28.jar: id=[clumps, forge, minecraft] nume=[Clumps]
+mod emotecraft-for-MC1.16.5-2.2.7-b.build.47-forge.jar: id=[emotecraft, playeranimator] nume=[Emotecraft]
+mod entitycollisionfpsfix-1.16-1.0.1.jar: id=[entitycollisionfpsfix, forge, minecraft] nume=[Entity Collision FPS Fix]
+mod entityculling-forge-mc1.16.5-1.5.2.jar: id=[entityculling, forge, minecraft] nume=[EntityCulling]
+mod ferritecore-2.1.1-forge.jar: id=[ferritecore, forge, minecraft] nume=[Ferrite Core]
+mod lazydfu-0.1.3.jar: id=[lazydfu, forge] nume=[LazyDFU]
+mod mapperbase-1.16.5-2.4.0.0.jar: id=[mapperbase, forge, minecraft] nume=[Mapper Base]
+mod modernfix-forge-5.18.0+mc1.16.5.jar: id=[modernfix, forge, minecraft, jei] nume=[ModernFix]
+mod modernlife-1.16.5-1.15.jar: id=[modernlife] nume=[Modern Life]
+mod Modernxl 1.16.5.jar: id=[minecraftmodernxl, minecraft] nume=[Modernxl]
+mod obfuscate-0.6.3-1.16.5.jar: id=[obfuscate, forge, minecraft] nume=[Obfuscate]
+mod oculus-mc1.16.5-1.4.7.jar: id=[oculus] nume=[Oculus]
+mod out_of_sight-1.16.4-1.0.1.jar: id=[out_of_sight, forge, minecraft] nume=[Out of Sight]
+mod pamhc2foodcore-1.16.3-1.0.2.jar: id=[pamhc2foodcore, forge, minecraft] nume=[Pam's HarvestCraft 2 Food Core]
+mod Pizzaland_v68.jar: id=[pizzamod, minecraft] nume=[Pizzaland Roleplay]
+mod player-animation-lib-forge-0.4.0+1.16.5.jar: id=[playeranimator, minecraft] nume=[Player Animator]
+mod radon-0.8.0a.jar: id=[radon] nume=[Radon]
+mod roadstuff-1.16.5-4.3.0.jar: id=[roadstuff, forge, minecraft, mapperbase] nume=[Road Stuff]
+mod rubidium-mc1.16.5-0.2.13.jar: id=[rubidium] nume=[Rubidium]
+mod selene-1.16.5-1.9.0.jar: id=[selene, forge, minecraft] nume=[Selene]
+mod supplementaries-1.16.5-0.18.4b.jar: id=[supplementaries, forge, minecraft, computercraft, flywheel, configured, selene] nume=[Supplementaries]
+mod vehicle-mod-0.45.2-1.16.5 (1).jar: id=[vehicle, forge, minecraft, obfuscate] nume=[Pizzaland Vehicle Mod (Modified MrCrayfish's Vehicle Mod)]
+FunCity : argumente heap=[-Xms256M, -Xmx2500M]
+FunCity : renderDistance:4
+FunCity : particles:2
+FunCity : graphicsMode:0
+FunCity : renderDistance:5
+FunCity : graphicsMode:0
+FunCity : particles:2
+FunCity : shaders activati=False
+CUANTIC-Client-1.7.7 : jar-uri=25
+CUANTIC-Client-1.7.7 : argumente heap=[-Xms256M, -Xmx2500M]
+CUANTIC-Client-1.7.7 : renderDistance:4
+CUANTIC-Client-1.7.7 : particles:2
+CUANTIC-Client-1.7.7 : graphicsMode:0
+CUANTIC-Client-1.7.7 : renderDistance:5
+CUANTIC-Client-1.7.7 : graphicsMode:0
+CUANTIC-Client-1.7.7 : particles:2
+CUANTIC-Client-1.7.7 : shaders activati=False
+clienti Minecraft din Prism porniti: 1
+client Minecraft: RAM privat=4376 MB, RAM fizic in uz=3171 MB, CPU in 5s=0 sec/s
+Procesul activ nu dovedeste ca cineva joaca in lume; FPS nu este masurat.
+conexiuni TCP active spre server=1
+127.0.0.1:25565 deschis: True
+127.0.0.1:25575 deschis: True

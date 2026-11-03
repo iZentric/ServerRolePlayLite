@@ -1,0 +1,13 @@
+name: Retired Clumps client addition — read-only
+# Owner changed course: keep Lite at 22; no XP optimization JAR added to client.
+# This retired workflow cannot write to Prism or the server.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 1
+    steps:
+      - run: echo 'RETIRED_CLIENT_CLUMPS_APPLY; NO_PC_WRITE=true; NO_SERVER_WRITE=true'

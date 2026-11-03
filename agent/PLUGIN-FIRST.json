@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "purpose": "temporary zero-mod boot control only; final FunCity target is modded with the owner's identified content JARs and required dependencies, plus RP plugins",
+  "engine_reference": "FunCity b1.0827 hybrid 1.16.5 (unchanged)",
+  "historical_24_29": "comparison only, not authorized for installation",
+  "owner_content_jar_approvals": [],
+  "measured_performance_jar_approvals": [],
+  "client_jar_selection": [],
+  "server_jar_selection": [],
+  "voice_status": "unresolved: server plugin alone does not prove client audio",
+  "release_blocked": true
+}

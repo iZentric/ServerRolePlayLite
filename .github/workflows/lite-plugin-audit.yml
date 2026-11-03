@@ -1,0 +1,46 @@
+name: FunCity Lite historical-plugin audit
+# Hosted runner, read-only. Never starts Minecraft, modifies a PC or publishes assets.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - '.github/workflows/lite-plugin-audit.yml'
+      - 'scripts/fc_plugin_audit*.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PYTHONPATH: scripts
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test fail-closed metadata parser (synthetic ZIP)
+        run: python3 scripts/fc_plugin_audit_test.py
+      - name: Audit pinned historical ZIP plugin.yml only
+        run: |
+          set -Eeuo pipefail
+          mkdir -p "$RUNNER_TEMP/fc-plugin-audit"
+          gh release download lite -R "$GITHUB_REPOSITORY" \
+            -p CUANTIC-Server-CatServer-1.7.7.zip -D "$RUNNER_TEMP/fc-plugin-audit"
+          pack="$RUNNER_TEMP/fc-plugin-audit/CUANTIC-Server-CatServer-1.7.7.zip"
+          python3 scripts/fc_plugin_audit.py "$pack" \
+            --sha256 fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15 \
+            > "$RUNNER_TEMP/fc-plugin-audit/report.json"
+          cat "$RUNNER_TEMP/fc-plugin-audit/report.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'fc-plugin-audit/report.json'
+          result=json.loads(p.read_text())
+          names=[i['declared_name'] for i in result['plugins']]
+          assert len(names)==14
+          print('::notice file=agent/RP-LITE-PLUGINS.md,line=1,title=Historical metadata only::'
+                f"plugin_count={len(names)} shared_declared_commands={len(result['shared_declared_commands'])}; "
+                'no live or gameplay tested')
+          PY

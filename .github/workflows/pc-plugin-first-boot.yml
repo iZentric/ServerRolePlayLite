@@ -1,0 +1,68 @@
+name: PC FunCity closed plugin-first one-shot boot
+# Owner requested a PC start. Isolated runner-temp directory only; never public.
+# No existing world, Prism profile, server, credentials, release or deployment touched.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-plugin-first-boot.yml
+      - scripts/fc_plugin_first_pc_smoke.py
+      - scripts/fc_plugin_first_extract.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pc-closed-boot:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: scripts
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download only signed-off pinned release inputs to new runner temp
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Join-Path $env:RUNNER_TEMP ('fc-plugin-first-PC-' + $env:GITHUB_RUN_ID)
+          if (Test-Path -LiteralPath $root) { throw 'Existing PC lab; no overwrite' }
+          $null = New-Item -ItemType Directory -Path $root
+          $inputs = @(
+            @{name='engines.tar.gz'; sha='f2cb921efbf751fa24534a9a02b57197db46294ca7b71d9711b04996bf6d1784'; url='https://github.com/iZentric/ServerRolePlayLite/releases/download/jars-20261017-0952/functity-jare-toate.tar.gz'},
+            @{name='old-plugins.zip'; sha='fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15'; url='https://github.com/iZentric/ServerRolePlayLite/releases/download/lite/CUANTIC-Server-CatServer-1.7.7.zip'},
+            @{name='CoreProtect.jar'; sha='04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977'; url='https://github.com/PlayPro/CoreProtect/releases/download/v21.2/CoreProtect-21.2.jar'},
+            @{name='guava-21.0.jar'; sha='972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480'; url='https://github.com/google/guava/releases/download/v21.0/guava-21.0.jar'}
+          )
+          foreach ($item in $inputs) {
+            $path = Join-Path $root $item.name
+            try { Invoke-WebRequest -Uri $item.url -OutFile $path -UseBasicParsing -MaximumRedirection 5 }
+            catch { throw ('PC input unavailable: ' + $item.name + '; no server started') }
+            if ((Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -ne $item.sha) {
+              throw ('PC input SHA256 mismatch: ' + $item.name + '; no server started')
+            }
+          }
+          python scripts/fc_plugin_first_extract.py (Join-Path $root 'engines.tar.gz') (Join-Path $root 'motor.jar')
+          if ($LASTEXITCODE -ne 0) { throw 'Motor extraction refused' }
+          python scripts/fc_plugin_first_stage.py --engine (Join-Path $root 'motor.jar') `
+            --archive (Join-Path $root 'old-plugins.zip') `
+            --coreprotect (Join-Path $root 'CoreProtect.jar') `
+            --guava21 (Join-Path $root 'guava-21.0.jar') `
+            --output (Join-Path $root 'stage') | Out-Null
+          if ($LASTEXITCODE -ne 0) { throw 'PC stage refused' }
+          Write-Output '::notice title=PC isolated staged server::SHA-pinned motor=FunCity_b1.0827 forge=36.2.42 mods=0 plugins=6 runtime_Guava21=pinned bind=127.0.0.1; NOT public'
+      - name: Boot once and stop within job (no player or benchmark)
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Join-Path $env:RUNNER_TEMP ('fc-plugin-first-PC-' + $env:GITHUB_RUN_ID)
+          python scripts/fc_plugin_first_pc_smoke.py (Join-Path $root 'stage')
+          if ($LASTEXITCODE -ne 0) { throw 'PC closed boot refused or failed; no public service' }
+          Write-Output '::notice title=PC boot scope::one closed boot and stop only; no Prism launch, player login, RP, voice, capacity or maximal performance proof'

@@ -1,0 +1,18 @@
+# Cele 10 proiecte „agent” trimise de proprietar — selecție sigură (20.10.2026)
+
+**Cerere interpretată:** evaluează toate cele zece depozite din captura GitHub; adaugă în proiect numai skill-uri utile, **nu** instala frameworkuri complete. Stelele din căutare nu sunt indicator de compatibilitate sau încredere. Sursele au fost verificate prin GitHub API; fișierele selectate au fost copiate din commituri fixate, cu SHA-256 în [`skills-lock.json`](../skills-lock.json). Nu s-au executat scripturile lor, nu s-au instalat dependențe, hooks, MCP-uri sau aplicații globale. Fișierele sunt instrucțiuni locale pentru proiect; **nu există dovadă că Arena le încarcă drept comenzi sau pluginuri active**. Instrucțiunile lor nu înlocuiesc aprobările proprietarului și restricțiile sesiunii.
+
+| Depozit din listă | Verdict pentru acest repo | Motiv / sursă |
+|---|---|---|
+| [morluto/rea](https://github.com/morluto/rea) | Nu instala runtime/skill acum | Unelte de reverse engineering și MCP/engine separat; analiza de cod din repo nu cere acest sistem. Skill-ul REA spune explicit că o copie a instrucțiunilor nu conectează MCP-ul. |
+| [obra/superpowers](https://github.com/obra/superpowers) | **2 existente + 2 adăugate** | `brainstorming`, `using-superpowers` existau; `verification-before-completion`, `systematic-debugging` sunt documentație utilă pentru verificări, fără hooks noi. MIT. |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | **1 adăugat** | `writing-for-agents` + referința lui pentru redactarea fișierelor AGENTS/skill. Alte skill-uri cer subagenți sau tracker configurat; nu pretindem acele instrumente. MIT. |
+| [affaan-m/ECC](https://github.com/affaan-m/ECC) | **1 adăugat** | `change-impact` pentru efecte în lanț, teste și rollback. Restul harnessului/instalării nu este necesar. MIT. |
+| [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Nu instala | Agent complet cu runtime/tooling propriu; skill-urile inspectate presupun Hermes, Kanban ori dependențe noi, iar Google Workspace cere OAuth separat. Nu mutăm date private. |
+| [anomalyco/opencode](https://github.com/anomalyco/opencode) | Nu instala | Agent complet; skill-urile inspectate sunt exemple sau fluxuri pentru testele și structura OpenCode, nu pentru FunCity/Arena. |
+| [ultraworkers/claw-code](https://github.com/ultraworkers/claw-code) | Nu instala | Aplicație/agent Rust; nu este un pachet independent de skill-uri necesar proiectului. |
+| [firecrawl/firecrawl](https://github.com/firecrawl/firecrawl) | Nu instala | Serviciu/CLI de scraping; skill-ul de căutare cere `FIRECRAWL_API_KEY`, iar proiectul nu construiește o integrare de scraping. Nu solicităm chei. |
+| [anthropics/skills](https://github.com/anthropics/skills) | **1 existent + 1 adăugat** | `skill-creator` exista; `frontend-design` este util site-ului, doar Markdown + licența Apache-2.0 a skill-ului. Nu instalăm plugin Claude. |
+| [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | **1 adăugat** | `ponytail-review` oferă verificare read-only a modificărilor; nu instalăm hooks/scripts/plugin. MIT. |
+
+**Starea după selecție:** 5 skill-uri deja locale + 6 noi = **11 directoare locale**, nu 11 comenzi garantate în Arena. Licențele noi sunt lângă skill-uri (iar MIT pentru cele două Superpowers este consemnat în `agent/SKILLURI-LICENSES.txt`). `scripts/fc_agent_skills_test.py` validează manifestul, SHA-256, numele și fișierele locale. Nu au fost accesate PC-ul, Prism, serverul, secretele sau conturile. Înainte de utilizare efectivă: citește skill-ul relevant și aplică numai instrucțiunile compatibile cu permisiunile și instrumentele sesiunii.

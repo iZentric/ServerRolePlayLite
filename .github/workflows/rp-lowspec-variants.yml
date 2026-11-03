@@ -1,0 +1,100 @@
+name: RP LowSpec client variants - hosted safety fixture
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/rp-lowspec-variants.yml
+      - agent/FUNCITY-RP-VARIANTE-LOWSPEC.json
+      - scripts/fc_rp_lowspec_variants.ps1
+      - scripts/fc_rp_lowspec_variants_test.ps1
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fixture-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check PowerShell syntax
+        shell: pwsh
+        run: |
+          foreach ($file in @('scripts/fc_rp_lowspec_variants.ps1','scripts/fc_rp_lowspec_variants_test.ps1')) {
+            $tokens=$null; $errors=$null
+            $null=[System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $file),[ref]$tokens,[ref]$errors)
+            if (@($errors).Count -ne 0) {
+              foreach ($problem in $errors) { Write-Output ('::error file=' + $file + '::' + $problem.Message) }
+              exit 2
+            }
+          }
+      - name: Create three fake local Prism profiles and assert fail-closed behavior
+        shell: pwsh
+        run: |
+          try {
+            ./scripts/fc_rp_lowspec_variants_test.ps1
+            exit 0
+          } catch {
+            Write-Output ('::error title=Hosted fixture failed::' + $_.Exception.Message)
+            exit 2
+          }
+  pc-create:
+    # One intentional push only; never run on ordinary documentation changes.
+    if: startsWith(github.event.head_commit.message, 'Create RP low-spec Prism variants once')
+    needs: fixture-only
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create isolated local variants only if client closed and inventories exact
+        shell: powershell
+        run: |
+          $lite = 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\FunCity RP Lite'
+          $test = 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\FunCity RP Lite Embeddium TEST'
+          & .\scripts\fc_rp_lowspec_variants.ps1 -Variant low_rubidium -Lite $lite
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & .\scripts\fc_rp_lowspec_variants.ps1 -Variant no_oculus_test -Lite $lite
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & .\scripts\fc_rp_lowspec_variants.ps1 -Variant embeddium_test -Lite $lite -EmbeddiumTest $test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+  pc-diagnose:
+    # Read-only and separate from creation. Only publishes fixed booleans/counts.
+    if: startsWith(github.event.head_commit.message, 'Diagnose RP low-spec preflight once')
+    needs: fixture-only
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check local profile availability and process gates without reading private files
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          try {
+            $root = 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances'
+            $lite = Join-Path $root 'FunCity RP Lite'
+            $test = Join-Path $root 'FunCity RP Lite Embeddium TEST'
+            $manifest = Get-Content -LiteralPath agent/FUNCITY-RP-LITE-SELECTIE.json -Raw | ConvertFrom-Json
+            $plan = Get-Content -LiteralPath agent/FUNCITY-RP-VARIANTE-LOWSPEC.json -Raw | ConvertFrom-Json
+            $prism = @(Get-Process -Name 'prismlauncher','minecraft' -ErrorAction SilentlyContinue).Count -gt 0
+            $server = 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+            $jvms = @(Get-CimInstance Win32_Process -Filter "Name = 'java.exe' OR Name = 'javaw.exe'")
+            $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction Stop)
+            $unknownJava = $false
+            foreach ($jvm in $jvms) {
+              if (-not $jvm.CommandLine -or $jvm.CommandLine.IndexOf($server,[StringComparison]::OrdinalIgnoreCase) -lt 0 -or
+                  @($listeners | Where-Object { $_.OwningProcess -eq $jvm.ProcessId }).Count -eq 0) { $unknownJava = $true }
+            }
+            $liteMods = Join-Path $lite '.minecraft/mods'
+            if (-not (Test-Path -LiteralPath $liteMods)) { $liteMods = Join-Path $lite 'minecraft/mods' }
+            $testMods = Join-Path $test '.minecraft/mods'
+            if (-not (Test-Path -LiteralPath $testMods)) { $testMods = Join-Path $test 'minecraft/mods' }
+            $names = @($manifest.retained_in_future_target)
+            $actual = if (Test-Path -LiteralPath $liteMods) { @(Get-ChildItem -LiteralPath $liteMods -Force | ForEach-Object Name) } else { @() }
+            $testCount = if (Test-Path -LiteralPath $testMods) { @(Get-ChildItem -LiteralPath $testMods -Force).Count } else { 0 }
+            $exact = $names.Count -eq 22 -and $actual.Count -eq 22 -and @(Compare-Object $names $actual).Count -eq 0
+            $existing = @($plan.variants | Where-Object { Test-Path -LiteralPath (Join-Path $root $_.prism_name) }).Count
+            Write-Output ('::notice title=RP LowSpec read-only preflight::PRISM_ACTIVE=' + $prism + ' UNKNOWN_JAVA=' + $unknownJava +
+              ' LITE_22_EXACT=' + $exact + ' TEST_JAR_COUNT=' + $testCount + ' NEW_VARIANTS_PRESENT=' + $existing)
+          } catch {
+            Write-Output ('::warning title=RP LowSpec read-only preflight::BLOCKED TYPE=' + $_.Exception.GetType().Name)
+            exit 2
+          }

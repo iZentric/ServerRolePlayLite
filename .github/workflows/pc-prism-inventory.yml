@@ -1,0 +1,60 @@
+name: PC Prism remaining profiles safety inventory
+# Read-only metadata: no account data, world contents, server addresses or raw logs.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-prism-inventory.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 5
+    steps:
+      - name: Classify other Prism instances before any further cleanup
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Join-Path $env:APPDATA 'PrismLauncher\instances'
+          if (-not (Test-Path -LiteralPath $root -PathType Container)) { throw 'Prism instances root not visible' }
+          $profiles = @(Get-ChildItem -LiteralPath $root -Directory -ErrorAction Stop)
+          if ($profiles.Count -gt 80) { throw 'unexpected Prism profile count; no changes' }
+          $categories = @{}
+          foreach ($profile in $profiles) {
+            $id = $profile.Name
+            $category = if ($id -eq 'FunCity-Lite-LowSpec-LAB-1.16.5') { 'KEEP-Lite' }
+              elseif ($id -match '(?i)egk') { 'KEEP-EGK' }
+              elseif ($id -match '(?i)v[ _-]?rp') { 'KEEP-VRP' }
+              elseif ($id -match '(?i)fab') { 'POSSIBLE-FABULISO' }
+              elseif ($id -match '(?i)funcity') { 'OLD-FUNCITY-DO-NOT-DELETE-YET' }
+              else { 'OTHER-DO-NOT-DELETE' }
+            $mc = Join-Path $profile.FullName '.minecraft'
+            if (-not (Test-Path -LiteralPath $mc -PathType Container)) {
+              $mc = Join-Path $profile.FullName 'minecraft'
+            }
+            $worlds = if (Test-Path -LiteralPath (Join-Path $mc 'saves') -PathType Container) {
+              @(Get-ChildItem -LiteralPath (Join-Path $mc 'saves') -Force).Count
+            } else { 0 }
+            $screens = if (Test-Path -LiteralPath (Join-Path $mc 'screenshots') -PathType Container) {
+              @(Get-ChildItem -LiteralPath (Join-Path $mc 'screenshots') -Force).Count
+            } else { 0 }
+            $mods = if (Test-Path -LiteralPath (Join-Path $mc 'mods') -PathType Container) {
+              @(Get-ChildItem -LiteralPath (Join-Path $mc 'mods') -File -Filter '*.jar').Count
+            } else { 0 }
+            if (-not $categories.ContainsKey($category)) { $categories[$category] = 0 }
+            $categories[$category]++
+            # Show only the name of old FunCity/fab candidates; never other names,
+            # player identities, world names or addresses in public CI annotations.
+            $tag = if ($category -in @('OLD-FUNCITY-DO-NOT-DELETE-YET','POSSIBLE-FABULISO')) {
+              ($id -replace '[^A-Za-z0-9 ._+()-]','_').Substring(0,[Math]::Min(80,$id.Length))
+            } else { 'redacted' }
+            Write-Output ('::notice title=Prism profile classification::category=' + $category +
+                          '|label=' + ($tag -replace '::','_') + '|mods=' + $mods +
+                          '|world_entries=' + $worlds + '|screenshots=' + $screens)
+          }
+          $overview = @($categories.GetEnumerator() | ForEach-Object { $_.Key + '=' + $_.Value }) -join '|'
+          Write-Output ('::notice title=Prism profiles total::count=' + $profiles.Count + '|' + $overview)
+          Write-Output '::notice title=Prism inventory scope::read_only=true no_profile_deleted=true'

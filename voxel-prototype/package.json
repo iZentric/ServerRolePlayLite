@@ -1,0 +1,16 @@
+{
+  "name": "funcity-voxel-prototype",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "test": "tsc -p tsconfig.test.json && node --test .test-build/test/*.test.js"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vite": "7.3.7",
+    "@types/node": "22.18.6"
+  }
+}

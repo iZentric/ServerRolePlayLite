@@ -1,0 +1,14 @@
+name: pack-build (retired)
+# Old pipeline wrote unvalidated mod JARs to another branch.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse unmeasured mod distribution
+        run: |
+          echo '::error::Do not add a mod without source, license and matched A/B evidence.'
+          exit 1

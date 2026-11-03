@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "project_name": "FunCity RP Lite",
+  "source_profile": "Freeroam 1.0.0",
+  "minecraft": "1.16.5",
+  "rule": "retain_original_bytes_except_exact_owner_approved_target_exclusions",
+  "status": "SIX_EXCLUSIONS_IN_FUTURE_TARGET_ONLY_NO_PROFILE_EDIT_NOT_RELEASE_READY",
+  "performance_candidates_for_active_game": [
+    "rubidium-mc1.16.5-0.2.13.jar",
+    "ferritecore-2.1.1-forge.jar",
+    "modernfix-forge-5.18.0+mc1.16.5.jar"
+  ],
+  "conditional_non_performance": {
+    "lazydfu-0.1.3.jar": "startup only; not FPS",
+    "oculus-mc1.16.5-1.4.7.jar": "visual compatibility only; shaders off"
+  },
+  "test_settings": {
+    "render_distance_chunks": 5,
+    "graphics": "Fast",
+    "shaders": false,
+    "particles": "Minimal",
+    "mipmap_levels": 0,
+    "entity_shadows": false
+  },
+  "on_conflict": "stop; no original JAR removed or replaced unless the owner explicitly names it",
+  "distribution": "BLOCKED_UNTIL_SOURCE_LICENSE_SHA_CLIENT_SERVER_LOGIN_BACKUP_VERIFIED",
+  "declared_original_names": "agent/FREEROAM-LISTA-DECLARATA.json",
+  "already_in_declared_list": [
+    "rubidium-mc1.16.5-0.2.13.jar",
+    "ferritecore-2.1.1-forge.jar",
+    "modernfix-forge-5.18.0+mc1.16.5.jar"
+  ],
+  "approved_additions": [],
+  "deferred_not_installed": {
+    "entityculling-forge-mc1.16.5-1.5.2.jar": "Older 1.16.5 line is unsupported; async culling may need CPU headroom. FPS and RP visibility untested.",
+    "embeddium-0.3.18+mc1.16.5.jar": "Forge 1.16.5 renderer alternative, not an add-on to Rubidium; TexTrue Rubidium Options conflict reported. No replacement without owner approval and A/B on isolated copy."
+  },
+  "owner_choices": "agent/FREEROAM-RASPUNSURI-28.json",
+  "approved_exclusions_from_future_lite": [
+    "CTM-MC1.16.1-1.1.2.6.jar",
+    "DynamicSurroundings-1.16.5-4.0.5.0.jar",
+    "InGameAccountSwitcher-Forge-1.16-8.0.1.jar",
+    "TRansliterationLib-1.0.4.jar",
+    "lightfallclient-1.0.0.jar",
+    "notenoughanimations-1.2.4.jar"
+  ],
+  "dependencies_and_server_handshake": "NOT_VERIFIED; especially CTM textures and Lightfall proxy requirement; no release claim",
+  "selection": "agent/FUNCITY-RP-LITE-SELECTIE.json",
+  "dependency_pair_excluded_by_owner": [
+    "notenoughanimations-1.2.4.jar",
+    "TRansliterationLib-1.0.4.jar"
+  ],
+  "requested_prism_destination": "Freeroam 1.0.0",
+  "installation_state": "BLOCKED_ACTIVE_PRISM_AND_JAVA_AT_PC_CHECK_NO_JAR_CHANGED",
+  "owner_authorizes_in_place_update_after_safety_gates": true,
+  "pc_inventory_verified": false,
+  "profile_backup_restore_verified": false,
+  "pc_declared_name_match_verified": true,
+  "pc_apply_attempt_run": "39463725942",
+  "pc_readonly_blocker_run": "39463980133"
+}

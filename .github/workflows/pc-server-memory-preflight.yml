@@ -1,0 +1,32 @@
+name: Measure existing PC server memory before 3 GiB host migration
+# Read-only: one snapshot of the ORIGINAL Java process. Never print process
+# command line, paths, config, player data, secrets, or world contents.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-server-memory-preflight.yml]
+permissions:
+  contents: read
+jobs:
+  pc-memory-read-only:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 4
+    steps:
+      - name: Check current working set and configured maximum heap only
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $server = Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
+          $processes = @(Get-CimInstance Win32_Process -Filter "Name = 'java.exe' OR Name = 'javaw.exe'" -ErrorAction Stop |
+            Where-Object { $_.CommandLine -and $_.CommandLine.IndexOf($server,[StringComparison]::OrdinalIgnoreCase) -ge 0 })
+          if ($processes.Count -ne 1) { throw 'ORIGINAL_SERVER_PROCESS_NOT_UNIQUE' }
+          $process = Get-Process -Id $processes[0].ProcessId -ErrorAction Stop
+          $rssMiB = [math]::Ceiling($process.WorkingSet64 / 1MB)
+          $peakMiB = [math]::Ceiling($process.PeakWorkingSet64 / 1MB)
+          $heapMiB = 'UNKNOWN'
+          if ($processes[0].CommandLine -match '(?i)(?:^|\s)-Xmx(\d+)([GgMm])(?:\s|$)') {
+            $value = [long]$Matches[1]
+            if ($Matches[2] -ieq 'G') { $value *= 1024 }
+            $heapMiB = [string]$value
+          }
+          Write-Output ('::notice title=Local RP server memory (read only)::RSS_MIB=' + $rssMiB + ' PEAK_RSS_MIB=' + $peakMiB + ' CONFIGURED_XMX_MIB=' + $heapMiB + '; ONE_SNAPSHOT_ONLY=true; DOES_NOT_PROVE_HOST_FIT=true')

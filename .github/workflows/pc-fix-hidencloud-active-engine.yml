@@ -1,0 +1,40 @@
+name: Correct HidenCloud active server.jar with verified working engine
+# One-time owner-requested host change. Preserve the old host JAR for rollback.
+# Do not start host or modify world, configs, mods, plugins, PC live server.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-fix-hidencloud-active-engine.yml
+      - scripts/fc_pc_fix_hidencloud_active_engine.ps1
+permissions:
+  contents: read
+concurrency:
+  group: funcity-host-engine-swap-one-at-a-time
+  cancel-in-progress: false
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse engine fix script without executing it
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path $PWD 'scripts/fc_pc_fix_hidencloud_active_engine.ps1'),
+            [ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'ENGINE_FIX_SCRIPT_SYNTAX_FAILED' }
+  pc-engine-fix:
+    if: startsWith(github.event.head_commit.message, 'Correct HidenCloud active engine once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Save current host JAR, upload verified engine, compare active SHA
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_fix_hidencloud_active_engine.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

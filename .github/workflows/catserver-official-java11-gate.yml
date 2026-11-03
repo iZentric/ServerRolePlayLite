@@ -1,0 +1,43 @@
+name: Check official CatServer engine Java 11 bootstrap safely
+# Public upstream JAR only, empty temp directory, EULA not accepted; no private
+# world, mods, plugins, account data, host files, upload, or deployment.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/catserver-official-java11-gate.yml]
+permissions:
+  contents: read
+jobs:
+  java11-public-jar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+      - name: Download SHA-pinned upstream and detect Java class compatibility only
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          temp="$(mktemp -d)"
+          trap 'rm -rf -- "$temp"' EXIT
+          cd "$temp"
+          gh release download 23.05.26-1 -R Luohuayu/CatServer \
+            -p CatServer-1.16.5-1d8d6313-server.jar -O upstream.jar
+          echo '8edea98c597e7af44a45ef9093678c38ca3749d55a71cdff10218c1c6b946fd0  upstream.jar' | sha256sum -c - >/dev/null
+          set +e
+          timeout --signal=TERM 145s java -Xms256M -Xmx1536M -jar upstream.jar nogui >private-bootstrap.log 2>&1
+          code=$?
+          set -e
+          if grep -Eqi 'UnsupportedClassVersionError|Unsupported class file major version|has been compiled by a more recent version of the Java Runtime' private-bootstrap.log; then
+            echo '::notice title=CatServer Java11 gate::JAVA11_CLASS_INCOMPATIBLE=true PRIVATE_CONTENT_NOT_USED=true DEPLOYMENT_NOT_ALLOWED=true'
+            exit 0
+          fi
+          if grep -Eqi 'You need to agree to the EULA|eula\.txt|EULA' private-bootstrap.log; then
+            echo '::notice title=CatServer Java11 gate::JAVA11_BOOTSTRAP_REACHED_EULA=true COMPLETE_34_MOD_13_PLUGIN_TEST=false DEPLOYMENT_NOT_ALLOWED=true'
+          else
+            echo "::notice title=CatServer Java11 gate::JAVA11_BOOTSTRAP_INCONCLUSIVE=true PROCESS_EXIT_CODE=$code COMPLETE_34_MOD_13_PLUGIN_TEST=false DEPLOYMENT_NOT_ALLOWED=true"
+          fi

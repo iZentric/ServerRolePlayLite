@@ -1,0 +1,14 @@
+name: RELEASE-JARS (retired)
+# Existing live engine remains; no automatic JAR release or cross-branch writes.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse unvalidated JAR publication
+        run: |
+          echo '::error::No JAR is published without build, Forge login, gameplay and rollback evidence.'
+          exit 1

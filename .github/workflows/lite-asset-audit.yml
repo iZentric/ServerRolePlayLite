@@ -1,0 +1,192 @@
+name: FunCity Lite historical-asset audit
+# Manual-only historical 24/29 A vs 23/28 B. NOT the plugin-first target.
+# Hosted runner only. No download artifact, release, PC action or deployment.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PYTHONPATH: scripts
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify authentic old release and inspect source names
+        run: |
+          set -Eeuo pipefail
+          mkdir -p "$RUNNER_TEMP/fc-asset"
+          gh release download funcity -R "$GITHUB_REPOSITORY" \
+            -p FunCity-1.2.5.mrpack -D "$RUNNER_TEMP/fc-asset"
+          pack="$RUNNER_TEMP/fc-asset/FunCity-1.2.5.mrpack"
+          printf '%s  %s\n' 'cd9c8ddeaff2e02e009934d7a35eba14b1b5a2bc919797ad7a0ab2a92bc5fb47' "$pack" | sha256sum -c -
+          python3 scripts/fc_mrpack_audit.py "$pack" --historical diag/pc-client.txt \
+            > "$RUNNER_TEMP/fc-asset/baseline.json"
+          cat "$RUNNER_TEMP/fc-asset/baseline.json"
+          python3 - <<'PY'
+          import hashlib, os, zipfile
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'fc-asset/FunCity-1.2.5.mrpack'
+          with zipfile.ZipFile(p) as z:
+              files=set(z.namelist())
+              if {'pack.png','overrides/pack.png'} <= files:
+                  match=hashlib.sha256(z.read('pack.png')).digest()==hashlib.sha256(z.read('overrides/pack.png')).digest()
+                  print('::notice file=agent/BETA-LITE.md,line=1,title=Icon duplication::'
+                        f'root_equals_override={str(match).lower()}')
+              big=sorted((i for i in z.infolist() if not i.is_dir()),
+                         key=lambda i:i.compress_size,reverse=True)[:10]
+              for i in big:
+                  if any(c in i.filename for c in ('\\n','\\r','::')):
+                      raise SystemExit('unsafe archive name for annotation')
+                  print('::notice file=agent/BETA-LITE.md,line=1,title=Large pack entry::'
+                        f'{i.filename} compressed_bytes={i.compress_size}')
+          PY
+      - name: Inspect client Pizzaland and ModernXL (same names need not mean same binaries)
+        run: |
+          set -Eeuo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          from scripts.fc_mod_binary_evidence import inspect_archive
+          pack = Path(os.environ['RUNNER_TEMP']) / 'fc-asset/FunCity-1.2.5.mrpack'
+          names = ('Pizzaland_v68.jar', 'Modernxl 1.16.5.jar')
+          records = inspect_archive(pack, names)
+          for name in names:
+              entry = json.dumps({'jar': name, **records[name]}, ensure_ascii=True, sort_keys=True)
+              print('::notice title=Client JAR metadata::' + entry)
+          PY
+      - name: Compare archived voice code with pinned official binary
+        run: |
+          set -Eeuo pipefail
+          gh release download lite -R "$GITHUB_REPOSITORY" \
+            -p CUANTIC-Server-CatServer-1.7.7.zip -D "$RUNNER_TEMP/fc-asset"
+          server="$RUNNER_TEMP/fc-asset/CUANTIC-Server-CatServer-1.7.7.zip"
+          printf '%s  %s\n' fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15 "$server" | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib, io, json, os, urllib.request, zipfile
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'fc-asset'
+          meta=json.loads(Path('agent/voicechat-1.16.5-2.3.23.json').read_text())
+          with zipfile.ZipFile(root/'CUANTIC-Server-CatServer-1.7.7.zip') as z:
+              matches=[i for i in z.infolist() if not i.is_dir() and
+                       i.filename.split('/')[-1]==meta['filename']]
+              assert len(matches)==1, 'voice JAR missing or ambiguous in historical server'
+              archive=z.read(matches[0])
+          with urllib.request.urlopen(meta['download'],timeout=40) as res:
+              official=res.read(10_000_000)
+              assert not res.read(1), 'voice download unexpectedly large'
+          assert len(official)==meta['size'] and hashlib.sha1(official).hexdigest()==meta['sha1']
+          assert hashlib.sha512(official).hexdigest()==meta['sha512']
+          def classes(jar):
+              with zipfile.ZipFile(io.BytesIO(jar)) as z:
+                  return {n:hashlib.sha256(z.read(n)).hexdigest() for n in z.namelist()
+                          if n.endswith('.class') and not n.endswith('/')}
+          a,b=classes(archive),classes(official)
+          print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Voice bytecode comparison::'
+                f'archive_bytes={len(archive)} official_bytes={len(official)} '
+                f'archive_classes={len(a)} official_classes={len(b)} '
+                f'classes_missing={len(b.keys()-a.keys())} classes_extra={len(a.keys()-b.keys())} '
+                f'classes_changed={sum(a[k]!=b[k] for k in a.keys()&b.keys())}')
+          assert a==b and len(a)>0, 'same filename/version but voice bytecode differs'
+          print('::notice file=agent/RP-EVIDENCE.md,line=1,title=Voice code verified::'
+                'archive and official class files byte-identical; non-class files differ')
+          PY
+      - name: Inspect selected historical JAR metadata, read-only (not runtime proof)
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/fc_mod_binary_evidence_test.py
+          python3 scripts/fc_mod_binary_evidence.py \
+            "$RUNNER_TEMP/fc-asset/CUANTIC-Server-CatServer-1.7.7.zip" \
+            | tee "$RUNNER_TEMP/fc-asset/mod-evidence.jsonl"
+          cat "$RUNNER_TEMP/fc-asset/mod-evidence.jsonl" >> "$GITHUB_STEP_SUMMARY"
+      - name: Stage isolated server 29-mod candidate from pinned archive (no plugins/world/engine)
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/fc_server_lite_candidate.py \
+            "$RUNNER_TEMP/fc-asset/CUANTIC-Server-CatServer-1.7.7.zip" \
+            --output "$RUNNER_TEMP/fc-asset/FunCity-Server-Mods-29-candidate.zip" \
+            > "$RUNNER_TEMP/fc-asset/server-candidate.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          report=json.loads((Path(os.environ['RUNNER_TEMP'])/'fc-asset/server-candidate.json').read_text())
+          assert report['server_mod_count']==29 and report['shared_client_server_names']==20
+          assert report['server_only']==9 and report['client_only']==4
+          with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as summary:
+              summary.write('Server mod archive (local only): 29 mods, '
+                            f"SHA256 `{report['candidate_sha256']}`. No server boot.\n")
+          PY
+      - name: Build local, non-distributed candidate and audit 24-mod target
+        run: |
+          set -Eeuo pipefail
+          pack="$RUNNER_TEMP/fc-asset/FunCity-1.2.5.mrpack"
+          target="$RUNNER_TEMP/fc-asset/FunCity-Lite-Beta-candidate.mrpack"
+          python3 scripts/fc_lite_repack.py "$pack" \
+            --source-sha256 cd9c8ddeaff2e02e009934d7a35eba14b1b5a2bc919797ad7a0ab2a92bc5fb47 \
+            --output "$target" > "$RUNNER_TEMP/fc-asset/candidate.json"
+          python3 scripts/fc_mrpack_audit.py "$target" > "$RUNNER_TEMP/fc-asset/candidate-audit.json"
+          cat "$RUNNER_TEMP/fc-asset/candidate.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'fc-asset'
+          a=json.loads((root/'candidate-audit.json').read_text())
+          b=json.loads((root/'baseline.json').read_text())
+          c=json.loads((root/'candidate.json').read_text())
+          assert b['client_mod_count']==25 and a['client_mod_count']==24
+          assert a['remote_files_without_declared_size']==0
+          summary=Path(os.environ['GITHUB_STEP_SUMMARY'])
+          with summary.open('a') as stream:
+              stream.write('Client structural only; NO Prism/client connection or FPS test\n'
+                           f"Source: {b['archive_bytes']} bytes / 25 mods; "
+                           f"candidate: {a['archive_bytes']} bytes / 24 mods (voice RP).\n"
+                           f"Remote downloads declared: {a['remote_download_bytes_declared']} bytes; "
+                           f"candidate SHA256: `{c['output_sha256']}`.\n")
+          print('::notice file=agent/BETA-LITE.md,line=1,title=Lite ZIP metadata::'
+                f"old_bytes={b['archive_bytes']} new_bytes={a['archive_bytes']} "
+                f"remote_bytes={a['remote_download_bytes_declared']} "
+                f"new_sha256={c['output_sha256']} source_sha256={c['source_sha256']}")
+          PY
+      - name: Stage isolated no-Pizzaland A/B pair (no install or distribution)
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-asset"
+          python3 scripts/fc_server_lite_candidate.py \
+            "$root/CUANTIC-Server-CatServer-1.7.7.zip" --without-pizzaland \
+            --output "$root/server-no-pizzaland-lab.zip" > "$root/server-no-pizzaland.json"
+          python3 scripts/fc_lite_repack.py "$root/FunCity-1.2.5.mrpack" \
+            --source-sha256 cd9c8ddeaff2e02e009934d7a35eba14b1b5a2bc919797ad7a0ab2a92bc5fb47 \
+            --without-pizzaland --output "$root/client-no-pizzaland-lab.mrpack" \
+            > "$root/client-no-pizzaland.json"
+          python3 scripts/fc_mrpack_audit.py "$root/client-no-pizzaland-lab.mrpack" \
+            --without-pizzaland-lab > "$root/client-no-pizzaland-audit.json"
+          python3 - <<'PY'
+          import json, os, pathlib
+          from scripts.fc_mod_binary_evidence import scan_required_dependents
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'fc-asset'
+          get=lambda n: json.loads((root/n).read_text())
+          a=get('candidate-audit.json'); b=get('client-no-pizzaland-audit.json')
+          server=get('server-no-pizzaland.json'); client=get('client-no-pizzaland.json')
+          assert (a['client_mod_count'], b['client_mod_count'], server['server_mod_count']) == (24,23,28)
+          assert 'pizzaland_v68.jar' in client['removed']
+          assert 'Pizzaland_v68.jar' in server['removed']
+          assert server['shared_client_server_names']==19
+          scans=[scan_required_dependents(root/'server-no-pizzaland-lab.zip','pizzamod'),
+                 scan_required_dependents(root/'client-no-pizzaland-lab.mrpack','pizzamod')]
+          assert not any(s['mandatory_dependents'] for s in scans), 'mandatory pizzamod dependent remained'
+          print('::notice title=No-Pizzaland declared dependencies::'
+                f"server_embedded={scans[0]['embedded_jars_inspected']} "
+                f"client_embedded={scans[1]['embedded_jars_inspected']} "
+                f"metadata_unparsed_server={len(scans[0]['metadata_not_parsed'])} "
+                f"metadata_unparsed_client={len(scans[1]['metadata_not_parsed'])} "
+                'no mandatory pizzamod declared among inspected embedded JARs; runtime/remote unknown')
+          message=(f"A=24 client/{a['archive_bytes']} bytes; B=23 client/{b['archive_bytes']} bytes; "
+                   f"delta={a['archive_bytes']-b['archive_bytes']} bytes; server B=28 mods. "
+                   'STATIC ZIP ONLY: no Forge login, gameplay or FPS.')
+          print('::notice title=No-Pizzaland isolated comparison::'+message)
+          with pathlib.Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as f:
+              f.write('\nNo-Pizzaland A/B lab only: '+message+'\n')
+          PY

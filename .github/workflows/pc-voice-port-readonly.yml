@@ -1,0 +1,53 @@
+name: Check private RP voice configuration against HidenCloud allocations
+# Read only the already SHA-verified offline PC backup; no file contents,
+# usernames, paths, passwords or private world data in logs. No host writes.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-voice-port-readonly.yml]
+permissions:
+  contents: read
+jobs:
+  pc-voice-check:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 4
+    steps:
+      - name: Check server-side Voice Chat port without outputting config
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          try {
+            $root=Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\Arena-Private-Backups\offline-39843776626\server'
+            $toml=Join-Path $root 'serverconfig\voicechat-server.toml'
+            $legacy=Join-Path $root 'config\voicechat\voicechat-server.properties'
+            $tomlPresent=Test-Path -LiteralPath $toml -PathType Leaf
+            $legacyPresent=Test-Path -LiteralPath $legacy -PathType Leaf
+            $tomlPort='UNKNOWN'
+            $legacyPort='UNKNOWN'
+            if ($tomlPresent) {
+              $lines=@(Get-Content -LiteralPath $toml -ErrorAction Stop | Where-Object { $_ -match '^\s*port\s*=\s*\d+\s*(?:#.*)?$' })
+              if ($lines.Count -eq 1 -and $lines[0] -match '^\s*port\s*=\s*(\d+)') { $tomlPort=$Matches[1] }
+            }
+            if ($legacyPresent) {
+              $lines=@(Get-Content -LiteralPath $legacy -ErrorAction Stop | Where-Object { $_ -match '^\s*port\s*=\s*\d+\s*$' })
+              if ($lines.Count -eq 1 -and $lines[0] -match '^\s*port\s*=\s*(\d+)') { $legacyPort=$Matches[1] }
+            }
+            $allToml=@(Get-ChildItem -LiteralPath $root -Recurse -File -Force -ErrorAction Stop |
+              Where-Object { $_.Name -ieq 'voicechat-server.toml' })
+            $nestedPort='UNKNOWN'
+            if ($allToml.Count -eq 1) {
+              $portLines=@(Get-Content -LiteralPath $allToml[0].FullName -ErrorAction Stop |
+                Where-Object { $_ -match '^\s*port\s*=\s*\d+\s*(?:#.*)?$' })
+              if ($portLines.Count -eq 1 -and $portLines[0] -match '^\s*port\s*=\s*(\d+)') { $nestedPort=$Matches[1] }
+            }
+            foreach ($port in @($tomlPort,$legacyPort,$nestedPort)) {
+              if ($port -ne 'UNKNOWN' -and ([int]$port -lt 1 -or [int]$port -gt 65535)) { throw 'INVALID_VOICE_PORT' }
+            }
+            Write-Output ('::notice title=RP voice port from offline backup::TOML_PRESENT=' + $tomlPresent +
+              ' TOML_PORT=' + $tomlPort + ' LEGACY_PRESENT=' + $legacyPresent + ' LEGACY_PORT=' + $legacyPort +
+              ' RECURSIVE_TOML_COUNT=' + $allToml.Count + ' UNIQUE_TOML_PORT=' + $nestedPort +
+              ' HOST_SECONDARY_ALLOCATION=25103 UDP_AVAILABILITY_NOT_VERIFIED=true HOST_CONFIG_NOT_RECHECKED=true')
+          } catch {
+            Write-Output '::error title=RP voice port::READ_ONLY_CHECK_FAILED; no private values logged'
+            exit 2
+          }

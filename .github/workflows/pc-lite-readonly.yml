@@ -1,0 +1,159 @@
+name: FunCity PC Lite read-only inventory
+# One-shot, branch-only inventory on the owner's existing Windows runner.
+# No install, launch, server/Prism changes, world/player data, upload or repo writes.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-lite-readonly.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 6
+    steps:
+      - name: Read allowlisted FunCity / HYPECITY inventory only
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          $root='E:\Administrator\Desktop\FunCity'
+          Write-Output 'SCOPE=READ_ONLY_METADATA_NO_WORLD_NO_CREDENTIALS_NO_INSTALL'
+          if (-not (Test-Path -LiteralPath $root -PathType Container)) {
+            Write-Output 'ROOT=ABSENT; NO_CHANGE'
+            exit 0
+          }
+          function SafeName([string]$n) { return ($n -replace '[^a-zA-Z0-9 ._()+-]','_') }
+          # Notices are visible through GitHub's checks API even when log downloads fail.
+          # Values are allowlisted/sanitized metadata only; never credentials or player data.
+          function Note([string]$title,[string]$value) {
+            $safe=$value -replace '[^a-zA-Z0-9 ._()+|=:-]','_'
+            Write-Output ('::notice title=' + $title + '::' + $safe.Substring(0,[Math]::Min(1600,$safe.Length)))
+          }
+          function JarNames([string]$dir) {
+            if (-not (Test-Path -LiteralPath $dir -PathType Container)) { return @() }
+            return @(Get-ChildItem -LiteralPath $dir -File -ErrorAction Stop |
+                     Where-Object { $_.Extension -ieq '.jar' } |
+                     ForEach-Object { SafeName $_.Name } | Sort-Object)
+          }
+          function Info([string]$label,[string]$rel) {
+            $p=Join-Path $root $rel
+            if (-not (Test-Path -LiteralPath $p -PathType Container)) {
+              Write-Output "$label=ABSENT"
+              Note "$label presence" 'ABSENT'
+              return
+            }
+            Write-Output "$label=PRESENT"
+            $mods=@(JarNames (Join-Path $p 'mods'))
+            $plugins=@(JarNames (Join-Path $p 'plugins'))
+            Write-Output "$label MODS_COUNT=$($mods.Count) PLUGINS_COUNT=$($plugins.Count)"
+            Write-Output "$label MODS=$($mods -join ' | ')"
+            Write-Output "$label PLUGINS=$($plugins -join ' | ')"
+            Note "$label files" "mods=$($mods.Count) names=$($mods -join '|') plugins=$($plugins.Count) plugin_names=$($plugins -join '|')"
+            $props=Join-Path $p 'server.properties'
+            if (Test-Path -LiteralPath $props -PathType Leaf) {
+              foreach ($line in Get-Content -LiteralPath $props -ErrorAction Stop) {
+                if ($line -match '^(max-players|view-distance|network-compression-threshold|spawn-protection|online-mode)\s*=\s*(true|false|-?[0-9]{1,6})\s*$') {
+                  Write-Output "$label PROP=$($matches[1])=$($matches[2])"
+                  Note "$label setting" "$($matches[1])=$($matches[2])"
+                }
+              }
+            }
+            else { Write-Output "$label PROPS=ABSENT" }
+          }
+          Info 'HYPECITY' 'servere referinta\hypecity'
+          Info 'HYPECITY_BK' 'servere referinta\HYPECITY BK vechi nostalgic pentru cei de pe mooncraft'
+          Info 'FUNCITY_PC' 'FunCity server'
+          $prism=$null
+          if ($env:APPDATA) { $prism=Join-Path $env:APPDATA 'PrismLauncher\instances' }
+          if ($prism -and (Test-Path -LiteralPath $prism -PathType Container)) {
+            $profiles=@(Get-ChildItem -LiteralPath $prism -Directory -ErrorAction Stop |
+                        Where-Object { $_.Name -match 'FunCity' } | Select-Object -First 4)
+            Write-Output "PRISM_FUNCITY_PROFILE_COUNT=$($profiles.Count)"
+            Note 'Prism profiles' "count=$($profiles.Count)"
+            foreach ($profile in $profiles) {
+              Write-Output "PRISM_PROFILE=$(SafeName $profile.Name)"
+              $mods=@(JarNames (Join-Path $profile.FullName '.minecraft\mods'))
+              Write-Output "PRISM_MODS_COUNT=$($mods.Count) NAMES=$($mods -join ' | ')"
+              Note 'Prism FunCity mods' "count=$($mods.Count) names=$($mods -join '|')"
+            }
+          }
+          else { Write-Output 'PRISM_INSTANCES=NOT_VISIBLE_TO_RUNNER_ACCOUNT'; Note 'Prism profiles' 'NOT_VISIBLE' }
+          foreach ($dir in @($root, (Join-Path $root 'FunCity server'))) {
+            if (Test-Path -LiteralPath $dir -PathType Container) {
+              foreach ($jar in @(Get-ChildItem -LiteralPath $dir -File -Filter '*b1.0827*.jar' -ErrorAction Stop | Select-Object -First 2)) {
+                if ($jar.Length -le 500000000) {
+                  $hash=(Get-FileHash -LiteralPath $jar.FullName -Algorithm SHA256).Hash
+                  Write-Output "ENGINE_CANDIDATE=$(SafeName $jar.Name) BYTES=$($jar.Length) SHA256=$hash"
+                  Note 'Engine candidate' "name=$(SafeName $jar.Name) bytes=$($jar.Length) sha256=$hash"
+                }
+              }
+            }
+          }
+          $drive=Get-PSDrive -Name E -ErrorAction SilentlyContinue
+          if ($drive -and $null -ne $drive.Free) {
+            $freeMib=[math]::Floor($drive.Free / 1MB)
+            Write-Output "PC_E_FREE_MIB=$freeMib"
+            Note 'PC storage' "E_free_mib=$freeMib"
+          }
+          Write-Output 'DONE=READ_ONLY; no file or configuration modified'
+      - name: Report current FunCity and Prism (separate annotation budget)
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          function Note([string]$title,[string]$value) {
+            $safe=$value -replace '[^a-zA-Z0-9 ._()+|=:-]','_'
+            Write-Output ('::notice title=' + $title + '::' + $safe.Substring(0,[Math]::Min(1500,$safe.Length)))
+          }
+          function Names([string]$dir) {
+            if (-not (Test-Path -LiteralPath $dir -PathType Container)) { return @() }
+            return @(Get-ChildItem -LiteralPath $dir -File -ErrorAction Stop |
+                     Where-Object { $_.Extension -ieq '.jar' } |
+                     ForEach-Object { $_.Name -replace '[^a-zA-Z0-9 ._()+-]','_' } | Sort-Object)
+          }
+          # Actual local stage observed in historical PC client report; E: is references only.
+          $root=Join-Path $env:USERPROFILE 'Desktop\FunCityLocal\server'
+          if (Test-Path -LiteralPath $root -PathType Container) {
+            Note 'FunCity PC' 'PRESENT'
+            $mods=@(Names (Join-Path $root 'mods'))
+            $plugins=@(Names (Join-Path $root 'plugins'))
+            Note 'FunCity mods' "count=$($mods.Count) names=$($mods -join '|')"
+            Note 'FunCity plugins' "count=$($plugins.Count) names=$($plugins -join '|')"
+            $props=Join-Path $root 'server.properties'
+            if (Test-Path -LiteralPath $props -PathType Leaf) {
+              $values=@(Get-Content -LiteralPath $props -ErrorAction Stop | Where-Object {
+                $_ -match '^(max-players|view-distance|network-compression-threshold|spawn-protection|online-mode)\s*=\s*(true|false|-?[0-9]{1,6})\s*$'
+              })
+              Note 'FunCity settings' "count=$($values.Count) values=$($values -join '|')"
+            }
+            $mainJars=@(Get-ChildItem -LiteralPath $root -File -Filter '*.jar' -ErrorAction Stop |
+                        Select-Object -First 5 | ForEach-Object { $_.Name -replace '[^a-zA-Z0-9 ._()+-]','_' })
+            Note 'FunCity server jars' "count=$($mainJars.Count) names=$($mainJars -join '|')"
+            $jars=@(Get-ChildItem -LiteralPath $root -File -Filter '*b1.0827*.jar' -ErrorAction Stop | Select-Object -First 1)
+            foreach ($jar in $jars) {
+              if ($jar.Length -le 500000000) {
+                $hash=(Get-FileHash -LiteralPath $jar.FullName -Algorithm SHA256).Hash
+                Note 'FunCity engine' "bytes=$($jar.Length) sha256=$hash"
+              }
+            }
+          }
+          else { Note 'FunCity PC' 'ABSENT' }
+          $candidates=@()
+          if ($env:APPDATA) { $candidates+=Join-Path $env:APPDATA 'PrismLauncher\instances' }
+          $candidates+='C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances'
+          $instances=@($candidates | Select-Object -Unique | Where-Object { Test-Path -LiteralPath $_ -PathType Container })
+          if ($instances.Count -eq 0) { Note 'Prism on PC' 'NOT_VISIBLE' }
+          else {
+            $profiles=@(Get-ChildItem -LiteralPath $instances[0] -Directory -ErrorAction Stop |
+                        Where-Object { $_.Name -match 'FunCity' } | Select-Object -First 2)
+            Note 'Prism profiles' "count=$($profiles.Count)"
+            foreach ($profile in $profiles) {
+              $mods=@(Names (Join-Path $profile.FullName 'minecraft\mods'))
+              Note 'Prism profile mods' "count=$($mods.Count) names=$($mods -join '|')"
+            }
+          }
+          $drive=Get-PSDrive -Name E -ErrorAction SilentlyContinue
+          if ($drive -and $null -ne $drive.Free) { Note 'PC E storage' "free_mib=$([math]::Floor($drive.Free / 1MB))" }
+          Write-Output 'DONE=READ_ONLY; targeted metadata only'

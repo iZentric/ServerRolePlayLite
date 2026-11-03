@@ -1,0 +1,83 @@
+name: Arena router - disposable GitHub runner
+# Runs on GitHub-hosted Ubuntu, NOT the owner's PC or HidenCloud. The installer
+# and CLI config are never committed/uploaded with credentials. Each run has a
+# new HOME; this cannot configure the Arena Agent Mode or restart Minecraft.
+# Without the optional ARENA_ROUTER_TOKEN repository secret this is a safe
+# download/verification only. Never put the token in workflow inputs or logs.
+on:
+  workflow_dispatch:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/arena-installer-snapshot.yml]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    env:
+      HAS_ARENA_TOKEN: ${{ secrets.ARENA_ROUTER_TOKEN != '' }}
+    steps:
+      - name: Download and verify exact installer before execution
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          curl --proto '=https' --tlsv1.2 --location --fail --silent --show-error \
+            --retry 2 --connect-timeout 10 --max-time 60 --max-filesize 2097152 \
+            'https://platform.arena.ai/setup.sh' -o "$RUNNER_TEMP/arena-setup.sh"
+          test -s "$RUNNER_TEMP/arena-setup.sh"
+          digest="$(sha256sum "$RUNNER_TEMP/arena-setup.sh" | cut -d ' ' -f 1)"
+          echo "::notice file=.github/workflows/arena-installer-snapshot.yml,title=Public installer SHA256::$digest"
+          printf 'SHA256=%s\n' "$digest" >> "$GITHUB_STEP_SUMMARY"
+          echo '0eec62e982f8e9ab7d0fb25ee6a1cad4b477158f622af6ee530127be69a7a77b  '"$RUNNER_TEMP/arena-setup.sh" | sha256sum -c -
+          bash -n "$RUNNER_TEMP/arena-setup.sh"
+          # No token or repository content is exposed to this sanity check.
+          HOME="$RUNNER_TEMP/arena-help-home" bash "$RUNNER_TEMP/arena-setup.sh" --help >/dev/null
+          echo 'Pinned installer syntax and help checked; no setup yet.'
+      - name: Preserve only the public script for review (one day)
+        uses: actions/upload-artifact@v4
+        with:
+          name: arena-setup-public-script
+          path: ${{ runner.temp }}/arena-setup.sh
+          retention-days: 1
+          if-no-files-found: error
+      - name: No Arena token configured - do not install
+        if: env.HAS_ARENA_TOKEN != 'true'
+        shell: bash
+        run: |
+          echo '::notice title=Arena router not configured::No ARENA_ROUTER_TOKEN repository secret available; installer not run in setup mode.'
+          echo 'No Arena token available; setup skipped. No HidenCloud command channel was created.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Install OpenCode CLI without access to token
+        if: env.HAS_ARENA_TOKEN == 'true'
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          npm install --global opencode-ai@1.19.4 --no-audit --no-fund
+          command -v opencode
+          opencode --version >/dev/null
+      - name: Configure OpenCode via pinned Arena installer (temporary HOME)
+        if: env.HAS_ARENA_TOKEN == 'true'
+        shell: bash
+        env:
+          ARENA_ROUTER_TOKEN: ${{ secrets.ARENA_ROUTER_TOKEN }}
+        run: |
+          set -Eeuo pipefail
+          export HOME="$RUNNER_TEMP/arena-router-home"
+          umask 077
+          install -d -m 700 "$HOME/.arena"
+          trap 'rm -f "$HOME/.arena/token"' EXIT
+          printf '%s' "$ARENA_ROUTER_TOKEN" > "$HOME/.arena/token"
+          unset ARENA_ROUTER_TOKEN
+          ARENA_SETUP_NONINTERACTIVE=1 ARENA_SETUP_HARNESSES=opencode \
+            bash "$RUNNER_TEMP/arena-setup.sh" </dev/null >/dev/null
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          home = Path(os.environ['HOME'])
+          config = json.loads((home / '.config/opencode/opencode.json').read_text())
+          assert config['model'] == 'arena/coding-router-preview'
+          assert config['provider']['arena']['options']['baseURL'] == 'https://api.arena.ai/v1'
+          assert (home / '.arena/install-state.json').is_file()
+          print('Arena router configured for OpenCode on disposable runner (no model request or billing).')
+          PY
+          echo 'OpenCode configured only for this ephemeral runner; not deployed to HidenCloud.' >> "$GITHUB_STEP_SUMMARY"

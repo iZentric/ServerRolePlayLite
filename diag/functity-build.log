@@ -1,0 +1,30 @@
+== descarc srv-live (443MB) de pe release server-live ==
+== structura ==
+ADRESA
+CITESTE-MA.txt
+CatServer-1.16.5-1d8d6313-server.jar
+FunCity-1.16.5-b1.0827.jar
+ROLLBACK.txt
+banned-ips.json
+banned-players.json
+bind.log
+boot.clean
+boot.log
+jars: 0
+== engine jar root ==
+mods: ./mods cu 29 jars
+engine: FunCity-1.16.5-b1.0827.jar
+== icon 64x64 de pe release funcity ==
+imagick ok
+server-icon: convertit
+== server.properties FunCity ==
+== start.bat (java portabil + RAM auto) ==
+== Actualizare FunCity.bat ==
+== java portabila Windows x64 (Temurin 11) ==
+== adresa curenta ==
+ADRESA.txt: serveousercontent.com:42241
+== README ==
+== zip final ==
+-rw-r--r-- 1 runner runner 486671634 Oct 17 21:50 /home/runner/work/ServerRolePlayLite/ServerRolePlayLite/FUNCTITY-SERVER.zip
+== upload pe release functity ==
+release not found

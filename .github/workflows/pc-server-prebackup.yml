@@ -1,0 +1,33 @@
+name: Create private pre-maintenance server safety copy once
+# Copy on local PC only, hash-verify every file; never upload files or stop server.
+# This running-server copy is NOT the final consistent offline backup.
+# Retry once after safe phase/type diagnostics were added; never force-stop Java.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-server-prebackup.yml]
+permissions:
+  contents: read
+jobs:
+  guards:
+    if: startsWith(github.event.head_commit.message, 'Create local private server prebackup once')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthetic source unchanged, private copy and hash checks
+        shell: pwsh
+        run: ./scripts/fc_server_prebackup_test.ps1
+  pc-copy:
+    if: startsWith(github.event.head_commit.message, 'Create local private server prebackup once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy selected existing server locally without world edits or process stop
+        shell: powershell
+        run: |
+          $server = 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+          & ./scripts/fc_server_prebackup.ps1 -Server $server
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

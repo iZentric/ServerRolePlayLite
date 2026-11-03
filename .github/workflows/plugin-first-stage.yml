@@ -1,0 +1,108 @@
+name: FunCity plugin-first isolated server stage
+# GitHub-hosted runner ONLY; private loopback, no player, PC, live, release or artifact.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - '.github/workflows/plugin-first-stage.yml'
+      - 'scripts/fc_plugin_first_stage.py'
+      - 'scripts/fc_plugin_first_stage_test.py'
+      - 'scripts/fc_plugin_first_smoke.py'
+      - 'agent/PLUGIN-FIRST.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  closed-stage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PYTHONPATH: scripts
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+      - name: Fail-closed plugin policy and synthetic stage fixtures
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/fc_plugin_first_gate_test.py
+          python3 scripts/fc_plugin_first_stage_test.py
+      - name: Fetch SHA-pinned engine and plugin inputs; no world
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-plugin-first"
+          mkdir -p "$root"
+          gh release download jars-20261017-0952 --repo "$GITHUB_REPOSITORY" \
+            -p 'functity-jare-toate.tar.gz' -O "$root/engines.tar.gz"
+          echo "f2cb921efbf751fa24534a9a02b57197db46294ca7b71d9711b04996bf6d1784  $root/engines.tar.gz" | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib, os, shutil, tarfile
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'fc-plugin-first'
+          with tarfile.open(root/'engines.tar.gz','r:gz') as archive:
+              entries=archive.getmembers()
+              guava=[m.name for m in entries if m.isfile() and 'guava' in m.name.lower()]
+              print('::notice title=Reference archive Guava::matches=' +
+                    str(len(guava)) + ' names=' + '|'.join(guava[:5])[:450])
+              members=[m for m in entries if m.isfile() and Path(m.name).name in
+                       ('FunCity-b1.0827.jar','FunCity-1.16.5-b1.0827.jar')]
+              if len(members)!=1 or members[0].size>350_000_000:
+                  raise SystemExit('missing/ambiguous/oversized pinned FunCity engine')
+              with archive.extractfile(members[0]) as src, (root/'motor.jar').open('wb') as dst:
+                  shutil.copyfileobj(src,dst,1<<20)
+          digest=hashlib.sha256((root/'motor.jar').read_bytes()).hexdigest()
+          assert digest=='d6ffa35c1ea9032a4a95f7f1e34b734aa7f53b0358dda6b9e6592326640a15dd'
+          print('::notice title=FunCity reference engine::b1.0827 SHA verified; no alternative motor selected')
+          PY
+          gh release download lite --repo "$GITHUB_REPOSITORY" \
+            -p 'CUANTIC-Server-CatServer-1.7.7.zip' -O "$root/old-plugins.zip"
+          echo "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  $root/old-plugins.zip" | sha256sum -c -
+          python3 - <<'PY'
+          import os, zipfile
+          from pathlib import Path
+          pack=Path(os.environ['RUNNER_TEMP'])/'fc-plugin-first/old-plugins.zip'
+          with zipfile.ZipFile(pack) as archive:
+              guava=[i.filename for i in archive.infolist() if 'guava' in i.filename.lower()]
+              print('::notice title=Historical server pack Guava::matches=' +
+                    str(len(guava)) + ' names=' + '|'.join(guava[:5])[:450])
+          PY
+          gh release download v21.2 --repo PlayPro/CoreProtect \
+            -p 'CoreProtect-21.2.jar' -O "$root/CoreProtect.jar"
+          echo "04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977  $root/CoreProtect.jar" | sha256sum -c -
+      - name: Pin official Guava 21 for isolated engine boot diagnosis
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-plugin-first"
+          gh release download v21.0 --repo google/guava -p 'guava-21.0.jar' -O "$root/guava-21.0.jar"
+          test "$(stat -c%s "$root/guava-21.0.jar")" = 2521113
+          echo "972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480  $root/guava-21.0.jar" | sha256sum -c -
+          javap -classpath "$root/guava-21.0.jar" com.google.common.collect.ImmutableMap \
+            | grep 'toImmutableMap(java.util.function.Function' > /dev/null
+          echo '::notice title=Guava21 laboratory input::official v21.0 release pinned and toImmutableMap present; classpath override is lab-only'
+      - name: Stage exactly zero mods and six pinned plugins on a new isolated copy
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-plugin-first"
+          python3 scripts/fc_plugin_first_stage.py --engine "$root/motor.jar" \
+            --archive "$root/old-plugins.zip" --coreprotect "$root/CoreProtect.jar" \
+            --guava21 "$root/guava-21.0.jar" \
+            --output "$root/stage" > "$root/stage-result.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'fc-plugin-first'
+          result=json.loads((root/'stage-result.json').read_text())
+          assert not result['server_mods'] and len(result['plugins'])==6
+          print('::notice title=Closed plugin-only stage::mods=0 pinned_plugins=6 '
+                'online-mode=true whitelist=true bind=127.0.0.1; no player authentication/plugin voice yet')
+          PY
+      - name: Boot and clean stop on loopback, no public player or benchmark
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/fc_plugin_first_smoke.py "$RUNNER_TEMP/fc-plugin-first/stage"
+          echo 'Closed boot only. No client login, RP gameplay, capacity or live changes.'

@@ -1,0 +1,14 @@
+name: bat-v2 (retired)
+# Never publish an untested installer when tools/FunCity-Update.bat changes.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse automatic installer publication
+        run: |
+          echo '::error::Installer release requires a Windows test and explicit approval.'
+          exit 1

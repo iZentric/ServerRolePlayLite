@@ -1,0 +1,36 @@
+name: Inventory owner's E drive FunCity JARs privately
+# Reads user-provided E drive via PC self-hosted runner. No host writes, no
+# private JAR/world upload, no Java boot. Manifest stays only on owner's PC.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-e-funcity-jar-inventory.yml
+      - scripts/fc_pc_inventory_e_funcity_jars.ps1
+permissions:
+  contents: read
+jobs:
+  syntax:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse inventory script without scanning PC
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path $PWD 'scripts/fc_pc_inventory_e_funcity_jars.ps1'),
+            [ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'E_INVENTORY_SCRIPT_SYNTAX_FAILED' }
+  pc-private-inventory:
+    needs: syntax
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Hash and classify every readable JAR on E without publishing names
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_inventory_e_funcity_jars.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

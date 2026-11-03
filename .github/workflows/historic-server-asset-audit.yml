@@ -1,0 +1,34 @@
+name: Inspect already published funcity server ZIP
+# Hosted, read-only audit of the public historical asset. No repackaging or upload.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/historic-server-asset-audit.yml
+      - scripts/fc_historic_server_release_audit.py
+      - scripts/fc_historic_server_release_audit_test.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify metadata-audit fixture tests
+        run: python3 scripts/fc_historic_server_release_audit_test.py
+      - name: Fetch exact historical asset, verify checksum, inspect ZIP directory only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/funcity-historic"
+          gh release download funcity -R iZentric/ServerRolePlayLite \
+            -p FUNCTITY-SERVER.zip -D "$RUNNER_TEMP/funcity-historic"
+          result=$(python3 scripts/fc_historic_server_release_audit.py \
+            --archive "$RUNNER_TEMP/funcity-historic/FUNCTITY-SERVER.zip" \
+            --expected-sha 0752393616e898ede7f1b68f3bb2c68c063235581eca4af6b6d9d02d3cfbb289)
+          printf '%s\n' "$result"
+          printf '::notice title=Published server ZIP directory only::%s\n' "$(printf '%s\n' "$result" | head -n 1)"
+          rm -f "$RUNNER_TEMP/funcity-historic/FUNCTITY-SERVER.zip"

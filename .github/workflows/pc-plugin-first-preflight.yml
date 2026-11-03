@@ -1,0 +1,90 @@
+name: PC closed-server and clean Prism preflight
+# Read-only preflight for a NEW isolated copy. Never inspect worlds, accounts or credentials.
+on:
+  push:
+    branches:
+      - arena/9bbcb24f-serverroleplaylite
+    paths:
+      - .github/workflows/pc-plugin-first-preflight.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 5
+    steps:
+      - name: Check lab prerequisites without touching existing server or Prism
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          function Note([string]$key, [string]$value) {
+            $safe = $value -replace '[^A-Za-z0-9 ._+=:-]', '_'
+            Write-Output ('::notice title=' + $key + '::' + $safe.Substring(0, [Math]::Min($safe.Length, 300)))
+          }
+          $os = Get-CimInstance Win32_OperatingSystem
+          Note 'PC available memory MiB' ([string][Math]::Floor($os.FreePhysicalMemory / 1024))
+          $drive = Get-PSDrive -Name C -ErrorAction SilentlyContinue
+          if ($drive) { Note 'PC C free MiB' ([string][Math]::Floor($drive.Free / 1MB)) }
+          $java = Get-Command java -ErrorAction SilentlyContinue
+          Note 'Java on PATH' ([string][bool]$java)
+          if ($java) {
+            $ErrorActionPreference = 'Continue' # java -version prints to stderr on Java 11
+            $version = (& java -version 2>&1 | Select-Object -First 1) -replace '[^A-Za-z0-9 ._+\-]','_'
+            $ErrorActionPreference = 'Stop'
+            Note 'Java version' $version
+          }
+          $prism = @()
+          if ($env:APPDATA) { $prism += Join-Path $env:APPDATA 'PrismLauncher\instances' }
+          $prism += 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances'
+          $present = @($prism | Select-Object -Unique | Where-Object { Test-Path -LiteralPath $_ -PathType Container })
+          Note 'Prism instances root visible' ([string]($present.Count -gt 0))
+          $existing = if ($present.Count) { @(Get-ChildItem -LiteralPath $present[0] -Directory -ErrorAction Stop | Where-Object { $_.Name -like 'FunCity-Lite-PluginFirst-LAB*' }) } else { @() }
+          Note 'Lab instance name collision' ([string]($existing.Count -gt 0))
+          # Small allowlist: no recursive search through private folders or world data.
+          $javaRoots = @('C:\Program Files\Eclipse Adoptium', 'C:\Program Files\Java',
+                         'C:\Program Files\Microsoft', 'C:\Program Files\Zulu')
+          $javaBins = @()
+          foreach ($r in $javaRoots) {
+            if (Test-Path -LiteralPath $r -PathType Container) {
+              $javaBins += @(Get-ChildItem -LiteralPath $r -Directory -ErrorAction SilentlyContinue |
+                             ForEach-Object { Join-Path $_.FullName 'bin\java.exe' } |
+                             Where-Object { Test-Path -LiteralPath $_ -PathType Leaf })
+            }
+          }
+          Note 'Known-location Java executables' ([string]$javaBins.Count)
+          foreach ($exe in @($javaBins | Select-Object -First 3)) {
+            $ErrorActionPreference = 'Continue'
+            $ver = (& $exe -version 2>&1 | Select-Object -First 1) -replace '[^A-Za-z0-9 ._+\-]','_'
+            $ErrorActionPreference = 'Stop'
+            Note 'Known-location Java version' $ver
+          }
+          if ($present.Count) {
+            $profiles = @(Get-ChildItem -LiteralPath $present[0] -Directory -ErrorAction Stop |
+                          Where-Object { $_.Name -like '*FunCity*' } | Select-Object -First 3)
+            foreach ($profile in $profiles) {
+              $manifest = Join-Path $profile.FullName 'mmc-pack.json'
+              if (Test-Path -LiteralPath $manifest -PathType Leaf) {
+                $components = @( (Get-Content -LiteralPath $manifest -Raw | ConvertFrom-Json).components )
+                $forge = @($components | Where-Object { $_.uid -eq 'net.minecraftforge' } | Select-Object -First 1)
+                $mc = @($components | Where-Object { $_.uid -eq 'net.minecraft' } | Select-Object -First 1)
+                Note 'FunCity Prism minecraft' $(if ($mc.Count) { [string]$mc[0].version } else { 'unknown' })
+                Note 'FunCity Prism Forge' $(if ($forge.Count) { [string]$forge[0].version } else { 'unknown' })
+              }
+              $cfg = Join-Path $profile.FullName 'instance.cfg'
+              if (Test-Path -LiteralPath $cfg -PathType Leaf) {
+                $javaLine = @(Get-Content -LiteralPath $cfg | Where-Object { $_ -match '^JavaPath=' } | Select-Object -First 1)
+                if ($javaLine.Count) {
+                  $candidate = $javaLine[0].Substring(9).Trim('"') -replace 'javaw\.exe$','java.exe'
+                  Note 'Prism profile Java exists' ([string](Test-Path -LiteralPath $candidate -PathType Leaf))
+                  if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+                    $ver = ((Get-Item -LiteralPath $candidate).VersionInfo.ProductVersion) -replace '[^A-Za-z0-9 ._+\-]','_'
+                    Note 'Prism profile Java version' $ver
+                  }
+                }
+              }
+            }
+          }
+          $live = @(Get-CimInstance Win32_Process -Filter "name = 'java.exe' OR name = 'javaw.exe'")
+          Note 'Java processes currently running' ([string]$live.Count)
+          Note 'Preflight' 'READ_ONLY_NO_START_NO_PRISM_CHANGE_NO_WORLD_DATA'

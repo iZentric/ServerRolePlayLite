@@ -1,0 +1,201 @@
+name: Freeroam original — read-only target inventory
+# No Prism launch, server start, JAR upload, artifact, world or account mutation.
+# Recheck the launcher/client gate after the owner's latest failed login; read-only.
+# Uses native PowerShell because Python is unavailable on this Windows runner.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-freeroam-inventory.yml
+      - scripts/fc_freeroam_target_preflight.ps1
+      - scripts/fc_freeroam_apply.ps1
+      - scripts/fc_freeroam_apply_test.ps1
+      - scripts/fc_freeroam_new_profile.ps1
+      - scripts/fc_freeroam_new_profile_test.ps1
+      - scripts/fc_local_status_ping.ps1
+      - scripts/fc_local_status_ping_test.py
+      - scripts/fc_forge_modid_audit.ps1
+      - scripts/fc_forge_modid_audit_test.py
+      - scripts/fc_lite_join_log_diagnostic.ps1
+      - scripts/fc_lite_join_log_diagnostic_test.py
+      - scripts/fc_server_no_clumps_stage.ps1
+      - scripts/fc_server_no_clumps_stage_test.ps1
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthetic target and read-only inventory safety tests
+        run: |
+          PYTHONPATH=scripts PYTHONDONTWRITEBYTECODE=1 python3 scripts/fc_freeroam_inventory_test.py
+          PYTHONPATH=scripts PYTHONDONTWRITEBYTECODE=1 python3 scripts/fc_freeroam_target_preflight_test.py
+      - name: PowerShell synthetic inventory (no user profile)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Join-Path $env:RUNNER_TEMP ('fc-freeroam-synthetic-' + $env:GITHUB_RUN_ID)
+          $profile = Join-Path $root 'Freeroam 1.0.0'
+          $mods = Join-Path $profile '.minecraft/mods'
+          if (Test-Path -LiteralPath $root) { throw 'Fixture already exists' }
+          try {
+            New-Item -ItemType Directory -Path $mods -Force | Out-Null
+            $declared = Get-Content -LiteralPath agent/FREEROAM-LISTA-DECLARATA.json -Raw | ConvertFrom-Json
+            foreach ($n in $declared.jar_names) { [IO.File]::WriteAllText((Join-Path $mods $n), ('fixture:' + $n)) }
+            Write-Output '::notice title=Freeroam synthetic gate::PHASE=BASELINE'
+            & ./scripts/fc_freeroam_target_preflight.ps1 -Profile $profile -Quiet -SyntheticDiagnostics
+            if ($LASTEXITCODE -ne 0) { throw ('Fixture baseline failed code=' + $LASTEXITCODE) }
+            Write-Output 'Synthetic PowerShell inventory PASS: 28 declared names on hosted fixture, no PC touched'
+          } finally {
+            if (Test-Path -LiteralPath $root) { Remove-Item -LiteralPath $root -Recurse -Force }
+          }
+      - name: Synthetic in-place apply and private rollback (hosted fixture only)
+        shell: pwsh
+        run: ./scripts/fc_freeroam_apply_test.ps1
+      - name: Separate 22-JAR profile and private-data exclusion (hosted fixture only)
+        shell: pwsh
+        run: ./scripts/fc_freeroam_new_profile_test.ps1
+      - name: Minecraft status protocol with private-data redaction (hosted fixture only)
+        run: python3 scripts/fc_local_status_ping_test.py
+      - name: Forge JAR metadata comparison safety (hosted fixture only)
+        run: python3 scripts/fc_forge_modid_audit_test.py
+      - name: Recent client join error classification (hosted fixture only)
+        run: python3 scripts/fc_lite_join_log_diagnostic_test.py
+      - name: Server mod stage without Clumps, no world or running server access (hosted fixture only)
+        shell: pwsh
+        run: ./scripts/fc_server_no_clumps_stage_test.ps1
+  read-only-pc:
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check only the owner-selected Freeroam profile
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $profile = 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\Freeroam 1.0.0'
+          if (-not (Test-Path -LiteralPath $profile -PathType Container)) {
+            Write-Output '::error title=Freeroam PC gate::PROFILE_NOT_VISIBLE_AT_APPROVED_LOCATION; INSTALLATION=false'
+            exit 2
+          }
+          & ./scripts/fc_freeroam_target_preflight.ps1 -Profile $profile
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $prismActive = @(Get-Process -Name 'prismlauncher' -ErrorAction SilentlyContinue).Count -gt 0
+          $javaActive = @(Get-Process -Name 'java','javaw','minecraft' -ErrorAction SilentlyContinue).Count -gt 0
+          $server = 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+          $candidateServerVisible = Test-Path -LiteralPath $server -PathType Container
+          $serverMods = -1
+          $serverPlugins = -1
+          $rootJars = -1
+          if ($candidateServerVisible) {
+            $serverMods = @(Get-ChildItem -LiteralPath (Join-Path $server 'mods') -File -Filter '*.jar' -ErrorAction SilentlyContinue).Count
+            $serverPlugins = @(Get-ChildItem -LiteralPath (Join-Path $server 'plugins') -File -Filter '*.jar' -ErrorAction SilentlyContinue).Count
+            $rootJars = @(Get-ChildItem -LiteralPath $server -File -Filter '*.jar' -ErrorAction SilentlyContinue).Count
+          }
+          $knownServerProcess = $false
+          $knownServerListening = $false
+          try {
+            $candidate = @(Get-CimInstance Win32_Process -Filter "Name = 'java.exe' OR Name = 'javaw.exe'" -ErrorAction Stop)
+            $serverProcesses = @($candidate | Where-Object {
+              $_.CommandLine -and $_.CommandLine.IndexOf($server, [StringComparison]::OrdinalIgnoreCase) -ge 0
+            })
+            $knownServerProcess = $serverProcesses.Count -gt 0
+            if ($knownServerProcess -and $candidateServerVisible) {
+              $port = 25565
+              $properties = Join-Path $server 'server.properties'
+              if (Test-Path -LiteralPath $properties -PathType Leaf) {
+                $entry = @(Get-Content -LiteralPath $properties | Where-Object { $_ -match '^server-port=\d+$' } | Select-Object -First 1)
+                if ($entry.Count -eq 1) { $port = [int]($entry[0] -replace '^server-port=', '') }
+              }
+              if ($port -gt 0 -and $port -le 65535) {
+                $listeners = @(Get-NetTCPConnection -State Listen -LocalPort $port -ErrorAction SilentlyContinue)
+                $pids = @($serverProcesses | ForEach-Object { $_.ProcessId })
+                $knownServerListening = @($listeners | Where-Object { $pids -contains $_.OwningProcess }).Count -gt 0
+              }
+            }
+          } catch { Write-Output '::notice title=PC readiness::SERVER_PROCESS_CLASSIFICATION=UNAVAILABLE; READ_ONLY=true' }
+          Write-Output ('::notice title=PC readiness::PRISM_ACTIVE=' + $prismActive + ' JAVA_OR_MINECRAFT_ACTIVE=' + $javaActive + ' KNOWN_FUNCITY_SERVER_FOLDER_VISIBLE=' + $candidateServerVisible + ' SERVER_MOD_JARS=' + $serverMods + ' SERVER_PLUGIN_JARS=' + $serverPlugins + ' SERVER_ROOT_JARS=' + $rootJars + ' KNOWN_SERVER_JAVA=' + $knownServerProcess + ' KNOWN_SERVER_LISTENING=' + $knownServerListening + '; READ_ONLY=true')
+          # Only aggregate/boolean observations; never print addresses, config lines, player names or JAR paths.
+          try {
+            $lite = Get-Content -LiteralPath 'agent/FUNCITY-RP-LITE-SELECTIE.json' -Raw | ConvertFrom-Json
+            $liteProfile = Join-Path (Split-Path -Parent $profile) 'FunCity RP Lite'
+            $liteGame = if (Test-Path -LiteralPath (Join-Path $liteProfile '.minecraft') -PathType Container) { '.minecraft' } else { 'minecraft' }
+            $liteMods = Join-Path (Join-Path $liteProfile $liteGame) 'mods'
+            $serverJarNames = @(Get-ChildItem -LiteralPath (Join-Path $server 'mods') -File -Filter '*.jar' -ErrorAction Stop | ForEach-Object { $_.Name })
+            $sharedNames = @($serverJarNames | Where-Object { @($lite.retained_in_future_target) -ccontains $_ })
+            $shared = $sharedNames.Count
+            $differentHash = @($sharedNames | Where-Object {
+              (Get-FileHash -LiteralPath (Join-Path (Join-Path $server 'mods') $_) -Algorithm SHA256).Hash -ne
+              (Get-FileHash -LiteralPath (Join-Path $liteMods $_) -Algorithm SHA256).Hash
+            })
+            Write-Output ('::notice title=Forge exact filename hash comparison::COMMON_FILENAMES=' + $shared + ' DIFFERENT_SHA256=' + $differentHash.Count + '; NO_FILE_CHANGED=true')
+            # Names are already in the owner's committed selection; never disclose hash values or paths.
+            Write-Output ('::notice title=Forge differing approved names::' + ($differentHash -join ','))
+            $cfg = Join-Path $server 'server.properties'
+            $onlineMode = 'UNKNOWN'
+            $whitelist = 'UNKNOWN'
+            $maxPlayersKnown = $false
+            if (Test-Path -LiteralPath $cfg -PathType Leaf) {
+              $settings = @(Get-Content -LiteralPath $cfg -ErrorAction Stop)
+              foreach ($key in @('online-mode','white-list','max-players')) {
+                $match = @($settings | Where-Object { $_ -match ('^' + $key + '=') } | Select-Object -First 1)
+                if ($match.Count -eq 1) {
+                  $value = ($match[0] -split '=', 2)[1]
+                  if ($key -eq 'online-mode' -and $value -match '^(true|false)$') { $onlineMode = $value.ToUpperInvariant() }
+                  if ($key -eq 'white-list' -and $value -match '^(true|false)$') { $whitelist = $value.ToUpperInvariant() }
+                  if ($key -eq 'max-players' -and $value -match '^\d+$') { $maxPlayersKnown = $true }
+                }
+              }
+            }
+            $localBind = 'UNKNOWN'
+            if ($knownServerListening) {
+              $owned = @($listeners | Where-Object { $pids -contains $_.OwningProcess })
+              if (@($owned | Where-Object { $_.LocalAddress -eq '0.0.0.0' -or $_.LocalAddress -eq '::' }).Count -gt 0) { $localBind = 'ALL_INTERFACES' }
+              elseif (@($owned | Where-Object { $_.LocalAddress -ne '127.0.0.1' -and $_.LocalAddress -ne '::1' }).Count -gt 0) { $localBind = 'NON_LOOPBACK' }
+              else { $localBind = 'LOOPBACK_ONLY' }
+            }
+            $newProfile = Join-Path (Split-Path -Parent $profile) 'FunCity RP Lite'
+            $newProfileExists = Test-Path -LiteralPath $newProfile
+            $prismMetadataReady = (Test-Path -LiteralPath (Join-Path $profile 'instance.cfg') -PathType Leaf) -and (Test-Path -LiteralPath (Join-Path $profile 'mmc-pack.json') -PathType Leaf)
+            $customPatchesPresent = Test-Path -LiteralPath (Join-Path $profile 'patches')
+            $authPluginCandidate = @((Get-ChildItem -LiteralPath (Join-Path $server 'plugins') -File -Filter '*.jar' -ErrorAction Stop) | Where-Object { $_.Name -match '(?i)authme|nlogin|authplugin|loginsecurity|fastlogin' }).Count -gt 0
+            Write-Output ('::notice title=RP readiness::SERVER_CLIENT_EXACT_JAR_OVERLAP=' + $shared + '/22 SERVER_ONLINE_MODE=' + $onlineMode + ' SERVER_WHITELIST=' + $whitelist + ' SERVER_MAX_PLAYERS_DEFINED=' + $maxPlayersKnown + ' SERVER_LISTEN_BIND=' + $localBind + ' PRISM_METADATA_READY=' + $prismMetadataReady + ' CUSTOM_PATCHES_PRESENT=' + $customPatchesPresent + ' AUTH_PLUGIN_FILENAME_CANDIDATE=' + $authPluginCandidate + ' NEW_PROFILE_EXISTS=' + $newProfileExists + '; PUBLIC_REACHABILITY=NOT_TESTED; READ_ONLY=true')
+          } catch { Write-Output '::notice title=RP readiness::SERVER_OR_PROFILE_AUDIT=UNAVAILABLE; READ_ONLY=true' }
+          # Status query only to the already-identified local Java listener; never a login.
+          if ($knownServerListening -and $port -gt 0 -and $port -le 65535) {
+            Write-Output ('::notice title=Local join address::LOOPBACK_DEFAULT_PORT=' + ($port -eq 25565) + '; PORT_NUMBER_NOT_PUBLISHED=true')
+            & ./scripts/fc_local_status_ping.ps1 -Port $port
+            if ($LASTEXITCODE -ne 0) { Write-Output '::notice title=Minecraft local status::PROTOCOL_READINESS=UNVERIFIED; CLIENT_JOIN=NOT_TESTED' }
+          }
+          # Reconfirm the new profile is exactly the approved selection, byte-for-byte from the original.
+          $liteMods = $null
+          try {
+            $new = Join-Path (Split-Path -Parent $profile) 'FunCity RP Lite'
+            $originalGame = if (Test-Path -LiteralPath (Join-Path $profile '.minecraft') -PathType Container) { '.minecraft' } else { 'minecraft' }
+            $sourceMods = Join-Path (Join-Path $profile $originalGame) 'mods'
+            $liteMods = Join-Path (Join-Path $new $originalGame) 'mods'
+            $approvedNames = @($lite.retained_in_future_target)
+            $actual = @(Get-ChildItem -LiteralPath $liteMods -Force -ErrorAction Stop)
+            $matched = $actual.Count -eq 22 -and (Test-Path -LiteralPath (Join-Path $new 'mmc-pack.json') -PathType Leaf)
+            foreach ($item in $actual) {
+              if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or
+                  $approvedNames -cnotcontains $item.Name -or
+                  (Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash -ne
+                  (Get-FileHash -LiteralPath (Join-Path $sourceMods $item.Name) -Algorithm SHA256).Hash) { $matched = $false }
+            }
+            Write-Output ('::notice title=Lite PC verification::NEW_PROFILE_22_MATCH_ORIGINAL=' + $matched + '; CLIENT_BOOT=NOT_TESTED CLIENT_JOIN=NOT_TESTED')
+          } catch { Write-Output '::notice title=Lite PC verification::NEW_PROFILE_VERIFICATION=UNAVAILABLE; CLIENT_JOIN=NOT_TESTED' }
+          # Read JAR metadata only; do not infer that every server-only ID is client-required.
+          if ($candidateServerVisible -and $liteMods -and (Test-Path -LiteralPath $liteMods -PathType Container)) {
+            & ./scripts/fc_forge_modid_audit.ps1 -ClientMods $liteMods -ServerMods (Join-Path $server 'mods') -DiagnosticTypeOnly
+            if ($LASTEXITCODE -ne 0) {
+              Write-Output '::notice title=Forge inventory::MODID_COMPARISON=UNVERIFIED'
+              $global:LASTEXITCODE = 0
+            }
+          }
+          # User-supplied error image warrants local diagnosis, not exposing any log text.
+          & ./scripts/fc_lite_join_log_diagnostic.ps1 -Profile (Join-Path (Split-Path -Parent $profile) 'FunCity RP Lite')
+          if ($LASTEXITCODE -ne 0) { $global:LASTEXITCODE = 0 }

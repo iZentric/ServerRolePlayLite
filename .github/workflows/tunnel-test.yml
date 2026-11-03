@@ -1,0 +1,14 @@
+name: tunnel-test (retired)
+# Old job attempted a public tunnel; policy requires loopback-only testing.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse public connectivity testing
+        run: |
+          echo '::error::Public tunnel tests are retired; keep Minecraft private.'
+          exit 1

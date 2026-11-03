@@ -1,0 +1,89 @@
+name: FunCity - fail-closed capacity decision tests
+# Synthetic fixtures test decision logic only. No private world/logs/players
+# are downloaded or uploaded; this workflow does not measure performance.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/funcity-capacity-verdict-gate.yml
+      - scripts/fc_funcity_capacity_verdict.py
+      - scripts/fc_funcity_capacity_verdict_test.py
+      - scripts/fc_funcity_private_trial.py
+      - scripts/fc_funcity_lab_resources.py
+      - scripts/fc_funcity_lab_resources_test.py
+      - scripts/fc_funcity_capacity_profile_test.py
+      - scripts/fc_funcity_jfr_hotspots.py
+      - scripts/fc_funcity_jfr_hotspots_test.py
+      - scripts/fc_funcity_hybrid_config_test.py
+      - functity/capacity/3g-view4/server.properties
+      - functity/capacity/3g-view4-only/server.properties
+      - functity/capacity/3g-view4/bukkit.yml
+      - functity/capacity/3g-view4/config/connectivity-common.toml
+      - functity/capacity/3g-view4/defaultconfigs/forge-server.toml
+      - functity-config/server.properties
+  pull_request:
+    paths:
+      - .github/workflows/funcity-capacity-verdict-gate.yml
+      - scripts/fc_funcity_capacity_verdict.py
+      - scripts/fc_funcity_capacity_verdict_test.py
+      - scripts/fc_funcity_private_trial.py
+      - scripts/fc_funcity_lab_resources.py
+      - scripts/fc_funcity_lab_resources_test.py
+      - scripts/fc_funcity_capacity_profile_test.py
+      - scripts/fc_funcity_jfr_hotspots.py
+      - scripts/fc_funcity_jfr_hotspots_test.py
+      - scripts/fc_funcity_hybrid_config_test.py
+      - functity/capacity/3g-view4/server.properties
+      - functity/capacity/3g-view4-only/server.properties
+      - functity/capacity/3g-view4/bukkit.yml
+      - functity/capacity/3g-view4/config/connectivity-common.toml
+      - functity/capacity/3g-view4/defaultconfigs/forge-server.toml
+      - functity-config/server.properties
+permissions:
+  contents: read
+jobs:
+  static-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+      - name: Check isolated config and synthetic verdict reject cases
+        run: |
+          set -euo pipefail
+          python3 scripts/fc_funcity_capacity_profile_test.py
+          python3 scripts/fc_funcity_jfr_hotspots_test.py
+          python3 scripts/fc_funcity_hybrid_config_test.py
+          python3 scripts/fc_funcity_capacity_verdict_test.py
+          python3 scripts/fc_funcity_lab_resources_test.py
+          echo '::notice title=FunCity static gate::No real-client measurements or capacity gain claimed.'
+      - name: Check parser against a real synthetic Java 11 JFR export
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/JfrFixture.java" <<'JAVA'
+          public class JfrFixture {
+              public static void main(String[] args) {
+                  Thread.currentThread().setName("Server thread");
+                  long until = System.nanoTime() + 14_000_000_000L;
+                  while (System.nanoTime() < until) Math.sqrt(System.nanoTime());
+              }
+          }
+          JAVA
+          javac "$RUNNER_TEMP/JfrFixture.java"
+          java -XX:StartFlightRecording=settings=profile,filename="$RUNNER_TEMP/fixture.jfr" \
+            -cp "$RUNNER_TEMP" JfrFixture
+          jfr print --json --events jdk.ExecutionSample "$RUNNER_TEMP/fixture.jfr" \
+            > "$RUNNER_TEMP/fixture.json"
+          # The short fixture verifies Java 11 JFR format; private analysis still
+          # requires >=100 server-thread samples (the CLI's default gate).
+          PYTHONPATH=scripts python3 - <<'PY'
+          import json, os
+          from fc_funcity_jfr_hotspots import summarize
+          with open(os.environ['RUNNER_TEMP'] + '/fixture.json') as source:
+              total, frames = summarize(json.load(source), minimum=1)
+          assert frames and total >= 1
+          print(f'PASS: Java 11 JFR format; {total} synthetic samples; no players')
+          PY

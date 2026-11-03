@@ -1,0 +1,97 @@
+name: FunCity engine family — same full RP content isolated compatibility
+# Five independent GitHub-hosted jobs in parallel. No self-hosted runner, live world,
+# accounts, Prism modification, release, raw log upload or public Minecraft port.
+# Different JVMs/bootstrap prevent ranking by startup time; boot != MSPT/FPS.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/engine-family-full-content.yml
+      - scripts/fc_engine_family_lab.py
+      - scripts/fc_engine_family_lab_test.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  closed-engine:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { engine: funcity, java: '11' }
+          - { engine: catserver-old, java: '17' }
+          - { engine: catserver-official, java: '17' }
+          - { engine: arclight, java: '17' }
+          - { engine: mist, java: '11' }
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PYTHONPATH: scripts
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+      - name: Synthetic source SHA and safety guards
+        run: python3 scripts/fc_engine_family_lab_test.py
+      - name: Fetch pinned old inputs to this job's temp directory only
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-engine-family"
+          mkdir -p "$root"
+          gh release download jars-20261017-0952 -R "$GITHUB_REPOSITORY" \
+            -p functity-jare-toate.tar.gz -O "$root/engines.tar.gz"
+          echo "f2cb921efbf751fa24534a9a02b57197db46294ca7b71d9711b04996bf6d1784  $root/engines.tar.gz" | sha256sum -c -
+          python3 scripts/fc_plugin_first_extract.py "$root/engines.tar.gz" "$root/motor.jar"
+          gh release download lite -R "$GITHUB_REPOSITORY" \
+            -p CUANTIC-Server-CatServer-1.7.7.zip -O "$root/old-plugins.zip"
+          echo "fe1e261097d92f26c6653239a7161613e6be54b8e9f82c79739c101ce8aa8a15  $root/old-plugins.zip" | sha256sum -c -
+          gh release download v21.2 -R PlayPro/CoreProtect \
+            -p CoreProtect-21.2.jar -O "$root/CoreProtect.jar"
+          echo "04f31b609d1e3e1c53e99aaa06ca10ea6bdf5172c94bf5af8ccf108b0bc4b977  $root/CoreProtect.jar" | sha256sum -c -
+          gh release download v21.0 -R google/guava \
+            -p guava-21.0.jar -O "$root/guava-21.0.jar"
+          echo "972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480  $root/guava-21.0.jar" | sha256sum -c -
+      - name: Obtain exactly one historical/official SHA-pinned alternate motor
+        env:
+          ENGINE: ${{ matrix.engine }}
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-engine-family"
+          case "$ENGINE" in
+            funcity|catserver-old) : ;; # already SHA-pinned in baseline sources
+            catserver-official)
+              gh release download 23.05.26-1 -R Luohuayu/CatServer \
+                -p CatServer-1.16.5-1d8d6313-server.jar -O "$root/alternative.jar" ;;
+            arclight)
+              gh release download lite -R "$GITHUB_REPOSITORY" \
+                -p CUANTIC-Server-Arclight-1.7.7.zip -O "$root/alternative.zip" ;;
+            mist)
+              gh release download lite -R "$GITHUB_REPOSITORY" \
+                -p CUANTIC-Server-Mist-EXPERIMENTAL-1.7.7.zip -O "$root/alternative.zip" ;;
+            *) exit 2 ;;
+          esac
+      - name: Stage same 15 RP/dependency mods and six plugins, no world
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-engine-family"
+          python3 scripts/fc_modded_candidate.py --engine "$root/motor.jar" \
+            --archive "$root/old-plugins.zip" --coreprotect "$root/CoreProtect.jar" \
+            --guava21 "$root/guava-21.0.jar" --output "$root/stage"
+      - name: One bounded loopback boot; disclose category only, never raw logs
+        env:
+          ENGINE: ${{ matrix.engine }}
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc-engine-family"
+          case "$ENGINE" in
+            funcity) source="$root/motor.jar" ;;
+            catserver-old) source="$root/old-plugins.zip" ;;
+            catserver-official) source="$root/alternative.jar" ;;
+            arclight|mist) source="$root/alternative.zip" ;;
+            *) exit 2 ;;
+          esac
+          python3 scripts/fc_engine_family_lab.py "$root/stage" "$ENGINE" "$source"

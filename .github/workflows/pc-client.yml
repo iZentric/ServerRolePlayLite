@@ -1,0 +1,14 @@
+name: pc-client (retired)
+# Old runner changed client mods/audio without paired login and FPS measurements.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse unvalidated PC mod changes
+        run: |
+          echo '::error::Client mods and audio stay intact until a reversible Forge login and A/B test.'
+          exit 1

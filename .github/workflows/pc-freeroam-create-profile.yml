@@ -1,0 +1,33 @@
+name: Create separate FunCity RP Lite Prism profile once
+# One-time owner-approved new instance; does not edit source Freeroam or server.
+# Never upload client files, worlds, account data or logs.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-freeroam-create-profile.yml]
+permissions:
+  contents: read
+jobs:
+  guards:
+    if: startsWith(github.event.head_commit.message, 'Create separate FunCity RP Lite profile once')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify separate profile, source intact and no private-data copy on fixture
+        shell: pwsh
+        run: ./scripts/fc_freeroam_new_profile_test.ps1
+  pc-client:
+    if: startsWith(github.event.head_commit.message, 'Create separate FunCity RP Lite profile once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create owner-selected separate Prism instance only if client closed
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $source = 'C:\Users\Administrator\AppData\Roaming\PrismLauncher\instances\Freeroam 1.0.0'
+          & ./scripts/fc_freeroam_new_profile.ps1 -Source $source
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

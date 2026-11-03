@@ -1,0 +1,30 @@
+name: Verify local server RCON authentication and player count read-only
+# Only 'list', never stop/save/write. No password, response or player names uploaded.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-server-rcon-readonly.yml
+      - scripts/fc_local_rcon.ps1
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test restricted RCON parser against synthetic loopback service
+        run: python3 scripts/fc_local_rcon_test.py
+  pc-read-only:
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Authenticate to selected server and read only player count
+        shell: powershell
+        run: |
+          $server = 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+          & ./scripts/fc_local_rcon.ps1 -Server $server -Command list
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

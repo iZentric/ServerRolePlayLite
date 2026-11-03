@@ -1,0 +1,315 @@
+#!/usr/bin/env python3
+"""Artificial private trial fixtures only; no real Minecraft files or host access."""
+import hashlib
+from pathlib import Path
+import socket
+import tempfile
+import unittest
+from unittest.mock import patch
+from subprocess import CompletedProcess
+
+from fc_funcity_compiled_engine_gate_test import fixture
+from fc_funcity_private_trial import (ADDONS, MARKER, TrialRejected, available_memory_mib,
+                                       isolated_java_command, namespace_supported,
+                                       prepare, preflight, properties, trial)
+from fc_funcity_runtime_seed import export_runtime, validate_runtime, InvalidSeed
+
+
+def unused_port():
+    with socket.socket() as sock:
+        sock.bind(('127.0.0.1', 0))
+        return sock.getsockname()[1]
+
+
+def synthetic_lab(root):
+    root = Path(root)
+    source = root / 'offline-source-copy'
+    source.mkdir()
+    (source / '.funcity-isolated-copy').write_text(MARKER)
+    (source / 'eula.txt').write_text('eula=true\n')
+    (source / 'server.properties').write_text('level-name=rp\nonline-mode=false\nserver-ip=0.0.0.0\n'
+                                               'enable-rcon=true\nserver-port=25565\n')
+    (source / 'rp').mkdir()
+    (source / 'rp' / 'level.dat').write_bytes(b'SYNTHETIC WORLD')
+    (source / 'server.jar').write_bytes(b'original rollback engine')
+    for folder, count in (('mods', 34), ('plugins', 13)):
+        (source / folder).mkdir()
+        for i in range(count):
+            (source / folder / f'{i:02d}.jar').write_bytes(b'fixture')
+    binary_dir = root / 'binary'
+    binary_dir.mkdir()
+    jar, _classes = fixture(binary_dir)
+    digest = hashlib.sha256(jar.read_bytes()).hexdigest()
+    (source / 'libraries').mkdir()
+    (source / 'libraries' / 'old.jar').write_bytes(b'MOHIST RUNTIME')
+    bootstrap = root / 'bootstrap'
+    (bootstrap / 'libraries').mkdir(parents=True)
+    (bootstrap / 'libraries' / 'new.jar').write_bytes(b'CATSERVER RUNTIME')
+    (bootstrap / 'foxlaunch-data').mkdir()
+    (bootstrap / 'foxlaunch-data' / 'install.dat').write_text('synthetic')
+    (bootstrap / 'private-boot.log').write_text('NOT A SEED')
+    seed = root / 'runtime-seed'
+    export_runtime(bootstrap, seed, jar)
+    return source, root / 'new-trial', jar, digest, seed
+
+
+def fake_java(root, *, fatal=False, version='11.0.29'):
+    path = Path(root) / 'fake-java'
+    msg = '[Server thread/ERROR] failed' if fatal else 'Done (2s)! For help, type "help"'
+    path.write_text('#!/usr/bin/env python3\nimport sys\n'
+                    'if "-version" in sys.argv:\n'
+                    '  print("openjdk version \\"' + version + '\\"", file=sys.stderr); sys.exit(0)\n'
+                    'print(' + repr(msg) + ', flush=True)\n'
+                    'input()\n')
+    path.chmod(0o755)
+    return path
+
+
+class PrivateTrialTest(unittest.TestCase):
+    def test_shield_preserves_world_and_auth(self):
+        world, safe = properties('level-name=City\nonline-mode=false\n'
+                                 'server-ip=0.0.0.0\nenable-rcon=true\n', 25595)
+        self.assertEqual(world, 'City')
+        self.assertIn('online-mode=false\n', safe)
+        for line in ('server-ip=127.0.0.1', 'white-list=true', 'enable-rcon=false',
+                     'enable-query=false', 'server-port=25595'):
+            self.assertEqual(safe.splitlines().count(line), 1)
+        self.assertNotIn('server-ip=0.0.0.0', safe)
+        with self.assertRaises(TrialRejected):
+            properties('online-mode=false\nlevel-name=../other\n', 25595)
+        with self.assertRaises(TrialRejected):
+            properties('online-mode=false\nonline-mode=false\n', 25595)
+
+    def test_prepare_only_new_copy_with_rollback(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            before = (source / 'server.jar').read_bytes()
+            prepared = prepare(source, output, jar, digest, unused_port(), seed)
+            self.assertEqual(prepared, output)
+            self.assertEqual((source / 'server.jar').read_bytes(), before)
+            self.assertEqual((output / 'server-before-funcity-trial.jar').read_bytes(), before)
+            self.assertEqual(hashlib.sha256((output / 'server.jar').read_bytes()).hexdigest(), digest)
+            self.assertNotEqual((source / 'server.properties').read_bytes(),
+                                (output / 'server.properties').read_bytes())
+            self.assertEqual((source / 'rp' / 'level.dat').read_bytes(),
+                             (output / 'rp' / 'level.dat').read_bytes())
+            self.assertFalse((output / '.funcity-isolated-copy').exists())
+            self.assertEqual((output/'libraries'/'new.jar').read_bytes(), b'CATSERVER RUNTIME')
+            self.assertEqual((output/'.funcity-prior-runtime'/'libraries'/'old.jar').read_bytes(),
+                             b'MOHIST RUNTIME')
+            self.assertFalse((output/'private-boot.log').exists())
+            self.assertEqual((source/'libraries'/'old.jar').read_bytes(), b'MOHIST RUNTIME')
+
+    def test_optional_optimizers_only_add_pinned_mods_to_new_copy(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            name = 'starlight-forge-1.0.0-RC2-1.16.5.jar'
+            addon = Path(temp)/name
+            addon.write_bytes(b'PRIVATE TEST FIXTURE ONLY')
+            second = Path(temp)/'chunksending-1.16.5-2.5.jar'
+            second.write_bytes(b'SECOND TEST FIXTURE ONLY')
+            expected = hashlib.sha256(addon.read_bytes()).hexdigest()
+            other_sha = hashlib.sha256(second.read_bytes()).hexdigest()
+            pins = {name: (expected, len(addon.read_bytes())),
+                    second.name: (other_sha, len(second.read_bytes()))}
+            with patch.dict(ADDONS, pins, clear=True):
+                for index, single in enumerate((addon, second)):
+                    solo = prepare(source, Path(temp)/f'solo-{index}', jar, digest,
+                                   unused_port(), seed, addons=[single])
+                    self.assertEqual(len(list((solo/'mods').glob('*.jar'))), 35)
+                    self.assertEqual((solo/'mods'/single.name).read_bytes(), single.read_bytes())
+                staged = prepare(source, output, jar, digest, unused_port(), seed,
+                                 addons=[addon, second])
+                self.assertEqual(len(list((source/'mods').glob('*.jar'))), 34)
+                self.assertEqual(len(list((staged/'mods').glob('*.jar'))), 36)
+                self.assertEqual((staged/'mods'/name).read_bytes(), addon.read_bytes())
+                self.assertEqual((staged/'mods'/second.name).read_bytes(), second.read_bytes())
+                self.assertEqual((staged/'server-before-funcity-trial.jar').read_bytes(),
+                                 b'original rollback engine')
+                with self.assertRaises(TrialRejected):
+                    prepare(source, Path(temp)/'duplicate', jar, digest,
+                            unused_port(), seed, addons=[addon, addon])
+                self.assertFalse((Path(temp)/'duplicate').exists())
+                unapproved = Path(temp)/'unknown-optimizer.jar'
+                unapproved.write_bytes(b'NO PIN')
+                with self.assertRaises(TrialRejected):
+                    prepare(source, Path(temp)/'unapproved', jar, digest,
+                            unused_port(), seed, addons=[unapproved])
+                self.assertFalse((Path(temp)/'unapproved').exists())
+                link = Path(temp)/'link'/name
+                link.parent.mkdir()
+                link.symlink_to(addon)
+                with self.assertRaises(TrialRejected):
+                    prepare(source, Path(temp)/'linked', jar, digest,
+                            unused_port(), seed, addons=[link])
+                self.assertFalse((Path(temp)/'linked').exists())
+                addon.write_bytes(b'MODIFIED RELEASE')
+                with self.assertRaises(TrialRejected):
+                    prepare(source, Path(temp)/'tampered', jar, digest,
+                            unused_port(), seed, addons=[addon])
+                self.assertFalse((Path(temp)/'tampered').exists())
+                source_mod = source/'mods'/name
+                source_mod.write_bytes(b'ORIGINAL CONTENT')
+                addon.write_bytes(b'PRIVATE TEST FIXTURE ONLY')
+                with self.assertRaises(TrialRejected):
+                    prepare(source, Path(temp)/'collision', jar, digest,
+                            unused_port(), seed, addons=[addon])
+                self.assertFalse((Path(temp)/'collision').exists())
+
+    def test_refuse_private_runtime_export_inside_public_repository(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            inside_repo = Path(__file__).resolve().parents[1]/'NEVER-CREATE-PRIVATE-SEED'
+            self.assertFalse(inside_repo.exists())
+            with self.assertRaises(InvalidSeed):
+                export_runtime(Path(temp)/'bootstrap', inside_repo, jar)
+            self.assertFalse(inside_repo.exists())
+
+    def test_refuse_corrupted_or_wrong_engine_runtime_seed(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with self.assertRaises(InvalidSeed):
+                validate_runtime(seed, '0' * 64)
+            (seed/'libraries'/'new.jar').write_bytes(b'CORRUPTED')
+            with self.assertRaises(InvalidSeed):
+                preflight(source, output, jar, digest, unused_port(), seed)
+            self.assertFalse(output.exists())
+
+    def test_refuse_missing_marker_or_wrong_sha_or_live_target(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            port = unused_port()
+            (source / '.funcity-isolated-copy').unlink()
+            with self.assertRaises(TrialRejected):
+                preflight(source, output, jar, digest, port, seed)
+            (source / '.funcity-isolated-copy').write_text(MARKER)
+            with self.assertRaises(TrialRejected):
+                preflight(source, output, jar, '0' * 64, port, seed)
+            with self.assertRaises(TrialRejected):
+                preflight(source, source / 'nested-output', jar, digest, port, seed)
+            (source / 'plugins' / '00.jar').unlink()
+            with self.assertRaises(TrialRejected):
+                preflight(source, output, jar, digest, port, seed)
+
+    def test_refuse_links_or_taken_port(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with socket.socket() as sock:
+                sock.bind(('127.0.0.1', 0))
+                with self.assertRaises(TrialRejected):
+                    preflight(source, output, jar, digest, sock.getsockname()[1], seed)
+            link = Path(temp)/'repo-link'
+            link.symlink_to(Path(__file__).resolve().parents[1], target_is_directory=True)
+            with self.assertRaises(TrialRejected):
+                preflight(source, link/'untracked-secret-copy', jar, digest, unused_port(), seed)
+            (source / 'mods' / 'linked.jar').symlink_to(source / 'mods' / '00.jar')
+            with self.assertRaises(TrialRejected):
+                preflight(source, output, jar, digest, unused_port(), seed)
+
+    def test_boot_requires_kernel_network_isolation(self):
+        cmd = isolated_java_command('/opt/java11/bin/java')
+        self.assertEqual(cmd[:6], ['unshare', '--user', '--map-root-user', '--net', '--', 'sh'])
+        self.assertIn('ip link set lo up && exec "$@"', cmd)
+        self.assertIn('server.jar', cmd)
+
+    def test_12gb_lab_uses_eight_gib_heap_without_changing_isolation(self):
+        cmd = isolated_java_command('/opt/java11/bin/java', heap_gib=8)
+        self.assertEqual(cmd[:6], ['unshare', '--user', '--map-root-user', '--net', '--', 'sh'])
+        self.assertIn('-Xmx8G', cmd)
+        self.assertNotIn('-Xmx2G', cmd)
+
+    def test_large_heap_uses_cgroup_free_memory_not_host_free_memory(self):
+        data = {'/proc/meminfo': 'MemAvailable: 12582912 kB\n',
+                '/sys/fs/cgroup/memory.max': str(12 * 1024**3),
+                '/sys/fs/cgroup/memory.current': str(8 * 1024**3)}
+        with patch('fc_funcity_private_trial.Path.read_text',
+                   autospec=True, side_effect=lambda path: data[str(path)]), \
+             patch('fc_funcity_private_trial.Path.exists',
+                   autospec=True, side_effect=lambda path: str(path) in data):
+            self.assertEqual(available_memory_mib(), 4096)
+        with patch('fc_funcity_private_trial.Path.read_text', return_value='invalid'):
+            self.assertEqual(available_memory_mib(), 0)
+
+    def test_heap_above_eight_gib_rejected_before_copy(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with self.assertRaises(TrialRejected):
+                trial(Path(temp)/'fake-java', source, output, jar, digest, seed,
+                      unused_port(), heap_gib=12)
+            self.assertFalse(output.exists())
+
+    def test_eight_gib_trial_rejects_insufficient_memory_before_copy(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with patch('fc_funcity_private_trial.namespace_supported'), \
+                 patch('fc_funcity_private_trial.available_memory_mib', return_value=9000):
+                with self.assertRaises(TrialRejected):
+                    trial(fake_java(temp), source, output, jar, digest, seed,
+                          unused_port(), heap_gib=8)
+            self.assertFalse(output.exists())
+
+    def test_target_resource_gate_refuses_before_copy_or_boot(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with self.assertRaises(TrialRejected):
+                trial(Path(temp)/'fake-java', source, output, jar, digest, seed,
+                      unused_port(), heap_gib=2, require_target=True)
+            self.assertFalse(output.exists())
+            from fc_funcity_lab_resources import LabRejected
+            with patch('fc_funcity_private_trial.require_lab_resources',
+                       side_effect=LabRejected('not 12GB')):
+                with self.assertRaises(TrialRejected):
+                    trial(Path(temp)/'fake-java', source, output, jar, digest, seed,
+                          unused_port(), heap_gib=8, require_target=True)
+            self.assertFalse(output.exists())
+
+    def test_eight_gib_trial_passes_heap_to_both_isolated_boots(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with patch('fc_funcity_private_trial.namespace_supported'), \
+                 patch('fc_funcity_private_trial.require_lab_resources', return_value=True), \
+                 patch('fc_funcity_private_trial.available_memory_mib', return_value=11264), \
+                 patch('fc_funcity_private_trial.boot_once', return_value=True) as boots:
+                self.assertTrue(trial(fake_java(temp), source, output, jar, digest, seed,
+                                      unused_port(), timeout=5, heap_gib=8, require_target=True))
+            self.assertEqual(boots.call_count, 2)
+            self.assertTrue(all(call.kwargs['heap_gib'] == 8 for call in boots.call_args_list))
+
+    def test_isolation_failure_aborts_before_copy(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with patch('fc_funcity_private_trial.shutil.which', return_value='/usr/bin/tool'), \
+                 patch('fc_funcity_private_trial.subprocess.run',
+                       side_effect=[CompletedProcess([], 0, stdout=b'', stderr=b'openjdk version "11.0.29"'),
+                                    CompletedProcess([], 1)]) as run:
+                with self.assertRaises(TrialRejected):
+                    trial(Path(temp)/'fake-java', source, output, jar, digest, seed, unused_port())
+            self.assertEqual(run.call_count, 2)
+            self.assertFalse(output.exists())
+
+    def test_two_boots_and_failure_stop(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with patch('fc_funcity_private_trial.namespace_supported'), \
+                 patch('fc_funcity_private_trial.boot_once', return_value=True) as boots:
+                self.assertTrue(trial(fake_java(temp), source, output, jar, digest, seed,
+                                      unused_port(), timeout=5))
+            self.assertEqual(boots.call_count, 2)
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with patch('fc_funcity_private_trial.namespace_supported'), \
+                 patch('fc_funcity_private_trial.boot_once', side_effect=[False, True]) as boots:
+                with self.assertRaises(TrialRejected):
+                    trial(fake_java(temp, fatal=True), source, output, jar, digest, seed,
+                          unused_port(), timeout=5)
+            self.assertEqual(boots.call_count, 1)
+        with tempfile.TemporaryDirectory() as temp:
+            source, output, jar, digest, seed = synthetic_lab(temp)
+            with self.assertRaises(TrialRejected):
+                trial(fake_java(temp, version='17.0.1'), source, output, jar, digest, seed,
+                      unused_port(), timeout=5)
+            self.assertFalse(output.exists())
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,20 +1,14 @@
-name: PACK-SRV
+name: PACK-SRV (retired)
+# world-live and server-live must never be overwritten by an old stitch job.
 on:
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
-  s:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env: { GT: "${{ secrets.GITHUB_TOKEN }}" }
+  retired:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - name: Stitch + upload la release server-live
+      - name: Refuse world/server release overwrite
         run: |
-          git fetch -q origin srvparts && git checkout -q FETCH_HEAD
-          cat srvpart_* > srv-live.tar.gz
-          echo "stitch: $(stat -c %s srv-live.tar.gz) B"
-          sha256sum srv-live.tar.gz | head -c 64
-          gh release upload server-live srv-live.tar.gz --clobber -R $GITHUB_REPOSITORY
-          gh release view server-live -R $GITHUB_REPOSITORY --json assets --jq '.assets[].name'
+          echo '::error::Live world/server assets require backup, restore test and explicit approval.'
+          exit 1

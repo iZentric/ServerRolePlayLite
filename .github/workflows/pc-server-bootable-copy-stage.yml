@@ -1,0 +1,34 @@
+name: Prepare private bootable no-Clumps copy from verified offline backup
+# Never start a test server or edit original/JAR; PC copy requires exact commit prefix.
+# Synthetic whole-tree source/hash/Clumps fixture passed in hosted run 39598625157.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths: [.github/workflows/pc-server-bootable-copy-stage.yml]
+permissions:
+  contents: read
+concurrency:
+  group: funcity-maintenance-one-at-a-time
+  cancel-in-progress: false
+jobs:
+  guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthetic whole-tree copy from an independently restored backup
+        shell: pwsh
+        run: ./scripts/fc_server_bootable_copy_stage_test.ps1
+  pc-private-copy:
+    if: startsWith(github.event.head_commit.message, 'Prepare verified no-Clumps copy once')
+    needs: guards
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify every backed-up file then stage server and world privately, minus Clumps
+        shell: powershell
+        run: |
+          $server = 'C:\Users\Administrator\Desktop\FunCityLocal\server'
+          & ./scripts/fc_server_bootable_copy_stage.ps1 -Server $server -BackupRunId '39597824602'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

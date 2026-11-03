@@ -1,0 +1,30 @@
+name: Generate replacement HidenCloud SSH public key on owner PC
+# The old identity was exposed in chat and is still on the PC: do NOT use it.
+# Generate a separate replacement on the PC without overwriting the old file.
+# Never log, upload, or commit a private key; display ONLY the new public key.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/pc-hidencloud-ssh-key.yml
+      - scripts/fc_pc_hidencloud_ssh_key.ps1
+permissions:
+  contents: read
+jobs:
+  key-on-pc:
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check PowerShell syntax before modifying the user profile
+        shell: powershell
+        run: |
+          $tokens=$null; $errors=$null
+          [void][Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path 'scripts/fc_pc_hidencloud_ssh_key.ps1'),[ref]$tokens,[ref]$errors)
+          if (@($errors).Count -ne 0) { throw 'SSH_KEY_SCRIPT_SYNTAX_FAILED' }
+      - name: Generate or verify a dedicated client key; publish PUBLIC key only
+        shell: powershell
+        run: |
+          & ./scripts/fc_pc_hidencloud_ssh_key.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
