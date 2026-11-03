@@ -5,9 +5,15 @@
 set -Eeuo pipefail
 stage=preflight
 trap 'rc=$?; echo "::error title=FunCity private build::STAGE_FAILED stage=$stage exit=$rc; private Gradle/server logs not uploaded" >&2' ERR
-if [ "$#" -ne 2 ]; then
-  echo 'usage: bash scripts/fc_funcity_build_private.sh NEW_OUTSIDE_REPO_WORKDIR JAVA11_BIN' >&2
+if [ "$#" -ne 2 ] && { [ "$#" -ne 3 ] || [ "$3" != '--cuantic' ]; }; then
+  echo 'usage: bash scripts/fc_funcity_build_private.sh NEW_OUTSIDE_REPO_WORKDIR JAVA11_BIN [--cuantic]' >&2
   exit 2
+fi
+brand=FunCity
+identity_patch=0001-funcity-operator-identity.patch
+if [ "$#" -eq 3 ]; then
+  brand=Cuantic
+  identity_patch=0004-cuantic-operator-identity.patch
 fi
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 parent="$(cd "$(dirname "$1")" && pwd -P)"
@@ -37,7 +43,7 @@ git clone -q --depth 1 --filter=blob:none --branch 23.05.26-1 \
 test "$(git -C "$source_dir" rev-parse HEAD)" = '1d8d63138be77a606df2a5e940b960065948f983'
 test -s "$source_dir/LICENSE" && grep -q 'LESSER GENERAL PUBLIC LICENSE' "$source_dir/LICENSE"
 stage=patch
-for patch in 0001-funcity-operator-identity.patch 0002-preserve-forge-block-place-cancellation.patch 0003-preserve-forge-block-break-cancellation.patch; do
+for patch in "$identity_patch" 0002-preserve-forge-block-place-cancellation.patch 0003-preserve-forge-block-break-cancellation.patch; do
   git -C "$source_dir" apply --check "$repo/functity/catserver/patches/$patch"
   git -C "$source_dir" apply "$repo/functity/catserver/patches/$patch"
 done
@@ -45,8 +51,8 @@ python3 "$repo/scripts/fc_funcity_bridge_patch_test.py" --source \
   "$source_dir/src/main/java/catserver/server/CatServerEventHandler.java"
 python3 "$repo/scripts/fc_funcity_break_veto_test.py" --source \
   "$source_dir/src/main/java/catserver/server/CatServerEventHandler.java"
-grep -Fq 'serverName = "FunCity"' "$source_dir/src/main/java/org/bukkit/craftbukkit/v1_16_R3/CraftServer.java"
-grep -Fq 'getLogger("FunCity")' "$source_dir/src/main/java/catserver/server/CatServer.java"
+grep -Fq "serverName = \"$brand\"" "$source_dir/src/main/java/org/bukkit/craftbukkit/v1_16_R3/CraftServer.java"
+grep -Fq "getLogger(\"$brand\")" "$source_dir/src/main/java/catserver/server/CatServer.java"
 grep -Fq 'new CatServerConfig("catserver.yml")' "$source_dir/src/main/java/catserver/server/CatServer.java"
 cd "$source_dir"
 sed -i -e 's/-XX:MaxPermSize=512m//g' \
@@ -92,12 +98,12 @@ if [ "${#jars[@]}" -ne 1 ] || [ ! -s "${jars[0]}" ]; then
 fi
 stage=compiled_gate
 python3 "$repo/scripts/fc_funcity_compiled_engine_gate.py" \
-  "${jars[0]}" projects/forge/build/classes/java/main
+  "${jars[0]}" projects/forge/build/classes/java/main "$brand"
 stage=empty_java11_boot
 python3 "$repo/scripts/fc_funcity_java11_smoke.py" "$java11" "${jars[0]}" "$root/runtime-seed"
 stage=private_copy
 # Copy ONLY to a new PRIVATE local workdir; refuse a pre-existing target.
-result="$root/FunCityEngine-private-trial.jar"
+result="$root/${brand}Engine-private-trial.jar"
 cp -n "${jars[0]}" "$result"
 test -s "$result" && cmp -s "${jars[0]}" "$result"
 echo "PRIVATE_CANDIDATE_BUILD_PASS sha256=$(sha256sum "$result" | cut -d' ' -f1) binary=$result runtime_seed=$root/runtime-seed rp_pack=NOT_TESTED client=NOT_TESTED no_artifact_uploaded=true"

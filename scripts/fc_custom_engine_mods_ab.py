@@ -22,7 +22,7 @@ ORDER = 'FXOOXF'
 BOOT_JAR = base.BOOT_JAR
 
 
-def candidate_inputs(root, private):
+def candidate_inputs(root, private, brand='FunCity'):
     raw_private = Path(private)
     root, private = Path(root).resolve(), raw_private.resolve()
     temp = os.environ.get('RUNNER_TEMP')
@@ -30,11 +30,13 @@ def candidate_inputs(root, private):
             or private != Path(temp).resolve()/'fc-catserver-private'
             or raw_private.is_symlink()):
         raise ValueError('only a fresh disposable hosted runner candidate')
-    jar = private/'FunCityEngine-private-trial.jar'
+    if brand not in ('FunCity', 'Cuantic'):
+        raise ValueError('unknown candidate brand')
+    jar = private/f'{brand}Engine-private-trial.jar'
     seed = private/'runtime-seed'
     if not jar.is_file() or jar.is_symlink() or seed.is_symlink():
         raise ValueError('private source build or runtime seed missing')
-    check_packaged(jar)
+    check_packaged(jar, brand)
     folders = validate_runtime(seed, sha(jar))
     return jar, folders
 

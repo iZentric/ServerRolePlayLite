@@ -10,6 +10,26 @@ from fc_custom_engine_mods_ab import copy_trial, candidate_inputs, ORDER
 
 
 class CustomSwapTest(unittest.TestCase):
+    def test_cuantic_candidate_requires_brand_and_new_private_jar(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)/'fc-server-optimizer-ab'
+            root.mkdir()
+            private = Path(tmp)/'fc-catserver-private'
+            private.mkdir()
+            (private/'CuanticEngine-private-trial.jar').write_bytes(b'Cuantic public fixture')
+            (private/'runtime-seed').mkdir()
+            with patch.dict(os.environ, {'RUNNER_TEMP': tmp}), \
+                 patch('fc_custom_engine_mods_ab.check_packaged') as gate, \
+                 patch('fc_custom_engine_mods_ab.validate_runtime', return_value={'libraries'}):
+                jar, folders = candidate_inputs(root, private, 'Cuantic')
+                self.assertEqual(jar.name, 'CuanticEngine-private-trial.jar')
+                self.assertEqual(folders, {'libraries'})
+                gate.assert_called_once_with(jar, 'Cuantic')
+                with self.assertRaises(ValueError):
+                    candidate_inputs(root, private, 'Other')
+                with self.assertRaises(ValueError):
+                    candidate_inputs(root, private)
+
     def test_only_custom_arm_gets_private_seed_and_other_arms_stay_unchanged(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)/'fc-server-optimizer-ab'

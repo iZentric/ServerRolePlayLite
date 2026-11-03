@@ -9,10 +9,10 @@ import zipfile
 from fc_funcity_compiled_engine_gate import BRIDGE, IDENTITY, InvalidEngine, check
 
 
-def fixture(folder, *, inner=True, wrong=False, second=False):
+def fixture(folder, *, inner=True, wrong=False, second=False, brand='FunCity'):
     folder = Path(folder)
     classes = folder / 'classes'
-    payload = {name: b'compiled:FunCity:' + name.encode() for name in IDENTITY}
+    payload = {name: b'compiled:' + brand.encode() + b':' + name.encode() for name in IDENTITY}
     payload[BRIDGE] = b'compiled:block-place-bridge' * 10
     for name, data in payload.items():
         target = classes / name
@@ -40,6 +40,15 @@ class CompiledGateTest(unittest.TestCase):
     def test_nested_classes_match(self):
         with tempfile.TemporaryDirectory() as temp:
             self.assertTrue(check(*fixture(temp)))
+
+    def test_cuantic_brand_passes_but_wrong_or_unknown_brand_fails(self):
+        with tempfile.TemporaryDirectory() as temp:
+            jar, classes = fixture(temp, brand='Cuantic')
+            self.assertTrue(check(jar, classes, 'Cuantic'))
+            with self.assertRaises(InvalidEngine):
+                check(jar, classes, 'FunCity')
+            with self.assertRaises(InvalidEngine):
+                check(jar, classes, 'Unknown')
 
     def test_launcher_root_is_insufficient(self):
         with tempfile.TemporaryDirectory() as temp:
