@@ -7,7 +7,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from fc_funcity_jfr_hotspots import ProfileRejected, main, summarize
+from fc_funcity_jfr_hotspots import ProfileRejected, main, netty_zlib_stack_samples, summarize
 
 
 def sample(thread, class_name, method='tick'):
@@ -40,6 +40,22 @@ class HotspotTest(unittest.TestCase):
                          (150, [('java.util.zip.Deflater.deflate', 150)]))
         self.assertEqual(summarize(recording)[0], 120)
 
+    def test_netty_zlib_counts_inclusive_frames_once_per_sample(self):
+        netty = sample('Netty Server IO #1', 'io.netty.channel.Channel', 'run')
+        netty['values']['stackTrace']['frames'].extend([
+            {'method': {'type': {'name': 'java/util/zip/Deflater'}, 'name': 'deflate'}},
+            {'method': {'type': {'name': 'java.util.zip.Deflater'}, 'name': 'deflateBytes'}},
+        ])
+        inflater = sample('Netty Epoll Server IO #2', 'java.util.zip.Inflater')
+        ignored = sample('Server thread', 'java.util.zip.Deflater')
+        recording = {'recording': {'events': [netty, inflater, ignored]}}
+        self.assertEqual(netty_zlib_stack_samples(recording), {'deflate': 1, 'inflate': 1})
+        self.assertEqual(summarize(recording, minimum=1, thread='netty')[0], 2)
+        broken = sample('Netty Server IO #1', 'io.netty.channel.Channel')
+        broken['values']['stackTrace'] = None
+        with self.assertRaises(ProfileRejected):
+            netty_zlib_stack_samples({'recording': {'events': [broken]}})
+
     def test_cli_reads_only_private_json_and_prints_aggregates(self):
         with tempfile.TemporaryDirectory() as tmp:
             export = Path(tmp) / 'profile.json'
@@ -52,6 +68,8 @@ class HotspotTest(unittest.TestCase):
             self.assertIn('100.0%    120  rp.Vehicle.tick', out.getvalue())
             self.assertIn('netty execution samples: 120', out.getvalue())
             self.assertIn('java.util.zip.Deflater.tick', out.getvalue())
+            self.assertIn('Netty deflate in active stack: 120/120 samples', out.getvalue())
+            self.assertIn('Netty inflate in active stack: 0/120 samples', out.getvalue())
             self.assertIn('no real-player capacity', out.getvalue())
             with self.assertRaises(ProfileRejected):
                 main(Path(__file__))
