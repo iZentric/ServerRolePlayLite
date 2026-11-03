@@ -16,3 +16,5 @@
 **Definiția „terminat”:** H1–H6 au dovezi reproductibile și verificarea manuală a comportamentului RP pe o copie; numai atunci se poate afirma că FunCity este compatibil cu acest server și se poate stabili un plafon măsurat. „Fără nicio problemă hibridă pentru orice mod/plugin” nu este o garanție testabilă. Codul și datele private rămân separate.
 
 [Registrul Unlazy al porților](UNLAZY-GATES.md) păstrează separat dovezile istorice, testele statice executabile și porțile RP/host care încă necesită validare reală; verificarea lui structurală nu substituie aceste probe.
+
+**Poarta diferențială 281 (publică, fără clienți):** [metoda și comparația funcțiilor rivalilor](DIFFERENTIAL-281.md) adaugă 261 de scenarii publice pentru modelul prag/VarInt/zlib la cele 20 de cazuri ale contractului Java de punte. Nu schimbă criteriile H1–H6, nu înlocuiește nicio probă pe pachetul privat și nu transformă 281 de *scenarii* în 281 de harnessuri complete. Singurul motiv de a prelua o optimizare este un câștig măsurat fără pierdere de compatibilitate.

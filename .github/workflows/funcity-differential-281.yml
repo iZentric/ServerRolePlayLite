@@ -1,0 +1,98 @@
+name: FunCity 281 public differential CONTRACT cases (not full pack)
+# 20 extracted CatServer hybrid-bridge cases + 261 deterministic Java/JNI
+# packet-model cases. No real RP data, player or Netty traffic; no JAR upload.
+on:
+  push:
+    branches: [arena/9bbcb24f-serverroleplaylite]
+    paths:
+      - .github/workflows/funcity-differential-281.yml
+      - scripts/fc_differential_281.py
+      - scripts/fc_differential_281_test.py
+      - scripts/fc_funcity_bridge_java_contract.py
+      - scripts/fc_funcity_bridge_java_contract_test.py
+      - functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch
+      - functity/catserver/patches/0003-preserve-forge-block-break-cancellation.patch
+      - experiments/packet-compression/PacketDifferential281.java
+      - experiments/packet-compression/NativeDeflater.java
+      - experiments/packet-compression/NativeDeflater.c
+  pull_request:
+    paths:
+      - .github/workflows/funcity-differential-281.yml
+      - scripts/fc_differential_281.py
+      - scripts/fc_differential_281_test.py
+      - scripts/fc_funcity_bridge_java_contract.py
+      - scripts/fc_funcity_bridge_java_contract_test.py
+      - functity/catserver/patches/0002-preserve-forge-block-place-cancellation.patch
+      - functity/catserver/patches/0003-preserve-forge-block-break-cancellation.patch
+      - experiments/packet-compression/PacketDifferential281.java
+      - experiments/packet-compression/NativeDeflater.java
+      - experiments/packet-compression/NativeDeflater.c
+permissions:
+  contents: read
+jobs:
+  public-differential-contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+      - name: Validate public-case matrix and actual bridge extractors
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/fc_differential_281_test.py
+          python3 scripts/fc_funcity_bridge_java_contract_test.py
+          python3 scripts/fc_funcity_break_veto_test.py
+      - name: Compile exact pinned hybrid methods in synthetic Java 11 contract
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc281-catserver"
+          git clone -q --depth 1 --filter=blob:none --branch 23.05.26-1 \
+            https://github.com/Luohuayu/CatServer.git "$root"
+          test "$(git -C "$root" rev-parse HEAD)" = 1d8d63138be77a606df2a5e940b960065948f983
+          for patch in 0002-preserve-forge-block-place-cancellation.patch 0003-preserve-forge-block-break-cancellation.patch; do
+            git -C "$root" apply --check "$GITHUB_WORKSPACE/functity/catserver/patches/$patch"
+            git -C "$root" apply "$GITHUB_WORKSPACE/functity/catserver/patches/$patch"
+          done
+          source="$root/src/main/java/catserver/server/CatServerEventHandler.java"
+          python3 scripts/fc_funcity_bridge_patch_test.py --source "$source"
+          python3 scripts/fc_funcity_break_veto_test.py --source "$source"
+          python3 scripts/fc_funcity_bridge_java_contract.py "$source" "$JAVA_HOME/bin/javac" "$JAVA_HOME/bin/java" \
+            > "$RUNNER_TEMP/fc281-bridge-result"
+          grep -Fxq 'BRIDGE_JAVA11_CONTRACT_PASS: 20 place/break cases, two mutants rejected, no Minecraft jars' \
+            "$RUNNER_TEMP/fc281-bridge-result"
+      - name: Compile pinned MIT libdeflate only in disposable runner temp
+        run: |
+          set -Eeuo pipefail
+          root="$RUNNER_TEMP/fc281-native"
+          git clone -q --depth 1 --filter=blob:none https://github.com/ebiggers/libdeflate.git "$root"
+          git -C "$root" fetch -q --depth 1 origin 0758d0a12d34fac281b0fe27c5155fbe753d9511
+          git -C "$root" checkout -q --detach FETCH_HEAD
+          test "$(git -C "$root" rev-parse HEAD)" = 0758d0a12d34fac281b0fe27c5155fbe753d9511
+          test -s "$root/COPYING"
+          cmake -S "$root" -B "$root/build" -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DLIBDEFLATE_BUILD_SHARED_LIB=OFF \
+            -DLIBDEFLATE_BUILD_GZIP=OFF -DLIBDEFLATE_INSTALL=OFF
+          cmake --build "$root/build" --target libdeflate_static --parallel 2
+          gcc -O3 -fPIC -shared -I "$JAVA_HOME/include" -I "$JAVA_HOME/include/linux" \
+            -I "$root" experiments/packet-compression/NativeDeflater.c \
+            "$root/build/libdeflate.a" -o "$RUNNER_TEMP/libfc_native.so"
+          javac --release 11 -d "$RUNNER_TEMP" \
+            experiments/packet-compression/NativeDeflater.java \
+            experiments/packet-compression/PacketDifferential281.java
+      - name: Enforce 261 packet cases plus 20 bridge cases, fail on any mismatch
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/fc_differential_281.py "$RUNNER_TEMP/fc281-public-cases.tsv" \
+            > "$RUNNER_TEMP/fc281-manifest-result"
+          grep -Fxq 'PUBLIC_PACKET_DIFFERENTIAL_CASES=261' "$RUNNER_TEMP/fc281-manifest-result"
+          java -Djava.library.path="$RUNNER_TEMP" -cp "$RUNNER_TEMP" \
+            PacketDifferential281 "$RUNNER_TEMP/fc281-public-cases.tsv" \
+            > "$RUNNER_TEMP/fc281-packet-result"
+          grep -Fxq 'PACKET_DIFFERENTIAL_PASS cases=261 corrupted_header_rejected=true public_only=true' \
+            "$RUNNER_TEMP/fc281-packet-result"
+          grep -Fxq 'BRIDGE_JAVA11_CONTRACT_PASS: 20 place/break cases, two mutants rejected, no Minecraft jars' \
+            "$RUNNER_TEMP/fc281-bridge-result"
+          echo '::notice title=281 public contract scenarios verified::20 synthetic extracted bridge + 261 public packet-model differential cases; 0 real clients, 0 private mods/plugins, no claim of complete engine, capacity or parity with another server'
